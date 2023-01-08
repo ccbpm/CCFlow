@@ -37,7 +37,7 @@
             groupID = 0;
 
         var fType = GetQueryString("FType");
-
+        var isDtlAdd = GetQueryString("IsDtlAdd") || "0";
         //页面启动函数.
         $(function () {
 
@@ -323,7 +323,7 @@
                             var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
                             window.open("ImpTableField.htm?FK_MapData=" + GetQueryString("FK_MapData"), "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left=" + iLeft + ",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
                             //var url = 'ImpTableField.htm?FK_MapData='+GetQueryString('FK_MapData')+'&FType=Class&Idx=&GroupField=0';
-                            //window.location.href = url;
+                            //window.location.href = filterXSS(url);
                         }
 
                         //图片组件.
@@ -493,13 +493,13 @@
 
                         //附件.
                         function ExtAth() {
-
+                           
                             var name = promptGener('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
                             if (name == null || name == undefined)
                                 return;
 
                             var frmID = GetQueryString("FK_MapData");
-                            // alert(frmID + imgName);
+                           
                             var mapAttrs = new Entities("BP.Sys.MapAttrs");
                             mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
                             if (mapAttrs.length >= 1) {
@@ -512,6 +512,8 @@
                             var id = StrToPinYin(name);
 
                             var mypk = frmID + "_" + id;
+                            if (isDtlAdd == "1")
+                                mypk = frmID + "_" + id +"_AthMDtl";
                             var mapAttr = new Entity("BP.Sys.MapAttr");
                             mapAttr.MyPK = mypk;
                             if (mapAttr.IsExits == true) {
@@ -519,7 +521,7 @@
                                 return;
                             }
                             mapAttr.FK_MapData = frmID;
-                            mapAttr.KeyOfEn = id;
+                            mapAttr.KeyOfEn = id+"_AthMDtl";
                             mapAttr.Name = name;
                             mapAttr.GroupID = groupID;
                             mapAttr.UIContralType = 6; //附件控件.
@@ -535,9 +537,9 @@
                             mapAttr.Retrieve();
 
                             var en = new Entity("BP.Sys.FrmAttachment");
-                            en.MyPK = frmID + "_" + id;
+                            en.MyPK = mypk;
                             en.FK_MapData = frmID;
-                            en.NoOfObj = id;
+                            en.NoOfObj = id + "_AthMDtl";
                             en.GroupID = mapAttr.GroupID; //设置分组列.
                             en.Name = name;
                             en.UploadType = 1; //多附件.

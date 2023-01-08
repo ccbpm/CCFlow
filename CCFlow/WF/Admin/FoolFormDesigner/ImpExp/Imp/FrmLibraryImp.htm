@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋表单设计器\\导入导出\\从流程导入</title>
+    <title>驰骋表单设计器\\导入导出\\从表单库导入</title>
 
     <link href="../../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -38,11 +38,11 @@
         var selFrmNode = null;
         var Btn_Flows = null;
         $(function () {
-            InitBar("FlowFrmImp");
+            InitBar("FrmLibraryImp");
 
 
             //表单类别. 字段: No,Name
-            var fts = new Entities("BP.Sys.FrmTrees");
+            var fts = new Entities("BP.WF.Template.SysFormTrees");
             fts.RetrieveAll();
 
             //表单. FK_FormTree. 字段：No,Name,PTable,FK_FormTree, FrmType=0 傻瓜表单 ， 8=开发者表单.

@@ -44,7 +44,7 @@
         <div class="attrnode-bar-header">
             <strong>API </strong>
         </div>
-     
+
         <fieldset>
             <legend>
                 登录与门户API
@@ -367,6 +367,19 @@
             <br />
             <font color="green">//彻底的删除流程,有日志记录.</font><br />
             <font color="blue">string</font> delInfo2 = BP.WF.<font color="blue">Dev2Interface</font> .Flow_DoDeleteFlowByWriteLog(<font color="red">"001"</font>, workID, <font color="red">"我不需要请假了"</font>, <font color="blue">true</font>); <br />
+
+            <legend>封装的WebServices的接口</legend>
+            <ol>
+                <li>ccbpm的接口API都是一组静态的方法，这些方法可以被封装为多种形式比如：微服务、webservice、接口、controller等等。 </li>
+                <li>现在以经典常用的webservice封装为api为例来说明一下。 </li>
+                <li><img src="APICode1.png" class="HelpImg" /> </li>
+            </ol>
+            <legend>接口封装</legend>
+            <img src="APICode3.png" class="HelpImg" />
+
+            <legend>调用方法</legend>
+            <img src="APICode2.png" class="HelpImg" />
+
         </fieldset>
 
     </div>

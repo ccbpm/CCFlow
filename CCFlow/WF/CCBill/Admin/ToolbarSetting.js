@@ -56,7 +56,7 @@ new Vue({
 
                 var childNodeMenuItems = [
                     { title: '<i class=icon-star></i> 方法属性', id: "Attr" },
-                    { title: '<i class=icon-plus ></i> 新建方法', id: "NewmapAttr" },
+                 //   { title: '<i class=icon-plus ></i> 新建方法', id: "NewmapAttr" },
                     /*    { title: '<i class=icon-settings></i> 设计方法', id: "Designer" },*/
                     /*    { title: '<i class=icon-docs></i> 复制方法', id: "Copy" },*/
                     { title: '<i class=icon-pencil></i> 修改名称', id: "EditmapAttrName" },

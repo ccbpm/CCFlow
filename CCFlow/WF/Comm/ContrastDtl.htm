@@ -21,6 +21,14 @@
 
             $("#Msg").html("<img src='../Img/loading.gif' />正在加载, 请稍后......");
             InitPage();
+
+            var titleName = GetQueryString("TitleName");
+            if (titleName == null || titleName == undefined)
+                titleName = "详情";
+
+            document.title = titleName;
+
+
             $("#Msg").html("");
         });
 
@@ -47,9 +55,11 @@
 
             document.title = title;
 
-
-
-            var columns = new Array();;
+            var columns = new Array();
+            columns.push({
+                type: "numbers",
+                title: "序号",
+            });
             for (var i = 0; i < Sys_MapAttrs.length; i++) {
                 var attr = Sys_MapAttrs[i];
 
@@ -101,19 +111,15 @@
                     , cols: [columns]
                     , page: false
                     , cellMinWidth: 60
+                    , limit: Number.MAX_VALUE
                     , height: $(document).height() - $("#toolBar").height() - 100
                    
                 });
             });
-
         }
-
-      
     </script>
 </head>
 <body>
-    <div class="layui-card" style="margin:10px">
         <table class="layui-hide" id="searchTable" lay-filter="searchTable"></table>
-    </div>
 </body>
 </html>

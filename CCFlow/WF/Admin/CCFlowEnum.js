@@ -39,7 +39,6 @@ if (typeof DeliveryWay == "undefined") {
         //在指定的部门里按照岗位计算.
         DeliveryWay.FindSpecDeptEmpsInStationlist = 19,
 
-
         // 按部门
         DeliveryWay.ByDept = 1,
         // 按SQL
@@ -52,6 +51,11 @@ if (typeof DeliveryWay == "undefined") {
         DeliveryWay.BySelected_1 = 41,
         // 按表单选择人员
         DeliveryWay.ByPreviousNodeFormEmpsField = 5,
+        DeliveryWay.ByPreviousNodeFormDepts = 52,
+        //按表单选择岗位
+        DeliveryWay.ByPreviousNodeFormStationsAI = 53,
+        DeliveryWay.ByPreviousNodeFormStationsOnly = 54,
+        //按表单选择部门
         // 与上一节点的人员相同
         DeliveryWay.ByPreviousNodeEmp = 6,
         // 与开始节点的人员相同

@@ -302,10 +302,10 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
                 _Html += "<td nowrap>" + item.RDT + "</td>";
 
             //流程备注.
-            if (item.FlowNote == null)
-                _Html += "<td title='" + item.FlowNote + "'></td>";
-            else
-                _Html += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
+            //if (item.FlowNote == null)
+            //    _Html += "<td title='" + item.FlowNote + "'></td>";
+            //else
+            //    _Html += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
 
             _Html += "</tr>";
 
@@ -392,7 +392,7 @@ function InsertSubFlows(flowNo, fid, workid, layer, html) {
             html += "<td nowrap>" + item.RDT + "</td>";
 
         //流程备注.
-        htm += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
+       // htm += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
 
         html += "</tr>";
         //加载他下面的子流程.

@@ -27,6 +27,48 @@
         }
     </style>
     <script>
+        var w = window.innerWidth / 2;
+        var h = window.innerHeight - 40;
+
+        //设置岗位-左右结构.
+        function OpenBranchesAndLeafStations() {
+
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExtCloseFunc(url, '设置岗位', w * 1.5, h, function () {
+                Baseinfo.stas = getStas();
+            });
+        }
+        //通用的设置岗位的方法。for admin. ***********************************************************
+        function OpenDot2DotStations() {
+            var nodeID = GetQueryString("FK_Node");
+            var url = "../../../Comm/RefFunc/Dot2Dot.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations";
+            url += "&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations";
+            url += "&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+            OpenEasyUiDialogExtCloseFunc(url, '设置岗位', w, h, function () {
+                Baseinfo.stas = getStas();
+            });
+        }
+        /*
+         * 获取节点绑定的岗位
+         */
+        function getStas() {
+            var ens = new Entities("BP.WF.Template.NodeStations");
+            ens.Retrieve("FK_Node", GetQueryString("FK_Node"));
+            ens = $.grep(ens, function (obj, i) {
+                return obj.FK_Node != undefined
+            });
+            return ens;
+        }
+
+
+        function OpenNodStationGroup(orgNo) {
+            var url = "NodeStationGroup.htm?OrgNo=" + orgNo + "&FK_Node=" + GetQueryString("FK_Node");
+            OpenEasyUiDialogExtCloseFunc(url, '绑定岗位', 500, 600, function () {
+                Baseinfo.stas = getStas();
+            });
+        }
+
         var nodeID = GetQueryString("FK_Node");
         var node = new Entity("BP.WF.Node", nodeID);
         $(function () {
@@ -56,6 +98,7 @@
             OpenEasyUiDialogExtCloseFunc(url, '代办删除规则', 800, 500, function () {
             });
         }
+
     </script>
 </head>
 <body>
@@ -109,6 +152,27 @@
                     <ol class="olText">
                         <li>如果当前节点是协作模式的节点。</li>
                         <li>当前工作完成后，该节点绑定的岗位集合，当前操作员的岗位集合，与剩余每个人员的岗位集合对比如果有交集，该人员就被删除。</li>
+                        <li><a href="https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=6366313&doc_id=31094" target="_blank">点击查看本案例配置</a></li>
+
+                        <div id="App">
+
+                            <legend>绑定岗位</legend>
+                            <ul>
+                                <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
+                                <li><a href="javascript:OpenBranchesAndLeafStations()">绑定岗位-左右树结构模式</a> </li>
+                            </ul>
+                            <legend>已经绑定的岗位 </legend>
+                            <div id="stas">
+                                <ul>
+                                    <li v-show="stas.length===0">未设置</li>
+                                    <template v-for="sta in stas">
+                                        <li v-show="sta.FK_StationText!=undefined">{{sta.FK_StationText}}</li>
+                                    </template>
+
+                                </ul>
+                            </div>
+                        </div>
+                       
                     </ol>
                 </li>
             </ul>
@@ -139,5 +203,48 @@
         </fieldset>
 
     </form>
+<script type="text/javascript">
+    var Baseinfo = new Vue({
+        el: '#App',
+        data: {
+            adminModel: 1,
+            orgModel: 0,
+            stas: [],
+            webuser: null,
+            deliverWay: DeliveryWay.ByStationOnly
+        },
+        methods: {
+            OpenDot2DotStations: function () {
+                OpenDot2DotStations();
+                //SaveSta();
+            },
+            OpenNew: function () {
+                var nodeID = GetQueryString("FK_Node");
+                var url = "../../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeStations&Dot2DotEnName=BP.WF.Template.NodeStation&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations&DefaultGroupAttrKey=FK_StationType&NodeID=" + nodeID + "&PKVal=" + nodeID;
+                OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 1100, 500, function () {
+                    Baseinfo.stas = getStas();
+                    // SaveSta();
+                });
+            },
+            SetGroupStations: function () {
+                OpenNodStationGroup(this.webuser.GroupNo);
+
+            },
+            SetOrgStations: function () {
+                OpenNodStationGroup(this.webuser.FK_Dept);
+            }
+        },
+        created() {
+            InitBar(this.deliverWay);
+            this.stas = getStas();
+
+            //根据用户的信息，判断是否启用那个设置工具。
+            this.webuser = new WebUser();
+            this.adminModel = this.webuser.No == "admin" ? 1 : 0;
+            this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+        }
+    });
+
+</script>
 </body>
 </html>

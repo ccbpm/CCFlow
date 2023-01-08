@@ -137,10 +137,10 @@
 
                     <div class="layui-tab" lay-allowclose="true" lay-filter="g-admin-layout-tabs">
                         <ul class="layui-tab-title" ref="iframe-tabs">
-                            <li @click="selectedTabsIndex = -1" :class="{'layui-this':selectedTabsIndex === -1}">
+                            <li @click="changeSelectTab(-1)" :class="{'layui-this':selectedTabsIndex === -1}">
                                 <i class="layui-icon layui-icon-home"></i><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>
                             </li>
-                            <li v-for="(item,index) in tabsList" @click="selectedTabsIndex = index"
+                            <li v-for="(item,index) in tabsList" @click="changeSelectTab(index)"
                                 :class="{'layui-this':selectedTabsIndex === index}">
                                 <span>{{item.name}}</span><i class="layui-icon layui-unselect layui-tab-close"
                                                              @click="closeCurrentTabs(index)">ဆ</i>

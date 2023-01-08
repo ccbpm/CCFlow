@@ -29,11 +29,15 @@
     <script src="../Admin.js"></script>
     <style>
         td input[type=checkbox] {
-            vertical-align:top; margin-top:0px; margin-right:5px;
+            vertical-align: top;
+            margin-top: 0px;
+            margin-right: 5px;
         }
     </style>
     <script type="text/javascript" language="javascript">
         var nodeID = "";
+        var webUser = new WebUser();
+        var rootNo = 0;
         //页面启动函数.
         window.onload = function () {
             var mime = 'text/x-mariadb';
@@ -95,14 +99,18 @@
         function WinDeptOpen() {
 
             var url = "../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCDepts&Dot2DotEnName=BP.WF.Template.CCEn.CCDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
-
+            if (webUser.CCBPMRunModel != 0)
+                rootNo = webUser.OrgNo;
+            url += "&RootNo=" + rootNo;
 
             OpenEasyUiDialogExt(url, "抄送部门", 800, 600, true);
         }
 
         function WinEmpOpen() {
             var url = "../../Comm/RefFunc/BranchesAndLeaf.htm?EnName=BP.WF.Template.CCEn.CC&Dot2DotEnsName=BP.WF.Template.CCEn.CCEmps&Dot2DotEnName=BP.WF.Template.CCEn.CCEmp&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Emp&EnsOfM=BP.Port.Emps&DefaultGroupAttrKey=FK_Dept&NodeID=" + nodeID + "&PKVal=" + nodeID + "&s=" + Math.random();
-
+            if (webUser.CCBPMRunModel != 0)
+                rootNo = webUser.OrgNo;
+            url += "&RootNo=" + rootNo;
 
             OpenEasyUiDialogExt(url, '抄送人员', 800, 500, true);
         }
@@ -134,10 +142,10 @@
             <strong>抄送规则</strong>
         </div>
         <form id="cc">
-          
+
             <div style="position:relative;">
                 <table style="width:100%;" class="table">
-                   
+
                     <tr>
                         <th colspan="2">
                             基本设置

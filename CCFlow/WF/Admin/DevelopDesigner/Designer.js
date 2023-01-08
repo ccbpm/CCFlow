@@ -253,7 +253,7 @@ UE.plugins['edit'] = function () {
     var me = this, thePlugins = 'edit';
     me.commands[thePlugins] = {
         execCommand: function (method, datatype, obj) {
-            if (datatype == "SubFlow") {
+            if (datatype == "SubFlow" || datatype == "WorkCheck") {
                 showFigurePropertyWin(datatype, null, pageParam.fk_mapdata, obj);
                 return;
             }
@@ -605,6 +605,10 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                 en.SetPKVal(MyPK);
                 if (en.RetrieveFromDBSources() == 0)
                     UE.dom.domUtils.remove(anchorEl, false);
+                else{
+                    UE.dom.domUtils.setStyle(anchorEl, 'width', en.UIWidth+'px');
+                    UE.dom.domUtils.setStyle(anchorEl, 'height', en.UIHeight+'px');
+                }
                 break;
             case "Button":
                 break;
@@ -1598,6 +1602,23 @@ UE.plugins['component'] = function () {
         _delete: function () {
             if (window.confirm('确认删除该控件吗？')) {
                 var dataType = this.anchorEl.getAttribute("data-type");
+                if (dataType == "SubFlow") {
+                    var nodeID = GetQueryString("FK_Node");
+                    var subFlow = new Entity("BP.WF.Template.SFlow.FrmSubFlow", nodeID);
+                    subFlow.SFSta = 0;//禁用
+                    subFlow.Update();
+                    baidu.editor.dom.domUtils.remove(this.anchorEl, false);
+                    return;
+                }
+
+                if (dataType == "WorkCheck") {
+                    var nodeID = GetQueryString("FK_Node");
+                    var frmCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
+                    frmCheck.FWCSta = 0;//禁用
+                    frmCheck.Update();
+                    baidu.editor.dom.domUtils.remove(this.anchorEl, false);
+                    return;
+                }
                 var mypk = this.anchorEl.getAttribute("data-key");
                 if (mypk == null || mypk == undefined) {
                     alert('元素属性data-key丢失，请联系管理员');
@@ -1639,19 +1660,7 @@ UE.plugins['component'] = function () {
                     frmBtn.Delete();
                 }
 
-                if (dataType == "SubFlow") {
-                    var nodeID = GetQueryString("FK_Node");
-                    var subFlow = new Entity("BP.WF.Template.SFlow.FrmSubFlow", nodeID);
-                    subFlow.SFSta = 0;//禁用
-                    subFlow.Update();
-                }
-
-                if (dataType == "WorkCheck") {
-                    var nodeID = GetQueryString("FK_Node");
-                    var frmCheck = new Entity("BP.WF.Template.NodeWorkCheck", nodeID);
-                    frmCheck.FWCSta = 0;//禁用
-                    frmCheck.Update();
-                }
+                
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -2184,6 +2193,8 @@ function ExtImg() {
     en.FK_MapData = pageParam.fk_mapdata;
     en.GroupID = mapAttr.GroupID; //设置分组列.
     en.Name = name;
+    en.UIWidth = 150;
+    en.UIHeight = 170;
     en.Insert(); //插入到数据库.
 
     var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK;
@@ -2637,7 +2648,7 @@ function Save() {
 
     //审核组件  判断当前是否是节点表单，节点表单才包含审核组件
     var fk_node = GetQueryString("FK_Node");
-    if (fk_node != null && fk_node != undefined && fk_node != 0) {
+    if (fk_node != null && fk_node != undefined && fk_node != "0" && fk_node !="undefined") {
         var element = getElementByAttr(imgs, "data-type", "WorkCheck");
         if (element == null) {
             var node = new Entity("BP.WF.Node", fk_node);

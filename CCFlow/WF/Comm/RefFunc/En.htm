@@ -135,18 +135,7 @@
                                             <i :class="item.open?'fa fa-angle-down':'fa fa-angle-right'"></i>
                                         </span>
                                     </a>
-
-
-
-
-
-
-
-                                    <!--                                <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"-->
-                                    <!--                                   @click="openTab(item.Name,item.Url),selectedId = item.No">-->
-                                    <!--                                    <i :class="item.Icon"></i>-->
-                                    <!--                                    <cite style="margin-left:8px">{{item.Name}}</cite>-->
-                                    <!--                                </a>-->
+                                    
                                     <dl v-show="Array.isArray(item.children) &&  item.open"
                                         ref="sort-tree-child" style=" background:#fbf9f9">
                                         <dd v-for="(it,idx) in item.children" :data-id="it.No" :data-pid="item.No"

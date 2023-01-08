@@ -30,7 +30,6 @@ PressTimes,
 GuestNo,
 GuestName,
 BillNo,
-FlowNote,
 TodoEmps,
 TodoEmpsNum,
 TodoSta,
@@ -38,7 +37,8 @@ TaskSta,
 ListType,
 Sender,
 AtPara,
-Domain,OrgNo
+Domain,OrgNo,
+FlowIdx,FlowSortIdx
 )
 AS
 
@@ -52,7 +52,6 @@ B.SDT, B.FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode,B.PressTimes,
 A.GuestNo,
 A.GuestName,
 A.BillNo,
-A.FlowNote,
 A.TodoEmps,
 A.TodoEmpsNum,
 A.TodoSta,
@@ -60,10 +59,11 @@ A.TaskSta,
 0 as ListType,
 A.Sender,
 A.AtPara,
-A.Domain,A.OrgNo
-FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
+A.Domain,A.OrgNo,
+C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
+FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B,WF_Flow C,WF_FlowSort D
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
- AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState<>0 AND WhoExeIt<>1
+ AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState<>0 AND WhoExeIt<>1 AND A.FK_Flow=C.No AND A.FK_FlowSort=D.No AND C.FK_FlowSort=D.No
  UNION
 SELECT A.PRI,A.WorkID,B.Sta AS IsRead, A.Starter,
 A.StarterName,
@@ -75,7 +75,6 @@ B.RDT AS SDT, B.CCTo as FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode, 0 as 
 A.GuestNo,
 A.GuestName,
 A.BillNo,
-A.FlowNote,
 A.TodoEmps,
 A.TodoEmpsNum,
 0 as TodoSta,
@@ -83,8 +82,9 @@ A.TodoEmpsNum,
 1 as ListType,
 B.Rec as Sender,
 '@IsCC=1'||A.AtPara as AtPara,
-A.Domain,A.OrgNo
-  FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState<>0;
+A.Domain,A.OrgNo,C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
+  FROM WF_GenerWorkFlow A, WF_CCList B ,WF_Flow C,WF_FlowSort D 
+  WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState<>0 AND A.FK_Flow=C.No AND A.FK_FlowSort=D.No AND C.FK_FlowSort=D.No;
  
 /****** 对象:  View V_FlowStarterBPM    脚本日期:  2015-04-10 ******/;
 CREATE VIEW V_FlowStarterBPM (FK_Flow,FlowName,FK_Emp,OrgNo)
@@ -144,7 +144,7 @@ FROM
 WHERE
 	A.NodePosType= 0 	AND A.DeliveryWay= 4 
 			AND A.FK_Flow= C.No
-		AND  B.OrgNo= C.OrgNo 
+  AND ((B.OrgNo = C.OrgNo) OR ((B.OrgNo IS NULL) AND (C.OrgNo IS NULL)))
 
 	UNION
 SELECT
@@ -175,7 +175,7 @@ FROM
 	Port_Emp C 
 WHERE
 	A.FK_Flow= B.FlowNo 
-	AND B.OrgNo= C.OrgNo 
+    AND ((B.OrgNo = C.OrgNo) OR ((B.OrgNo IS NULL) AND (C.OrgNo IS NULL)))
 	AND (
 	A.DeliveryWay= 22 
 	OR A.DeliveryWay= 51);

@@ -18,8 +18,8 @@ function Admin_GenerAllBills() {
  * @param {目录名字} dirName
  */
 function Admin_TreeDir_Create(dirName) {
-    var en = new Entity("BP.Sys.FrmTree", "100");
-    return en.DoMethodReturnString("CreateSubNode");
+    var en = new Entity("BP.WF.Template.SysFormTree", "100");
+    return en.DoMethodReturnString("DoCreateSubNodeIt", dirName);
 }
 
 /**
@@ -27,7 +27,7 @@ function Admin_TreeDir_Create(dirName) {
  * @param {目录编号} treeNo
  */
 function Admin_TreeDir_Delete(treeNo) {
-    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    var en = new Entity("BP.WF.Template.SysFormTree", treeNo);
     en.Delete();
 }
 
@@ -36,7 +36,7 @@ function Admin_TreeDir_Delete(treeNo) {
  * @param {目录编号} treeNo
  */
 function Admin_TreeDir_Up(treeNo) {
-    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    var en = new Entity("BP.WF.Template.SysFormTree", treeNo);
     en.DoMethodReturnString("DoUp");
 }
 /**
@@ -44,7 +44,7 @@ function Admin_TreeDir_Up(treeNo) {
  * @param {目录编号} treeNo
  */
 function Admin_TreeDir_Down(treeNo) {
-    var en = new Entity("BP.Sys.FrmTree", treeNo);
+    var en = new Entity("BP.WF.Template.SysFormTree", treeNo);
     en.DoMethodReturnString("DoDown");
 }
 
@@ -115,11 +115,7 @@ function Admin_Form_GenerDesignerUrl(frmID) {
     }
 
     data = data.replace("url@..", "");
-
-    if (plant == 'JFlow')
-        data = "/jflow-web/WF/Admin" + data;
-    else
-        data = "/WF/Admin" + data;
+    data = basePath + "/WF/Admin" + data;
 
     return data;
 }

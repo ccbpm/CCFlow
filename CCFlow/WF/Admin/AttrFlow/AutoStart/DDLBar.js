@@ -51,9 +51,6 @@ function GetDBDtl() {
         { "No": 2, "Name": "数据集按时启动", "GroupNo": "A", "Url": "2.ByTimeData.htm" },
         { "No": 4, "Name": "指定人员集合按时启动", "GroupNo": "A", "Url": "4.ByDesigneeAdv.htm" },
         { "No": 5, "Name": "以admin启动发送给指定人员集合", "GroupNo": "A", "Url": "5.ByDesigneeAdminSendTo02Node.htm" },
-
-
-
         { "No": 3, "Name": "触发试启动", "GroupNo": "B", "Url": "3.ByTrigger.htm" }
     ];
     return json;

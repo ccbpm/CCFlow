@@ -112,8 +112,12 @@
                 url += "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
                 top.layui.index.openTabsPage(url, flowNo + "." + flowName);
             } else {
-                window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
-                    "icon-flow1");
+                if (typeof window.parent.parent.addTab != "undefined")
+                    window.parent.parent.addTab(flowNo, flowNo + "." + flowName, url,
+                        "icon-flow1");
+                else
+                    window.parent.parent.location.href = url;
+
             }
             
 

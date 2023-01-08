@@ -34,6 +34,10 @@
             //en.UrlExt = $("#TB_Url").val();
             en.MenuModel = "Rpt3D"; //类型为.
             en.Icon = "icon-heart";
+            en.Tag0 = 'SELECT FK_BanJi,XB,ZZMM, COUNT(*) as Num from Demo_Student GROUP BY FK_BanJi,XB,ZZMM';
+            en.Tag1 = 'SELECT No,Name FROM demo_banji';
+            en.Tag2 = 'SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey=~XB~';
+            en.Tag3 = 'SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey=~ZZMM~';
             en.Insert();
 
             alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
@@ -63,6 +67,17 @@
         <ul>
             <li> 三维报表，需要指定三个数据源，通过列的关系显示数据。 </li>
             <!--<li> <img src="SelfUrl.png" class="HelpImg" /></li>-->
+        </ul>
+        <legend>数据示例</legend>
+        <ol>
+            <li>数据源：SELECT FK_BanJi,XB,ZZMM, COUNT(*) as Num from Demo_Student GROUP BY FK_BanJi,XB,ZZMM </li>
+            <li>维度1：SELECT No,Name FROM demo_banji; </li>
+            <li>维度2：SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey='XB';</li>
+            <li>维度3：SELECT IntKey as No, Lab as Name FROM sys_enum WHERE EnumKey='ZZMM';</li>
+        </ol>
+        <legend>样式</legend>
+        <ul>
+            <li> <img src="Rpt3D.png" style="width:50%;" class="HelpImg" /></li>
         </ul>
     </fieldset>
 </body>

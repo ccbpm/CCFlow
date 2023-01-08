@@ -827,7 +827,7 @@
             var url = "";
             url = "MyDict.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
             if (top.layui && top.layui.index) {
-                url = "/WF/CCBill/" + url;
+                url = "./" + url;
                 top.layui.index.openTabsPage(url, frmDict.Name)
             } else {
                 if (rowOpenModel == 0)

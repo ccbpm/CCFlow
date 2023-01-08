@@ -64,11 +64,11 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
         if (selectVal != oldValue) {
             $("#autodiv").remove();
             //获得对象.
-            var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType, mapExt.FK_DBSrc);
-            if ($.isEmptyObject(dataObj)) {
-                //$("#divinfo").hide();
-                return;
-            }
+            //var dataObj = GenerDB(mapExt.Tag4, selectVal, mapExt.DBType, mapExt.FK_DBSrc);
+            //if ($.isEmptyObject(dataObj)) {
+            //    //$("#divinfo").hide();
+            //    return;
+            //}
 
             //简洁模式
             if (TBModel == "Simple") {
@@ -83,52 +83,79 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
                     if (name == undefined)
                         name = item.NAME;
 
-                   
+
                     var left = $("#autodiv").offset().left;
                     $("#autoComplete").css("left", left + "px");
-                    $("#autoComplete").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div></div>");
+                    $("#autoC omplete").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + no + "','" + tbid + "','" + fk_mapExt + "');\" value='" + no + "'>" + no + '|' + name + "</div></div>");
                 });
 
             }
 
             //表格模式
             if (TBModel == "Table")
-                showDataGrid(sender, tbid, dataObj, mapExt);
+                showDataGrid(tbid, selectVal, mapExt);
 
             oldValue = selectVal;
 
             document.onclick = function () {
                 $("#autodiv").remove();
             }
-        
+
         }
-       
+
     }
+}
+/**
+ * 获取数据的方法
+ * @param {any} dbSrc 请求数据集合的内容
+ * @param {any} dbType 请求数据的集合了类型 SQL,函数,URL
+ * @param {any} dbSource 如果是SQL的时，SQL的查询来源，本地，外部数据源
+ * @param {any} keyVal 选择替换的值
+ */
+function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
+    // debugger
+    if (dbSrc == null || dbSrc == undefined || dbSrc == "")
+        return null;
+    //处理sql，url参数.
+    dbSrc = dbSrc.replace(/~/g, "'");
+    if (keyVal != null) {
+        if (dbType == 0)
+            keyVal = keyVal.replace(/'/g, '');
+
+        dbSrc = dbSrc.replace(/@Key/g, keyVal);
+        dbSrc = dbSrc.replace(/@key/g, keyVal);
+        dbSrc = dbSrc.replace(/@KEY/g, keyVal);
+    }
+    dbSrc = DealExp(dbSrc, null, false);
+    //获取数据源.
+    dataObj = DBAccess.RunDBSrc(dbSrc, dbType, dbSource);
+    return dataObj;
 }
 
 
-
-//文本自动填充 表格模式
-function showDataGrid(sender, tbid, dataObj, mapExt) {
-   // debugger
+/**
+* 文本自动完成表格展示
+*/
+function showDataGrid(tbid, selectVal, mapExtMyPK) {
+    debugger
+    var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
+    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal);
     var columns = mapExt.Tag3;
-    $("#autodiv").remove();
-    $("#" + tbid).after("<div id='autodiv' style=''><div id='autoComplete' style='position:absolute;z-index:999'></div></div>");
-    $("#autoComplete").append(" <table id='viewGrid'></table>");
-    //取消DIV的宽度
-    //document.getElementById("divinfo").style.width = "";
-    var left = $("#autodiv").offset().left;
-    $("#autoComplete").css("left", left + "px");
+    $("#divInfo").remove();
+    $("#" + tbid).after("<div style='position:relative;z-index:999;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);width:100%' id='divInfo'><table class='layui-hide' style='width:100%;' id='autoTable' lay-filter='autoTable'></table></div>");
+
     var searchTableColumns = [{
-        //title: 'Number',//标题  可不加  
-        formatter: function (value, row, index) {
-            return index + 1;
+        field: "",
+        title: "序号",
+        templet: function (d) {
+            return d.LAY_TABLE_INDEX + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+
         }
 
     }];
 
     //显示列的中文名称.
-    if (typeof columns == "string") {
+    if (typeof columns == "string" && columns != "") {
         $.each(columns.split(","), function (i, o) {
             var exp = o.split("=");
             var field;
@@ -148,58 +175,37 @@ function showDataGrid(sender, tbid, dataObj, mapExt) {
 
             });
         });
-        var ispagination = dataObj.length > 20 ? true : false;
-        var data = [];
-        if (ispagination) {
+    } else {
+        searchTableColumns.push({
+            field: "No",
+            title: "编号"
 
-        }
-        var options = {
-            locale: 'zh-CN',
-            striped: true,
-            cache: false,
-            showHeader: true,
-            sortOrder: "asc",
-            strictSearch: true,
-            minimumCountColumns: 2,
-            highlightSelected: true,
-            clickToSelect: true,
-            singleSelect: true,
-            sortable: false,
-            cardView: false,
-            detailView: false,
-            sidePagination:"client",
-            uniqueId: "No",
-            pageNumber: 1, //初始化加载第一页
-            pageSize:10,
-            pagination: ispagination,
-            columns: searchTableColumns,
-            rowStyle: function () {
-                var style = {};
-                style = 'active';
-                return { classes: style };
-            },
-            formatShowingRows: function (pageFrom, pageTo, totalRows) {
-                return "第" + pageFrom + "-" + pageTo + "行，总共" + totalRows + "";
-            },
-            //自定义分页字符串显示为中文
-            formatRecordsPerPage: function (pageNumber) {
-                return pageNumber + '行每页';
-            }
-        };
-        options.onClickRow = function (row, element) {
-            $("#autodiv").remove();
-            highlightindex = -1;
-            $("#" + tbid).val(row.No);
+        });
+        searchTableColumns.push({
+            field: "Name",
+            title: "名称"
 
-            FullIt(row.No, mapExt.MyPK, tbid);
-
-        };
-        $('#viewGrid').bootstrapTable(options);
-        $('#viewGrid').bootstrapTable("load", dataObj);
-
-       
+        });
     }
+    //debugger
+    var ispagination = dataObj.length > 20 ? true : false;
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: "#autoTable",
+            id: "autoTable",
+            cols: [searchTableColumns],
+            data: dataObj
+        })
+        //监听行单击事件（双击事件为：rowDouble）
+        table.on('row(autoTable)', function (obj) {
+            var data = obj.data;
+            $("#" + tbid).val(data.No);
+            $("#divInfo").remove();
+            FullIt(data.No, mapExt.MyPK, tbid);
 
+        });
+    })
 
 }
 
@@ -442,7 +448,7 @@ function setValForPopval(id, dtlWin, val) {
 function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
     var wfPreHref = GetLocalWFPreHref();
     var url = wfPreHref + '/WF/CCForm/FrmReturnValTBFullCtrl.aspx?CtrlVal=' + ctrl.value + '&FK_MapExt=' + fk_mapExt;
-    var v = window.showModalDialog(url, 'wd', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
+    var v = window.OpenLayuiDialog(url, 'wd', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
     if (v == null || v == '' || v == 'NaN') {
         return;
     }
@@ -624,14 +630,6 @@ function hiddiv() {
     $("#divinfo").css("display", "none");
 }
 
-// 获取参数.
-function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null)
-        return decodeURI(r[2]);
-    return null;
-}
 //通过正则表达式检测
 function CheckInput(oInput, filter) {
     var re = filter;
@@ -972,7 +970,7 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
         //重新绑定下拉框.
         GenerBindDDL("DDL_" + ctrlID, db);
     }
-	layui.form.render("select");
+    layui.form.render("select");
 }
 //填充明细.
 function FullDtl(selectVal, mapExt) {
@@ -1066,7 +1064,7 @@ function GenerDB(dbSrc, selectVal, dbType, dbSource, isDtlField) {
 
     //处理sql，url参数.
     dbSrc = dbSrc.replace(/~/g, "'");
-    if (dbType == 0)
+    if (dbType == 0 && typeof selectval === 'string')
         selectVal = selectVal.replace(/'/g, '');
 
     dbSrc = dbSrc.replace(/@Key/g, selectVal);
@@ -1115,5 +1113,10 @@ function DealSQL(dbSrc, key, kvs) {
 
     return dbSrc;
 }
-
+function isLegalName(name) {
+    if (!name) {
+        return false;
+    }
+    return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+}
 

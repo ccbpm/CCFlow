@@ -105,7 +105,7 @@
         function StartFoolFormDesigner() {
             var url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + GetQueryString("EnsName") + "&IsFirst=1";
             WinOpen(url, "dd");
-            //window.location.href = url;
+            //window.location.href = filterXSS(url);
         }
 
         //导入设置.

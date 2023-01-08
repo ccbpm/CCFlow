@@ -107,6 +107,14 @@
             }
         }
 
+        function SetSelected(checked, ids) {
+            var checkeds = ids.split(',');
+            for (var i = 0; i < checkeds.length; i++) {
+                var checkid = document.getElementById('emp_' + checkeds[i]);
+                checkid.checked = checked;
+            }
+        }
+
         function Save() {
             var emps = ",";
             var html = "";

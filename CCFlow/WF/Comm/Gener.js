@@ -1,4 +1,47 @@
 ﻿
+function deleteUrlParam(targetUrl, targetKey) {
+    if (typeof targetUrl !== 'string') {
+        return targetUrl
+    }
+
+    if (!targetUrl.includes('?')) {
+        return targetUrl
+    }
+
+    const queries = targetUrl.split('?')
+    let resultUrl = ''
+    if (queries.length > 1) {
+
+        const search = queries[1].split('&');
+        if (search.length > 0) {
+            resultUrl += queries[0] + '?';
+            for (const kvStr of search) {
+                const [key, val] = kvStr.split('=')
+                if (targetKey === key) continue;
+                else resultUrl += `${key}=${val}&`
+            }
+            return resultUrl.substring(0, resultUrl.length - 1);
+        }
+    }
+    return '';
+}
+
+// 从指定字符串中获取参数
+function getQueryFromTargetStr(targetStr, targetKey) {
+    if (typeof targetStr !== 'string') {
+        return null
+    }
+    const queries = targetStr.split('?')
+    if (queries.length > 1) {
+        const search = queries[1].split('&');
+        for (const kvStr of search) {
+            const [key, val] = kvStr.split('=')
+            if (targetKey === key) return val
+        }
+    }
+    return null
+}
+
 function promptGener(msg, defVal) {
     var val = window.prompt(msg, defVal);
     return val;
@@ -16,7 +59,7 @@ function SetHref(url) {
     var a = 1;
     var b = 2;
     if (a + a == b) {
-        window.location.href = url;
+        window.location.href = filterXSS(url);
     }
 }
 
@@ -81,9 +124,9 @@ function ReLoginByToken() {
         return;
 
     //获得参数,获取不到就return. userNo,SID，当前url没有，就判断parent的url.
-    var sid = GetQueryString("Token");
+    var sid = localStorage.getItem('Token');
     if (sid == null || sid == undefined)
-        sid = window.parent.GetQueryString("Token");
+        sid = window.parent.localStorage.getItem('Token');
     if (sid == null || sid == undefined || sid == 'null')
         return;
 
@@ -128,6 +171,16 @@ function trim(s) {
     return s.replace(/(^\s*)|(\s*$)/g, "");
 }
 
+// script 标签过滤
+function filterXSS(str) {
+    if (typeof str !== 'string') {
+        return str
+    }
+    str = str.trim()
+    //.replace(/[(]/g, '')
+    return str.replace(/<\/?[^>]+>/gi, '')
+        .replace(/->/g, '_')
+}
 
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
@@ -138,7 +191,7 @@ function AtParaToJson(json) {
             if (atParam != '') {
                 var atParamKeyValue = atParam.split('=');
                 if (atParamKeyValue.length == 2) {
-                    jsObj[atParamKeyValue[0]] = atParamKeyValue[1];
+                    jsObj[atParamKeyValue[0]] = filterXSS(atParamKeyValue[1]);
                 }
             }
         });
@@ -873,7 +926,7 @@ function IsObject(obj) {
 }
 
 function To(url) {
-    //window.location.href = url;
+    //window.location.href = filterXSS(url);
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }
 
@@ -1482,6 +1535,7 @@ var Entity = (function () {
             return result;
         },   //一个参数直接传递,  多个参数，参数之间使用 ~隔开， 比如: zhangsna~123~1~山东济南.
         DoMethodReturnString: function (methodName, myparams) {
+            methodName = filterXSS(methodName)
             if (dynamicHandler == "")
                 return;
             var params = "";
@@ -1756,7 +1810,7 @@ var Entity = (function () {
 //    var data = en.DoMethodReturnJSON("GenerHisJson");
 
 //}
-     
+
 
 var Entities = (function () {
 
@@ -1979,6 +2033,7 @@ var Entities = (function () {
             this.deleteIt();
         },
         DoMethodReturnString: function (methodName) {
+            methodName = filterXSS(methodName)
             if (dynamicHandler == "")
                 return;
             var params = "";
@@ -2029,6 +2084,7 @@ var Entities = (function () {
         },
 
         DoMethodReturnJSON: function (methodName) {
+            methodName = filterXSS(methodName)
             if (dynamicHandler == "")
                 return;
             var params = "";
@@ -2097,7 +2153,7 @@ var Entities = (function () {
             });
         },
         AddPara: function (key, value) {
-            parameters[key] = value;
+            parameters[key] = filterXSS(value);
         },
         CopyForm: function () {
 
@@ -2509,7 +2565,7 @@ var HttpHandler = (function () {
                         if (key == "DoType" || key == "DoMethod" || key == "HttpHandlerName")
                             return;
 
-                        self.AddPara(key, value);
+                        self.AddPara(key, filterXSS(value));
 
                     })(param[0], param[1]);
                 }
@@ -2532,11 +2588,41 @@ var HttpHandler = (function () {
                     var param = o.split("=");
                     if (param.length == 2 && validate(param[1])) {
                         (function (key, value) {
-                            self.AddPara(key, decodeURIComponent(value, true));
+                            self.AddPara(key, filterXSS(decodeURIComponent(value, true)));
                         })(param[0], param[1]);
                     }
                 });
             }
+            //获取form表单中disabled的表单字段
+            var disabledEles = $('form :disabled');
+            $.each(disabledEles, function (i, disabledEle) {
+                var name = $(disabledEle).attr('name');
+                if (name == null || name == undefined || name == "")
+                    return true;
+                switch (disabledEle.tagName.toUpperCase()) {
+                    case "INPUT":
+                        switch (disabledEle.type.toUpperCase()) {
+                            case "CHECKBOX": //复选框
+                                self.AddPara(name, encodeURIComponent($(disabledEle).is(':checked') ? 1 : 0));
+                                break;
+                            case "TEXT": //文本框
+                            case "NUMBER":
+                                self.AddPara(name, encodeURIComponent($(disabledEle).val()));
+                                break;
+                            case "RADIO": //单选钮
+                                self.AddPara(name, $('[name="' + name + ':checked"]').val());
+                                break;
+                        }
+                        break;
+                    //下拉框
+                    case "SELECT":
+                        self.AddPara(name, $(disabledEle).children('option:checked').val());
+                        break;
+                    case "TEXTAREA":
+                        self.AddPara(name, encodeURIComponent($(disabledEle).val()));
+                        break;
+                }
+            });
         },
         AddFileData: function () {
             var files = $("input[type=file]");
@@ -2552,7 +2638,9 @@ var HttpHandler = (function () {
         },
         AddPara: function (key, value) {
             if (params.indexOf("&" + key + "=") == -1) {
-                if (IsIELower10 == true)
+                if (value == undefined)
+                    value = "";
+               if (IsIELower10 == true)
                     parameters[key] = value;
                 else
                     parameters.append(key, value);
@@ -2564,7 +2652,7 @@ var HttpHandler = (function () {
         AddJson: function (json) {
 
             for (var key in json) {
-                this.AddPara(key, json[key]);
+                this.AddPara(key, filterXSS(json[key]));
             }
         },
 
@@ -2607,12 +2695,71 @@ var HttpHandler = (function () {
 
             return params;
         },
-        DoMethodReturnString: function (methodName) {
+		
+		customRequest: function(methodName) {
+            methodName = filterXSS(methodName)
             if (dynamicHandler == "")
                 return;
             var self = this;
             var jsonString;
+            // 如果没有携带token， 自动补上
+            if (!parameters.has('Token')) {
+                parameters.append('Token', GetQueryString('Token'))
+            }
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    xhrFields: {
+                        withCredentials: !IsIELower10
+                    },
+                    crossDomain: !IsIELower10,
+                    url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
+                    data: new FormData(),
+                    dataType: 'html',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (methodName === 'Login_Submit' || methodName === 'TestFlow2020_StartIt') {
+                            localStorage.setItem('Token', getQueryFromTargetStr(data, 'Token'))
+                            jsonString = deleteUrlParam(data, 'Token')
+                        } else {
+                            jsonString = data;
+                        }
 
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
+                        ThrowMakeErrInfo("HttpHandler-DoMethodReturnString-" + methodName, textStatus, url);
+
+
+                    }
+                });
+            return jsonString;
+        },
+		
+        DoMethodReturnString: function (methodName) {
+            methodName = filterXSS(methodName)
+            if (dynamicHandler == "")
+                return;
+            var self = this;
+            var jsonString;
+            // 如果没有携带token， 自动补上
+            if (!parameters.has('Token')) {
+                parameters.append('Token', GetQueryString('Token'))
+            }
+			if(methodName === 'Login_Submit') {
+                var isEncrypt = this.customRequest("CheckEncryptEnable")
+                var key = "TB_PW"
+                if(isEncrypt === '1'){
+                    var encryptStr =encodeURIComponent(parameters.get(key));
+                    parameters.delete(key);
+                    parameters.append(key, encryptStr)
+                }else if(isEncrypt === '2'){
+                    var encryptStr = md5(parameters.get(key)).toUpperCase();
+                    parameters.delete(key);
+                    parameters.append(key, encryptStr)
+                }
+            }
             if (IsIELower10 == false)
                 $.ajax({
                     type: 'post',
@@ -2627,7 +2774,12 @@ var HttpHandler = (function () {
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        jsonString = data;
+                        if (methodName === 'Login_Submit' || methodName === 'TestFlow2020_StartIt') {
+                            localStorage.setItem('Token', getQueryFromTargetStr(data, 'Token'))
+                            jsonString = deleteUrlParam(data, 'Token')
+                        } else {
+                            jsonString = data;
+                        }
 
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -2649,7 +2801,13 @@ var HttpHandler = (function () {
                     data: parameters,
                     dataType: 'html',
                     success: function (data) {
-                        jsonString = data;
+                        if (methodName === 'Login_Submit') {
+                            localStorage.setItem('Token', getQueryFromTargetStr(data, 'Token'))
+                            jsonString = deleteUrlParam(data, 'Token')
+                        } else {
+                            jsonString = data;
+                        }
+
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random();
@@ -2699,7 +2857,7 @@ var WebUser = function () {
     if (webUserJsonString != null) {
         var self = this;
         $.each(webUserJsonString, function (n, o) {
-            self[n] = o;
+            self[n] = filterXSS(o);
         });
         return;
     }
@@ -2714,12 +2872,7 @@ var WebUser = function () {
     }
 
     //获得页面上的token. 在登录信息丢失的时候，用token重新登录.
-    var token = GetQueryString("Token");
-    if (token == null || token == undefined) token = GetQueryString("Token");
-    if (token == null || token == undefined) {
-        var parent = window.parent;
-
-    }
+    var token = localStorage.getItem('Token');
 
     $.ajax({
         type: 'post',
@@ -2740,11 +2893,15 @@ var WebUser = function () {
                 }
                 if (window.top.vm != null)
                     window.top.vm.logoutExt();
+                else {
+                    if (GetHrefUrl().indexOf("Portal/Standard/") != -1)
+                        SetHref(basePath + "/Portal/Standard/Login.htm");
+                }
                 return;
             }
 
             try {
-                webUserJsonString = JSON.parse(data);
+                webUserJsonString = JSON.parse(filterXSS(data));
 
             } catch (e) {
                 alert("json解析错误: " + data);
@@ -2757,7 +2914,7 @@ var WebUser = function () {
     });
     var self = this;
     $.each(webUserJsonString, function (n, o) {
-        self[n] = o;
+        self[n] = filterXSS(o);
     });
 };
 
@@ -2995,7 +3152,8 @@ function DealJsonExp(json, expStr, webUser) {
 
     if (expStr.indexOf('@') == -1)
         return expStr;
-
+    if (json == null)
+        return expStr;
     $.each(json, function (n, val) {
         if (expStr.indexOf("@") == -1)
             return;
@@ -3120,9 +3278,9 @@ $(function () {
     if (url.indexOf('login.htm') != -1
         || url.indexOf('dbinstall.htm') != -1
         || url.indexOf('scanguide.htm') != -1
-        || url.indexOf('home.htm') != -1
+        //|| (url.indexOf('home.htm') != -1 && url.indexOf('/portal/standard/') == -1)
         || url.indexOf('qrcodescan.htm') != -1
-        || url.indexOf('default.htm') != -1
+        //|| (url.indexOf('default.htm') != -1 && url.indexOf('/portal/standard/')==-1)
         || url.indexOf('index.htm') != -1
         || url.indexOf('gotourl.htm') != -1
         || url.indexOf('invited.htm') != -1
@@ -3134,6 +3292,7 @@ $(function () {
         || url == basePath
 
         || url.indexOf('loginwebsite.htm') != -1) {
+        localStorage.setItem('Token', '');
         return;
     }
 
@@ -3162,7 +3321,12 @@ $(function () {
  * @param {any} action
  */
 function ChildrenPostMessage(info, action) {
-    parent.postMessage({ action: action, info: info }, "*");
+    //获取当前子页面的URL
+    var curPath = window.location.href;
+    var pathName = window.document.location.pathname;
+    var pos = curPath.indexOf(pathName);
+    var localhostPath = curPath.substring(0, pos);
+    parent.postMessage({ action: action, info: info }, localhostPath);
 }
 
 /**
@@ -3227,8 +3391,10 @@ function getConfigByKey(key, defVal) {
     }
     if (CommonConfig[key] == undefined)
         CommonConfig[key] = defVal;
-
-    return CommonConfig[key];
+    var val = CommonConfig[key];
+    if(typeof val=='string'&& val.indexOf("@")!=-1)
+        val = DealJsonExp(null,val);
+    return val;
 }
 /**
  * 对象数组分组

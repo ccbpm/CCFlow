@@ -2,7 +2,7 @@
 if (typeof MenuModel == "undefined") {
     var MenuModel = {}
 
-    MenuModel.SelfUrl = "SelfUrl",  //自定义url.
+        MenuModel.SelfUrl = "SelfUrl",  //自定义url.
         MenuModel.Func = "Func", //独立的方法.
 
         MenuModel.StandAloneFlow = "StandAloneFlow", //创建独立的流程.

@@ -65,7 +65,7 @@
 
         function loadTree(rootNo, global, orgNo, nodeID) {
 
-            var ens = new Entities("BP.WF.Port.Depts");
+            var ens = new Entities("BP.Port.Depts");
 
             if (orgNo != null && orgNo != "undefined" && orgNo != "")
                 ens.Retrieve("OrgNo", orgNo);
@@ -99,7 +99,7 @@
         function createJsonToTree(jsonArray, parentNo) {
             if (parentNo != "0") {
                 //增加当前用户所在的部门
-                var en = new Entity("BP.WF.Port.Dept", parentNo);
+                var en = new Entity("BP.Port.Dept", parentNo);
                 var checked = false;
                 var selectedNodes = window.selectedNodes;
                 var sel = $.grep(selectedNodes, function (obj) {

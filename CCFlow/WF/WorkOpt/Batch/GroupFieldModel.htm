@@ -56,10 +56,11 @@
             thead += "<th>标题</th>";
             thead += "<th>发起人</th>";
             thead += "<th>接收日期</th>";
-            var files = node.GetPara("BatchFields");
+            var files = node.GetPara("BatchFields") || "";
+            var editFiles = node.GetPara("EditFields") || "";
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
-                if (files == undefined)
+                if (files == "")
                     continue;
                 if (files.indexOf(attr.KeyOfEn) == -1)
                     continue;
@@ -104,7 +105,10 @@
                         continue;
                     if (mapAttr.Name == "审核意见")
                         continue;
-                    tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
+                    if (editFiles.indexOf(mapAttr.KeyOfEn) < 0)
+                        tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
+                    else
+                        tbody += "<td><input type='text' id='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' name='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' value='" + wk[mapAttr.KeyOfEn] + "'></td>";
                 }
 
                 // 启用审核组件并且可编辑 ，如果是：每个记录后面都有一个意见框.的模式.

@@ -43,7 +43,7 @@
 
             //获得字段集合.
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
-            mapAttrs.Retrieve("FK_MapData", frmID, "Y");
+            mapAttrs.Retrieve("FK_MapData", frmID, "GroupID,Idx");
             fieldsData = mapAttrs;
 
             var groups = new Entities("BP.Sys.GroupFields", "FrmID", frmID);
@@ -60,11 +60,13 @@
 
                 for (var i = 0; i < mapAttrs.length; i++) {
                     var en = mapAttrs[i];
+                    if (en.GroupID != group.OID)
+                        continue;
                     if (en.EditType != 0  || en.KeyOfEn == "FID")
                         continue;
-                    if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
-                        en.DefVal = "";
-                    }
+                    //if (en.MyDataType == 2 && en.DefValType == 0 && en.DefVal == '10002') {
+                    //    en.DefVal = "";
+                    //}
                     var html = "";
                     html += "<tr >";
                     html += "<td class=Idx>" + (i + 1) + "</td>";

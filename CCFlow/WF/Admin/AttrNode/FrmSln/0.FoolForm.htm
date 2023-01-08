@@ -138,7 +138,7 @@
             var nodeID = GetQueryString("FK_Node");
             var flowNo = GetQueryString("FK_Flow");
 
-            var url = "/WF/Admin/AttrFlow/BatchFWC.htm?FK_Flow=" + flowNo + "&NodeID=" + nodeID;
+            var url = "../../AttrFlow/BatchFWC.htm?FK_Flow=" + flowNo + "&NodeID=" + nodeID;
             OpenEasyUiDialogExt(url, '批量设置', 800, 450, false);
         }
 

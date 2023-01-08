@@ -146,7 +146,7 @@
                 //遍历字段
                 for (var i = 0; i < Sys_MapAttr.length; i++) {
                     var mapAttr = Sys_MapAttr[i];
-                    if (groupField.OID == mapAttr.GroupID) {
+                    if (groupField.OID == GetPara(mapAttr.AtPara,"GroupName")) {
 
                         html += "<tr>";
                         html += "<td>" + (i + 1) + "</td>";

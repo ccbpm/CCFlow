@@ -36,6 +36,10 @@
         //初始化数据.
         function InitPage() {
 
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData():
+            handler.DoMethodReturnJSON("MyMethondName")
+
             var flowNo = GetQueryString("FK_Flow");
 
             var nds = new Entities("BP.WF.Template.NodeSimples", flowNo);
@@ -70,12 +74,12 @@
 
             var url = "AdminFrm.htm?WorkID=" + GetQueryString("WorkID");
             url += "&FK_Flow=" + GetQueryString("FK_Flow");
-            url += "&FK_Node=" +NodeID;
+            url += "&FK_Node=" + NodeID;
             window.open(url);
             return;
         }
 
-        
+
     </script>
     <style type="text/css">
         caption {

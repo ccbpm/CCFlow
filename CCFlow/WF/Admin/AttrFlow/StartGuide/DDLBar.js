@@ -32,7 +32,6 @@ function InitBar(optionKey) {
     html += "<button  id='Btn_Help' class='cc-btn-tab btn-setting' onclick='Adv()' value='高级设置' />高级设置</button>";
     html += "<button  id='Btn_Help' class='cc-btn-tab btn-save' onclick='HelpOnline()' value='在线帮助' />在线帮助</button>";
 
-
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
 }

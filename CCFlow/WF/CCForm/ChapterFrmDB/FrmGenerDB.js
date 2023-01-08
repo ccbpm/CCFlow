@@ -2,7 +2,7 @@
 //定义全局的变量
 var pageData = {};//全局的参数变量
 var frmData = {}; // 表单数据
-var isReadonly = false;//表单方案是只读时的变化
+var isReadonly = true;//表单方案是只读时的变化
 webUser = typeof webUser == "undefined" || webUser == null ? new WebUser() : webUser;//用户信息
 var UserICon = getConfigByKey("UserICon", '../../../DataUser/Siganture/'); //获取签名图片的地址
 var UserIConExt = getConfigByKey("UserIConExt", '.jpg');  //签名图片的默认后缀
@@ -50,10 +50,15 @@ function GenerFrm() {
     if (frmData != null) {
         var datas = frmData.MainData;
         $.each(datas, function (idx, item) {
+            var data = item.Data;
+            data = data.replace(/\\\\\\\\"/g, "'");
             if (item.Ver == pageData.DBVer)
-                frmData.MainTable = JSON.parse(item.Data);
+                frmData.MainTable = JSON.parse(data);
+           
             else
-                frmData.CompareTable = JSON.parse(item.Data);
+                frmData.CompareTable = JSON.parse(data);
+           
+                
         })
     }
 
@@ -218,7 +223,10 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
         var compareVal = ConvertDefVal(frmData.CompareTable, mapAttr.KeyOfEn);
         //文本框.
         if (mapAttr.UIContralType == 0) {
-            $('#TB_' + mapAttr.KeyOfEn).val(val);
+            if (mapAttr.TextModel == 3) {
+                $("#TD_" + mapAttr.KeyOfEn +" div").html(val);
+            }else
+                $('#TB_' + mapAttr.KeyOfEn).val(val);
             if (mapAttr.Tip != "") {
                 $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", mapAttr.Tip);
 

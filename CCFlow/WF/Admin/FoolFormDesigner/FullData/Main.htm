@@ -105,7 +105,9 @@
                 return;
             }
 
-            if (sql.indexOf('@Key') == -1 && extType != "PageLoadFull") {
+            //按钮的操作的时候不判断语句是否有@Key
+            var keyControlType = GetQueryString("UIControlType") || "";
+            if (keyControlType!="18" && sql.indexOf('@Key') == -1 && extType != "PageLoadFull") {
                 alert("表达式里必须有 @Key 参数.");
                 return;
             }

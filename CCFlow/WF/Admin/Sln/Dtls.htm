@@ -88,13 +88,9 @@
             }
 
             Reload();
-            //var url = '../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&FK_MapData=' + fk_mapdata + '&No=' + mypk + '&FK_Node=' + fk_node;
 
             var url = "../FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=" + fk_mapdata + "_" + fk_node + "&FK_MapDtl=" + mypk + "&FK_Node=" + fk_Node;
             WinOpen(url);
-
-            //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
-            //Reload();
         }
 
         //删除从表在节点中的权限控制.
@@ -103,8 +99,7 @@
                 return;
             var mypk = dtl + '_' + fk_node;
             var en = new Entity("BP.WF.Template.Frm.MapDtlExt");
-            en.No = mypk;
-            en.Delete();
+            en.Delete("No",mypk);
             alert("删除成功!");
             Reload();
         }

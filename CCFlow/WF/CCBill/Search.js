@@ -8,7 +8,7 @@ function isHaveAutoFull(mapAttr) {
         return false;
     var isHave = false;
     $.each(mapExts, function (idex, mapExt) {
-        if (mapExt.AttrOfOper == mapAttr.Field
+        if ((mapExt.AttrOfOper == mapAttr.Field || mapExt.AttrsOfActive == mapAttr.Field)
             && mapExt.ExtType == "AutoFullDLLSearchCond") {
             isHave = true;
             return false;
@@ -27,7 +27,7 @@ function isHaveActiveDDLSearchCond(mapAttr) {
         return false;
     var isHave = false;
     $.each(mapExts, function (idex, mapExt) {
-        if (mapExt.AttrOfOper == mapAttr.Field
+        if ((mapExt.AttrOfOper == mapAttr.Field || mapExt.AttrsOfActive == mapAttr.Field)
             && mapExt.ExtType == "ActiveDDLSearchCond") {
             isHave = true;
             return false;
@@ -44,6 +44,7 @@ function isHaveActiveDDLSearchCond(mapAttr) {
 * @param defVal
 */
 function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
+    defVal = "," + defVal + ",";
     var operations = [];
     var isAutoFull = isHaveAutoFull(mapAttr);
     var isActiveDDL = isHaveActiveDDLSearchCond(mapAttr);
@@ -69,13 +70,13 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
                     operations.push({
                         name: en.Name,
                         value: en.BH,
-                        selected: en.BH == defVal ? true : false
+                        selected: defVal.indexOf(","+en.BH+",")!=-1 ? true : false
                     });
                 } else {
                     operations.push({
                         name: en.Lab,
                         value: en.IntKey,
-                        selected: en.IntKey == defVal ? true : false
+                        selected: defVal.indexOf("," + en.IntKey + ",") != -1? true : false
                     });
                 }
 
@@ -83,7 +84,7 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
                 operations.push({
                     name: en.Name,
                     value: en.No,
-                    selected: en.No == defVal ? true : false
+                    selected: defVal.indexOf("," + en.No + ",") != -1 ? true : false
                 });
         })
     }
@@ -95,13 +96,27 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
     }
 
     var showWay = ddlShowWays[mapAttr.Field];
-    showWay = showWay == null || showWay == undefined || showWay == "" ? 0 : showWay;
+    showWay = showWay == null || showWay == undefined || showWay == "" ? "0" : showWay;
+    var isRadioSelect = 1;
+    var ss = showWay.split("_");
+    if (ss.length == 2) {
+        showWay = ss[0];
+        isRadioSelect = ss[1];
+    } else {
+        showWay = ss[0];
+        isRadioSelect = 1;
+    }
+    if (showWay == 0 && (isAutoFull == true || isActiveDDL == true)) {
+        showWay = 2;
+        isRadioSelect = 1;
+    }
     selectSearch.push({
         key: mapAttr.Field,
         label: mapAttr.Name,
         value: defVal,
         showWay: showWay, //0下拉 1平铺
         operations: operations,
+        isRadioSelect: isRadioSelect
     });
 
     return selectSearch;
@@ -365,7 +380,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                     if (row[this.field] == "1")
                         val = "是";
 
-                    return FieldColorSet(colorSet, this.field, row[this.field], val)
+                    return FieldColorSet(colorSet, this.field, row[this.field], val,row)
 
                 }
             };
@@ -405,7 +420,6 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
             fixed: false,
             sort: sortable,
             rowspan: keyRowSpan,
-
             templet: function (row) {
                 var val = row[this.field];
 
@@ -418,7 +432,7 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
                     }
                 }
 
-                return FieldColorSet(colorSet, this.field, val, val);
+                return FieldColorSet(colorSet, this.field, val, val,row);
 
             }
 
@@ -435,14 +449,14 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
             var _html = "";
             var rowstr = JSON.stringify(row);
             rowstr = encodeURIComponent(rowstr);
-            if (row.BillState == 100 || entityType == 100) {
+            /*if (row.BillState == 100 || entityType == 100) {
                 _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ",\"" + rowstr + "\")'style='color:blue'>详情</a>";
             }
             else
-                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ")'style='color:blue'>编辑</a>";
+                _html += "<a href='javascript:void(0)'onclick='OpenIt(\"" + row.OID + "\"," + entityType + "," + row.BillState + ")'style='color:blue'>编辑</a>";*/
             //增加其他的方法
             $.each(methods, function (idx, method) {
-                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DoMethod(\"" + method.No + "\"," + row.OID + ")'style='color:blue'>" + method.Name + "</a>";
+                _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DoMethod(\"" + method.No + "\",\"" + row.OID + "\",\"" + rowstr + "\")'style='color:blue'>" + method.Name + "</a>";
             })
             if (isHaveDelOper == true)
                 _html += "<span style='padding: 0px 3px; color:#ccc'>|</span><a href='javascript:void(0)'onclick='DeleteIt(\"" + row.OID + "\"," + entityType + ")' style='color:red'>删除</a>";
@@ -552,7 +566,7 @@ function OpenIt(workid, entityType, billstate, row, isOpenAdd) {
 
     if (mapData.RowOpenModel == 0) {
         if (urlOpenType != 9)
-            url = "../CCBill/" + url;
+            url = basePath + "/WF/CCBill/" + url;
         if (top.vm != null)
             top.vm.openTab(mapData.Name, url);
         else
@@ -588,12 +602,21 @@ function Search() {
 
     //获得外键的查询条件,存储里面去.
     var str = "";
-    $("select[name^='DDL_']").each(function () {
-        var id = $(this).attr("id");
-        id = id.replace("DDL_", "");
-        str += "@" + id + "=" + $(this).val();
-    });
+   
+    $.each(searchData["selectSearch"], function (i, item) {
+        if (item.showWay == 0 && item.isRadioSelect == 0) {
+            var val = xmSelect.get('#XmlSelect_' + item.key, true).getValue('value');
+            if (val.join(",").indexOf("all") != -1)
+                str += "@" + item.key + "=all";
+            else
+                str += "@" + item.key + "=" + val.join(",");
+        } else {
+            str += "@" + item.key + "=" + $("#DDL_" + item.key).val();
+        }
+       
+           
 
+    });
     $.each(searchData["inputSearch"], function (i, item) {
         if (item.key == "key")
             return true;
@@ -695,9 +718,6 @@ function SearchByDate(type, selectVal, selectType, obj) {
  */
 function SearchBySelect(ddlKey, ddlVal) {
     $("#DDL_" + ddlKey).val(ddlVal);
-    layui.form.render("select");
-    var select = 'dd[lay-value=' + ddlVal + ']';
-    $("#DDL_" + ddlKey).siblings("div.layui-form-select").find('dl').find(select).click();//触发
     Search();
 }
 /**
@@ -922,7 +942,7 @@ function getFieldColor(colorSet, keyOfEn) {
  * @param {any} val
  * @param {any} valText
  */
-function FieldColorSet(colorSet, field, val, valText) {
+function FieldColorSet(colorSet, field, val, valText, rowData) {
     var fieldColor = [];
     if (colorSet.indexOf("@" + field + ":") != -1) {
         fieldColor = getFieldColor(colorSet, field);
@@ -932,15 +952,21 @@ function FieldColorSet(colorSet, field, val, valText) {
     var reg = /^[0-9]+.?[0-9]*/;
     for (var i = 0; i < fieldColor.length; i++) {
         var color = fieldColor[i];
+        if (color.Color.indexOf("_")==0)
+            color.Color = rowData[color.Color.substring(1)];
+        if (color.From == 0 && color.To == 0) {
+            var stylecss = "padding: 0 5px;font-size: 14px;white-space: nowrap;border-radius: 2px;text-align:center;";
+            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>';
+        }
         //说明是字符串，需要修改
         if (reg.test(color.From) == false && reg.test(color.To) == false && (color.From == valText || color.To == valText)) {
-            var stylecss = "padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
-            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>'
+            var stylecss = "padding: 0 5px;font-size: 14px;white-space: nowrap;border-radius: 2px;text-align:center;";
+            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>';
         }
         if (reg.test(color.From) == true && reg.test(color.To) == true
             && parseInt(color.From) <= val && parseInt(color.To) >= val) {
-            var stylecss = "padding: 0 5px;font-size: 14px;color: #fff;white-space: nowrap;border-radius: 2px;text-align:center;";
-            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>'
+            var stylecss = "padding: 0 5px;font-size: 14px;white-space: nowrap;border-radius: 2px;text-align:center;";
+            return '<div style="' + stylecss + 'background-color:' + color.Color + ';">' + valText + '</div>';
         }
     }
     return valText;
@@ -962,9 +988,13 @@ function OpenLink(no, source) {
         return;
     }
     url = url.indexOf("?") == -1 ? url + "?1=1" : url;
-    url += "&FrmID=" + frmID
+    url += "&FrmID=" + frmID;
+    url = DealExp(url);
+    var w = link.PopWidth || window.innerWidth * 2/3;
+    if (w < window.innerWidth * 2 / 3)
+        w = window.innerWidth * 2 / 3;
     if (link.RefMethodType == 0) {//0=模态窗口打开@1=新窗口打开@2=右侧窗口打开@4=转到新页面
-        OpenLayuiDialog(url, link.Name, window.innerWidth * 2 / 3, null, "r", false);
+        OpenLayuiDialog(url, link.Name, w, null, "r", false);
         return;
     }
     window.top.vm.openTab(link.Name, url);
@@ -1146,7 +1176,11 @@ function DeleteIt(oid, entityType) {
  * @param {any} methodNo
  * @param {any} workid
  */
-function DoMethod(methodNo, workid) {
+function DoMethod(methodNo, workid, jsonStr) {
+    jsonStr = jsonStr || "";
+    jsonStr = decodeURIComponent(jsonStr);
+    if (jsonStr != "")
+        jsonStr = JSON.parse(jsonStr);
     var method = new Entity("BP.CCBill.Template.Method", methodNo);
     if (method.MethodModel === "Bill")
         method.Docs = "./Opt/Bill.htm?FrmID=" + method.Tag1 + "&MethodNo=" + method.No + "&WorkID=" + workid + "&From=Dict";
@@ -1216,16 +1250,39 @@ function DoMethod(methodNo, workid) {
             layer.alert("没有解析的Url-MethodModel:" + method.MethodModel + " - " + method.Mark);
             return;
         }
+        url = DealJsonExp(jsonStr, url);
         if (url.indexOf('?') > 0)
             method.Docs = url + "&FrmID=" + method.FrmID + "&WorkID=" + workid;
         else
             method.Docs = url + "?FrmID=" + method.FrmID + "&WorkID=" + workid;
     }
 
-    if (method.MethodModel === "Func")
+    if (method.MethodModel === "Func") {
         OpenLayuiDialog(method.Docs, method.Name, window.innerWidth / 2, 50, "auto");
-    else
-        window.top.vm.openTab(method.Name, method.Docs);
+    }
+    else {
+        var refmethodType = method.RefMethodType;
+        if (refmethodType == 0 || refmethodType == 1) {//模态窗打开
+            var h = method.PopHeight == 0 ? 70 : method.PopHeight;
+            var w = method.PopWidth == 0 ? window.innerWidth / 2 : method.PopWidth;
+            OpenLayuiDialog(method.Docs, method.Name, w, h, "auto");
+            return;
+        }
+        if (refmethodType == 2) { //新页面打开
+            window.top.vm.openTab(method.Name, method.Docs);
+            return;
+        }
+        if (refmethodType == 3) {//侧滑打开
+            var w = method.PopWidth == 0 ? window.innerWidth / 2 : method.PopWidth;
+            OpenLayuiDialog(method.Docs, method.Name, w, 100, "r");
+            return;
+        }
+        if (refmethodType == 4) {//转新页面
+            window.open(method.Docs);
+            return;
+        }
+        
+    }
 
 }
 
@@ -1293,7 +1350,7 @@ function transferHtmlData(tableData) {
 
 function htmlEncodeByRegExp(str) {
     var s = '';
-    if (str.length === 0) {
+    if (str==null || str==undefined ||str.length === 0) {
         return '';
     }
     s = str.replace(/&/g, '&amp;');

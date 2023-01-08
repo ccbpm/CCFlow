@@ -57,7 +57,8 @@
             thead += "<th>标题</th>";
             thead += "<th>发起人</th>";
             thead += "<th>接收日期</th>";
-            var files = node.GetPara("BatchFields");
+            var files = node.GetPara("BatchFields")||"";
+            var editFiles = node.GetPara("EditFields") || "";
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
                 if (files == undefined)
@@ -66,7 +67,8 @@
                     continue;
                 if (attr.Name == "审核意见")
                     continue;
-                thead += "<th>" + attr.Name + "</th>";
+                    thead += "<th>" + attr.Name + "</th>";
+              
             }
 
             //判断该节点是否启用审核组件
@@ -92,7 +94,7 @@
 
                 tbody += "<td ><label><input type='checkbox' id='CB_" + wk.WorkID + "' name='CB_" + wk.WorkID + "'/>选择</label></td>";
                 tbody += "<td><a href=\"javascript:To('../../MyFlow.htm?WorkID=" + wk.WorkID + "&FK_Node=" + node.NodeID + "&FK_Flow=" + node.FK_Flow + "');\" >" + wk.Title + "</a></td>";
-                tbody += "<td>" + wk.Starter + "</td>";
+                tbody += "<td>" + wk.StarterName + "</td>";
                 tbody += "<td>" + wk.ADT + "</td>";
 
                 //增加后台配置的显示的列.
@@ -101,11 +103,23 @@
                     var mapAttr = mapAttrs[idx];
                     if (files == undefined)
                         continue;
-                    if (files.indexOf(attr.KeyOfEn) == -1)
+                    if (files.indexOf(mapAttr.KeyOfEn) < 0)
                         continue;
                     if (mapAttr.Name == "审核意见")
                         continue;
-                    tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
+                    if (editFiles.indexOf(mapAttr.KeyOfEn) < 0) {
+                        if (parseInt(mapAttr.UIContralType) == 9) {
+                            var val = mapAttr.Tag2;
+                            //替换@符号的数据
+                            val = DealJsonExp(wk, val);
+                            tbody += "<td><a  id='Link_" + mapAttr.KeyOfEn + "' href='" + val + "' target='" + mapAttr.Tag1 + "' name='Link_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</a></td>";
+                        } else {
+                            tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
+                        }
+                    }
+                       
+                    else
+                        tbody += "<td><input type='text' id='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' name='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' value='" + wk[mapAttr.KeyOfEn]+"'></td>";
                 }
 
                 // 启用审核组件并且可编辑 ，如果是：每个记录后面都有一个意见框.的模式.
@@ -135,7 +149,13 @@
                 bar += '<button type=button onclick="Btn_Delete()">' + btns.DelLab + '</button>';
             }
 
+            if (sta == 1 && BatchCheckNoteModel == "1")
+                bar += '<button type=button   onclick="Btn_BatchCheckMsg()">批量意见</button>';
+
             bar += '<button type=button   onclick="Btn_Back()">返回</button>';
+
+           
+
 
             $("#btnDiv").append(bar);
 
@@ -169,7 +189,29 @@
             }
 
         }
-
+        function Btn_BatchCheckMsg() {
+            $('#TextArea').val('');
+            $('#WorkCheckModal').modal('show');
+            $('#TextArea').focus();
+        }
+        function ShowCheckMsg() {
+            var text = $('#TextArea').val();
+            text = replaceTrim(text);
+            if (text == "") {
+                alert("请输入数据");
+                $('#TextArea').val('');
+                $('#TextArea').focus();
+                return;
+            }
+            $("textarea[name$='_WorkCheck_Doc']").val(text);
+            $('#WorkCheckModal').modal('hide');
+        }
+        function replaceTrim(val) {//去除空格
+            val = val.replace(/[ ]/g, "");
+            val = val.replace(/<\/?.+?>/g, "");
+            val = val.replace(/[\r\n]/g, "");
+            return val;
+        }
         function To(url) {
             WinOpen(url);
             return;
@@ -297,12 +339,11 @@
         }
 
         function returnWorkWindowClose(data) {
-            if (data != "取消")
-                document.getElementById("ToEmps").innerHTML = data;
-
+            document.getElementById("ToEmps").innerHTML = data;
             $('#returnWorkModal').modal('hide');
-            Send();
-
+            if (data != "取消" && data != "")
+                Send();
+            return;
         }
 
         function Btn_Group() {
@@ -653,7 +694,7 @@
             <form id="divCCForm" method="post">
                 <table class="table  table-striped">
                     <thead id="Table1"></thead>
-                    <br />
+                    <br/>
                     <tbody id="Table2"></tbody>
                 </table>
                 <span id="ToEmps" style="display:none"></span>
@@ -697,6 +738,26 @@
                 </div>
             </div><!-- /.modal-content -->'
         </div><!-- /.modal-dialog -->'
+    </div>
+
+    <!--批量增加审核意见-->
+    <div class="modal fade" id="WorkCheckModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">请输入审核意见</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="TextArea" cols="20" rows="2" style="width: 350px; height: 150px; margin-top: 5px; overflow: hidden;"></textarea>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" data-dismiss="modal"><img src="../../Img/Btn/cancel_dafalut.png" /> 取消</button>
+                    <button type="button" onclick="ShowCheckMsg()"><img src="../../Img/Btn/Save.png" /> 保存</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 ﻿//自定义url. ********************************************************************************************************
-function SelfUrl(mapExt,targetId,index,oid) {
+function SelfUrl(mapExt, targetId, index, oid) {
     if (targetId == null || targetId == undefined)
         targetId = "TB_" + mapExt.AttrOfOper;
 
@@ -15,7 +15,9 @@ function SelfUrl(mapExt,targetId,index,oid) {
     // tb.attr('disabled', 'true');
 
     //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
-    tb.bind("click", function () { SelfUrl_Done(mapExt,targetId,index,oid) });
+    tb.bind("click", function () {
+        SelfUrl_Done(mapExt, this.id, index, oid)
+    });
 }
 
 function SelfUrl_Done(mapExt, targetId, index, pkval) {
@@ -29,20 +31,42 @@ function SelfUrl_Done(mapExt, targetId, index, pkval) {
     if (url.indexOf('?') == -1)
         url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
     var title = mapExt.GetPara("Title");
-    
-        OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,
-         "icon-edit", true, function () {
-             var iframe = document.getElementById("eudlgframe");
-             if (iframe) {
-                 var val = iframe.contentWindow.Btn_OK();
-                 $("#" + targetId).val(val);
-                 FullIt(val, mapExt.MyPK, targetId);
-             }
+    var width = mapExt.W;
+    var height = mapExt.H;
 
-         }, null, function () {
+    if (width > window.innerWidth || width < window.innerWidth / 2)
+        width = window.innerWidth * 4 / 5;
+    if (height > window.innerHeight || height < window.innerHeight / 2)
+        height = 250;
+    else
+        height = height / window.innerHeight * 100;
 
-         });
-    
+    if (window.parent && typeof window.parent.OpenLayuiDialog == "function") {
+        window.parent.OpenLayuiDialog(url, title, width, 80, "auto", false, true, true, function () {
+            var iframe = $(window.parent.frames["dlg"]).find("iframe");
+            if (iframe.length > 0) {
+                iframe = iframe[0].contentWindow;
+                if (typeof iframe.Btn_OK == "function") {
+                    var val = iframe.Btn_OK;
+                    $("#" + targetId).val(val);
+                    FullIt(val, mapExt.MyPK, targetId);
+                }
+            }
+        })
+        return;
+    }
+    OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,"icon-edit", true, function () {
+        var iframe = document.getElementById("eudlgframe");
+        if (iframe) {
+            var val = iframe.contentWindow.Btn_OK();
+            $("#" + targetId).val(val);
+            FullIt(val, mapExt.MyPK, targetId);
+        }
+
+    }, null, function () {
+
+    });
+
 }
 //***************************************树干叶子模式*****************************************************************
 function PopBranchesAndLeaf(mapExt, val, targetId, index, oid, objtr) {
@@ -60,21 +84,21 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index, oid, objtr) {
     target.after(container);
     container.width(width);
     container.css("min-height", height);
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
     var mtags = $("#" + mtagsId);
     if (oid == null || oid == undefined)
         oid = GetPKVal();
 
     //是否可以手工录入
     var isEnter = mapExt.GetPara("IsEnter");
-    isEnter = isEnter != null && isEnter != undefined && isEnter == "1"? true : false;
+    isEnter = isEnter != null && isEnter != undefined && isEnter == "1" ? true : false;
     var title = mapExt.GetPara("Title");
     mtags.mtags({
         "fit": true,
@@ -82,14 +106,14 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index, oid, objtr) {
         "KeyOfEn": mapExt.AttrOfOper,
         "RefPKVal": oid,
         "IsEnter": isEnter,
-        "Title": title == null || title == "" ? "选择" :title,
+        "Title": title == null || title == "" ? "选择" : title,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
             console.log("unselect: " + JSON.stringify(record));
         }
     });
-   
-    
+
+
 
     mtags.mtags("loadData", GetInitJsonData(mapExt, oid, val));
     $("#" + targetId).val(mtags.mtags("getText"));
@@ -98,11 +122,11 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index, oid, objtr) {
     var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     if (isEnter == false)
         container.on("dblclick", function () {
-            clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid)
+            clickEvent(mapExt, targetId, objtr, url, mtagsId, target, oid)
         });
     else
         $("#" + mtagsId + "_Button").bind("click", function () {
-            clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid);
+            clickEvent(mapExt, targetId, objtr, url, mtagsId, target, oid);
         });
 
 }
@@ -121,40 +145,79 @@ function GetInitJsonData(mapExt, oid, val) {
     });
     return initJsonData;
 }
-function clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid) {
+function clickEvent(mapExt, targetId, objtr, url, mtagsId, target, oid) {
     var width = mapExt.W;
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-    if (window.parent && window.parent.OpenBootStrapModal) {
-        var data = "";
-        var paras = "";
-        if (objtr == "" || objtr == null || objtr == undefined) {
-            //获取表单中字段的数据
-            paras = getPageData();
-        }
-        else {
-            data = $(objtr).data().data;
-            Object.keys(data).forEach(function (key) {
-                if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
-                else {
-                    paras += "@" + key + "=" + data[key];
-                }
-            });
-        }
 
+    if (width > window.innerWidth || width < window.innerWidth / 2)
+        width = window.innerWidth * 4 / 5;
+    if (height > window.innerHeight || height < window.innerHeight / 2)
+        height = 250;
+    else
+        height = height / window.innerHeight * 100;
 
-        window.parent.OpenBootStrapModal(url + "&AtParas=" + paras, iframeId, title, width, height, "icon-edit", true, function () {
+    //参数传递
+    var data = "";
+    var paras = "";
+    if (objtr == "" || objtr == null || objtr == undefined) {
+        //获取表单中字段的数据
+        paras = getPageData();
+    }
+    else {
+        data = $(objtr).data().data;
+        Object.keys(data).forEach(function (key) {
+            if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
+            else {
+                paras += "@" + key + "=" + data[key];
+            }
+        });
+    }
+
+    if (window.parent && typeof window.parent.OpenLayuiDialog == "function") {
+        window.parent.OpenLayuiDialog(url + "&AtParas=" + paras, title, width, 80, "auto", false, true, true, function () {
             var selectType = mapExt.GetPara("SelectType");
-            var iframe = window.parent.frames[iframeId];
-            if (iframe) {
+            var iframe = $(window.parent.frames["dlg"]).find("iframe");
+            if (iframe.length > 0) {
+                iframe = iframe[0].contentWindow;
                 var selectedRows = iframe.selectedRows;
                 if (iframe.Save)
-                        selectedRows = iframe.Save();
+                    selectedRows = iframe.Save();
                 if ($.isArray(selectedRows)) {
 
                     var mtags = $("#" + mtagsId);
-                    mtags.mtags("loadData", GetInitJsonData(mapExt, oid,""));
+                    mtags.mtags("loadData", GetInitJsonData(mapExt, oid, ""));
+                    target.val(mtags.mtags("getText"));
+                    // 单选复制当前表单
+                    if (selectType == "0" && selectedRows.length == 1) {
+                        FullIt(selectedRows[0].No, mapExt.MyPK, targetId);
+                    }
+                    var No = "";
+                    if (selectedRows != null && $.isArray(selectedRows))
+                        $.each(selectedRows, function (i, selectedRow) {
+                            No += selectedRow.No + ",";
+                        });
+                    //执行JS
+                    var backFunc = mapExt.Tag5;
+                    if (backFunc != null && backFunc != "" && backFunc != undefined)
+                        DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+
+                }
+            }
+        });
+    } else {
+        window.OpenBootStrapModal(url + "&AtParas=" + paras, iframeId, title, width, height, "icon-edit", true, function () {
+            var selectType = mapExt.GetPara("SelectType");
+            var iframe = window.frames[iframeId];
+            if (iframe) {
+                var selectedRows = iframe.selectedRows;
+                if (iframe.Save)
+                    selectedRows = iframe.Save();
+                if ($.isArray(selectedRows)) {
+
+                    var mtags = $("#" + mtagsId);
+                    mtags.mtags("loadData", GetInitJsonData(mapExt, oid, ""));
                     target.val(mtags.mtags("getText"));
                     // 单选复制当前表单
                     if (selectType == "0" && selectedRows.length == 1) {
@@ -175,18 +238,17 @@ function clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid) {
         }, null, function () {
 
         }, "div_" + iframeId);
-        return;
     }
 
 }
 //***************************************树干模式.*****************************************************************
-function PopBranches(mapExt, val, targetId, index,oid,objtr) {
+function PopBranches(mapExt, val, targetId, index, oid, objtr) {
     var mtagsId;
     if (targetId == null || targetId == undefined)
         targetId = "TB_" + mapExt.AttrOfOper;
 
     var target = $("#" + targetId);
-  
+
     var width = target.outerWidth();
     var height = target.outerHeight();
     target.hide();
@@ -196,14 +258,15 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
     container.css("min-height", height);
     container.attr("id", mapExt.AttrOfOper + "_mtags");
     var mtags;
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
+
     var mtags = $("#" + mtagsId);
     if (oid == null || oid == undefined)
         oid = GetPKVal();
@@ -222,11 +285,11 @@ function PopBranches(mapExt, val, targetId, index,oid,objtr) {
         "onUnselect": function (record) {
             console.log("unselect: " + JSON.stringify(record));
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
-          
+
         }
     });
 
-     //初始加载
+    //初始加载
     mtags.mtags("loadData", GetInitJsonData(mapExt, oid, val));
     $("#" + targetId).val(mtags.mtags("getText"));
 
@@ -250,73 +313,122 @@ function clickBranchesEvent(mapExt, targetId, objtr, url, mtagsId, target, oid) 
     var height = mapExt.H;
     var iframeId = mapExt.MyPK;
     var title = mapExt.GetPara("Title");
-
-    if (window.parent && window.parent.OpenBootStrapModal) {
-            var data = "";
-            var paras = "";
-            if (objtr == "" || objtr == null || objtr == undefined) {
-                //获取表单中字段的数据
-                paras = getPageData();
-            }
+    if (width > window.innerWidth || width < window.innerWidth / 2)
+        width = window.innerWidth * 4 / 5;
+    if (height > window.innerHeight || height < window.innerHeight / 2)
+        height = 50;
+    else
+        height = height / window.innerHeight * 100;
+    //传递参数
+    var data = "";
+    var paras = "";
+    if (objtr == "" || objtr == null || objtr == undefined) {
+        //获取表单中字段的数据
+        paras = getPageData();
+    }
+    else {
+        data = $(objtr).data().data;
+        Object.keys(data).forEach(function (key) {
+            if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
             else {
-                data = $(objtr).data().data;
-                Object.keys(data).forEach(function (key) {
-                    if (key == "OID" || key == "FID" || key == "Rec" || key == "RefPK" || key == "RDT") { }
-                    else {
-                        paras += "@" + key + "=" + data[key];
-                    }
-                });
+                paras += "@" + key + "=" + data[key];
             }
-            window.parent.OpenBootStrapModal(url+"&AtParas="+paras, iframeId, title, width, height, "icon-edit", true, function () {
-                var selectType = mapExt.GetPara("SelectType");
-                var iframe = window.parent.frames[iframeId];
-                
-                if (iframe) {
-                    //删除保存的数据
-                    var initJsonData = [];
-                    initJsonData = Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid, initJsonData);
-                    var nodes = iframe.GetCheckNodes();
-                    
-                    mtags = $("#" + mtagsId);
-                   
-                    if ($.isArray(nodes)) {
-                        $.each(nodes, function (i, node) {
-                            initJsonData.push({
-                                "No": node.No,
-                                "Name": node.Name
-                            });
+        });
+    }
+    if (window.parent && typeof window.parent.OpenLayuiDialog == "function") {
+        window.parent.OpenLayuiDialog(url + "&AtParas=" + paras, title, width, 80, "auto", false, true, true, function () {
+            var selectType = mapExt.GetPara("SelectType");
+            var iframe = $(window.parent.frames["dlg"]).find("iframe");
+            if (iframe.length > 0) {
+                iframe = iframe[0].contentWindow;
+                //删除保存的数据
+                var initJsonData = [];
+                initJsonData = Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid, initJsonData);
+                var nodes = iframe.GetCheckNodes();
+
+                mtags = $("#" + mtagsId);
+
+                if ($.isArray(nodes)) {
+                    $.each(nodes, function (i, node) {
+                        initJsonData.push({
+                            "No": node.No,
+                            "Name": node.Name
                         });
+                    });
 
-                        mtags.mtags("loadData", initJsonData);
-                        $("#" + targetId).val(mtags.mtags("getText"));
+                    mtags.mtags("loadData", initJsonData);
+                    $("#" + targetId).val(mtags.mtags("getText"));
 
-                        // 单选复制当前表单
-                        if (selectType == "0" && nodes.length == 1) {
-                            FullIt(nodes[0].No, mapExt.MyPK, targetId);
-                        }
-
-                        //执行JS方法
-                        var No = "";
-                        if (nodes != null && $.isArray(nodes))
-                            $.each(nodes, function (i, nodes) {
-                                No += nodes.No + ",";
-                            });
-                        //执行JS
-                        var backFunc = mapExt.Tag5;
-                        if (backFunc != null && backFunc != "" && backFunc != undefined)
-                            DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                    // 单选复制当前表单
+                    if (selectType == "0" && nodes.length == 1) {
+                        FullIt(nodes[0].No, mapExt.MyPK, targetId);
                     }
-                }
-            }, null, function () {
 
-            }, "div_" + iframeId);
-            return;
-        }
+                    //执行JS方法
+                    var No = "";
+                    if (nodes != null && $.isArray(nodes))
+                        $.each(nodes, function (i, nodes) {
+                            No += nodes.No + ",";
+                        });
+                    //执行JS
+                    var backFunc = mapExt.Tag5;
+                    if (backFunc != null && backFunc != "" && backFunc != undefined)
+                        DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                }
+            }
+        })
+    } else {
+        window.OpenBootStrapModal(url + "&AtParas=" + paras, iframeId, title, width, height, "icon-edit", true, function () {
+            var selectType = mapExt.GetPara("SelectType");
+            var iframe = window.frames[iframeId];
+
+            if (iframe) {
+                //删除保存的数据
+                var initJsonData = [];
+                initJsonData = Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid, initJsonData);
+                var nodes = iframe.GetCheckNodes();
+
+                mtags = $("#" + mtagsId);
+
+                if ($.isArray(nodes)) {
+                    $.each(nodes, function (i, node) {
+                        initJsonData.push({
+                            "No": node.No,
+                            "Name": node.Name
+                        });
+                    });
+
+                    mtags.mtags("loadData", initJsonData);
+                    $("#" + targetId).val(mtags.mtags("getText"));
+
+                    // 单选复制当前表单
+                    if (selectType == "0" && nodes.length == 1) {
+                        FullIt(nodes[0].No, mapExt.MyPK, targetId);
+                    }
+
+                    //执行JS方法
+                    var No = "";
+                    if (nodes != null && $.isArray(nodes))
+                        $.each(nodes, function (i, nodes) {
+                            No += nodes.No + ",";
+                        });
+                    //执行JS
+                    var backFunc = mapExt.Tag5;
+                    if (backFunc != null && backFunc != "" && backFunc != undefined)
+                        DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+                }
+            }
+        }, null, function () {
+
+        }, "div_" + iframeId);
+
+    }
+
 }
 
 /******************************************  表格查询 **********************************/
-function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
-    
+function PopTableSearch(mapExt, val, targetId, index, oid, objtr) {
+
     var mtagsId;
     if (targetId == null || targetId == undefined)
         targetId = "TB_" + mapExt.AttrOfOper;
@@ -330,16 +442,17 @@ function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-   
-    
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
+
     if (oid == null || oid == undefined)
         oid = GetPKVal();
 
@@ -370,11 +483,11 @@ function PopTableSearch(mapExt,val, targetId, index, oid,objtr) {
 
     if (isEnter == false)
         container.on("dblclick", function () {
-            clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid)
+            clickEvent(mapExt, targetId, objtr, url, mtagsId, target, oid)
         });
     else
         $("#" + mtagsId + "_Button").bind("click", function () {
-            clickEvent(mapExt, targetId, objtr, url, mtagsId, target,oid);
+            clickEvent(mapExt, targetId, objtr, url, mtagsId, target, oid);
         });
 
 }
@@ -388,7 +501,7 @@ function PopGroupList(mapExt, targetId, index, oid) {
         targetId = "TB_" + mapExt.AttrOfOper;
 
     var target = $("#" + targetId);
-    
+
 
     var width = target.outerWidth();
     var height = target.outerHeight();
@@ -397,14 +510,14 @@ function PopGroupList(mapExt, targetId, index, oid) {
     target.after(container);
     container.width(width);
     container.height(height);
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
     if (oid == null || oid == undefined)
         oid = GetPKVal();
     var mtags = $("#" + mtagsId);
@@ -439,7 +552,7 @@ function PopGroupList(mapExt, targetId, index, oid) {
         $("#" + mtagsId + "_Button").bind("click", function () {
             clickEvent(mapExt, targetId, null, url, mtagsId, target, oid);
         });
-   
+
 
 }
 
@@ -460,14 +573,14 @@ function PopBindSFTable(mapExt, targetId, index, oid) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
     var mtags = $("#" + mtagsId);
     var oid = GetPKVal();
 
@@ -488,9 +601,9 @@ function PopBindSFTable(mapExt, targetId, index, oid) {
         }
     });
 
-   
+
     mtags.mtags("loadData", GetInitJsonData(mapExt, oid, ""));
-   target.val(mtags.mtags("getText"));
+    target.val(mtags.mtags("getText"));
 
     //解项羽 这里需要相对路径.
     var localHref = GetLocalWFPreHref();
@@ -509,7 +622,7 @@ function PopBindSFTable(mapExt, targetId, index, oid) {
 
 
 /******************************************  绑定外键-单表数据源 PopTableList **********************************/
- 
+
 function PopTableList(mapExt, targetId, index, oid) {
 
     var mtagsId;
@@ -524,14 +637,14 @@ function PopTableList(mapExt, targetId, index, oid) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
     var mtags = $("#" + mtagsId);
 
     if (oid == null || oid == undefined)
@@ -592,14 +705,14 @@ function PopBindEnum(mapExt, targetId, index, oid) {
     var container = $("<div></div>");
     target.after(container);
     container.width(width);
-    if (index == null || index == undefined) {
-        container.attr("id", mapExt.AttrOfOper + "_mtags");
+    if (index == null || index == undefined)
         mtagsId = mapExt.AttrOfOper + "_mtags";
-    }
-    else {
-        container.attr("id", mapExt.AttrOfOper + "_mtags_" + index);
+    else
         mtagsId = mapExt.AttrOfOper + "_mtags_" + index;
-    }
+
+    if ($("#" + mtagsId).length != 0)
+        $("#" + mtagsId).remove();
+    container.attr("id", mtagsId);
     var mtags = $("#" + mtagsId);
 
     if (oid == null || oid == undefined)
@@ -609,13 +722,13 @@ function PopBindEnum(mapExt, targetId, index, oid) {
     var isEnter = mapExt.GetPara("IsEnter");
     isEnter = isEnter != null && isEnter != undefined && isEnter == "1" ? true : false;
     var title = mapExt.GetPara("Title");
-   mtags.mtags({
-       "fit": true,
-       "FK_MapData": mapExt.FK_MapData,
-       "KeyOfEn": mapExt.AttrOfOper,
-       "RefPKVal": oid,
-       "IsEnter": isEnter,
-       "Title": title == null || title==""?"选择":title,
+    mtags.mtags({
+        "fit": true,
+        "FK_MapData": mapExt.FK_MapData,
+        "KeyOfEn": mapExt.AttrOfOper,
+        "RefPKVal": oid,
+        "IsEnter": isEnter,
+        "Title": title == null || title == "" ? "选择" : title,
         "onUnselect": function (record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
 
@@ -640,7 +753,7 @@ function PopBindEnum(mapExt, targetId, index, oid) {
 }
 
 
-function ValSetter(tag4, key,dbType,dbSource) {
+function ValSetter(tag4, key, dbType, dbSource) {
     if (!tag4 || !key) {
         return;
     }
@@ -662,12 +775,12 @@ function Delete_FrmEleDBs(FK_MapData, keyOfEn, oid, initJsonData) {
             frmEleDB.MyPK = obj.MyPK
             frmEleDB.Delete();
         } else {
-          initJsonData.push({
+            initJsonData.push({
                 "No": obj.Tag1,
                 "Name": obj.Tag2
             });
         }
-        
+
     });
     $("#TB_" + keyOfEn).val('');
     return initJsonData;
@@ -700,7 +813,7 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2, tag5) {
  * 获取页面数据
  * */
 function getPageData() {
-    var formss = $('#divCCForm').serialize();
+    var formss = $('#divCCForm').serialize() || "";
     var params = "";
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -710,7 +823,7 @@ function getPageData() {
             var targetId = ele.split('=')[0];
             if ($('#' + targetId).length == 1) {
                 if ($('#' + targetId + ':checked').length == 1) {
-                    ele = targetId.replace("CB_","") + '=1';
+                    ele = targetId.replace("CB_", "") + '=1';
                 } else {
                     ele = targetId.replace("CB_", "") + '=0';
                 }
@@ -721,7 +834,7 @@ function getPageData() {
             var item = $("#" + ctrlID).children('option:checked').text();
             var mystr = ctrlID.replace("DDL_", "") + 'T=' + item;
             params += "@" + mystr;
-            params += "@" + ele.replace("DDL_","");
+            params += "@" + ele.replace("DDL_", "");
         } else {
             params += "@" + ele.replace("TB_", "");
         }
@@ -729,7 +842,7 @@ function getPageData() {
     });
 
 
-    
+
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');
     $.each(disabledEles, function (i, disabledEle) {
@@ -741,17 +854,17 @@ function getPageData() {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
                     case "CHECKBOX": //复选框
-                        params += "@" + name.replace("CB_","") + '=' + $(disabledEle).is(':checked') ? 1 : 0;
-                       
+                        params += "@" + name.replace("CB_", "") + '=' + $(disabledEle).is(':checked') ? 1 : 0;
+
                         break;
                     case "TEXT": //文本框
                     case "HIDDEN":
-                        params += "@"+name.replace("TB_","") + '=' + $(disabledEle).val();
+                        params += "@" + name.replace("TB_", "") + '=' + $(disabledEle).val();
                         break;
                     case "RADIO": //单选钮
                         name = $(disabledEle).attr('name');
                         var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
-                        params += "@" + eleResult.replace("RB_","");
+                        params += "@" + eleResult.replace("RB_", "");
                         break;
                 }
                 break;
@@ -760,7 +873,7 @@ function getPageData() {
                 var tbID = name.replace("DDL_", "TB_") + 'T';
                 if ($("#" + tbID).length == 1)
                     params += "@" + tbID.replace("DDL_", "") + '=' + $(disabledEle).children('option:checked').text();
-                    
+
                 break;
 
             //文本区域                    

@@ -123,7 +123,7 @@ window.onload = function () {
                 }
 
                 if (method.MethodModel === "QRCode") {
-                    method.Docs = "./OptComponents/QRCode.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID");
+                    method.Docs = "./OptComponents/QRCode.htm?FrmID=" + method.FrmID + "&MethodNo=" + method.No + "&WorkID=" + GetQueryString("WorkID")+"&IsReadonly="+GetQueryString("IsReadonly");
                 }
 
                 //单个实体发起的流程汇总.
@@ -241,7 +241,7 @@ window.onload = function () {
                     var group = groups[i];
                     group.open = true;
                     group.children = methods.filter(function (item) {
-                        return group.No === item.GroupID
+                        return group.No === item.GroupID && item.IsEnable==1
                     });
                 }
                 this.sideBarData = groups;

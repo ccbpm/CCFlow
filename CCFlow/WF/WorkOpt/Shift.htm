@@ -7,7 +7,7 @@
     2，需要 FK_Flow, FK_Node,WorkID, FID.
     3, 调用方法 ShiftWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
-    
+
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -55,7 +55,10 @@
     <script type="text/javascript">
         var param = {};
         $(function () {
-
+            if (IsMobile() == true) {
+                SetHref(GetHrefUrl().replace("/WF/WorkOpt/Shift.htm", "/CCMobile/WorkOpt/Shift.htm"));
+                return;
+            }
             //初始化页面移交页面
             param = {
                 FK_Node: GetQueryString('FK_Node'),
@@ -67,13 +70,13 @@
             $('#Message').val(param.Message);
             //初始化人员选择窗口
             var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width:60%;height:90%;margin:0 auto;">' +
-                '<div class="modal-dialog" style="width:80%;height:80%;">'
+                '<div class="modal-dialog" style="width:100%;height:80%;">'
                 + '<div class="modal-content" style="width:100%;height:100%;">'
                 + '<div class="modal-header">'
                 + '<button type="button" class="close" style="opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
                 + '<h4 class="modal-title">选择移交人</h4>'
                 + '</div>'
-                + '<div class="modal-body" style="width:98%;height:88%;">'
+                + '<div class="modal-body" style="height:65%">'
                 + '<iframe style="width:100%;border:0px;height:100%;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
                 + '</div>'
                 + '</div><!-- /.modal-content -->'
@@ -189,7 +192,7 @@
     </div>
     <div style="position: fixed; bottom: 60px; right: 5px;">
         <button type="button" onclick="Close();" class="layui-btn layui-btn-primary">
-           <img src="../Img/Btn/Close.png" />关闭
+            <img src="../Img/Btn/Close.png" />关闭
         </button>
         <button type="button" onclick="Save();" class="layui-btn layui-btn-normal">
             确定移交

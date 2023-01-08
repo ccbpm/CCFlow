@@ -261,5 +261,169 @@ function fromHTML() {
            // pdf.output('dataurlnewwindow', Name + ".pdf");
         });
 }
+let isBottomSort = false;
+let Direction = '';
+let iframe = '';
+let istop = null;
+function tabChange(sort) {
+    Direction = sort
+    TabViews();
+}
+
+//$("#toIframe").on("mousewheel", function (event, delta) {
+//    console.log(event)
+//    console.log(delta)
+//    event.preventDefault();
+//    if (delta > 0) {
+//        tabChange("up")
+//    } else {
+//        tabChange("down")
+//    }
+//    return false;
+//});
+const scrollEvent = function(){
+    //滚动时的函数执行代码
+    var viewH = $(this).height(),//可见高度
+        contentH = iframe.contentDocument.body.scrollHeight,//内容高度
+        scrollTop = $(this).scrollTop();//滚动高度
+    const valheight = contentH - viewH;
+    if (scrollTop == 0 ) {
+        Direction = "up"
+        //alert("到顶了")
+        layer.msg('到顶了');
+       
+    }
+    console.log("scrollTop", scrollTop)
+    console.log("valheight", valheight)
+    if (scrollTop >= valheight ) {
+        Direction = "down"
+       // alert("到底了")
+        layer.msg('到底了');
+    }
+
+   // isBottomSort =false;
+}
+
+const TniscrollEvent = function (view) {
+    //滚动时的函数执行代码
+    var viewH = $(view).height(),//可见高度
+        contentH = view.document.body.scrollHeight,//内容高度
+        scrollTop = view.scrollY;//滚动高度
+
+    const valheight = scrollTop + viewH;
+    
+    if (contentH <= valheight) {
+        Direction = "down"
+        //alert("到底了")
+        if (isBottomSort == false) {
+            isBottomSort = true;
+        } else {
+            TabViews()
+        }
+    }
+    if (valheight == viewH) {
+        Direction = "up"
+       // alert("到顶了")
+        if (istop == null) {
+            istop = true;
+        } else {
+            TabViews()
+        }
+    }
+    // isBottomSort =false;
+}
+//ArcScorll('#mytextarea_ifr')
+function ArcScorll(elem) {
+    iframe = document.querySelector(elem);
+    iframe.onload = function () {
+      //  alert("Local iframe is now loaded.");
+        document.querySelector(elem).contentWindow.addEventListener('scroll', scrollEvent,true)
+    };
+}
 
 
+
+let Indx = '';
+let tObj = {
+    data: '',
+    elem: {},
+    state:''
+}
+var conut = 0;
+var page=''
+//切换页面方法
+function TabViews() {
+    const list = document.querySelectorAll('.layui-tree  .layui-tree-set');
+    const activeElem = document.querySelector('.layui-tree .tree-txt-active');
+    const acId = $(activeElem).data("id");
+    list.forEach((item, index) => {
+        if (item.dataset.id == acId) {
+            Indx = index;
+        }
+    })
+    
+    tObj.elem = list.item(Indx + 1);
+    if (Direction == "down") {
+        if (Indx > list.length) {
+            layer.msg('已经是最后一章节了');
+            return;
+        }
+        if (tObj.elem[0] !== undefined) {
+            if (tObj.elem[0].children.length == 2) {
+                Indx = Indx + 2;
+                tObj.elem = $(list.item(Indx));
+            }
+        } else {
+            if (tObj.elem.children.length == 2) {
+                Indx = Indx + 2;
+                tObj.elem = $(list.item(Indx));
+            }
+        }
+        
+    } else {
+        if (Indx <= 0) {
+            layer.msg('已经是第一章节了');
+            return;
+        }
+        tObj.elem = $(list.item(Indx - 1));
+        if (tObj.elem[0] !== undefined) {
+            if (tObj.elem[0].children.length == 2) {
+                Indx = Indx - 2;
+                tObj.elem = $(list.item(Indx));
+            }
+        } else {
+            if (tObj.elem[0].children.length == 2) {
+                Indx = Indx - 2;
+                tObj.elem = $(list.item(Indx));
+            }
+        }
+        
+    }
+    const Nid = $(tObj.elem).data("id");
+    groupFields.forEach(item => item.OID == Nid ? tObj.data = item : '');
+    attrs.forEach(item => item.KeyOfEn == Nid ? tObj.data = item : '');
+    treeClick(tObj);
+    var ele = $("#Pnode" + Nid).get(0)
+    $(ele).addClass("tree-txt-active")
+    $(tObj.elem).addClass("tree-txt-active")
+    document.querySelector('#toIframe').contentWindow.removeEventListener('scroll', scrollEvent, true);
+
+    setTimeout(function () {
+
+        if (isBindMouseWheel)
+            return;
+
+        $("#mytextarea_ifr").contents().find("#tinymce").off('mousewheel').on("mousewheel", function (event, delta) {
+            isBindMouseWheel = true;
+            event.preventDefault();
+            if (delta > 0) {
+                tabChange("up")
+            } else {
+                tabChange("down")
+            }
+            return false;
+        });
+    }, 1000);
+
+}
+var isBindMouseWheel = false;

@@ -1,1 +1,0 @@
-import{_ as a,X as s}from"./DesignBody.4d7f3d6e.js";import{d as t,b as _,K as o,ah as r,ai as d,aj as n}from"./index.97353e3a.js";const c={class:"preview"},i=t({setup(p){const e=_(!1);return o("editable",e),(l,f)=>(r(),d("div",c,[n(s)]))}});var u=a(i,[["__scopeId","data-v-90498fea"]]);export{u as default};

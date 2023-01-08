@@ -122,7 +122,7 @@
             GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
             //绑定表单类别.
-            var frmTrees = new Entities("BP.Sys.FrmTrees");
+            var frmTrees = new Entities("BP.WF.Template.SysFormTrees");
             frmTrees.RetrieveAll();
 
             if (node.FormType == RefOneFrmTree) {

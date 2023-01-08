@@ -56,7 +56,7 @@
             handler.AddPara("WorkID", workid);
             handler.AddPara("FK_Flow", fk_flow);
             handler.AddPara("FK_Node", fk_node);
-           
+
             var data = null;
             data = handler.DoMethodReturnString(pageType + "_Init");
             if (data.indexOf('err@') == 0) {
@@ -73,21 +73,21 @@
                 data = data.replace('?&', '?');
                 try {
                     var url = data;
-
                     if (window.top.vm != undefined) {
                         if (window.top.location.href.indexOf("WF/") != -1)
                             url = "../" + url;
-                        else if (url.indexOf("http")!= -1)
+                        else if (url.indexOf("http") != -1)
                             url = url;
                         else
-                            url = "/WF/" + url;
+                            url = basePath +"/WF/" + url;
+
+                        url = url.replace('/WF//WF/', '/WF/');
                         window.top.vm.openTab(title, url);
-                    } else {
-                        window.open(data); //打开流程.
+                        return;
                     }
-                   
-                    return;
+                    window.open(data); //打开流程.
                 } catch (e) {
+                    data = data.replace('/WF/WF/', '/WF/');
                     window.open(data); //打开流程.
                     return;
                 }
@@ -101,13 +101,13 @@
             window.open(url);
             return;
 
-            layer.open({
-                skin: 'layer-class',
-                type: 2,
-                title: title + ' : 查询主页',
-                area: ['96%', '90%'],
-                content: url
-            });
+            //layer.open({
+            //    skin: 'layer-class',
+            //    type: 2,
+            //    title: title + ' : 查询主页',
+            //    area: ['96%', '90%'],
+            //    content: url
+            //});
         }
 
         //我的流程
@@ -307,8 +307,9 @@
 
                     listbox += "<li><a href=\"javascript:WinOpenStart('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >我发起的流程</a></li>";
                     listbox += "<li><a href=\"javascript:WinOpenJoin('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >我审批的流程</a></li>";
-                    listbox += "<li><a href=\"javascript:WinOpenMyFlow('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" ><font color=red>*</font>我的流程</a></a></li>";
-                    listbox += "<li><a href=\"javascript:WinOpenSearch('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >查询主页</a></li></ul></td></tr>";
+                    listbox += "<li><a href=\"javascript:WinOpenMyFlow('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >我的流程</a></li>";
+                    //listbox += "<li><a href=\"javascript:WinOpenSearch('" + flow.No + "','" + sortName + " - " + flow.Name + "');\" >查询主页</a></li>;
+					listbox +="</ul></td></tr>";
 
                 }
                 listbox += '</tbody></table></div></div></div>';

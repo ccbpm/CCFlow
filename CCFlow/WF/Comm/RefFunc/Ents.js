@@ -19,9 +19,9 @@ MenuConvertTools.prototype.getSystemMenus = function () {
     var GroupName = [];
     var GroupNames = [];
     var j = 0;
-    GroupNames[j] = "基本信息";
+    /*GroupNames[j] = "基本信息";
     Gl = { "Name": "基本信息", "No": "Tno" + j, "Icon": "icon-folder"};
-    GroupName.push(Gl);
+    GroupName.push(Gl);*/
     for (var i = 0; i < endtM.length; i++) {
         var en = endtM[i];
         
@@ -36,7 +36,8 @@ MenuConvertTools.prototype.getSystemMenus = function () {
             GroupName.push(Gl);
         }
     }
-   
+    if (GroupName.length==0)
+        GroupName.push({ "Name": "基本信息", "No": "Tno0", "Icon": "icon-folder" });
 
     //生成菜单.
     var adminMenuNodes = [];

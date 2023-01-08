@@ -99,7 +99,7 @@ var vm = new Vue({
             colspan = item.ColSpan || 1
             return {
                 width: 'calc(' + colspan / 4 * 100 + '%' + ' - 14px)',
-                height: '300px',
+                height: '360px',
                 margin: '6px 6px 6px 6px'
             }
         },
@@ -298,6 +298,8 @@ var vm = new Vue({
                                 iteminfo.Docs = iteminfo.isData
                                 //console.log(tabinfo)
                                 var els = document.querySelector('div[data-mypk="' + iteminfo.isNo + '"]');
+                                if (els == null)
+                                    return;
                                 //console.log(tabinfo.WindowsShowType)
                                 if (i == 0) {
                                     var width = $('#' + iteminfo.isNo).width();
@@ -544,6 +546,7 @@ var vm = new Vue({
         },
         // 初始化饼图
         initPieChart: function (el, item) {
+            debugger
             var pieChart = echarts.init(el);
             //console.log(pieChart)
             //var name = item.Name
@@ -706,10 +709,13 @@ var vm = new Vue({
         },
         //环形
         initAnnular: function (el, item) {
-
             var AnnularChart = echarts.init(el);
-            var name = item.Name
-            var data = JSON.parse(item.Docs)
+            var name = item.isName;
+            if (item.Docs == "") {
+                return;
+            }
+            var data = JSON.parse(item.Docs);
+            debugger
             var jsonKey = [];
             for (var jsonVal in data[0]) {
                 jsonKey.push(jsonVal);
@@ -729,13 +735,14 @@ var vm = new Vue({
                     }
                 }
             }
+            
             var option = {
                 tooltip: {
                     trigger: 'item'
                 },
                 legend: {},
                 series: [{
-                    name: item.Name,
+                    name: item.isName,
                     type: 'pie',
                     radius: ['40%', '70%'],
                     avoidLabelOverlap: false,
@@ -791,19 +798,29 @@ var vm = new Vue({
 
             for (var j = 0; j < windows.length; j++) {
                 var win = windows[j];
+                win.children = [];
                 if (win.WinDocModel == 'Tab') {
                     win.children = JSON.parse(win.Docs);
                 }
                 if (win.WinDocModel == 'ChartLine') {
-                    win.children = []
                     if (win.IsLine == 1) { win.children.push({ isShow: win.IsLine, isNo: win.No + 'line01', isName: '折线图', isData: win.Docs }) }
                     if (win.IsPie == 1) { win.children.push({ isShow: win.IsPie, isNo: win.No + 'pie01', isName: '扇形图', isData: win.Docs }) }
+                    if (win.IsRate == 1) { win.children.push({ isShow: win.IsRate, isNo: win.No + 'rate01', isName: '扇形图', isData: win.Docs }) }
                     if (win.IsRing == 1) { win.children.push({ isShow: win.IsRing, isNo: win.No + 'ring01', isName: '环形图', isData: win.Docs }) }
                     if (win.IsZZT == 1) { win.children.push({ isShow: win.IsZZT, isNo: win.No + 'zzt01', isName: '柱状图', isData: win.Docs }) }
                     // win.children = [{ isShow: win.IsLine, isNo: win.No + 'line01', isName: '折线图', isData: win.Docs }, { isShow: win.IsPie, isNo: win.No + 'pie01', isName: '扇形图', isData: win.Docs }, { isShow: win.IsRing, isNo: win.No + 'ring01', isName: '环形图', isData: win.Docs }, { isShow: win.IsZZT, isNo: win.No + 'zzt01',isName: '柱状图', isData: win.Docs }];
 
                 }
-
+                if (win.WinDocModel == 'ChartZZT') {
+                    win.children.push({ isShow: win.IsZZT, isNo: win.No, isName: '柱状图', isData: win.Docs });
+                }
+                if (win.WinDocModel == 'ChartPie') {
+                    win.children.push({ isShow: win.IsPie, isNo: win.No, isName: '扇形图', isData: win.Docs });
+                }
+                if (win.WinDocModel == 'ChartRate') {
+                    win.Docs = '[{"名称":"' + win.LabOfFZ + '","统计数":"' + win.SQLOfFZ + '"},{"名称":"' + win.LabOfFM + '","统计数":"' + win.SQLOfFM +'"}]';
+                    win.children.push({ isShow: win.IsRing, isNo: win.No, isName: '环形图', isData: win.Docs });
+                }
             }
         }
         //console.log(windows);

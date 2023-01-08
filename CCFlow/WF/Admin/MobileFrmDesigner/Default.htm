@@ -56,10 +56,10 @@
             if (name == null || name == undefined)
                 return;
 
-            var ensName = GetQueryString("FK_MapData");
+            var ensName = frmID;
 
             var groupFields = new Entities("BP.Sys.GroupFields");
-            groupFields.Retrieve("FrmID", ensName, "Lab", name);
+            groupFields.Retrieve("FrmID", frmID, "Lab", name);
             if (groupFields.length >= 1) {
                 alert('名称：[' + name + "]已经存在.");
                 return;
@@ -225,111 +225,112 @@
             var fk_node = GetQueryString("FK_Node");
             if (fk_node == null || fk_node == undefined || fk_node == "")
                 fk_node = 0;
-            var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID + "&FK_Node=" + fk_node;
-            SetHref(url);
-            return;
-
-            //Form_View();
-            //return;
-
+            var pageFrom = GetQueryString("PageFrom") || "";
+            debugger
+            if (pageFrom == "") {
+                var url = "./MobileFrmView/FrmView.htm?IsTest=1&FrmID=" + frmID + "&FK_Node=" + fk_node;
+                SetHref(url);
+                return;
+            }
+          
             InitPage();
 
             $('#nodes').dialog('close');
             $('#btns').hide();
             var sta = 0;
             //可拖动table
-            var fixHelperModified = function (e, tr) {
-                //拖动时状态改变为1
-                sta = 1;
-                //children() 方法返回返回被选元素的所有直接子元素
-                var $originals = tr.children();
-                //clone() 方法生成被选元素的副本，包含子节点、文本和属性
-                var $helper = tr.clone();
-                //each() 方法规定为每个匹配元素规定运行的函数
-                $helper.children().each(function (index) {
-                    //width() 方法返回或设置匹配元素的宽度
-                    //eq() 方法将匹配元素集缩减值指定 index 上的一个
-                    $(this).width($originals.eq(index).width())
-                });
-                return $helper;
-            },
-                updateIndex = function (e, ui) {
-                    //ui.item - 表示当前拖拽的元素
-                    //parent() 获得当前匹配元素集合中每个元素的父元素，使用选择器进行筛选是可选的
-                    $('td.index', ui.item.parent()).each(function (i) {
-                        //html() 方法返回或设置被选元素的内容 (inner HTML)
-                        $(this).html(i + 1);
-                    });
-                    var EnName = GetQueryString("FK_MapData");
-                    var refKey;
-                    var insetToPK;
-                    $("tr").mouseover(function () {
+            //var fixHelperModified = function (e, tr) {
+            //    //拖动时状态改变为1
+            //    sta = 1;
+            //    //children() 方法返回返回被选元素的所有直接子元素
+            //    var $originals = tr.children();
+            //    //clone() 方法生成被选元素的副本，包含子节点、文本和属性
+            //    var $helper = tr.clone();
+            //    //each() 方法规定为每个匹配元素规定运行的函数
+            //    $helper.children().each(function (index) {
+            //        //width() 方法返回或设置匹配元素的宽度
+            //        //eq() 方法将匹配元素集缩减值指定 index 上的一个
+            //        $(this).width($originals.eq(index).width())
+            //    });
+            //    return $helper;
+            //},
+            //    updateIndex = function (e, ui) {
+            //        //ui.item - 表示当前拖拽的元素
+            //        //parent() 获得当前匹配元素集合中每个元素的父元素，使用选择器进行筛选是可选的
+            //        $('td.index', ui.item.parent()).each(function (i) {
+            //            //html() 方法返回或设置被选元素的内容 (inner HTML)
+            //            $(this).html(i + 1);
+            //        });
+            //        var EnName = GetQueryString("FK_MapData")||GetQueryString("FrmID");
+            //        var refKey;
+            //        var insetToPK;
+            //        $("tr").mouseover(function () {
 
-                        if (sta == 1) {
+            //            if (sta == 1) {
 
-                            //当前选择的字段.
-                            refKey = $(this).children('td').eq(1).html();
+            //                //当前选择的字段.
+            //                refKey = $(this).children('td').eq(1).html();
 
-                            var mapAttrFrom = GetMapAttr(refKey);
-                            if (mapAttrFrom == null)
-                                return;
+            //                var mapAttrFrom = GetMapAttr(refKey);
+            //                if (mapAttrFrom == null)
+            //                    return;
 
-                            //插入到的字段的下一个字段.
-                            insetToPK = $(this).next('tr').children('td').eq(1).html();
+            //                //插入到的字段的下一个字段.
+            //                insetToPK = $(this).next('tr').children('td').eq(1).html();
 
-                            var mapAttrTo = GetMapAttr(insetToPK);
-                            if (mapAttrTo != null) {
-                                var myPK = EnName + '_' + refKey;
-                                var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
-                                //获得主键值
-                                insetToPK = EnName + '_' + insetToPK;
-                                mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
-                                Reload();
-                                sta = 0; // 1.0 重置状态.
-                            }
-                            return;
+            //                var mapAttrTo = GetMapAttr(insetToPK);
+            //                if (mapAttrTo != null) {
+            //                    var myPK = EnName + '_' + refKey;
+            //                    var mapAttr = new Entity("BP.Sys.MapAttr", myPK);
+            //                    //获得主键值
+            //                    insetToPK = EnName + '_' + insetToPK;
+            //                    mapAttr.DoMethodReturnString("DoInsertTo", insetToPK);
+            //                    Reload();
+            //                    sta = 0; // 1.0 重置状态.
+            //                }
+            //                return;
 
-                            alert(insetToPK);
+            //                alert(insetToPK);
 
-                            if (insetToPK != undefined && insetToPK.indexOf('<') == 0) {
+            //                if (insetToPK != undefined && insetToPK.indexOf('<') == 0) {
 
-                                alert('移动位置错误.' + insetToPK);
-                                Reload();
-                                return;
-                            }
+            //                    alert('移动位置错误.' + insetToPK);
+            //                    Reload();
+            //                    return;
+            //                }
 
 
-                            //判断字段是否落在组件上.?
-                            var isCompent = false; //是否是组件.
-                            var isGroup = false; //是否落到分组上?
-                            for (var i = 0; i < dtGroups.length; i++) {
-                                var group = dtGroups[i];
-                                if (group.Lab == insetToPK)
-                                    isGroup = true;
-                                if (group.Lab == insetToPK && group.CtrlType != "")
-                                    isCompent = true;
-                            }
-                            if (isCompent == true)
-                                return;
+            //                //判断字段是否落在组件上.?
+            //                var isCompent = false; //是否是组件.
+            //                var isGroup = false; //是否落到分组上?
+            //                for (var i = 0; i < dtGroups.length; i++) {
+            //                    var group = dtGroups[i];
+            //                    if (group.Lab == insetToPK)
+            //                        isGroup = true;
+            //                    if (group.Lab == insetToPK && group.CtrlType != "")
+            //                        isCompent = true;
+            //                }
+            //                if (isCompent == true)
+            //                    return;
 
-                            if (isGroup == false) {
+            //                if (isGroup == false) {
 
-                            }
+            //                }
 
-                            sta = 0;//重置状态
-                            //Reload();
-                        }
-                    });
+            //                sta = 0;//重置状态
+            //                //Reload();
+            //            }
+            //        });
 
-                };
-            $("#sort tbody").sortable({
-                //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
-                helper: fixHelperModified,
-                //当排序动作结束时触发此事件。
-                cancel: '.GroupTitle',//限制不能拖动分组
-                stop: updateIndex
+            //    };
+            //$("#sort tbody").sortable({
+            //    //设置是否在拖拽元素时，显示一个辅助的元素。可选值：'original', 'clone'
+            //    helper: fixHelperModified,
+            //    //当排序动作结束时触发此事件。
+            //    cancel: '.GroupTitle',//限制不能拖动分组
+            //    stop: updateIndex
 
-            }).disableSelection();
+            //}).disableSelection();
         });
 
         function GetMapAttr(key) {
@@ -398,7 +399,7 @@
                 //如果是明细表
                 if (group.CtrlType == "Dtl") {
                     //重新生成明细表表头
-                    var table = "<table style='width:100%;'>";
+                    var table = "<table style='width:98%;'>";
                     table += "<tr>";
                     table += "<td nowrap=''><a href=\"javascript:EditDtl('" + frmID + "','" + group.CtrlID + "')\">" + group.CtrlID + "</a></td>";
                     table += "<td nowrap=''>" + group.Lab + "</td>";
@@ -416,7 +417,7 @@
 
                     //重新生成多附件表头
                     var table = "";
-                    table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'>";
+                    table += "<table class='Table' border='0' cellpadding='0' cellspacing='0' style='width:98%'>";
 
                     table += "<tr>";
                     table += "<td style='text-align:center'>1</td>";
@@ -489,7 +490,7 @@
 
             var field = ctrl.name.replace('CB_', '');
 
-            var key = GetQueryString("FK_MapData") + "_" + field;
+            var key = frmID + "_" + field;
             var en = new Entity("BP.Sys.MapAttr", key);
 
             if (ctrl.checked == true)
@@ -521,7 +522,7 @@
             </table>
 
             <center>
-                <h5 style="">提示：支持字段拖动,如何操作您懂得:). </h5>
+                <h5 style=""> </h5>
             </center>
 
         </form>

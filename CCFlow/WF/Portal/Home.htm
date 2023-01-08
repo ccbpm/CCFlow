@@ -195,7 +195,7 @@
                 <div class="item-body">
 
                     <div v-if="item.WinDocModel == 'Html' || item.WinDocModel == 'System'  || item.WinDocModel == 'SQLList' || item.WinDocModel == 'HtmlVar'   || item.WinDocModel == 'Table'"
-                         class='inner-content' :data-cid="item.No">
+                         class='inner-content' :data-cid="item.No" style="height:246px;overflow-y:auto">
                         {{item.Docs}}
                     </div>
                     <div v-if="item.WinDocModel == 'ChartLine' ||  item.WinDocModel == 'ChartPie' ||  item.WinDocModel == 'ChartRing'">
@@ -220,9 +220,9 @@
                         <div class="Rate-nav">
                             <span>{{item.LabOfFZ}}:<strong>{{item.SQLOfFZ}}</strong></span>
                             <span>{{item.LabOfFM}}:<strong>{{item.SQLOfFM}}</strong></span>
-
+                            
                         </div>
-                        <div :data-cid="item.No" class='chart-content'></div>
+                        <div :data-mypk="item.No" class='chart-content'></div>
                     </div>
                     <div v-if="item.WinDocModel == 'ChartChina'" class="Rate-box">
                         <div :data-cid="item.No" class='chart-content'>123213</div>

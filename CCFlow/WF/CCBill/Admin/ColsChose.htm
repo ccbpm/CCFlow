@@ -148,7 +148,9 @@
                     continue;
                 }
 
+                var mypk = mapAttr.MyPK;
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);
+                mapAttrEn.MyPK = mypk;
 
                 mapAttrEn.Name = $("#TB_" + mapAttrEn.KeyOfEn).val();
                 mapAttrEn.UIWidth = $("#TBW_" + mapAttrEn.KeyOfEn).val();

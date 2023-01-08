@@ -59,6 +59,10 @@
             //转化为Json.
             data = JSON.parse(data);
 
+            if (data.length >= 3) {
+                $("#more").hide();
+            }
+
             //获得数据.
             layui.use(['table', 'util'], function () {
                 var table = layui.table
@@ -143,9 +147,9 @@
             <div class="layui-card">
                 <div class="layui-card-body">
                     <table class="layui-table" lay-filter="docs" id="TestFlow" style="width:70%"></table>
-                    <div style="text-align: center;">
+                    <div style="text-align: center;" id="more">
                         <button type="button" class="layui-btn layui-btn-normal layui-toolbar layui-btn-sm" data-type="MapDataEdit" onclick="ClearTester()()">
-                            <i class="layui-icon">&#xe65f;</i>显示更多
+                            <i class="layui-icon" id="mor1e">&#xe65f;</i>显示更多
                         </button>
                     </div>
                 </div>
@@ -233,13 +237,16 @@
         //发起流程。
         function StartIt(empNo, workID) {
 
-            var token = GetQueryString("Token");
+            var token = GetQueryString("Token") || GetQueryString("Token") ;
+
+            var webUser = new WebUser();
 
             $("#Btn_Reset").val("正在以[" + empNo + "]启动流程,请稍候....");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
             handler.AddPara("TesterNo", empNo);
+            handler.AddPara("UserNo", webUser.No);
             handler.AddPara("Token", token);
 
             var data = handler.DoMethodReturnString("TestFlow2020_StartIt");
@@ -259,7 +266,8 @@
 
             //启动测试容器.
             //WinOpenFull(data);
-            SetHref(data + "&Token=" + token);
+            localStorage.setItem('AdminToken', token)
+            SetHref(data);
         }
 
         function ClearTester() {

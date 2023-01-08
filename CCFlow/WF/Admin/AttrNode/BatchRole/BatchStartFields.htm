@@ -25,7 +25,7 @@
     </style>
     <script type="text/javascript" language="javascript">
         var fk_node = GetQueryString("FK_Node");
-
+        var type = GetQueryString("Type") || "Add";
         var node = new Entity("BP.WF.Node", fk_node);
 
         //页面启动函数.
@@ -46,25 +46,52 @@
 
             //获得属性集合.
             var attrs = new Entities("BP.Sys.MapAttrs");
-            attrs.Retrieve("FK_MapData", "ND" + fk_node);
-            //增加处理.
-            var BatchFields = node.GetPara("BatchFields");
-            for (var i = 0; i < attrs.length; i++) {
-                var item = attrs[i];
-                if (item.UIVisible == false)
-                    continue;
-                var newRow = "";
-                newRow = "<tr ><td class=Idx>" + i + "</td>";
-                if (BatchFields == undefined || BatchFields.indexOf(item.KeyOfEn) == -1) {
-                    newRow += "<td><label><input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' />" + item.KeyOfEn + "</label></td>";
+            attrs.Retrieve("FK_MapData", "ND" + fk_node, "GroupID,Idx");
 
-                } else {
-                    newRow += "<td><label><input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' checked='checked' />" + item.KeyOfEn + "</label></td>";
-                }
-                newRow += "<td>" + item.Name + "</td>";
-                newRow += "<td>" + item.LGTypeText + "</td>";
+            var groups = new Entities("BP.Sys.GroupFields");
+            groups.Retrieve("FrmID", "ND" + fk_node, "Idx");
+
+            //增加处理.
+            var BatchFields = node.GetPara("BatchFields") || "";
+            if (type == "Edit")
+                BatchFields = node.GetPara("EditFields") || "";
+
+            //分组.
+            for (var idx = 0; idx < groups.length; idx++) {
+                var gf = groups[idx];
+               // if (gf.CtrlType != '')
+                 //   continue;
+
+                var newRow = "";
+                newRow += "<tr>";
+                newRow += "<td colspan=4><b>" + gf.Lab + "</b></td>";
                 newRow += "</tr>";
                 $("#table1 tr:last").after(newRow);
+
+                var num = 0;
+                for (var i = 0; i < attrs.length; i++) {
+
+                    var item = attrs[i];
+                    if (item.UIVisible == false)
+                        continue;
+
+                    if (gf.OID != item.GroupID)
+                        continue;
+
+                    num++;
+                    var newRow = "";
+                    newRow = "<tr ><td class=Idx>" + num + "</td>";
+                    if (BatchFields == "" || BatchFields.indexOf(item.KeyOfEn) == -1) {
+                        newRow += "<td><label><input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' />" + item.KeyOfEn + "</label></td>";
+
+                    } else {
+                        newRow += "<td><label><input name='CB_Node' type='checkbox' value='" + item.KeyOfEn + "' checked='checked' />" + item.KeyOfEn + "</label></td>";
+                    }
+                    newRow += "<td>" + item.Name + "</td>";
+                    newRow += "<td>" + item.LGTypeText + "</td>";
+                    newRow += "</tr>";
+                    $("#table1 tr:last").after(newRow);
+                }
             }
             //$("#DDL_BRole").val(node.BatchRole);
 
@@ -81,7 +108,10 @@
             var cb = $("input[name='CB_Node']:checked").each(function (j) {
                 checkBoxIDs += $(this).val() + ","; //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             });
-            node.SetPara("BatchFields", checkBoxIDs)
+            if (type == "Add")
+                node.SetPara("BatchFields", checkBoxIDs)
+            if (type == "Edit")
+                node.SetPara("EditFields", checkBoxIDs);
             node.Update();
             //alert(checkBoxIDs)
             //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");

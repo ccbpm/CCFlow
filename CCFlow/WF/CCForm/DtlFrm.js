@@ -7,12 +7,14 @@
 4.  MapExt2021.js 文件是一个公用的文件，用于处理扩展业务逻辑的，它在多个地方别调用了.
 */
 var isReadonly = false;
+var IsSave = false;//是否已经保存
 //初始化函数
 $(function () {
     //增加css样式
     $('head').append('<link href="../../DataUser/Style/GloVarsCSS.css" rel="stylesheet" type="text/css" />');
     initPageParam(); //初始化参数.
-
+    if (pageData.IsNew == 0) //数据编辑字段
+        IsSave = true;
     //隐藏保存按钮.
     if (GetHrefUrl().indexOf('&IsReadonly=1') > 1
         || GetHrefUrl().indexOf('&IsEdit=0') > 1) {
@@ -61,6 +63,7 @@ function initPageParam() {
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
     pageData.DoType1 = GetQueryString("DoType");
     pageData.FK_MapData = GetQueryString("FK_MapData");
+    pageData.IsNew = GetQueryString("IsNew")||"0";
 }
 
 /**
@@ -225,7 +228,7 @@ function GenerFrm() {
     })
     
 }
-var IsSave = false;
+
 /**
  * 保存一条从表数据
  * @param {any} isSaveAndNew 是不是保存且新增
@@ -258,17 +261,19 @@ function Save(isSaveAndNew) {
         layer.close(index);
         if (data.indexOf("err@") != -1) {
             layer.alert(data);
+            return;
         }
 
         //layer.alert("数据保存成功");
 
         if (isSaveAndNew == false) {
-            SetHref(GetHrefUrl() + "&IsSave=true");
+            layer.alert("数据保存成功");
+            //SetHref(GetHrefUrl() + "&IsSave=true");
             IsSave = true;
             return false;
         }
         IsSave = false;
-        var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0";
+        var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0&IsNew=1";
         SetHref(url);
         return false;
     });
@@ -368,6 +373,12 @@ function DeleteDtlFrm() {
  * 关闭弹出窗
  */
 function CloseIt() {
+    dtlFrm_Delete();
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
+}
+
+function dtlFrm_Delete() {
     if (IsSave == false) {
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
         handler.AddPara("EnsName", GetQueryString("EnsName"));
@@ -380,6 +391,4 @@ function CloseIt() {
             return;
         }
     }
-    var index = parent.layer.getFrameIndex(window.name);
-    parent.layer.close(index);
 }

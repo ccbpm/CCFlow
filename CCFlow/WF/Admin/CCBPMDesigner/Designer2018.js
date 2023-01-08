@@ -3,6 +3,13 @@ var ccbpmRunModel = 0;
 var flowNo = GetQueryString("FK_Flow");
 flow = new Entity("BP.WF.Flow", flowNo);
 
+//子流程集合
+var subFlows = new Entities("BP.WF.Template.SFlow.SubFlows");
+subFlows.Retrieve("FK_Flow", flowNo);
+subFlows = subFlows.TurnToArry();
+//子流程显示方式
+var subFlowShowType = flow.SubFlowShowType;
+
 var webUser = new WebUser();
 var basepath = "";
 var flowDevModel = flow.GetPara("FlowDevModel"); //设计模式.
@@ -119,7 +126,7 @@ $(function () {
 function NodeFrmD(nodeID) {
 
     var node = new Entity("BP.WF.Node", nodeID);
-    if (node.FormType == 1 || node.FormType == 0 || node.FormType==10) { //自由表单，傻瓜表单.
+    if (node.FormType == 1 || node.FormType == 0 || node.FormType == 10) { //自由表单，傻瓜表单.
         //傻瓜表单.
         var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
         url += "&UserNo=" + GetQueryString("UserNo");
@@ -136,7 +143,7 @@ function NodeFrmD(nodeID) {
         url += "&Token=" + GetQueryString("Token");
 
         OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
-        //window.location.href = url;
+        //window.location.href = filterXSS(url);
         return;
     }
 
@@ -148,7 +155,7 @@ function NodeFrmD(nodeID) {
         var url = basePath + "/WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + myPK + "&Lang=CH";
 
         OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
-        //window.location.href = url;
+        //window.location.href = filterXSS(url);
         //NodeFrmRefOneFrmTree(nodeID);
         return;
     }
@@ -158,13 +165,13 @@ function NodeFrmD(nodeID) {
         var url = basePath + "/WF/Admin/Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&Lang=CH";
 
         OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
-        //window.location.href = url;
+        //window.location.href = filterXSS(url);
         //NodeFrmRefOneFrmTree(nodeID);
         return;
     }
 
-    alert("没有判断的表单类型:"+node.FormType);
-
+    alert("自定义表单不能设计,请查看表单方案.");
+    //alert("没有判断的表单类型:" + node.FormType);
 }
 
 
@@ -361,17 +368,14 @@ function SetNodeRunModel(nodeID, runModel, subThreadType) {
     var node = new Entity("BP.WF.Template.NodeExt", nodeID);
     node.RunModel = runModel;
 
-    //判断是否是同表单的,还是异表单的.
-    if (runModel == 4) {
-        node.SubThreadType = subThreadType;
-    }
+    ////判断是否是同表单的,还是异表单的.
+    //if (runModel == 4) {
+    //    node.SubThreadType = subThreadType;
+    //}
 
-    if (node.RunModel == 1 || node.RunModel == 2 || node.RunModel == 3) {
-        //   alert(node.ThreadEnable);
-        node.ThreadEnable = 1;
+    if (node.RunModel == 1 || node.RunModel == 3) {//|| node.RunModel == 2
         alert("修改成功，已经帮你起用了子线程按钮...");
         node.Update();
-
         return;
     }
 
@@ -715,7 +719,7 @@ $(function () {
             },
             "pmFrmFree": function (t) {
                 var activeId = _canvas.getActiveId(); //右键当前的ID
-                NodeFrmFree(activeId); cAlert
+                NodeFrmFree(activeId); 
             },
             "pmNodeAccepterRole": function (t) {
 
@@ -759,14 +763,46 @@ $(function () {
         }
         , fnClick: function () {
 
-
-            // //和 pmAttribute 一样
+              // //和 pmAttribute 一样
             // var activeId = _canvas.getActiveId(); //右键当前的ID\
             // NodeAttr(activeId);
         }
         , fnDbClick: function () {
             //点击修改名称方法
             var activeId = _canvas.getActiveId(); //右键当前的ID
+            //说明是子线程
+            if (activeId.indexOf("S_") != -1) {
+                var mypk = activeId.replace("S_","");
+                //合并模式
+                if (subFlowShowType == 1) {
+                    var subs = subFlows.filter(item => item.FK_Node == mypk);
+                    if (subs.length == 1) {
+                        var url = basePath+"/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + subs[0].SubFlowNo + "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&OrgNo=" + webUser.OrgNo;
+                        OpenLayuiDialog(url, subs[0].SubFlowName, window.innerWidth * 0.8, 80, "auto");
+                        return;
+                    }
+                    if (subs) {
+                        var _html = "<ul>";
+                        subs.forEach(function (item) {
+                            var url = basePath +"/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + item.SubFlowNo + "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&OrgNo=" + webUser.OrgNo;
+                            _html += '<li style="line-heigth:34px;font-size:16px;font-weight:600" onclick="OpenLayuiDialog(\'' + url + '\',\'' + item.SubFlowName + '\',' + window.innerWidth * 0.8+',80,\'auto\')">' + item.SubFlowName + '</li>';
+                        })
+                        _html += "</ul>";
+                        layer.open({
+                            title: "子流程",
+                            content: _html //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                        });
+                    }
+                    return;
+                }
+                if (subFlowShowType == 0) {
+                    var sub = subFlows.filter(item => item.MyPK == mypk)[0];
+                    var url = basePath +"/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + sub.SubFlowNo + "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&OrgNo=" + webUser.OrgNo;
+                    OpenLayuiDialog(url, sub.SubFlowName, window.innerWidth * 0.8,80,"auto");
+                    return;
+                }
+                return;
+            }
             var windowtext = $("#window" + activeId).text();
             var baocunbut = $("#alertModal1 div:eq(2) button:eq(0)").attr("class", "btn btn-primary savetext" + activeId);
             $("#alertModal1 div:eq(2) button:eq(0)").attr("onclick", "SaveNodeName(\"" + activeId + "\")");
@@ -841,7 +877,7 @@ function SaveFlow(_canvas) {
 
         //定义要生成的字符串.
         var nodePos = "";
-
+        var subFlows = "";
         //定义名称. 格式为: @101=填写请假申请单@101=
         var nodeName = "";
         for (var nodeID in processInfo) {
@@ -849,7 +885,7 @@ function SaveFlow(_canvas) {
             var nodeIDStr = JSON.stringify(nodeID);
 
             var nodeJSON = processInfo[nodeID];
-
+            var isHave = false;
             for (var idx = 0; idx < nodes.length; idx++) {
 
                 var node = nodes[idx];
@@ -862,8 +898,11 @@ function SaveFlow(_canvas) {
                 var nodeName = $("#span_" + node.NodeID).text();
 
                 nodePos += "@" + node.NodeID + "," + nodeJSON.left + "," + nodeJSON.top + "," + nodeName;
-                //console.log(nodePos);
+                isHave = true;
+                continue;
             }
+            if (isHave == false)
+                subFlows += "@" + nodeIDStr.replace("S_", "") + "," + nodeJSON.left + "," + nodeJSON.top;
         }
 
         //方向的字符串.
@@ -880,6 +919,7 @@ function SaveFlow(_canvas) {
             var toNodes = nodeJSON.process_to;
             if (toNodes == "")
                 continue;
+           
 
             if (nodeID == undefined
                 || nodeID == null
@@ -891,7 +931,8 @@ function SaveFlow(_canvas) {
             for (var i = 0; i < toNodes.length; i++) {
 
                 var toNodeID = toNodes[i];
-
+                if (toNodeID.indexOf("S_") == 0)
+                    continue;
                 if (toNodeID == undefined
                     || toNodeID == null
                     || toNodeID == "undefined"
@@ -925,6 +966,7 @@ function SaveFlow(_canvas) {
         handler.AddPara("Dirs", myDirs);
         handler.AddPara("Labs", labs);
         handler.AddPara("FK_Flow", flowNo);
+        handler.AddPara("SubFlows", subFlows);
         var data = handler.DoMethodReturnString("Designer_Save");
 
         if (data.indexOf('err@') == 0) {
@@ -944,7 +986,7 @@ function SaveFlow(_canvas) {
 
 //修改节点名称
 function SaveNodeName(activeId) {
-
+    debugger
     ReLoginByToken();
 
     var text = document.getElementById("TB_" + activeId).value; //新修改的值.
@@ -993,6 +1035,7 @@ function GenerDrowFlowData() {
     if (flowNo == null || flowNo == undefined)
         flowNo = "002";
 
+
     //节点. 取出来显示
     var nodes = new Entities("BP.WF.Nodes");
     nodes.Retrieve("FK_Flow", flowNo);
@@ -1020,6 +1063,54 @@ function GenerDrowFlowData() {
                 lineDes.id = node.NodeID + "_" + dir.ToNode;
                 lineDes.des = dir.Des;
                 lineDesList.push(lineDes);
+            }
+        }
+
+        //子流程展示
+        if (subFlows.length > 0) {
+            //平铺展示
+            if (subFlowShowType == 0) {
+                var idx = 0;
+                subFlows.forEach(item => {
+                    if (item.FK_Node == node.NodeID) {
+                        toNodes += ",S_" + item.MyPK;
+                        var lineDes = {};
+                        lineDes.id = node.NodeID + "_S_" + item.MyPK;
+                        lineDes.des = "子流程:" + item.SubFlowName;
+                        lineDesList.push(lineDes);
+                        strs += "{'id':'S_" + item.MyPK + "',";
+                        strs += "'flow_id':'" + flowNo + "',";
+                        strs += "'process_name':'" + item.SubFlowName.replace(/(^\s*)|(\s*$)/g, "") + "',";
+                        strs += "'process_to':'',";
+                        strs += "'icon':'icon-leaf',";
+                        var subFlowX = item.X == 0 || item.X == undefined ? node.X + 400 + idx * 145 : item.X;
+                        var subFlowY = item.Y == 0 || item.Y == undefined ? node.Y + idx * 50 : item.Y;
+                        strs += "'style':'width:auto;minWidth:121px;color:#0e76a8;left:" + subFlowX + "px" + ";top:" + subFlowY + "px;'";
+                        strs += "},";
+                        idx++;
+                    }
+                })
+            }
+            //合并展示
+            if (subFlowShowType == 1) {
+                var isHave = subFlows.filter(function (item) { return item.FK_Node == node.NodeID }).length > 0 ? true : false;
+                if (isHave == true) {
+                    toNodes += ",S_" + node.NodeID;
+                    var lineDes = {};
+                    lineDes.id = node.NodeID + "_S_" + node.NodeID;
+                    lineDes.des = "子流程";
+                    lineDesList.push(lineDes);
+                    strs += "{'id':'S_" + node.NodeID + "',";
+                    strs += "'flow_id':'" + flowNo + "',";
+                    strs += "'process_name':'启动的子流程',";
+                    strs += "'process_to':'',";
+                    strs += "'icon':'icon-leaf',";
+                    var subFlowX = node.SubFlowX == 0 ? node.X + 400 : node.SubFlowX;
+                    var subFlowY = node.SubFlowY == 0 ? node.Y : node.SubFlowY;
+                    strs += "'style':'width:auto;minWidth:121px;color:#0e76a8;left:" + subFlowX + "px" + ";top:" + subFlowY + "px;'";
+                    strs += "},";
+                }
+
             }
         }
 
@@ -1227,7 +1318,7 @@ function Help() {
 //节点属性
 function NodeAttr(nodeID) {
     var url = basePath + "/WF/Comm/En.htm?EnName=BP.WF.Template.NodeExt&NodeID=" + nodeID + "&Lang=CH";
-    OpenLayuiDialog(url, "节点属性" + nodeID, window.innerWidth * 0.8);
+    OpenLayuiDialog(url, "节点属性" + nodeID, window.innerWidth * 0.88);
 }
 
 //节点属性

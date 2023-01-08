@@ -80,8 +80,8 @@
 
             //初始化 01 02 03
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
-           handler.AddUrlData();
-          //  handler.AddPara("xx", "123");
+            handler.AddUrlData();
+            //  handler.AddPara("xx", "123");
             var data = handler.DoMethodReturnString("PushMsgEntity_Init");
 
             if (data.indexOf('err@') == 0) {
@@ -268,6 +268,11 @@
                         </td>
                         <td>
                             <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" class="frmfields"></select>
+
+                            <ul>
+                                <li>字段里必须存储的是人员账号,如果是多个人员账号就用逗号分开. 比如:zhangsan,lisi</li>
+                                <li>可以使用隐藏字段作为参数字段.</li>
+                            </ul>
                         </td>
                     </tr>
                     <tr>

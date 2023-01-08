@@ -21,20 +21,24 @@
 
         var gwls = null;
         $(function () {
+
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+            nodeID = gwf.FK_Node;
+
             //查询出来数据.
             gwls = new Entities("BP.WF.GenerWorkerLists");
-            gwls.Retrieve("WorkID", workID, "FK_Node", nodeID);
+            gwls.Retrieve("WorkID", workID, "FK_Node", gwf.FK_Node);
 
             //有可能是分合流.
             if (gwls.length == 0)
-                gwls.Retrieve("FID", workID, "FK_Node", nodeID);
+                gwls.Retrieve("FID", workID, "FK_Node", gwf.FK_Node);
 
             var html = "";
             html += "<ul>";
             for (var i = 0; i < gwls.length; i++) {
 
                 var gwl = gwls[i];
-                if (gwl.IsEable == 1)
+                if (gwl.IsEnable == 1)
                     html += "<li style='list-style-type:none;'><label><input checked='checked' type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
                 else
                     html += "<li style='list-style-type:none;'><label><input type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
@@ -64,10 +68,8 @@
                     var newgwl = new Entity("BP.WF.GenerWorkerList", gwls[0]);
                     newgwl.IsEnable = "0";
                     newgwl.Update();
-
                     todoEmps += newgwl.FK_Emp + "," + newgwl.FK_EmpText + ";";
                 });
-
 
                 var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
                 gwf.TodoEmps = todoEmps;
@@ -139,12 +141,13 @@
 
     <form id="cc">
 
-        <h3>工作分配</h3>
-
-        <div id="info"></div>
-
-        <input type=button value='执行分配' onclick='Save()' />
-
+        <center>
+            <h3>工作分配</h3>
+            <div style="text-align:left">
+                <div id="info"></div>
+            </div>
+            <input type=button value='执行分配' class="btn-default" onclick='Save()' />
+        </center>
     </form>
 
 </body>

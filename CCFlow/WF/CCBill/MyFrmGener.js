@@ -12,7 +12,11 @@ function ToolBar_Init(entityType) {
         return;
     }
     data = JSON.parse(data);
-
+    if (data.length == 0) {
+        $("#ToolBar").parent().hide();
+        $(".layui-fluid").css("padding-top", "15px");
+        return;
+    }
     var getTpl = document.getElementById("view").innerHTML
         , view = document.getElementById('ToolBar');
     layui.laytpl(getTpl).render(data, function (html) {
@@ -164,7 +168,7 @@ function ToolBar_Init(entityType) {
                     }
                     if (window.parent && (window.parent.location.href.indexOf("SearchDict") != -1
                         || window.parent.location.href.indexOf("SearchBill")!=-1)) {
-                        window.parent.reload();
+                        window.parent.location.reload();
                         //关闭该弹出层
                         window.parent.layer.close(layer.index);
                     } else {

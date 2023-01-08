@@ -46,10 +46,10 @@
     <script type="text/javascript" src="../../Admin/CCBPMDesigner/Public/js/flowdesign/leipi.flowdesign.v3.js?2025"></script>
     <script src="../../Admin/CCBPMDesigner/Designer2018.js" type="text/javascript"></script>
     <!--layer-->
-    <link href="../../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
-    <script src="../../Scripts/layui/layui/lay/modules/layer.js"></script>
     <script src="../../Scripts/layui/layui/layui.js"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <script src="../../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
     <style>
         body {
             background-color: #f7f6f9;
@@ -366,6 +366,8 @@
             var currNode = parseInt(GetQueryString("FK_Node"));
             var flowInfo = datas.FlowInfo[0];
             var gwls = jdata.WF_GenerWorkerList;
+            var subFlows = datas.WF_NodeSubFlow ||[];
+            var gwfs = datas.WF_GenerWorkFlow || [];
 
             $('#tracktable').hover(function () { }, function () {
                 $('#trackinfo').offset({ top: 0, left: 0 });
@@ -486,23 +488,9 @@
 
                     $("#window" + this.ID).after('<text text-anchor="start"  font="10px &quot;Arial&quot;" stroke="#008000" fill="#008000" style="color:' + getFillTextColor(TextColor) + ';left:' + trackLabLeft + 'px;top:' + trackLabTop + 'px; ' +
                         'position: absolute;-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 14px Arial;" font-size="14px">' + trackLabHtml + '</text>');
-                    //var s = $("#window" + this.ID).after('<text text-anchor="start" font="10px &quot;Arial&quot;" stroke="#008000" fill="#008000" style="left:' + trackLabLeft + 'px;top:' + trackLabTop + 'px; ' +
-                    //    'position: absolute;-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: start; font: 14px Arial;" font-size="14px">' +
-                    //    '<tspan dy="-3.59375" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">admin</tspan><tspan dy="16.8" x="82" ' +
-                    //    'style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2021/3/8上午11:28:17' + this.ID + '</tspan></text>');
-                    //rNode.rTrackText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, rNode.currTrack.type == "FROM" ? (rNode.currTrack.track.EmpFromT + '\n' + getChineseDateTime(rNode.currTrack.track.RDT)) : rNode.currTrack.track.EmpToT);
-                    //rNode.rTrackText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
-                    //rNode.rTrackText.toFront();
+                  
                 } else if (datas.Possible) {
 
-                    //检索是否有计算出节点处理人，以及可能处理时间，有则显示出来，added by liuxc,2016-4-15
-                    //rNode.rPossible = datas.Possible.findByField("FK_Node", this.ID);
-
-                    //if (rNode.rPossible) {
-                    //    rNode.rPossibleText = r.text(rNode.x + STYLE_NODE_WIDTH + 5, rNode.y + 25, "处理人：" + rNode.rPossible.EmpName + (rNode.rPossible.ADT && rNode.rPossible.ADT.length >= 16 ? ('\n到达：' + rNode.rPossible.ADT) : ''));
-                    //    rNode.rPossibleText.attr({ "stroke": TextColor, "fill": getFillTextColor(TextColor), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
-                    //    rNode.rPossibleText.toFront();
-                    //}
                 }
                 var sId = "#window" + this.ID;
                 $(sId).css({ "border": "1px solid " + borderColor });
@@ -943,8 +931,6 @@
                         }
                     }
                 });
-
-
                 //加入到流程节点.
                 rFlow.nodes.push(rNode);
             });
@@ -952,8 +938,134 @@
             //线
             $.each(jsPlumb.getConnections(), function (idx, connection) {
                 var ndFrom = this.sourceId.replace("window", "");
-                var ndTo = this.targetId.replace("window", "");
+                var ndTo = this.targetId.replace("window", "") || "";
                 var lineColor = datas.Track.findBy2Field("NDFrom", ndFrom, "NDTo", ndTo) != null ? STYLE_LINE_TRACK_COLOR : STYLE_LINE_COLOR;
+                if (ndTo.indexOf("S_") == 0) {
+                    //禁止节点拖动
+                    $("#"+this.targetId).draggable('disable').removeClass("ui-state-disabled");
+                    if (ndTo == "S_" + ndFrom) { //合并模式显示
+                        //说明是子流程，判断当前的子流程是否运行完成
+                        var curAllgwfs = gwfs.filter(gwf => gwf.PNodeID == ndFrom);
+                        if (curAllgwfs.length != 0) {
+                            var curgwfs = curAllgwfs.filter(gwf => gwf.WFState == 3);
+                            if (curgwfs.length == curAllgwfs.length) {
+                                lineColor = STYLE_LINE_TRACK_COLOR;
+                                $("#" + this.targetId).css({ "border": "1px solid " + STYLE_NODE_BORDER_COLOR_TRACK, "color": STYLE_NODE_COLOR_FORE_TRACK});
+                            } else {
+                                $("#" + this.targetId).css({ "border": "1px solid " + STYLE_CURRENT_NODE_BORDER_COLOR, "color": STYLE_CURRENT_NODE_COLOR_FORE });
+                            }
+                        }
+                        $("#" + this.targetId).hover(function () {
+                            var id = this.id.replace("windowS_", "");
+                            if (id.length <= 5) {
+                                //获取子流程
+                                var curAllgwfs = gwfs.filter(gwf => gwf.PNodeID == id);
+                                var sub = subFlows.filter(item => item.FK_Node == id);
+                                //未发起子流程的时候
+                                if (curAllgwfs == 0) {
+                                    if (sub.length == 1) {
+                                        var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node=" + parseInt(sub[0].SubFlowNo) + "01&WorkID=0&FK_Flow=" + sub[0].SubFlowNo + "&FID=0&FromWorkOpt=1&CCSta=0"
+                                        OpenLayuiDialog(url, sub[0].SubFlowName, window.innerWidth * 0.8, 80, "auto");
+                                    } else {
+                                        //显示所有的子流程
+                                        var _html = "<ul class='layui-menu layui-menu-lg'>";
+                                        sub.forEach(function (item) {
+                                            var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node=" + parseInt(item.SubFlowNo) + "01&WorkID=0&FK_Flow=" + item.SubFlowNo + "&FID=0&FromWorkOpt=1&CCSta=0"
+                                            _html += '<li  class="layui-menu-item-group"><div class="layui-menu-body-title"  style="color:black" onclick="OpenLayuiDialog(\'' + url + '\',\'' + item.SubFlowName + '\',' + window.innerWidth * 0.8 + ',80,\'auto\')"><span>' + item.SubFlowName + '</span></div></li><hr>';
+                                        })
+                                        _html += "</ul>";
+                                        $('#tracktable').empty();
+                                        var p = $(this).offset();
+                                        $('#tracktable').append(_html);
+                                        $('#trackinfo').offset({ top: p.top + $(this).height() - 2, left: p.left });
+                                        $('#trackinfo').show();
+                                    }
+
+                                } else {
+                                    var _html = "<ul class='layui-menu layui-menu-lg'>";
+                                    sub.forEach(function (item) {
+                                        //判断是否有发起的流程
+                                        var subgwfs = curAllgwfs.filter(gwf => gwf.FK_Flow == item.SubFlowNo);
+                                        _html += "<li class='layui-menu-item-group'>";
+                                        if (subgwfs.length == 0) {
+                                            var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node=" + parseInt(item.SubFlowNo) + "01&WorkID=0&FK_Flow=" + item.SubFlowNo + "&FID=0&FromWorkOpt=1&CCSta=0"
+                                            _html += '<div class="layui-menu-body-title"  style="color:black" onclick="OpenLayuiDialog(\'' + url + '\',\'' + item.SubFlowName + '\',' + window.innerWidth * 0.8 + ',80,\'auto\')">';
+                                        }
+                                        else
+                                            _html += ' <div class="layui-menu-body-title"  style="color:black">';
+                                        _html += item.SubFlowName;
+                                        _html += '<div>';
+                                        _html += '<hr>';
+                                        if (subgwfs.length != 0) {
+                                            _html += '<ul>';
+                                            subgwfs.forEach(function (gwf) {
+                                                var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node="+gwf.FK_Node+"&WorkID="+gwf.WorkID+"&FK_Flow="+gwf.FK_Flow+"&FID=0&FromWorkOpt=1&CCSta=0"
+                                                _html += '<li><div class="layui-menu-body-title"><a href="javascript:void(0)" onclick="OpenLayuiDialog(\'' + url + '\',\'' + item.SubFlowName + '\',' + window.innerWidth * 0.8 + ',80,\'auto\')"><span>' + gwf.Title + '</span></li>';
+                                            })
+                                            _html +="</ul>"
+                                        }
+                                        _html += '</li>';
+                                    })
+                                    _html += '</ul>';
+                                    $('#tracktable').empty();
+                                    var p = $(this).offset();
+                                    $('#tracktable').append(_html);
+                                    $('#trackinfo').offset({ top: p.top + $(this).height() - 2, left: p.left });
+                                    $('#trackinfo').show();
+                                }
+                            }
+                        }, function () {
+                            //$('#tracktable').empty();
+                            //$('#trackinfo').offset({ top: 0, left: 0 });
+                            //$('#trackinfo').hide();
+                        })
+                    } else {
+                        //平铺模式展示
+                        var myPK = ndTo.replace("S_", "");
+                        var sub = subFlows.filter(item => item.MyPK == myPK);
+                        if (sub.length != 0) {
+                            var curAllgwfs = gwfs.filter(gwf => gwf.PNodeID == ndFrom && gwf.FK_Flow == sub[0].SubFlowNo);
+                            if (curAllgwfs.length != 0) {
+                                var curgwfs = curAllgwfs.filter(gwf => gwf.WFState == 3);
+                                if (curgwfs.length == curAllgwfs.length) {
+                                    lineColor = STYLE_LINE_TRACK_COLOR;
+                                    $("#" + this.targetId).css({ "border": "1px solid " + STYLE_NODE_BORDER_COLOR_TRACK, "color": STYLE_NODE_COLOR_FORE_TRACK });
+                                } else {
+                                    $("#" + this.targetId).css({ "border": "1px solid " + STYLE_CURRENT_NODE_BORDER_COLOR, "color": STYLE_CURRENT_NODE_COLOR_FORE });
+                                }
+                            }
+                            $("#" + this.targetId).hover(function () {
+                                var id = this.id.replace("windowS_", "");
+                                var _html = "";
+                                if (id.length > 5) {
+                                    var sub = subFlows.filter(item => item.MyPK == id)[0];
+                                    var curAllgwfs = gwfs.filter(gwf => gwf.FK_Flow == sub.SubFlowNo);
+                                    if (curAllgwfs.length == 0) {
+                                        var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node=" + parseInt(sub.SubFlowNo) + "01&WorkID=0&FK_Flow=" + sub.SubFlowNo + "&FID=0&FromWorkOpt=1&CCSta=0"
+                                        OpenLayuiDialog(url, sub.SubFlowName, window.innerWidth * 0.8, 80, "auto");
+                                    } else {
+                                        _html += '<ul>';
+                                        curAllgwfs.forEach(function (gwf) {
+                                            var url = basePath +"/WF/WorkOpt/OneWork/Chart.htm?FK_Node=" + gwf.FK_Node + "&WorkID=" + gwf.WorkID + "&FK_Flow=" + gwf.FK_Flow + "&FID=0&FromWorkOpt=1&CCSta=0"
+                                            _html += '<li><div class="layui-menu-body-title"><a href="javascript:void(0)" onclick="OpenLayuiDialog(\'' + url + '\',\'' + sub.SubFlowName + '\',' + window.innerWidth * 0.8 + ',80,\'auto\')"><span>' + gwf.Title + '</span></li>';
+                                        })
+                                        _html += "</ul>"
+                                    }
+                                    $('#tracktable').empty();
+                                    var p = $(this).offset();
+                                    $('#tracktable').append(_html);
+                                    $('#trackinfo').offset({ top: p.top + $(this).height() - 2, left: p.left });
+                                    $('#trackinfo').show();
+                                }
+                            }, function () {
+                                //$('#tracktable').empty();
+                                //$('#trackinfo').offset({ top: 0, left: 0 });
+                                //$('#trackinfo').hide();
+                            })
+                        }
+                    }
+                }
+                
 
                 //设置有轨迹数据的线的颜色
                 var style = { "lineWidth": 3, "strokeStyle": lineColor, "fillStyle": lineColor };

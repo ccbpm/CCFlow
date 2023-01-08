@@ -203,6 +203,7 @@ function cleanAll(KeyOfEn, frmType) {
             SetCtrlUnMustInput(FKMapAttrs[i]);
             CleanCtrlVal(FKMapAttrs[i]);
         }
+        layui.form.render();
     }
 
 
@@ -244,6 +245,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
             NDMapAttrs.push(key);
 
         }
+        layui.form.render();
     }
     //@Title=3@OID=2@RDT=1@FID=3@CDT=2@Rec=1@Emps=3@FK_Dept=2@FK_NY=3
     if (cfgs) {
@@ -313,21 +315,51 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
     var isHidden = false;
     $.each(trs, function (i, obj) {
         //获取所有跟随的同胞元素，其中有不隐藏的tr,就跳出循环
-        var sibles = $(obj).parent().nextAll();
+        var sibles = $(obj).nextAll();
+        if (sibles.length == 0) {
+            $(obj).hide();
+            return true;
+        }
+        var isAllHidenField = false;
         for (var k = 0; k < sibles.length; k++) {
             var sible = $(sibles[k]);
-            if (sible.find(".FoolFrmGroupBar").length > 0 || sible.find(".form-unit").length > 0)
+            if (k == 0 && sible.hasClass("FoolFrmFieldRow") == true)
                 break;
-            if (sible.is(":hidden") == false) {
-                isHidden = false;
+            if (k == 0 && sible.hasClass("layui-row") == true)
+                break;
+
+            if (k == 0 && sible.hasClass("FoolFrmFieldRow") == true) {
+                isHidden = true;
                 break;
             }
-            isHidden = true;
+            if (sibles[k].type == "hidden" && sibles[k].localName == "input") {
+                isAllHidenField = true;
+                continue;
+            }
+            isAllHidenField = false;
         }
-        if (isHidden == true)
-            $(obj).parent().hide();
+        if (isHidden == true || isAllHidenField == true)
+            $(obj).hide();
 
     });
+
+    //$.each(trs, function (i, obj) {
+    //    //获取所有跟随的同胞元素，其中有不隐藏的tr,就跳出循环
+    //    var sibles = $(obj).parent().nextAll();
+    //    for (var k = 0; k < sibles.length; k++) {
+    //        var sible = $(sibles[k]);
+    //        if (sible.find(".FoolFrmGroupBar").length > 0 || sible.find(".form-unit").length > 0)
+    //            break;
+    //        if (sible.is(":hidden") == false) {
+    //            isHidden = false;
+    //            break;
+    //        }
+    //        isHidden = true;
+    //    }
+    //    if (isHidden == true)
+    //        $(obj).parent().hide();
+
+    //});
 }
 
 //设置是否可以用?
@@ -647,7 +679,6 @@ function SetCtrlVal(key, value) {
 
     ctrl = $("input[name='CB_" + key + "']");
     if (ctrl.length == 1) {
-        ctrl.val(value);
         if (parseInt(value) <= 0)
             ctrl.attr('checked', false);
         else {
@@ -668,16 +699,24 @@ function SetCtrlVal(key, value) {
         }
         return;
     }
-
-    ctrl = $('input:radio[name=RB_' + key + ']');
+    ctrl = document.getElementsByName("RB_" + key);
     if (ctrl.length > 0) {
-        var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
-        if (checkVal != null && checkVal != undefined)
-            document.getElementById("RB_" + key + "_" + checkVal).checked = false;
-        if ($("#RB_" + key + "_" + value).length == 1)
-            document.getElementById("RB_" + key + "_" + value).checked = true;
-        return;
+        for (var i = 0; i < ctrl.length; i++) {
+            if (value == ctrl[i].value) {
+                $(ctrl[i]).next().click();
+            }
+
+        }
     }
+    //ctrl = $('input:radio[name=RB_' + key + ']');
+    //if (ctrl.length > 0) {
+    //    var checkVal = $('input:radio[name=RB_' + key + ']:checked').val();
+    //    if (checkVal != null && checkVal != undefined)
+    //        document.getElementById("RB_" + key + "_" + checkVal).checked = false;
+    //    if ($("#RB_" + key + "_" + value).length == 1)
+    //        document.getElementById("RB_" + key + "_" + value).checked = true;
+    //    return;
+    //}
 }
 
 //清空值?

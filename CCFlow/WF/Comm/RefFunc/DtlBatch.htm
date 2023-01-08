@@ -162,7 +162,7 @@
 
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
-            var mapAtrrs = frmData.Sys_MapAttr;
+            var mapAttrs = frmData.Sys_MapAttr;
             var dtls = frmData.Dtls;
 
             var html = "<table class='table' id='Table1'>";
@@ -170,8 +170,8 @@
             html += "<th>序</th>";
 
 
-            for (var i = 0; i < mapAtrrs.length; i++) {
-                var mapAttr = mapAtrrs[i];
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var mapAttr = mapAttrs[i];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                 if (mapAttr.UIVisible == "0")
                     continue;
@@ -203,8 +203,8 @@
                 html += "<td class='Idx'>" + (i + 1) + "</td>";
 
 
-                for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
-                    var mapAttr = mapAtrrs[attrIdx];
+                for (var attrIdx = 0; attrIdx < mapAttrs.length; attrIdx++) {
+                    var mapAttr = mapAttrs[attrIdx];
                     mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                     if (mapAttr.UIVisible == "0") {
                         html += "<input type='hidden' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";
@@ -246,7 +246,7 @@
                     pkval = dtl.NodeID;
                 if (pkval == dtl.WorkID)
                     pkval = dtl.WorkID;
-                for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
+                for (var attrIdx = 0; attrIdx < mapAttrs.length; attrIdx++) {
                     var mapAttr = mapAttrs[attrIdx];
                     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
                         if ($("#TB_" + pkval + "_" + mapAttr.KeyOfEn + "Text").length == 1) {
@@ -527,7 +527,7 @@
             dtl.OID = newRowIdx;
             dtl.RefPK = GetQueryString("RefVal");
 
-            var mapAtrrs = frmData.Sys_MapAttr;
+            var mapAttrs = frmData.Sys_MapAttr;
 
             var html = "";
             html += "<tr>";
@@ -536,8 +536,8 @@
 
             var hidden = "";
 
-            for (var attrIdx = 0; attrIdx < mapAtrrs.length; attrIdx++) {
-                var mapAttr = mapAtrrs[attrIdx];
+            for (var attrIdx = 0; attrIdx < mapAttrs.length; attrIdx++) {
+                var mapAttr = mapAttrs[attrIdx];
                 mapAttr = new Entity("BP.Sys.SysMapAttr", mapAttr);
                 if (mapAttr.UIVisible == "0") {
                     html += "<input type='hidden' id='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' name='TB_" + newRowIdx + "_" + mapAttr.KeyOfEn + "' value='" + dtl[mapAttr.KeyOfEn] + "' />";

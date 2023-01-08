@@ -139,17 +139,10 @@
             $('body').append($(selectEmpModalHtml));
 
             //获得部门编号.
-            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
-
-            if (dept == null || dept == '' || dept == undefined) {
-                var u = new WebUser();
-                dept = u.FK_Dept;
-            }
-
-            if (dept == undefined) {
-                dept = "0";
-            }
-
+            
+            var u = new WebUser();
+            var dept = u.FK_Dept;
+           
             var IsSelectMore = isSigleSelect == false ? 1 : 0;
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&IsSelectMore=" + IsSelectMore + "&s=" + Math.random();
 
@@ -340,7 +333,7 @@
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
                 var url = data;
                 url = url.replace('TurnUrl@', '');
-                parent.window.location.href = url;
+                parent.window.location.href = filterXSS(url);
                 return;
             }
 

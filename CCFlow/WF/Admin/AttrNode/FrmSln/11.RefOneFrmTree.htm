@@ -34,7 +34,7 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             //绑定表单类别.
-            var ensFrmTree = "BP.Sys.FrmTrees";
+            var ensFrmTree = "BP.WF.Template.SysFormTrees";
 
             var webUser = new WebUser();
             if (webUser.CCBPMRunModel == 2)
@@ -182,7 +182,7 @@
             OpenEasyUiDialogExt(url, '选择要绑定的表单', 800, 450, false);
         }
         function BatchEdit() {
-            var url = "BatchEditSln.htm?NodeID=" + nodeID;
+            var url = "BatchEditSln.htm?NodeID=" + nodeID + "&FrmID=" + nodeFrmID;
             SetHref(url);
 
         }

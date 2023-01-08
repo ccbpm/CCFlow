@@ -71,6 +71,9 @@
             Hide_IsOpenFrm = false;
         }
         $(function () {
+            if (IsMobile() == true) {
+                SetHref(GetHrefUrl().replace("/WF/WorkOpt/OneWork/TimeBase.htm", "/CCMobile/WorkOpt/OneWork/TimeBase.htm"))
+            }
             InitPage();
         });
 

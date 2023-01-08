@@ -163,6 +163,6 @@ td {
     -webkit-text-overflow: ellipsis;
 }
 
-/*.table {
-    width: auto !important;
-}*/
+xm-select > .xm-body .xm-toolbar {
+    padding: 0 5px !important;
+}

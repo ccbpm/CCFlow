@@ -43,7 +43,6 @@ function GetDBDtl() {
         { "No": 1, "Name": "按时间规则计算", "GroupNo": "A", "Url": "1.TimeDT.htm" },
         { "No": 6, "Name": "按照发起字段不能重复规则", "GroupNo": "A", "Url": "6.ColNotExit.htm" },
         { "No": 7, "Name": "按SQL规则 ", "GroupNo": "A", "Url": "7.BySQL.htm" },
-
         { "No": 9, "Name": "为子流程时仅仅只能被调用1次.", "GroupNo": "A", "Url": "9.OnlyOneSubFlow.htm" }
     ];
     return json;

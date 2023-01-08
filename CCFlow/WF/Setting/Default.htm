@@ -71,7 +71,7 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="userbox">
-                        <div class="box1"><img id="QianMing" border=1 src="../../DataUser/Siganture/UnName.jpg" ; onerror="this.src='../../DataUser/Siganture/UnName.JPG'" /></div>
+                        <div class="box1"><img id="QianMing" border=1 src=""  /></div>
                         <div class="box2">电子签字</div>
                         <div class="box3"><a href='Siganture.htm'>设置/修改</a></div>
                     </div>
@@ -146,7 +146,7 @@
             //签名.
             var qmImg = document.getElementById("QianMing");
             qmImg.src = qmUrl;
-
+            qmImg.onerror="this.style.display='none'";
             var txUrl = "../../DataUser/UserIcon/" + data.UserNo + ".png";
 
             //头像.

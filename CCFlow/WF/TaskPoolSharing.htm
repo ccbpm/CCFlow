@@ -279,7 +279,7 @@
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
 
                     //备注
-                    listbox += "<td><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+                   // listbox += "<td><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
                     listbox += "</tr>";
                 }
             }
@@ -342,7 +342,7 @@
                 return;
             }
 
-            //执行撤销.
+            //执行申请.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("WorkID", workid);
             var data = handler.DoMethodReturnString("TaskPoolSharing_Apply");

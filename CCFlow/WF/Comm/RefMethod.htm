@@ -12,6 +12,8 @@
     <script type="text/javascript" src="Gener.js"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js"></script>
     <base target="_self" />
     <script language="javascript" type="text/javascript">
         //页面启动函数.
@@ -85,14 +87,20 @@
             }
 
             //提示信息.
-            if (data == "info@") {
+            if (data.indexOf('info@') == 0 ) {
                 data = data.replace('info@', '');
-                alert(data);
+                layer.alert(data.replace("close@", "").replace("info@", ""));
                 return;
             }
+            $("#Btn_Done").show();
 
-            //转化成json.
-            data = JSON.parse(data);
+            try {
+                //转化成json.
+                data = JSON.parse(data);
+            } catch
+            {
+                alert(data);
+            }
 
             var rm = data["RM"][0];
             warning = rm.Warning;
@@ -117,7 +125,7 @@
             //循环显示数据
 
             var html = "<table style='width:100%' >";
-        //    html += "<caption>" + rm.Title + "</caption>";
+            //    html += "<caption>" + rm.Title + "</caption>";
 
             html += InitMapAttr(attrs, json);
 
@@ -133,7 +141,7 @@
                 $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
                 $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
-                if (mapAttr.DefVal.indexOf("@") == -1)
+                if (typeof mapAttr.DefVal === "string" && mapAttr.DefVal.indexOf("@") == -1)
                     continue;
 
                 var val = ConvertDefVal(json, mapAttr.DefVal, mapAttr.KeyOfEn);
@@ -190,11 +198,6 @@
                     break;
                 }
             }
-
-            if (result != undefined && typeof (result) == 'string') {
-                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-            }
-            //console.info(defVal+"=="+keyOfEn+"=="+result);
             var result = unescape(result);
 
             if (result == "null")
@@ -317,7 +320,7 @@
             if (mapAttr.MyDataType == 6) {
                 var enableAttr = '';
                 if (mapAttr.UIIsEnable == 1)
-                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '"';
                 else
                     enableAttr = "disabled='disabled'";
 
@@ -329,7 +332,7 @@
 
                 var enableAttr = '';
                 if (mapAttr.UIIsEnable == 1)
-                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '"';
                 else
                     enableAttr = "disabled='disabled'";
 
@@ -488,7 +491,7 @@
         </div>
 
         <div style="right:30px; position:absolute; z-index:100; ">
-            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" class="cc-btn-tab" />
+            <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()" class="cc-btn-tab" style="display:none" />
         </div>
 
     </form>
@@ -558,9 +561,12 @@
                 return;
             }
 
-            alert(data);
-            document.getElementById("Btn_Done").disabled = true;
-            reload();
+            layer.alert(data.replace("close@", "").replace("info@", ""), function (index) {
+                layer.close(index);
+                document.getElementById("Btn_Done").disabled = true;
+                reload();
+            });
+
         }
 
         function reload() {

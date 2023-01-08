@@ -11,19 +11,24 @@
     <script src="Gener.js" type="text/javascript"></script>
     <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
     <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>
+    <link href="../Portal/icons/font-icons.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="Search.js" type="text/javascript"></script>
     <script src="../CCForm/MapExt2021.js" type="text/javascript"></script>
- 
     <link href="Style/Search.css" rel="stylesheet" />
     <script src="../Scripts/xss.js"></script>
+    <script src="../Scripts/layui/ext/xmSelect.js"></script>
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../../DataUser/JSLibData/SearchAndEn.js"></script>
+
     <style id="theme-data"></style>
     <base target="_self" />
     <style type="text/css">
         .layui-form-label {
             padding: 9px 0px;
+            width: auto;
         }
 
         .layui-form-label {
@@ -34,18 +39,60 @@
             font-weight: bold;
         }
 
+        .layui-table-col {
+            min-width: 150px;
+            min-height: 40px;
+            text-align: left;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+
+            .layui-table-col li {
+                padding: 0 10px;
+                line-height: 30px;
+                -webkit-transition: .5s all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+        .input-icon {
+            position: absolute;
+            left: calc(100% - 40px);
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
         .layui-table-cell .layui-form-checkbox[lay-skin=primary] {
-            top:0px !important;
-            padding:
+            top: 0px;
+            padding: 0;
+        }
+
+        .label-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: revert !important;
+        }
+
+        .layui-table img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        xm-select > .xm-body .xm-toolbar {
+            padding: 0 5px;
         }
     </style>
     <script language="javascript" type="text/javascript">
 
         var ensName = GetQueryString("EnsName");
 
-        var firstLoadTable = false;
-        var isCond = 0;
-
+        var isClearSearchCond = getConfigByKey("IsClearSearchCond", false);
+        var firstLoadTable = true;
         //定义公共个变量.
         var webUser = new WebUser();
 
@@ -60,15 +107,35 @@
         var cfg = new Entity("BP.Sys.EnCfg");
         cfg.No = ensName;
         cfg.RetrieveFromDBSources();
-
+        var drillFields = cfg.Drill || "";
+        drillFields = drillFields.replace(/@/g, ",");
+        drillFields += ",";
         //当前用户查询信息.
         var ur = GetUserRegedit();
+
+        //获取当前用户选择的列
+        var cfield = new Entity("BP.Sys.CField");
+        cfield.SetPKVal(urMyPK);
+        cfield.RetrieveFromDBSources();
 
         //页面分页信息显示
         var count = ur.GetPara("RecCount");//查询总条数
         var mapBase;
-        var pageIdx = 1;
-        var pageSize = 500;
+        var pageIdx = this.GetQueryString("PageIdx");//当前页
+
+        if (pageIdx == null || pageIdx == undefined || pageIdx == 0)
+            pageIdx = 1;
+
+        var pageSize = cfg.GetPara("PageSize");
+        if (pageSize == null || pageSize == undefined || pageSize == 0)
+            pageSize = 10;//一页显示的行数
+
+        var pages = 1;//总页数
+        if (count % pageSize != 0)
+            pages = parseInt(count / pageSize) + 1;
+        else
+            pages = parseInt(count / pageSize);
+        if (pages == 0) pages = 1;
 
         //页面字体大小
         var fontSize = cfg.GetPara("FontSize");
@@ -80,14 +147,33 @@
         var isSecHeader = false;//是否是二级表头
         var thrMultiTitle = cfg.GetPara("MultiTitle1"); //三级表头的内容
         var secMultiTitle = cfg.GetPara("MultiTitle");//二级表头的内容
-        var firstLoadTable = false;
 
+        var vtable = null;
+        var pageType = "batch";
+        var batchData = [];//记录batch页面选择的数据
         //获取用户的查询信息
         function GetUserRegedit() {
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.SetPKVal(urMyPK);
             ur.RetrieveFromDBSources();
+
             if (firstLoadTable != undefined && firstLoadTable == true) {
+                //清空Seach记录查询
+                if (isClearSearchCond == 1) {
+                    ur.MyPK = urMyPK;
+                    ur.SearchKey = "";
+                    ur.AtPara = "";
+                    ur.DTFrom = "";
+                    ur.DTTo = "";
+                    ur.FK_Emp = webUser.No;
+                    ur.CfgKey = "SearchAttrs";
+                    ur.Vals = "";
+                    ur.FK_MapData = ensName;
+                    ur.OrderBy = "";
+                    ur.OrderWay = "";
+                    ur.Save();
+                }
+
                 //获取Url传的查询Key值
                 var key = GetQueryString("Key");
                 if (key != null && key != undefined && firstLoadTable == true)
@@ -133,31 +219,14 @@
             if (isThrHeader == false && secMultiTitle != "")
                 isSecHeader = true;
 
-            firstLoadTable = true;
-            //清空Seach记录查询
-            if (isCond == 1) {
-                ur.MyPK = urMyPK;
-                if (key != null && key != undefined)
-                    ur.SearchKey = $("#TB_Key").val();
-                else
-                    ur.SearchKey = "";
-
-                ur.AtPara = "";
-                ur.DTFrom = "";
-                ur.DTTo = "";
-                ur.FK_Emp = webUser.No;
-                ur.CfgKey = "SearchAttrs";
-                ur.Vals = "";
-                ur.FK_MapData = ensName;
-                ur.Save();
-            }
+            firstLoadTable = false;
 
             layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
                 var table = layui.table,
                     laytpl = layui.laytpl,
                     form = layui.form,
                     laydate = layui.laydate;
-                InitToolbar();
+                InitToolbar("batch");
 
                 //时间类型
                 if ($(".ccdate").length > 0) {
@@ -175,7 +244,8 @@
                     var id = this.id;
                     switch (id) {
                         case "Search":
-                            Search();
+                            batchData = [];//选择的数据置空
+                            Search("batch");
                             break;
                         case "BtnLab1":
                             executeFunction(cfg.BtnJS1, cfg.BtnLab1);
@@ -183,11 +253,14 @@
                         case "BtnLab2":
                             executeFunction(cfg.BtnJS2, cfg.BtnLab2);
                             break;
+                        case "BtnLab3":
+                            executeFunction(cfg.BtnJS3, cfg.BtnLab3);
+                            break;
                         case "Add":
                             New();
                             break;
-                        case "Exp":
-                            Exp();
+                        case "Delete":
+                            Delete();
                             break;
                         case "Imp":
                             Imp();
@@ -200,32 +273,47 @@
                     }
                 });
 
-                var data = SearchData();
+                var data = SearchData("batch");
 
                 var focusField = "";
                 if (cfg.IsEnableFocusField == 1)
                     focusField = cfg.FocusField;
 
+                var orderBys = {};
+                if (ur.OrderBy != "")
+                    orderBys = { field: ur.OrderBy, type: ur.OrderWay };
+                if (ur.OrderBy == "" && cfg.OrderBy != "")
+                    orderBys = { field: cfg.OrderBy.split(",")[0], type: cfg.IsDeSc == 1 ? 'desc' : 'asc' };
                 //获取列
-                var cols = GetColoums(data, thrMultiTitle, secMultiTitle, cfg.ColorSet, cfg.SortColumns, focusField,true);
+                var cols = GetColoums(data, thrMultiTitle, secMultiTitle, cfg.ColorSet, cfg.OrderBy, focusField, true);
 
                 var tableData = transferHtmlData(data["DT"]);
-
                 //渲染table
+                var tableName = mapBase.EnDesc;
+                if (typeof window.top.vm != "undefined" && window.top.vm.tabsList.length > window.top.vm.selectedTabsIndex)
+                    tableName = window.top.vm.tabsList[window.top.vm.selectedTabsIndex].name;
                 //主页面数据
-                var vtable = table.render({
+                var h = $(document).height() - $("#toolbar").height() * 2 - 90;
+                vtable = table.render({
                     elem: '#tableSearch',
                     id: 'tableSearch',
                     data: tableData,
-                    title: '数据表',
+                    title: tableName,
                     limit: Number.MAX_VALUE,
-                    height: $(document).height() - $("#toolbar").height() - 100,
+                    height: h,
                     cellMinWidth: 120,
                     cols: cols,
-                    page: false
+                    autoSort: false,
+                    initSort: orderBys,
+                    page: false,
+                    done: function (res, curr, count) {
+                        $(".layui-table-body").height(h - $(".layui-table-header").height());
+                    }
+
                 });
-              
+                renderLaypage();
                 //触发行双击事件
+                //if (cfg.DoubleOrClickModel == 0) {
                 table.on('rowDouble(search)', function (obj) {
                     var row = obj.data;
                     var pkval = row[enPK];
@@ -234,7 +322,18 @@
                     rowstr = encodeURIComponent(rowstr);
                     OpenEn(pkval, "", 0, rowstr);
                 });
-               
+                //}
+                //if (cfg.DoubleOrClickModel == 1) {
+                //    table.on('row(search)', function (obj) {
+                //        var row = obj.data;
+                //        var pkval = row[enPK];
+
+                //        var rowstr = JSON.stringify(row);
+                //        rowstr = encodeURIComponent(rowstr);
+                //        OpenEn(pkval, "", 0, rowstr);
+                //    });
+                //}
+
                 table.on('tool(search)', function (obj) {
                     var data = obj.data;
                     $.each(dtMs, function (idx, dtm) {
@@ -246,6 +345,85 @@
                     if (obj.event == "downloadFile") {
                         downLoadFile(data[enPK]);
                     }
+                    //下载事件
+                    if (obj.event == "Btn_En1") {
+                        var func1 = cfg.EnBtnJS1;
+                        if (func1 == null || func1 == undefined || func1 == "")
+                            return;
+                        func1 = func1.replace(/~/g, "'");
+                        if (func1.indexOf("(") != -1)
+                            func1 = func1.replace("@PKVal", data[enPK]);
+                        else
+                            func1 = func1 + "(" + data[enPK] + "," + JSON.stringify(data) + ")";
+                        eval(func1);
+                    }
+                    if (obj.event == "Btn_En2") {
+                        var func2 = cfg.EnBtnJS2;
+                        if (func2 == null || func2 == undefined || func2 == "")
+                            return;
+                        func2 = func2.replace(/~/g, "'");
+                        if (func2.indexOf("(") != -1)
+                            func2 = func2.replace("@PKVal", data[enPK]);
+                        else
+                            func2 = func2 + "(" + data[enPK] + "," + JSON.stringify(data) + ")";
+                        eval(func2);
+                    }
+                });
+
+                table.on('checkbox(search)', function (obj) {
+                    var type = obj.type;
+                    //全部选中
+                    if (type == "all") {
+                        var allData = table.getData("tableSearch");
+                        if (obj.checked == true) {
+                            //需要加载所有的数据
+                            if (batchData.length == 0) {
+                                batchData = allData;
+                                return;
+                            }
+                            var enPKVals = batchData.map(item => item[enPK]);
+                            res = allData.filter((item) => {
+                                let res = !(enPKVals.indexOf(item[enPK]) > -1);
+                                return res;
+
+                            });
+                            batchData = batchData.concat(res);
+                        }
+                        //移除未选中的数据
+                        if (obj.checked == false) {
+                            if (batchData.length == 0)
+                                return;
+                            var enPKVals = allData.map(item => item[enPK]);
+                            var newData = [];;
+                            $.each(batchData, function (i, item) {
+                                if (enPKVals.indexOf(item[enPK]) == -1)
+                                    newData.push(item);
+                            })
+                            batchData = newData;
+                        }
+                        return;
+                    }
+                    var isHave = true;
+                    if (batchData.length == 0)
+                        isHave = false;
+                    else {
+                        $.each(batchData, function (i, item) {
+                            if (item[enPK] == obj.data[enPK]) {
+                                isHave = true;
+                                if (obj.checked == true)
+                                    return false;
+                                if (obj.checked == false)
+                                    batchData.splice(i, 1);
+                                return false;
+                            }
+                            isHave = false;
+                        });
+                    }
+
+                    if (obj.checked && isHave == false) {
+                        batchData.push(obj.data);
+                    }
+
                 });
 
                 table.on('sort(search)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -253,10 +431,45 @@
                     orderWay = obj.type;//当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
                     //尽管我们的 table 自带排序功能，但并没有请求服务端。
                     //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
-                    tableData = SearchData();
-                    table.reload('lay_table_dict', tableData["DT"]);
+                    pageIdx = 1;
+                    batchData = [];//选择的数据置空
+                    tableData = SearchData("batch", orderBy, orderWay);
+                    table.reload('tableSearch', { initSort: obj, data: transferHtmlData(tableData["DT"]) });
+                    renderLaypage();
+                    dropDownLayuiCols(tableData.Attrs);
 
                 });
+                dropDownLayuiCols(data.Attrs);
+                layui.form.on("checkbox(LAY_TABLE_TOOL_COLS)", function (e) {
+                    var l = $(e.elem),
+                        n = this.checked,
+                        o = l.data("key"),
+                        r = l.data("parentkey");
+                    //增加隐藏显示的列
+                    if (cfield.Attrs == "")
+                        cfield.Attrs = ",";
+                    if (n == false && cfield.Attrs.indexOf("," + l[0].name + ",") == -1)
+                        cfield.Attrs = cfield.Attrs + l[0].name + ",";
+                    //移除隐藏的列
+                    else
+                        cfield.Attrs = cfield.Attrs.replace(l[0].name + ",", "");
+                    cfield.Update();
+
+                    layui.each(vtable.config.cols, function (e, t) {
+                        layui.each(t, function (t, l) {
+                            if (e + "-" + t === o) {
+                                var d = l.hide;
+                                l.hide = !n;
+                                var item = $("div[lay-id='tableSearch']").find('*[data-key="' + vtable.config.index + "-" + o + '"]');
+                                if (l.hide == true)
+                                    item.addClass("layui-hide");
+                                else
+                                    item.removeClass("layui-hide");
+                                $("div[lay-id='tableSearch']").find(".laytable-cell-" + vtable.config.index + "-" + o).css("width", l.minWidth + "px");
+                            }
+                        });
+                    });
+                })
                 //批处理事件
                 BatchMethod();
 
@@ -275,28 +488,57 @@
                 return;
             }
             var refMethods = JSON.parse(data);
-            if (refMethods.length == 0)
+            if (refMethods.length == 0) {
+                $("#Div_Batch").hide();
                 return;
+            }
+
             $.each(refMethods, function (idx, method) {
-                var btn = $("<button type='button' class='layui-btn   layui-btn-sm method' id='method_" + idx + "' >" + method.Title + "</button>");
+                var btn = $("<button type='button' class='layui-btn  layui-btn-radius  layui-btn-sm method' id='method_" + idx + "' >" + method.Title + "</button>");
                 btn.data(method);
-                $("#refMethod").append(btn);
+                $(".layui-toolbar").append(btn);
                 btn.on('click', function () {
                     var method = $(this).data();
-                    operateBatch(method);
+                    operateBatch(idx, method);
                 })
             })
-     
+
+        }
+
+        function renderLaypage() {
+            //执行一个laypage实例
+            layui.laypage.render({
+                elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
+                , count: ur.GetPara("RecCount") //数据总数，从服务端得到
+                , limit: pageSize
+                , limits: [5, 10, 15, 20, 25]
+                , layout: ['prev', 'page', 'next', 'limit', 'skip', 'count']
+                , jump: function (obj, first) {
+
+                    if (!first) {
+                        pageIdx = obj.curr;
+                        pageSize = obj.limit;
+                        //刷新数据
+                        var tableData = SearchData("batch");
+                        layui.table.reload('tableSearch', { data: transferHtmlData(tableData["DT"]) });
+                        dropDownLayuiCols(tableData.Attrs);
+                    }
+
+                }
+            });
+            $('#page').css('text-align', 'right');  // 分页右对齐
+            $('.layui-table-page').css('text-align', 'right');  //
+
         }
 
         //点击事件
-        function operateBatch(method) {
+        function operateBatch(idx, method) {
             //获取前台页面的复选框的值
             var pkValue = GetChecked();
             if (pkValue == null || pkValue == "") {
                 return;
             }
-            var url = method.Url;
+            var url = method.Url || "";
             url = url.replace(/PKVal=/g, "PKVal=" + pkValue);
 
             if (parseInt(method.RefMethodType) == RefMethodType.Func) {
@@ -310,10 +552,28 @@
                 }
                 layer.confirm(warning, function (index) {
                     layer.close(index);
-                    OpenLayuiDialog(url, method.Title, method.W, 100, "r", false);
+                    if (method.IsHaveFuncPara == "1") {
+                        OpenLayuiDialog(url, method.Title, method.W, 100, "r", true);
+                        return;
+                    }
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                    handler.AddPara("Index", method.No);
+                    handler.AddPara("PKVal", pkValue);
+                    handler.AddPara("PK", pkValue);
+                    handler.AddPara("EnsName", GetQueryString("EnsName"));
+
+                    var data = handler.DoMethodReturnString("Refmethod_Init");
+                    if (data.indexOf("err@") != -1) {
+                        layer.alert(data);
+                        return;
+                    }
+                    data = replaceAll(data, "close@", "");
+                    layer.alert(replaceAll(data, "info@@", ""));
+                    Search("batch");
+
                 });
             } else {
-                OpenLayuiDialog(url, method.Title, method.W, 100, "r", false);
+                OpenLayuiDialog(url, method.Title, method.W, 100, "r", true);
             }
         }
 
@@ -363,8 +623,15 @@
                         </div>
                         <!--查询表格-->
                         <table class="layui-hide" id="tableSearch" lay-filter="search"></table>
-                        <!--批处理方法-->
+                        <!--分页-->
                         <div style="height:40px">
+                            <div style="float:left">
+                                <ul class="pagination  controls" style="margin-left:20px"><li class=" controls" id="JsResult"></li></ul>
+                            </div>
+                            <div style="float:right" id="page"></div>
+                        </div>
+                        <!--批处理方法-->
+                        <div style="height:40px" id="Div_Batch">
                             <div style="margin-top:5px">
                                 <div class="layui-form-item">
                                     <div class="layui-line" id="refMethod">
@@ -380,23 +647,19 @@
     </div>
     <script>
         $(function () {
-
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
             if (theme == null || theme == undefined || theme == "")
                 return;
             var data = JSON.parse(theme);
-
-            var html = "\n .layui-btn{\n background-color:" + data.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + data.selectedMenu + ";\n}";
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html += "\n .layui-btn{\n background-color:" + data.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + data.selectedMenu + ";\n}";
             html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + data.selectedMenu + " !important\n}";
             html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
             html += "\n .layui-tab-title .layui-this{\n background-color:" + data.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + data.selectedMenu + ";}";
             html += "\n .layui-a-this{\n background-color:" + data.selectedMenu + ";\n color: #fff;\n}";
 
-            var styleScope = document.getElementById("theme-data");
-
             styleScope.innerHTML = filterXSS(html);
-
-
         })
     </script>
     <!--serach页面JS开发接口-->

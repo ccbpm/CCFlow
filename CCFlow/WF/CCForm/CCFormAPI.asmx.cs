@@ -355,7 +355,7 @@ namespace CCFlow.WF.CCForm
         public void WordFileGenerSiganture(string userNo, ref byte[] bytes)
         {
             if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
-                throw new Exception("用户不存在");
+                throw new Exception("用户或密码错误.");
 
             string filePath = BP.Difference.SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
             if (System.IO.File.Exists(filePath) == false)

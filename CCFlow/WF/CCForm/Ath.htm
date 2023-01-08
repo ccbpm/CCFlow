@@ -21,7 +21,7 @@
         var pageData = {};
         var athchmentID = null;
         $(function () {
-            pageData.WorkID = GetQueryString("WorkID");
+            pageData.WorkID = GetQueryString("PKVal") || GetQueryString("WorkID");
             if (pageData.WorkID == null || pageData.WorkID == undefined)
                 pageData.WorkID = GetQueryString("OID");
             pageData.FID = GetQueryString("FID");

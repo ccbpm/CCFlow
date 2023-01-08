@@ -50,8 +50,7 @@
             var DTSearchWay = mapData.GetPara("DTSearchWay");
             var DTSearchKey = mapData.GetPara("DTSearchKey");
             var DDLShowWays = mapData.GetPara("DDLShowWays"); //下拉框展示模式
-           
-           
+          
             //绑定外键字段.
             var dateMapAttrs = [];
             var count = 0;
@@ -60,6 +59,7 @@
             htmlFKeys += "<tr>";
             htmlFKeys += "<th>字段</th>";
             htmlFKeys += "<th>展示方式</th>";
+            htmlFKeys += "<th>是否单选</th>";
             htmlFKeys += "<th>填充</th>";
             htmlFKeys += "<th>级联关系</th>";
             htmlFKeys += "</tr>";
@@ -104,7 +104,7 @@
 
                 htmlFKeys += "<tr>";
                 htmlFKeys += "<td>";
-                htmlFKeys += "   <input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' style='margin-right:3px'/><span for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</span>";
+                htmlFKeys += "<input class='ddl_field' type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' style='margin-right:3px'/><span for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</span>";
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "<td>";
@@ -112,6 +112,10 @@
                 htmlFKeys += "<option value=0>下拉框展示</option>";
                 htmlFKeys += "<option value=1>平铺展示</option>";
                 htmlFKeys += "</select>";
+                htmlFKeys += "</td>";
+
+                htmlFKeys += "<td>";
+                htmlFKeys += "<input type='checkbox' id='CB_" + attr.KeyOfEn + "' id='CB_" + attr.KeyOfEn + "' checked='checked'/>";
                 htmlFKeys += "</td>";
 
                 htmlFKeys += "<td>";
@@ -145,6 +149,15 @@
                         return true;
                     var strs = item.split("=");
                     if (strs.length == 2) {
+                        if (strs[1].indexOf("_") != -1) {
+                            var ss = strs[1].split("_");
+                            $("#" + strs[0] + "_ShowWay").val(ss[0]);
+                            if(ss[1]=="1")
+                                $("#CB_" + strs[0]).prop('checked', 'checked');
+                            else
+                                $("#CB_" + strs[0]).prop('checked', '');;
+                            return true;
+                        }
                         $("#" + strs[0] + "_ShowWay").val(strs[1]);
                     }
                 })
@@ -187,19 +200,21 @@
 
             hidenField = hidenField.replace(/%/g, '[%]');
             mapData.SetPara("HidenField", hidenField);
-
             var DDLShowWays = "";
             var fields = "";
-            var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
-            for (var i = 0, len = oChecks.length; i < len; i++) {
-                var item = oChecks[i];
+            var oChecks = $(".ddl_field");
+            $.each(oChecks, function (i, item) {
                 if (item.checked) {
                     //获取展示方式
                     var showWay = $("#" + item.id + "_ShowWay").val();
                     fields += "*" + item.id;
-                    DDLShowWays += "*" + item.id + "=" + showWay;
+                    var isRadioSelect = 0;
+                    if ($("#CB_" + item.id)[0].checked == true)
+                        isRadioSelect = 1;
+                    DDLShowWays += "*" + item.id + "=" + showWay + "_" + isRadioSelect;
                 }
-            }
+            })
+           
 
             if (fields == "") {
                 mapData.SetPara("RptSearchKeys", "");
@@ -318,7 +333,9 @@
 
             <div id="StringKeys" style="margin-left:15px"> </div>
 
-            <legend>  外键与枚举 </legend>
+            <legend>
+                外键与枚举 
+            </legend>
             <div id="FKeys"></div>
 
             <legend>  展现方式</legend>
@@ -337,6 +354,7 @@
                         <select name="DDL_ListShowWayKey" id="DDL_ListShowWayKey">
                         </select>
                     </td>
+                  
                 </tr>
             </table>
 
@@ -372,11 +390,23 @@
             <legend>  增加隐藏查询条件</legend>
 
             <ul>
-                <li> 单个条件：<font color="green"> WFState=1</font>  多个条件：<font color="green"> WFState=1 AND Starter=@WebUser.No</font></li>
-                <li> 支持@+表达式变量.</li>
+                <li>
+                    1.数据源类型按SQL查询：
+                    <br /><font color="green"> WFState=1</font>  多个条件：<font color="green"> WFState=1 AND Starter=_WebUser.No</font>
+                    <br /> <span>支持_+表达式变量.</span>
+                </li>
+                <li>
+                    2.数据源类型按URL请求查询(仅支持Post请求的方式)：
+                    <br />隐藏的条件可以增加 &UserNo=_WebUser.No&WFState=1
+                </li>
+                <li>
+                    3.数据源类型按存储过程请求查询：
+                    <br /><font color="green"> WFState=1</font>  多个条件：<font color="green"> Starter=_WebUser.No,WFState=1</font>
+                    <br /> <span>支持_+表达式变量</span>
+                </li>
             </ul>
 
-            <input id="TB_HidenField" name="TB_HidenField" type="text" value="" placeholder="例如: WFState=1 AND Starter=@WebUser.No " style="width:98%" />
+            <input id="TB_HidenField" name="TB_HidenField" type="text" value="" placeholder="例如: WFState=1 AND Starter=_WebUser.No " style="width:98%" />
 
 
             <legend>帮助  </legend>

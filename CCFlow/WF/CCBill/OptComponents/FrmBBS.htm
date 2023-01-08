@@ -47,11 +47,11 @@
                         <ul v-for="(it,key) in item.children">
                             <div class="pl ">
                                 <div class="tx tx2">
-                                    <span>{{it.Rec}}</span>
+                                    <span>{{it.RecName}}</span>
                                 </div>
                                 <ul class="plbg plbg2">
                                     <div class="f">{{it.RecName}}</div>
-                                    <div class="r"><a v-if="it.MyFilePath!=''" @click="downloadFile(it)" style="margin-right:15px"><img src="../../Img/FileType/.gif" style='width:16px' />{{it.MyFileName}}</a><span class="z12">{{it.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
+                                    <div class="r"><a v-if="it.MyFilePath!=''" @click="downloadFile(it)" style="margin-right:15px"><img src="../../Img/FileType/file.gif" style='width:16px' />{{it.MyFileName}}</a><span class="z12">{{it.RDT}}</span> <span v-if="it.Rec==webuser" @click="Delete(it.No)">删除</span></div>
                                     <div class="dr"></div>
                                 </ul>
                                 <ul style="padding-top: 10px; padding-bottom: 10px; word-wrap: break-word; width: 100%">
@@ -72,7 +72,7 @@
                         <textarea id='reply-input' style='height: 40px; width: 98%;' placeholder="请输入内容？" spellcheck="false"></textarea>
                         <div class="l top10">
                             <button @click="Save()" type="button" id="myButton" data-loading-text="Loading..." class="layui-btn" autocomplete="off">
-                                发布
+                                提交
                             </button>
 
                         </div>

@@ -210,7 +210,7 @@ function MenuClick(type, pinyin) {
             AddFixed();
             break;
         case "BigText"://大块文本
-            AddBigNoteHtmlText();
+            AddBigNoteHtmlText(pinyin);
             break;
         case "JobSchedule"://进度图
             ExtJobSchedule();

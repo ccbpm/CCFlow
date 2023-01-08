@@ -304,24 +304,24 @@ function ShowWorkReturnTip(flowData, isReadonly) {
         scrip = "";
     if ((flowData.AlertMsg != undefined && flowData.AlertMsg.length != 0) || (scrip != "" && scripNodeID != GetQueryString("FK_Node"))) {
         var _html = "";
-        if (flowData.AlertMsg != undefined) {
-            $.each(flowData.AlertMsg, function (i, item) {
-                if (item.Title == "退回信息")
-                    _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;color:red'>";
-                else
-                    _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;'>";
-                _html += (i + 1) + "." + item.Title + "<br/>";
-                _html += item.Msg;
-                _html += "</div>";
-            });
-        }
-        if (scripNodeID != GetQueryString("FK_Node")) {
+        $.each(flowData.AlertMsg, function (i, item) {
+            if (item.Title == "退回信息")
+                _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;color:red'>";
+            if (item.Title == "催办信息")
+                _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;font-weight:bold'>";
+            else
+                _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;'>";
+            _html += (i + 1) + "." + item.Title + "<br/>";
+            _html += item.Msg;
+            _html += "</div>";
+        });
+
+        if (scripNodeID != GetQueryString("FK_Node") && scrip != "") {
             _html += "<div style='padding: 10px 0px 0px 10px;line-height: 24px;'>";
             _html += "小纸条<br/>";
             _html += scrip;
             _html += "</div>";
         }
-
         var h = window.innerHeight - 240;
         //退回消息
         layer.open({
@@ -383,6 +383,13 @@ function Save(saveType) {
     layer.close(index);
     setToobarEnable();
     return true;
+}
+//阅读并关闭.
+function Close() {
+    if (window.top.vm && typeof window.top.vm.closeCurrentTabs == "function")
+        window.top.vm.closeCurrentTabs(window.top.vm.selectedTabsIndex);
+    else
+        window.close();
 }
 
 

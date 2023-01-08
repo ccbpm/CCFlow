@@ -12,7 +12,7 @@ function AttrFrm(enName, title, pkVal) {
 
 //打开设计表单.
 function GoToFrmDesigner(frmID) {
-    var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + frmID;
+    var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + frmID + '&Token=' + GetQueryString("Token");
     addTab(url, "设计:" + frmID);
     return;
 }
@@ -602,12 +602,26 @@ new Vue({
                 menu.Docs = "一个实体所有发起的流程列表.";
             }
 
+            if (menu.Mark === "Calendar") {
+                menu.Docs = " <a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >打开</a>";
+            }
+
+            if (menu.Mark === "Task") {
+                menu.Docs = " <a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >打开</a>";
+            }
+
+            if (menu.Mark === "Notepad") {
+                menu.Docs = " <a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >打开</a>";
+            }
+
             if (menu.Mark === "WorkRec") {
-                menu.Docs = "<a " + btnStyle + " href=\"javascript:addTab('" + basePath + "/CCFast/WorkRec/Default.htm?typeid=0&x=x','" + menu.Name + "');\"  >打开</a>";
+                menu.Docs = " <a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >打开</a>";
             }
 
             if (menu.Mark === "Info") {
-                menu.Docs = "<a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >编辑</a>";
+                menu.Docs = " <a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >打开</a>";
+                menu.Docs += "-<a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >编辑信息</a>";
+                menu.Docs += "-<a " + btnStyle + " href=\"javascript:OpenLayuiDialog('" + basePath + menu.UrlExt + "','" + menu.Name + "',9000); \"  >编辑类别</a>";
             }
 
             if (menu.Mark === "KnowledgeManagement") {
@@ -829,9 +843,9 @@ new Vue({
             if (menu.MenuModel === "Bill") {
                 menu.MenuModel = "单据";
                 var html = "";
-                html += "<a " + btnStyle + " href=\"javascript:addTab('" + basePath + "/WF/CCBill/SearchDict.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('" + basePath + "/WF/CCBill/SearchBill.htm?FrmID=" + menu.UrlExt + "','" + menu.Name + "');\"  >打开</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:addTab('" + basePath + "/WF/CCBill/Admin/Collection.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "&MenuModel=" + menu.MenuModel + "','方法:" + menu.Name + "');\" >列表组件</a>";
-                html += "<a " + btnStyle + "  href=\"javascript:addTab('" + basePath + "/WF/CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "&MenuModel=" + menu.MenuModel + "','方法:" + menu.Name + "');\" >实体组件</a>";
+                html += "<a " + btnStyle + "  href=\"javascript:addTab('" + basePath + "/WF/CCBill/Admin/Method.htm?FrmID=" + menu.UrlExt + "&ModuleNo=" + menu.ModuleNo + "&MenuModel=" + menu.MenuModel + "','方法:" + menu.Name + "');\" >单据组件</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:AttrFrm('BP.CCBill.FrmBill','" + menu.Name + "','" + menu.UrlExt + "')\" >单据属性</a>";
                 html += "<a " + btnStyle + "  href=\"javascript:GoToFrmDesigner('" + menu.UrlExt + "')\" >表单设计</a>";
                 menu.Docs = html;

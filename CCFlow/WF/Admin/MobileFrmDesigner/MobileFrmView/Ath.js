@@ -194,7 +194,7 @@ function downLoad(mypk) {
     //    var currentPath = GetHrefUrl();
     //    var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
     //    var Url = path + "/CCMobile/CCForm/downloadFile.do?MyPK=" + mypk + "&PKVal=" + mypk;
-    //window.location.href = Url;
+    //window.location.href = filterXSS(url);
 }
 
 //文件下载

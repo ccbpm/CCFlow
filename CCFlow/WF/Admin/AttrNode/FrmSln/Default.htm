@@ -16,7 +16,9 @@
 
             var node = new Entity("BP.WF.Node");
             node.NodeID = GetQueryString("FK_Node");
-            node.Retrieve();
+            node.SetPKVal(node.NodeID);
+            node.RetrieveFromDBSources();
+
 
             var url = '';
 

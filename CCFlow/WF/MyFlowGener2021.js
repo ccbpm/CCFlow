@@ -229,10 +229,6 @@ function BindFrm() {
             Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
             GenerFoolFrm(flowData); //傻瓜表单.
             break;
-        case FlowDevModel.FoolTruck://累加模式
-            //Skip.addJs("./CCForm/ChapterFrm.js?ver=" + Math.random());
-            GenerFoolFrm(flowData); //傻瓜表单.
-            break;
         case FlowDevModel.RefOneFrmTree://表单库单表单
             if (frmNode != null && frmNode != undefined) {
                 // frmNode = frmNode[0];
@@ -289,7 +285,7 @@ function BindFrm() {
         if (plant == "CCFlow")
             handlerUrl = basePath + "/WF/Comm/Handler.ashx";
         else
-            handlerUrl = basePath + "/WF/Comm/Sys/ProcessRequest.do";
+            handlerUrl = basePath + "/WF/Comm/ProcessRequest.do";
 
         images_upload_url = handlerUrl + '?DoType=HttpHandler&DoMethod=RichUploadFile';
         images_upload_url += '&HttpHandlerName=BP.WF.HttpHandler.WF_Comm_Sys&FrmID=' + mapData.No + "&WorkID=" + pageData.WorkID;
@@ -300,7 +296,7 @@ function BindFrm() {
             $(".rich").each(function (i, item) {
                 var id = item.id;
                 var h = item.style.height.replace("px", "");
-                if (h < 400) h = 400;
+              
                 tinymce.render({
                     elem: "#" + id
                     , height: h
@@ -451,8 +447,9 @@ function Save(saveType) {
         return;
     }
     isSaveOnly = true;
+    debugger
     if (checkBlanks() == false) {
-        layer.alert("必填项不能为空");
+        layer.msg('必填项不能为空', { icon: 5 });
         isSaveOnly = false;
         return;
     }
@@ -465,7 +462,7 @@ function Save(saveType) {
         }
     });
     //审核组件
-    if ($("#WorkCheck_Doc").length == 1) {
+    if ($("#WorkCheck_Doc").length == 1 || $("#WorkCheck_Doc0").length == 1) {
         //保存审核信息
         SaveWorkCheck();
     }
@@ -630,7 +627,12 @@ function checkBlanks() {
             if (keyOfEn != null) {
                 var item = $("#TB_" + keyOfEn);
                 if (item.length != 0) {
-                    if (item.val() == "") {
+                    var val = item.val();
+                    if (item.hasClass('rich')) {
+                        var edit = layui.tinymce.get('#TB_' + keyOfEn)
+                        val = edit.getContent();
+                    }
+                    if (val == "") {
                         checkBlankResult = false;
                         item.addClass('errorInput');
                     } else {

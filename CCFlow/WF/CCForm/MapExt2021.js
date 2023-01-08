@@ -229,6 +229,30 @@ function GetDataTableOfTBChoice(mapExt, frmData, defVal) {
                 })
             })
             break;
+        case 5:
+            debugger
+            var tag1 = mapExt.Tag1||"";
+            if (tag1 == "") {
+                layer.alert("未指定岗位");
+                return null;
+            }
+            try {
+                var dt = JSON.parse(replaceAll(tag1, '\\\\\"', '"'));
+                data = [];
+                dt.forEach(function (item) {
+                    data.push({
+                        value: item.No,
+                        name: item.Name,
+                        selected: defVal.indexOf("," + item.No + ",") != -1 ? true : false
+
+                    })
+                })
+            } catch {
+                layer.alert("存储的岗位信息有误:" + tag1);
+                return null;
+            }
+
+            break;
         default:
            layer. alert("未判断的模式");
             return null;
@@ -390,6 +414,7 @@ function FullIt(selectVal, refPK, elementId) {
     //执行填充从表.
     FullDtl(selectVal, mapExt,oid);
 
+    layui.form.render();
     //执行确定后执行的JS
     var backFunc = mapExt.Tag2;
     if (backFunc != null && backFunc != "" && backFunc != undefined)
@@ -600,6 +625,7 @@ function FullDtl(selectVal, mapExt,oid) {
         handler.AddPara("FK_MapExt", mapExt.MyPK);
         handler.AddPara("KVs", kvs);
         handler.AddPara("DoTypeExt", "ReqDtlFullList");
+        handler.AddPara("DtlKey", selectVal);
         handler.AddPara("OID", oid);
         var data = handler.DoMethodReturnString("HandlerMapExt");
         if (data == "")

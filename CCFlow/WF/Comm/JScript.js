@@ -285,16 +285,25 @@ function formatNumber(num, precision, separator, isDealPrec) {
         // 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
         // 的值变成了 12312312.123456713
         //num = Number(num);
+        num = num.toString();
+
         // 处理小数点位数
-        if (isDealPrec == 1)
-            num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
-        else
-            num = num.toString();
+        if (isDealPrec == 1 && typeof precision != "undefined" && precision) {
+            var suf = 0;
+            if (num.indexOf(".") != -1)
+                suf = num.substring(num.indexOf(".") + 1, num.length).length;
+            if (suf == 0 && num.indexOf(".") == -1)
+                num = num + ".";
+            for (var i = suf; i < precision; i++)
+                num += "0";
+
+        }
+        //    num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
+
         // 分离数字的小数部分和整数部分
         parts = num.split('.');
         // 整数部分加[separator]分隔, 借用一个著名的正则表达式
         parts[0] = parts[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + (separator || ','));
-
         return parts.join('.');
     }
     return 0;

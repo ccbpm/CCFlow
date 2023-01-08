@@ -210,7 +210,7 @@
          * @param idx
          */
         function TurnToFK(keyOfEn, frmID, idx) {
-            var url = "../../Admin/FoolFormDesigner/SFList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
+            var url = basePath + "/WF/Admin/FoolFormDesigner/SFList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
             var w = parent.window.innerWidth * 4 / 5;
             parent.OpenLayuiDialog(url, "绑定外键/外部数据源", w, 80, "auto", false, false, false, null, function () {
                 var en = new Entity("BP.Sys.MapAttr", frmID + "_" + keyOfEn);
@@ -226,7 +226,7 @@
          * @param mypk
          */
         function TurnToEnum(keyOfEn, frmID, idx) {
-            var url = "../../../Admin/FoolFormDesigner/SysEnumList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
+            var url = basePath + "/WF/Admin/FoolFormDesigner/SysEnumList.htm?KeyOfEn=" + keyOfEn + "&FK_MapData=" + frmID;
             var w = parent.window.innerWidth * 4 / 5;
             
             parent.OpenLayuiDialog(url, "绑定枚举", w, 80, "auto", false, false, false, null, function () {
@@ -316,8 +316,8 @@
         function Save() {
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
-            dblist.ExpEn = $("#TB_Doc").val();
-            if (dblist.DBType == 2 && dblist.ExpEn.toUpperCase().indexOf("SELECT") != -1) {
+            var doc = $("#TB_Doc").val()
+            if (dblist.DBType == 2 && doc.toUpperCase().indexOf("SELECT") != -1) {
 
             } else {
                 if (dblist.ExpEn.indexOf('@Key') == -1) {
@@ -325,8 +325,7 @@
                     return;
                 }
             }
-            
-
+            dblist.ExpEn = encodeURIComponent(doc);
             dblist.Update();
             SaveNames();
             Reload();

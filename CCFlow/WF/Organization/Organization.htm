@@ -735,7 +735,7 @@
 
             //把WF_Emp中主部门是当前部门且禁用的查询出来
             var wfEmps = new Entities("BP.WF.Port.WFEmps");
-            wfEmps.Retrieve("FK_Dept", deptNo, "UseSta", 0, "Idx");
+            wfEmps.Retrieve("FK_Dept", deptNo, "UseSta", 0);
 
             html += "<tbody class='blacklist-sort'>";
             for (var i = 0; i < wfEmps.length; i++) {

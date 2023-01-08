@@ -198,7 +198,7 @@ input[type="button"], .Btn, input[type="submit"]
  
 caption
 {
-    background: url('/WF/Comm/Style/BG_Title.png') repeat-x;
+    background: url('./BG_Title.png') repeat-x;
 }
  
 .TBDoc

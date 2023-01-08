@@ -36,6 +36,7 @@
                 cond.SetPKVal(mypk);
                 cond.RetrieveFromDBSources();
             }
+
             GenerBindEntities("DDL_Template", "BP.WF.Template.SQLTemplates", cond.OperatorValue, "SQLType=0");
             $("#TB_Note").val(cond.Note);
         });

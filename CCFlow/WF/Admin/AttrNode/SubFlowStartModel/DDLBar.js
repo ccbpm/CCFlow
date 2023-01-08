@@ -72,7 +72,7 @@ function changeOption() {
         optionKey = sele[index].value
     }
     var roleName = GenerUrlByOptionKey(optionKey);
-    SetHref( roleName + "?MyPK=" + mypk + "&FK_Flow=" + GetQueryString("FK_Flow");
+    SetHref( roleName + "?MyPK=" + mypk + "&FK_Flow=" + GetQueryString("FK_Flow"));
 }
 function SaveAndClose() {
     Save();

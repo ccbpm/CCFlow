@@ -366,6 +366,7 @@
             //  Reload();
         }
         function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
+            debugger
             var parentwin = parent.window;
             if (parentwin) {
 
@@ -384,8 +385,14 @@
 
             //普通字段类型.
             if (ftype == "1") {
-                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
-                title = '字段String属性';
+                if (uiControlType == 6) {
+                    url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&inlayer=1&PKVal=" + mypk;
+                    title = '字段附件属性';
+                } else {
+                    url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
+                    title = '字段String属性';
+                }
+                
             }
 
             //数值字段类型.

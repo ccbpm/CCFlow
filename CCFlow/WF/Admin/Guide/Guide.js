@@ -20,6 +20,8 @@ $(function () {
         return;
 
     token = GetQueryString("Token");
+    if(token==null || token==undefined || token=="null" ||token=="")
+        token = GetQueryString("Token");
 
     var webUser = new WebUser();
     userNo = GetQueryString("UserNo");
@@ -45,7 +47,7 @@ $(function () {
 
         // alert("userNo:" + userNo + " - webUser:" + webUser.No + " data:" + data);
 
-        window.location.href = window.location.href;
+        Reload();
         return;
     }
 
@@ -188,7 +190,8 @@ function Frm() {
         url += "&UserNo=" + userNo;
         url += "&Token=" + token;
         url += "&IsShowHideGuide=1";
-        window.location.href = url;
+        //window.location.href = filterXSS(url);
+        OpenLayuiDialog(filterXSS(url), "设计表单ND" + nodeID, window.innerWidth * 0.9);
         return;
     }
 
@@ -198,8 +201,8 @@ function Frm() {
         var nodeID = parseInt(flowNo + "01");
         var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FrmID=" + frmID + "&FK_Flow=" + flowNo + "&FK_MapData=" + frmID + "&FK_Node=" + nodeID;
         url += "&IsShowHideGuide=1";
-        window.location.href = url;
-        //WinOpen(url);
+        //window.location.href = filterXSS(url);
+        OpenLayuiDialog(filterXSS(url), "设计表单ND" + nodeID, window.innerWidth * 0.9);
         return;
         //if (pageFrom == "") {
         //    window.parent.addTab(nodeID, "设计表单" + nodeID, url);
@@ -226,7 +229,7 @@ function Frm() {
 
     var url = basePath + "/WF/Admin/BatchSetting/GuideNodeFrm.htm?FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&UserNo=" + userNo + "&Token=" + GetQueryString("Token");
     url += "&IsShowHideGuide=1";
-    window.location.href = url;
+    window.location.href = filterXSS(url);
     return;
 }
 
@@ -237,7 +240,7 @@ function Flow() {
     url += "&FK_Node=" + nodeID;
     url += "&UserNo=" + userNo;
     url += "&Token=" + token;
-    window.location.href = url;
+    window.location.href = filterXSS(url);
 }
 
 function Accepter() {
@@ -248,7 +251,7 @@ function Accepter() {
     url += "&FK_Node=" + nodeID;
     url += "&UserNo=" + userNo;
     url += "&Token=" + token;
-    window.location.href = url;
+    window.location.href = filterXSS(url);
 }
 
 /**
@@ -261,9 +264,9 @@ function TestingContainer() {
     url += "&FlowNo=" + flowNo;
     url += "&FK_Flow=" + flowNo;
     url += "&UserNo=" + GetQueryString("UserNo");
-    url += "&Token=" + GetQueryString("Token");
+    //url += "&Token=" + GetQueryString("Token");
     url += "&FK_Node=" + GetNodeID();
-    window.location.href = url;
+    window.location.href = filterXSS(url);
 }
 
 

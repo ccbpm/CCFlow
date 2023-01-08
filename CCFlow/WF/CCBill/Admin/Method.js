@@ -57,7 +57,7 @@ new Vue({
 
                 var childNodeMenuItems = [
                     { title: '<i class=icon-star></i> 方法属性', id: "Attr" },
-                    { title: '<i class=icon-plus ></i> 新建方法', id: "NewMethod" },
+                  //  { title: '<i class=icon-plus ></i> 新建方法', id: "NewMethod" },
                     /*    { title: '<i class=icon-settings></i> 设计方法', id: "Designer" },*/
                     /*    { title: '<i class=icon-docs></i> 复制方法', id: "Copy" },*/
                     { title: '<i class=icon-pencil></i> 修改名称', id: "EditMethodName" },
@@ -628,7 +628,7 @@ function AttrFrm(enName, title, pkVal) {
 function DesignerFlow(no, name) {
     var sid = GetQueryString("Token");
     var webUser = new WebUser();
-    var url = "../Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+    var url = basePath +"/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
     window.top.vm.openTab(name, url);
 }
 

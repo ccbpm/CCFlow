@@ -60,7 +60,7 @@ function Adv(PopModel) {
     var w = window.innerWidth*4/5;
     var h = window.innerHeight*4/5;
     OpenEasyUiDialogExt(url, "通用设置", w, h, false);
-    //window.location.href = url;
+    //window.location.href = filterXSS(url);
 
     //WinOpen(url);
 

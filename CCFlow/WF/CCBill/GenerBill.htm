@@ -270,7 +270,7 @@
 
             var url = "";
             url = "MyBill.htm?WorkID=" + workid + "&FrmID=" + frmID + "&FK_MapData=" + frmID;
-            //window.location.href = url;
+            //window.location.href = filterXSS(url);
             WinOpen(url);
             return;
 

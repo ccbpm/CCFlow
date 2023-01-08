@@ -34,6 +34,8 @@ new Vue({
                     { title: '按Url条件计算', id: "CondByUrl" },
                     { title: '按WebApi返回值', id: "CondByWebApi" },
                     { title: '按审核组件的立场计算', id: "CondByWorkCheck" },
+                    
+
                 ]
 
                 var systemFunc = function (data, oThis) {
@@ -267,9 +269,8 @@ new Vue({
                     cond.Express = cond.AttrKey + cond.FK_Operator + cond.OperatorValue;
 
                 if (cond.AttrKey != "")
-                    cond.Express = "说明：" + cond.AttrName + " " + cond.FK_Operator + " " + "" + cond.OperatorValue;
+                    cond.Express = "说明：" + cond.AttrName + " " + cond.FK_Operator + " " + " " + cond.OperatorValue;
             }
-
         })
 
         this.conds = conds;
@@ -337,7 +338,7 @@ function NewPara() {
 function Delete(no) {
     if (window.confirm('您确定要删除吗？') == false)
         return;
-    var en = new Entity("BP.Sys.cond");
+    var en = new Entity("BP.Sys.Cond");
     en.No = no;
     en.Delete();
     Reload();

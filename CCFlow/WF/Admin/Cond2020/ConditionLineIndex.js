@@ -165,10 +165,10 @@ window.onload = function () {
             openTabByMenu: function (it,key ,alignRight) {                             
                 switch (key) {
                     case "NodeID2":
-                        Url = "CondPRI.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
+                        Url = "./CondPRI.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
                         break;
                     case "NodeID1":
-                        Url =  "CondModel/Default.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
+                        Url =  "./CondModel/Default.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
                         break;
                     default :
                         Url = "../Cond2020/List.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + it.NodeID;

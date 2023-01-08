@@ -6,11 +6,13 @@
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
 
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js"></script>
+
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         $(function () {
-
             var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
             var flowNo = GetQueryString("FK_Flow");
             if (flowNo.indexOf("'") >= 0)
@@ -20,13 +22,21 @@
             handler.AddPara("WorkID", GetQueryString("WorkID"));
 
             var data = handler.DoMethodReturnString("AccepterOfGener_UnSend");
+            var msg = "撤销成功";
             if (data.indexOf("err@") == 0) {
-                $("#showMsg").html("<font color=red>" + data + "</font>");
-                return;
+                //$("#showMsg").html("<font color=red>" + data + "</font>");
+                msg = data.replaceAll("err@", "");
             }
 
-            $("#showMsg").html(data);
+            layer.alert(msg, {
+                icon: 1, title: "提示"
+                , yes: function () {
+                    window.top.vm.closeCurrentTabs(undefined);
+                    layer.close();
+                }
+            });
 
+            //$("#showMsg").html(data);
         })
 
         function Close() {
@@ -44,14 +54,16 @@
     <form id="cc">
 
         <br />
-        <center> <div id="showMsg"><img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </div></center>
+        <center>
+            <!--    <div id="showMsg"><img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </div>-->
+        </center>
 
         <br />
         <br />
         <br />
         <br />
         <center>
-            <a href="javascript:Close()"> 关闭窗口 </a>
+            <!--<a href="javascript:Close()"> 关闭窗口 </a>-->
         </center>
 
     </form>

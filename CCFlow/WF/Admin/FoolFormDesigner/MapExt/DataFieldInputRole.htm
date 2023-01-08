@@ -33,12 +33,16 @@
             $("#RB_" + en.DoWay).attr("checked", true);
             //绑定外键.
             var tables = new Entities("BP.Sys.MapAttrs");
-            tables.Retrieve("FK_MapData", frmID, "MyDataType", 6);
+            tables = tables.DoMethodReturnJSON("SearchMapAttrsDateAndDateTime", frmID);
+
+            //tables.Retrieve("FK_MapData", frmID, "MyDataType", 6);
             GenerBindDDL("DDL_DT", tables, "KeyOfEn", "Name", en.Tag4);
 
             //加上时间类型的.
             tables = new Entities("BP.Sys.MapAttrs");
-            tables.Retrieve("FK_MapData", frmID, "MyDataType", 7);
+            tables = tables.DoMethodReturnJSON("SearchMapAttrsDateAndDateTime", frmID);
+
+           // tables.Retrieve("FK_MapData", frmID, "MyDataType", 7);
 
             GenerBindDDLAppend("DDL_DT", tables, "KeyOfEn", "Name");
 

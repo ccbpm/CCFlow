@@ -79,7 +79,7 @@
             en.Idx = 0;
             en.Insert();
 
-            SetHref( "../../Comm/En.htm?EnName=BP.CCFast.CCMenu.Menu&No=" + en.No);
+            SetHref("../../Comm/En.htm?EnName=BP.CCFast.CCMenu.Menu&No=" + en.No);
             //  alert("创建成功，您可以在在菜单里执行高级编辑与授权.");
             //  SetHref( "../Menus.htm";
             // window.close();
@@ -225,10 +225,15 @@
         </fieldset>
 
         <fieldset>
-            <legend id="help"></legend>
+            <legend id="help">帮助</legend>
             <ul>
                 <li> 创建流程后，系统自动对该流程的相关操作创建到菜单上去。 </li>
                 <li> 比如：发起流程，流程查询、分析。 </li>
+            </ul>
+
+            <legend>流程图</legend>
+            <ul>
+                <li> <img src="StandAloneFlow.png" style="width:50%;" class="HelpImg" /></li>
             </ul>
         </fieldset>
     </form>

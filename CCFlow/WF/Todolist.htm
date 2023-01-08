@@ -47,6 +47,7 @@
         var keyword = null;
         var data = null;
         var Hide_IsTodoList = getConfigByKey("Hide_IsTodoList", false);
+        var Hide_TodoListSearchWay = getConfigByKey("Hide_TodoListSearchWay", "ADT");
         //页面启动函数.
         $(function () {
 
@@ -65,6 +66,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData();
+            handler.AddPara("OrderBy", Hide_TodoListSearchWay);
             data = handler.DoMethodReturnString("Todolist_Init");
             if (data.indexOf('err@') == 0) {
                 alert(data);
@@ -339,7 +341,6 @@
                         listbox += "<td>" + nodeName + "</td>"; //节点名称
                     }
 
-
                     listbox += "<td>" + work.RDT + "</td>"; //发起时间
                     listbox += "<td>" + work.ADT + "</td>"; //接受时间
                     listbox += "<td>" + work.SDT + "</td>"; //应完成时间
@@ -372,7 +373,6 @@
 
                     //备注
                     //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
-
                     listbox += "</tr>";
                 }
             }
@@ -436,11 +436,11 @@
                 try {
 
                     var url = data;
-                    if (url.indexOf("My") == 0) {
+                    if (url.indexOf("My")>=0) {
                         if (window.top.location.href.indexOf("WF/") != -1)
                             url = "../" + url;
                         else
-                            url = "/WF/" + url;
+                            url = basePath +"/WF/" + url;
                     }
                         
 
@@ -455,6 +455,10 @@
 
         function Batch(fk_node) {
             var node = new Entity("BP.WF.Node", fk_node);
+            if (node.BatchRole == 0) {
+                layer.alert(node.Name + "没有启用批处理功能,如需批处理，请联系管理员在节点属性->表单设置->批处理中设置");
+                return;
+            }
             var url = "";
             url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + fk_node;
 

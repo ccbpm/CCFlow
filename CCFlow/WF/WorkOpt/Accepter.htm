@@ -170,7 +170,7 @@
             if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL
                 var url = data;
                 url = url.replace('TurnUrl@', '');
-                parent.window.location.href = url;
+                parent.window.location.href = filterXSS(url);
                 return;
             }
             //如果包含url ,则是需要转向不同的url里面去.

@@ -21,8 +21,12 @@
     <script src="../../DataUser/JSLibData/SearchSelf.js"></script>
     <script src="../CCForm/MapExt2021.js"></script>
     <script src="../Scripts/xss.js"></script>
+    <script src="../Scripts/layui/ext/xmSelect.js"></script>
     <style id="theme-data"></style>
     <style type="text/css">
+        xm-select > .xm-body .xm-toolbar {
+            padding: 0 5px;
+        }
         .layui-tab-title .layui-this:after {
             border: 0;
         }
@@ -37,14 +41,14 @@
             padding: 9px 5px;
         }
 
-        .layui-table-cell {
+        /*.layui-table-cell {
             height: 28px;
             line-height: 28px;
             padding: 0 15px;
             position: relative;
             box-sizing: border-box;
         }
-
+*/
         .layui-tab-title li {
             margin-top: 3px;
         }
@@ -65,7 +69,12 @@
         .layui-form-label {
             color: #808080
         }
-
+        .label-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: revert !important;
+        }
         .layui-a-this {
             line-height: 30px;
             height: 30px;
@@ -142,28 +151,35 @@
                 </div>
                 {{#  }); }}
                 {{#  layui.each(d.selectSearch, function(index, item){ }}
-                <div class="layui-inline">
-                    <label class="layui-form-label-search">{{item.label}}</label>
-                    {{# if(item.showWay==0){ }}
-                    <div class="layui-input-inline">
-                        <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
-                            {{#  layui.each(item.operations, function(k, opt){ }}
-                            <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
-                            {{#  }); }}
-                        </select>
-                    </div>
-                    {{# } }}
+            <div class="layui-inline">
+                <label class="layui-form-label-search">{{item.label}}</label>
+                {{# if(item.showWay==0 && item.isRadioSelect==0){ }}
+                <div class="layui-input-inline">
+                    <div id="XmlSelect_{{=item.key}}" name="XmlSelect_{{=item.key}}"></div>
 
-                    {{# if(item.showWay==1){ }}
-                    <div class="layui-tab" style="width:auto">
-                        <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
-                            {{#  layui.each(item.operations, function(k, opt){ }}
-                            <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
-                            {{#  }); }}
-                        </ul>
-                    </div>
-                    {{# } }}
                 </div>
+                {{# } }}
+
+                {{# if(item.showWay==1){ }}
+                <div class="layui-tab" style="width:auto">
+                    <input type="hidden" id="DDL_{{=item.key}}" />
+                    <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                        {{#  layui.each(item.operations, function(k, opt){ }}
+                        <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                        {{#  }); }}
+                    </ul>
+                </div>
+                {{# } }}
+                {{# if(item.showWay==2 ||(item.showWay==0 && item.isRadioSelect==1)){ }}
+                <div class="layui-input-inline">
+                    <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
+                        {{#  layui.each(item.operations, function(k, opt){ }}
+                        <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
+                        {{#  }); }}
+                    </select>
+                </div>
+                {{# } }}
+            </div>
                 {{#  }); }}
                 {{# if(d.dateTabSearch.key!=undefined){}}
                 <div class="layui-form-item">
@@ -245,7 +261,7 @@
         var orderWay = "DESC";
         var isHaveDelOper = false;
         var isHaveSeachOper = false;
-
+        
         var frmDict = new Entity("BP.CCBill.FrmDict", frmID);
         var mapData = frmDict;
         var listShowWay = mapData.GetPara("ListShowWay");
@@ -253,6 +269,7 @@
         if (listShowWay != "0") {
             SetHref(GetHrefUrl().replace("SearchDict.htm", "SearchTree.htm"));
         }
+
         layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
             var table = layui.table,
                 laytpl = layui.laytpl,
@@ -273,7 +290,32 @@
                 view.innerHTML = html;
             });
             $.each(searchData["selectSearch"], function (i, item) {
-                $("#DDL_" + item.key).val(item.value);
+                if (item.showWay == 0 && item.isRadioSelect==0) {
+                    xmSelect.render({
+                        el: "#XmlSelect_" + item.key,
+                        autoRow: true,
+                        radio: false,
+                        clickClose: false,
+                        model: { label: { type: 'text' } },
+                        data: item.operations,
+                        toolbar: {
+                            show: true,
+                            list: ['ALL', 'CLEAR', {
+                                name: '确定',
+                                icon: 'layui-icon layui-icon-ok',
+                                key: "#XmlSelect_" + item.key,
+                                method(event) {
+                                    //$("xm-select").css("border-color", "");
+                                    //$(".xm-icon-expand").removeClass("xm-icon-expand");
+                                    //$(".xm-body").addClass("dis");
+                                    $(this.key).find("xm-select").click();
+                                }
+                            }]
+                        },
+                    });
+                }
+                else
+                    $("#DDL_" + item.key).val(item.value);
             })
 
             if ($(".layui-tab-title").length == 1) {
@@ -444,6 +486,7 @@
                         SetHref(url);
                         break;
                     case "Link"://链接
+                    case "LinkCollection":
                         var no = $(this).data('no');
                         var source = $(this).data('source');
                         OpenLink(no, source);
@@ -592,8 +635,7 @@
             searchData["dateSearch"] = dateSearch;
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-            var ddlShowWays = GetPara(atPara, "DDLShowWays");
-            ddlShowWays = ddlShowWays == null || ddlShowWays == undefined || ddlShowWays == "" ? "" : ddlShowWays;
+            var ddlShowWays = GetPara(atPara, "DDLShowWays") ||"";
             ddlShowWays = ddlShowWays.replace(/[*]/g, "@");
             ddlShowWays = AtParaToJson(ddlShowWays);
             for (var i = 0; i < attrs.length; i++) {
@@ -662,8 +704,9 @@
             if (theme == null || theme == undefined || theme == "")
                 return;
             theme = JSON.parse(theme);
-
-            var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html +=  "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
             html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
             html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
             html += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";

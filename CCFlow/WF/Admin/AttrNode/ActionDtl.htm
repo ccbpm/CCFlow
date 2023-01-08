@@ -111,16 +111,16 @@
 
         function Save() {
 
-            var en = new Entity("BP.Sys.FrmEvent","0");
+            var en = new Entity("BP.Sys.FrmEvent", "0");
             en.CopyForm();
             en.FK_Node = GetQueryString("FK_Node");
             en.EventSource = 2;//节点事件
 
             //如果是业务单元.
             if (en.EventDoType == 7) {
-                en.DoDoc = $("#DDL_Doc").val();
+                en.DoDoc = encodeURIComponent($("#DDL_Doc").val());
             } else {
-                en.DoDoc = $("#TB_Doc").val();
+                en.DoDoc = encodeURIComponent($("#TB_Doc").val());
             }
 
 
@@ -313,6 +313,14 @@
                         <li>1. 支持 @WebUser.No 表达式, 比如: EXECUTE P_ChangeUserDeptName @_userNo='@WebUser.No',@_orgNo='@WebUser.OrgNo'; </li>
                     </ul>
 
+                    <legend>关于WebAPI</legend>
+                    <ul>
+                        <li>1. WebAPI的输入格式：@WebApiHost/DataUser/FrmEvent?id=51184 </li>
+                        <li>2. 接口地址支持固定参数，或者ccbpm内置参数，或者流程表单参数，比如:http://demo.ccflow.org/DataUser/FrmEvent?id=@FK_Node </li>
+                        <li>3. 调用事件时，无论成功与否，都不会影响流程正常运行，如果需要阻断流程执行，请自定义方法，比如抛出异常。</li>
+                        <li><img src="WebAPI.png" id="HelpImg" class="HelpImg" /></li>
+                    </ul>
+
                 </fieldset>
             </div>
 
@@ -323,7 +331,6 @@
 
     </form>
 
-    </div>
 
 </body>
 </html>

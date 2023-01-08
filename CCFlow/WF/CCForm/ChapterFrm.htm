@@ -24,8 +24,8 @@
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="./JS/tinymce/tinymce.min.js"></script>
+    <script src="JS/jquery.mousewheel.min.js"></script>
     <script src="ChapterFrmGener.js"></script>
-
     <script src="../Scripts/Tools/jsPdf.debug.js"></script>
     <script src="../Scripts/Tools/html2canvas.js"></script>
 
@@ -38,13 +38,15 @@
         var eleOneDom = null;
         let OId = null;
         var nodeRates = null;
-        layui.use(['tree', 'jquery'], function () {
+        var Tree = null;
+        var groupFields = null;
+        var attrs = null;
+        var treeClick = null;
+        layui.use(['tree', 'jquery', 'laypage'], function () {
             var tree = layui.tree, $ = layui.jquery;
             var name = null;
             var treelist = null;
             var isReadonly = 0; //是否只读？
-            var groupFields = null;
-            var attrs = null;
             var Tip = null;
             var Tree_set = null;
             //页面启动函数.
@@ -74,7 +76,7 @@
                 handler.AddPara("FrmID", frmID);
                 handler.AddPara("OID", oid);
                 var data = handler.DoMethodReturnJSON("ChapterFrm_Init");
-
+                console.log(data)
                 groupFields = data["GroupFields"];//章.
                 attrs = data["MapAttrs"];//节.
                 console.log(attrs)
@@ -114,6 +116,7 @@
                     }
                     group.push(list)
                 }
+                console.log(group)
                 function tinyInit() {
                     tinymce.init({
                         selector: '#mytextarea',
@@ -154,14 +157,12 @@
                                         layer.msg("检测到本地文件，请右键图片替换")
                                     }
                                 }
-                            });
 
+                            });
                             var sdata = ChapterFrmShow(key);
                             editor.setContent(sdata);
-                        }
-
+                        },
                     });
-
                 }
 
                 function iframeFun(id, url, OId, item) {
@@ -177,65 +178,69 @@
                     $("#toIframe").show();
                     $("#toIframe").attr("src", url);
                     $("#textRea").hide()
-
                 }
 
-                tree.render({
+                // tree 点击事件
+                treeClick = (obj) => {
+                    $('.layui-tree-set').removeClass("tree-txt-active");
+                    if (!obj.data.children) {
+                        tinyInit();
+                        $("#toIframe").hide();
+                        $("#textRea").show();
+                        if (name !== obj.data.Name) {
+                            Tip = obj.data.Tip;
+                            name = obj.data.Name;
+                            $("#Title").html(name);
+                            getContent(obj.data.KeyOfEn);
+                            eleDom = $(obj.elem[0]).find(".rate");
+                        }
+                        $(obj.elem[0]).addClass("tree-txt-active");
+                        Savetab(OId, eleOneDom)
+
+                    } else {
+                        getContent(key);
+                        var url = '';
+                        //如果点击章.
+                        if (obj.data.CtrlType == "Dtl") {
+                            url = Ele_Dtl(obj.data.CtrlID);
+
+                        }
+
+                        if (obj.data.CtrlType == "Ath") {
+                            url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                        }
+
+                        if (obj.data.CtrlType == "ChapterFrmLinkFrm") {
+                            url = basePath + "/WF/CCForm/Frm.htm?1=1&FrmID=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + obj.data.CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
+
+                        }
+
+                        if (obj.data.CtrlType == "ChapterFrmSelfUrl") {
+                            if (obj.data.CtrlID.indexOf('http') == 0)
+                                url = obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                            else
+                                url = basePath + "" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+
+                        }
+                        if (obj.data.CtrlType == '') {
+                            return;
+                        }
+
+
+                        eleOneDom = obj.elem;
+                        OId = obj.data.OID;
+                        iframeFun("toIframe", url, OId, eleOneDom);
+                        $('.layui-tree-set').removeClass("tree-txt-active");
+                        $(obj.elem[0]).addClass("tree-txt-active");
+                    }
+                }
+
+                Tree = tree.render({
                     elem: '#test1',
                     data: group,
                     id: 'treeId',
                     click: function (obj) {
-                        $('.layui-tree-set').removeClass("tree-txt-active");
-                        if (!obj.data.children) {
-                            tinyInit();
-                            $("#toIframe").hide();
-                            $("#textRea").show();
-                            if (name !== obj.data.Name) {
-                                Tip = obj.data.Tip;
-                                name = obj.data.Name;
-                                $("#Title").html(name);
-                                getContent(obj.data.KeyOfEn);
-                                eleDom = $(obj.elem[0]).find(".rate");
-                            }
-                            $(obj.elem[0]).addClass("tree-txt-active");
-                            Savetab(OId, eleOneDom)
-                        } else {
-                            getContent(key);
-                            var url = '';
-                            //如果点击章.
-                            if (obj.data.CtrlType == "Dtl") {
-                                url = Ele_Dtl(obj.data.CtrlID);
-
-                            }
-
-                            if (obj.data.CtrlType == "Ath") {
-                                url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                            }
-
-                            if (obj.data.CtrlType == "ChapterFrmLinkFrm") {
-                                url = basePath + "/WF/CCForm/Frm.htm?1=1&FrmID=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + obj.data.CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
-
-                            }
-
-                            if (obj.data.CtrlType == "ChapterFrmSelfUrl") {
-                                if (obj.data.CtrlID.indexOf('http') == 0)
-                                    url = obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                                else
-                                    url = basePath + "" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-
-                            }
-                            if (obj.data.CtrlType == '') {
-                                return;
-                            }
-                            
-
-                            eleOneDom = obj.elem;
-                            OId = obj.data.OID;
-                            iframeFun("toIframe", url, OId, eleOneDom);
-                            $('.layui-tree-set').removeClass("tree-txt-active");
-                            $(obj.elem[0]).addClass("tree-txt-active");
-                        }
-
+                        treeClick(obj)
                     }
                 });
 
@@ -254,7 +259,6 @@
 
                     })
                     Tree_set = document.querySelectorAll('.layui-tree>.layui-tree-set');
-
                     Tree_set.forEach((item, index) => {
                         $(item).attr("title", group[index].title);
                         $(item).attr("id", "Pnode" + group[index].OID);
@@ -338,7 +342,8 @@
                             }
                         }
                     })
-
+                    showType(group,Tree_set)
+                    
                 }
 
                 treeSet();
@@ -347,13 +352,56 @@
                 })
                 IsAtPara(attrs, treelist);
                 IsAtParaKey(group, Tree_set);
+                var isShows = true;
+                $("#menuShow").click(function () {
+                    $("#menu").toggle();
+                    if (isShows) {
+                        $("#scrollDiv").addClass("Card_body")
+                        isShows = false
+                    } else {
+                        $("#scrollDiv").removeClass("Card_body")
+                        isShows = true
+                    }
+
+                })
+                
+                $("#scrollDiv").on("mousewheel", function (event, delta) {
+                    console.log(event)
+                    console.log(delta)
+                    event.preventDefault();
+                    if (delta > 0) {
+                        tabChange("up")
+                    } else {
+                        tabChange("down")
+                    }
+                    return false;
+                });
+                
+                //监听滚动条事件
+                ArcScorll("#toIframe")
+                //setTimeout(ArcScorll('#mytextarea_ifr'), 3000)
             });
 
+            function showType(group,Tree_set) {
+                console.log(Tree_set)
+                let n = 0;
+                group.forEach((item, index) => {
+                    if (item.ShowType == 2) {
+                        n = n + 1;
+                        const Id = Tree_set[index].dataset.id;
+                        console.log($(`#Pnode${Id}`))
+                        $(`#Pnode${Id }`).hide()
+                    }
+                })
+                if (n == group.length) {
+                    $("#menuShow").hide()
+                }
+            }
             // 解析
             function analysis(Tip) {
                 let tipArr = Tip.split("@");
                 let tempul = `<ul class="tipsul">
-                                                            ${tipArr.map(item => {
+                                                                    ${tipArr.map(item => {
                     if (item.includes('###')) {
                         return `<li class="m-1"><h3>${item.split("###").join('')}</h3></li>`
                     } else if (item.includes(')')) {
@@ -363,7 +411,7 @@
                     }
 
                 }).join('')}
-                                                         </ul>`
+                                                                 </ul>`
                 Tip = tempul;
                 return Tip;
             }
@@ -393,7 +441,7 @@
                     }
                 });
             });
-            
+
             var keylist = [];
             function IsAtPara(attrs, list) {
                 attrs.forEach(item => {
@@ -442,7 +490,7 @@
             }
             function openDialog(tip, keyOfEn) {
                 if (tip == null || tip == '') {
-                    var mypk = "FieldBigHelper_" + frmID + "_" + keyOfEn;
+                    var mypk = "FieldNameLink_" + frmID + "_" + keyOfEn;
                     var mapExt = new Entity("BP.Sys.MapExt");
                     mapExt.MyPK = mypk;
                     var i = mapExt.RetrieveFromDBSources();
@@ -473,7 +521,7 @@
                     })
                 }
 
-               
+
             }
 
 
@@ -536,7 +584,7 @@
 
             }
             /**
-             * 节的数据保存.
+             * 节的数据保存..
              * @param attrKey
              * @param vals
              */
@@ -606,7 +654,7 @@
                     isHaveBlank = true;
                 }
                 //给父节点加star.
-                
+
                 if (isHaveBlank == false) {
                     $(raEle).show();
                 } else {
@@ -615,7 +663,7 @@
 
             }
 
-            
+
 
             $('#View').click(function () {
                 if (key == undefined || key == '') {
@@ -667,9 +715,11 @@
                 var Data = ChapterFrmShow(key);
                 if (tinymce.activeEditor !== null) {
                     tinymce.activeEditor.setContent(Data);
+
                 }
+                // setTimeout(ArcScorll('#mytextarea_ifr'), 3000)
             }
-               
+
             //保存当前打开的最后一个章节方法
             function Savetab(OId, eleOneDom) {
                 var iframe = $("#toIframe");
@@ -678,7 +728,6 @@
                     var myframe = iframe[0].contentWindow;
                     if (myframe && myframe.Save != undefined && typeof (myframe.Save) == "function") {
                         var flag = myframe.Save();
-                        debugger;
                         CheckGroupFieldStr(OId, eleOneDom)
                         if (flag == false)
                             return false;
@@ -730,10 +779,20 @@
             }
             return true;
         }
-       
+
     </script>
 
     <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+
+        .app {
+            height: 100%;
+            width: 100%;
+            display: flex;
+        }
+
         .border_1 {
             border: 1px solid #ccc;
             height: 100%;
@@ -848,16 +907,30 @@
             display: none;
             margin-left: 5px;
         }
+
+        #menu {
+            display: none;
+            width: 30%;
+        }
+
+        #scrollDiv {
+            width: 100%
+        }
+
+        .Card_body {
+            width: 70%;
+        }
+        
     </style>
 </head>
 
 <body>
-    <div class="layui-row">
-        <div class="layui-col-sm3 layui-col-md3 layui-col-xs3">
+    <div class="layui-row app">
+        <div id="menu" data-anim="layui-anim-downbit">
             <div class="layui-tab layui-tab-brief" lay-filter="docTabBrief">
                 <!--<div class="layui-tab-title">
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" id="View">预览</button>
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" id="Exp">导出</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('up')">上一节</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('down')">下一节</button>
                 </div>-->
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
@@ -867,7 +940,13 @@
 
             </div>
         </div>
-        <div class="layui-col-sm9 layui-col-md9 layui-col-xs9 h-100" style="overflow-y:hidden">
+        <div class="h-100" id="scrollDiv" style="overflow-y:hidden">
+            <div class="layui-tab-title" style="display:flex;justify-content:end;background:#fff">
+                <div id="elemPage"></div>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" id="menuShow">目录</button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('up')">上一节</button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('down')">下一节</button>
+            </div>
             <div class="layui-form" id="textRea">
                 <div class="labelTitle">
                     <span id="Title"></span>
@@ -876,7 +955,7 @@
                 <textarea id="mytextarea"></textarea>
             </div>
             <div class="layui-form">
-                <iframe id="toIframe" frameborder="0" style="width:100%;height:100%" scroll=no></iframe>
+                <iframe id="toIframe" frameborder="0" style="width:100%;height:100%"></iframe>
             </div>
         </div>
     </div>

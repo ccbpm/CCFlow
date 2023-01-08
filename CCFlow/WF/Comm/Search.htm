@@ -10,8 +10,9 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="Gener.js" type="text/javascript"></script>
-    <script language="JavaScript" src="JScript.js" type="text/javascript"></script>
+
     <script src="../Admin/CCFlowEnum.js" type="text/javascript"></script>
+    <link href="../Portal/icons/font-icons.min.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
     <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
@@ -21,13 +22,16 @@
     <!--serach页面JS开发接口-->
     <script src="../../DataUser/JSLibData/SearchSelf.js" type="text/javascript"></script>
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
-    <link href="Style/Search.css" rel="stylesheet" />
     <script src="../Scripts/xss.js"></script>
+    <script src="../Scripts/layui/ext/xmSelect.js"></script>
+    <script src="../../DataUser/JSLibData/SearchAndEn.js"></script>
+
     <style id="theme-data"></style>
     <base target="_self" />
     <style type="text/css">
         .layui-form-label {
             padding: 9px 0px;
+            width: auto;
         }
 
         .layui-form-label {
@@ -37,33 +41,59 @@
         .layui-table th {
             font-weight: bold;
         }
+
         .layui-table-col {
-            z-index: 989;
+            /* z-index: 989;
             position: absolute;
             left: 50px;
-            padding: 5px 0;
+            padding: 5px 0;*/
             min-width: 150px;
             min-height: 40px;
-            border: 1px solid #d2d2d2;
+            /* border: 1px solid #d2d2d2;*/
             text-align: left;
             overflow-y: auto;
             background-color: #fff;
-            box-shadow: 0 2px 4px rgb(0 0 0 / 12%);
+            /*box-shadow: 0 2px 4px rgb(0 0 0 / 12%);*/
         }
-        .layui-table-col li {
-            padding: 0 10px;
-            line-height: 30px;
-            -webkit-transition: .5s all;
-               
+
+            .layui-table-col li {
+                padding: 0 10px;
+                line-height: 30px;
+                -webkit-transition: .5s all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+        .input-icon {
+            position: absolute;
+            left: calc(100% - 40px);
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .label-content {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            display: revert !important;
+        }
+
+        .layui-table img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        xm-select > .xm-body .xm-toolbar {
+            padding: 0 5px;
         }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
 
-        var firstLoadTable = false;
         var isClearSearchCond = getConfigByKey("IsClearSearchCond", false);
 
         //定义公共个变量.
@@ -80,12 +110,17 @@
         var cfg = new Entity("BP.Sys.EnCfg");
         cfg.No = ensName;
         cfg.RetrieveFromDBSources();
+        var drillFields = cfg.Drill || "";
+        drillFields = drillFields.replace(/@/g, ",");
+        drillFields += ",";
         var firstLoadTable = true;
         //当前用户查询信息.
         var ur = GetUserRegedit();
 
         //获取当前用户选择的列
-        var cfield = new Entity("BP.Sys.CField", ur.MyPK);
+        var cfield = new Entity("BP.Sys.CField");
+        cfield.SetPKVal(urMyPK);
+        cfield.RetrieveFromDBSources();
 
         //页面分页信息显示
         var count = ur.GetPara("RecCount");//查询总条数
@@ -116,7 +151,8 @@
         var isSecHeader = false;//是否是二级表头
         var thrMultiTitle = cfg.GetPara("MultiTitle1"); //三级表头的内容
         var secMultiTitle = cfg.GetPara("MultiTitle");//二级表头的内容
-        
+        var vtable = null;
+        var pageType = "search";
 
         //获取用户的查询信息
         function GetUserRegedit() {
@@ -124,21 +160,23 @@
             ur.SetPKVal(urMyPK);
             ur.RetrieveFromDBSources();
 
-            //清空Seach记录查询
-            if (isClearSearchCond == 1) {
-                ur.MyPK = urMyPK;
-                ur.SearchKey = "";
-                ur.AtPara = "";
-                ur.DTFrom = "";
-                ur.DTTo = "";
-                ur.FK_Emp = webUser.No;
-                ur.CfgKey = "SearchAttrs";
-                ur.Vals = "";
-                ur.FK_MapData = ensName;
-                ur.Save();
-            }
-
             if (firstLoadTable != undefined && firstLoadTable == true) {
+                //清空Seach记录查询
+                if (isClearSearchCond == 1) {
+                    ur.MyPK = urMyPK;
+                    ur.SearchKey = "";
+                    ur.AtPara = "";
+                    ur.DTFrom = "";
+                    ur.DTTo = "";
+                    ur.FK_Emp = webUser.No;
+                    ur.CfgKey = "SearchAttrs";
+                    ur.Vals = "";
+                    ur.FK_MapData = ensName;
+                    ur.OrderBy = "";
+                    ur.OrderWay = "";
+                    ur.Save();
+                }
+
                 //获取Url传的查询Key值
                 var key = GetQueryString("Key");
                 if (key != null && key != undefined && firstLoadTable == true)
@@ -192,25 +230,14 @@
                     laytpl = layui.laytpl,
                     form = layui.form,
                     laydate = layui.laydate;
-                InitToolbar();
+                InitToolbar("search");
 
-                //时间类型
-                if ($(".ccdate").length > 0) {
-                    $.each($(".ccdate"), function (i, item) {
-                        var format = $(item).attr("data-info");
-                        laydate.render({
-                            elem: '#' + item.id, //指定元素
-                            format: $(item).attr("data-info"),
-                            type: format == "yyyy-MM-dd" ? "date" : "datetime"
-                        });
-                    })
-                }
                 //按钮操作
                 $('.toolbar').on('click', function () {
                     var id = this.id;
                     switch (id) {
                         case "Search":
-                            Search();
+                            Search("search");
                             break;
                         case "BtnLab1":
                             executeFunction(cfg.BtnJS1, cfg.BtnLab1);
@@ -218,12 +245,13 @@
                         case "BtnLab2":
                             executeFunction(cfg.BtnJS2, cfg.BtnLab2);
                             break;
+                        case "BtnLab3":
+                            executeFunction(cfg.BtnJS3, cfg.BtnLab3);
+                            break;
                         case "Add":
                             New();
                             break;
-                        case "Exp":
-                            Exp();
-                            break;
+
                         case "Imp":
                             Imp();
                             break;
@@ -235,28 +263,40 @@
                     }
                 });
 
-                var data = SearchData();
+               
 
                 var focusField = "";
                 if (cfg.IsEnableFocusField == 1)
                     focusField = cfg.FocusField;
 
+                var orderBys = {};
+                if (ur.OrderBy != "")
+                    orderBys = { field: ur.OrderBy, type: ur.OrderWay };
+                if (ur.OrderBy == "" && cfg.OrderBy != "")
+                    orderBys = { field: cfg.OrderBy.split(",")[0], type: cfg.IsDeSc == 1 ? 'desc' : 'asc' };
+
+                var data = SearchData("search");
                 //获取列
-                var cols = GetColoums(data, thrMultiTitle, secMultiTitle, cfg.ColorSet, cfg.SortColumns, focusField);
+                var cols = GetColoums(data, thrMultiTitle, secMultiTitle, cfg.ColorSet, cfg.OrderBy, focusField);
 
                 var tableData = transferHtmlData(data["DT"]);
 
                 //渲染table
+                var tableName = mapBase.EnDesc;
+                if (typeof window.top.vm != "undefined" && window.top.vm.tabsList.length > window.top.vm.selectedTabsIndex)
+                    tableName = window.top.vm.tabsList[window.top.vm.selectedTabsIndex].name;
                 //主页面数据
-                var vtable = table.render({
+                vtable = table.render({
                     elem: '#tableSearch',
                     id: 'tableSearch',
                     data: tableData,
-                    title: '数据表',
+                    title: tableName,
                     limit: Number.MAX_VALUE,
-                    height: $(document).height() - $("#toolbar").height() - 100,
+                    height: $(document).height() - $("#toolbar").height()*2 - 100,
                     cellMinWidth: 120,
                     cols: cols,
+                    autoSort: false,
+                    initSort: orderBys,
                     page: false
                 });
                 renderLaypage();
@@ -293,6 +333,29 @@
                     if (obj.event == "downloadFile") {
                         downLoadFile(data[enPK]);
                     }
+                    //下载事件
+                    if (obj.event == "Btn_En1") {
+                        var func1 = cfg.EnBtnJS1 ||"";
+                        if (func1 == "")
+                            return;
+                        func1 = func1.replace(/~/g, "'");
+                        if (func1.indexOf("(") != -1)
+                            func1 = func1.replace("@PKVal", data[enPK]);
+                        else
+                            func1 = func1 + "(" + data[enPK] + "," + JSON.stringify(data) + ")";
+                        eval(func1);
+                    }
+                    if (obj.event == "Btn_En2") {
+                        var func2 = cfg.EnBtnJS2;
+                        if (func2 == null || func2 == undefined || func2 == "")
+                            return;
+                        func2 = func2.replace(/~/g, "'");
+                        if (func2.indexOf("(") != -1)
+                            func2 = func2.replace("@PKVal", data[enPK]);
+                        else
+                            func2 = func2 + "(" + data[enPK] + "," + JSON.stringify(data) + ")";
+                        eval(func2);
+                    }
                 });
 
                 table.on('sort(search)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -300,92 +363,55 @@
                     orderWay = obj.type;//当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
                     //尽管我们的 table 自带排序功能，但并没有请求服务端。
                     //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
-                    tableData = SearchData();
-                    table.reload('lay_table_dict', tableData["DT"]);
-
+                    pageIdx = 1;
+                    tableData = SearchData("search", orderBy, orderWay);
+                    table.reload('tableSearch', { initSort: obj, data: transferHtmlData(tableData["DT"]) });
+                    renderLaypage();
+                    dropDownLayuiCols(tableData.Attrs);
                 });
+                dropDownLayuiCols(data.Attrs);
+                layui.form.on("checkbox(LAY_TABLE_TOOL_COLS)", function (e) {
+                    var l = $(e.elem),
+                        n = this.checked,
+                        o = l.data("key"),
+                        r = l.data("parentkey");
+                    //增加隐藏显示的列
+                    if (cfield.Attrs == "")
+                        cfield.Attrs = ",";
+                    if (n == false && cfield.Attrs.indexOf("," + l[0].name + ",") == -1)
+                        cfield.Attrs = cfield.Attrs + l[0].name + ",";
+                    //移除隐藏的列
+                    else
+                        cfield.Attrs = cfield.Attrs.replace(l[0].name + ",", "");
+                    cfield.Update();
 
-                //筛选列的显示
-                $(".analyseCols").on('click', function () {
-                    var attrs = data.Attrs;
-                    var cols = $("div[lay-id='tableSearch']").find(".layui-table-header").find("th");
-                    var arry = [];
-                    $.each(attrs, function (idx, attr) {
-                        if (attr.UIVisible == 0
-                            || attr.KeyOfEn == "OID"
-                            || attr.KeyOfEn == "WorkID"
-                            || attr.KeyOfEn == "NodeID"
-                            || attr.KeyOfEn == "MyNum"
-                            || attr.KeyOfEn == "MyPK") {
-                           
-                            return true;
-                        }
-                        var col = cols[idx + 1];//排除序号字段或者复选框节点
-                        var data = $(col).data();
-                        if ($(col).hasClass("layui-hide") == true)
-                            data.hide = true;
-                        else
-                            data.hide = false;
-                        data.key = data.key.replace(vtable.config.index + "-", "");
-                        arry.push('<li><input type="checkbox" name="' + data.field + '" data-key="' + data.key + '" data-parentkey="' + (data.parentKey || "") + '" lay-skin="primary" ' + (data.hide ? "" : "checked") + ' title="' + attr.Name + '" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
-                    })
-
-                    var ul = $('<ul class="layui-table-col"></ul>');
-                    ul.html($(arry.join("")));
-                    ul.css("max-height", $(document).height() - $("#toolbar").height() - 150);
-                    ul.css("top", $("#toolbar").height() + 50);
-                    $("#laytable-col").html(ul[0]);
-                    layui.form.render();
-                    layui.form.on("checkbox(LAY_TABLE_TOOL_COLS)", function (e) {
-                        var l = $(e.elem),
-                            n = this.checked,
-                            o = l.data("key"),
-                            r = l.data("parentkey");
-                        //增加隐藏显示的列
-                        if (cfield.Attrs == "")
-                            cfield.Attrs = ",";
-                        if (n == false && cfield.Attrs.indexOf("," + l[0].name + ",")==-1)
-                            cfield.Attrs = cfield.Attrs + l[0].name+",";
-                         //移除隐藏的列
-                        else
-                            cfield.Attrs = cfield.Attrs.replace(l[0].name + ",", "");
-                        cfield.Update();
-                      
-                        layui.each(vtable.config.cols, function (e, t) {
-                            layui.each(t, function (t, l) {
-                                if (e + "-" + t === o) {
-                                    var d = l.hide;
-                                    l.hide = !n;
-                                    var item = $("div[lay-id='tableSearch']").find('*[data-key="' + vtable.config.index + "-" + o + '"]');
-                                    if (l.hide == true)
-                                        item.addClass("layui-hide");
-                                    else
-                                        item.removeClass("layui-hide");
-                                }
-                            });
+                    layui.each(vtable.config.cols, function (e, t) {
+                        layui.each(t, function (t, l) {
+                            if (e + "-" + t === o) {
+                                var d = l.hide;
+                                l.hide = !n;
+                                var item = $("div[lay-id='tableSearch']").find('*[data-key="' + vtable.config.index + "-" + o + '"]');
+                                if (l.hide == true)
+                                    item.addClass("layui-hide");
+                                else
+                                    item.removeClass("layui-hide");
+                                $("div[lay-id='tableSearch']").find(".laytable-cell-" + vtable.config.index + "-" + o).css("width", l.minWidth + "px");
+                            }
                         });
-                    })
-                });
-
-                //隐藏弹出窗
-                $(document).on("click", function (e) {
-                    if (e.target == $(".analyseCols")[0])
-                        return;
-                    if (e.target.parentNode.parentNode.parentNode && e.target.parentNode.parentNode.parentNode == $(".layui-table-col")[0])
-                        return;
-                     $(".layui-table-col").remove();
-                });
+                    });
+                })
             });
-           
+
         });
 
-        
+
 
         function renderLaypage() {
             //执行一个laypage实例
             layui.laypage.render({
                 elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
                 , count: ur.GetPara("RecCount") //数据总数，从服务端得到
+                , limit: pageSize
                 , limits: [5, 10, 15, 20, 25]
                 , layout: ['prev', 'page', 'next', 'limit', 'skip', 'count']
                 , jump: function (obj, first) {
@@ -394,8 +420,9 @@
                         pageIdx = obj.curr;
                         pageSize = obj.limit;
                         //刷新数据
-                        var tableData = SearchData();
-                        layui.table.reload('tableSearch', { data: tableData["DT"] });
+                        var tableData = SearchData("search");
+                        layui.table.reload('tableSearch', { data: transferHtmlData(tableData["DT"]) });
+                        dropDownLayuiCols(tableData.Attrs);
                     }
 
                 }
@@ -404,11 +431,6 @@
             $('.layui-table-page').css('text-align', 'right');  //
 
         }
-
-
-
-
-
     </script>
 
 </head>
@@ -441,19 +463,21 @@
 
 
     </div>
-   
+
     <script>
         $(function () {
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
             if (theme == null || theme == undefined || theme == "")
                 return;
             var data = JSON.parse(theme);
-            var html = "\n .layui-btn{\n background-color:" + data.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + data.selectedMenu + ";\n}";
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html += "\n .layui-btn{\n background-color:" + data.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + data.selectedMenu + ";\n}";
             html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + data.selectedMenu + " !important\n}";
             html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
             html += "\n .layui-tab-title .layui-this{\n background-color:" + data.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + data.selectedMenu + ";}";
             html += "\n .layui-a-this{\n background-color:" + data.selectedMenu + ";\n color: #fff;\n}";
-            var styleScope = document.getElementById("theme-data");
+            
             styleScope.innerHTML = filterXSS(html);
         })
     </script>

@@ -72,7 +72,6 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByDeptLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门的领导(主管,负责人).</option>";
         html += "<option value=" + DeliveryWay.ByEmpLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找指定节点的人员直属领导.</option>";
         //  html += "<option value=" + DeliveryWay.ByDeptShipLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门的分管领导.</option>";
-
         // 与按照岗位智能计算不同的是，仅仅找本部门的人员.
     }
 
@@ -92,7 +91,6 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByPreviousNodeEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;与上一节点处理人相同</option>";
         html += "<option value=" + DeliveryWay.BySpecNodeEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;与指定节点处理人相同</option>";
     }
-
 
 
     if (isSatrtNode == false) {
@@ -115,6 +113,16 @@ function InitBar(optionKey) {
             html += "<option value=" + DeliveryWay.BySelectedForPrj + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“项目组人员选择器”选择接受人</option>";
         }
     }
+
+    if (isSatrtNode == false) {
+        html += "<option value=null disabled='disabled' >+按节点表单的数据计算</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是人员编号</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormDepts + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是部门编号</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormStationsAI + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是岗位编号(按岗位智能计算)</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormStationsOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是岗位编号(仅按岗位计算)</option>";
+        html += "<option value=" + DeliveryWay.ByDtlAsSubThreadEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点的明细表来决定子线程的接受人</option>";
+    }
+
     html += "<option value=null disabled='disabled' >+其他方式</option>";
 
     if (isSatrtNode == true) {
@@ -134,17 +142,17 @@ function InitBar(optionKey) {
             html += "<option value=" + DeliveryWay.BySelectedEmpsOrgModel + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人(集团模式)</option>";
         }
 
-
         html += "<option value=" + DeliveryWay.BySelfUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义人员选择器</option>";
         html += "<option value=" + DeliveryWay.ByAPIUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;按照设置的WebAPI接口获取的数据计算</option>";
-        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;按上一节点表单指定的字段值作为本步骤的接受人</option>";
-
-        html += "<option value=" + DeliveryWay.ByDtlAsSubThreadEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点的明细表来决定子线程的接受人</option>";
+     
         html += "<option value=" + DeliveryWay.ByFEE + " >&nbsp;&nbsp;&nbsp;&nbsp;由FEE来决定</option>";
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
 
     }
+
+
+
     html += "</select >";
     html += "<button  id='Btn_Save'type=button  onclick='SaveRole()' value='保存' />保存</button>";
     if (GetQueryString("FK_Node").substr(GetQueryString("FK_Node").length - 2) != "01")
@@ -261,7 +269,7 @@ function BindDeptTree() {
     if (webUser.CCBPMRunModel != 0)
         rootNo = webUser.OrgNo;
 
-    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', w, h, function () {
         Baseinfo.depts = getDepts();
@@ -284,7 +292,7 @@ function BindDeptTreeGroup() {
 
     }
 
-    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.WF.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
+    var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&RootNo=" + rootNo + "&NodeID=" + nodeID + "&PKVal=" + nodeID;
 
     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', w, h, function () {
         Baseinfo.depts = getDepts();
@@ -347,7 +355,7 @@ function getGroups() {
  */
 function getDeptLeader() {
     var ens = getDepts();
-    var depts = new Entities("BP.WF.Port.Depts");
+    var depts = new Entities("BP.Port.Depts");
 
     for (var i = 0; i < ens.length; i++) {
         var en = ens[i];
@@ -412,6 +420,7 @@ function changeOption() {
     if (index > 1) {
         optionKey = sele[index].value
     }
+
     var roleName = "";
     switch (parseInt(optionKey)) {
         case DeliveryWay.ByStation:
@@ -434,6 +443,15 @@ function changeOption() {
             break;
         case DeliveryWay.ByPreviousNodeFormEmpsField:
             roleName = "5.ByPreviousNodeFormEmpsField.htm";
+            break;
+        case DeliveryWay.ByPreviousNodeFormDepts:
+            roleName = "52.ByPreviousNodeFormDepts.htm";
+            break;
+        case DeliveryWay.ByPreviousNodeFormStationsAI:
+            roleName = "53.ByPreviousNodeFormStationsAI.htm";
+            break;
+        case DeliveryWay.ByPreviousNodeFormStationsOnly:
+            roleName = "54.ByPreviousNodeFormStationsOnly.htm";
             break;
         case DeliveryWay.ByPreviousNodeEmp:
             roleName = "6.ByPreviousNodeEmp.htm";

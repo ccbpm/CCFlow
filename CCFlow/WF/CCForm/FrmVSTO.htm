@@ -75,7 +75,7 @@
             url += ",PEmpNo=" + GetQueryString("PEmpNo");
 
 
-            var wsUrl = "http://" + location.hostname + ":" + location.port + "/WF/CCForm/CCFormAPI.asmx";
+            var wsUrl = basePath + "/WF/CCForm/CCFormAPI.asmx";
             url += ",WSUrl=" + wsUrl;
 
             vstoUrl = url + ",TemDataSync=1,IsSendOnlineWork=1";

@@ -137,7 +137,7 @@
 
             var local = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
             
-            var urlWS = local + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
+            var urlWS = basePath + "/WF/CCForm/CCFormAPI.asmx?DocName="+DocName;
             var url = "httpCCWord://-fromccflow,Path="+path+",App=OnlineEdit," + paras + "WSUrl=" + urlWS;
            // alert(url);
             SetHref(url);

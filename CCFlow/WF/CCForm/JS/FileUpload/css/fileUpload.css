@@ -142,14 +142,13 @@
 .image-item {
     width: 75px !important;
     height: 75px;
-    background-image: url(/WF/CCForm/JS/FileUpload/css/images/iconfont-tianjia.png);
+    background-image: url(./iconfont-tianjia.png);
     background-size: 100% 100%;
     display: inline-block;
     position: relative;
     border-radius: 5px;
     margin-right: 10px;
     margin-bottom: 10px;
-    border: solid 1px #e8e8e8;
     float: left;
 }
 

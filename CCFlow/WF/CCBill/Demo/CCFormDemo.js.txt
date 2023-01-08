@@ -38,10 +38,10 @@ else
    alert("学生["+en.Title+"]删除失败" );
  
    //打开这个实体并编辑方式1.
-   var url='/WF/Entity/MyDict.htm?FrmID=Student&OID='+oid;
+   var url=basePath + '/WF/Entity/MyDict.htm?FrmID=Student&OID='+oid;
    window.localhost.href=url; 
 
    //打开这个实体并编辑方式2.
-   var url='/WF/Entity/MyDict.htm?FrmID=Student&BillNo=0001';
+   var url=basePath + '/WF/Entity/MyDict.htm?FrmID=Student&BillNo=0001';
    window.localhost.href=url; 
 }

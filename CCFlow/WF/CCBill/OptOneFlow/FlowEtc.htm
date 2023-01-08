@@ -20,22 +20,23 @@
             width: 100%;
         }
 
-            .method .row {
-                display: flex;
-                justify-content: flex-start;
-                flex: 0.2;
-                height: 40px;
-                line-height: 40px;
-                background-color: #FAFAFA;
-            }
+        .method .row {
+            display: flex;
+            justify-content: flex-start;
+            flex: 0.2;
+            height: 40px;
+            line-height: 40px;
+            background-color: #FAFAFA;
+        }
 
-                .method .row .item {
-                    box-sizing: border-box;
-                    flex-shrink: 0;
-                    text-align: center;
-                    border-right: 1px solid #eee;
-                    border-bottom: 1px solid #eee;
-                }
+        .method .row .item {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            line-height: 20px;
+        }
 
         .item-name {
             width: 35%;
@@ -114,15 +115,15 @@
             <div class="layui-row">
                 <div class="layui-col-sm6">
                     <div class="layui-inline">
-                        <input type="text" id="TB_Key" name="TB_Key" class="layui-input layui-col-sm4" placeholder="关键字" />
+                        <input type="text" v-model:value="SearchKey" name="TB_Key" class="layui-input layui-col-sm4" placeholder="关键字" />
                     </div>
-                    <button onclick="Search()" class="layui-btn layui-btn-sm"> 查询</button>
+                    <button @click="Search" class="layui-btn layui-btn-sm"> 查询</button>
                     <button onclick="StartIt()" class="layui-btn layui-btn-sm" id="StartIt">新建</button>
 
                 </div>
-                <div class="layui-col-sm6" style="text-align:right">
+               <!-- <div class="layui-col-sm6" style="text-align:right">
                     <button onclick="SearchAdv()" class="layui-btn layui-btn-sm">高级查询</button>
-                </div>
+                </div>-->
 
             </div>
 
@@ -138,11 +139,11 @@
         </div>
 
         <div class="row" v-for="(item,idx) in gwfs" :key="idx" :data-id="item.WorkID">
-            <div class="item item-index" style="text-align: right;">{{idx + 1}}</div>
+            <div class="item item-index" style="text-align: right;line-height: 40px;">{{idx + 1}}</div>
             <div class="item item-other"><i :class="item.Icon"></i> {{item.IconTitle}}</div>
 
             <div class="item item-name"
-                 style="text-align: left" :data-mypk="item.WorkID" :data-name="item.Title"
+                 style="text-align: left;line-height: 40px" :data-mypk="item.WorkID" :data-name="item.Title"
                  :data-idx="idx" @click.stop="OpenMyView(item.FK_Flow,item.WorkID)">
                 <span> <font color="blue">{{item.Title}}</font></span>
             </div>
@@ -170,7 +171,9 @@
             el: '#method',
 
             data: {
-                gwfs: []
+                gwfs: [],
+                allgwfs:[],
+                SearchKey:''
             },
             methods: {
                 OpenMyView: function (flowNo, workid) {
@@ -204,6 +207,15 @@
                     }
                 }, Test: function (flowNo, workid) {
 
+                },
+                Search:function(){
+                    if(this.SearchKey===''){
+						this.gwfs = this.allgwfs;
+   						return this.gwfs;
+					}
+                     
+                    const key = this.SearchKey;
+                    this.gwfs = this.allgwfs.filter(gwf=>gwf.Title.includes(key) || gwf.StarterName.includes(key) || gwf.TodoEmps.includes(key) || gwf.NodeName.includes(key))
                 }
             },
             mounted: function () {
@@ -240,6 +252,7 @@
 
                 }
                 this.gwfs = ens;
+                this.allgwfs = ens;
             }
         })
 
@@ -263,10 +276,6 @@
             }
         }
 
-        //查询
-        function Search() {
-            //对this.gwfs 的数据 的Title 进行过滤匹配,从新绑定表格.
-        }
 
         //高级查询.
         function SearchAdv() {

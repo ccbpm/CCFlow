@@ -24,7 +24,7 @@
     <div id="App">
         <div id="bar"> </div>
         <fieldset>
-            <legend>请选择一个字段.</legend>
+            <legend>请选择一个人员字段.</legend>
             <div style="margin-top:15px">
                 请选择一个节点字段:
                 <select name="DDL_ByPreviousNodeFormEmpsField" id="DDL_ByPreviousNodeFormEmpsField" v-model="selectMapAttr">
@@ -32,6 +32,17 @@
                 </select>
             </div>
 
+        </fieldset> 
+        
+        <fieldset>
+            <legend>字段是人员编号</legend>
+				<ul>
+					<li>#### 帮助</li>
+					<li>- 该计算模式是按照表单字段中绑定的人员计算，人员集合是由表单字段中的内容确定的。</li>
+					<li>- 我们通常的做法是，把一个字段设置为小范围多选，或者Pop选择人员，在下一个节点按照这用户选择的人员集合作为接受人。</li>
+					<li>- 可以选择的字段，都是节点表单的字段。</li>
+					<li>- 如果表单中有字段，但在选择时没有显示，需要使用流程设计器的检查流程就可以显示出来。</li>
+				</ul>
         </fieldset>
     </div>
     <script type="text/javascript">
@@ -52,7 +63,7 @@
                 var FK_MapData = "ND" + parseInt(FK_Flow) + "Rpt";
                 var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", FK_MapData);
                 this.mapAttrs = $.grep(mapAttrs, function (obj, i) {
-                    return obj.KeyOfEn != undefined;
+                    return obj.UIVisible==1;
                 })
 
                 //初始话下拉列表值

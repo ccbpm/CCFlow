@@ -281,7 +281,7 @@
                     listbox += "<td>" + GetState(work.WFState) + "</td>";
 
                     //备注
-                    listbox += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+                   // listbox += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
 
                     listbox += "<td ><a href=\"javascript:PutOne('" + workID + "')\" >放入</a></td>";
 
@@ -366,7 +366,6 @@
                 title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByNode' >节点</th>";
             }
 
-
             title += "<th>发起日期</th>";
             title += "<th>到达</th>";
             title += "<th>期限</th>";
@@ -375,7 +374,6 @@
             title += "<th>备注</th>";
             title += "<th>操作</th>";
             title += "</tr>";
-
             return title;
         }
         function PutOne(workid) {

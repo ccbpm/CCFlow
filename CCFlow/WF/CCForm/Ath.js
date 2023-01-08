@@ -53,7 +53,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
         "onUpload": function (opt, data) {
             uploadTools.uploadError(opt);//显示上传错误
             InitAthPage(athDivID);
-            AthTable_Init(athchmentID, "Div_" + athchmentID, pageData.WorkID);
+            AthTable_Init(athchment, athDivID, pageData.WorkID);
         },
         autoCommit: true,//文件是否自动上传
         "fileType": AthParams.realFileExts,//文件类型限制，默认不限制，注意写的是文件后缀
@@ -359,6 +359,8 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
 
             //⑦操作列的增加.
             _html += "<td  style='text-align: center;'class='operate'>";
+            if (isHaveSort == true)
+                _html += "<a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\",\"" + athDesc.MyPK + "\")'>上传</a>";
             if (athDesc.IsDownload == 1)
                 _html += "<a href=\"javascript:Down2018('" + db.MyPK + "')\">下载</a>&nbsp;&nbsp;&nbsp;&nbsp;";
             if (pageData.IsReadonly != 1) {
@@ -404,10 +406,20 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
                 });
             }
             //⑦操作列的增加.
-            if (athDesc.IsExpCol == 1)
-                _html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\",\"" + athDesc.MyPK + "\")'>上传</a>&nbsp;&nbsp;&nbsp;<a href=\"\" onclick='return SaveUpload(\"" + athDesc.MyPK + "\",\"" + uploadUrl + "\")'>保存</a></td>";
-            else
-                _html += "<td></td>";
+            if (isHaveSort == true) {
+                _html += "<td><a href='javaScript:void(0)' onclick='changeSort(\"" + sort + "\",\"" + athDesc.MyPK + "\")'>上传</a>";
+                if (athDesc.IsExpCol == 1) {
+                    _html += "&nbsp;&nbsp;&nbsp;<a href=\"\" onclick='return SaveUpload(\"" + athDesc.MyPK + "\",\"" + uploadUrl + "\")'>保存</a>";
+                }
+                _html += "</td>";
+            }
+            else {
+                if (athDesc.IsExpCol == 1) {
+                    _html += "<td><a href=\"\" onclick='return SaveUpload(\"" + athDesc.MyPK + "\",\"" + uploadUrl + "\")'>保存</a></td>";
+                } else
+                    _html += "<td></td>";
+            }
+               
 
             _html += "</tr>";
         }
@@ -415,30 +427,34 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
     }
     //附件可上传并且存在分组，增加分组的选择下拉框   && (isHaveSort == true || athDesc.IsNote)
     //  debugger;
-    if ((athDesc.IsUpload == true && pageData.IsReadonly != "1") || athDesc.IsExpCol != 1) {
+    if ((athDesc.IsUpload == true && pageData.IsReadonly != "1") && athDesc.IsExpCol != 1) {
         columnNum += mapAttrs != null ? mapAttrs.length + isHaveSort == true ? 1 : 0 : 0 + isHaveSort == true ? 1 : 0;
         _html += "<tr>";
         _html += "<td colspan=" + columnNum + ">"
         _html += "<div id='file_upload-queue' class='uploadify-queue'></div>";
 
         _html += "<div id='s' style='text-align:left;float:left;display:inline;width:100%'  >";
-        _html += "<div style='float:right' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> ";
-
-        if (isHaveSort == true || athDesc.IsNote) {
-            var operations = "";
-            for (var idx = 0; idx < fileSorts.length; idx++) {
-                operations += "<option  value='" + fileSorts[idx] + "'>" + fileSorts[idx] + "</option>";
-            }
-
-            if (isHaveSort == true) {
-                _html += "<div style='float:left;padding-right:2px'>";
-                _html += "请选择" + sortColoum + "：";
-                _html += "<select id='Sort_" + athDesc.MyPK + "' class='form-control' style='margin:0px 0px !important;width:auto !important'>" + operations + "</select>";
-                _html += "</div>";
-            }
-            if (athDesc.IsNote)
-                _html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
+        if (isHaveSort == false)
+            _html += "<div style='float:right' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> ";
+        else {
+            _html += "<div style='float:right;display:none' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> ";
+            _html += "<input id='Sort_" + athDesc.MyPK + "'style='display:none'>";
         }
+        //if (isHaveSort == true || athDesc.IsNote) {
+        //    var operations = "";
+        //    for (var idx = 0; idx < fileSorts.length; idx++) {
+        //        operations += "<option  value='" + fileSorts[idx] + "'>" + fileSorts[idx] + "</option>";
+        //    }
+
+        //    if (isHaveSort == true) {
+        //        _html += "<div style='float:left;padding-right:2px'>";
+        //        _html += "请选择" + sortColoum + "：";
+        //        _html += "<select id='Sort_" + athDesc.MyPK + "' class='form-control' style='margin:0px 0px !important;width:auto !important'>" + operations + "</select>";
+        //        _html += "</div>";
+        //    }
+        //    if (athDesc.IsNote)
+        //        _html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
+        //}
         _html += "</div>";
         _html += "</td>";
         _html += "</tr>";
@@ -531,9 +547,7 @@ function GetFileStream(mypk, FK_FrmAttachment) {
         Url = basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&MyPK=" + mypk;
     } else {
         //按照数据流模式下载。
-        var currentPath = GetHrefUrl();
-        var path = currentPath.substring(0, currentPath.indexOf('/CCMobile') + 1);
-        Url = path + "WF/Ath/downLoad.do?MyPK=" + mypk + "&FK_FrmAttachment=" + FK_FrmAttachment;
+        Url = basePath + "/WF/Ath/downLoad.do?MyPK=" + mypk + "&FK_FrmAttachment=" + FK_FrmAttachment;
     }
 
     return Url;
@@ -551,39 +565,7 @@ function Down2018(mypk) {
 
     var url = "";
     if (plant == "CCFlow") {
-        //url = basePath + '/WF/CCForm/DownFile.aspx?DoType=Down&MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
         SetHref(basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + workID + "&FK_Node=" + nodeID + "&MyPK=" + mypk);
-
-
-
-        //var xhr = new XMLHttpRequest();
-        //xhr.open('GET', url, true);
-        //xhr.responseType = 'blob';
-        //xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
-        //xhr.send();//JSON.stringify(params));   // 发送ajax请求
-        //xhr.onreadystatechange = function () {
-        //    if (xhr.readyState === XMLHttpRequest.DONE) {
-        //        // 获取唯一成功标识
-        //        var code = decodeURI(xhr.getResponseHeader("Code"));
-        //        console.log(code);
-        //        if (code.toString() === "OK") {
-        //            var fileName = decodeURI(xhr.getResponseHeader("content-disposition").split(";")[1].split("=")[1]);
-        //            console.log(fileName);
-        //            // 将`blob`对象转化成一个可访问的`url`
-        //            let dataUrl = window.URL.createObjectURL(new Blob([xhr.response]));
-        //            let link = document.createElement("a");
-        //            link.style.display = "none";
-        //            link.href = dataUrl;
-        //            link.setAttribute("download", fileName);
-        //            document.body.appendChild(link);
-        //            link.click();
-        //            document.body.removeChild(link);
-        //        } else {
-        //            alert("下载失败,请联系管理员.");
-        //        }
-        //    }
-        //}
-
         return;
     }
 
@@ -591,7 +573,13 @@ function Down2018(mypk) {
     var currentPath = GetHrefUrl();
     var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
     url = path + 'WF/Ath/downLoad.do?MyPK=' + mypk + "&WorkID=" + workID + "&FK_Node=" + nodeID;
-
+    if(typeof filterXSS === 'function'){
+        url = filterXSS(url);
+    }else {
+        url = url.replace(/<\/?[^>]+>/gi, '')
+        .replace(/[(]/g, '')
+        .replace(/->/g, '_')
+    }
     if (IEVersion() < 11) {
         window.open(url);
         return;
@@ -601,11 +589,6 @@ function Down2018(mypk) {
     link.href = url;
     link.click();
 
-    var x = new XMLHttpRequest();
-    x.open("GET", url, true);
-    x.responseType = 'blob';
-    x.onload = function (e) { download(x.response, fileName, "image/gif"); }
-    x.send();
 }
 
 /**
@@ -675,11 +658,12 @@ function Del(delPKVal, fk_framAttachment, name) {
 
     //获取
     InitAthPage("Div_" + fk_framAttachment);
-    AthTable_Init(athchmentID, "Div_" + athchmentID, pageData.WorkID);
+    AthTable_Init(fk_framAttachment, "Div_" + fk_framAttachment, pageData.WorkID);
 }
 
 //在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
 function AthView(mypk, filePath) {
+    debugger;
     if (typeof AthViewOverWrite === 'function') {
         AthViewOverWrite(mypk);
         return;

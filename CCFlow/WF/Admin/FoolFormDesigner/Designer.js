@@ -347,7 +347,7 @@ function InitPage() {
         //过滤attrs
         var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
         if (tableCol == 4 || tableCol == 6)
-            _html += InitMapAttr(mapAttrs, tableCol);
+            _html += InitMapAttr(mapAttrs, tableCol,data.Sys_MapExt);
 
         if (tableCol == 3)
             _html += InitThreeColMapAttr(mapAttrs, tableCol);
@@ -702,7 +702,7 @@ function GenerGroupContext(groupEn, data, tableCol) {
 }
 
 //解析表单字段 MapAttr.(表单4列/6列)
-function InitMapAttr(Sys_MapAttr, tableCol) {
+function InitMapAttr(Sys_MapAttr, tableCol,mapExts) {
     var html = "";
     var isDropTR = true;
     var colSpan = 1;
@@ -731,13 +731,19 @@ function InitMapAttr(Sys_MapAttr, tableCol) {
             }
             textWidth = getLabelColSpanClass(tableCol, tableCol);
             //获取文本信息
-            var filename = basePath + "/DataUser/CCForm/BigNoteHtmlText/" + attr.FK_MapData + ".htm?r=" + Math.random();
-            var htmlobj = $.ajax({ url: filename, async: false });
-            var str = htmlobj.responseText;
-            if (htmlobj.status == 404)
-                str = filename + "这个文件不存在，请联系管理员";
+            mapExts = mapExts || [];
+            var myExts = $.grep(mapExts, function (item) {
+                var mypk = "HtmlText_" + attr.MyPK;
+                return item.MyPK == mypk;
+            });
+            var str = "设置大块文本说明";
+            if (myExts.length > 0) {
+                var mapExt = new Entity("BP.Sys.MapExt", myExts[0]);
+                mapExt.MyPK = myExts[0].MyPK;
+                str = mapExt.DoMethodReturnString("ReadBigNoteHtmlText");
+            }
             html += "<div class='layui-col-xs12 item FoolFrmFieldRow' data-id='" + attr.MyPK + "' style='margin-bottom: 6px;'>";
-            html += "<div  class='" + textWidth + " FoolFrmFieldLabel'><a href='#' onclick='EditBigText(\"" + attr.MyPK + "\",\"" + attr.FK_MapData + "\")'>" + str + "</a></div>";
+            html += "<div  class='" + textWidth + " FoolFrmFieldLabel'><a href='#' onclick='EditBigText(\"" + attr.FK_MapData + "\",\"" + attr.KeyOfEn + "\")'>" + str + "</a></div>";
             html += "</div>";
             isDropTR = true;
             continue;
@@ -1196,12 +1202,12 @@ function getLabelColSpanClass(LabelColSpan, tabCol) {
 /************************************************编辑表单字段属性中的操作****************************************************************************************************************************************************************/
 /**
  * 编辑大文本字段的属性
- * @param {any} mypk
  * @param {any} frmID
+ * @param {any} keyOfEn
  */
-function EditBigText(mypk, frmID) {
+function EditBigText(frmID, keyOfEn) {
     getWindowWH();
-    url = './EditFExtContral/60.BigNoteHtmlText.htm?FrmID=' + frmID + '&MyPK=' + mypk;
+    url = './EditFExtContral/60.BigNoteHtmlText.htm?FrmID=' + frmID + '&KeyOfEn=' + keyOfEn;
     OpenLayuiDialog(url, '大文本编辑', W, 0, null, true);
 }
 /**
@@ -2063,7 +2069,7 @@ function AddBtn(pinyin) {
         mapAttr.LGType = 0;
         mapAttr.ColSpan = 0; //
         mapAttr.LabelColSpan = 1; //
-        mapAttr.IsEnableInAPP = 0;
+        mapAttr.IsEnableInAPP = 1;
         mapAttr.Insert(); //插入字段.
         mapAttr.Retrieve();
         var url = "../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&MyPK=" + mapAttr.MyPK;
@@ -2342,19 +2348,48 @@ function AddMap(pinyin) {
 }
 
 //大块文本
-function AddBigNoteHtmlText() {
-    //增加大文本
-    layer.confirm('您确认要创建吗？', {
-        btn: ['确定', '取消']
-    }, function (index) {
-        layer.close(index);
-        var url = "./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID;
-        getWindowWH();
-        OpenLayuiDialog(url, '大块文本', W, 0, null, true);
-        //LayuiPopRight(url, '大块文本', W, true);
-    }, function (index) {
-        layer.close(index);
-    });
+function AddBigNoteHtmlText(pinyin) {
+    var name = promptGener('请输入字段名', '大块提示文本');
+    if (name == null || name == undefined || name.trim() == "")
+        return "";
+
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+    if (mapAttrs.length >= 1) {
+        alert('名称：[' + name + "]已经存在.");
+        AddBigNoteHtmlText();
+        return "";
+    }
+
+    //获得ID.
+    var id = pinyin.makePy(name);
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.MyPK = mypk;
+    if (mapAttr.IsExits == true) {
+        alert('名称：[' + name + "]已经存在.");
+        AddBigNoteHtmlText();
+        return "";
+    }
+
+
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 60; //大块文本.
+    mapAttr.FK_MapData = frmID;
+    mapAttr.Name = name;
+    mapAttr.KeyOfEn = id;
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 4; //
+    mapAttr.UIWidth = 0;
+    mapAttr.UIHeight = 100;
+    mapAttr.Idx = 0;
+    mapAttr.Insert(); //插入字段.
+    var url ="./EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + frmID + "&KeyOfEn=" + id;
+    getWindowWH();
+    OpenLayuiDialog(url, '大块文本', W, 0, null, true);
+    
 
 }
 

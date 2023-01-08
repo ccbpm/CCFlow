@@ -204,7 +204,7 @@
             var url = "DataVer.htm?WorkID=" + workID + "&FrmID=" + frmID;
             window.location.reload(); // = url;
             // DataVer.htm ? WorkID = 126 & FrmID=Dict_XueShengTaiZhang1 & FK_MapData=Dict_XueShengTaiZhang1
-            //window.location.href = url;
+            //window.location.href = filterXSS(url);
         }
 
 
@@ -258,7 +258,7 @@
             //    url = "../SearchBill.htm?EnsName=" + frmID + "&FrmID=" + frmID;
             //if (EntityType == "1")
             //    url = "../SearchDict.htm?EnsName=" + frmID + "&FrmID=" + frmID;
-            //window.location.href = url;
+            //window.location.href = filterXSS(url);
         }
     </script>
 </head>

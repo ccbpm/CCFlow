@@ -75,14 +75,14 @@
 
           //主表存储表为数据库表时，从表的字段也不能自动创建
           function AddF(fk_mapdata) {
-              var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&FK_Flow='+GetQueryString("FK_Flow")+'&s=' + Math.random();
+              var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&FK_Flow='+GetQueryString("FK_Flow")+'&IsDtlAdd=1&s=' + Math.random();
               var mapDtl = new Entity("BP.Sys.MapDtl");
               mapDtl.SetPKVal(fk_mapdata);
               if (mapDtl.RetrieveFromDBSources() != 0) {
                   var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapdata);
                   var mapData = new Entity("BP.Sys.MapData", mapDtl.FK_MapData);
                   if (mapData != null && mapData.PTableModel == 2)
-                      url = 'FieldTypeListChoseOneField.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&s=' + Math.random();
+                      url = 'FieldTypeListChoseOneField.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&IsDtlAdd=1&s=' + Math.random();
               }
              
               OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
@@ -96,15 +96,20 @@
               Reload();
           }
 
-          function Edit(mypk, ftype) {
+          function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
 
               var url = '';
               var title = ''
 
               //普通字段类型.
               if (ftype == "1") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
-                  title = '字段String属性';
+                  if (uiControlType == 6) {
+                      url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&inlayer=1&PKVal=" + mypk;
+                      title = '字段附件属性';
+                  } else {
+                      url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
+                      title = '字段String属性';
+                  }
               }
 
               //数值字段类型.
@@ -235,7 +240,7 @@
             <div style='clear:both'></div>
         </div>
         <div data-options="region:'center',noheader:true,border:false" style="overflow-y:hidden">
-            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:400px' src='this.url'    ></iframe>
+            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:400px' src=''    ></iframe>
            <!-- <iframe id='Iframe1' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='this.url'    ></iframe>-->
 
         </div>

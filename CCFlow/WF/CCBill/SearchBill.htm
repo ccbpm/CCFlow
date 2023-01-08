@@ -18,9 +18,14 @@
     <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="Search.js" type="text/javascript"></script>
+    <script src="../../DataUser/JSLibData/SearchSelf.js"></script>
     <script src="../Scripts/xss.js"></script>
+    <script src="../Scripts/layui/ext/xmSelect.js"></script>
     <style id="theme-data"></style>
     <style type="text/css">
+        xm-select > .xm-body .xm-toolbar {
+            padding: 0 5px;
+        }
         .layui-tab-title .layui-this:after {
             border: 0;
         }
@@ -35,13 +40,13 @@
             padding: 9px 5px;
         }
 
-        .layui-table-cell {
+        /*.layui-table-cell {
             height: 28px;
             line-height: 28px;
             padding: 0 15px;
             position: relative;
             box-sizing: border-box;
-        }
+        }*/
 
         .layui-tab-title li {
             margin-top: 3px;
@@ -62,6 +67,13 @@
 
         .layui-form-label {
             color: #808080
+        }
+
+        .label-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: revert !important;
         }
 
         .layui-a-this {
@@ -142,23 +154,30 @@
                 {{#  layui.each(d.selectSearch, function(index, item){ }}
                 <div class="layui-inline">
                     <label class="layui-form-label-search">{{item.label}}</label>
-                    {{# if(item.showWay==0){ }}
+                    {{# if(item.showWay==0 && item.isRadioSelect==0){ }}
+                    <div class="layui-input-inline">
+                        <div id="XmlSelect_{{=item.key}}" name="XmlSelect_{{=item.key}}"></div>
+
+                    </div>
+                    {{# } }}
+
+                    {{# if(item.showWay==1){ }}
+                    <div class="layui-tab" style="width:auto">
+                        <input type="hidden" id="DDL_{{=item.key}}" />
+                        <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                            {{#  layui.each(item.operations, function(k, opt){ }}
+                            <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                            {{#  }); }}
+                        </ul>
+                    </div>
+                    {{# } }}
+                    {{# if(item.showWay==2 ||(item.showWay==0 && item.isRadioSelect==1)){ }}
                     <div class="layui-input-inline">
                         <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
                             {{#  layui.each(item.operations, function(k, opt){ }}
                             <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
                             {{#  }); }}
                         </select>
-                    </div>
-                    {{# } }}
-
-                    {{# if(item.showWay==1){ }}
-                    <div class="layui-tab" style="width:auto">
-                        <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
-                            {{#  layui.each(item.operations, function(k, opt){ }}
-                            <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
-                            {{#  }); }}
-                        </ul>
                     </div>
                     {{# } }}
                 </div>
@@ -262,11 +281,37 @@
             //渲染查询条件
             var getTpl = document.getElementById("toolbar").innerHTML
                 , view = document.getElementById('view');
-            laytpl(getTpl).render(InitToolBar(), function (html) {
+            InitToolBar()
+            laytpl(getTpl).render(searchData, function (html) {
                 view.innerHTML = html;
             });
             $.each(searchData["selectSearch"], function (i, item) {
-                $("#DDL_" + item.key).val(item.value);
+                if (item.showWay == 0 && item.isRadioSelect == 0) {
+                    xmSelect.render({
+                        el: "#XmlSelect_" + item.key,
+                        autoRow: true,
+                        radio: false,
+                        clickClose: false,
+                        model: { label: { type: 'text' } },
+                        data: item.operations,
+                        toolbar: {
+                            show: true,
+                            list: ['ALL', 'CLEAR', {
+                                name: '确定',
+                                icon: 'layui-icon layui-icon-ok',
+                                key: "#XmlSelect_" + item.key,
+                                method(event) {
+                                    //$("xm-select").css("border-color", "");
+                                    //$(".xm-icon-expand").removeClass("xm-icon-expand");
+                                    //$(".xm-body").addClass("dis");
+                                    $(this.key).find("xm-select").click();
+                                }
+                            }]
+                        },
+                    });
+                }
+                else
+                    $("#DDL_" + item.key).val(item.value);
             })
             form.render();
             if ($(".ccdate").length > 0) {
@@ -278,7 +323,7 @@
                 })
             }
             //获取列
-            var cols = GetColoums(frmBill.GetPara("MultiTitle1"), frmBill.GetPara("MultiTitle"), frmBill.ColorSet, frmBill.SortColumns, parseInt(frmBill.RowOpenModel), frmBill.Name, 2,false);
+            var cols = GetColoums(frmBill.GetPara("MultiTitle1"), frmBill.GetPara("MultiTitle"), frmBill.ColorSet, frmBill.SortColumns, parseInt(frmBill.RowOpenModel), frmBill.Name, 2, false);
             var tableData = SearchData();
             //渲染table
             //主页面数据
@@ -446,6 +491,7 @@
          * 初始化查询条件按钮功能
          */
         var searchData = {};
+        var mapExts;
         function InitToolBar() {
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
@@ -460,12 +506,38 @@
             var mapData = data.Sys_MapData;
             var attrs = data.Attrs;
             var atPara = mapData[0].AtPara;
+            mapExts = data.Sys_MapExt;
 
             var inputSearch = [];
+            var dateTabSearch = {};
             var dateSearch = [];
             var selectSearch = [];
             var btns = [];
             var stringSearchKeys = GetPara(atPara, "StringSearchKeys");
+            //时间查询展示方式 0 时间从到、 1 table表格查询模式
+            var dateShowType = GetPara(atPara, "DTShowWay");
+            dateShowType = dateShowType == null || dateShowType == undefined || dateShowType == "" ? "0" : dateShowType;
+            if (dateShowType == "1" && GetPara(atPara, "DTSearchWay") != "0") {
+                var beginDate = GetPara(atPara, "DateShowYear");
+                var date = new Date(beginDate);
+                var year = date.getFullYear();
+                var currYear = new Date().getFullYear();
+                var years = [];
+                for (currYear; currYear >= year; currYear--)
+                    years.push(currYear);
+                if (years.length == 0)
+                    years.push(currYear);
+                //需要展示开始时间
+                dateTabSearch = {
+                    key: "Date",
+                    DTSearchKey: GetPara(atPara, "DTSearchKey"),
+                    Year: years,
+                    Month: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    JiDu: ["一季度", "二季度", "三季度", "四季度"],
+                    value: ["2021", "1月", "一季度"]
+                }
+            }
+            searchData["dateTabSearch"] = dateTabSearch;
             if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
                 var strs = stringSearchKeys.split("*");
                 var fieldV = ""
@@ -493,10 +565,7 @@
                 })
             }
             searchData["inputSearch"] = inputSearch;
-            var dtSearchWay = GetPara(atPara, "DTSearchWay");
-            dtSearchWay = dtSearchWay == null || dtSearchWay == undefined || dtSearchWay == "" ? "0" : dtSearchWay;
-
-            if (dtSearchWay != "0") {
+            if (dateShowType == "0" && GetPara(atPara, "DTSearchWay") != "0") {
                 var dtFrom = GetPara(atPara, "DTSearchLabel");
                 if (dtFrom == undefined)
                     dtFrom = '日期从';
@@ -512,20 +581,25 @@
             searchData["dateSearch"] = dateSearch;
             //格式为: @WFSta=0@FK_Dept=02
             var json = AtParaToJson(ur.Vals);
-
+            var ddlShowWays = GetPara(atPara, "DDLShowWays") || "";
+            ddlShowWays = ddlShowWays.replace(/[*]/g, "@");
+            ddlShowWays = AtParaToJson(ddlShowWays);
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
                 var val = json[attr.Field];
-                val = val == null || val == undefined ? "all" : val;
-                selectSearch.push({
+                val = val == null || val == undefined || val == "" || val == "null" ? "all" : val;
+                /**selectSearch.push({
                     key: attr.Field,
                     label: attr.Name,
                     value: val,
-                    operations: InitDDLOperation(data, attr, val)
-                });
+                    showWay: ddlShowWays[attr.Field], //0下拉 1平铺
+                    operations: []
+                });*/
+                selectSearch = InitDDLOperation(data, attr, val, ddlShowWays, selectSearch);
+
             }
             searchData["selectSearch"] = selectSearch;
-          
+
             //获得当前的集合.
             var frms = data["Frm_Method"];
             var colls = data["Frm_Collection"];
@@ -541,7 +615,14 @@
                 isHaveSeachOper = true;
             }
 
-            //工具栏按钮操作集合
+            /**$.each(menus, function (index, menus) {
+                btns.push({
+                    label: menus.Name,
+                    type: menus.MenuModel,
+                    no: menus.No,
+                    source: "Menu"
+                })
+            })**/
             if (colls && colls.length > 0) {
                 $.each(colls, function (index, coll) {
                     if (isHaveSeachOper == false && coll.MethodModel != "FlowNewEntity")
@@ -569,8 +650,9 @@
             if (theme == null || theme == undefined || theme == "")
                 return;
             theme = JSON.parse(theme);
-
-            var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html += "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";
             html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:" + theme.selectedMenu + " !important\n}";
             html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + theme.selectedMenu + " !important;\n}";
             html += "\n .layui-tab-title .layui-this{\n background-color:" + theme.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + theme.selectedMenu + ";}";

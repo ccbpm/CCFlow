@@ -20,7 +20,7 @@
   <Item No="1401" ModuleNo="FlowAdv" Name="共享任务" For="" Url="../../WF/TaskPoolSharing.htm" Icon="icon-share" />
   <Item No="1402" ModuleNo="FlowAdv" Name="申请下来的任务" For="" Url="../../WF/TaskPoolApply.htm" Icon="icon-folder-alt" />
   <Item No="1403" ModuleNo="FlowAdv" Name="我的关注" For="" Url="../../WF/Focus.htm" Icon="icon-star" />
-  <Item No="1404" ModuleNo="FlowAdv" Name="取回审批" For="" Url="../../WF/GetTask.htm" Icon="icon-logout" />
+  <Item11 No="1404" ModuleNo="FlowAdv" Name="取回审批" For="" Url="../../WF/GetTask.htm" Icon="icon-logout" />
   <Item No="1405" ModuleNo="FlowAdv" Name="挂起的工作" For="" Url="../../WF/HungupList.htm" Icon="icon-loop" />
   <Item No="1406" ModuleNo="FlowAdv" Name="我的设置" For="" Url="../../WF/Setting/Default.htm" Icon="icon-settings" />
 
@@ -30,9 +30,9 @@
   <Item No="1203" ModuleNo="Search" Name="我审批的" For="" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" Icon="icon-user-following" />
   <Item No="1204" ModuleNo="Search" Name="我的流程分布" For="" Url="../../WF/RptSearch/DistributedOfMy.htm" Icon="icon-calendar" />
   <Item No="1205" ModuleNo="Search" Name="我的流程" For="" Url="../../WF/SearchDataGrid.htm" Icon="icon-speech" />
-  <Item No="1206" ModuleNo="Search" Name="单流程查询"    For="" Url="../../WF/RptDfine/Flowlist.htm" Icon="icon-magnifier" />
+  <Item11 No="1206" ModuleNo="Search" Name="单流程查询"    For="" Url="../../WF/RptDfine/Flowlist.htm" Icon="icon-magnifier" />
   <Item No="1207" ModuleNo="Search" Name="综合查询" For="" Url="../../WF/RptSearch/Default.htm" Icon="icon-magnifier" />
-  <Item No="1217" ModuleNo="Search" Name="查询2022" For="" Url="../../WF/SearchZongHe.htm" Icon="icon-magnifier" />
+  <Item1 No="1217" ModuleNo="Search" Name="查询2022" For="" Url="../../WF/SearchZongHe.htm" Icon="icon-magnifier" />
   <Item No="1208" ModuleNo="Search" Name="流程监控" For="" Url="../../WF/Watchdog.htm" Icon="icon-magnifier" />
   <Item No="1209" ModuleNo="Search" Name="逾期流程"    For="" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Delays" Icon="icon-magnifier" />
 

@@ -139,16 +139,20 @@ Skip.includeJsSrc = function (rootObject, fileUrl) {
 },
 //同步加载
 Skip.addJs = function (url, rootObject) {
-    if (Exists(url) == false)
-        return;
-    //同步加载
-    $.ajaxSettings.async = false;
-    $.get(url, function (data, status, xhr) {
+    $.ajax({
+        url: url,
+        method: 'GET',
+        async: false
+    }).success(function (result) {
         if (rootObject == null || rootObject == undefined)
-            rootObject = document.getElementsByTagName('head')[0];
-        Skip.includeJsText(rootObject, xhr.responseText);
+            rootObject = document.getElementsByTagName('script')[0];
+        Skip.includeJsText(rootObject, result.responseText);
+    }).error(function (result) {
+        if (rootObject == null || rootObject == undefined)
+            rootObject = document.getElementsByTagName('script')[0];
+        Skip.includeJsText(rootObject, result.responseText);
     });
-    $.ajaxSettings.async = true;
+
 }
 
 function Exists(url) {

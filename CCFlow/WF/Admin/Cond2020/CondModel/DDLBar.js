@@ -11,7 +11,7 @@ function InitBar(optionKey) {
     html += "<option value=" + DirCondModel.ByPopSelect + ">&nbsp;&nbsp;&nbsp;&nbsp;发送后手工选择到达节点与接受人</option>";
 
     html += "<option value=null  disabled='disabled'>+自动计算</option>";
-    html += "<option value=" + DirCondModel.ByLineCond + ">&nbsp;&nbsp;&nbsp;&nbsp;由连接线控制</option>";
+    html += "<option value=" + DirCondModel.ByLineCond + ">&nbsp;&nbsp;&nbsp;&nbsp;由连接线设置的条件控制</option>";
 
     html += "</select >";
 

@@ -179,6 +179,7 @@ function SaveDtl(OID, dtlNo,type,field) {
     handler.AddPara("EnsName", dtlNo);
     handler.AddPara("RefPKVal", pageData.WorkID);
     handler.AddPara("OID", OID);
+    handler.AddUrlData();
     $.each(params.split("&"), function (i, o) {
         var param = o.split("=");
         if (param.length == 2 && validate(param[1])) {
@@ -187,7 +188,7 @@ function SaveDtl(OID, dtlNo,type,field) {
             handler.AddPara(param[0], "");
         }
     });
-    handler.AddUrlData();
+    
     var data = handler.DoMethodReturnString("FrmGener_Save");
     if (data.indexOf("err@") != -1) {
         alert(data);

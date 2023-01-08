@@ -35,9 +35,6 @@
                     保存日期
                 </th>
                 <th>
-                    备注
-                </th>
-                <th>
                     操作
                 </th>
                 </tr>
@@ -101,7 +98,6 @@
                 var flowNo = data[i].FK_Flow;
                 var flowName = data[i].FlowName;
                 var rdt = data[i].RDT;
-                var flowNote = data[i].FlowNote;
                 var workID = data[i].WorkID;
                 var paras = data[i].AtPara; //参数.
                 if (paras != '' && paras != null) {
@@ -118,7 +114,6 @@
                 listbox += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
                 listbox += "<td>" + flowName + "</td>";
                 listbox += "<td>" + rdt + "</td>";
-                listbox += "<td>" + flowNote + "</td>";
                 listbox += "<td>";
                 listbox += "<a href=\"javascript:Delete('" + flowNo + "','" + workID + "')\">删除</a>";
                 listbox += "</td>";

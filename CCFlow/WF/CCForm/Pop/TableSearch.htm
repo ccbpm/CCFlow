@@ -216,6 +216,9 @@
         function loadViewGrid(gridUrl,paras,sqlWhere) {
             var global = window;
             var json;
+            var myPK = mapExt.MyPK;
+            mapExt = new Entity("BP.Sys.MapExt", mapExt);
+            mapExt.MyPK = myPK;
             if (mapExt.DBType == 0) {
                 json = mapExt.DoMethodReturnString("GetDataTableByField", "Tag2", paras, sqlWhere, GetQueryString("OID"));
                 if (json.indexOf("err@") != -1) {
@@ -380,7 +383,10 @@
                         searchPanel.append(select);
 
                         var ifcData;
-                        if (mapExt.DBType == 0 && condtion.CtrlType=="ListSQL") {
+                        if (mapExt.DBType == 0 && condtion.CtrlType == "ListSQL") {
+                            var myPK = mapExt.MyPK;
+                            mapExt = new Entity("BP.Sys.MapExt", mapExt);
+                            mapExt.MyPK = myPK;
                             ifcData = mapExt.DoMethodReturnString("GetDataTableByTag1", condtion.FieldKey, atParas, GetQueryString("OID"));
                             if (ifcData.indexOf("err@") != -1) {
                                 alert(ifcData);

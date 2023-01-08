@@ -22,7 +22,7 @@ var myvue=new Vue({
             en.Insert();
 
             input.val('');
-            layer.msg("回复成功", { time: 1000 }, function () {
+            layer.msg("提交成功", { time: 1000 }, function () {
                 window.location.reload();
             });
         },
@@ -41,7 +41,7 @@ var myvue=new Vue({
             tag += "<a onclick='SaveAsReply(" + index + ")' id='Renum" + index + "' data-noid=" + No +"  class='layui-btn layui-btn-sm top10'>回复</a>";
             tag += "<a onclick='Closeq(" + index +")'  class='layui-btn layui-btn-primary layui-btn-sm top10'>取消</a>";
             tag += "<a  onclick='UploadFile(" + index +")' class='layui-btn layui-btn-primary layui-btn-sm top10'>上传附件</a>";
-            tag += "<input id='" + index + "' name='" + index+"' type='file' style='visibility: hidden'>"
+            tag += "<input id='" + index + "' name='" + index + "' type='file' onchange='fileChange(event," + index + ")' style='visibility: hidden'>"
             var num = index
             var a = $('.huifu').eq(num).html(tag);
           
@@ -105,9 +105,17 @@ function Closeq(index) {
     var a = $('.huifu').eq(num).html('');
 }
 
-function UploadFile(index) {
-    document.getElementById(index+"").click();
+function fileChange(e, index) {
+    var e = e || window.event;
+    //获取 文件 个数 取消的时候使用
+    var files = e.target.files;
+    if (files.length > 0) {
+        SaveAsReply(index);
+    }
 }
+function UploadFile(index) {
+    document.getElementById(index).click();
+} 
 function obj2arr(obj) {
     delete obj.Paras
     delete obj.ensName

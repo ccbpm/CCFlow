@@ -159,7 +159,45 @@
                 row = JSON.parse(decodeURIComponent(row));
             var url = "./En.htm?EnName=" + enName + "&PKVal=" + pk + "&RefPK=" + GetQueryString("RefKey") + "&RefPKVal=" + GetQueryString("RefVal");
             var windowW = document.body.clientWidth*4/5;
-            OpenLayuiDialog(url, mapData.Name, windowW, 100, "r", true);
+            OpenLayuiDialog(url, mapData.Name, windowW, 100, "r", true, false, false, null, function () {
+                //关闭弹窗时，刷新本页面，如果父页面时En.htm时页需要刷新
+                var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                httpHandler.AddUrlData();  //增加参数属性.
+                var data = httpHandler.DoMethodReturnString("Dtl_Init");
+                if (data.indexOf('err@') == 0) {
+                    $("#Msg").html(data);
+                    return;
+                }
+                //解析json.
+                frmData = JSON.parse(data);
+                layui.table.reload('tableSearch', { data: frmData.Dtls });
+                if (typeof window.parent.vm != "undefined") {
+                    var len = frmData.Dtls.length;
+                    if (window.parent.vm.tabsList.length > window.parent.vm.selectedTabsIndex) {
+                        //修改Tab标签
+                        $.each(window.parent.vm.tabsList, function (i, item) {
+                            if (i == window.parent.vm.selectedTabsIndex) {
+                                item.name = mapData.Name + "(" + len + ")";
+                                item.Title = item.name;
+                            }
+                        })
+                        //修改树形菜单
+                        var dd = $("dd[data-id='" + ensName + "']", window.parent.document);
+                        dd.attr("data-name", mapData.Name + "(" + len + ")");
+                        $(dd.find("a")[0]).find("span").html(mapData.Name + "(" + len + ")");
+                        $.each(window.parent.vm.menuTreeData, function (i,group) {
+                            $.each(group.children, function (k, item) {
+                                if (item.No == ensName) {
+                                    item.name = mapData.Name + "(" + len + ")";
+                                    item.Title = item.name;
+                                    return false;
+                                }
+
+                            })
+                        })
+                    }
+                }
+            });
         }
 
         function GetColoums(data) {

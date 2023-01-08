@@ -17,26 +17,28 @@
                 frmID = GetQueryString("FrmID");
             var md = new Entity("BP.Sys.MapData", frmID);
 
+            var Token = GetQueryString("Token")
+
 
 
             if (md.FrmType == FrmType.FoolForm || md.FrmType == 9  ) {
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
                 handler.AddUrlData();
                 var data = handler.DoMethodReturnString("Designer_CheckFrm");
-                SetHref( "Designer.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
+                SetHref( "Designer.htm?FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random() + "&Token=" +Token );
                 return;
             }
             if (md.FrmType == FrmType.Develop) {
-                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
+                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random() + "&Token=" + Token);
                 return;
             }
             if (md.FrmType == FrmType.FreeFrm) {
-                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
+                SetHref("../DevelopDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random() + "&Token=" + Token);
                 return;
             }
             if (md.FrmType == FrmType.Url) {
                 // return "url@../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.MapDataURL&No=" + this.FK_MapData;
-                SetHref("../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDataURL&No=" + frmID + "&s=" + Math.random());
+                SetHref("../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDataURL&No=" + frmID + "&s=" + Math.random() + "&Token=" + Token);
                 return;
             }
           
@@ -44,7 +46,7 @@
                 SetHref("../../Comm/Ens.htm?EnsName=" + md.PTable);
                 return;
             }
-            SetHref("../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random());
+            SetHref("../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + frmID + "&FrmID=" + frmID + "&s=" + Math.random() + "&Token=" + Token);
 
         });
     </script>

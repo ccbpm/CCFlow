@@ -250,7 +250,7 @@
                                     <div class="layui-input-block" style="margin: 0" :data-id="method.No"
                                          @click="changeMethodEnableStatus(method,this)">
                                         <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
-                                               :checked="parseInt(method.IsEnable) === 1">
+                                               :checked="parseInt(method.IsEnable)== 1?true:false">
                                     </div>
                                 </div>
                             </form>

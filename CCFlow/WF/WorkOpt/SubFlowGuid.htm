@@ -2,8 +2,8 @@
 <head>
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
-    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" defer="defer"
             type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
@@ -47,6 +47,7 @@
                 if (subFlowGuid.SubFlowGuideGroup == null || subFlowGuid.SubFlowGuideGroup == "") {
                     alert("请配置批量启动子流程的分组数据源")
                 }
+                GroupSubFlowGuid(subFlowGuid)
             }
 
             if (subFlowGuid.SubFlowStartModel == 3) {
@@ -56,6 +57,7 @@
                     alert("配置批量启动子流程的SQL语句不包含ParentNo,请联系管理员");
                     return;
                 }
+                TreeSubFlowGuid(subFlowGuid);
             }
         });
         /**
@@ -103,11 +105,20 @@
                 columns: columns
             };
             options.onCheck = function (row, element) {
-                loadSelectGrid(row.No);
+                loadSelectGrid(row.No, row.Name);
 
             };
             options.onUncheck = function (row, element) {
-                remove(row.Name);
+                remove(row.No);
+            };
+            options.onCheckAll = function (rows) {
+                selectedRows = [];
+                rows.forEach(row => {
+                    selectedRows.push({ No: row.No, Name: row.Name });
+                });
+            };
+            options.onUnCheckAll = function (rows) {
+                selectedRows = [];
             };
             $('#listGrid').bootstrapTable(options);
             $("#listGrid").bootstrapTable("load", dt);
@@ -128,7 +139,7 @@
             var html = "";
             //获取分组字段
             var fieldFK = "", groupPK = "";
-            if(groupdt.length != 0 && dt.length != 0){
+            if (groupdt.length != 0 && dt.length != 0) {
                 var idx = 0;
                 for (var obj in groupdt[0]) {
                     if (idx == 0) {
@@ -156,12 +167,12 @@
                 html += "</th>";
                 html += "</tr>";
                 var myNum = -1;
-                for (var idx = 0; idx < dt.length; idx++) {                 
+                for (var idx = 0; idx < dt.length; idx++) {
                     if (dt[fieldFK] != group[groupPK])
                         continue;
 
                     var isHave = false;
-                    
+
                     var lab = en.Name;
                     var checked = "";
                     if (isHave) {
@@ -172,7 +183,7 @@
                     myNum++;
                     if (myNum == 0)
                         html += "<tr>";
-                        html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " onclick='CheckOrUnCheckRow(this,\""+en.No+"\",\""+en.Name+"\")'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                    html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " onclick='CheckOrUnCheckRow(this,\"" + en.No + "\",\"" + en.Name + "\")'/><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
                     if (myNum == showSpan - 1) {
 
@@ -194,7 +205,7 @@
             }
             $("#listGrid").html(html);
 
-          
+
         }
         /**
          * 树形结构的解析
@@ -376,9 +387,9 @@
                     }
                 });
                 if (isHave == false)
-                    selectedRows.push({ "No": no, "Name": name});
+                    selectedRows.push({ "No": no, "Name": name });
             }
-            if(subFlowGuid.SubFlowStartModel == 3)
+            if (subFlowGuid.SubFlowStartModel == 3)
                 $('#selectGrid').bootstrapTable("load", selectedRows);
         }
 
@@ -439,7 +450,7 @@
             handler.AddPara("FK_Flow", GetQueryString("FK_Flow")); // 当前流程.
             handler.AddPara("FID", GetQueryString("FID"));
             handler.AddPara("SelectNos", selectNos); //选择的实体编号，名称.
-            handler.AddPara("SubFlowMyPK", GetQueryString("SubFlowMyPK")); 
+            handler.AddPara("SubFlowMyPK", GetQueryString("SubFlowMyPK"));
             var data = handler.DoMethodReturnString("SubFlowGuid_Send");
             if (data.indexOf("err@") != -1) {
                 alert(data);
@@ -479,7 +490,7 @@
                         <table id="listGrid"></table>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </body>

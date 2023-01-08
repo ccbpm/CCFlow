@@ -20,11 +20,12 @@
 
             var dblist = new Entity("BP.CCBill.DBList", frmID);
             if (dblist.ExpList == null || dblist.ExpList == "") {
-                dblist.ExpList = dblist.ExpEn.replace('~', '\'');
-                dblist.ExpList = dblist.ExpEn.replace('~', '\'');
+                dblist.ExpList = dblist.ExpEn.replace(/~/g, "'");
             }
             if (dblist.ExpCount == null || dblist.ExpCount == "")
                 dblist.ExpCount = dblist.ExpList;
+
+            dblist.ExpList = dblist.ExpList.replace(/~/g, "'");
 
             $("#TB_DBSrc").val(dblist.ExpList);
             $("#TB_ExpCount").val(dblist.ExpCount);
@@ -50,7 +51,7 @@
 
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
-            dblist.ExpList = $("#TB_DBSrc").val();
+            dblist.ExpList = encodeURIComponent($("#TB_DBSrc").val());
             if (dblist.ExpList == "") {
                 alert("列表数据源不能为空");
                 return;

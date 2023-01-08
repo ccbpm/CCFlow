@@ -25,6 +25,7 @@
         });
 
         function Save() {
+
             var name = $("#TB_Name").val();
             var id = $("#TB_No").val();
 
@@ -32,7 +33,7 @@
             var webUser = new WebUser();
 
             func.Name = name;
-            func.FuncID = id;
+            func.FuncID = id; 
 
             if (func.FuncID == "" || func.Name == "") {
                 alert("err@名称与编号不能为空.");

@@ -122,7 +122,20 @@
         StartFrm: function(no, name) {
             var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToRunFrm.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            var en = new Entity("BP.Sys.MapData", no);
+            if (en.EntityType == 0) {
+                layer.alert(en.Name + "是独立表单不能运行");
+                return;
+            }
+            var url = "";
+            if (en.EntityType == 1)
+                url = basePath + "/WF/CCBill/SearchDict.htm?FrmID=" + en.No;
+            if (en.EntityType == 2)
+                url = basePath + "/WF/CCBill/SearchBill.htm?FrmID=" + en.No;
+            if (en.EntityType == 3)
+                url = basePath + "/WF/CCBill/SearchTree.htm?FrmID=" + en.No;
+            
+            //var url = basePath + "/WF/Admin/FoolFormDesigner/GoToRunFrm.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
             window.top.vm.openTab(name, url);
 
@@ -130,11 +143,13 @@
             //  window.top.vm.fullScreenOpen(url, name);
             // this.openLayer(url, name);
         },
-        flowAttr: function(no, name) {
+        flowAttr: function (no, name) {
+            debugger
             var sid = GetQueryString("Token");
             var webUser = new WebUser();
-            var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+            //var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
+            var url = "/WF/Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&PKVal=" + no + "&s=" + Math.random();
             window.top.vm.openTab(name, url);
             //this.openLayer(url, name,900);
         },
@@ -300,7 +315,7 @@
                 if (sameLevel == true) {
                     data = en.DoMethodReturnString("DoCreateSameLevelNodeIt", value);
                 } else {
-                    data = en.DoMethodReturnString("DoCreateSubNodeMy", value);
+                    data = en.DoMethodReturnString("DoCreateSubFormNodeMy", value);
                 }
 
                 layer.msg("创建成功" + data);
@@ -372,7 +387,10 @@
             event.preventDefault();
             event.stopPropagation();
         }
-
+        var webUser = new WebUser();
+        if (webUser.CCBPMRunModel == 1) {
+            window.location.href = window.location.href.replace("Frms.htm", "FrmTree.htm");
+        }
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
         var fss = handler.DoMethodReturnJSON("Frms_InitSort");
 

@@ -175,9 +175,11 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
         "FK_MapData": mapExt.FK_MapData,
         "KeyOfEn": mapExt.AttrOfOper,
         "RefPKVal": pkval,
-        "onUnselect": function (record) {
+        "elemId": mtagsId,
+        "onUnselect": function (target,record) {
             Delete_FrmEleDB(mapExt.AttrOfOper, pkval, record.No);
-
+            var elemId = mapExt.AttrOfOper + "_mtags";
+            $("#TB_" + mapExt.AttrOfOper).val($("#" + elemId).mtags("getText"));
         }
     });
 
@@ -214,6 +216,7 @@ function OpenPopFunction(mapExt, mapExts, mtagsId, target, targetID, pkval, popt
             break;
         case "PopSelfUrl":
             url = mapExt.Tag;
+            url = DealExp(mapExt.Tag);
             if (url.indexOf('?') == -1)
                 url = url + "?PKVal=" + pkval + "&UserNo=" + webUser.No;
             break;
@@ -243,8 +246,12 @@ function CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval)
     if (iframe.length > 0) {
        // debugger
         var selectedRows = iframe[0].contentWindow.selectedRows;
-        if (selectedRows == undefined || selectedRows.length == 0)
-            selectedRows = iframe[0].contentWindow.GetCheckNodes()
+        if (selectedRows == undefined || selectedRows.length == 0) {
+            if (typeof iframe[0].contentWindow.GetCheckNodes != 'undefined' && typeof iframe[0].contentWindow.GetCheckNodes == "function")
+                selectedRows = iframe[0].contentWindow.GetCheckNodes();
+            if (typeof iframe[0].contentWindow.Btn_OK != 'undefined' && typeof iframe[0].contentWindow.Btn_OK == "function")
+                selectedRows = iframe[0].contentWindow.Btn_OK();
+        }
         if ($.isArray(selectedRows)) {
             //保存selectedRows的信息
             SaveFrmEleDBs(selectedRows, mapExt.AttrOfOper, mapExt, pkval);
@@ -271,23 +278,23 @@ function CloseLayuiDialogFunc(mapExt, mapExts, mtagsId, target, targetID, pkval)
                 if (backFunc != null && backFunc != "" && backFunc != undefined)
                     DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
             }
-            else {
-                $.each(mapExts[attrMyPK], function (idx, mapExt1) {
-                    var mapExtN = new Entity("BP.Sys.MapExt", mapExt1);
-                    mapExtN.MyPK = mapExt1.MyPK;
-                    //填充其他控件
-                    switch (mapExtN.ExtType) {
-                        case "FullData": //填充其他控件
-                            DDLFullCtrl(No.substring(0, No.length - 1), mapExtN.AttrOfOper, mapExtN.MyPK);
+            //else {
+            //    $.each(mapExts[attrMyPK], function (idx, mapExt1) {
+            //        var mapExtN = new Entity("BP.Sys.MapExt", mapExt1);
+            //        mapExtN.MyPK = mapExt1.MyPK;
+            //        //填充其他控件
+            //        switch (mapExtN.ExtType) {
+            //            case "FullData": //填充其他控件
+            //                DDLFullCtrl(No.substring(0, No.length - 1), mapExtN.AttrOfOper, mapExtN.MyPK);
 
-                            break;
-                    }
-                });
-                //执行JS
-                var backFunc = mapExt.Tag5;
-                if (backFunc != null && backFunc != "" && backFunc != undefined)
-                    DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
-            }
+            //                break;
+            //        }
+            //    });
+            //    //执行JS
+            //    var backFunc = mapExt.Tag5;
+            //    if (backFunc != null && backFunc != "" && backFunc != undefined)
+            //        DBAccess.RunFunctionReturnStr(DealSQL(backFunc, No));
+            //}
         }
     }
 }

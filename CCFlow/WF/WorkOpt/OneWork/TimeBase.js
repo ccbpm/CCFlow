@@ -302,8 +302,13 @@ function InitPage() {
                 var timeLeft = GetSpanTime(timeDot, toTimeDot);
 
                 if (timeLeft != 'NaN秒') {                  
-                    doc += "<span>还剩余:<font color=green>";
-                    doc += timeLeft+'</font></span>';
+                    if (timeLeft.startsWith('-')) {
+                        doc += "<span>已超时:<font color=red>";
+                        doc += timeLeft.substring(1, timeLeft.length) + '</font></span>'
+                    } else {
+                        doc += "<span>还剩余:<font color=green>";
+                        doc += timeLeft + '</font></span>'
+                    };
                 }
                 doc += "</p>";
                 var nodeSubFlows = $.grep(subFlows, function (subFlow) {

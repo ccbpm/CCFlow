@@ -14,7 +14,7 @@
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
         var userNo = GetQueryString("UserNo");
-        var token = GetQueryString("Token");
+        var token = GetQueryString("Token") ||GetQueryString("Token");
 
         var tester = GetQueryString("Tester");
 
@@ -33,14 +33,15 @@
             }
 
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-
+            var adminToken = GetQueryString("AdminToken") || localStorage.getItem("AdminToken");
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddUrlData();
+            handler.AddPara("Token", adminToken);
+            handler.AddPara("UserNo", GetQueryString("UserNo"));
             handler.DoMethodReturnString("Default_LetAdminerLogin");
-            window.parent.InitPageUserInfo();
+            window.parent.InitPageUserInfo(adminToken);
 
-
+            handler.AddUrlData();
             var ens = handler.DoMethodReturnJSON("SelectOneUser_Init");
 
             //   var webUser = new WebUser();
@@ -166,7 +167,7 @@
             var adminer = GetQueryString("Adminer");
             handler.AddPara("Adminer", adminer);
 
-            var AdminerToken = GetQueryString("AdminerToken");
+            var AdminerToken = GetQueryString("AdminerToken") || localStorage.getItem("AdminToken");
             handler.AddPara("AdminerToken", AdminerToken);
 
             var orgNo = GetQueryString("OrgNo");
@@ -176,8 +177,8 @@
             if (orgNo != webUser.OrgNo) {
                 alert(" 系统错误: " + orgNo + " curr:" + webUser.OrgNo + ", 出现了组织结构编号不一致.");
                 return;
-            }
 
+            }
             handler.AddPara("OrgNo", orgNo);
 
             var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
@@ -185,13 +186,14 @@
                 alert(data);
                 return;
             }
+            localStorage.setItem("Token", data);
             if (isMobile == 1)
-                window.open('../../../CCMobile/MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+                window.open('../../../CCMobile/MyFlow.htm?Token='+data+'&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
             else
-                window.open('../../MyFlow.htm?FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+                window.open('../../MyFlow.htm?Token=' + data +'&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
 
 
-            window.parent.InitPageUserInfo();
+            window.parent.InitPageUserInfo(data);
         }
 
         function GetWFState(wfstate) {
@@ -231,9 +233,5 @@
         <div id="gwls"></div>
 
     </center>
-
-
-
-
 </body>
 </html>

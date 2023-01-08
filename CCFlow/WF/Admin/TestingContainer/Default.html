@@ -16,7 +16,7 @@
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/bootstrap/BootstrapUIDialog.js"></script>
-   
+
     <script src="../Guide/Guide.js"></script>
     <script language="javascript" type="text/javascript">
         var workID = 0;
@@ -32,10 +32,6 @@
             var flow = new Entity("BP.WF.Flow", flowNo);
             document.title = "测试容器:" + flow.Name;
 
-            //var adminer = GetQueryString("Adminer"); //管理员.
-            var token = GetQueryString("Token"); //管理员SID.
-            var userNo = GetQueryString("UserNo"); //要登录的用户
-
             //第一次加载,如果没有传递过来workid.
             workID = GetQueryString("WorkID");
             if (workID == undefined || workID == null) {
@@ -48,7 +44,6 @@
                     var url = 'error.htm?err=' + workID;
 
                     confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
-                    // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
                     window.close();
                 }
                 var webUser = new WebUser()
@@ -56,54 +51,58 @@
                 document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
 
             } else {
-                //urlEnd += "&WorkID=" + workID;
                 workID = GetQueryString("WorkID");
                 SelectOneUser();
-                //document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
             }
 
         });
 
 
         function GenerUrlEnd() {
-            var AdminerToken = GetQueryString("AdminerToken");
+            var adminerToken = GetQueryString("AdminToken") || localStorage.getItem("AdminToken");
 
             //定义变量.
-            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No + "&AdminerToken=" + AdminerToken + "&OrgNo=" + webUser.OrgNo;
+            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No+ "&OrgNo=" + webUser.OrgNo;
             urlEnd += "&Adminer=" + GetQueryString("Adminer");
+            urlEnd += "&AdminToken=" + adminerToken;
             urlEnd += "&Token=" + webUser.Token;
             return urlEnd;
         }
         // 发送成功后刷新页面进入切换用户页面
         function refreshRight() {
+            debugger
             $("#J_iframe").attr('src', "SelectOneUser.html?1=2" + GenerUrlEnd());
         }
 
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
-            // var adminer = GetQueryString("Adminer"); //管理员.
-            var sid = GetQueryString("Token"); //管理员SID.
+            var token = GetQueryString("AdminToken") || localStorage.getItem("AdminToken") ; //管理员SID.
             var userNo = GetQueryString("UserNo"); //管理员SID.
 
-            if (sid == null || sid == "null") {
-                alert("系统错误，丢失了登录信息SID,请重新登录。");
+            if (token == null || token == "null") {
+                alert("系统错误，丢失了登录信息 token ,请重新登录。");
                 return;
             }
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddPara("Token", sid);
+            handler.AddPara("Token", token);
             handler.AddPara("UserNo", userNo);
 
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
-            if (data.indexOf('err@') == 0)
-            {
+            if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
-              //  data = GetQueryString("UserNo");
             }
-
-            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&UserNo=" + data + "&Token=" + sid;
+            var userNo = "";
+            try {
+                data = JSON.parse(data);
+                userNo = data.EmpNo;
+            } catch (e) {
+                userNo = data;
+            }
+            localStorage.setItem("Token", token);
+            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&UserNo=" + userNo;
             SetHref(url);
             return;
 
@@ -112,16 +111,26 @@
 
 
         //页面启动函数.
-        //var adminer = GetQueryString("Adminer"); //管理员.
-        var sid = GetQueryString("Token"); //管理员SID.
+        var sid = GetQueryString("AdminToken") || localStorage.getItem("AdminToken"); //管理员SID.
         // var workID = GetQueryString("WorkID");
         var userNo = GetQueryString("UserNo");
         var flowNo = GetQueryString("FK_Flow");
         // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Token=" + sid;
-        function InitPageUserInfo() {
-
+        function InitPageUserInfo(token) {
+            token = token || "";
+          
             //先设置缓存为空.
             webUserJsonString = null;
+            if (token !="") {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+                handler.AddPara("Token", token);
+                var data = handler.DoMethodReturnString("WebUser_Init");
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+                webUserJsonString = JSON.parse(data);
+            }
             var webUser = new WebUser();
 
             var html = "<table style='width:100%;'>";
@@ -186,6 +195,63 @@
         }
         function chageFramPage(obj) {
             var url = $(obj).attr('data-info');
+
+        
+            // var adminer = GetQueryString("Adminer"); //管理员.
+            var token = GetQueryString("AdminToken") || localStorage.getItem("AdminToken"); //管理员SID.
+            var userNo = GetQueryString("UserNo"); //管理员SID.
+            if (token == null || token == "null") {
+                alert("系统错误，丢失了登录信息 token ,请重新登录。");
+                return;
+            }
+            //访问后台，获得一个工作ID.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+            handler.AddPara("Token", token);
+            handler.AddPara("UserNo", userNo);
+            var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
+
+            //先设置缓存为空.
+            webUserJsonString = null;
+            var webUser = new WebUser();
+
+            var html = "<table style='width:100%;'>";
+            html += "<caption><a href='javascript:LetAdminerLogin();' >返回流程设计器 </a></caption>";
+            html += "<tr>";
+            html += "<td colspan=2 style='text-align:center'>";
+            html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
+            html += "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>帐号</td>";
+            html += "<td>" + webUser.No + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>用户</td>";
+            html += "<td>" + webUser.Name + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td>部门</td>";
+            html += "<td>" + webUser.FK_DeptName + "</td>";
+            html += "</tr>";
+            html += "</table>";
+
+            $("#userInfo").html(html);
+
+
+            //   InitPageUserInfo();
+
+            //if (data.indexOf('err@') == 0) {
+            //    alert(data);
+            //    return;
+            //    //  data = GetQueryString("UserNo");
+            //}
+
+            //if (url.indexOf("SelectOneUser") == 0 || url.indexOf("SelectOneUser") == 0 )
+
+
             $("#J_iframe").attr('src', url + GenerUrlEnd());
             return false
         }
@@ -195,25 +261,6 @@
         function Restart() {
 
             webUserJsonString = null;
-
-
-            //if (window.confirm('您确认要使用[' + userNo + ']创建一个新的流程吗？') == false)
-            //    return;
-            // 使用最初用户登录
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
-            handler.AddPara("FK_Emp", userNo);
-            //handler.AddPara("WorkID", workID);
-            //handler.AddPara("Adminer", adminer);
-            handler.AddPara("Token", sid);
-
-            var webUser = new WebUser();
-            $("#userInfo").html(webUser.No + "," + webUser.Name);
-            var data = handler.DoMethodReturnString("SelectOneUser_ChangUser");
-
-            // 进入流程页面
-            //var url = "Default.html?RunModel=1&FK_Flow=" + flowNo + "&Token=" + sid + "&UserNo=" + userNo;
-            // SetHref(url);
-            //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Default_Init");
@@ -221,11 +268,10 @@
                 var url = 'error.htm?err=' + workID;
 
                 confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
-                // window.open(url, '错误信息', 'height=500,width=600,top=200,left=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
                 window.close();
             }
             workID = data;
-
+            localStorage.setItem("Token", "");
             InitPageUserInfo();
             document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
         }

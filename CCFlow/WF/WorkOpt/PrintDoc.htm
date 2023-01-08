@@ -69,11 +69,11 @@
 
                 data = data.replace('url@', '');
                 if (data.indexOf('rtf@') != -1) {
-                    window.location.href = data.replace('rtf@', '');
+                    window.location.href = filterXSS(data).replace('rtf@', '');
                 } else {
                     data = data.replace('word@', '');
                     if (plant == 'CCFlow') {
-                        data += ",WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                        data += ",WSUrl=" + basePath + + "/WF/CCForm/CCFormAPI.asmx";
                     }
                     if (plant == "JFlow") {
                         alert('还没有翻译.');
@@ -91,8 +91,7 @@
                 var html = "<ul>";
                 for (var i = 0; i < ens.length; i++) {
                     var en = ens[i];
-                    //  html += "<li ><a href='?FK_Bill=" + en.No + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&WorkID=" + workID + "'>" + en.Name + "</li>";
-                    html += "<li><a href='javascript:void(0);' onclick=PrintIt(\"" + en.MyPK + "\",\"" + flowNo + "\"," + nodeID + "," + workID + "," + fid + ",\"" + en.FK_MapData + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
+                    html += "<li><a href='javascript:void(0);' onclick=PrintIt(\"" + en.MyPK + "\",\"" + flowNo + "\"," + nodeID + "," + workID + "," + fid + ",\"" + en.FrmID + "\",\"" + en.TemplateFileModel + "\") >" + en.Name + "</li>";
                 }
 
                 html += "</ul>";
@@ -150,12 +149,12 @@
 
                 data = data.replace('url@', '');
                 if (data.indexOf('rtf@') != -1) {
-                    window.location.href = data.replace('rtf@', '');
+                    window.location.href = filterXSS(data).replace('rtf@', '');
                     return;
                 } else {
                     data = data.replace('word@', '');
                     if (plant == 'CCFlow' && printModal == 1) {
-                        data += "?WSUrl=http://" + window.location.host + "/WF/CCForm/CCFormAPI.asmx";
+                        data += "?WSUrl=" + basePath + "/WF/CCForm/CCFormAPI.asmx";
                     }
                     if (plant == "JFlow") {
                         alert('还没有翻译.');

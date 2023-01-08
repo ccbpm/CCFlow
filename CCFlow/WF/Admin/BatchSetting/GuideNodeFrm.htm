@@ -80,13 +80,12 @@
         function NodeFrmD(nodeID) {
 
             var node = new Entity("BP.WF.Node", nodeID);
-            if (node.FormType == 1 || node.FormType == 0) { //自由表单，傻瓜表单.
+            if (node.FormType == 1 || node.FormType == 0 ||node.FormType == 10) { //自由表单，傻瓜表单.
                 //傻瓜表单.
                 var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
                 url += "&UserNo=" + GetQueryString("UserNo");
                 url += "&Token=" + GetQueryString("Token");
                 OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
-                // SetHref(url);
                 return;
             }
 
@@ -97,7 +96,6 @@
                 url += "&Token=" + GetQueryString("Token");
 
                 OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
-                //window.location.href = url;
                 return;
             }
 
@@ -109,13 +107,15 @@
                 var url = basePath + "/WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeExt&MyPK=" + myPK + "&Lang=CH";
 
                 OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
-                //window.location.href = url;
-                //NodeFrmRefOneFrmTree(nodeID);
                 return;
             }
             if (node.FormType == 5) {
                 var url = "../Sln/BindFrms.htm?FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow");
                 OpenLayuiDialog(url, "设计表单" + nodeID, window.innerWidth * 0.9);
+                return;
+            }
+            if (node.FormType == 3) {
+                layer.alert("SDK表单，客户自己的表单无需设计");
                 return;
             }
             alert(node.FormType);

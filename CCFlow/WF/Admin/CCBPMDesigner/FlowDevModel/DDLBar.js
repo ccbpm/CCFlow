@@ -39,7 +39,7 @@ function InitBar(optionKey) {
 
     var from = GetQueryString("From");
 
-    if (from == "Flows.htm")
+    if (from == "Flows.htm" || from=="FlowTree.htm")
         html += "<input  id='Btn_Save'class='cc-btn-tab' type=button onclick='Save()' value='创建流程' />";
 
     document.getElementById("bar").innerHTML = html;
@@ -53,7 +53,8 @@ function InitBar(optionKey) {
 function Save() {
 
     var newFlowInfo = getNewFlowInfo();
-    if (newFlowInfo.FlowFrmModel == FlowDevModel.RefOneFrmTree && newFlowInfo.FrmID == "") {
+    if ((newFlowInfo.FlowFrmModel == FlowDevModel.RefOneFrmTree
+        || newFlowInfo.FlowFrmModel == FlowDevModel.FrmTree)&& newFlowInfo.FrmID == "") {
         alert("请选择绑定的表单");
         return;
     }
@@ -96,8 +97,8 @@ function GetDBGroup() {
         //{ "No": "B", "Name": "服务的模式" },
         { "No": "C", "Name": "绑定表单库模式" },
         { "No": "D", "Name": "自定义表单模式" },
-        { "No": "E", "Name": "物联网流程模式" },
-        { "No": "F", "Name": "敏捷应用" }
+        { "No": "E", "Name": "物联网流程模式" }
+        /*{ "No": "F", "Name": "敏捷应用" }*/
 
     ];
     return json;
@@ -117,9 +118,9 @@ function GetDBDtl() {
         { "No": 5, "Name": "SDK表单", "GroupNo": "D", "Url": "5.SDKFrm.htm" },
         { "No": 6, "Name": "嵌入式表单", "GroupNo": "D", "Url": "6.SelfFrm.htm" },
         { "No": 7, "Name": "物联网流程", "GroupNo": "E", "Url": "7.InternetOfThings.htm" },
-        { "No": 8, "Name": "决策树模式", "GroupNo": "E", "Url": "8.Tree.htm" },
-        { "No": 9, "Name": "实体(车辆、固定资产)", "GroupNo": "F", "Url": "9.Dict.htm" },
-        { "No": 10, "Name": "单据(车辆维修记录、固资使用记录)", "GroupNo": "F", "Url": "10.Bill.htm" }
+        { "No": 8, "Name": "决策树模式", "GroupNo": "E", "Url": "8.Tree.htm" }
+        //{ "No": 9, "Name": "实体(车辆、固定资产)", "GroupNo": "F", "Url": "9.Dict.htm" },
+        //{ "No": 10, "Name": "单据(车辆维修记录、固资使用记录)", "GroupNo": "F", "Url": "10.Bill.htm" }
 
     ];
     return json;

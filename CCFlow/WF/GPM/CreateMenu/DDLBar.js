@@ -49,8 +49,8 @@ function GetDBDtl() {
         { "No": "Tabs", "Name": "Tabs页面容器", "GroupNo": "A", "Url": "Tabs.htm", "Icon": "icon-note" },
         { "No": "Rpt3D", "Name": "3维报表", "GroupNo": "A", "Url": "Rpt3D.htm", "Icon": "icon-note" },
 
-        { "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm", "Icon": "icon-note" },
-        { "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm", "Icon": "icon-note" },
+        /*{ "No": MenuModel.FlowUrl, "Name": "内置流程菜单", "GroupNo": "A", "Url": "FlowUrl.htm", "Icon": "icon-note" },*/
+        /*{ "No": MenuModel.Func, "Name": "独立功能(方法)页", "GroupNo": "A", "Url": "Func.htm", "Icon": "icon-note" },*/
         { "No": MenuModel.Dict, "Name": "创建实体", "GroupNo": "B", "Url": "Dict.htm", "Icon": "icon-note" },
         { "No": "DBList", "Name": "数据源实体", "GroupNo": "B", "Url": "DBList.htm", "Icon": "icon-note" },
 

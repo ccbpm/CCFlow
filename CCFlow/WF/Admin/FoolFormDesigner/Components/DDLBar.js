@@ -169,7 +169,7 @@ function changeOption() {
             break;
     }
 
-    SetHref("/WF/Admin/FoolFormDesigner/Components/" + roleName + "?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmType=" + frmType);
+    SetHref("./" + roleName + "?FK_MapData=" + GetQueryString("FK_MapData") + "&FrmType=" + frmType);
 }
 
 
@@ -765,10 +765,45 @@ function ExtScore() {
 }
 //大块文本
 function ExtBigNoteHtmlText() {
-    //增加大文本
-    if (window.confirm('您确认要创建吗？') == false)
+    var name = promptGener('请输入字段名','大块提示文本');
+    if (name == null || name == undefined || name.trim() == "")
         return "";
-    SetHref("../EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + fk_mapData);
+
+    var frmID = fk_mapData;
+    var mapAttrs = new Entities("BP.Sys.MapAttrs");
+    mapAttrs.Retrieve("FK_MapData", frmID, "Name", name);
+    if (mapAttrs.length >= 1) {
+        alert('名称：[' + name + "]已经存在.");
+        ExtLink();
+        return "";
+    }
+
+    //获得ID.
+    var id = StrToPinYin(name);
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.MyPK = mypk;
+    if (mapAttr.IsExits == true) {
+        alert('名称：[' + name + "]已经存在.");
+        ExtBigNoteHtmlText();
+        return "";
+    }
+
+    
+    var mypk = frmID + "_" + id;
+    var mapAttr = new Entity("BP.Sys.MapAttr");
+    mapAttr.UIContralType = 60; //大块文本.
+    mapAttr.FK_MapData = frmID;
+    mapAttr.Name = name;
+    mapAttr.KeyOfEn = id;
+    mapAttr.MyDataType = 1;
+    mapAttr.LGType = 0;
+    mapAttr.ColSpan = 4; //
+    mapAttr.UIWidth = 0;
+    mapAttr.UIHeight = 100;
+    mapAttr.Idx = 0;
+    mapAttr.Insert(); //插入字段.
+    SetHref("../EditFExtContral/60.BigNoteHtmlText.htm?FrmID=" + fk_mapData + "&KeyOfEn=" + id);
 }
 
 //手写签名版.
@@ -957,6 +992,8 @@ function ExtImg() {
     en.FK_MapData = frmID;
     en.GroupID = mapAttr.GroupID; //设置分组列.
     en.Name = name;
+    en.UIWidth = 150;
+    en.UIHeight = 170;
     en.Insert(); //插入到数据库.
     if (frmType != 8)
         SetHref("../../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.ExtImg&MyPK=" + en.MyPK);
@@ -1092,9 +1129,9 @@ function CreateDtl() {
         return;
     }
     if (frmType != 8)
-        SetHref('../../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&FK_MapData=' + fk_mapData + '&No=' + data);
+        SetHref('../../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&FK_MapData=' + fk_mapData + '&No=' + en.No);
     if (frmType == 8)
-        return GetHtmlByMapAttrAndFrmComponent(data, 80);
+        return GetHtmlByMapAttrAndFrmComponent( en.No, 80);
 }
 
 function CreateFrame() {

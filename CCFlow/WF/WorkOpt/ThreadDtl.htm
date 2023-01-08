@@ -3,7 +3,7 @@
 <head>
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
-    <script language="JavaScript" src="/WF/Comm/JS/Calendar/WdatePicker.js" defer="defer"
+    <script language="JavaScript" src="../Comm/JS/Calendar/WdatePicker.js" defer="defer"
             type="text/javascript"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="../Img/ccbpm.ico" type="image/x-icon" />
@@ -84,7 +84,7 @@
                 var en = new Entity("BP.WF.GenerWorkFlow", workid);
                 var data = en.DoMethodReturnString("DoSubFlowAddEmps", empNo);
                 alert(data);
-                window.location.href = window.location.href;
+                Reload();
                 return;
             }
 
@@ -281,7 +281,7 @@
                 if (data.indexOf('FromWorkOpt') == -1)
                     data = data + "&FromWorkOpt=1";
 
-                //window.location.href = data;
+                //window.location.href = filterXSS(data);
                 window.open(data);
                 return;
             }
@@ -300,7 +300,7 @@
             handler.AddPara("WorkID", workID);
 
             var data = handler.DoMethodReturnString("ThreadDtl_DelSubThread");
-            window.location.href = window.location.href;
+            Reload();
         }
 
     </script>

@@ -180,6 +180,11 @@
                             contextmenu.bindings = defaults.processMenus;
 
                             var nodeID = document.getElementById("leipi_active_id");
+                            if (nodeID.value.indexOf("S_") != -1) {
+                               // $(this).contextMenu('processMenu', contextmenu);
+                                return;
+                            }
+                               
                             var node = new Entity("BP.WF.Node", nodeID.value);
                             //如果是第一个节点，把接收人规则文字换成可启动流程的人员
                             if (nodeID.value.substr(nodeID.value.length - 2) == "01")
@@ -336,7 +341,7 @@
                 var flowNo = GetQueryString("FK_Flow");
                 var url = "";
                 if (GetHrefUrl().indexOf("/WF/Admin/CCBPMDesigner") == -1)
-                    url = "/WF/Admin/";
+                    url = basePath + "/WF/Admin/";
                 else
                     url = "../";
                 url += "Cond2020/ConditionLine.htm?FK_Flow=" + flowNo + "&FK_MainNode=" + fromNodeID + "&FK_Node=" + fromNodeID + "&ToNodeID=" + targetId + "&CondType=2&Lang=CH&t=" + new Date().getTime();

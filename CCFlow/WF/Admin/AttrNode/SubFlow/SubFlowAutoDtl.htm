@@ -62,8 +62,8 @@
                 var en = dt[i];
 
                 html += "<tr>";
-
-                html += "<td>" + en.OrgNo + "</td>";
+                var orgNo = en.OrgNo || "";
+                html += "<td>" + orgNo + "</td>";
                 // html += "<td>" + en.FK_FlowSortText + "</td>";
                 html += "<td>" + en.No + "</td>";
                 html += "<td>" + en.Name + "</td>";

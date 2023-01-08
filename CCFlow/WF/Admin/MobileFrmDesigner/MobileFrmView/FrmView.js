@@ -228,7 +228,7 @@ function Change() {
 
 
 function To(url) {
-    //window.location.href = url;
+    //window.location.href = filterXSS(url);
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }
 
@@ -834,7 +834,7 @@ function figure_Template_ImageAth(frmImageAth) {
     var eleHtml = $("<div></div>");
     var img = $("<img/>");
 
-    var imgSrc = "/WF/Data/Img/LogH.PNG";
+    var imgSrc = basePath +  "/WF/Data/Img/LogH.PNG";
     //获取数据
     if (frmData.Sys_FrmImgAthDB) {
         $.each(frmData.Sys_FrmImgAthDB, function (i, obj) {
@@ -845,14 +845,14 @@ function figure_Template_ImageAth(frmImageAth) {
     }
     //设计属性
     img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
-    img.attr("src", imgSrc).attr('onerror', "this.src='/WF/Data/Img/LogH.PNG'");
+    img.attr("src", imgSrc).attr('onerror', "this.src='../../../Data/Img/LogH.PNG'");
     img.css('width', frmImageAth.W).css('height', frmImageAth.H).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
     //不可编辑
     if (isEdit == "1") {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = "/WF/CCForm/ImgAth.aspx?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = basePath + "/WF/CCForm/ImgAth.aspx?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');

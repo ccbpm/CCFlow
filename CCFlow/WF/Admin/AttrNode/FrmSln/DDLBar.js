@@ -32,7 +32,7 @@ function InitBar(optionKey) {
 
 
     html += "<option value=null  disabled='disabled'>+绑定表单库里的表单</option>";
-    html += "<option value=" + FormSlnType.RefOneFrmTree + " >&nbsp;&nbsp;绑定表单库的表单</option>";
+    html += "<option value=" + FormSlnType.RefOneFrmTree + " >&nbsp;&nbsp;绑定单表单</option>";
     html += "<option value=" + FormSlnType.SheetTree + " >&nbsp;&nbsp;绑定多表单(表单树)</option>";
 
     html += "</select >";
@@ -45,8 +45,6 @@ function InitBar(optionKey) {
 
     //  html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
     html += "<button  id='Btn_Help' type=button onclick='HelpOnline()' value='在线帮助' />在线帮助</button>";
-
-
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");

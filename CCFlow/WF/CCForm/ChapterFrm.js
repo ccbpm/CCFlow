@@ -563,7 +563,7 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                         eleHtml += "</div>";
                         return eleHtml;
                     case 6://字段附件
-                        return getFieldAth(mapAttr);
+                        return getFieldAth(mapAttr,frmData.Sys_FrmAttachment);
 
                     case 8://写字板
                         var imgPath = "../";

@@ -1,7 +1,7 @@
 ﻿//设置
 function SetEntity() {
     var fk_MapData = $("#EnNo").val();
-    var url = "/WF/Admin/FoolFormDesigner/Rpt/Frm_ColsChose.aspx?FK_MapData=" + fk_MapData;
+    var url = basePath +"/WF/Admin/FoolFormDesigner/Rpt/Frm_ColsChose.aspx?FK_MapData=" + fk_MapData;
     $("<div id='dialogEnPanel'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
         title: "窗口",
         width: 800,

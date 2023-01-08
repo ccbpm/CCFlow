@@ -293,13 +293,27 @@
                                 eleDom = $(treelist[index]).find(".rate");
                             }
                         }
+                        
                     })
-
+                    showType(group, Tree_set)
                 }
                 treeSet();
             });
 
-            
+            function showType(group, Tree_set) {
+                let n = 0;
+                group.forEach((item, index) => {
+                    if (item.ShowType == 2) {
+                        n = n + 1;
+                        const Id = item.OID;
+                        console.log($(`#Pnode${Id}`))
+                        $(`#Pnode${Id}`).hide()
+                    }
+                })
+                if (n == group.length) {
+                    $("#menuShow").hide()
+                }
+            }
 
             function ChapterFrmShow(attrKey) {
                 InitPara();
@@ -552,7 +566,7 @@
 
 <body id="content" style="overflow:hidden">
     <!--startprint1-->
-    <div class="layui-row padding-5">
+    <div class="layui-row">
         <div class="layui-col-sm3 layui-col-md3 layui-col-xs3">
             <div class="layui-tab layui-tab-brief" lay-filter="docTabBrief">
                 <!-- <div class="layui-tab-title">

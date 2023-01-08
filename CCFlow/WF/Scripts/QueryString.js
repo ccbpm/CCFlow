@@ -10,12 +10,15 @@ function getQueryString() {
 //Other
 function GetQueryString(name) {
 
+    if(typeof name === 'string' && name.toLocaleLowerCase() === 'token') {
+        return filterXSS(localStorage.getItem("Token"))
+    }
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 
     var r = window.location.search.substr(1).match(reg);
 
     if (r != null)
-        return decodeURI(r[2]);
+        return filterXSS(decodeURI(r[2]));
     return null;
 
 }

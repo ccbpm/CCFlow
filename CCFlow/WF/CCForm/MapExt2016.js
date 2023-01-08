@@ -901,14 +901,6 @@ function hiddiv() {
     $("#divinfo").css("display", "none");
 }
 
-// 获取参数.
-function GetQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null)
-        return decodeURI(r[2]);
-    return null;
-}
 //通过正则表达式检测
 function CheckInput(oInput, filter) {
     var re = filter;

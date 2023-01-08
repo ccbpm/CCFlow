@@ -462,6 +462,9 @@
             SetHref('SearchKey.htm?s=' + Math.random());
         }
 
+        function SettingMobile() {
+            SetHref("../Default.htm??IsTest=1&FrmID=" + GetQueryString("FrmID") + "&PageFrom=Mobile");
+        }
     </script>
     <style type="text/css">
         body {
@@ -524,8 +527,9 @@
 
 </head>
 <body>
+   
     <div class="mui-body">
-
+        <div style="margin-left:439px"><button type="button" class="mui-btn mui-btn-primary" onclick="SettingMobile()">设置</button></div>
         <div id="app" class="mui-views">
             <div class="mui-view">
                 <div class="mui-navbar">

@@ -163,6 +163,7 @@
                             <ul>
                                 <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
                                 <li>SQL格式为:</li>
+                                <li>$Para=FK_Dept#Label=部门#ListSQL=Select No,Name FROM Port_Dept </li>
                                 <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
                                 <li>$Para=XB#Label=性别#EnumKey=XB</li>
                                 <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
@@ -190,7 +191,8 @@
                                 <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
                                 <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
                                 <li>
-                                    比如For SQLServer: SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
+                                    比如For SQLServer:<br>
+                                    SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by
                                     t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student WHERE Name LIKE '%@Key%'
                                     ) A WHERE rownumber > @PageCount
                                     <br />

@@ -61,6 +61,7 @@
                 changeCond($("#DDL_Fields")[0]);
                 $("#DDL_Operator").val(getOperText(cond.FK_Operator));
                 $("#TB_Val").val(cond.OperatorValue);
+                $("#DDL_Val").val(cond.OperatorValue);
             }
 
 
@@ -225,8 +226,7 @@
             var data = flow.DoMethodReturnString("DoCheck");
 
             $("#Btn_Check").attr('value', '检查成功，请设置条件');
-
-            alert("执行成功...")
+            alert("执行成功...");
             return;
 
             WinOpen(url);

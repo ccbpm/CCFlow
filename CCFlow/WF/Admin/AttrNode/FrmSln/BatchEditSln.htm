@@ -20,6 +20,7 @@
 
     <script type="text/javascript">
         var nodeID = GetQueryString("NodeID");
+        var frmID = GetQueryString("FrmID");
         $(function () {
             if (window.parent.location.href.indexOf("En.htm") != -1)
                 $("#backLink").hide();
@@ -31,7 +32,7 @@
 
             //节点对应关系.
             var frmNodes = new Entities("BP.WF.Template.FrmNodes");
-            frmNodes.Retrieve("FK_Flow", node.FK_Flow);
+            frmNodes.Retrieve("FK_Flow", node.FK_Flow, "FK_Frm", frmID);
 
             var html = "<table class='table'>";
             html += "<thead>";
@@ -39,7 +40,7 @@
             html += "<th>#</th>";
             html += "<th>节点ID</th>";
             html += "<th>名称</th>";
-            html += "<th>表单ID</th>";
+            //   html += "<th>表单ID</th>";
             html += "<th>控制方案</th>";
             html += "<th>签批组件</th>";
             html += "<th>组件状态</th>";
@@ -62,15 +63,15 @@
                 var frmNode = null;
                 for (var idx = 0; idx < frmNodes.length; idx++) {
                     var en = frmNodes[idx];
-                    if (en.FK_Node != json.NodeID)
+                    if (parseInt(en.FK_Node) != parseInt(json.NodeID))
                         continue;
-                    frmNode = en;
 
+                    frmNode = en;
                     html += "<tr>";
                     html += "<td>" + (i + 1) + "</td>";
                     html += "<td>" + json.NodeID + "</td>";
                     html += "<td>" + json.Name + "</td>";
-                    html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
+                    //     html += "<td><a href=\"javascript:EditFrm('" + frmNode.FK_Frm + "')\" >" + frmNode.FK_Frm + "</a></td>";
 
                     //控制方案
                     html += "<td><select id='DDL_FrmSln_" + json.NodeID + "' ></select></td>";
@@ -93,7 +94,6 @@
 
                     html += "<td><a href=\"javascript:EditFrmNode('" + frmNode.MyPK + "');\" >详情</a></td>";
                     html += "</tr>";
-                    break;
                 }
                 //if (frmNode == null) {
                 //    html += "<td colspan=3></td>";
@@ -107,7 +107,7 @@
 
             //求出枚举值，然后绑定上.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
-            handler.AddPara("Fk_Frm", frmNode.FK_Frm);
+            handler.AddPara("FrmID", frmNode.FK_Frm);
             var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
 
             var frmSln = data["FrmSln"];
@@ -152,8 +152,7 @@
             }
         });
 
-        function Fields(nodeID, frmID)
-        {
+        function Fields(nodeID, frmID) {
             var url = "../../Sln/Fields.htm?FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&DoType=Field";
             WinOpen(url);
         }

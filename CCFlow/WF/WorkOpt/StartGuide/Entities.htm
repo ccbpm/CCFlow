@@ -58,7 +58,6 @@
         //前置导航的模式
         var StartGuideWay = GetQueryString("StartGuideWay");
 
-
         var pageSize = 10;  //每页显示的记录条数
         var curPage = 0;   //显示第curPage页
         var len;         //总行数
@@ -215,6 +214,9 @@
             //获取URL参数
             if (location.search.indexOf("PrjNo") != -1)
                 href = href + "&PrjNo=" + GetQueryString("PrjNo") + "&PrjName=" + GetQueryString("PrjName");
+
+            href = '../../' + href;
+            //alert(href);
             SetHref(href);
 
         }
@@ -247,7 +249,6 @@
 
                 var key = "No";
                 var Name = "Name";
-
 
                 var thHtml = "<tr><th>Idx</th>";
                 //如果是第一行，先生成table列名

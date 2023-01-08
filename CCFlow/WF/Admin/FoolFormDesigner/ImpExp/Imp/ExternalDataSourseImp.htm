@@ -6,23 +6,27 @@
     <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../../../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script src="../../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../../Comm/Gener.js" type="text/javascript"></script>
     <script src="DDLBar.js" type="text/javascript"></script>
     <script src="../../../CCFlowEnum.js"></script>
+    <link href="../../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../../Scripts/layui/layui/layui.js"></script>
     <script type="text/javascript">
 
         //页面启动函数.
-        var frmID = GetQueryString("FK_MapData");
+        var frmID = GetQueryString("FK_MapData") || GetQueryString("FrmID");
         var flowNo = GetQueryString("FK_Flow");
         var nodeID = GetQueryString("FK_Node");
 
         var btnFrmLib = null;
         var selFrmNode = null;
         var Btn_Flows = null;
+        var curDBSrcNo = '';
+        var curDBSrcName = '';
+        var curTableName = '';
         $(function () {
 
             InitBar("ExternalDataSourseImp");
@@ -36,17 +40,239 @@
             for (var i = 0; i < ens.length; i++) {
                 var en = ens[i];
 
-                html += "<li><a href=''>" + en.No + " - " + en.Name + " - " + en.DBSrcTypeText + "</a></li>";
+                html += "<li><a href='javascript:GoToStep2(\"" + en.No + "\",\"" + en.Name + "\")'>" + en.No + " - " + en.Name + " - " + en.DBSrcTypeText + "</a></li>";
             }
 
             html += "</ul>";
 
             //加载完成.
-            $("#Msg").html(html);
+            $("#Step1").html(html);
+            $("#Step2").hide();
+            $("#Step3").hide();
         });
-        function NewDB()
-        {
-            var url = "";
+        //2.1 点击数据源，进入第二步
+        function GoToStep2(dbSrcNo, dbSrcName) {
+            $("#Step2").show();
+            $("#Step3").hide();
+            curDBSrcNo = dbSrcNo;
+            curDBSrcName = dbSrcName;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", dbSrcNo);
+            var data = handler.DoMethodReturnString("Imp_Src_Step2_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //转化成json.
+            data = JSON.parse(data);
+
+            if (data) {
+                //1、左侧列表
+                var ul = '<ul class=\'ulcols\' style="height:300px;overflow-y:auto">';
+                data.forEach(function (item) {
+                    ul += "<li><a id='" + item["NO"] + "' href='#' onclick=\"GetColumns('" + item["NO"] + "')\" >" + item["NAME"] + "</a></li>";
+                });
+
+                ul += '</ul>';
+                $('#Step21H').html('选择' + dbSrcName + ' 数据表/视图');
+                $('#Step21B').html(ul);
+
+                //2、右侧
+                //填数据(只有个表头)
+                $('#Step22H').html('请选择要导入的数据列');
+                Table_Cols(data);
+
+            }
+
+        }
+
+        //2.2 点击表名获取表下的所有的列
+        function GetColumns(tableName) {
+
+            curTableName = tableName;
+
+            //1.样式处理。选中节点标红，其他节点去红
+            var old = $(event.srcElement).css("color");
+            $(".ulcols li a").css('color', old);
+            $(event.srcElement).css('color', 'red');
+
+            //2.获取数据 FK_MapData=ND18507&FK_SFDBSrc=NKApp&STable=ND104
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", curDBSrcNo);
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("STable", tableName);
+            var data = handler.DoMethodReturnString("Imp_Src_Step2_GetColumns");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //转化成json.
+            data = JSON.parse(data);
+            Table_Cols(data);
+        }
+
+        //2.2.1 根据获取的数据，生成字段的table
+        function Table_Cols(data) {
+
+            var tr = "",
+                tableHtml = "<table class='layui-table' cellpadding='2' cellspacing='2' style='height:300px;overflow-y:auto'>";
+            tr += "<tr>";
+            tr += "<td class='GroupTitle' style='height:39px'>序</td>";
+            tr += "<td class='GroupTitle' style='width:140px;text-align:center;height:39px'><input id='CB_CheckAll' type='checkbox' name='CB_CheckAll' onclick='CheckAll(this.checked);'></td>";
+            tr += "<td class='GroupTitle'  style='height:39px'>中文描述</td>";
+            tr += "<td class='GroupTitle' style='width:80px;text-align:center;height:39px'>类型</td>";
+            tr += "<td class='GroupTitle' style='width:50px;text-align:center;height:39px'>最大长度</td>";
+            tr += "</tr>";
+
+            tableHtml += tr;
+            if (data.TableColumns) {
+                var tableColumns = data.TableColumns;
+                var attrs = data.MapAttrs;
+                tableColumns.forEach(function (item, index) {
+
+                    tr = "";
+                    tr += "<tr>";
+                    tr += "<td nowrap=''>" + item.colid + "</td>";
+                    var disabletag = "";
+                    if (attrs && attrs.length > 0) {
+                        if ($.grep(attrs, function (attr) {
+                            return attr.KeyOfEn == item.No;
+                        }).length > 0) {
+                            disabletag = "disabled";
+                        }
+                    }
+                    tr += "<td><input " + disabletag + " id='CB_Col_" + item.No + "' type='checkbox' name='" + item.No + "' title='" + item.No + "'/><label for='CB_Col_" + item.No + "'>" + item.No + "</label></td>";
+                    tr += "<td nowrap=''>" + item.Name + "</td>";
+                    tr += "<td nowrap=''>" + item.DBType + "</td>";
+                    tr += "<td class='TDNum'>" + item.DBLength + "</td>";
+                    tr += "</tr>";
+                    tableHtml += tr;
+                });
+            } else {
+                tableHtml += "<tr></tr>";
+            }
+            tableHtml += "</table>";
+            var center = $('#Step22B');
+            center.html("").append(tableHtml);
+            if (data.TableColumns) {
+                //var btnPrev = "<input type='button' id='btnPrev' value='上一步 ' />";
+                var btnNext = "<input type='button' name='btnNext' value='下一步 ' onclick='Step3();' />";
+                center.append(btnNext);
+            }
+        }
+
+        function Step3() {
+            $("#Step2").hide();
+            $("#Step3").show();
+            var chk_value = [];
+            //获取所有选中的checkbox 字段用，拼接
+            $('#Step22B input:checked').each(function () {
+                chk_value.push(this.name);
+            });
+
+            var SColumns = chk_value.join();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_SFDBSrc", curDBSrcNo);
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("STable", curTableName);
+            handler.AddPara("SColumns", SColumns);
+            var data = handler.DoMethodReturnString("Imp_Src_Step3_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //转化成json.
+            data = JSON.parse(data);
+
+            var tableHtml = "",
+                impFields = "",
+                Columns = data.Columns,
+                EnumsDataType = data.EnumsDataType,
+                EnumsLGType = data.EnumsLGType,
+                tr = "";
+
+            var optionsEnumsLGType = "",
+                optionsEnumsDataType;
+            EnumsLGType.forEach(function (item) {
+                optionsEnumsLGType += "<option value='" + item.IntKey + "'>" + item.Lab + "</option>";
+            });
+
+            tableHtml += "<form><table class='layui-table' cellpadding='2' cellspacing='2'>";
+            tableHtml += "<tr><td class='GroupTitle' nowrap=''>序</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>字段名</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>中文描述</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>数据类型</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>逻辑类型</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>绑定值(双击选择)</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>最大长度</td>";
+            tableHtml += "<td class='GroupTitle' nowrap=''>顺序</td>";
+            tableHtml += "</tr>";
+
+            var dic = { "nvarchar": 1, "int": 2, "smallint": 2, "float": 3, "bit": 4, "double": 5, "date": 6, "datetime": 7, "money": 8 };
+
+            if (Columns.length > 0) {
+                Columns.forEach(function (item, index) {
+                    tr = "";
+                    tr += "<tr>";
+                    tr += "<td class='Idx' nowrap=''>" + index + "</td>";
+                    tr += "<td nowrap=''>" + item.No + "</td>";
+                    tr += "<td><input name='TB_Desc_" + item.No + "' type='text' value='" + (item.Name || item.No) + "' size='20' id='TB_Desc_" + item.No + "' /></td>";
+                    tr += "<td><select name='DDL_DBType_" + item.No + "' id='DDL_DBType_" + item.No + "'>";
+                    tr += _GetOptionsEnumsDataType(EnumsDataType, dic[item.DBType]);
+                    tr += "</select></td>";
+                    tr += "<td><select name='DDL_LogicType_" + item.No + "' id='DDL_LogicType_" + item.No + "'>";
+                    tr += optionsEnumsLGType;
+                    tr += "</select></td>";
+                    tr += "<td><input name='TB_BindKey_" + item.No + "' type='text' size='30' id='TB_BindKey_" + item.No + "' ondblclick='OpenSelectBindKey(this)' /></td>";
+                    tr += "<td><input name='TB_Len_" + item.No + "' type='text' value='" + item.DBLength + "' size='5' id='TB_Len_" + item.No + "' /></td>";
+                    tr += "<td style='text-align:center' nowrap=''><a href='javascript:void(0)' onclick='up(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-up'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-down'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
+                    tr += "</td>";
+                    tr += "</tr>";
+                    tableHtml += tr;
+                    impFields += item.No + ","
+
+                });
+            }
+            tableHtml += "</table></form>";
+
+            $('#Step3').html("").html(tableHtml);
+            var hidImpFields = "<input type='hidden' id='hidImpFields' name='hidImpFields' value='" + impFields + "' />";
+            var btnNext = "<input type='button' name='btnNext' value='导入字段 生成表单 ' onclick='Save_Click();' />";
+            //var btnPrev = "<input type='button' id='btnPrev' value='上一步 ' />";
+            $('#Step3').append(hidImpFields).append(btnNext);
+        }
+        //3、TODO导入字段 生成表单
+        function Save_Click() {
+            //2.获取数据 FK_MapData=ND18507     &FK_SFDBSrc=NKApp&STable=ND104
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp");
+            handler.AddPara("FK_MapData", frmID);
+            handler.AddPara("hidImpFields", $("#hidImpFields").val());
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("Imp_Src_Step3_Save");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+
+        }
+        function CheckAll(checked) {
+            $.each($(":checkbox"), function () {
+                this.checked = checked;
+            });
+        }
+        function _GetOptionsEnumsDataType(EnumsDataType, key) {
+            var ret = "";
+            EnumsDataType.forEach(function (item) {
+                ret += "<option value='" + item.IntKey + "' " + (item.IntKey == key ? "selected" : "") + ">" + item.Lab + "</option>";
+            });
+            return ret;
         }
     </script>
 </head>
@@ -55,10 +281,31 @@
     <div id="bar"></div>
 
     <fieldset style="height: 90%;">
-        <legend>选择数据源：<a href="javascript:NewDB();">新建数据源</a></legend>
+        <legend>第一步：选择数据源：<a href="javascript:NewDB();">新建数据源</a> </legend>
+        <div id="Step1"></div>
+        <legend>第二步：选择表</legend>
+        <div id="Step2">
+            <div class="layui-row">
+                <div class="layui-col-xs4" id="Step21">
+                    <div class="layui-card">
+                        <div class="layui-card-header" id="Step21H" style="font-weight:bold"></div>
+                        <div class="layui-card-body" id="Step21B" style="height:300px">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs8" id="Step22">
+                    <div class="layui-card">
+                        <div class="layui-card-header" id="Step22H" style="font-weight:bold"></div>
+                        <div class="layui-card-body" id="Step22B"  style="height:300px;overflow-y:auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div id="Msg">
         </div>
+        <legend>第三步：设置关系</legend>
+        <div id="Step3"></div>
+        
 
         <legend>帮助 </legend>
         <ul>

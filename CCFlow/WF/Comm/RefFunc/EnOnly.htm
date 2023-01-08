@@ -6,7 +6,7 @@
     <title>ccform正在加载请稍候...</title>
 
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <!--<link href="../../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />-->
     <script type="text/javascript" src="../../Scripts/jquery-1.11.0.min.js"></script>
     <link href="../fonts/font-icons.min.css" rel="Stylesheet" />
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
@@ -19,15 +19,21 @@
     <script src="../../Admin/CCFlowEnum.js" type="text/javascript"></script>
     <script src="../../CCForm/FrmEnd.js" type="text/javascript"></script>
     <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <!--<link href="../../Scripts/layui/style/admin.css" rel="stylesheet" />-->
     <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="EnOnly.js" type="text/javascript"></script>
+    <script src="../../../DataUser/JSLibData/SearchAndEn.js"></script>
     <style type="text/css">
 
         .layui-form-label {
             min-width: 80px;
             width: auto;
-            padding: 9px 15px 9px 0px;
+            text-align: right
+        }
+
+        .layui-form-label {
+            float: right !important;
         }
 
         .input-icon {
@@ -42,6 +48,13 @@
 
         .ccdate {
             padding-right: 40px;
+        }
+
+        input[type=text], input[type=password], select {
+            border-radius: 5px;
+            border: thin solid #CCCCCC;
+            margin: 1px 1px;
+            height: 38px;
         }
 
         .layui-input-suffix {
@@ -96,6 +109,7 @@
         var webUser = new WebUser();
         var isSameEnName = true;//EnOnly页面和En的EnName是否相同
         var cfg = null;
+        var drillFields = "";
         $(function () {
             pkVal = GetPKVal();
             var enName = GetQueryString("EnName");
@@ -103,19 +117,21 @@
             if (window.parent) {
                 var url = window.parent.location.href;
                 var pEnName = getQueryStringByNameFromUrl(url, "EnName");
-                
+
                 if (pEnName != enName)
                     isSameEnName = false;
             }
             cfg = new Entity("BP.Sys.EnCfg");
-            cfg.No = enName+"s";
+            cfg.No = enName + "s";
             cfg.RetrieveFromDBSources();
-
+            drillFields = cfg.Drill || "";
+            drillFields = drillFields.replace(/@/g, ",");
+            drillFields += ",";
             if (isSameEnName == true && window.parent && window.parent.vm != undefined && pkVal == null) {
                 window.parent.vm.sideBarOpen = false;
-                $(".ocside",window.parent.document).remove();
+                $(".ocside", window.parent.document).remove();
             }
-              
+
 
             var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
             httpHandler.AddUrlData();
@@ -167,7 +183,7 @@
             InitToolbar(); //初始工具栏.
 
             //生成傻瓜表单.
-            GenerFoolFrm(mapData,frmData);
+            GenerFoolFrm(mapData, frmData);
 
 
 
@@ -195,9 +211,9 @@
                             , height: h
                             , images_upload_url: images_upload_url
                             , paste_data_images: true
-							//取消默认提示
-							,plugins: ['advlist', 'saveBtn', 'lists', 'image', 'charmap', 'searchreplace', 'visualblocks',
-                                        'table', 'wordcount',
+                            //取消默认提示
+                            , plugins: ['advlist', 'saveBtn', 'lists', 'image', 'charmap', 'searchreplace', 'visualblocks',
+                                'table', 'wordcount',
                             ],
                         });
                     })
@@ -221,8 +237,9 @@
 
         ///设置.
         function Setting() {
+            var width = window.innerWidth * 4 / 5;
             var url = GetLocalWFPreHref() + "/WF/Comm/RefFunc/Setting.htm?EnName=" + GetQueryString("EnName") + "&PKVal=" + GetQueryString("PKVal");
-            OpenLayuiDialog(url, "设置", 600, 470, "auto", true);
+            OpenLayuiDialog(url, "设置", width, 90, "auto", true);
         }
 
 
@@ -239,23 +256,26 @@
                 }
 
             } else {
-                //权限控制.
-                if (mapData.GetPara("IsInsert") == 1 && pkVal!=null) {
-                    isHiddenBtn = false;
-                    $("#Btn_New").show();
-                }
-
-                if (mapData.GetPara("IsUpdate") == 1) {
-                    isHiddenBtn = false;
-                    $("#Btn_Save").show();
-                }
-                if (mapData.GetPara("IsDelete") == 1 && pkVal != null) {
-                    if (pkVal != null) {
+                if (isReadonly != "1") {
+                    //权限控制.
+                    if (mapData.GetPara("IsInsert") == 1 && pkVal != null) {
                         isHiddenBtn = false;
-                        $("#Btn_Delete").show();
+                        $("#Btn_New").show();
                     }
 
+                    if (mapData.GetPara("IsUpdate") == 1) {
+                        isHiddenBtn = false;
+                        $("#Btn_Save").show();
+                    }
+                    if (mapData.GetPara("IsDelete") == 1 && pkVal != null) {
+                        if (pkVal != null) {
+                            isHiddenBtn = false;
+                            $("#Btn_Delete").show();
+                        }
+
+                    }
                 }
+
             }
 
             if (webUser.No == 'admin') {
@@ -275,7 +295,7 @@
 
         }
 
-        function GenerFoolFrm(mapData,frmData) {
+        function GenerFoolFrm(mapData, frmData) {
 
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
@@ -294,7 +314,7 @@
             html += "<ul class='layui-tab-title'>";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
-                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != "基础信息")//去除基本信息
                     continue;
 
                 var lab = gf.Lab;
@@ -317,7 +337,7 @@
             html += "<div class='layui-tab-content'style='width:95%'>";
             for (var i = 0; i < Sys_GroupFields.length; i++) {
                 var gf = Sys_GroupFields[i];
-                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != "基础信息")//去除基本信息
                     continue;
 
                 if (Sys_GroupFields.length == 1) {
@@ -330,7 +350,7 @@
                         html += "<div class='layui-tab-item'>";
                     }
                 }
-                html += InitMapAttr(frmData.Sys_MapAttr,gf.OID, userRegedit);
+                html += InitMapAttr(frmData.Sys_MapAttr, gf.OID, userRegedit);
                 html += "</div>";
             }
             html += "</div>";
@@ -367,15 +387,20 @@
             })
 
             //设置默认值
+            var mainDataStr = JSON.stringify(frmData.MainTable[0]);
             for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
 
                 var mapAttr = frmData.Sys_MapAttr[j];
-
+                if (mapAttr.UIIsEnable == "0" || isReadonly == "1") {
+                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(mapAttr);
-                if (frmData.MainTable[0].DefValType == 0 && defValue == "10002")
-                    defValue = "";
+                //if (frmData.MainTable[0].DefValType == 0 && defValue == "10002")
+                //    defValue = "";
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     if (defValue == null || defValue == "null")
@@ -385,6 +410,12 @@
 
                     if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
                         $("#menuIconIcon").attr("class", defValue);
+                    }
+                    if (drillFields.indexOf(mapAttr.KeyOfEn + ",") != -1 && typeof Drill == "function") {
+                        $('#TB_' + mapAttr.KeyOfEn).hide();
+                        var _html = cceval("Drill('" + mapAttr.KeyOfEn + "','" + defValue + "','" + mainDataStr + "')");
+                        _html = "<div class='layui-input'style='padding:10px 10px;border:none'>" + _html + "</div>";
+                        $('#TB_' + mapAttr.KeyOfEn).after(_html);
                     }
                 }
 
@@ -418,16 +449,12 @@
                                 $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
 
                         }
-                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('loadData', pushData);
-                        //if (mapAttr.UIIsEnable == 0)
-                        //    $('#DDL_' + mapAttr.KeyOfEn).combotree({ disabled: true });
-
-                        //$('#DDL_' + mapAttr.KeyOfEn).combotree('setValue', defValue);
-                        //var target = $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('find', defValue)
-                        //if (target != null) {
-                        //    target = target.target;
-                        //    $('#DDL_' + mapAttr.KeyOfEn).combotree('tree').tree('expandTo', target);
-                        //}
+                        if (drillFields.indexOf(mapAttr.KeyOfEn + ",") != -1 && typeof Drill == "function") {
+                            $('#DDL_' + mapAttr.KeyOfEn).hide();
+                            var _html = cceval("Drill('" + mapAttr.KeyOfEn + "','" + defValue + "','" + mainDataStr + "')");
+                            _html = "<div class='layui-input'style='padding:10px 10px;border:none'>" + _html + "</div>";
+                            $('#DDL_' + mapAttr.KeyOfEn).after(_html);
+                        }
 
                     } else {
                         // 判断下拉框是否有对应option, 若没有则追加
@@ -449,6 +476,13 @@
                             $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
 
                         }
+                        if (drillFields.indexOf(mapAttr.KeyOfEn + ",") != -1 && typeof Drill == "function") {
+                            $('#DDL_' + mapAttr.KeyOfEn).hide();
+                            var _html = cceval("Drill('" + mapAttr.KeyOfEn + "','" + defValue + "','" + mainDataStr + "')");
+                            _html = "<div class='layui-input'style='padding:10px 10px;border:none'>" + _html + "</div>";
+                            $('#DDL_' + mapAttr.KeyOfEn).after(_html);
+                        }
+
                     }
                     if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
                         if ($("#TB_" + mapAttr.KeyOfEn + "Text").length == 1) {
@@ -466,12 +500,12 @@
                         $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
                     else
                         $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
-                }
-
-                if (mapAttr.UIIsEnable == "0" || isReadonly == "1") {
-                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
-                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    if (drillFields.indexOf(mapAttr.KeyOfEn + ",") != -1 && typeof Drill == "function") {
+                        $('#CB_' + mapAttr.KeyOfEn).hide();
+                        var _html = cceval("Drill('" + mapAttr.KeyOfEn + "','" + defValue + "','" + mainDataStr + "')");
+                        _html = "<div class='layui-input'style='padding:10px 10px;border:none'>" + _html + "</div>";
+                        $('#CB_' + mapAttr.KeyOfEn).after(_html);
+                    }
                 }
             }
 
@@ -491,55 +525,7 @@
                 $("#TB_" + refKey).val(refValue);
                 $("#DDL_" + refKey).val(refValue);
             }
-            //如果传的参数里面有改字段，则需要给相应的字段赋值
-            var queryString = document.location.search.substr(1);
-            if (queryString.length > 0) {
-                var realVal = "";
-                $.each(queryString.split("&"), function (i, o) {
-                    var param = o.split("=");
-                    if (param.length == 2 && param[0] != "RefKey" && param[0] != "RefVal") {
-                        realVal = decodeURI(param[1]);
-                        if ($('#TB_' + param[0]).length == 1) {
-                            if ($('#TB_' + param[0]).attr("disabled") == "disabled" && $('#TB_' + param[0]).val() != null && $('#TB_' + param[0]).val() != "")
-                                return true;
-                            $('#TB_' + param[0]).val(realVal);
-                            return true;
-                        }
-                        if ($('#DDL_' + param[0]).length == 1) {
-                            if ($('#DDL_' + param[0]).attr("disabled") == "disabled" && $('#DDL_' + param[0]).val() != null && $('#DDL_' + param[0]).val() != "")
-                                return true;
-                            $('#DDL_' + param[0]).val(realVal);
-                            if (realVal != "" && $("option[value='" + realVal + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-                                var mainTable = frmData.MainTable[0];
-                                var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-                                if (selectText == null || selectText == undefined || selectText == "")
-                                    selectText = mainTable[mapAttr.KeyOfEn + "T"];
 
-                                if (selectText == null || selectText == undefined || selectText == "")
-                                    selectText = realVal;
-                                $('#DDL_' + param[0]).append("<option value='" + realVal + "'>" + selectText + "</option>");
-                            }
-                        }
-
-                        //if ($('#DDL_' + param[0]).hasClass("easyui-combotree") == true) {
-                        //    if ($("option[value='" + realVal + "']", '#DDL_' + param[0]).length == 0) {
-                        //        var pushData = [];
-                        //        pushData.push({ "id": realVal, "text": realVal, "children": [] });
-                        //        $('#DDL_' + param[0]).combotree('loadData', pushData);
-                        //    }
-                        //    $('#DDL_' + param[0]).combotree('setValue', realVal);
-
-                        //}
-
-                        if (realVal == "1") {
-                            var obj = document.getElementById("CB_" + param[0])
-                            if (obj != null)
-                                obj.checked = true;
-                        }
-
-                    }
-                });
-            }
             var html = "-";
             var fileName = $("#TB_MyFileName").val();
             if (fileName != null && fileName != "" && fileName != undefined && fileName != "null") {
@@ -549,6 +535,58 @@
             layui.form.render();
             //设置扩展
             AfterBindEn_DealMapExt(frmData);
+            $.each($(".ccdate"), function (i, item) {
+                var format = $(item).attr("data-info");
+                var type = $(item).attr("data-type");
+                if (format.indexOf("HH") != -1) {
+                    layui.laydate.render({
+                        elem: '#' + item.id,
+                        format: $(item).attr("data-info"), //可任意组合
+                        type: type,
+                        trigger: 'click',
+                        ready: function (date) {
+                            var now = new Date();
+                            var mm = "";
+                            if (now.getMinutes() < 10)
+                                mm = "0" + now.getMinutes();
+                            else
+                                mm = now.getMinutes();
+
+                            var ss = "";
+                            if (now.getSeconds() < 10)
+                                ss = "0" + now.getSeconds();
+                            else
+                                ss = now.getSeconds();
+
+                            this.dateTime.hours = now.getHours();
+                            this.dateTime.minutes = mm;
+                            this.dateTime.seconds = ss;
+                        },
+                        change: function (value, date, endDate) {
+                            $('.laydate-btns-confirm').click();
+                        },
+                        done: function (value, date, endDate) {
+                            var data = $(this.elem).data();
+                            $(this.elem).val(value);
+                            if (data && data.ReqDay != null && data.ReqDay != undefined)
+                                ReqDays(data.ReqDay);
+                        }
+                    });
+                } else {
+                    layui.laydate.render({
+                        elem: '#' + item.id,
+                        format: $(item).attr("data-info"), //可任意组合
+                        type: type,
+                        done: function (value, date, endDate) {
+                            var data = $(this.elem).data();
+                            $(this.elem).val(value);
+                            if (data && data.ReqDay != null && data.ReqDay != undefined)
+                                ReqDays(data.ReqDay);
+                        }
+                    });
+                }
+
+            })
 
         }
 
@@ -583,7 +621,7 @@
                     continue;
                 }
 
-                if (attr.GroupID != groupID || attr.UIVisible == 0)
+                if (GetPara(attr.AtPara, "GroupName") != groupID || attr.UIVisible == 0)
                     continue;
 
                 var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
@@ -605,16 +643,16 @@
                     if (attr.MyDataType == 4) {
 
                         if (helpUrl.indexOf('javascr') == 0)
-                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /></a>";
+                            name = "<a href=\"" + helpUrl + "\" ><img src='../../Img/Help.png' style='text-align:right'  /><i class='iconfont icon-iconfonticon4'></i></a>";
                         else
-                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /></a>";
+                            name = "<a href=\"" + helpUrl + "\" target=_blank ><img src='../../Img/Help.png' style='text-align:right' /><i class='iconfont icon-iconfonticon4'></i></a>";
 
                     } else {
 
                         if (helpUrl.indexOf('javascr') == 0)
-                            name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "</a>";
+                            name = "<a href=\"" + helpUrl + "\" >" + attr.Name + "<i class='iconfont icon-iconfonticon4'></i></a>";
                         else
-                            name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "</a>";
+                            name = "<a href=\"" + helpUrl + "\" target=_blank >" + attr.Name + "<i class='iconfont icon-iconfonticon4'></i></a>";
                     }
                 }
 
@@ -635,16 +673,16 @@
                 //大文本
                 if (attr.UIHeight >= 10) {
 
-                    if (GetPara(attr.AtPara, "IsRichText") == "1" || attr.ColSpan == 4) {
+                    if (attr.TextModel == 3 || attr.ColSpan == 4) {
                         if (isDropTR == false) {
                             html += "</div>";
                         }
                         isDropTR = true;
-                        html += "<div class='layui-row FoolFrmFieldRow'style='padding-left:10px;padding-right:10px'>";
-                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-row FoolFrmFieldRow'style=''>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'style='width: 16.66666667%;'>" + lab + "</div>";
                         html += "</div>";
-                        html += "<div class='layui-row FoolFrmFieldRow'style='padding-left:10px;padding-right:10px'>";
-                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput'>";
+                        html += "<div class='layui-row FoolFrmFieldRow'>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput' style='padding-left:calc(16.6% - 10px)'>";
                         html += InitMapAttrOfCtrl(attr);
                         html += "</div>";
                         html += "</div>";
@@ -692,11 +730,11 @@
                         html += "</div>";
                     }
                     isDropTR = true;
-                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    html += "<div class='layui-row FoolFrmFieldRow' style='width: 16.66666667%;'>";
                     html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'>" + lab + "</div>";
                     html += "</div>";
                     html += "<div class='layui-row FoolFrmFieldRow'>";
-                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput'>";
+                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput' style='padding-left:calc(16.6% - 10px)'>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</div>";
                     html += "</div>";
@@ -743,13 +781,7 @@
 
                 if (isDropTR == false) {
 
-                    if (rm != null) {
-                        html += "<div class='layui-col-md6 layui-col-xs6 FoolFrmFieldLabel'>";
-                        html += GenerRM(rm);
-                        html += "</div>";
-                        html += "</div>";
-                        html += "<div class='layui-row FoolFrmFieldRow'>";
-                    }
+
                     if (attr.UIContralType == 2) {
                         html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
                         html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
@@ -821,14 +853,14 @@
             var icon = rm.Icon;
             if (rm.Icon == "" || rm.Icon == null) {
                 icon = "../../Img/dot.png";
+            } else if (rm.Icon.indexOf('http') != 0) {
+                icon = "../" + rm.Icon;
             }
+
 
 
             var img = "";
             if (icon.toLowerCase().indexOf(".png") != -1 || icon.toLowerCase().indexOf(".jpg") != -1) {
-                if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
-                    icon = "../" + rm.Icon;
-                }
                 img = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' />";
             }
             else
@@ -838,24 +870,24 @@
             var H = document.body.clientHeight - 140;
             if (W > rm.W)
                 W = rm.W;
-
+            var event = "if(pkVal== null){ layer.alert(\"请保存后再执行操作\");return;}"
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkeWinOpen) {
-                html = "<a href='javascript:WinOpenFull(\"" + rm.Url + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
+                html = "<a href='javascript:void(0)' onclick='" + event + " WinOpenFull(\"" + rm.Url + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.Func) {
-                html = "<a href='javascript:OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
+                html = "<a href='javascript:void(0)' onclick='" + event + " OPenFun(\"" + rm.Url + "\",\"" + rm.Warning + "\",\"" + rm.Title + "\")'>" + img + rm.Title + "</a>";
             }
 
             if (parseInt(rm.RefMethodType) == RefMethodType.LinkModel) {
-                html = "<a href='javascript:OpenLayuiDialog(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",80,\"auto\",true)'>" + img + rm.Title + "</a>";
+                html = "<a href='javascript:void(0)' onclick='" + event + " OpenLayuiDialog(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + W + "\",80,\"auto\",true)'>" + img + rm.Title + "</a>";
             }
 
 
             if (parseInt(rm.RefMethodType) == RefMethodType.RightFrameOpen) {
                 // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
                 //var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
-                html = "<a href='javascript:OpenUrlInRightFrame(this,\"" + rm.Url + "\")'>" + img + rm.Title + "</a>";
+                html = "<a href='javascript:" + event + " OpenUrlInRightFrame(this,\"" + rm.Url + "\")'>" + img + rm.Title + "</a>";
 
             }
             return html;
@@ -962,20 +994,21 @@
                 switch (parseInt(mapAttr.MyDataType)) {
                     case 1://普通文本
                         //富文本编辑器
-                        if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                        if (mapAttr.TextModel == 3) {
                             if (mapAttr.UIIsEnable == "0" || isReadonly == true) {
                                 //使用div展示
                                 var defValue = ConvertDefVal(mapAttr);
                                 defValue = defValue.replace(/white-space: nowrap;/g, "");
-                                return "<div style='margin:9px 0px 9px 15px'>" + defValue + "</div>";
+                                return "<div style='margin-bottom:5px;border: 1px solid #cacaca!important;min-height: 50px;padding: 5px;background-color: #f2f2f2;word-wrap: break-word;'>" + defValue + "</div>";
                             }
-                            return "<textarea maxlength=" + mapAttr.MaxLen + "  style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "'  class='rich'/>";
+                            return "<textarea maxlength=" + mapAttr.MaxLen + "  style='height:" + mapAttr.UIHeight + "px;width:100%;' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  class='rich'/>";
                         }
                         //判断是不是大块文本
                         if (mapAttr.IsSupperText == 1 || mapAttr.UIHeight > 40) {
-                            return "<textarea class='layui-textarea'  id='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "></textarea>"
+                            return "<textarea class='layui-textarea'  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "></textarea>"
                         }
                         var baseUrl = "../";
+                        var currentURL = "";
                         if (currentURL.indexOf("AdminFrm.htm") != -1)
                             baseUrl = "../../../";
                         if (currentURL.indexOf("CCBill") != -1 || currentURL.indexOf("CCForm") != -1)
@@ -1007,7 +1040,7 @@
                             var _html = "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'>";
                             _html += "<span class='layui-input-prefix'><i id='menuIconIcon' class='icon-settings'></i></span>"
                             _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:left;width:calc(100% - 120px)!important;display:inline' type='text' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>";
-                            if (mapAttr.UIIsEnable == 1&& isReadonly!="1")
+                            if (mapAttr.UIIsEnable == 1 && isReadonly != "1")
                                 _html += "<span class='layui-input-suffix'><a id='menuIconButton' href='javascript:void(0)' class=''  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='layui-icon'>&#xe615;</i></a></span>";
                             _html += "</div>";
                             return _html;
@@ -1016,7 +1049,7 @@
                         return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'> <input class='" + ccsCtrl + " layui-input'  maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " /></div>";
                     case 2://整数
                         var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
-                        _html += "<input class='" + ccsCtrl + " layui-input'  value='0' style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "<input class='" + ccsCtrl + " layui-input'  value='0' style='text-align:right;padding-right:10px;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'/>";
                         _html += "</div>";
                         return _html;
                     case 4:  //复选框
@@ -1025,7 +1058,7 @@
                         } else {
                             enableAttr = "";
                         }
-                        return "<div style='line-height:38px' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "'" + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' lay-skin='primary' value='1' title='" + mapAttr.Name + "'></div>";
+                        return "<div style='line-height:38px;margin-top:10px;' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "'" + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' lay-skin='primary' value='1' title='" + mapAttr.Name + "'></div>";
                     case 3://浮点
                     case 5://双精度
                         var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
@@ -1035,14 +1068,17 @@
                             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
                         else
                             bit = 2;
-                        _html += "<input class='" + ccsCtrl + " layui-input'  value='0.00'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "<input class='" + ccsCtrl + " layui-input'  style='text-align:right;padding-right:10px;' value='0.00'  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
                         _html += "</div>";
                         return _html;
                     case 6://日期类型
                     case 7://时间类型
                         //生成中间的部分.
+                        debugger
                         var enableAttr = '';
-                        var frmDate = mapAttr.IsSupperText; //获取日期格式
+                        var frmDate = 0; //获取日期格式
+                        if (mapAttr.MyDataType == 7)
+                            frmDate = 1;
                         var dateFmt = '';
                         var dateType = "";
                         if (frmDate == 0) {
@@ -1086,7 +1122,7 @@
                             bit = attrdefVal.substring(attrdefVal.indexOf(".") + 1).length;
                         else
                             bit = 2;
-                        _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                        _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;padding-right:10px;' onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'/>";
                         _html += "</div>";
                         return _html;
                     default:
@@ -1107,6 +1143,15 @@
                 }
             }
 
+            //获取参数中的值
+            var pageParams = getQueryString();
+            $.each(pageParams, function (i, pageParam) {
+                if (pageParam.indexOf(attr.KeyOfEn) == 0) {
+                    var pageParamArr = pageParam.split('=');
+                    result = pageParamArr[1];
+                    return false;
+                }
+            });
             return result = unescape(result);
         }
 
@@ -1159,11 +1204,11 @@
             url = replaceParamVal(url, "PKVal", "");
 
             //新增时En.htm页面隐藏
-            if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true) {
-                parent.window.location.href = url.replace("EnOnly", "En"); //刷新.
+            if (window.parent && window.parent.$ && window.parent.$(".layui-side").length == 1 && isSameEnName == true) {
+                parent.window.location.href = filterXSS(url).replace("EnOnly", "En"); //刷新.
                 return;
             }
-            window.location.href = url;
+            window.location.href = filterXSS(url);
 
 
         }
@@ -1180,7 +1225,7 @@
             var url = GetHrefUrl();
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
-           
+
             //获取选中的tab选项卡
             var index = 0;
             if ($('#tabDiv').length == 1) {
@@ -1237,10 +1282,17 @@
                 }
 
                 //保存实体后文件上传
-                var entityAthType = mapData.GetPara("BPEntityAthType")
-                if (entityAthType == 1 || entityAthType == 2)
-                    uploadFile(en.GetPKVal());
+                var entityAthType = mapData.GetPara("BPEntityAthType");
+                var fileObj = $("#File_Upload").length == 0 ? [] : $("#File_Upload")[0].files;
+                if (fileObj.length != 0) {
+                    if (entityAthType == 1)
+                        uploadFile(en.GetPKVal());
+                    if (entityAthType == 2) {
+                        pkVal = en.GetPKVal();
+                        MultiUploadFile();
+                    }
 
+                }
 
                 url = url.replace("#", "");
                 url = replaceParamVal(url, "PKVal", en.GetPKVal());
@@ -1253,16 +1305,16 @@
 
 
                 //新增保存后显示En
-                if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh==true) {
+                if (window.parent && window.parent.$ && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh == true) {
                     url = url.replace("EnOnly", "En");
-                    parent.window.location.href = url; //刷新.
+                    parent.window.location.href = filterXSS(url); //刷新.
                     return;
                 }
                 if (isRefresh == true) {
                     SetHref(url); //刷新.
                     return;
                 }
-                    
+
                 if (pkVal == null) {
                     pkVal = mainData.OID;
                     if (pkVal == undefined || pkVal == "")
@@ -1297,23 +1349,11 @@
                     en[key] = val;
                 })
             }
-            
+
             var refPK = GetQueryString("RefPK");
             if (refPK && refPK != "") {
                 en[refPK] = GetQueryString("RefPKVal");
             }
-            ////获取树形结构的表单值
-            //var combotrees = $(".easyui-combotree");
-            //$.each(combotrees, function (i, combotree) {
-            //    var name = $(combotree).attr('id');
-            //    var tree = $('#' + name).combotree('tree');
-            //    //获取当前选中的节点
-            //    var data = tree.tree('getSelected');
-            //    if (data != null) {
-            //        en[name] = data.id;
-            //    }
-            //});
-
             var info = en.Update();
             if (info == 0) {
                 alert('更新错误:' + info);
@@ -1322,24 +1362,29 @@
 
             //保存实体后文件上传
             var entityAthType = mapData.GetPara("BPEntityAthType")
-            if (entityAthType == 1 || entityAthType == 2)
-                uploadFile(pkVal);
+            var fileObj = $("#File_Upload").length == 0 ? [] : $("#File_Upload")[0].files;
+            if (fileObj.length != 0) {
+                if (entityAthType == 1)
+                    uploadFile(pkVal);
+
+            }
+
 
             url = url.replace("#", "");
             url = replaceParamVal(url, "tabIndex", index);
-
+            url = replaceParamVal(url, "PKVal", en.GetPKVal());
             if (url.indexOf("&tabIndex") == -1)
                 url += "&tabIndex=" + index;
 
 
-            if (window.parent && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh==true) {
+            if (window.parent && typeof window.parent.$ != "undefined" && window.parent.$(".layui-side").length == 1 && isSameEnName == true && isRefresh == true) {
                 url = url.replace("EnOnly", "En");
-                parent.window.location.href = url;
+                parent.window.location.href = filterXSS(url);
                 return;
             }
 
-            if (isRefresh==true)
-                window.location.href = url; //刷新.
+            if (isRefresh == true)
+                window.location.href = filterXSS(url); //刷新.
             return true;
         }
 
@@ -1357,57 +1402,16 @@
         //单文件上传
         function uploadFile(pkval) {
 
-            var fileObj = document.getElementById("File_Upload").files[0]; // js 获取文件对象
-            if (fileObj == null || (fileObj) == "undefined" || fileObj.size <= 0) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            handler.AddFileData();
+            handler.AddPara("EnName", GetQueryString("EnName"));
+            handler.AddPara("PKVal", pkval);
+            var data = handler.DoMethodReturnString("EntityAth_Upload");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
                 return;
             }
-
-            //获取文件的后缀名
-            if (fileObj.name.indexOf(".") == -1) {
-                alert("上传的文件名没有扩展名，请检查后上传");
-                return;
-            }
-
-
-            //form表单序列话
-            var formData = new FormData();
-            var name = $("input").val();
-            formData.append("file", fileObj);
-            formData.append("name", name);
-            //获取发送请求时的参数
-            var queryString = document.location.search.substr(1);
-
-            queryString = replaceParamVal(queryString, "PKVal", pkval);
-
-            //URL 路径
-            var URL = "/WF/Comm/Handler.ashx?DoType=EntityAth_Upload";
-            if (plant != "CCFlow") {
-                var currentPath = GetHrefUrl();
-                var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
-                URL = path + "/WF/Comm/ProcessRequest.do?DoType=EntityAth_Upload";
-            }
-
-            if (queryString != null && queryString.length > 0)
-                URL += "&" + queryString;
-
-            $.ajax({
-                url: URL,
-                type: 'POST',
-                data: formData,
-                async: false,
-                // 告诉jQuery不要去处理发送的数据
-                processData: false,
-                // 告诉jQuery不要去设置Content-Type请求头
-                contentType: false,
-                beforeSend: function () {
-                    console.log("正在进行，请稍候");
-                },
-                success: function (responseStr) {
-                },
-                error: function (responseStr) {
-                    console.log("error");
-                }
-            });
+            alert("上传成功");
         }
 
         function Delete() {
@@ -1441,7 +1445,26 @@
         }
 
         function CloseIt() {
-            parent.$("#eudlg").dialog('close');
+            if (window.parent && window.parent.$ && window.parent.$(".layui-side").length == 1) {
+                if (isSameEnName == true) {
+                    //En页面的基础信息删除时关闭页面
+                    try {
+                        window.parent.parent.layer.close(window.parent.parent.layer.index);
+                        return;
+                    }
+                    catch (e) {
+                        return;
+                    }
+                }
+                return;
+            }
+            //打开的时EnOnly页面
+            try {
+                window.parent.layer.close(window.parent.layer.index);
+                return;
+            } catch (e) {
+                return;
+            }
             if (parent.parent != undefined && parent.parent.$("#eudlg").length == 1)
                 parent.parent.$("#eudlg").dialog('close');
         }
@@ -1499,7 +1522,7 @@
                 label = cfg.EnBtnLab1;
                 funcStr = cfg.EnBtnJS1;
             }
-                
+
             if (type == 2) {
                 label = cfg.EnBtnLab2;
                 funcStr = cfg.EnBtnJS2;
@@ -1525,7 +1548,7 @@
             <button id="Btn_New" type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="New()" style="display:none">
                 <i class="iconfont icon-xinjian"></i> 新建
             </button>
-            <button id="Btn_Save"  type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Save()" style="display:none">
+            <button id="Btn_Save" type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Save()" style="display:none">
                 <i class="iconfont icon-Save"></i> 保存
             </button>
 
@@ -1533,7 +1556,7 @@
                 <i class="iconfont icon-shanchu1"></i>  删除
             </button>
 
-            <button id="Btn_Setting"  type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Setting()" style="display:none">
+            <button id="Btn_Setting" type="button" class="layui-btn layui-btn-primary layui-border-green layui-btn-sm" onclick="Setting()" style="display:none">
                 <i class="iconfont icon-jurassic_setup-batch"></i>  设置
             </button>
         </div>
@@ -1542,6 +1565,15 @@
 
         </div>
     </form>
-
+    <script>
+        $(function () {
+            var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
+            var data = JSON.parse(theme);
+            $("#Btns").find("button").css("border-color", data.selectedMenu).css("color", data.selectedMenu);
+            $("#Btns").find("button").removeClass("layui-border-green");
+        })
+    </script>
 </body>
 </html>

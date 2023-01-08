@@ -44,8 +44,10 @@ $(function () {
 
 
     var toolBars = data.ToolBar;
-    if (toolBars == undefined)
+    if (toolBars == undefined) {
         toolBars = data;
+    }
+        
     var _html = "";
     var sendBtnOper = "";
     $.each(toolBars, function (i, toolBar) {
@@ -97,6 +99,8 @@ $(function () {
         $('#ToolBar').html(_html);
         $('#Toolbar').html(_html);
         $(".layui-header").show();
+        if (toolBars.length == 0)
+            $(".layui-header").hide();
     }
 
     if (toolbarPos == "1") {
@@ -144,6 +148,7 @@ $(function () {
         var oper = $(this).data("info");
         if (oper != null && oper != undefined && oper != "") {
             oper = oper.toString().replace(/~/g, "'");
+            oper = DealExp(oper, webUser, false);
             cceval(oper);
         }
 
@@ -222,7 +227,9 @@ $(function () {
     }
 
     if ($('[name=PackUp_html]').length > 0) {
-        $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); });
+        $('[name=PackUp_html]').bind('click', function () {
+            printHtml();
+        });
     }
 
     if ($('[name=PackUp_pdf]').length > 0) {
@@ -230,6 +237,10 @@ $(function () {
     }
     if ($('[name=PrintDoc]').length > 0) {
         $('[name=PrintDoc]').bind('click', function () { initModal("PrintDoc"); });
+    }
+
+    if ($('[name=PR]').length > 0) {
+        $('[name=PR]').bind('click', function () { initModal("PR"); });
     }
 
     if ($('[name=SelectAccepter]').length > 0) {
@@ -817,6 +828,11 @@ function Send(isHuiQian, formType) {
         }
     }
 
+    //发送前事件
+    if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
+        if (beforeSend() == false)
+            return false;
+
     /**发送前处理的信息 Start**/
     //SDK表单
     if (formType == 3) {
@@ -978,6 +994,7 @@ function execSend(toNodeID, formType, isReturnNode) {
     layui.form.on('submit(Send)', function (data) {
         //提交信息的校验
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData();
         if (formType != 3 && formType != 2) {
             var formData = getFormData(data.field);
             for (var key in formData) {
@@ -986,7 +1003,6 @@ function execSend(toNodeID, formType, isReturnNode) {
         }
 
         handler.AddPara("ToNode", toNodeID);
-        handler.AddUrlData();
         handler.AddPara("IsReturnNode", isReturnNode);
         var data = handler.DoMethodReturnString("Send"); //执行保存方法.
         layer.close(index);//关闭正在发送
@@ -1141,7 +1157,7 @@ function OptSuc(msg) {
     layer.close(layer.index);
     if (msg == null || msg == undefined)
         msg = "";
-    msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
+    msg = msg.replace("@查看<img src='./Img/Btn/PrintWorkRpt.gif' >", '')
     msg = msg.replace(/@/g, '<br/>').replace(/null/g, '');
     if (msg.indexOf("err@") != -1) {
         layer.alert(msg);
@@ -1212,7 +1228,7 @@ function SDKSend() {
         return false;
     }
     //审核信息的保存
-    if ($("#WorkCheck_Doc").length == 1) {
+    if ($("#WorkCheck_Doc").length == 1 ||$("#WorkCheck_Doc0").length == 1) {
         //保存审核信息
         SaveWorkCheck();
         if (isCanSend == false)
@@ -1225,6 +1241,7 @@ function SDKSend() {
  * 节点表单发送前的验证
  */
 function NodeFormSend() {
+
     if (typeof isChartFrm != "undefined" && isChartFrm == true && $("#ChapterIFrame").length > 0) {
         //获取IFrame的页面
         var frame = $("#ChapterIFrame")[0];
@@ -1265,17 +1282,8 @@ function NodeFormSend() {
 
     }
 
-    //发送前事件
-    if (typeof beforeSend != 'undefined' && beforeSend instanceof Function)
-        if (beforeSend() == false)
-            return false;
-
     //审核组件
-    if ($("#WorkCheck_Doc").length == 1) {
-        if ($("#WorkCheck_Doc").val() == "" && $("#Img_WorkCheck").length != 0 && $("#Img_WorkCheck")[0].src == "../DataUser/Siganture/UnSiganture.jpg") {
-            alert("请填写审核意见!!!!");
-            return false;
-        }
+    if ($("#WorkCheck_Doc").length == 1 || $("#WorkCheck_Doc0").length == 1) {
         //保存审核信息
         SaveWorkCheck();
         if (isCanSend == false)
@@ -1564,7 +1572,8 @@ function Press() {
         layer.alert(data);
         return;
     }
- 
+
+    layer.alert(data);
 }
 
 /***
@@ -1614,7 +1623,7 @@ function SendSubFlow(subFlowNo, subFlowMyPK) {
 
                     }
                     //显示子流程信息
-                    var html = window.parent.SubFlow_Init(wf_node);
+                    var html = SubFlow_Init(wf_node);
                     $("#SubFlow").html("").html(html);
                 }
 
@@ -1642,7 +1651,7 @@ function StartThread() {
 
     if (data == null || data == undefined)
         data = "";
-    data = data.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '');
+    data = data.replace("@查看<img src='./Img/Btn/PrintWorkRpt.gif' >", '');
     data = data.replace(/@/g, '<br/>').replace(/null/g, '');
 
     layer.open({
@@ -1718,6 +1727,201 @@ function HelpAlter() {
             }
         }
     }
+}
+
+//打印Html
+function printHtml() {
+   if (typeof isFool != "undefined" && isFool == true) {
+        initModal("PackUp_html");
+        return;
+    }
+    //判断是否打印单表单
+    var targetNode = null;
+    var document = window.document;
+    if ($("#CCForm").length != 0) {
+        var bodyNode = window.document.body.cloneNode(true);
+        targetNode = bodyNode.querySelector('#ContentDiv');
+        targetNode.querySelectorAll('#CCForm')[0].style.width = $('#ContentDiv').css("width");
+        if (!targetNode) {
+            alert("没有找到文档节点")
+            return
+        }
+    } else {
+        var targetIframes = Array.from(document.querySelectorAll('.tab-iframe'))
+        var iframe = targetIframes.find(function (iframe) {
+            return iframe.parentNode.style.display !== 'none';
+        })
+        if (iframe) {
+            document = iframe.contentDocument;
+            const bodyNode = iframe.contentDocument.body.cloneNode(true);
+            targetNode = bodyNode.querySelector('.doc');
+            if (!targetNode) {
+                alert("没有找到文档节点")
+                return
+            }
+        }
+    }
+
+    if (targetNode) {
+        targetNode.querySelectorAll('td').forEach(tdElem => {
+            tdElem.style.minWidth = '60px';
+        })
+        targetNode.querySelectorAll('input').forEach(input => {
+            //如果是复选框的处理
+            if (input.parentNode && (window.getComputedStyle(input).display !== 'none' || input.style.display !== 'none') && (input.type == "checkbox" || input.type == 'radio')) {
+                input.style.display = 'inline';
+                input.style.marginRight = '5px';
+                //他的第一个兄弟节点隐藏
+                input.nextElementSibling.style.display = 'none';
+                //复选框
+                if (input.type == "checkbox") {
+                    var val = 0;
+                    if (input.nextElementSibling.className.indexOf('layui-form-checked') != -1)
+                        val = 1;
+                    if (val == 1)
+                        input.setAttribute("checked", true);
+                    const p = document.createElement("span");
+                    p.style.marginRight = '5px';
+                    p.innerHTML = input.getAttribute('title');
+                    input.parentNode.insertBefore(p, input.nextSibling);
+                }
+                //单选按钮 
+                if (input.type == "radio") {
+                    var val = 0;
+                    if (input.nextElementSibling.className.indexOf(' layui-form-radioed') != -1)
+                        val = 1;
+                    if (val == 1)
+                        input.setAttribute("checked", true);
+                }
+            } else {
+                if (input.parentNode && window.getComputedStyle(input).display !== 'none' && input.style.display !== 'none' && input.type != 'hidden') {
+                    //如果是傻瓜表单
+                    if (input.className.indexOf("layui-input") != -1) {
+                        input.setAttribute("value", input.value);
+                    } else {
+                        const p = document.createElement("div");
+                        p.innerHTML = input.value
+
+                        p.style = input.style
+                        p.style.whiteSpace = 'pre-line'
+                        if (input.className.indexOf('layui-unselect') != -1) {
+                            input.nextElementSibling.remove();
+                            p.style.textAlign = 'left';
+                            p.style.paddingLeft = '10px';
+                        }
+                        if (input.className.indexOf('ccdate') != -1 && input.nextElementSibling!=null)
+                            input.nextElementSibling.remove();
+
+                        input.parentNode.appendChild(p);
+                        input.parentNode.style.maxHeight = '120px'
+                        input.parentNode.style.overflow = 'hidden'
+                        input.parentNode.style.fontSzie = '16px'
+                        input.parentNode.style.lineHeight = '16px'
+                        $(input).hide();
+                    }
+
+                    
+                }
+            }
+        })
+        targetNode.querySelectorAll('textarea').forEach(textarea => {
+            if (textarea.parentNode && window.getComputedStyle(textarea).display !== 'none' && textarea.style.display !== 'none' && textarea.type != 'hidden') {
+                const p = document.createElement("div");
+                p.innerHTML = textarea.value
+                p.style = textarea.style
+                p.style.whiteSpace = 'pre-line'
+                textarea.parentNode.appendChild(p);
+                textarea.parentNode.style.maxHeight = '120px'
+                textarea.parentNode.style.overflow = 'hidden'
+                textarea.parentNode.style.fontSzie = '16px'
+                textarea.parentNode.style.lineHeight = '16px'
+                textarea.remove()
+            }
+        })
+        targetNode.querySelectorAll('select').forEach(select => {
+            if (select.parentNode && window.getComputedStyle(select).display !== 'none' && select.style.display !== 'none' && select.type != 'hidden') {
+                select.style.display = 'none';
+            }
+
+        });
+        //获取从表信息
+        var dtls = Array.from(targetNode.querySelectorAll('div')).filter(div => {
+            return div.getAttribute('name') == 'Dtl';
+        });
+        dtls.forEach(dtl => {
+            dtl.children[0].remove();
+        })
+        const html = generateHTML(targetNode, document.styleSheets, `
+                    @media print { 
+                        .paper { box-shadow: none !important; page-break-inside: avoid;}
+                        .paper_A4 { width: 21cm !important; height: 27cm !important }
+                                            .paper + .paper { margin-top: 0px !important }
+                        /**body{
+                                -webkit-print-color-adjust:exact;
+                                -moz-print-color-adjust:exact;
+                                -ms-print-color-adjust:exact;
+                                print-color-adjust:exact;
+                            }*/
+
+
+                    }
+                    .page > div { padding: 1.5cm 0 0 0 !important }
+                    @page {
+                      size: auto; 
+                      margin: 1cm;
+                    }
+                `)
+        const tempIframe = document.createElement('iframe')
+        const handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData();
+        handler.AddPara("html", html);
+        handler.AddPara("WorkID", GetQueryString('WorkID'));
+        handler.AddPara("FK_Node", GetQueryString('FK_Node'));
+        const filePath = handler.DoMethodReturnString("CreateHtmlFile");
+        tempIframe.src = basePath + '/' + filePath;
+        tempIframe.style.height = '0px';
+        tempIframe.onload = function () {
+            tempIframe.contentWindow.print();
+        }
+        document.body.appendChild(tempIframe);
+    } else {
+        alert('当前页面不可打印')
+    }
+}
+
+function getAllCssStyles(sheets) {
+    let styleTag = '';
+    for (const sheet of sheets) {
+        const rules = sheet.rules || sheet.cssRules;
+        for (const rule of rules) {
+            styleTag += rule.cssText + ' '
+        }
+    }
+    return styleTag;
+}
+
+function generateHTML(dom, styleSheets, extendCssRules = "") {
+    var css = getAllCssStyles(styleSheets);
+    return `
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                </head>
+                <style>
+                    ${css}
+                    ${extendCssRules}
+                    .DtlTh{
+                        background-color:rgb(242, 242, 242) !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                </style>
+                <body>
+                    ${dom.innerHTML}
+                </body>
+            </html>
+            `
 }
 
 

@@ -106,6 +106,16 @@
                     data = data == null || data == "" ? enFunc.MsgSuccess : data;
                     layer.alert(data);
                     break;
+                case 3://内置方法模式.
+                    var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                    handler.AddPara("MyPK", mypk);
+                    handler.AddPara("FrmID", frmID);
+                    handler.AddPara("WorkID", workid);
+                    data = handler.DoMethodReturnString("DoMethod_ExecFunc"); //执行SQLs
+                    layer.alert(data);
+                    if (data.indexOf("err@") == -1)
+                        $("#Btn_Done").attr('disabled', true);
+                    break;
                 default:
                     layer.alert("还没有增加" + enFunc.MethodDocTypeOfFunc + "类型的判断");
                     break;

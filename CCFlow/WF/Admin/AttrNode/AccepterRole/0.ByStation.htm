@@ -28,7 +28,7 @@
             <legend>人员身份规则</legend>
             <ul>
                 <li style="list-style:none">
-                    <input type="radio" value="0" id="SF_0"  v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
+                    <input type="radio" value="0" id="SF_0" v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
                     <ol class="olText">
                         <li>说明：就是上一步发送作为当前节点的人员身份。 </li>
                     </ol>
@@ -36,7 +36,8 @@
                     <input type="radio" value="1" id="SF_1" v-model="SF" /> <label style="font-weight:bolder" for="SF_1"> 指定节点的人员身份</label>
                     <ol class="olText">
                         <li> 说明：指定节点发送人的作为当前节点的人员身份。 </li>
-                        <li>请选择节点:
+                        <li>
+                            请选择节点:
                             <select id="DDL_Nodes" v-model="node">
                                 <option v-for="option in nodes" :value="option.NodeID">{{option.Name}}</option>
                             </select>
@@ -45,7 +46,8 @@
                     <input type="radio" value="2" id="SF_2" v-model="SF" /> <label style="font-weight:bolder" for="SF_2"> 按表单字段作为人员身份（该字段里存储的是账号）</label>
                     <ol class="olText">
                         <li> 说明：指定表单字段作为人员编号作为当前节点的人员身份，比如：我替别人请假，请假人字段作为人员身份。 </li>
-                        <li>请选择字段:
+                        <li>
+                            请选择字段:
                             <select id="DDL_Fields" v-model="field">
                                 <option v-for="option in fields" :value="option.KeyOfEn">{{option.Name}}</option>
                             </select>
@@ -74,7 +76,29 @@
                 </ul>
             </div>
         </fieldset>
-
+        <fieldset>
+            <legend>岗位计算方式:</legend>
+            <ul>
+                <li>
+                    <select name="DDL_StationReqEmpsWay" id="DDL_StationReqEmpsWay" v-model="StationReqEmpsWay">
+                        <option value="0">岗位集合模式</option>
+                        <option value="1">岗位切片-严谨模式</option>
+                        <option value="2">岗位切片-宽泛模式</option>
+                    </select>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>岗位找人规则:</legend>
+            <ul>
+                <li>
+                    <select name="DDL_StationFindWay" id="DDL_StationFindWay" v-model="StationFindWay">
+                        <option value="0">递归父级,父级平级寻找</option>
+                        <option value="1">递归父级寻找</option>
+                    </select>
+                </li>
+            </ul>
+        </fieldset>
         <fieldset>
             <legend>找人算法</legend>
             <ul>
@@ -92,8 +116,25 @@
                 <li> 比如：我要请假，找部门负责人，就按照当前操作员的身份计算。 </li>
 
                 <li> 有的环境下并不是按照当前人员计算。 </li>
-                <li> 比如：我要为别人请假，找部门负责人，要按照指定的字段（该字段就是被请假人员的账号）作为人员身份。 </li>
+                <li> 比如：我要为别人（非同一部门）请假，找部门负责人，要按照指定的字段（该字段就是请假人员的账号）作为人员身份。 </li>
+
             </ul>
+            <legend>场景一流程图</legend>
+            <ul>
+                <li>说明:当不同部门申请后,第三个节点接收人为相应部门负责人时.</li>
+            </ul>
+            <img src="./Img/ShengqingFlow1.png" />
+            <legend>场景一配置图</legend>
+            <img src="./Img/ShengqingPeizhi1.png" />
+            <legend>场景二流程图</legend>
+            <ul>
+                <li>说明:当申请人为其他部门人员请假时，审批人员为其他部门负责人.</li>
+            </ul>
+            <img src="./Img/ShengqingFlow2.png" />
+            <legend>场景一配置图</legend>
+            <img src="./Img/ShengqingBiaodan2.png" />
+            <legend>场景一配置图</legend>
+            <img src="./Img/ShengqingPeizhi2.png" />
         </fieldset>
     </div>
     <script type="text/javascript">
@@ -109,7 +150,9 @@
                 node: "",
                 field:"",
                 webuser: null,
-                deliverWay: DeliveryWay.ByStation
+                deliverWay: DeliveryWay.ByStation,
+                StationReqEmpsWay: 0,
+                StationFindWay:0
             },
             methods: {
                 OpenDot2DotStations: function () {
@@ -152,7 +195,7 @@
                 var flowID = parseInt(flowNo);
 
                 var ens = new Entities("BP.Sys.MapAttrs");
-                if (ens.FormType == 11)
+                if (node.FormType == 11)
                     ens.Retrieve("FK_MapData", node.NodeFrmID);
                 else
                     ens.Retrieve("FK_MapData", "ND" + flowID + "Rpt");
@@ -170,6 +213,11 @@
                 this.webuser = new WebUser();
                 this.adminModel = this.webuser.No == "admin" ? 1 : 0;
                 this.orgModel = this.webuser.No == "admin" ? 0 : 1;
+                //岗位计算模式.
+                var val = node.GetPara('StationReqEmpsWay');
+                this.StationReqEmpsWay = val;
+                val = node.GetPara('StationFindWay') || "0";
+                this.StationFindWay = parseInt(val);
             }
         });
 
@@ -194,6 +242,8 @@
             }
             node.SetPara("ShenFenModel", Baseinfo.SF);
             node.DeliveryWay = Baseinfo.deliverWay;
+            node.SetPara('StationReqEmpsWay', Baseinfo.StationReqEmpsWay);
+            node.SetPara('StationFindWay', Baseinfo.StationFindWay);
             node.Update();
         }
     </script>

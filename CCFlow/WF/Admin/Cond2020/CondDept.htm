@@ -25,7 +25,7 @@
    
     <base target="_self" />
     <script type="text/javascript">
-
+        var webUser = new WebUser();
         //初始化页面函数.....
         $(function () {
 
@@ -50,8 +50,10 @@
                     "Name": ""
                 });
             });
-
-            loadTree("0");
+            var rootNo = "0";
+            if(webUser.CCBPMRunModel!= 0)
+                rootNo = webUser.OrgNo;
+            loadTree(rootNo);
 
 
             //TODO 条件参数
@@ -81,7 +83,7 @@
 
             var ens = new Entities("BP.WF.Port.Depts");
             ens.RetrieveAll();
-            var jsonTree = createJsonToTree(ens, rootNo);
+            var jsonTree = createJsonToTree(ens.TurnToArry(), rootNo);
 
             //查询出来数据.
             $('#tree').treeview({
@@ -124,26 +126,34 @@
         //树形结构转换
         var treeJson = [];
         function createJsonToTree(jsonArray, parentNo) {
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (data.ParentNo == parentNo) {
-                    var checked = false;
-                    var selectedNodes = window.selectedNodes;
-                    var sel = $.grep(selectedNodes, function (obj) {
-                        return data.No == obj.No;
-                    });
-
-                    if (sel.length > 0) {
-                        checked = true;
-                    }
-                    treeJson.push({
-                        "id": data.No,
-                        "text": data.Name,
-                        "nodes": creatTreeChildern(jsonArray, data.No),
-                        "state": { checked: checked, disabled: false }
-                    });
-                }
+            var list = [];
+            if(webUser.CCBPMRunModel!=0){
+               var list = jsonArray.filter(item=>item.No==parentNo);
+               if(list.length==0){
+                   var dept = new Entity("BP.Port.Dept",parentNo);
+                   list.push(dept);
+               }
+            }else{
+                list = jsonArray.filter(item=>item.ParentNo==parentNo);
             }
+            $.each(list,function(idx,data){
+                var checked = false;
+                var selectedNodes = window.selectedNodes;
+                var sel = $.grep(selectedNodes, function (obj) {
+                    return data.No == obj.No;
+                });
+
+                if (sel.length > 0) {
+                    checked = true;
+                }
+                treeJson.push({
+                    "id": data.No,
+                    "text": data.Name,
+                    "nodes": creatTreeChildern(jsonArray, data.No),
+                    "state": { checked: checked, disabled: false }
+                });
+            })
+
             function _(treeArray) {
                 $.each(treeArray, function (i, o) {
                     if ($.isArray(o.nodes)) {

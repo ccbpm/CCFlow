@@ -88,9 +88,9 @@
 
             //如果是业务单元.
             if (en.EventDoType == 7) {
-                en.DoDoc = $("#DDL_Doc").val();
+                en.DoDoc = encodeURIComponent($("#DDL_Doc").val());
             } else {
-                en.DoDoc = editor.getValue();
+                en.DoDoc = encodeURIComponent(editor.getValue());
             }
 
             if (en.DoDoc == "") {
@@ -195,6 +195,34 @@
                         <li>1. 支持ccbpm表达式,什么是bpm表达式,请参考. </li>
                         <li>2. 支持 @PTable 表达式, 比如: UPDATE @PTable SET MyFile1='xxx' WHERE OID=@WorkID </li>
                     </ul>
+
+
+                    <legend>关于:存储过程</legend>
+                    <ul>
+                        <li>
+                            create procedure dbo.sp_throwErr
+                            @para VARCHAR
+                            as
+                            begin
+                            declare  @raiseErrorCode nvarchar(50)
+                            if (@para is not null)
+                            RAISERROR(N'%s err@错误没有收到款,不能发货.',16,1, @raiseErrorCode,5)
+                            end
+                        </li>
+                        <li>如果返回值是:err@ 就说明是异常，系统就终止运行.</li>
+                    </ul>
+
+
+                    <legend>关于:SQL</legend>
+                    <ul>
+                        <li>可以写多条SQL</li>
+                        <li>
+                            DELETE FROM XXX WHERE OID=@WorkID;
+                            UPDATE FROM XXX SET ABC='XXX' WHERE  OID=@WorkID;
+                        </li>
+                        <li>系统不解析返回值，如果执行异常，就停止(卡住)，ccbpm不处理数据回滚。</li>
+                    </ul>
+
                 </fieldset>
             </div>
 

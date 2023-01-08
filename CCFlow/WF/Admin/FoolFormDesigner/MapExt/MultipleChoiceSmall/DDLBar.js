@@ -23,7 +23,7 @@ function InitBar(optionKey) {
     html += "</select >";
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' class='cc-btn-tab' value='保存' />";
-    html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()'class='cc-btn-tab' value='更多' />";
+    //html += "<input id='Btn_Advanced' type=button onclick='AdvSetting()'class='cc-btn-tab' value='更多' />";
 
     document.getElementById("bar").innerHTML = html;
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -46,7 +46,8 @@ function GetDBDtl() {
         { "No": 1, "Name": "按文本输入的值", "GroupNo": "A", "Url": "1.ByInputText.htm" },
         { "No": 2, "Name": "按照枚举值", "GroupNo": "A", "Url": "2.ByEnum.htm" },
         { "No": 3, "Name": "按照系统外键表计算", "GroupNo": "A", "Url": "3.BySysKey.htm" },
-        { "No": 4, "Name": "按照SQL计算", "GroupNo": "A", "Url": "4.BySQL.htm" }
+        { "No": 4, "Name": "按照SQL计算", "GroupNo": "A", "Url": "4.BySQL.htm" },
+        { "No": 5, "Name": "按照指定的岗位计算", "GroupNo": "A", "Url": "5.ByStation.htm" }
     ];
     return json;
 }

@@ -37,13 +37,51 @@
     </fieldset>
 
 
+
     <fieldset id="help">
-        <legend>说明 </legend>
+        <legend>帮助 </legend>
+        <ol>
+
+            <li>您可以定义一个页面，绑定到该节点上。</li>
+            <li>
+                该页面里面有一个Save() 的 function ，当用户点击框架外面的工具栏上的【保存】按钮或者【发送】按钮，就会触发这个函数。
+            </li>
+            <li>
+                您需要在Save()的function里完成数据完整性效验与数据保存。
+            </li>
+            <li>
+                如果保存成功就return true, 保存失败就return false. 比如:当用户执行发送的时候，首先执行保存，保存成功后在执行发送，保存失败后，就阻止发送。
+            </li>
+            <li>
+                您输入的Url可以有参数，但是系统会把所有的参数附件到该url后面。
+            </li>
+            <li>
+                例如:/SDKFlowDemo/QingJia/SDKQianRuFangShiForm.htm 。
+            </li>
+            <li>
+                比如:您配置的url为 http://xxxx:222:/abc.htm 系统实际的Url为 http://xxxx:222:/abc.htm?FK_Flow=xxx&FK_Node=xxx&WorkID=xxx&UserNo=xxx&Token=xxx
+            </li>
+            <li>
+                系统会把当前流程环境中的变量与参数都传递到您的自定义页面上来，您可以根据这些参数来展示，保存数据，控制数据只读，可编辑。
+            </li>
+            <li>如果使用绝对路径可以使用ccbpm的全局变量@SDKFromServHost ，比如: @SDKFromServHost/MyFile.htm</li>
+
+        </ol>
+        <legend>示例1 </legend>
         <ul>
-            <li> 该流程是嵌入式表单模式 </li>
+            <li>
+                <img src="6.SelfFrm.png" style="width:50%;" class="HelpImg" />
+            </li>
+        </ul>
+        <legend>示例2 </legend>
+        <ul>
+            <li>
+                <img src="6.SelfFrm1.png" style="width:50%;" class="HelpImg" />
+            </li>
         </ul>
     </fieldset>
-   
+
+
 
 </body>
 </html>

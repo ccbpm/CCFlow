@@ -109,6 +109,14 @@ function DealMenuUrl(menu) {
         menu.Url = basePath + "/CCFast/Rpt/Rpt3D.htm?RptNo=" + menu.No;
         return menu;
     }
+    if (menu.MenuModel === "RptBlue") {
+        menu.Url = basePath + "/WF/Portal/RptBlue.htm?PageID=" + menu.No;
+        return menu;
+    }
+    if (menu.MenuModel === "RptWhite") {
+        menu.Url = basePath + "/WF/Portal/RptBlue.htm?PageID=" + menu.No;
+        return menu;
+    }
 
     if (menu.Url != "") {
         if (menu.Url.indexOf("?") != -1)
@@ -118,6 +126,6 @@ function DealMenuUrl(menu) {
         return menu;
     }
 
-    alert('没有判断的模式:' + menu.MenuModel + "  urlExt:" + menu.UrlExt);
+    alert('没有判断的模式:[' + menu.MenuModel + "]  urlExt:" + menu.UrlExt);
     return menu;
 }

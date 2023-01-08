@@ -22,6 +22,7 @@
     <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
     <!--    <script src="./js/sortjs/Sortable.min.js" type="text/javascript"></script>-->
     <script src="../../DataUser/JSLibData/PortalConfig.js" type="text/javascript"></script>
+    
     <script type="text/javascript">
         //初始化页面函数.....
         $(function () {
@@ -81,6 +82,7 @@
 
         .sideMenuBar-set {
             overflow-y: auto;
+            height: 100vh;
         }
 
         .nav-menu:hover {
@@ -134,19 +136,23 @@
             background: white !important;
         }
 
-        .openswich .menus-wrapper {
-            width: 240px;
-            background-color: #fff;
-            height: 100vh;
+        .openswich {
+            background-color: #fff !important;
         }
 
-        .openswich .layui-logo {
-            position: absolute;
-            height: 50px;
-            line-height: 50px;
-            color: #333;
-            box-shadow: none;
-        }
+            .openswich .menus-wrapper {
+                width: 240px;
+                background-color: #fff;
+                height: 100vh;
+            }
+
+            .openswich .layui-logo {
+                position: absolute;
+                height: 50px;
+                line-height: 50px;
+                color: #333;
+                box-shadow: none;
+            }
 
         .sub-menu-divider .line {
             width: 50px
@@ -177,6 +183,7 @@
 </head>
 
 <body :class="layui-layout-body">
+    <audio id="alert-msg" style="display: none" src="../Standard/sound/alert.mp3"></audio>
     <div id="g-app-main" v-cloak>
         <div :class="sideBarOpen?'':'g-admin-sidebar-fold'">
             <!--layUi layout start-->
@@ -191,7 +198,7 @@
                             </a>
                         </li>
 
-                        <li class="layui-nav-item layui-hide-xs" v-if="IsShowFast">
+                        <li v-if="isAdmin" class="layui-nav-item layui-hide-xs" v-if="IsShowFast">
                             <a href="javascript:void(0)" title="流程" @mouseover.stop="showShortCut = true"
                                @mouseenter="stopTimeout" @mouseleave="closeDropdown">
                                 流程
@@ -219,6 +226,7 @@
                                         <i class="icon-magnifier"></i>查询
                                     </a>
                                 </dd>
+
                             </dl>
                         </li>
 
@@ -279,7 +287,27 @@
                                 <span>低代码</span>
                             </a>
                         </li>-->
+                        <li v-if="isAdmin==false" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Start()">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <i class="icon-share-alt"></i>
+                                <span>发起</span>
+                            </a>
+                        </li>
 
+
+                        <li v-if="isAdmin==false" id="iconFlow" class="layui-nav-item layui-hide-xs" onclick="Todolist()">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <i class="icon-bell"></i>
+                                <span>待办</span>
+                            </a>
+                        </li>
+
+                        <li v-if="isAdmin==false" id="iconFrm" class="layui-nav-item layui-hide-xs" onclick="Runing()">
+                            <a href="javascript:void(0)" class="flex-item">
+                                <i class="icon-clock"></i>
+                                <span>在途</span>
+                            </a>
+                        </li>
 
                         <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Fasts()">
                             <a href="javascript:void(0)" class="flex-item">
@@ -311,31 +339,20 @@
                             </a>
                         </li>
 
-                        <!--
-                        <!--<li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMessage()">-->
-                        <!--<li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMessage()">
+
+                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMessage()">
                             <a href="javascript:void(0)">
                                 <i class="icon-bubbles"></i> 消息
                             </a>
                         </li>
 
-                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="Infos()">
+                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenIM()">
                             <a href="javascript:void(0)">
-                                <i class="layui-icon layui-icon-notice"></i> 通知
+                                <i class="icon-bubbles"></i> IM
                             </a>
                         </li>
 
-                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="BBS()">
-                            <a href="javascript:void(0)">
-                                <i class="layui-icon layui-icon-notice"></i> BBS
-                            </a>
-                        </li>-->
-                        <!--<li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="umclient.OpenMsgPanel()">
-                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMsgPanel()">
-                            <a href="javascript:void(0)">
-                                <i class="icon-bubbles"></i> 消息
-                            </a>
-                        </li>-->
+
 
 
                         <li v-if="IsShowTheme" class="layui-nav-item layui-hide-xs" @click="openThemePicker">
@@ -367,7 +384,7 @@
                                     <a href="javascript:void(0)"
                                        @click='openTab("切换组织","../../WF/Setting/ChangeDept.htm")'>切换组织</a>
                                 </dd>
-                                <dd><a href="javascript:void(0)" @click="GoToMobile">移动端登录</a></dd>
+                                <dd v-if="plant=='CCFlow'"><a href="javascript:void(0)" @click="GoToMobile">移动端登录</a></dd>
                                 <dd><a href="javascript:void(0)" @click="GoToAppClassic">中间件端登录</a></dd>
                                 <dd><a href="javascript:void(0)" @click="logout">退出登录</a></dd>
                             </dl>
@@ -377,8 +394,8 @@
                 <!-- menus -->
                 <div v-if="classicalLayout" :class="sideBarOpen?'layui-side layui-side-menu':'layui-side layui-side-menu miniBar'">
                     <div class="layui-side-scroll">
-                        <div class="layui-logo" v-if="sideBarOpen">{{SystemName}}</div>
-                        <div class="layui-logo" v-else
+
+                        <div class="layui-logo" 
                              style="display: flex;align-items: center; justify-content: center;">
                             <img :src="SystemLogo" style="width: 32px;height:32px;" alt="logo">
                         </div>
@@ -393,7 +410,7 @@
                                     <span class="layui-nav-more"></span>
                                 </a>
                                 <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"
-                                   @click="openTab(item.Name,item.Url),selectedId = item.No">
+                                   @click="openTab(item.Name,item.Url,item.No),selectedId = item.No">
                                     <i :class="item.Icon"></i>
                                     <cite style="margin-left:8px">{{item.Name}}</cite>
                                 </a>
@@ -405,7 +422,7 @@
 
                                         <template v-if="Array.isArray(ite.children) && ite.children.length == 1">
                                             <a v-for="(itemd,index) in ite.children"
-                                               @click="openTab(itemd.Name,itemd.Url) , selectedId = itemd.No" :class="{'layui-this': itemd.No === selectedId}" style="cursor: pointer;">
+                                               @click="openTab(itemd.Name,itemd.Url,itemd.No) , selectedId = itemd.No" :class="{'layui-this': itemd.No === selectedId}" style="cursor: pointer;">
                                                 <i :class="itemd.Icon"></i> {{itemd.Name}}
                                                 <span class="layui-nav-more"></span>
                                             </a>
@@ -417,7 +434,7 @@
                                             <i :class="ite.Icon"></i> {{ite.Name}}
                                             <span class="layui-nav-more"></span>
                                         </a>
-                                        <a v-else @click="openTab(ite.Name,ite.Url),selectedId = ite.No"
+                                        <a v-else @click="openTab(ite.Name,ite.Url,ite.No),selectedId = ite.No"
                                            :class="{'layui-this': ite.No === selectedId}" style="cursor: pointer;">
                                             <i :class="ite.Icon"></i> {{ite.Name}}
                                         </a>
@@ -426,7 +443,7 @@
                                             <dd v-for="(it,it_idx) in ite.children" :data-id="it.No" :data-pid="ite.No"
                                                 :data-no="it.No" :data-name="it.Name" :data-pidx="idx"
                                                 :data-idx="it_idx" :class="calcClassList(item,2)" @click.right.stop>
-                                                <a @click="openTab(it.Name,it.Url),selectedId = it.No"
+                                                <a @click="openTab(it.Name,it.Url,it.No),selectedId = it.No"
                                                    :class="{'layui-this': it.No === selectedId}"
                                                    style="cursor: pointer;">
                                                     <i :class="it.Icon"></i> {{it.Name}}
@@ -558,10 +575,10 @@
 
                     <div class="layui-tab" lay-allowclose="true" lay-filter="g-admin-layout-tabs">
                         <ul class="layui-tab-title" ref="iframe-tabs">
-                            <li @click="selectedTabsIndex = -1" :class="{'layui-this':selectedTabsIndex === -1}">
+                            <li @click="changeSelectTab(-1)" :class="{'layui-this':selectedTabsIndex === -1}">
                                 <i class="layui-icon layui-icon-home"></i><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>
                             </li>
-                            <li v-for="(item,index) in tabsList" @click="changeSelectTab(index)"
+                            <li v-for="(item,index) in tabsList" @click="changeSelectTab(index,item)"
                                 :class="{'layui-this':selectedTabsIndex === index}">
                                 <span>{{item.name}}</span><i class="layui-icon layui-unselect layui-tab-close"
                                                              @click="closeCurrentTabs(index)">ဆ</i>
@@ -609,11 +626,13 @@
     <script src="Default.js"></script>
     <script src="DefaultIndex.js"></script>
     <script src="DefaultMenuGlo.js"></script>
-    <!--<script src="umsdk/dist/umsdk.min.js"></script>-->
-    <!--<script src="./CCIM/umgrid.tinyim.js"></script>
-    <script src="./CCIM/umgrid.tinyim.js"></script>-->
-    <!--<script src="tinyIM/pc/umgrid.tinyim.js"></script>-->
-    <!--<script src="FeigeAPI.js"></script>-->
+    <script src="../../WF/Scripts/tinyIM/commonSDK.js"></script>
+    <script type="text/javascript">
+
+
+
+
+    </script>
 </body>
 
 </html>

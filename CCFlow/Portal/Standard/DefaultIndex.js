@@ -35,7 +35,10 @@ window.onload = function () {
                 IsShowFullScreen: true,
                 IsShowTheme: true,
                 IsShowFlexible: true,
-                IsShowTwoLevelMenu: false
+                IsShowTwoLevelMenu: false,
+                msgListener: null,
+                plant:"CCFlow"
+
             };
         },
         computed: {
@@ -51,6 +54,25 @@ window.onload = function () {
             },
         },
         methods: {
+            initIM: function () {
+                var webUser = new WebUser();
+                var orgNo = webUser.OrgNo;
+                if (orgNo == "" || orgNo == null) {
+                    orgNo = "ccflow";
+                }
+                var bgc = JSON.parse(localStorage.getItem("themeColorInfo"));
+                umclient.init({
+                    No: webUser.No,
+                    Name: webUser.Name,
+                    Password: '',
+                    FG_OrgNo: orgNo,//必填，不能为空
+                    FG_OrgName: webUser.OrgName,
+                    FG_DeptNo: webUser.FK_Dept,
+                    FG_DeptName: webUser.FK_DeptName,
+                    isShowVideo: true, // 是否启用音视频通话 
+                    headerBgc: bgc.selectedMenu
+                }, '#iconIM')
+            },
             openTabDropdownMenu: function (e) {
                 this.tabDropdownVisible = true;
                 this.top = e.pageY;
@@ -190,8 +212,13 @@ window.onload = function () {
                         this.$refs['iframe-home'].contentWindow.location.reload();
                         return
                     }
-                    this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location
-                        .reload()
+                    var src = this.tabsList[this.selectedTabsIndex].src;
+                    var oldSrc = this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location.href;
+                    if (oldSrc.indexOf(src) != -1)
+                        this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location
+                            .reload()
+                    else
+                        this.$refs['iframe-' + this.selectedTabsIndex][0].contentWindow.location.href = src;
                 })
             },
             // 关闭当前标签页
@@ -206,8 +233,12 @@ window.onload = function () {
                     } else {
                         _this.selectedTabsIndex = index - 1
                     }
+                    if (_this.selectedTabsIndex == -1)
+                        _this.selectedId = "";
+                    else
+                        _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
                     var cur = _this.tabsList[_this.selectedTabsIndex];
-                    if (cur.name == "待办")
+                    if ((cur != undefined && cur.name == "待办") || _this.selectedTabsIndex == -1)
                         _this.reLoadCurrentPage();
                 }, 100)
             },
@@ -228,15 +259,18 @@ window.onload = function () {
                     return;
                 this.tabsList.splice(index, 1)
                 var _this = this
-                debugger
                 setTimeout(function () {
                     if (_this.tabsList.length > index) {
                         _this.selectedTabsIndex = index
                     } else {
                         _this.selectedTabsIndex = index - 1
                     }
+                    if (_this.selectedTabsIndex == -1)
+                        _this.selectedId = "";
+                    else
+                        _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
                     var cur = _this.tabsList[_this.selectedTabsIndex];
-                    if (cur.name == "待办")
+                    if ((cur != undefined && cur.name == "待办") || _this.selectedTabsIndex == -1)
                         _this.reLoadCurrentPage();
                 }, 100)
             },
@@ -244,7 +278,8 @@ window.onload = function () {
             // 关闭所有
             closeAllTabs: function () {
                 this.tabsList = []
-                this.selectedTabsIndex = -1
+                this.selectedTabsIndex = -1;
+                this.selectedId = "";
                 this.$nextTick(function () {
                     this.$refs['iframe-tabs'].style.left = 0 + 'px'
                 })
@@ -274,9 +309,9 @@ window.onload = function () {
                 //写入日志.
                 UserLogInsert("MenuClick", menu.Name + "@" + menu.Icon + "@" + menu.Url);
 
-                this.openTab(menu.Name, menu.Url, alignRight);
+                this.openTab(menu.Name, menu.Url,menu.No, alignRight);
             },
-            openTab: function (name, src, alignRight) {
+            openTab: function (name, src,no, alignRight) {
                 //如果发起实体类的流程，是通过一个页面中专过去的.
                 /*
                  *  /WF/CCBill/Opt/StartFlowByNewEntity.htm
@@ -288,6 +323,7 @@ window.onload = function () {
                     return;
                 }
                 var obj = {
+                    no:no||"",
                     name: name,
                     src: src
                 }
@@ -310,10 +346,14 @@ window.onload = function () {
                 // if (this.tabsList.length > 5)
                 //     this.handleTabScroll()
             },
-            changeSelectTab:function(index) {
+            changeSelectTab: function (index,item) {
                 this.selectedTabsIndex = index;
-                var cur =this.tabsList[this.selectedTabsIndex];
-                if (cur.name == "待办")
+                if (index == -1)
+                    this.selectedId == "";
+                else
+                    this.selectedId = item.no;
+                var cur = this.tabsList[this.selectedTabsIndex];
+                if ((cur != undefined && cur.name == "待办") || index==-1)
                     this.reLoadCurrentPage();
             },
             checkExist: function (obj) {
@@ -343,8 +383,8 @@ window.onload = function () {
                     "   <div class=\"layui-form-item\" pane>" +
                     "   <label class=\"layui-form-label\">\u5206\u680F\u5E03\u5C40</label>" +
                     "<div class=\"layui-input-block\">";
-                if (this.IsShowTwoLevelMenu == true)
-                    tag += "<input type=\"checkbox\" lay-skin=\"switch\" lay-text=\"\u5F00\u542F|\u5173\u95ED\" lay-filter=\"layout\" disabled>" + "</div>" + "</div>" + "</form>" + "</div>" + "<hr class=\"layui-border-black\">" + "<div class='theme-picker'>";
+                if (this.IsShowTwoLevelMenu == true || getPortalConfigByKey("IsClassicalLayout", true) == false)
+                    tag += "<input type=\"checkbox\" lay-skin=\"switch\" lay-text=\"\u5F00\u542F|\u5173\u95ED\" lay-filter=\"layout\" disabled checked>" + "</div>" + "</div>" + "</form>" + "</div>" + "<hr class=\"layui-border-black\">" + "<div class='theme-picker'>";
                 else
                     tag += "<input type=\"checkbox\" lay-skin=\"switch\" lay-text=\"\u5F00\u542F|\u5173\u95ED\" lay-filter=\"layout\" ".concat(this.classicalLayout ? '' : 'checked', ">" + "</div>" + "</div>" + "</form>" + "</div>" + "<hr class=\"layui-border-black\">" + "<div class='theme-picker'>");
                 for (var key in themeData) {
@@ -416,6 +456,8 @@ window.onload = function () {
                 // chooseTheme(color)
                 if (this.IsShowTwoLevelMenu == true)
                     localStorage.setItem('classicalLayout', "1");
+                if (getPortalConfigByKey("IsClassicalLayout", true) == false)
+                    localStorage.setItem('classicalLayout', "1");
                 this.classicalLayout = parseInt(localStorage.getItem('classicalLayout')) === 1
                 this.updateLayout()
             },
@@ -455,13 +497,14 @@ window.onload = function () {
 
                 //  win
                 //  var url = getPortalConfigByKey("LogoutPath", "./") + data;
-                //window.location.href = url;// "Login.htm?DoType=Logout";
+                //window.location.href = filterXSS(url);// "Login.htm?DoType=Logout";
             },
             logoutExt: function () {
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
                 var data = handler.DoMethodReturnString("Default_LogOut");
-                var url = getPortalConfigByKey("LogoutPath", "./") + data;
-                SetHref(url); // "Login.htm?DoType=Logout";
+                var url = getPortalConfigByKey("LogoutPath", "/Portal/Standard/") + data;
+                window.top.location.href = url
+                // SetHref(url); 
             },
             GoToAppClassic: function () {
                 var webUser = new WebUser();
@@ -524,6 +567,45 @@ window.onload = function () {
                 if (item.type === 'flow') cList.push(type === 1 ? 'flow-node' : 'flow-node-child')
                 if (item.type === 'form') cList.push(type === 1 ? 'form-node' : 'form-node-child')
                 return cList
+            },
+            startListenMsg: function () {
+                var _this = this
+                if (this.msgListener) {
+                    this.stopListenMsg()
+                }
+                this.msgListener = setInterval(() => {
+                    var storedNotifyVal = window.localStorage.getItem("lastNotifyTime") || '0';
+                    var lastNotifyTime = new Date(storedNotifyVal.replace(/-/g, '/')).getTime();
+
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+                    var data = handler.DoMethodReturnString("GenerMsg_Init");
+                    if (data.indexOf('err@') > -1) {
+                        alert(data);
+                        return
+                    }
+                    try {
+                        var json = JSON.parse(data)
+                        var targetTimeMillions = new Date((json.ID + '').replace(/-/g, '/')).getTime();
+                        if (json.Num > 0 && targetTimeMillions > lastNotifyTime ) {
+                            document.getElementById("alert-msg").play();
+                            layer.confirm("您有【" + json.Num + "】个新工作。", {
+                                btn: ["去处理", "忽略"],
+                            }, function () {
+                                _this.openTab("待办", "/WF/Todolist.htm", false);
+                                layer.close(layer.index);
+                            }, function () {
+                                layer.close(layer.index);
+                            })
+                            window.localStorage.setItem("lastNotifyTime", json.ID);
+                        }
+                    } catch (e) {
+                        return
+                    }
+                }, 5000)
+            },
+
+            stopListenMsg: function () {
+                clearInterval(this.msgListener)
             }
         },
         mounted: function () {
@@ -535,7 +617,7 @@ window.onload = function () {
             this.SystemName = getPortalConfigByKey("SystemName", "驰骋BPM");
             this.SystemLogo = getPortalConfigByKey("SystemLogo", "./image/logo.png");
             this.IsShowFast = getPortalConfigByKey("IsShowFast", true);
-            this.IsShowOA = getPortalConfigByKey("IsShowOA", false);
+            this.IsShowOA = getPortalConfigByKey("IsShowOA", true);
             this.IsShowRefresh = getPortalConfigByKey("IsShowRefresh", true);
             this.IsShowFullScreen = getPortalConfigByKey("IsShowFullScreen", true);
             this.IsShowTheme = getPortalConfigByKey("IsShowTheme", true);
@@ -543,8 +625,14 @@ window.onload = function () {
             this.IsShowTwoLevelMenu = getPortalConfigByKey("IsShowTwoLevelMenu", false);
             this.webUser = new WebUser();
             this.isAdmin = this.webUser.No === "admin" || parseInt(this.webUser.IsAdmin) === 1;
+            this.plant = plant;
             this.initMenus();
+            this.startListenMsg();
+            this.initIM();
         },
+        beforeDestory: function () {
+            this.stopListenMsg()
+        }
     })
 
 }

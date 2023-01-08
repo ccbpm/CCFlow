@@ -33,7 +33,7 @@
         logo: 'rgb(24, 144, 255)',
         selected: 'rgb(57, 158, 253)',
         header: 'rgb(24, 144, 255)',
-        sideBar: 'linear-gradient(90deg, rgb(0, 108, 255), rgb(57, 158, 253))',
+        sideBar: 'rgb(0, 108, 255)',
         navBar: 'rgb(57, 158, 253)',
         selectedMenu: 'rgb(57, 158, 253)',
         formColor: 'rgb(57, 158, 253)',
@@ -41,7 +41,7 @@
     },
     rynn: {
         logo: 'rgb(24, 144, 255)',
-        selected: 'rgb(250 250 250)', //选择系统的颜色
+        selected: 'rgb(52 137 211)', //选择系统的颜色
         header: 'rgba(28, 90, 201, 1)',
         sideBar: 'rgba(28, 90, 201, 1)',
         navBar: 'rgba(28, 90, 201, 1)',

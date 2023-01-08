@@ -28,37 +28,37 @@ var vm = new Vue({
                             alert("未实现.");
                             break;
                         case 'Col1':
-                            var en = new Entity("BP.CCFast.Portal.WindowTemplate", nameNo);
+                            var en = new Entity("BP.GPM.Home.WindowTemplate", nameNo);
                             en.ColSpan = 1;
                             en.Update();
                             window.location.reload();
                             break;
                         case 'Col2':
-                            var en = new Entity("BP.CCFast.Portal.WindowTemplate", nameNo);
+                            var en = new Entity("BP.GPM.Home.WindowTemplate", nameNo);
                             en.ColSpan = 2;
                             en.Update();
                             window.location.reload();
                             break;
                         case 'Col3':
-                            var en = new Entity("BP.CCFast.Portal.WindowTemplate", nameNo);
+                            var en = new Entity("BP.GPM.Home.WindowTemplate", nameNo);
                             en.ColSpan = 3;
                             en.Update();
                             window.location.reload();
                             break;
                         case 'Col4':
-                            var en = new Entity("BP.CCFast.Portal.WindowTemplate", nameNo);
+                            var en = new Entity("BP.GPM.Home.WindowTemplate", nameNo);
                             en.ColSpan = 4;
                             en.Update();
                             window.location.reload();
                             break;
                         case 'Edit':
-                            var url = "../Comm/EnOnly.htm?EnName=BP.CCFast.Portal.WindowExt." + WinDocModel + "&No=" + nameNo;
+                            var url = "../Comm/EnOnly.htm?EnName=BP.GPM.Home.WindowExt." + WinDocModel + "&No=" + nameNo;
                             OpenLayuiDialog(url, '', 1100, 89, "auto", false);
                             break;
                         case 'Delete':
                             if (window.confirm("确定要删除吗?") == false)
                                 return;
-                            var en = new Entity("BP.CCFast.Portal.WindowTemplate", nameNo);
+                            var en = new Entity("BP.GPM.Home.WindowTemplate", nameNo);
                             var data = en.Delete();
                             layer.msg(data);
 
@@ -98,7 +98,7 @@ var vm = new Vue({
             colspan = item.ColSpan || 1
             return {
                 width: 'calc(' + colspan / 4 * 100 + '%' + ' - 14px)',
-                height: '300px',
+                height: '360px',
                 margin: '6px 6px 6px 6px'
             }
         },
@@ -752,6 +752,8 @@ var vm = new Vue({
 
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
         var pageID = GetQueryString("PageID");
+        pageID = "e1493a51-63f9-4c2e-a06b-be49c68e6c54";
+
         handler.AddPara("PageID", pageID);
         //handler.AddUrlData();
         var windows = handler.DoMethodReturnJSON("Home_Init");
@@ -766,17 +768,28 @@ var vm = new Vue({
 
             for (var j = 0; j < windows.length; j++) {
                 var win = windows[j];
+                win.children = [];
                 if (win.WinDocModel == 'Tab') {
                     win.children = JSON.parse(win.Docs);
                 }
                 if (win.WinDocModel == 'ChartLine') {
-                    win.children = []
                     if (win.IsLine == 1) { win.children.push({ isShow: win.IsLine, isNo: win.No + 'line01', isName: '折线图', isData: win.Docs }) }
                     if (win.IsPie == 1) { win.children.push({ isShow: win.IsPie, isNo: win.No + 'pie01', isName: '扇形图', isData: win.Docs }) }
+                    if (win.IsRate == 1) { win.children.push({ isShow: win.IsRate, isNo: win.No + 'rate01', isName: '扇形图', isData: win.Docs }) }
                     if (win.IsRing == 1) { win.children.push({ isShow: win.IsRing, isNo: win.No + 'ring01', isName: '环形图', isData: win.Docs }) }
                     if (win.IsZZT == 1) { win.children.push({ isShow: win.IsZZT, isNo: win.No + 'zzt01', isName: '柱状图', isData: win.Docs }) }
                     // win.children = [{ isShow: win.IsLine, isNo: win.No + 'line01', isName: '折线图', isData: win.Docs }, { isShow: win.IsPie, isNo: win.No + 'pie01', isName: '扇形图', isData: win.Docs }, { isShow: win.IsRing, isNo: win.No + 'ring01', isName: '环形图', isData: win.Docs }, { isShow: win.IsZZT, isNo: win.No + 'zzt01',isName: '柱状图', isData: win.Docs }];
 
+                }
+                if (win.WinDocModel == 'ChartZZT') {
+                    win.children.push({ isShow: win.IsZZT, isNo: win.No, isName: '柱状图', isData: win.Docs });
+                }
+                if (win.WinDocModel == 'ChartPie') {
+                    win.children.push({ isShow: win.IsPie, isNo: win.No, isName: '扇形图', isData: win.Docs });
+                }
+                if (win.WinDocModel == 'ChartRate') {
+                    win.Docs = '[{"名称":"' + win.LabOfFZ + '","统计数":"' + win.SQLOfFZ + '"},{"名称":"' + win.LabOfFM + '","统计数":"' + win.SQLOfFM + '"}]';
+                    win.children.push({ isShow: win.IsRing, isNo: win.No, isName: '环形图', isData: win.Docs });
                 }
             }
         }
@@ -789,7 +802,7 @@ var vm = new Vue({
 
         //console.log(windows);
         //  handler.AddPara("MyPK", str);
-        // var windows = new Entities("BP.CCFast.Portal.WindowTemplates");
+        // var windows = new Entities("BP.GPM.Home.WindowTemplates");
         // windows.RetrieveAll();
         // handle bad json response
         //delete windows['Paras']

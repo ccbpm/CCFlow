@@ -82,7 +82,7 @@ function GoToOrgEn() {
 
     var urlEnd = "&Token=" + GetQueryString("Token") + "&OrgNo=" + GetQueryString("OrgNo") + "&UserNo=" + GetQueryString("UserNo");
     var url = basePath + '/WF/Comm/En.htm?EnName=BP.WF.Admin.Org&No=ccflow' + urlEnd;
-    window.location.href = url;
+    window.location.href = filterXSS(url);
     //WinOpenFull(url);
     return;
 
@@ -102,7 +102,8 @@ var menuNode;
 // 获取系统菜单
 MenuConvertTools.prototype.getSystemMenus = function () {
 
-    systemNodes = this.data['System'];
+    systemNodes = [];
+    systems = this.data['System'];
     moduleNode = this.data['Module'];
     menuNode = this.data['Menu'];
 
@@ -110,8 +111,10 @@ MenuConvertTools.prototype.getSystemMenus = function () {
 
     var adminMenuNodes = [];
     //循环系统.
-    for (var idx = 0; idx < systemNodes.length; idx++) {
-        var systemNode = systemNodes[idx];
+    for (var idx = 0; idx < systems.length; idx++) {
+        if (systems[idx].IsEnable == 0)
+            continue;
+        var systemNode = systems[idx];
         if (nonSystemItems.indexOf(systemNode.No) > -1) continue;
         systemNode.children = [];
         systemNode.open = false;
@@ -129,6 +132,8 @@ MenuConvertTools.prototype.getSystemMenus = function () {
             var moduleEn = moduleNode[idxModule];
             if (moduleEn.SystemNo !== systemNode.No)
                 continue; //如果不是本系统的.
+            if (moduleEn.IsEnable == 0)
+                continue;
             moduleEn.children = [];
             if (moduleEn.Icon === "" || moduleEn.Icon == null || moduleEn.Icon === "")
                 moduleEn.Icon = 'icon-list';
@@ -141,6 +146,8 @@ MenuConvertTools.prototype.getSystemMenus = function () {
                 var menu = menuNode[idxMenu];
                 if (moduleEn.No !== menu.ModuleNo)
                     continue; // 不是本模块的。
+                if (menu.IsEnable == 0)
+                    continue;
                 if (menu.MenuModel == "FlowEntityBatchStart")
                     continue;
 

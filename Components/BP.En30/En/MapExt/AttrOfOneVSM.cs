@@ -1,0 +1,344 @@
+﻿using System;
+using System.Collections;
+using BP.En;
+
+namespace BP.En
+{
+    /// <summary>
+    /// 工作模式
+    /// </summary>
+    public enum Dot2DotModel
+    {
+        /// <summary>
+        /// 默认模式
+        /// </summary>
+        Default,
+        /// <summary>
+        /// 树模式
+        /// </summary>
+        TreeDept,
+        /// <summary>
+        /// 树叶子模式
+        /// </summary>
+        TreeDeptEmp
+    }
+	/// <summary>
+	/// SearchKey 的摘要说明。
+	/// 用来处理一条记录的存放，问题。
+	/// </summary>
+	public class AttrOfOneVSM 
+	{
+		#region 基本属性
+        /// <summary>
+        /// 工作模式
+        /// </summary>
+        public Dot2DotModel Dot2DotModel = Dot2DotModel.Default;
+        /// <summary>
+        /// 树
+        /// </summary>
+        public EntitiesTree EnsTree = null;
+        /// <summary>
+        /// 默认的分组key.
+        /// </summary>
+        public string DefaultGroupAttrKey = null;
+        /// <summary>
+        /// 树的根节点
+        /// </summary>
+        public string RootNo = null;
+        /// <summary>
+        /// 显示的扩展列
+        /// </summary>
+        public string ExtShowCols = null;
+        /// <summary>
+        /// 关联的树字段
+        /// </summary>
+        public string RefTreeAttr =null; 
+		/// <summary>
+		/// 多对多的实体.
+		/// </summary>
+		private Entities _ensOfMM=null;
+		public string GroupName = "";
+		/// <summary>
+		/// 多对多的实体集合
+		/// </summary>
+		public Entities EnsOfMM
+		{
+			get
+			{
+				return _ensOfMM;
+			}
+			set
+			{
+				_ensOfMM=value;
+			}
+		}
+		/// <summary>
+		/// 多对多的实体
+		/// </summary>
+		private Entities _ensOfM=null;
+		/// <summary>
+		/// 多对多的实体集合
+		/// </summary>
+		public Entities EnsOfM
+		{
+			get
+			{
+				return _ensOfM;
+			}
+			set
+			{
+				_ensOfM=value;
+			}
+		}
+		/// <summary>
+		/// M的实体属性在多对多的实体中
+		/// </summary>
+		public string Desc=null;
+		/// <summary>
+		/// 一的实体属性在多对多的实体中.
+		/// </summary>
+		private string _AttrOfOneInMM=null;
+		/// <summary>
+		/// 一的实体属性在多对多的实体中
+		/// </summary>
+		public string AttrOfOneInMM
+		{
+			get
+			{
+				return _AttrOfOneInMM;
+			}
+			set
+			{
+				_AttrOfOneInMM=value;
+			}
+		}
+
+		/// <summary>
+		/// M的实体属性在多对多的实体中
+		/// </summary>
+		public string AttrOfMInMM = null;
+
+		/// <summary>
+		/// 标签
+		/// </summary>
+		public string AttrOfMText = null;
+
+		/// <summary>
+		/// Value
+		/// </summary>
+		public string AttrOfMValue = null;
+		 
+		#endregion
+
+		#region 构造方法
+		/// <summary>
+		/// AttrOfOneVSM
+		/// </summary>
+		public AttrOfOneVSM()
+		{
+        }
+		/// <summary>
+		/// AttrOfOneVSM
+		/// </summary>
+		/// <param name="_ensOfMM"></param>
+		/// <param name="_ensOfM"></param>
+		/// <param name="AttrOfOneInMM"></param>
+		/// <param name="AttrOfMInMM"></param>
+		/// <param name="AttrOfMText"></param>
+		/// <param name="AttrOfMValue"></param>
+		public AttrOfOneVSM(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText, string AttrOfMValue, string desc)
+		{
+			this.EnsOfM=_ensOfM;
+			this.EnsOfMM=_ensOfMM;
+			this.AttrOfOneInMM=AttrOfOneInMM;
+			this.AttrOfMInMM=AttrOfMInMM;
+			this.AttrOfMText=AttrOfMText;
+			this.AttrOfMValue=AttrOfMValue;
+			this.Desc=desc;
+		}
+		#endregion
+
+	}
+	/// <summary>
+	/// AttrsOfOneVSM 集合
+	/// </summary>
+	public class AttrsOfOneVSM : System.Collections.CollectionBase
+	{
+		public string GroupName = "";
+		public AttrsOfOneVSM()
+		{
+		}
+		public AttrOfOneVSM this[int index]
+		{
+			get
+			{
+				return (AttrOfOneVSM)this.InnerList[index];
+			}
+		}
+		/// <summary>
+		/// 增加一个SearchKey .
+		/// </summary>
+		/// <param name="r">SearchKey</param>
+		public void Add(AttrOfOneVSM attr)
+		{
+			if (this.IsExits(attr))
+				return ;
+			attr.GroupName = this.GroupName;
+			this.InnerList.Add(attr);
+		}
+
+		/// <summary>
+		/// 是不是存在集合里面
+		/// </summary>
+		/// <param name="en">要检查的EnDtl</param>
+		/// <returns>true/false</returns>
+		public bool IsExits(AttrOfOneVSM en)
+		{
+			foreach (AttrOfOneVSM attr in this )
+			{
+				if (attr.EnsOfMM == en.EnsOfMM  )
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// 增加一个属性
+		/// </summary>
+		/// <param name="_ensOfMM">多对多的实体</param>
+		/// <param name="_ensOfM">多实体</param>
+		/// <param name="AttrOfOneInMM">点实体,在MM中的属性</param>
+		/// <param name="AttrOfMInMM">多实体主键在MM中的属性</param>
+		/// <param name="AttrOfMText"></param>
+		/// <param name="AttrOfMValue"></param>
+		/// <param name="desc">描述</param>
+		public void Add(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM , string AttrOfMText,
+            string AttrOfMValue, string desc, Dot2DotModel model= Dot2DotModel.Default, EntitiesTree ensTree=null,
+            string refTreeAttr=null)
+		{
+
+            //属性.
+			AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM,_ensOfM,AttrOfOneInMM,AttrOfMInMM,AttrOfMText,AttrOfMValue,desc);
+            
+            //工作模式.
+            en.Dot2DotModel = model;
+            en.EnsTree = ensTree;
+            en.RefTreeAttr = refTreeAttr;
+			 
+			this.Add(en);				
+		}
+        /// <summary>
+        /// 绑定树模式
+        /// </summary>
+        /// <param name="_ensOfMM">比如 BP.WF.NodeDepts </param>
+        /// <param name="_ensOfM">比如: BP.Port.Depts</param>
+        /// <param name="rootNo">跟节点</param>
+        /// <param name="AttrOfOneInMM">比如:FK_Node</param>
+        /// <param name="AttrOfMInMM">比如:FK_Dept</param>
+        /// <param name="desc">比如:节点绑定部门</param>
+        /// <param name="AttrOfMText">一般是Name</param>
+        /// <param name="AttrOfMValue">一般是No</param>
+        /// <param name="rootNo">根目录节点</param>
+        public void AddBranches(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+           string desc, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo = "0",string expShowCols=null)
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDept; //分组模式.
+
+            en.RootNo = rootNo; //默认的根目录.
+            en.ExtShowCols = expShowCols; //显示的列.
+            this.Add(en);
+        }
+        /// <summary>
+        /// 增加树杆叶子类型
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc"></param>
+        /// <param name="defaultGroupKey"></param>
+        /// <param name="AttrOfMText"></param>
+        /// <param name="AttrOfMValue"></param>
+        /// <param name="rootNo">根目录编号</param>
+        /// <param name="extShowCols">显示的扩展列 , @FK_DeptName=部门名称@OrgName=组织名称</param>
+        public void AddBranchesAndLeaf(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+            string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo="0",string extShowCols=null)
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDeptEmp; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+            en.RootNo = rootNo; //默认的根目录.
+            en.ExtShowCols = extShowCols; //显示的扩展列 , @FK_DeptName=部门名称@OrgName=组织名称.
+
+            this.Add(en);
+        }
+        /// <summary>
+        /// 增加分组列表模式
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc"></param>
+        /// <param name="defaultGroupKey"></param>
+        /// <param name="AttrOfMText"></param>
+        /// <param name="AttrOfMValue"></param>
+        /// <param name="rootNo"></param>
+        public void AddGroupListModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+          string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDeptEmp; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+            en.RootNo = "0";
+
+            this.Add(en);
+        }
+        /// <summary>
+        /// 绑定分组列表平铺模式
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc">标签或者描述</param>
+        /// <param name="AttrOfMText">显示的标签,一般为 Name</param>
+        /// <param name="AttrOfMValue">存储的值字段,一般为 No</param>
+        /// <param name="defaultGroupKey">默认的分组外键或者枚举,如果为空就不分组.</param>
+        public void AddGroupPanelModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+            string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM, AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.Default; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+			
+
+			this.Add(en);
+        }
+		 
+	}
+}

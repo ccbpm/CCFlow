@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 管理员菜单:
+  1, 用于显示在流程设计器功能菜单栏.
+  2, For="admin" 标识只有admin用户可以使用. 
+     比如： For="00000120"  只有这个管理员才可以使用. 
+     For="SecondAdmin" 说明只对二级管理员有效.
+  3, 如果 For="" 标识所有的管理员都可以使用.
+  4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
+  系统维护管理员菜单.
+  -->
+
+  <!-- 集团版本的admin组织结构菜单. -->
+  <Group No="OrgAdmin" Name="组织结构" For="admin" />
+  <Item No="101" GroupNo="OrgAdmin" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
+  <Item No="101" GroupNo="OrgAdmin" Name="岗位维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
+  <Item No="102" GroupNo="OrgAdmin" Name="部门台帐"  Url="../../Comm/Search.htm?EnsName=BP.Port.Admin2.Depts"  />
+  <Item No="101" GroupNo="OrgAdmin" Name="独立组织"   Url="../../Comm/Search.htm?EnsName=BP.Port.Admin2.Orgs"  />
+  <Item No="104" GroupNo="OrgAdmin" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
+  <Item No="105" GroupNo="OrgAdmin" Name="用户组类型"   Url="../../Comm/Ens.htm?EnsName=BP.Port.TeamTypes"  />
+  <Item No="106" GroupNo="OrgAdmin" Name="用户组"   Url="../../Comm/Search.htm?EnsName=BP.Port.Teams"  />
+
+  <!-- 集团版本的admin2 (二级管理员) 组织结构菜单. -->
+  <Group No="OrgAdmin2" Name="组织结构(2级管理员)" For="admin2" />
+  <Item No="201" GroupNo="OrgAdmin2" Name="组织结构"   Url="../../../GPM/Organization.htm"  />
+  <Item No="202" GroupNo="OrgAdmin2" Name="岗位类型维护"  Url="../../Comm/Search.htm?EnsName=BP.Port.StationTypes"  />
+  <Item No="203" GroupNo="OrgAdmin2" Name="岗位维护"   Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
+  <Item No="001" GroupNo="OrgAdmin2" Name="数据源"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
+  <Item No="001" GroupNo="OrgAdmin2" Name="数据表"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFTables"  />
+
+
+  <Group No="GPM" Name="菜单权限管理"  For="admin"  />
+  <Item No="901" GroupNo="GPM" Name="系统类别"  Url="../../Comm/Search.htm?EnsName=BP.GPM.AppSorts"  />
+  <Item No="902" GroupNo="GPM" Name="系统台帐"   Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
+  <Item No="903" GroupNo="GPM" Name="权限组"   Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
+  <Item1 No="904" GroupNo="GPM" Name="岗位菜单"   Url="../../Comm/Search.htm?EnsName=BP.Port.StationExts"  />
+  <Item No="905" GroupNo="GPM" Name="人员菜单"   Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
+  <Item No="907" GroupNo="GPM" Name="菜单树"   Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />
+
+  <Group No="System" Name="系统管理" For="admin" /> 
+  
+  <Item No="001" GroupNo="System" Name="数据源"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs"  />
+  <Item No="002" GroupNo="System" Name="字典表"  Url="../../Comm/Search.htm?EnsName=BP.Sys.SFTables"  />
+
+  <Item No="002" GroupNo="System" Name="节假日设置"   Url="../../Comm/Sys/Holiday.htm"  />
+  <Item No="003" GroupNo="System" Name="表结构"    Url="../../Comm/Sys/SystemClass.htm"  />
+  <Item No="005" GroupNo="System" Name="工具箱"  Url="../../Comm/MethodLink.htm"  />
+  <Item No="010" GroupNo="System" Name="修改密码"   Url="../../Setting/ChangePassword.htm"  />
+  <Item No="001" GroupNo="System" Name="SQL配置模版设置"  Url="../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates"  />
+  <Item No="601" GroupNo="System" Name="系统枚举"  Url="../../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum"  />
+  <Item No="020" GroupNo="System" Name="JavaScript脚本导入" For="" Url="../../Comm/Sys/JavaScriptImp.htm"  />
+  <Item No="999" GroupNo="System" Name="配置字符串加密" For="" Url="../../Comm/Sys/JiaMi.htm"  />
+
+  <!--<Group1 No="DOC2" Name="公文管理（二级管理员）" For="admin2" />
+  <Item11 No="7002" GroupNo="DOC2" Name="公文模版"   Url="../../Comm/Search.htm?EnsName=BP.Port.WD.Templates"  />
+  <Item1 No="7003" GroupNo="DOC2" Name="公文代字"   Url="../../Comm/Search.htm?EnsName=BP.Port.WD.Words"  />
+  <Item1 No="7004" GroupNo="DOC2" Name="流程设置"   Url="../../Comm/Search.htm?EnsName=BP.Port.WD.Flows"  />
+  <Item1 No="7004" GroupNo="DOC2" Name="工具箱"  Url="../../Comm/MethodLink.htm"  />-->
+
+  <!--<Group No="Org" Name="组织结构(多级管理员模式)" /> 
+  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.StationTypes"  />
+  <Item No="501" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Stations"  />
+  <Item No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Depts"  />
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.Emps"  />
+  <Item No="504" GroupNo="Org" Name="组织结构维护" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.SubInc.AdminEmps"  />-->
+
+</NewDataSet>

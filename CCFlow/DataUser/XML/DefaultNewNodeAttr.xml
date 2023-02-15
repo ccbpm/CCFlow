@@ -1,20 +1,172 @@
 <?xml version="1.0" standalone="yes"?>
-<NewDataSet>
+<DocumentElement>
   <Node>
-
-    <!-- 考核方式 0不考核,1,按时间考核.  -->
-    <CHWay>1</CHWay>
-    <!-- 限期(天)  -->
-    <TimeLimit>1</TimeLimit>
-    <!-- 预警(天)  -->
-    <WarningDay>1</WarningDay>
-    <!-- 0=不计算节假日,1=计算节假日  -->
-    <TWay>1</TWay>
-    <!-- 扣分(每延期1小时)  -->
-    <TCent>2</TCent>
-    
-    <!-- 退回规则 0不能退回,1,只能退回上一个节点, 2退回任意节点, 3指定的节点.  -->
+    <NodeID>103</NodeID>
+    <FK_Flow>001</FK_Flow>
+    <FlowName>请假流程-经典表单-演示</FlowName>
+    <Name>总经理审批</Name>
+    <WhoExeIt>0</WhoExeIt>
+    <WhoExeItText>操作员执行</WhoExeItText>
+    <ReadReceipts>0</ReadReceipts>
+    <ReadReceiptsText>不回执</ReadReceiptsText>
+    <CancelRole>0</CancelRole>
+    <CancelRoleText>上一步可以撤销</CancelRoleText>
+    <CancelDisWhenRead>0</CancelDisWhenRead>
+    <IsOpenOver>0</IsOpenOver>
+    <IsSendDraftSubFlow>0</IsSendDraftSubFlow>
+    <IsGuestNode>0</IsGuestNode>
+    <IsYouLiTai>0</IsYouLiTai>
+    <FocusField>审核意见:@ZJLSP_Note</FocusField>
+    <NodeAppType>0</NodeAppType>
+    <FWCSta>0</FWCSta>
+    <FWCAth>0</FWCAth>
+    <DeliveryWay>14</DeliveryWay>
+    <SelfParas />
+    <Step>3</Step>
+    <Tip />
+    <RunModel>0</RunModel>
+    <RunModelText>普通</RunModelText>
+    <SubThreadType>0</SubThreadType>
+    <SubThreadTypeText>同表单</SubThreadTypeText>
+    <PassRate>100</PassRate>
+    <SubFlowStartWay>0</SubFlowStartWay>
+    <SubFlowStartWayText>不启动</SubFlowStartWayText>
+    <SubFlowStartParas />
+    <ThreadIsCanDel>0</ThreadIsCanDel>
+    <ThreadIsCanShift>0</ThreadIsCanShift>
+    <IsAllowRepeatEmps>0</IsAllowRepeatEmps>
+    <AutoRunEnable>0</AutoRunEnable>
+    <AutoRunParas />
+    <IsSendBackNode>0</IsSendBackNode>
+    <AutoJumpRole0>0</AutoJumpRole0>
+    <AutoJumpRole1>0</AutoJumpRole1>
+    <AutoJumpRole2>0</AutoJumpRole2>
+    <WhenNoWorker>0</WhenNoWorker>
+    <SendLab>发送</SendLab>
+    <SendJS />
+    <SaveLab>保存</SaveLab>
+    <SaveEnable>1</SaveEnable>
+    <CCLab>抄送</CCLab>
+    <CCRole>0</CCRole>
+    <CCRoleText>不能抄送</CCRoleText>
+    <QRCodeLab>二维码</QRCodeLab>
+    <QRCodeRole>0</QRCodeRole>
+    <QRCodeRoleText>无</QRCodeRoleText>
+    <ShiftLab>移交</ShiftLab>
+    <ShiftEnable>0</ShiftEnable>
+    <DelLab>删除</DelLab>
+    <DelEnable>0</DelEnable>
+    <DelEnableText>不能删除</DelEnableText>
+    <EndFlowLab>结束流程</EndFlowLab>
+    <EndFlowEnable>0</EndFlowEnable>
+    <ShowParentFormLab>查看父流程</ShowParentFormLab>
+    <ShowParentFormEnable>0</ShowParentFormEnable>
+    <OfficeBtnLab>打开公文</OfficeBtnLab>
+    <OfficeBtnEnable>0</OfficeBtnEnable>
+    <OfficeBtnEnableText>不可用</OfficeBtnEnableText>
+    <OfficeFileType>0</OfficeFileType>
+    <OfficeFileTypeText>word文件</OfficeFileTypeText>
+    <OfficeBtnLocal>0</OfficeBtnLocal>
+    <OfficeBtnLocalText>工具栏上</OfficeBtnLocalText>
+    <PrintHtmlLab>打印Html</PrintHtmlLab>
+    <PrintHtmlEnable>0</PrintHtmlEnable>
+    <PrintHtmlMyView>0</PrintHtmlMyView>
+    <PrintHtmlMyCC>0</PrintHtmlMyCC>
+    <PrintPDFLab>打印pdf</PrintPDFLab>
+    <PrintPDFEnable>0</PrintPDFEnable>
+    <PrintPDFMyView>0</PrintPDFMyView>
+    <PrintPDFMyCC>0</PrintPDFMyCC>
+    <PrintPDFModle>0</PrintPDFModle>
+    <PrintPDFModleText>全部打印</PrintPDFModleText>
+    <ShuiYinModle />
+    <PrintZipLab>打包下载</PrintZipLab>
+    <PrintZipEnable>0</PrintZipEnable>
+    <PrintZipMyView>0</PrintZipMyView>
+    <PrintZipMyCC>0</PrintZipMyCC>
+    <PrintDocLab>打印单据</PrintDocLab>
+    <PrintDocEnable>0</PrintDocEnable>
+    <TrackLab>轨迹</TrackLab>
+    <TrackEnable>1</TrackEnable>
+    <HungLab>挂起</HungLab>
+    <HungEnable>0</HungEnable>
+    <SearchLab>查询</SearchLab>
+    <SearchEnable>0</SearchEnable>
+    <HuiQianLab>会签</HuiQianLab>
+    <HuiQianRole>0</HuiQianRole>
+    <HuiQianRoleText>不启用</HuiQianRoleText>
+    <HuiQianLeaderRole>0</HuiQianLeaderRole>
+    <HuiQianLeaderRoleText>只有一个组长</HuiQianLeaderRoleText>
+    <AddLeaderLab>加主持人</AddLeaderLab>
+    <AddLeaderEnable>0</AddLeaderEnable>
+    <TCLab>流转自定义</TCLab>
+    <TCEnable>0</TCEnable>
+    <FrmDBVerLab>数据版本</FrmDBVerLab>
+    <FrmDBVerEnable>0</FrmDBVerEnable>
+    <FrmDBVerMyView>0</FrmDBVerMyView>
+    <FrmDBVerMyCC>0</FrmDBVerMyCC>
+    <PRILab>重要性</PRILab>
+    <PRIEnable>0</PRIEnable>
+    <PRIEnableText>不启用</PRIEnableText>
+    <CHLab>节点时限</CHLab>
+    <CHRole>0</CHRole>
+    <CHRoleText>禁用</CHRoleText>
+    <AllotLab>分配</AllotLab>
+    <AllotEnable>0</AllotEnable>
+    <FocusLab>关注</FocusLab>
+    <FocusEnable>0</FocusEnable>
+    <ConfirmLab>确认</ConfirmLab>
+    <ConfirmEnable>0</ConfirmEnable>
+    <ListLab>列表</ListLab>
+    <ListEnable>1</ListEnable>
+    <BatchLab>批量审核</BatchLab>
+    <BatchEnable>0</BatchEnable>
+    <NoteLab>备注</NoteLab>
+    <NoteEnable>0</NoteEnable>
+    <NoteEnableText>禁用</NoteEnableText>
+    <HelpLab>帮助提示</HelpLab>
+    <HelpRole>0</HelpRole>
+    <HelpRoleText>禁用</HelpRoleText>
+    <ScripLab>小纸条</ScripLab>
+    <ScripRole>0</ScripRole>
+    <ScripRoleText>禁用</ScripRoleText>
+    <FlowBBSLab>评论</FlowBBSLab>
+    <FlowBBSRole>0</FlowBBSRole>
+    <FlowBBSRoleText>禁用</FlowBBSRoleText>
+    <IMLab>即时通讯</IMLab>
+    <IMEnable>0</IMEnable>
+    <IMEnableText>禁用</IMEnableText>
+    <NextLab>下一条</NextLab>
+    <NextRole>0</NextRole>
+    <NextRoleText>禁用</NextRoleText>
+    <ThreadLab>子线程</ThreadLab>
+    <ThreadEnable>0</ThreadEnable>
+    <ThreadKillRole>0</ThreadKillRole>
+    <ThreadKillRoleText>不能删除</ThreadKillRoleText>
+    <JumpWayLab>跳转</JumpWayLab>
+    <JumpWay>0</JumpWay>
+    <JumpWayText>不能跳转</JumpWayText>
+    <JumpToNodes />
+    <ReturnLab>退回</ReturnLab>
     <ReturnRole>1</ReturnRole>
-
-    </Node> 
-</NewDataSet>
+    <ReturnRoleText>只能退回上一个节点</ReturnRoleText>
+    <ReturnAlert />
+    <IsBackTracking>1</IsBackTracking>
+    <IsBackTrackingText>由退回人决定</IsBackTrackingText>
+    <IsBackResetAccepter>0</IsBackResetAccepter>
+    <IsKillEtcThread>0</IsKillEtcThread>
+    <IsKillEtcThreadText>不删除其它的子线程</IsKillEtcThreadText>
+    <ReturnCHEnable>0</ReturnCHEnable>
+    <ReturnOneNodeRole>0</ReturnOneNodeRole>
+    <ReturnOneNodeRoleText>不启用</ReturnOneNodeRoleText>
+    <ReturnField />
+    <ReturnReasonsItems />
+    <TAlertRole>0</TAlertRole>
+    <TAlertWay>0</TAlertWay>
+    <WAlertRole>0</WAlertRole>
+    <WAlertWay>0</WAlertWay>
+    <TCent>2</TCent>
+    <CHWay>1</CHWay>
+    <IsEval>0</IsEval>
+    <OutTimeDeal>0</OutTimeDeal>
+  </Node>
+</DocumentElement>

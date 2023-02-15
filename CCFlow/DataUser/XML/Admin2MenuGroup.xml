@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+
+  <!-- 集团模式下的 2级管理员菜单. -->
+  <Group No="Flows" Name="流程表单(本组织)"  Icon="icon-layers" />
+  <Item No="101" GroupNo="Flows" Name="统计大屏"   Url="../../WF/Watchdog.htm"  Icon="icon-note"  />
+  <Item No="102" GroupNo="Flows" Name="查询监控"  Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Admin2Group.GenerWorkFlowViews" Icon="icon-magnifier" />
+  <Item No="103" GroupNo="Flows" Name="流程分析"  Url="../../WF/Comm/Group.htm?EnsName=BP.WF.Data.Admin2Group.GenerWorkFlowViews" Icon="icon-pie-chart" />
+  <Item No="104" GroupNo="Flows" Name="时效查询"  Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Admin2Group.CHExts" Icon="icon-magnifier" />
+  <Item No="105" GroupNo="Flows" Name="时效分析"  Url="../../WF/Comm/Group.htm?EnsName=BP.WF.Data.Admin2Group.CHExts" Icon="icon-pie-chart" />
+
+  <Group No="Org" Name="组织结构"  Icon="icon-organization" />
+  <Item No="5024" GroupNo="Org" Name="组织信息"  Url="../../WF/Comm/En.htm?EnName=BP.WF.Port.Admin2Group.Org&amp;No=@WebUser.OrgNo" Icon="icon-people" />
+  <Item No="504" GroupNo="Org" Name="组织结构"  Url="../../GPM/Organization.htm" Icon="icon-people" />
+  <Item No="501" GroupNo="Org" Name="岗位类型维护"  Url="../../WF/Comm/Search.htm?EnsName=BP.Port.StationTypes" Icon="icon-note" />
+  <Item No="502" GroupNo="Org" Name="岗位维护"  Url="../../WF/Comm/Search.htm?EnsName=BP.Port.Stations"  Icon="icon-note"/>
+  <Item1 No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../WF/Comm/Search.htm?EnsName=BP.Port.Emps" Icon="icon-list" />
+  <Item1 No="601" GroupNo="Org" Name="自动报表"  Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.AutoRpts" Icon="icon-pie-chart" />
+
+  <Group1 No="System" Name="系统管理" Icon="icon-settings" />
+  <Item1 No="670" GroupNo="System" Name="系统枚举"  Url="../../WF/Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum" Icon="icon-note" />
+  <Item1 No="621" GroupNo="System" Name="系统字典2.0"  Url="../../WF/Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  Icon="icon-note"/>
+  <Item1 No="671" GroupNo="System" Name="系统字典1.0"  Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-book-open" />
+
+  <Item1 No="672" GroupNo="System" Name="数据源"  Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs" Icon="icon-note" />
+  <Item1 No="002" GroupNo="System" Name="节假日设置"  Url="../../WF/Comm/Sys/Holiday.htm" Icon="icon-notebook" />
+  <Item1 No="003" GroupNo="System" Name="表结构"     Url="../../WF/Comm/Sys/SystemClass.htm" Icon="icon-note" />
+  <Item1 No="090" GroupNo="System" Name="信息窗"     Url="../../WF/Comm/Search.htm?EnsName=BP.CCFast.Portal.WindowTemplates" Icon="icon-note" />
+
+</NewDataSet>

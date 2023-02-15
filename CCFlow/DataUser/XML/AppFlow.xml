@@ -7,7 +7,7 @@
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../../GPM/Organization.htm" Icon="icon-layers" />
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.Port.StationTypes" Icon="icon-layers" />
   <Item No="502" GroupNo="Org" Name="岗位维护" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.Port.Stations"  Icon="icon-layers"/>
-  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Emps" Icon="icon-layers" />
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Emps" Icon="icon-layers" />
   <Item No="601" GroupNo="Org" Name="自动报表" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Data.AutoRpts" Icon="icon-layers" />
 
   <Group No="System" Name="系统管理" Icon="icon-layers" />
@@ -24,7 +24,7 @@
   <Item11 No="901" GroupNo="GPM" Name="系统类别" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.GPM.AppSorts" Icon="icon-layers" />
   <Item No="902" GroupNo="GPM" Name="系统" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.GPM.Apps" Icon="icon-layers" />
   <Item No="903" GroupNo="GPM" Name="权限组" For="admin" Url="../../Comm/Ens.htm?EnsName=BP.GPM.Groups" Icon="icon-layers" />
-  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts" Icon="icon-layers" />
+  <Item No="904" GroupNo="GPM" Name="岗位菜单" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations" Icon="icon-layers" />
   <Item No="905" GroupNo="GPM" Name="人员菜单" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps" Icon="icon-layers" />
   <Item No="906" GroupNo="GPM" Name="菜单台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus" Icon="icon-layers" />
   <Item No="907" GroupNo="GPM" Name="菜单树" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  Icon="icon-layers" />

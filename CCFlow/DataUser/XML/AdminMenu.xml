@@ -10,40 +10,45 @@
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单  
   -->
+  <!--<Group No="LW" Name="低代码"  Icon="icon-folder" />
+  <Item No="LW01" GroupNo="LW" Name="菜单体系" For="admin" Url="../../WF/GPM/SystemList.htm" Icon="icon-menu" />
+  <Item No="LW02" GroupNo="LW" Name="新建系统" For="admin" Url="../../WF/GPM/NewSystem.htm" Icon="icon-plane" />
 
-  <!-- 所有的人都可以维护组织结构. -->
-  <Group No="Org" Name="组织结构"  Icon="icon-organization"   />
+  <Group No="Flow" Name="流程模板"  Icon="icon-folder" />
+  <Item No="Flow01" GroupNo="Flow" Name="流程" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Admin.Flows" Icon="icon-cursor" />
+  <Item No="Flow02" GroupNo="Flow" Name="目录" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FlowSorts" Icon="icon-star" />
+  <Item No="Flow03" GroupNo="Flow" Name="实例查询" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" Icon="icon-layers" />
+  <Item No="Flow04" GroupNo="Flow" Name="实例分析" For="admin" Url="../../WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" Icon="icon-chart" />
+
+  <Group No="Frm" Name="表单模板"  Icon="icon-folder" />
+  <Item No="Frm01" GroupNo="Frm" Name="表单" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Admin.Frms" Icon="icon-doc" />
+  <Item No="Frm02" GroupNo="Frm" Name="目录" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FrmSorts" Icon="icon-star" />
+  <Item No="Frm03" GroupNo="Frm" Name="数据源" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs" Icon="icon-drop" />
+  <Item No="Frm04" GroupNo="Frm" Name="外键" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-drop" />
+  <Item No="Frm05" GroupNo="Frm" Name="枚举" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SysEnumMains" Icon="icon-drop" />-->
+
+  <Group No="Org" Name="组织结构"  Icon="icon-organization" />
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../GPM/Organization.htm" Icon="icon-people" />
-  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../Comm/Ens.htm?EnsName=BP.Port.StationTypes" Icon="icon-note" />
-  <Item No="502" GroupNo="Org" Name="岗位维护" For="admin" Url="../Comm/Ens.htm?EnsName=BP.Port.Stations"  Icon="icon-note"/>
+  <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.Port.StationTypes" Icon="icon-note" />
+  <Item No="502" GroupNo="Org" Name="岗位维护" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Port.Stations"  Icon="icon-note"/>
+  <Item No="503" GroupNo="Org" Name="人员台帐" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Port.Emps" Icon="icon-list" />
+  <Item No="601" GroupNo="Org" Name="自动报表" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.AutoRpts" Icon="icon-pie-chart" />
+
+  <Group No="System" Name="系统管理" Icon="icon-settings" />
+  <Item No="670" GroupNo="System" Name="系统枚举" For="admin" Url="../../WF/Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum" Icon="icon-note" />
+  <Item No="621" GroupNo="System" Name="系统字典1" For="admin" Url="../../WF/Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  Icon="icon-note"/>
+  <Item No="671" GroupNo="System" Name="系统字典2" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-book-open" />
+  <Item No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../../WF/Comm/Sys/Holiday.htm" Icon="icon-notebook" />
+  <Item No="003" GroupNo="System" Name="系统日志"    For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.UserLogs" Icon="icon-note" />
+  <Item No="004" GroupNo="System" Name="表结构"    For="admin" Url="../../WF/Comm/Sys/SystemClass.htm" Icon="icon-organization" />
+  <Item No="090" GroupNo="System" Name="信息窗"    For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.CCFast.Portal.WindowTemplates" Icon="icon-organization" />
+
   <!-- <Item1 No="502" GroupNo="Org" Name="部门台帐" For="admin" Url="../../Comm/Search.htm?EnsName=BP.Cloud.Depts" Icon="icon-list"   />
-  <Item1 No="502" GroupNo="Org" Name="部门树" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Depts"  />
-  <Item1 No="502" GroupNo="Org" Name="部门人员树" For="admin" Url="../../Comm/TreeEns.htm?TreeEnsName=BP.GPM.Depts&amp;EnsName=BP.GPM.Emps&amp;RefPK=FK_Dept"  />
+  <Item1 No="502" GroupNo="Org" Name="部门树" For="admin" Url="../../Comm/Tree.htm?EnsName=BP.Port.Depts"  />
+  <Item1 No="502" GroupNo="Org" Name="部门人员树" For="admin" Url="../../Comm/TreeEns.htm?TreeEnsName=BP.Port.Depts&amp;EnsName=BP.Port.Emps&amp;RefPK=FK_Dept"  />
   <Item1 No="501" GroupNo="Org" Name="独立组织" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.Incs"  />
   <Item1 No="504" GroupNo="Org" Name="权限组" For="admin" Url="../../Comm/Search.htm?EnsName=BP.En.Groups"  />  
   -->
-  <Item No="503" GroupNo="Org" Name="人员台帐" For="" Url="../Comm/Search.htm?EnsName=BP.GPM.Emps" Icon="icon-list" />
-  <Item No="601" GroupNo="Org" Name="自动报表" For="admin" Url="../Comm/Search.htm?EnsName=BP.WF.Data.AutoRpts" Icon="icon-pie-chart" />
-
-  <Group No="System" Name="系统管理" Icon="fa-cogs" />
-  <Item No="670" GroupNo="System" Name="系统枚举" For="admin" Url="../Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum" Icon="icon-note" />
-  <Item No="621" GroupNo="System" Name="系统字典Adv" For="admin" Url="../Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  Icon="icon-note"/>
-  <Item No="671" GroupNo="System" Name="系统字典" For="admin" Url="../Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-book-open" />
-
-  <Item No="672" GroupNo="System" Name="数据源" For="admin" Url="../Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs" Icon="icon-layers" />
-  <Item No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../Comm/Sys/Holiday.htm" Icon="icon-notebook" />
-  <Item No="003" GroupNo="System" Name="表结构"    For="admin" Url="../Comm/Sys/SystemClass.htm" Icon="icon-organization" />
-  <Item No="090" GroupNo="System" Name="信息窗"    For="admin" Url="../Comm/Search.htm?EnsName=BP.GPM.Home.WindowTemplates" Icon="icon-organization" />
-
-  <Group No="GPM" Name="菜单权限" Icon="fa-list-ul" />
-  <Item No="900" GroupNo="GPM" Name="菜单权限" For="admin" Url="../../GPM/Menus.htm?ParentNo=0" Icon="icon-equalizer" />
-  <Item No="901" GroupNo="GPM" Name="系统类别" For="admin" Url="../Comm/Ens.htm?EnsName=BP.GPM.AppSorts" Icon=" icon-grid" />
-  <Item No="902" GroupNo="GPM" Name="系统" For="admin" Url="../Comm/Ens.htm?EnsName=BP.GPM.Apps" Icon="icon-drawer" />
-  <Item11 No="903" GroupNo="GPM" Name="权限组" For="admin" Url="../Comm/Ens.htm?EnsName=BP.GPM.Groups" Icon="icon-user-following" />
-  <Item11 No="904" GroupNo="GPM" Name="岗位菜单" For="admin" Url="../Comm/Search.htm?EnsName=BP.GPM.StationExts" Icon="icon-menu" />
-  <Item11 No="905" GroupNo="GPM" Name="人员菜单" For="admin" Url="../Comm/Search.htm?EnsName=BP.GPM.GPMEmps" Icon="icon-menu" />
-  <Item11 No="906" GroupNo="GPM" Name="菜单台帐" For="admin" Url="../Comm/Search.htm?EnsName=BP.GPM.Menus" Icon="fa-list-alt" />
-  <Item No="907" GroupNo="GPM" Name="菜单树" For="admin" Url="../Comm/Tree.htm?EnsName=BP.GPM.Menus"  Icon="fa-cubes" />
 
   <!-- 
   <Item1 No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../../Comm/Sys/Holiday.htm"  />
@@ -60,7 +65,7 @@
   <Item1 No="901" GroupNo="GPM" Name="系统类别" For="" Url="../../Comm/Ens.htm?EnsName=BP.GPM.AppSorts"  />
   <Item1 No="902" GroupNo="GPM" Name="系统台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Apps"  />
   <Item1 No="903" GroupNo="GPM" Name="权限组" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Groups"  />
-  <Item1 No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.StationExts"  />
+  <Item1 No="904" GroupNo="GPM" Name="岗位菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
   <Item1 No="905" GroupNo="GPM" Name="人员菜单" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.GPMEmps"  />
   <Item No="906" GroupNo="GPM" Name="菜单台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.GPM.Menus"  />
   <Item1 No="907" GroupNo="GPM" Name="菜单树" For="" Url="../../Comm/Tree.htm?EnsName=BP.GPM.Menus"  />

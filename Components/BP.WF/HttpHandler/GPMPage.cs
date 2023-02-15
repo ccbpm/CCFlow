@@ -91,6 +91,14 @@ namespace BP.WF.HttpHandler
 
             BP.Port.Depts depts = new BP.Port.Depts();
             string parentNo = this.GetRequestVal("ParentNo");
+            if (DataType.IsNullOrEmpty(parentNo) == true)
+            {
+                if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    parentNo = BP.Web.WebUser.OrgNo;
+                else
+                    parentNo = "0";
+            }
+
             QueryObject qo = new QueryObject(depts);
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {

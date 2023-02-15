@@ -10,7 +10,7 @@
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单  
   -->
-  <!--<Group No="LW" Name="低代码"  Icon="icon-folder" />
+  <!--<Group No="LW" Name="低代码"  Icon="icon-folder"  />
   <Item No="LW01" GroupNo="LW" Name="菜单体系" For="admin" Url="../../WF/GPM/SystemList.htm" Icon="icon-menu" />
   <Item No="LW02" GroupNo="LW" Name="新建系统" For="admin" Url="../../WF/GPM/NewSystem.htm" Icon="icon-plane" />
 

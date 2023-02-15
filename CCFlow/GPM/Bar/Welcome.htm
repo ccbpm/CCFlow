@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>我的信息块管理</title>
+     <meta charset="UTF-8"/>
+    <script type="text/javascript" src="../../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引入新版本的类库. -->
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="../../WF/Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+
+
+      <script type="text/javascript">
+
+          //初始化
+          $(function () {
+
+              //绑定帮助信息.
+              var html = "<h3>欢迎使用GPM系统...</h3>";
+              $("#msg").html(html);
+
+              var barEmps = new Entities("BP.GPM.BarEmps");
+              barEmps.DoMethodReturnString("InitMyBars");
+
+              barEmps.Retrieve("FK_Emp", new WebUser().No, "IsShow", 1, "Idx");
+              var html = "";
+              //获取宽度
+              var width = $(document).innerWidth();
+              var height = $(document).innerHeight() - 60;
+              $("#info").css({ "height": height + "px" });
+              var divWidth = (width - 140) / 2
+              var divHeight = (height - 30) / 2;
+              for (var i = 0; i < barEmps.length; i++) {
+                  html = "";
+                  var bar = new Entity("BP.GPM.Bar", barEmps[i].FK_Bar);
+
+                  var data = bar.DoMethodReturnString("GetDocument");
+                  if (bar.Height != null && bar.Height != "")
+                      divHeight = bar.Height;
+                  html += "<div class='bar' style='width:" + divWidth + "px;height:" + divHeight + "px;'>"
+                  html += "<div class='title'>"
+                  html += "<div style='float:left;'>" + bar.Name + "</div>";
+                  html += "<div style='float:right;text-align:right;padding-right:10px'>" + bar.MoreUrl.replace(/~/g, "'") + "</div>";
+                  html += "</div>";
+                  html += data;
+                  html += "</div>"
+                  $("#info").append(html);
+              }
+              $("#msg").html("");
+
+          });
+
+       </script>
+       <style type="text/css">
+           .title{
+                height: 28px;
+                background-color:#E0ECFF;
+                background-image: -moz-linear-gradient(top, #d8f8e3,  rgba(171, 217, 202, 0.74));
+                  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d8f8e3), to( rgba(171, 217, 202, 0.74)));
+                  background-image: -webkit-linear-gradient(top, #d8f8e3,  rgba(171, 217, 202, 0.74));
+                  background-image: -o-linear-gradient(top, #d8f8e3,  rgba(171, 217, 202, 0.74));
+                  background-image: linear-gradient(to bottom, #d8f8e3, rgba(171, 217, 202, 0.74));
+                  background-repeat: repeat-x;
+                  border-color: #252525;
+                  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe0ecff', endColorstr='#a2c2f5', GradientType=0)
+                  border: 1px #d7edff solid; 
+
+
+                padding: 6px 4px 6px 10px;
+                z-index: 2;
+            }
+          .bar
+          {
+              float:left;
+              border:1px solid #ccc;
+              border-top-width: 2px;
+              border-top-color:#59b0bd;
+              margin:5px 5px 3px 0px;
+          }
+          a
+          {
+              color:Black;
+              font-weight:bold;
+          }
+          li
+          {
+              padding:0px 0px 0px 5px;
+          }
+       </style>
+
+</head>
+<body class="gray-bg">
+<div id="msg"></div>
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div id="info" class="ibox-content" style="height:100%"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>桌面设置</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="../../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引入新版本的类库. -->
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="../../WF/Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript">
+        var webUser = new WebUser();
+     
+       //初始化
+          $(function () {
+
+              //绑定帮助信息.
+              var html = "<h3>欢迎使用GPM系统...</h3>";
+              $("#msg").html(html);
+               InitTable();
+              $("#msg").html("");
+          });
+
+          function InitTable() {
+              var bars = new Entities("BP.GPM.Bars");
+              bars.RetrieveAll();
+
+              var barEmps = new Entities("BP.GPM.BarEmps");
+              barEmps.Retrieve("FK_Emp",webUser.No,"Idx");
+
+              if (barEmps.length == 0) {
+                  $("#tbody").htm("没有查出要分配的信息模块");
+                  return;
+              }
+              var html = "";
+              var checked = "";
+              $("#tbody").html("");
+              for (var i = 0; i < barEmps.length; i++) {
+                  html += "<tr>";
+                  checked = ""
+                  if (barEmps[i].IsShow == 1)
+                      checked = "checked = checked";
+                  html += "<td><input type='checkbox' id='CB_" + barEmps[i].FK_Bar + "' onclick='SaveBarEmp(this.checked,\"" + barEmps[i].FK_Bar + "\")' " + checked + "></td>"
+                  html += "<td>" + barEmps[i].Title + "</td>";
+                  html += "<td><img src='../../WF/Img/Btn/Up.GIF' onclick=\"Up('" + barEmps[i].FK_Bar + "')\" alt='上移' />-<img src='../../WF/Img/Btn/Down.gif' onclick=\"Down('" + barEmps[i].FK_Bar + "')\" alt='下移' /> </td>";
+                  html += "</tr>";
+              }
+              $("#tbody").append(html);
+          }
+
+          //选择与取消选择.
+          function CheckAll(checked) {
+
+              //获取type=checkbox的复选框 遍历输出复选框
+              var checkeds = $("input[type='checkbox']");
+              for (var i = 0; i < checkeds.length; i++) {
+                  checkeds[i].checked = checked;
+                  if(checkeds[i].id.indexOf('CB_') == -1)
+                      continue;
+                  SaveBarEmp(checked, checkeds[i].id.replace('CB_', ''));
+                
+              }
+
+         }
+
+         function SaveBarEmp(checked, FK_Bar) {
+             var myPK = FK_Bar + "_" + webUser.No;
+             var barEmp = new Entity("BP.GPM.BarEmp", myPK);
+             if (checked == true)
+                 barEmp.IsShow = 1;
+             else
+                 barEmp.IsShow = 0;
+            
+             barEmp.Save();
+         }
+          //上移
+         function Up(FK_Bar) {
+             var myPK = FK_Bar + "_" + webUser.No;
+              var barEmp = new Entity("BP.GPM.BarEmp", myPK);
+              var data = barEmp.DoMethodReturnString("DoUp");
+              InitTable();
+          }
+
+          //下移
+          function Down(FK_Bar) {
+              var myPK = FK_Bar + "_" + webUser.No;
+              var barEmp = new Entity("BP.GPM.BarEmp", myPK);
+              var data = barEmp.DoMethodReturnString("DoDown");
+              InitTable();
+          }
+
+         
+</script>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+	    <div class="ibox-content">
+            <table  class="table table-striped">
+                <thead>
+			        <tr >
+				    <th><input type="checkbox" value="全选" onclick="CheckAll(this.checked);" id="SelectAll" /><label for="SelectAll" >全选</label></th>
+				    <th>标题</th>
+                    <th>操作</th>
+			        </tr>
+			    </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<div id="msg"></div>
+
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>人员-部门列表</title>
+    <link rel="stylesheet" type="text/css" href="themes/default/easyui.css" />
+    <link href="../../DataUser/Style/admin/skins/context.standalone.css" rel="stylesheet"
+        type="text/css" />
+    <script src="../WF/Admin/CCBPMDesigner/js/context.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+  
+
+    <!-- 引入新版本的类库. -->
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+   
+	<script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js" type="text/javaScript"></script>
+    <!--引入zTree树. -->
+    <link href="../WF/Scripts/zTree_v3/css/metroStyle/metroStyle.css" rel="stylesheet"
+        type="text/css" />
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.all.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.core.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.excheck.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/zTree_v3/js/jquery.ztree.exedit.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        
+       .small-menu {  
+        position: absolute;  
+        width: 120px;  
+        z-index: 99999;  
+        border: solid 1px #CCC;  
+        background: #EEE;  
+        padding: 0px;  
+        margin: 0px;  
+        display: none;  
+    }  
+      
+    .small-menu li {  
+       list-style: none;  
+        padding: 0px;  
+        margin: 0px;  
+    }  
+    .small-menu li A {  
+        color: #333;  
+        text-decoration: none;  
+        display: block;  
+        line-height: 20px;  
+        height: 20px;  
+        background-position: 6px center;  
+        background-repeat: no-repeat;  
+        outline: none;  
+        padding: 1px 5px;  
+        padding-left: 28px;  
+    }  
+      
+    .small-menu li a:hover {  
+        color: #FFF;  
+        background-color: #3399FF;  
+    }  
+      
+    .small-menu-separator {  
+        padding-bottom:0;  
+        border-bottom: 1px solid #DDD;  
+    }  
+      
+    .small-menu LI.edit A { background-image: url(images/page_white_edit.png); }  
+    .small-menu LI.cut A { background-image: url(images/cut.png); }  
+    .small-menu LI.copy A { background-image: url(images/page_white_copy.png); }  
+    .small-menu LI.paste A { background-image: url(images/page_white_paste.png); }  
+    .small-menu LI.delete A { background-image: url(images/page_white_delete.png); }  
+    .small-menu LI.quit A { background-image: url(images/door.png); }  
+    </style>
+
+    <script type="text/javascript">
+        var deptNo = "";
+        var parentNo = GetQueryString("FK_Dept");
+        var isFirst =true;
+
+        var webUser = new WebUser();
+        var tree = {
+            zTree:'',
+            pNode:'',
+            setting:{
+                isSimpleData: true,
+                treeNodeKey: "id",
+                treeNodeParentKey: "pid",
+                showLine: true,
+                root:{
+                    isRoot:true,
+                    nodes:[]
+                },
+                view:{
+                    dblClickExpand: false, //双击节点时，是否自动展开父节点的标识
+                    showLine: true, //是否显示节点之间的连线
+                    fontCss: {}, //字体样式函数
+                    selectedMulti: false //设置是否允许同时选中多个节点
+                },
+                check: {
+                    chkboxType: { "Y": "ps", "N": "ps" },
+                    chkboxType: { "Y": "", "N": "" },
+                    chkStyle: "checkbox", //复选框类型
+                    enable: false //每个节点上是否显示 CheckBox
+                },
+                edit: {
+                    enable: true,
+                    editNameSelectAll: true,
+                    showRemoveBtn: false,
+                    showRenameBtn: false,
+                    removeTitle: "remove",
+                    renameTitle: "rename"
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "id",
+                        pIdKey: "pid",
+                        rootPId: WebUser.FK_Dept
+                    }
+                },
+                callback: {
+                    onExpand:function(event,treeId,treeNode){
+                        tree.pNode = treeNode;
+                        tree.loadNodeByPNode();
+                    }
+                }
+            },
+            loadRootNode:function(){ //加载根节点,pid=0
+                var zNodes=[];
+                var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                handler.AddPara("ParentNo", parentNo);
+                var ens = handler.DoMethodReturnString("DeptEmp_Init");
+                if (ens.indexOf("err@") != -1) {
+                    alert(ens);
+                    return;
+                }
+                ens = JSON.parse(ens);
+                var zNodes = createJsonToTree(ens, parentNo);
+                $.fn.zTree.init($("#regionZTree"), tree.setting,zNodes);
+                tree.zTree = $.fn.zTree.getZTreeObj("regionZTree");
+            },
+
+            /**
+             * 该方法是点击父节点的+号后执行的，意味着执行该方法的时候树已经生成了
+             * 所以才能用tree.zTree
+             */
+            loadNodeByPNode:function(){
+                var children=[];
+                var folder=false;
+                //获取pid = mid的数据，也就是子节点的id等于父节点的id，说明此父节点加载了子节点
+                if(!tree.zTree.getNodeByParam("pid",tree.pNode.id)){
+                    var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+                    handler.AddPara("ParentNo",tree.pNode.id);
+                    var ens = handler.DoMethodReturnString("DeptEmp_Init");
+                    if (ens.indexOf("err@") != -1) {
+                        alert(ens);
+                        return;
+                    }
+                    ens = JSON.parse(ens);
+                    isFirst = false;
+                    var zNodes = createJsonToTree(ens, tree.pNode.id);
+                    tree.zTree.addNodes(tree.pNode,zNodes,folder);
+                }
+            }
+
+        };
+
+        $(function () {
+            
+            $("#pageloading").show();
+
+            tree.loadRootNode();
+        });
+
+        function Prev() {
+            if (parentNo == 'null' || parentNo == 0) {
+                alert("已到第一级机构");
+                return;
+            }
+            var webUser = new WebUser();
+            // SAAS模式下，限制只可以看到OrgNo级别
+            if (webUser.CCBPMRunModel != 0 && parentNo == 100) {
+                alert("已到第一级机构");
+                return;
+            }
+            isFirst = true;
+            tree.loadRootNode();
+          
+        }
+        //设置展开前三级
+        function fillter(zTreeObj) {
+            //获得树形图对象
+            var nodeList = zTreeObj.getNodes(); //展开第一个根节点
+            for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+                zTreeObj.expandNode(nodeList[i], true, false, true);
+
+            }
+        }
+        //转换ztree需要的数据格式
+        var treeJson = [];
+        function createJsonToTree(jsonArray,fk_dept) {
+            var depts = jsonArray.Depts;
+            var emps = jsonArray.Emps;
+            treeJson = [];
+            //var fk_dept = parentNo;
+            //if (webUser.CCBPMRunModel != 0) {
+            //    fk_dept = webUser.OrgNo;
+            //}
+          /**if (webUser.No == "admin") {
+
+                for (var i = 0; i < depts.length; i++) {
+                    var data = depts[i];
+                    if (data.No === "" || data.No == undefined)
+                        continue;
+                    treeJson.push({
+                        "id": data.No,
+                        "pid": data.ParentNo,
+                        "name": data.Name,
+                        "idx": data.Idx,
+                        isParent:true,
+                        parent: true
+
+                    });
+                }
+            } else {*/
+
+                //添加本部门的一条数据
+                $.each(depts, function (i, o) {
+                    if (o.No == fk_dept && isFirst == true) {
+                        parentNo = o.ParentNo;
+                        treeJson.push({
+                            "id": o.No,
+                            "pid": o.ParentNo,
+                            "name": o.Name,
+                            "idx": o.Idx,
+                            isParent:true,
+                            parent: true
+
+                        });
+                        return;
+                    }
+                });
+                //加入人员信息
+                $.each(emps, function (i, o) {
+                    if (o.FK_Dept == fk_dept) {
+                        treeJson.push({
+                            "id": o.No,
+                            "pid": o.FK_Dept,
+                            "name": o.Name,
+                            "idx": o.Idx,
+                            isParent: false,
+                            parent: false
+
+                        });
+                    }
+                });
+                //循环加入本部门的所有下级部门
+                findChildren(depts, fk_dept);
+            //}
+            return treeJson;
+        }
+        function findChildren(jsonArray, parentNo) {
+
+            $.each(jsonArray, function (i, o) {
+                if (o.ParentNo == parentNo) {
+                    treeJson.push({
+                        "id": o.No,
+                        "pid": o.ParentNo,
+                        "name": o.Name,
+                        "idx": o.Idx,
+                        isParent: true,
+                        parent: true
+
+                    });
+                    findChildren(jsonArray, o.No);
+                }
+            });
+        }
+
+
+        //更新.
+        function Save() {
+            var nodes = tree.zTree.getSelectedNodes();
+            if (nodes[0].isParent == true) {
+                alert("请选择人员信息");
+                return;
+            }
+            var empNo = GetQueryString("FK_Emp");
+            
+            //改变直属领导
+            var emp = new Entity("BP.Port.Emp", empNo);
+            emp.Leader = nodes[0].id;
+            emp.LeaderName = nodes[0].name;
+            emp.Update();
+            parent.location.reload();
+        }
+        //返回.
+        function Return() {
+            parent.location.reload();
+        }
+    </script>
+
+    
+
+</head>
+<body>
+
+    <div id="pageloading"></div>
+    <div id="Btns" data-options="region:'north',noheader:true,split:false,border:false"
+         style="height: 30px; padding: 2px; background-color: #d3d3d34a">
+        <a id="Btn_Prev" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Prev()">上一级</a>
+        <a id="Btn_Save" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'" onclick="Save()">保存</a>
+        <a id="Btn_Return" href="javaScript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-delete'"
+           onclick="Return()">返回</a>
+    </div>
+    <div style="">
+        <div style="width: 100%; height: 95%; overflow: auto;">
+             <ul id="regionZTree" class="ztree" data-options="animate:false,dnd:false"></ul>
+            
+        </div>
+    </div>
+<div id="Msg"></div>
+
+</body>
+</html>

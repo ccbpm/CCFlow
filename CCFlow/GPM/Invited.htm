@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../WF/Style/skin/js/appnew.js?v=4.1.0"></script>
+    <script type="text/javascript" src="../WF/Style/skin/js/index.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var orgNo = GetQueryString("OrgNo");
+
+            var depts = new Entities("BP.Cloud.Depts");
+            depts.Retrieve("OrgNo", orgNo, "Idx");
+
+            //绑定部门.
+            GenerBindDDL("DDL_Depts", depts, "No", "Name");
+        });
+
+        function Submit()
+        {
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            handler.AddFormData();
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnJSON("Invited_Submit");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    欢迎加入: ________________________
+
+    <fieldset>
+
+        <table>
+            <tr>
+                <td>手机号</td>
+                <td><input type="text" id="TB_No" placeholder="手机号，账号" /></td>
+            </tr>
+            <tr>
+                <td>姓名</td>
+                <td><input type="text" id="TB_Name" placeholder="姓名" /></td>
+            </tr>
+
+            <tr>
+                <td>所在部门</td>
+                <td>
+                    <select id="DDL_Dept" name="DDL_Dept" ></select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>密码</td>
+                <td><input type="password" id="TB_Pass1" placeholder="请输入密码" /></td>
+            </tr>
+            <tr>
+                <td>重复密码</td>
+                <td><input type="password" id="TB_Pass2" placeholder="确认密码" /></td>
+            </tr>
+
+        </table>
+        <button onclick="Submit()">提交</button>
+    </fieldset>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>人员-部门列表</title>
+    <script type="text/javascript" src="../WF/Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引入新版本的类库. -->
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <script src="../WF/Scripts/layui/layui/lay/modules/layer.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#Msg").html("正在加载请稍候...");
+
+            var empNo = GetQueryString("FK_Emp");
+
+            if (empNo == null)
+                empNo = 'liping';
+
+            var emp = new Entity("BP.Port.Emp", empNo);
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            handler.AddPara("FK_Emp", empNo);
+            var data = handler.DoMethodReturnString("EnpDepts_Init");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+            var deptEmps = data['Port_DeptEmp'];
+            var deptempStations = data['Port_DeptEmpStation']
+            var html = "<table border=0 style='width:100%;'>";
+
+            html += "<caption >姓名:" + emp.Name + ", 主要部门:" + emp.FK_DeptText + " <a href='javascript:AddDept()'>增加部门</a></caption>";
+            html += "<tr>";
+            html += "<th>编号</th>";
+            html += "<th>部门名称</th>";
+            html += "<th></th>";
+            html += "<th>多个岗位</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+            deptEmps.forEach(function (deptEmp) {
+                html += "<tr>";
+                if (deptEmp.FK_Dept.length > 23)
+                    html += "<td class='showTD' data-info='" + deptEmp.FK_Dept + "' style='white-space:nowrap;word-break:keep-all;text-overflow: ellipsis;'>" + deptEmp.FK_Dept.substring(0, 23) + "..." + "</td>";
+                else
+                    html += "<td>" + deptEmp.FK_Dept + "</td>";
+                if (emp.FK_Dept == deptEmp.FK_Dept) {
+                    html += "<td><font color=green><b>" + deptEmp.FK_DeptText + "</b></font></td>";
+                    html += "<td> 主部门 </td>";
+                }
+                else {
+                    html += "<td>" + deptEmp.FK_DeptText + "</td>";
+                    html += "<td><a href=\"javascript:SetMainDept('" + deptEmp.FK_Dept + "','" + empNo + "')\">设置主部门</a></td>";
+                }
+                //求岗位集合.
+                var dess = deptempStations.filter(item => item.FK_Dept == deptEmp.FK_Dept);
+                if (dess.length == 0) {
+                    html += "<td>无岗位-<a href=\"javascript:AddStation('" + deptEmp.FK_Dept + "','" + empNo + "')\">增加</a></td>";
+                } else {
+                    var staNames = dess.map(item => item.FK_StationText).join(",");
+                    /*  dess.forEach(function(des){
+                          staNames += des.Name + ",";
+                      })
+                     */
+                    html += "<td><a href=\"javascript:AddStation('" + deptEmp.FK_Dept + "','" + empNo + "')\">" + staNames + "</a></td>";
+                }
+
+                if (emp.FK_Dept == deptEmp.FK_Dept)
+                    html += "<td> <a href='javascript:EditMainDept()'>修改主部门</a> </td>";
+                else
+                    html += "<td><a href=\"javascript:Del('" + deptEmp.MyPK + "')\" ><img src='../WF/Img/Btn/Delete.png' ></a></td>";
+
+
+                html += "</tr>";
+            });
+
+            html += "</table>";
+
+            $("#Msg").html(html);
+            $(".showTD").on("mouseover", function () {
+                var innerHtml = this.innerHTML;
+                if (innerHtml.endsWith("...") == false)
+                    return;
+                var that = this;
+                var text = $(this).attr("data-info");
+                layer.tips(text, that, {
+                    maxWidth: text.length * 10,
+                    tips: 1,
+                    time: 0
+                });
+
+            });
+            $(".showTD").on("mouseout", function () {
+                layer.closeAll();
+            });
+
+
+
+        });
+
+        //修改主部门.
+        function EditMainDept() {
+
+            var empNo = GetQueryString("FK_Emp");
+            var emp = new Entity("BP.Port.Emp", empNo);
+            SetHref("EmpDeptMainDept.htm?FK_Emp=" + empNo + "&FK_DEPT=" + emp.FK_Dept);
+
+
+        }
+
+        //设置主部门
+        function SetMainDept(deptNo, empNo) {
+
+            var emp = new Entity("BP.Port.Emp", empNo);
+            emp.FK_Dept = deptNo;
+            emp.Update();
+            Reload();
+
+        }
+
+        //设置岗位.
+        function AddStation(deptNo, empNo) {
+            var url = "EmpDeptsDtl.htm?FK_Emp=" + empNo + "&FK_Dept=" + deptNo;
+            SetHref(url);
+        }
+
+
+        function AddDept() {
+
+            var empNo = GetQueryString("FK_Emp");
+
+            var url = "../../WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.Port.DeptEmps&Dot2DotEnName=BP.Port.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
+            if (plant != "CCFlow")
+                url = basePath + "/WF/Comm/RefFunc/Branches.htm?EnName=BP.GPM.GPMEmp&Dot2DotEnsName=BP.Port.DeptEmps&Dot2DotEnName=BP.Port.DeptEmp&AttrOfOneInMM=FK_Emp&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=&No=" + empNo + "&PKVal=" + empNo;
+            SetHref(url);
+        }
+
+        function Del(mypk) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var dept = new Entity("BP.Port.DeptEmp", mypk);
+            dept.Delete();
+
+            Reload();
+        }
+    </script>
+
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+
+
+    <div id="Msg"></div>
+
+</body>
+</html>

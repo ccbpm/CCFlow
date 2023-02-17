@@ -1,37 +1,34 @@
-﻿### ccbpm系统概要介绍 (在右上角点:watch,star,fork支持我们,谢谢!!!)
-01. 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。
-02. 我们把驰骋工作流程引擎简称ccbpm, CCFlow是.net版本的简称，JFlow是java版本的简称，我们未来将要发布python版本的PFlow,敬请关注.
-03. 十多年来，我们一直践行自己的诺言，真心服务中国IT产业，努力提高产品质量，成为了国内知名的老牌工作流引擎。
-04. ccbpm作简单、概念通俗易懂、操作手册完善（计:14万操作手册说明书）、代码注释完整、案例丰富翔实、单元测试完整。
-05. ccbpm包含表单引擎与流程引擎两大部分，并且两块完美结合，流程引擎对表单引擎的操纵，协同高效工作, 完成了很多国内生产审批模式下的流程设计,
-06. ccbpm的流程与表单界面可视化的设计，可配置程度高，采用结构化的表单模版设计,集中解析模式的设计. 适应于中国国情的多种场景的需要、配置所见即所得、低代码、高配置.
-07. ccbpm 在国内拥有最广泛的研究群体与应用客户群，是大型集团企业IT部门、软件公司、研究院、高校研究与应用的产品。
-08. ccbpm不仅仅能够满足中小企业的需要，也能满足通信级用户的应用，先后在西门子、海南航空、中船、陕汽重卡、华电国际、江苏山东吉林测绘院、厦门证券、天业集团、天津港等国内外大型企业政府单位服役。
-09. ccbpm可以独立运行，也可以作为中间件嵌入您的开发架构,还可以作为服务的模式支持对外发布.
-10. ccbpm 既有配置类型的开发适用于业务人员，IT维护人员， 也有面向程序员的高级引擎API开发,满足不同层次的流程设计人员需要.
-11. 支持 oracle,sqlserver,mysql 数据库. 内置:
-12. 流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
-13. 流程模式简洁，只有4种容易理解：线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
-14. 配置参数丰富，支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
-15. 数据库脚本可以用代码自动安装完成。只需要新建一个空的数据库，运行项目后访问流程设计器页面，即可进入脚本自动安装的页面。  
+﻿### ccbpm系统概要介绍 
+- 技术交流群:1060674395, 在右上角点:watch,star,fork支持我们,谢谢.
+- 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。
+- 我们把驰骋工作流程引擎简称ccbpm, CCFlow是.net版本的简称，JFlow是java版本的简称，我们未来将要发布python版本的PFlow,敬请关注.
+- 十多年来，我们一直践行自己的诺言，真心服务中国IT产业，努力提高产品质量，成为了国内知名的老牌工作流引擎。
+- ccbpm作简单、概念通俗易懂、操作手册完善（计:14万操作手册说明书）、代码注释完整、案例丰富翔实、单元测试完整。
+- ccbpm包含表单引擎与流程引擎两大部分，并且两块完美结合，流程引擎对表单引擎的操纵，协同高效工作, 完成了很多国内生产审批模式下的流程设计,
+- ccbpm的流程与表单界面可视化的设计，可配置程度高，采用结构化的表单模版设计,集中解析模式的设计. 适应于中国国情的多种场景的需要、配置所见即所得、低代码、高配置.
+- ccbpm 在国内拥有最广泛的研究群体与应用客户群，是大型集团企业IT部门、软件公司、研究院、高校研究与应用的产品。
+- ccbpm不仅仅能够满足中小企业的需要，也能满足通信级用户的应用，先后在西门子、海南航空、中船、陕汽重卡、华电国际、江苏山东吉林测绘院、厦门证券、天业集团、天津港等国内外大型企业政府单位服役。
+- ccbpm可以独立运行，也可以作为中间件嵌入您的开发架构,还可以作为服务的模式支持对外发布.
+- ccbpm 既有配置类型的开发适用于业务人员，IT维护人员， 也有面向程序员的高级引擎API开发,满足不同层次的流程设计人员需要.
+- 支持 oracle,sqlserver,mysql 数据库. 内置:
+- 流程引擎设计支持所见即所得的设计：节点设计、表单设计、单据设计、报表定义设计、以及用户菜单设计。
+- 流程模式简洁，只有4种容易理解：线性流程、同表单分合流、异表单分合流、父子流程，没有复杂的概念。
+- 配置参数丰富，支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
+- 数据库脚本可以用代码自动安装完成。只需要新建一个空的数据库，运行项目后访问流程设计器页面，即可进入脚本自动安装的页面。  
 
-##### 生态伙伴
+##### 生态伙伴-排名不分先后.
 
-1. 微同商城 https://gitee.com/fuyang_lipengjun/platform
-1. 单点登录 https://gitee.com/dotnetchina/BootstrapAdmin 
-1. Bootstrap Blazor https://gitee.com/dotnetchina/BootstrapAdmin 
-1. ccflow 项目已加入 [dotNET China](https://gitee.com/dotnetchina) 组织.
-
+- 微同商城 https://gitee.com/fuyang_lipengjun/platform
+- 单点登录 https://gitee.com/dotnetchina/BootstrapAdmin
+- Bootstrap Blazor https://gitee.com/dotnetchina/BootstrapAdmin 
+- ccflow 项目已加入 [dotNET China](https://gitee.com/dotnetchina) 组织.
 
 ### 资源
-
 0. http://demo.ccflow.org 在线演示.
 1. http://ccflow.org 官方网站
 2. https://ccfast.cc  驰骋低代码开发平台
 3. http://doc.ccbbpm.cn  操作手册
 4. http://ccflow.org/ke.htm 视频教程
-5. http://edu.ccflow.org 培训中心
-6. http://app.ccflow.org 案例，appStore.
 
 ## 后台设计器：
 
@@ -86,18 +83,9 @@
 4. Java版，参见另一个项目 [JFlow](https://gitee.com/opencc/JFlow) 
 
 ### 组成部分
-1. 驰骋工作流程引擎， JFlow
+1. 驰骋工作流程引擎 JFlow
 2. 驰骋表单引擎. CCForm
 3. 组织结构管理, 菜单权限管理. GPM
-
-### 驰骋工作流程引擎下载资源 
-1. 在线演示: http://demo.ccflow.org
-2. 流程引擎在线文档: http://ccflow.org/CCBPMFile/default.htm
-3. 表单引擎在线文档：http://ccflow.org/CCFormFile/default.htm
-4. 视频教程下载:http://ccflow.org/ke.htm
-5. 资料下载：http://ccflow.org/docs
-6. 官方网站: http://ccflow.org 
-7. SDK模式在线验示： http://140.143.236.168:8088/
 
 ### 为什么选择ccflow? ###
 01. CCFlow成长于中国2003年,历史长久,在多种生产、管理环境中成长起来，是国内老牌的工作流程引擎,拥有众多的爱好者,开发者, 100%的核心代码开源.
@@ -152,7 +140,6 @@
 15. D:\ccflow\CCFlow\WF\Admin\CCFormDesigner -- H5的表单设计器.
 16. D:\ccflow\CCFlow\SDKFlowDemo -- sdk开发模式的案例.
 
-
 ### 1.2 前台的用户数据文件，用户可以更改. ###
 01. D:\ccflow\CCFlow\DataUser --用户文件.
 02. D:\ccflow\CCFlow\DataUser\Seal -- 电子盖章图片.
@@ -183,7 +170,6 @@
    3. 确认你是以administrator 超级用户进行安装的。
 
 2. 使用 svn下载源程序,请查看如下连接.
- 
    1. 如果你不会使用svn,请到网上baidu.
    2. 建议把ccflow放在 D:\下面,  ccflow的说明书都以此目录说明, 以方便您定位程序文件.
    3. 特别提示: 如果不放置在D:\ccflow 下，您可能会遇到dll 文件引用找不到路径的问题。
@@ -200,10 +186,8 @@
    2. 请看下面第5步骤, 为数据库配置链接.
 
 5. 打开文件 D:\ccflow\CCFlow\web.config   修改 Appsetting 节点中的数据库连接。
-
    如下：【如果使用的是MSSQL数据库，修改数据库的链接的用户名和密码即可】
-  
-    <appSettings>   
+    <appSettings>
     <!-- 数据库连接url. -->
     <add key="AppCenterDSN" value="Password=123;Persist Security Info=True;User ID=sa;Initial Catalog=ccflow;Data Source=.;Timeout=2" />
     <!--ccflow 支持的数据库类型, MSSQL, Oracle, DB2, MySQL,InforMix 
@@ -227,10 +211,9 @@
 
    3. 建立网站, 网站名称为CCFlow6  主目录为: D:\ccflow\CCFlow , 应用程序池为 ASP.NET v4.0 Classic. (建议单独建立一个应用程序池.)
 
-
 8. 启动流程设计器 
   
-   1. 流程设计器进入地址:` http://localhost:5853/WF/Admin/CCBPMDesigner/Login.htm`
+   1. 流程设计器进入地址:` http://localhost:5853/Default.htm`
    2. 超级用户:admin  密码: 123
  
    **说明:**
@@ -240,7 +223,6 @@
    3. 安装成功会ccflow 会自动转入设计器.
    4. 如果中途安装失败，您需要删除数据库重新建立，重新安装.   
   
-
 
 ### 安装过程中经常遇到的问题: ###
 
@@ -256,7 +238,6 @@
          aspnet_regiis.exe -ua
          aspnet_regiis.exe -i	  
 
-
 3. 出现用户名及密码错误，请在web.config 文件中.
 
     <identity impersonate="true" userName="administrator" password="jiaozi"/> 
@@ -265,14 +246,11 @@
 
 4. 造成流程设计器不能正常打开的原因:有可能是c:\windows\temp 目录访问权限有限制, 修改一下该目录的访问权限，比如everyone都可以读写试一下(不建议你这样)。
 
-
 5, 在按下安装一步时，遇到创建表或者数据库的错误。
    1. 指定连接里面数据库用户没有权限，导致错误。
    2. web.config 中的 数据库类型设置错误.
         <add key="AppCenterDBType" value="MSSQL" />
-
 6, 用户权限问题.
-
      如果出现:C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files”
      的写访问权限。的错误提示. 解决办法:  把“IIS_IUSERS”和你自己的系统用户赋予它操作
      C：\WINDOWS\TEMP文件夹的权利，

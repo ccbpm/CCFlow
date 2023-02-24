@@ -17,7 +17,6 @@
 - 数据库脚本可以用代码自动安装完成。只需要新建一个空的数据库，运行项目后访问流程设计器页面，即可进入脚本自动安装的页面。  
 
 ##### 生态伙伴-排名不分先后.
-
 - 微同商城 https://gitee.com/fuyang_lipengjun/platform
 - 单点登录 https://gitee.com/dotnetchina/BootstrapAdmin
 - Bootstrap Blazor https://gitee.com/dotnetchina/BootstrapAdmin 
@@ -30,10 +29,34 @@
 3. http://doc.ccbbpm.cn  操作手册
 4. http://ccflow.org/ke.htm 视频教程
 
-## 后台设计器：
+## 后台设计器
+ - 登录主页 
+![输入图片说明](Documents/VueView/00.Login.png)
+- 流程列表
+ ![流程设计器](Documents/VueView/Flow/00.Flows.png)
+- 流程设计器
+ ![流程设计器](Documents/VueView/Flow/04.Flow2.png)
+- 表单列表
+ ![流程设计器](Documents/VueView/Frm/00.Frms.png)
+- 表单设计器
+ ![流程设计器](Documents/VueView/Frm/00.FrmD.png)
+## 组织结构
+ - 组织结构
+![输入图片说明](Documents/VueView/01.Org.png)
+  - 角色 
+![输入图片说明](Documents/VueView/02.role.png)
+  - 人员
+![输入图片说明](Documents/VueView/03.Emps.png)
 
- **登录主页** 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/110344_4fe66a4d_980781.png "屏幕截图.png")
+## 前端应用
+- 发起 
+![输入图片说明](Documents/VueView/App/01.Start.png)
+- 待办
+![输入图片说明](Documents/VueView/App/02.Todolist.png)
+- 在途
+![输入图片说明](Documents/VueView/App/04.Runing.png)
+- 近期
+![输入图片说明](Documents/VueView/App/04.Near.png)
 
 **流程图1**
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/110502_0ed3d055_980781.png "屏幕截图.png")

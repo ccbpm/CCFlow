@@ -57,14 +57,15 @@
 - 待办
 ![输入图片说明](Documents/VueView/App/02.Todolist.png)
 - 在途
-![输入图片说明](Documents/VueView/App/04.Runing.png)
+![输入图片说明](Documents/VueView/App/03.Runing.png)
 - 近期
 ![输入图片说明](Documents/VueView/App/04.Near.png)
 
-**流程图1**
+###  H5版本
+- 流程图1
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/110502_0ed3d055_980781.png "屏幕截图.png")
 
- **流程图2** 
+-  **流程图2** 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/101224_fec4bcfc_980781.png "屏幕截图.png")
 
 **流程图3**
@@ -76,13 +77,10 @@
 **丰富流程属性配置项**
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/101310_d7d1609d_980781.png "屏幕截图.png")
 
- **傻瓜表单设计器：** 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/101354_7f0fe186_980781.png "屏幕截图.png")
-
- **开发者表单设计器** 
+**开发者表单设计器** 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/102312_361bd457_980781.png "屏幕截图.png")
 
-# 前端流程处理
+### 前端流程处理
 
 **流程发起**
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/102353_93695172_980781.png "屏幕截图.png")
@@ -187,134 +185,6 @@
 18. D:\ccflow\CCFlow\DataUser\Style 用户自定义风格文件。
 19. D:\ccflow\CCFlow\DataUser\UploadFile 表单附件上传文件，单附件，与多附件。
 20. D:\ccflow\CCFlow\DataUser\XML 用户系统配置文件。
-
-### 如何安装并设置ccflow开发环境?(请严格按如下步骤去安装,不要跳跃,否则会导致安装失败.) ###
-
-1. 确认升级到IE8+ 以上，并且做如下设置.
-   1. 菜单->工具->Internet 选项-> 隐私 -> 把打开弹出窗口阻止程序 关闭上，否则一些功能就不能使用.
-   2. 菜单->工具->Internet 选项-> 常规 -> 浏览历史记录设置-> 选中 () 每次访问此网页时. 单选按钮. 点确定，以避免缓存对程序有影响。
-   3. 确认你是以administrator 超级用户进行安装的。
-
-2. 使用 svn下载源程序,请查看如下连接.
-   1. 如果你不会使用svn,请到网上baidu.
-   2. 建议把ccflow放在 D:\下面,  ccflow的说明书都以此目录说明, 以方便您定位程序文件.
-   3. 特别提示: 如果不放置在D:\ccflow 下，您可能会遇到dll 文件引用找不到路径的问题。
-
-3. 打开解决方案文件并编译它. CCFlow6 解决方案的位置: D:\ccflow\CCFlow.sln, 设置 /Default.htm 为起始页.
-
-   ETC: 如果不能正常打开请按如下步骤检查.
-   1. 您的vs是否是2019版本？
-   2. 如果您用的vs比较高的版本，vs就会自动转换，请按照要求转换. 
-   3. 以管理员身份运行VS2019，否则无法启动调试
-
-4. 创建空白数据库.
-   1. 建立数据库(不管你用的什么数据库,oracle,sqlserver,mysql,informix系列),先创建一个空白的数据库名称为: CCFlow6
-   2. 请看下面第5步骤, 为数据库配置链接.
-
-5. 打开文件 D:\ccflow\CCFlow\web.config   修改 Appsetting 节点中的数据库连接。
-   如下：【如果使用的是MSSQL数据库，修改数据库的链接的用户名和密码即可】
-    <appSettings>
-    <!-- 数据库连接url. -->
-    <add key="AppCenterDSN" value="Password=123;Persist Security Info=True;User ID=sa;Initial Catalog=ccflow;Data Source=.;Timeout=2" />
-    <!--ccflow 支持的数据库类型, MSSQL, Oracle, DB2, MySQL,InforMix 
-     注意区分大小写. 还要检查此数据库用户是否具有足够的权限可以创建表、
-     视图、存储过程、函数。 -->
-    <add key="AppCenterDBType" value="MSSQL" />
-
-6. 在vs设计器里面，直接ctrl + F5 运行系统。
-
-   1, 系统直接运行到安装界面.
-   2，如果不需要安装demo，就不选安装demo。
-   3，点击接受协议并安装，稍等十几分钟就会安装好。
-
-7. 发布到IIS上,建立网站应用:
-
-   1. 开始->> 运行->> 输入 inetmgr 打开IIS管理器.
-   2. 确认您的机器已经安装上了.net4.5.2, 并且，启用了它:
-        
-        For Win7用户: 把鼠标点在Internet信息服务(IIS)管理器的根节点，找到 IIS 分组中的 [IASPI 和CGI的限制] 图标，确认ASP.NET v4.0 相关的dll是否被允许.
-        For Win2003用户: Internet 信息服务树上找到 Web服务扩展. 确认 ASP.NET v4.0.*** 是存在或者被允许? 如果没有找到 ASP.NET v4.0 则是您没有安装.net4.0 Framework, 请下载安装解决.
-
-   3. 建立网站, 网站名称为CCFlow6  主目录为: D:\ccflow\CCFlow , 应用程序池为 ASP.NET v4.0 Classic. (建议单独建立一个应用程序池.)
-
-8. 启动流程设计器 
-  
-   1. 流程设计器进入地址:` http://localhost:5853/Default.htm`
-   2. 超级用户:admin  密码: 123
- 
-   **说明:**
-
-   1. 第一次进入后，会提示您安装与初始化ccflow数据.
-   2. 注意选择是否是要安装demo .
-   3. 安装成功会ccflow 会自动转入设计器.
-   4. 如果中途安装失败，您需要删除数据库重新建立，重新安装.   
-  
-
-### 安装过程中经常遇到的问题: ###
-
-1. 在internet 信息服务(iis) 中， web 服务扩展 asp.net v4.xxxxxx 的dll 没有被允许.
-
-   1. 如果找不到，就是没有安装iis的程序扩展功能。
-   2. 控制面板-> 程序和功能-> 在左边有打开或者关闭windows功能. 把 Internet information services. 与 Internet 信息服务 全部选择上.
-
-2. 没有注册 asp.net 到iis 上. 需要执行如下命令.
-
-         cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319   (32位)
-         cd C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319 (64位)
-         aspnet_regiis.exe -ua
-         aspnet_regiis.exe -i	  
-
-3. 出现用户名及密码错误，请在web.config 文件中.
-
-    <identity impersonate="true" userName="administrator" password="jiaozi"/> 
-    中的 impersonate="true" 修改成 impersonate="false" 或者填写正确的密码, 
-    也可以把  impersonate="false" 	 
-
-4. 造成流程设计器不能正常打开的原因:有可能是c:\windows\temp 目录访问权限有限制, 修改一下该目录的访问权限，比如everyone都可以读写试一下(不建议你这样)。
-
-5, 在按下安装一步时，遇到创建表或者数据库的错误。
-   1. 指定连接里面数据库用户没有权限，导致错误。
-   2. web.config 中的 数据库类型设置错误.
-        <add key="AppCenterDBType" value="MSSQL" />
-6, 用户权限问题.
-     如果出现:C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files”
-     的写访问权限。的错误提示. 解决办法:  把“IIS_IUSERS”和你自己的系统用户赋予它操作
-     C：\WINDOWS\TEMP文件夹的权利，
-
-  重新启动IIS，并尝试再次运行Web应用程序。
-
-7. 如果以上方式都不奏效.
-
-        cd C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319
-        aspnet_regiis.exe -ua
-        aspnet_regiis.exe -i
-
-   重新安装，就有可能解决，此时可以寻求你的同事解决。
-
-8. VS2010+IE8 调试提示 “找不到元素”
-    1.  Open RegEdit //打开注册表编辑器
-    2.  Browse to HKEY_LOCALMACHINE -> SOFTWARE -> Microsoft -> Internet Explorer -> Main
-    3.  Set TabProcGrowth to 0 //设置 TabProcGrowth 的值为 0
-
-9. 当前ccflow的工作模式为集成模式，您没有安装或者成功配置CCGPM,ccflow的BPM工作模式，必须依赖CCGPM才能运行。
-
-   1. 如果需要集成模式，请先安装CCGPM，然后安装ccflow;
-   2. 或者改为简单模式：请在web.config 文件中把OSModel 改为0.
-
-10. 在  oracle 的安装的时候会越到大小写敏感问题,我们需要被安装的mysql数据库不要区分大小写.
-
-11. Visual Studio 2019无法启动IIS Express的解决办法：以管理员身份打开Visual Studio 2019，然后从文件菜单打开ccflow.sln
-
-12. 流程页面图标显示有问题，如下图
-![如图](https://images.gitee.com/uploads/images/2021/1120/114802_d4a8c2f9_5090226.png "微信图片_20211120113547.png")
-
-解决方式：在web.config里的<system.webServer>中添加如下内容就可以正常显示。
-```
-   <staticContent>
-      <remove fileExtension=".woff2" />
-      <mimeMap fileExtension=".woff2" mimeType="font/woff2" />
-   </staticContent>
-```
 
 
 

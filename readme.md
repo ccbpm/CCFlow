@@ -16,6 +16,9 @@
 - 配置参数丰富，支持流程的基础功能：前进、后退、转向、转发、撤销、抄送、挂起、草稿、任务池共享，也支持高级功能取回审批、项目组、外部用户等等。
 - 数据库脚本可以用代码自动安装完成。只需要新建一个空的数据库，运行项目后访问流程设计器页面，即可进入脚本自动安装的页面。  
 
+##### 我们的品牌
+[![输入图片说明](http://ccflow.org/AD/ADccflowTitle.gif)](http://ccflow.org/?frm=ccflow)
+
 ##### 生态伙伴-排名不分先后.
 - 微同商城 https://gitee.com/fuyang_lipengjun/platform
 - 单点登录 https://gitee.com/dotnetchina/BootstrapAdmin

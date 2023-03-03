@@ -1,5 +1,5 @@
 ﻿##### 我们的品牌
-[![输入图片说明](http://ccflow.org/AD/ADccflowTitle.gif)](http://ccflow.org/?frm=ccflow)
+[![输入图片说明](http://ccflow.org/AD/ADccflowTitle.gif)](http://ccflow.org/?frm=ccflowGit)
 
 #### ccbpm系统概要介绍 
 - 技术交流群:1060674395, 在右上角点:watch,star,fork支持我们,谢谢.

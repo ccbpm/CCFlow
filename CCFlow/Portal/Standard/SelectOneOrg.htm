@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>驰骋流程&表单设计器 </title>
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <link href="../../WF/Style/skin/css/login.css" type="text/css" rel="stylesheet" />
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/JS/validation.js"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+        var name = null;
+
+        //初始化页面函数.....
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            var data = handler.DoMethodReturnString("SelectOneOrg_Init");
+            if (data.indexOf('err@') == 0)
+            {
+                $("#list").html(data);
+                return;
+            }
+
+            datas = JSON.parse(data);
+
+            //$("#cc").html("<img src='/Admin/Portal/Img/loading_small.gif' /><font color=blue>ccbpm 正在登录请您稍后.</font>");
+            var webUser = new WebUser();
+
+            var html = "您好：" + webUser.No + " - " + webUser.Name + ",共有:<font color=red>" + datas.length + " </font>个. <a href='Login.htm'>切换管理员</a>";
+            $("#title").html(html);
+            var orgNo = webUser.OrgNo;
+
+            var html = "<ul style='align:left'>";
+            for (var i = 0; i < datas.length; i++) {
+
+                var data = datas[i];
+
+                if (data.No == orgNo)
+                    html += "<li><h2><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a></h2> </li>";
+                else
+                    html += "<li><a href=\"javascript:SelectOrg('" + data.No + "');\" >" + data.No + " " + data.Name + " </a> </li>";
+            }
+            html += "</ul>";
+            $("#list").html(html);
+        });
+
+        function SelectOrg(no) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("OrgNo", no);
+            var data = handler.DoMethodReturnString("SelectOneOrg_Selected");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = data.substring(4);
+            SetHref(data);
+            return;
+        }
+    </script>
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+</head>
+
+<body class="login-bg">
+
+    <form id="cc">
+        <br />
+
+        <center>
+            <h3>请选择要登录的组织</h3>
+            <fieldset style="width:50%; text-align:left">
+                <legend id="title">
+                </legend>
+                <div id="list"></div>
+            </fieldset>
+        </center>
+    </form>
+
+</body>
+</html>

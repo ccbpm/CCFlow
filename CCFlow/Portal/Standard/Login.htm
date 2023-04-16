@@ -96,7 +96,9 @@
         }
 
         //执行后台登录.
-        function Login() {
+        function Login(isZZJ) {
+            if (isZZJ == undefined)
+                isZZJ = '0';
             //$("#Msg").html("<font> ccbpm 正在登录流程&表单引擎设计器,请稍候... </font>");
             var loading = layer.load(1, { shade: [0.1, '#fff'] });
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
@@ -118,6 +120,7 @@
             handler.AddPara("VerifyCode", $("#inputCode").val());
             handler.AddPara("TB_No", userNo);
             handler.AddPara("TB_PW", pass);
+            handler.AddPara("IsZZJ", isZZJ);
 
             var data = handler.DoMethodReturnString("Login_Submit");
 
@@ -318,14 +321,16 @@
                                 <a href="javascript:void(0)" style="margin-left: 10px" onclick="createCode()">看不清</a>
                             </div>
 
-                            <input type="button" class="btn btn-lg btn-login btn-block" value="用户登录" id="Btn_Login" onclick="Login();" />
-
+                            <div id="">
+                                <input  type="button" class="btn btn-lg btn-login btn-block" value="登录-流程引擎中间件" id="Btn_Login" onclick="Login(1);" />
+                                <input type="button" class="btn btn-lg btn-login btn-block" value="登录-标准版低代码开发平台" id="Btn_Login" onclick="Login(0);" />
+                            </div>
                             <!--<input type="button" class="btn btn-primary btn-block" value="测试版本test" id="Btn_LoginExt" onclick="LoginText();" />-->
                             <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
                             // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
                             <!--<div class="text-center">
-                                <div class="forget-password">
-                                    <a href="javascript:Mobile();">手机登录</a>-->
+                            <div class="forget-password">
+                                <a href="javascript:Mobile();">手机登录</a>-->
                             <!--<a href="../AppClassic/Login.htm">前台登录</a>-->
                             <!--</div>
                             </div>-->

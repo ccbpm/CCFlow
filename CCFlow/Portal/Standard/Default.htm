@@ -20,9 +20,10 @@
     <!--- 引入代码. -->
     <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
-    <!--    <script src="./js/sortjs/Sortable.min.js" type="text/javascript"></script>-->
     <script src="../../DataUser/JSLibData/PortalConfig.js" type="text/javascript"></script>
-    
+    <script src="../../WF/Data/lang/load.js"></script>
+
+
     <script type="text/javascript">
         //初始化页面函数.....
         $(function () {
@@ -32,23 +33,23 @@
 
         function GoToFunc(funcName) {
             if (funcName === 'Calendar') {
-                vm.openTab('日历', '/CCFast/Calendar/Month.htm');
+                vm.openTab(vm.GetNameByLange('rili'), '/CCFast/Calendar/Month.htm');
                 return;
             }
             if (funcName === 'WorkRec') {
-                vm.openTab('日志', '/CCFast/WorkRec/Default.htm');
+                vm.openTab(vm.GetNameByLange('rizhi'), '/CCFast/WorkRec/Default.htm');
                 return;
             }
             if (funcName === 'Notepad') {
-                vm.openTab('记事本', '/CCFast/Notepad/Notepad.htm');
+                vm.openTab(vm.GetNameByLange('jishiben'), '/CCFast/Notepad/Notepad.htm');
                 return;
             }
             if (funcName === 'Task') {
-                vm.openTab('任务', '/CCFast/Task/Task.htm');
+                vm.openTab(vm.GetNameByLange('renwu'), '/CCFast/Task/Task.htm');
                 return;
             }
             if (funcName === 'KnowledgeManagement') {
-                vm.openTab('知识库', '/CCFast/KnowledgeManagement/Default.htm');
+                vm.openTab(vm.GetNameByLange('zhishiku'), '/CCFast/KnowledgeManagement/Default.htm');
                 return;
             }
         }
@@ -175,6 +176,7 @@
         .g-admin-layout .offerbodyleft {
             left: 300px;
         }
+      
     </style>
     <style id="theme-data">
     </style>
@@ -199,31 +201,31 @@
                         </li>
 
                         <li v-if="isAdmin" class="layui-nav-item layui-hide-xs" v-if="IsShowFast">
-                            <a href="javascript:void(0)" title="流程" @mouseover.stop="showShortCut = true"
+                            <a href="javascript:void(0)" :title="GetNameByLange('liucheng')" @mouseover.stop="showShortCut = true"
                                @mouseenter="stopTimeout" @mouseleave="closeDropdown">
-                                流程
+                                {{GetNameByLange('liucheng')}}
                             </a>
                             <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortCut}"
-                                style='width: 72px;' @click.stop="showShortCut = false" @mouseenter="stopTimeout"
+                                style='width: 100px;' @click.stop="showShortCut = false" @mouseenter="stopTimeout"
                                 @mouseleave="closeDropdown">
                                 <dd onclick="Start()">
-                                    <a class="drop-down-item">
-                                        <i class="icon-share-alt"></i>发起
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-share-alt"></i>&nbsp;&nbsp;{{GetNameByLange('faqi')}}
                                     </a>
                                 </dd>
                                 <dd onclick='Todolist()'>
-                                    <a class="drop-down-item">
-                                        <i class="icon-bell"></i>待办
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-bell"></i>&nbsp;&nbsp;{{GetNameByLange('daiban')}}
                                     </a>
                                 </dd>
                                 <dd onclick='Runing()'>
-                                    <a class="drop-down-item">
-                                        <i class="icon-clock"></i>在途
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-clock"></i>&nbsp;&nbsp;{{GetNameByLange('zaitu')}}
                                     </a>
                                 </dd>
                                 <dd onclick='Search()'>
-                                    <a class="drop-down-item">
-                                        <i class="icon-magnifier"></i>查询
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-magnifier"></i>&nbsp;&nbsp;{{GetNameByLange('chaxun')}}
                                     </a>
                                 </dd>
 
@@ -237,31 +239,31 @@
                             </a>
 
                             <dl class="layui-nav-child drop-down" :class="{'layui-show':showShortOA}"
-                                style='width: 72px;' @click.stop="showShortOA = false" @mouseenter="stopTimeout"
+                                style='width: 110px;' @click.stop="showShortOA = false" @mouseenter="stopTimeout"
                                 @mouseleave="closeDropdown">
                                 <dd onclick="GoToFunc('Calendar')">
-                                    <a class="drop-down-item">
-                                        <i class="icon-calendar"></i>日历
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-calendar"></i>&nbsp;&nbsp;{{GetNameByLange('rili')}}
                                     </a>
                                 </dd>
                                 <dd onclick="GoToFunc('WorkRec')">
-                                    <a class="drop-down-item">
-                                        <i class="icon-bell"></i>日志
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-bell"></i>&nbsp;&nbsp;{{GetNameByLange('rizhi')}}
                                     </a>
                                 </dd>
                                 <dd onclick="GoToFunc('Notepad')">
-                                    <a class="drop-down-item">
-                                        <i class="icon-note"></i>&nbsp;&nbsp;记事本
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-note"></i>&nbsp;&nbsp;{{GetNameByLange('jishiben')}}
                                     </a>
                                 </dd>
                                 <dd onclick="GoToFunc('Task')">
-                                    <a class="drop-down-item">
-                                        <i class="icon-note"></i>任务
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-note"></i>&nbsp;&nbsp;{{GetNameByLange('renwu')}}
                                     </a>
                                 </dd>
                                 <dd onclick="GoToFunc('KnowledgeManagement')">
-                                    <a class="drop-down-item">
-                                        <i class="icon-eyeglass"></i>&nbsp;知识库
+                                    <a class="drop-down-item" style="display:inline !important">
+                                        <i class="icon-eyeglass"></i>&nbsp;&nbsp;{{GetNameByLange('zhishiku')}}
                                     </a>
                                 </dd>
                             </dl>
@@ -276,21 +278,21 @@
 
                     <ul class="layui-nav g-layout-right">
                         <!--<li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="GoToOrgEn()">
-                            <a href="javascript:void(0)" class="flex-item">
-                                <i class="icon-menu"></i>
-                                <span>系统后台</span>
-                            </a>
-                        </li>-->
+        <a href="javascript:void(0)" class="flex-item">
+            <i class="icon-menu"></i>
+            <span>系统后台</span>
+        </a>
+    </li>-->
                         <!--<li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Fasts()">
-                            <a href="javascript:void(0)" class="flex-item">
-                                <i class="icon-menu"></i>
-                                <span>低代码</span>
-                            </a>
-                        </li>-->
+        <a href="javascript:void(0)" class="flex-item">
+            <i class="icon-menu"></i>
+            <span>低代码</span>
+        </a>
+    </li>-->
                         <li v-if="isAdmin==false" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Start()">
                             <a href="javascript:void(0)" class="flex-item">
                                 <i class="icon-share-alt"></i>
-                                <span>发起</span>
+                                <span>{{GetNameByLange('faqi')}}</span>
                             </a>
                         </li>
 
@@ -298,95 +300,99 @@
                         <li v-if="isAdmin==false" id="iconFlow" class="layui-nav-item layui-hide-xs" onclick="Todolist()">
                             <a href="javascript:void(0)" class="flex-item">
                                 <i class="icon-bell"></i>
-                                <span>待办</span>
+                                <span>{{GetNameByLange('daiban')}}</span>
                             </a>
                         </li>
 
                         <li v-if="isAdmin==false" id="iconFrm" class="layui-nav-item layui-hide-xs" onclick="Runing()">
                             <a href="javascript:void(0)" class="flex-item">
                                 <i class="icon-clock"></i>
-                                <span>在途</span>
+                                <span>{{GetNameByLange('zaitu')}}</span>
                             </a>
                         </li>
 
                         <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Fasts()">
                             <a href="javascript:void(0)" class="flex-item">
                                 <i class="icon-menu"></i>
-                                <span>低代码</span>
+                                <span>{{GetNameByLange('didaima')}}</span>
                             </a>
                         </li>
 
 
                         <li v-if="isAdmin" id="iconFlow" class="layui-nav-item layui-hide-xs" onclick="Flows()">
-                            <a href="javascript:void(0)" class="flex-item">
+                            <a href="javascript:void(0)" class="flex-item" style="padding:0 15px">
                                 <i class="icon-heart"></i>
-                                <span>流程</span>
+                                <span>{{GetNameByLange('liucheng')}}</span>
                             </a>
                         </li>
 
                         <li v-if="isAdmin" id="iconFrm" class="layui-nav-item layui-hide-xs" onclick="Frms()">
-                            <a href="javascript:void(0)" class="flex-item">
+                            <a href="javascript:void(0)" class="flex-item" style="padding:0 15px">
                                 <i class="icon-diamond"></i>
-                                <span>表单</span>
+                                <span>{{GetNameByLange('biaodan')}}</span>
                             </a>
                         </li>
 
 
                         <li v-if="isAdmin" id="iconOrg" class="layui-nav-item layui-hide-xs" onclick="OpenOrg()">
-                            <a href="javascript:void(0)" class="flex-item">
+                            <a href="javascript:void(0)" class="flex-item" style="padding:0 15px">
                                 <i class="icon-people"></i>
-                                <span>组织</span>
+                                <span>{{GetNameByLange('zuzi')}}</span>
                             </a>
                         </li>
 
 
                         <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenMessage()">
-                            <a href="javascript:void(0)">
-                                <i class="icon-bubbles"></i> 消息
+                            <a href="javascript:void(0)" style="padding:0 15px">
+                                <i class="icon-bubbles"></i> {{GetNameByLange('xiaoxi')}}
                             </a>
                         </li>
 
                         <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenIM()">
-                            <a href="javascript:void(0)">
+                            <a href="javascript:void(0)" style="padding:0 15px">
                                 <i class="icon-bubbles"></i> IM
                             </a>
                         </li>
 
-
+                        <li id="lange" class="layui-nav-item layui-hide-xs" >
+                            <a href="javascript:void(0)" style="padding:0 15px">
+                                <i class="layui-icon layui-icon-website"></i>
+                            </a>
+                        </li>
 
 
                         <li v-if="IsShowTheme" class="layui-nav-item layui-hide-xs" @click="openThemePicker">
-                            <a href="javascript:void(0)">
+                            <a href="javascript:void(0)" style="padding:0 15px">
                                 <i class="layui-icon layui-icon-theme"></i>
                             </a>
                         </li>
 
                         <li v-if="IsShowFullScreen" class="layui-nav-item layui-hide-xs"
                             @click="changeFullScreenStatus">
-                            <a href="javascript:void(0)">
+                            <a href="javascript:void(0)" style="padding:0 15px">
                                 <i class="layui-icon "
                                    :class="inFullScreenMode ? 'layui-icon-screen-restore':'layui-icon-screen-full'"></i>
                             </a>
                         </li>
                         <li class="layui-nav-item " style="margin-right: 20px" @mouseover.stop="showUserActions = true"
                             @mouseenter="stopTimeout" @mouseleave="closeDropdown">
-                            <a href="javascript:void(0)">
+                            <a href="javascript:void(0)" style="padding:0 15px">
                                 <span id="username">{{webUser.Name}}</span>
                             </a>
                             <dl class="layui-nav-child drop-down" :class="{'layui-show': showUserActions}"
                                 @mousemove.stop @mouseenter="stopTimeout" @mouseleave="closeDropdown">
                                 <dd>
                                     <a href="javascript:void(0)"
-                                       @click='openTab("个人信息","../../WF/Setting/Default.htm")'>个人信息</a>
+                                       @click='openTab(GetNameByLange("grxx"),"../../WF/Setting/Default.htm")'>{{GetNameByLange('grxx')}}</a>
                                 </dd>
                                 <!--<dd><a href="javascript:void(0)" @click='openTab("修改密码","../Setting/ChangePassword.htm")'>修改密码</a></dd>-->
                                 <dd>
                                     <a href="javascript:void(0)"
-                                       @click='openTab("切换组织","../../WF/Setting/ChangeDept.htm")'>切换组织</a>
+                                       @click='openTab(GetNameByLange("qhzz"),"../../WF/Setting/ChangeDept.htm")'>{{GetNameByLange('qhzz')}}</a>
                                 </dd>
-                                <dd v-if="plant=='CCFlow'"><a href="javascript:void(0)" @click="GoToMobile">移动端登录</a></dd>
-                                <dd><a href="javascript:void(0)" @click="GoToAppClassic">中间件端登录</a></dd>
-                                <dd><a href="javascript:void(0)" @click="logout">退出登录</a></dd>
+                                <dd v-if="plant=='CCFlow'"><a href="javascript:void(0)" @click="GoToMobile">{{GetNameByLange('ydddl')}}</a></dd>
+                                <dd><a href="javascript:void(0)" @click="GoToAppClassic">{{GetNameByLange('zjjdl')}}</a></dd>
+                                <dd><a href="javascript:void(0)" @click="logout">{{GetNameByLange('tcdl')}}</a></dd>
                             </dl>
                         </li>
                     </ul>
@@ -537,7 +543,7 @@
                                 <a href="javascript:void(0)"><span class="layui-nav-more"></span></a>
                                 <dl class="layui-nav-child layui-anim-fadein layui-anim layui-anim-upbit bgwhite"
                                     :class="{'layui-show': showPagesAction}" @mouseleave="showPagesAction = false">
-                                    <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                                    <dd @click="closeCurrentTabs(selectedTabsIndex,true)">
                                         <a href="javascript:void(0)">
                                             <i class="icon-check"></i>关闭当前标签页
                                         </a>
@@ -559,7 +565,7 @@
 
                     <dl v-if="tabDropdownVisible" :style="contextMenuStyle" @mouseleave="tabDropdownVisible = false"
                         @click.stop="tabDropdownVisible = false">
-                        <dd @click="closeCurrentTabs(selectedTabsIndex)">
+                        <dd @click="closeCurrentTabs(selectedTabsIndex,true)">
                             <a href="javascript:void(0)"><i class="icon-check"></i>关闭当前标签页</a>
                         </dd>
                         <dd @click="closeOtherTabs">
@@ -581,15 +587,15 @@
                             <li v-for="(item,index) in tabsList" @click="changeSelectTab(index,item)"
                                 :class="{'layui-this':selectedTabsIndex === index}">
                                 <span>{{item.name}}</span><i class="layui-icon layui-unselect layui-tab-close"
-                                                             @click="closeCurrentTabs(index)">ဆ</i>
+                                                             @click="closeCurrentTabs(index,true)">ဆ</i>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <!-- body -->
-                <div :class="classicalLayout? 'layui-body':'layui-body offerbodyleft'">
+                <div   :class="classicalLayout? 'layui-body':'layui-body offerbodyleft'">
                     <div :class="{'layui-show':selectedTabsIndex === -1}" class="g-admin-tabsbody-item">
-                        <iframe src="Home.htm" frameborder="0" ref="iframe-home" class="g-admin-iframe"></iframe>
+                        <iframe  src="../../WF/Todolist.htm" frameborder="0" ref="iframe-home" class="g-admin-iframe"></iframe>
                     </div>
                     <div v-for="(item,index) in tabsList" class="g-admin-tabsbody-item"
                          :class="{'layui-show':index === selectedTabsIndex}">
@@ -628,10 +634,6 @@
     <script src="DefaultMenuGlo.js"></script>
     <script src="../../WF/Scripts/tinyIM/commonSDK.js"></script>
     <script type="text/javascript">
-
-
-
-
     </script>
 </body>
 

@@ -222,25 +222,53 @@ window.onload = function () {
                 })
             },
             // 关闭当前标签页
-            closeCurrentTabs: function (index) {
+            closeCurrentTabs: function (index, isShowTip) {
+                isShowTip = isShowTip || false;
                 if (index == undefined)
                     index = this.selectedTabsIndex;
-                this.tabsList.splice(index, 1)
-                var _this = this
-                setTimeout(function () {
-                    if (_this.tabsList.length > index) {
-                        _this.selectedTabsIndex = index
-                    } else {
-                        _this.selectedTabsIndex = index - 1
-                    }
-                    if (_this.selectedTabsIndex == -1)
-                        _this.selectedId = "";
-                    else
-                        _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
-                    var cur = _this.tabsList[_this.selectedTabsIndex];
-                    if ((cur != undefined && cur.name == "待办") || _this.selectedTabsIndex == -1)
-                        _this.reLoadCurrentPage();
-                }, 100)
+
+                var cur = this.tabsList[index];
+                var src = cur.src || "";
+                var _this = this;
+                if ((src.indexOf('MyFlowGener') != -1 || src.indexOf('MyFlowTree') != -1
+                    || src.indexOf('MyDict') != -1 || src.indexOf('MyBill') != -1) && src.indexOf('IsReadonly=1') == -1 && isShowTip) {
+                    layer.confirm('关闭当前页面,请检查是否已保存填写的内容', function (closeIndex) {
+                        layer.close(closeIndex);
+                        _this.tabsList.splice(index, 1)
+                        setTimeout(function () {
+                            if (_this.tabsList.length > index) {
+                                _this.selectedTabsIndex = index
+                            } else {
+                                _this.selectedTabsIndex = index - 1
+                            }
+                            if (_this.selectedTabsIndex == -1)
+                                _this.selectedId = "";
+                            else
+                                _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
+                            var cur = _this.tabsList[_this.selectedTabsIndex];
+                            if ((cur != undefined && cur.name == "待办") || _this.selectedTabsIndex == -1)
+                                _this.reLoadCurrentPage();
+                        }, 100)
+                    });
+                } else {
+                    _this.tabsList.splice(index, 1)
+                    setTimeout(function () {
+                        if (_this.tabsList.length > index) {
+                            _this.selectedTabsIndex = index
+                        } else {
+                            _this.selectedTabsIndex = index - 1
+                        }
+                        if (_this.selectedTabsIndex == -1)
+                            _this.selectedId = "";
+                        else
+                            _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
+                        var cur = _this.tabsList[_this.selectedTabsIndex];
+                        if ((cur != undefined && cur.name == "待办") || _this.selectedTabsIndex == -1)
+                            _this.reLoadCurrentPage();
+                    }, 100)
+                }
+
+               
             },
             closeTabByName: function (name) {
                 if (name == null || name == undefined || name == "")
@@ -508,7 +536,7 @@ window.onload = function () {
             },
             GoToAppClassic: function () {
                 var webUser = new WebUser();
-                SetHref(basePath + "/WF/AppClassic/Login.htm?UserNo=" + webUser.No + "&Token=" + webUser.Token + "&OrgNo=" + webUser.OrgNo);
+                SetHref(basePath + "/WF/AppClassic/Home.htm?UserNo=" + webUser.No + "&Token=" + webUser.Token + "&OrgNo=" + webUser.OrgNo);
             },
             GoToMobile: function () {
                 var webUser = new WebUser();  //退出
@@ -606,6 +634,28 @@ window.onload = function () {
 
             stopListenMsg: function () {
                 clearInterval(this.msgListener)
+            },
+            ChangeLang: function () {
+                //初演示
+                layui.dropdown.render({
+                    elem: '#lange'
+                    , align: 'right'
+                    , data: [{
+                        title: '简体中文'
+                        , id: 'zh-cn'
+                    }, {
+                        title: 'English'
+                        , id: 'en-us'
+                    }],
+                    style:'top: 44px',
+                     click: function (obj) {
+                         localStorage.setItem("Lange", obj.id);
+                         SetHref(GetHrefUrl());
+                    }
+                });
+            },
+            GetNameByLange: function (key) {
+                return window.lang[key];
             }
         },
         mounted: function () {
@@ -629,6 +679,7 @@ window.onload = function () {
             this.initMenus();
             this.startListenMsg();
             this.initIM();
+            this.ChangeLang();
         },
         beforeDestory: function () {
             this.stopListenMsg()

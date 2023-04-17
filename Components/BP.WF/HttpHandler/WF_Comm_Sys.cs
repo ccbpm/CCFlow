@@ -774,6 +774,8 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     en = obj as Entity;
+                    if (en == null)
+                        continue;
                     string className = en.ToString();
                     switch (className.ToUpper())
                     {

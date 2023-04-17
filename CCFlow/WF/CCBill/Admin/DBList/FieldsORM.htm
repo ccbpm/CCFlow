@@ -320,7 +320,7 @@
             if (dblist.DBType == 2 && doc.toUpperCase().indexOf("SELECT") != -1) {
 
             } else {
-                if (dblist.ExpEn.indexOf('@Key') == -1) {
+                if (doc.indexOf('@Key') == -1) {
                     alert("数据源里必须包含@Key参数.");
                     return;
                 }

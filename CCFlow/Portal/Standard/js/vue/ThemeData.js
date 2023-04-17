@@ -39,7 +39,7 @@
         formColor: 'rgb(57, 158, 253)',
         alias: '海之蓝'
     },
-    rynn: {
+   /* rynn: {
         logo: 'rgb(24, 144, 255)',
         selected: 'rgb(52 137 211)', //选择系统的颜色
         header: 'rgba(28, 90, 201, 1)',
@@ -47,7 +47,7 @@
         navBar: 'rgba(28, 90, 201, 1)',
         selectedMenu: 'rgba(51, 125, 254, 1)', //选择菜单的颜色
         alias: '深之蓝'
-    },
+    },*/
     pro: {
         logo: 'rgb(32, 34, 42)',
         selected: 'rgb(230, 0, 18)',

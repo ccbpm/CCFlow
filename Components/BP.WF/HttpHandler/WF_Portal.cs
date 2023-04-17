@@ -409,7 +409,7 @@ namespace BP.WF.HttpHandler
                     if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
                     {
                         string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
-                        if (DBAccess.RunSQLReturnValInt(sql, 1) == 1)
+                        if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
                             return "err@该用户已经被禁用.";
                     }
 

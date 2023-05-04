@@ -16,13 +16,13 @@ namespace BP.WF.Template
     /// <summary>
     /// 这里存放每个节点的信息.	 
     /// </summary>
-    public class TempalteNode : Entity
+    public class TemplateNode : Entity
     {
         #region 构造函数
         /// <summary>
         /// 节点
         /// </summary>
-        public TempalteNode() { }
+        public TemplateNode() { }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -40,7 +40,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, true, 0, 100, 10, false);
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
-                map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 70, 10);
+                map.AddTBString(NodeAttr.Icon, null, "节点ICON图片路径", true, false, 0, 70, 10);
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 3, 10);
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
@@ -236,7 +236,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 节点集合
     /// </summary>
-    public class TempalteNodes : EntitiesOID
+    public class TemplateNodes : EntitiesOID
     {
         #region 方法
         /// <summary>
@@ -246,7 +246,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new TempalteNode();
+                return new TemplateNode();
             }
         }
         #endregion
@@ -255,7 +255,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点集合
         /// </summary>
-        public TempalteNodes()
+        public TemplateNodes()
         {
         }
         #endregion
@@ -265,20 +265,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<TempalteNode> ToJavaList()
+        public System.Collections.Generic.IList<TemplateNode> ToJavaList()
         {
-            return (System.Collections.Generic.IList<TempalteNode>)this;
+            return (System.Collections.Generic.IList<TemplateNode>)this;
         }
         /// <summary>
         /// 转化成list 为了翻译成java的需要
         /// </summary>
         /// <returns>List</returns>
-        public List<TempalteNode> Tolist()
+        public List<TemplateNode> Tolist()
         {
-            List<TempalteNode> list = new List<TempalteNode>();
+            List<TemplateNode> list = new List<TemplateNode>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((TempalteNode)this[i]);
+                list.Add((TemplateNode)this[i]);
             }
             return list;
         }

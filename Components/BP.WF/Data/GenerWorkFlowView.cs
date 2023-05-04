@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Data;
 using BP.DA;
+using BP.Difference;
 using BP.En;
 using BP.WF.Template;
 
 namespace BP.WF.Data
 {
-     
+
     /// <summary>
     /// 流程实例
     /// </summary>
@@ -588,16 +589,24 @@ namespace BP.WF.Data
 
                 map.AddTBString(GenerWorkFlowAttr.FK_NY, null, "发起月份", true, true, 0, 100, 10);
                 map.AddTBFloat(GenerWorkFlowAttr.LostTimeHH, 0, "耗时", true, true);
+                //查询关键字.
+                map.AddTBSKeyWords(4000);
+
+                // map.AddMyFileS("xx");
 
                 map.AddSearchAttr(GenerWorkFlowAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowAttr.WFSta);
+
+                if (SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
+                    map.AddHidden(GenerWorkFlowAttr.OrgNo, "=", "@WebUser.OrgNo");
+
+                map.AddHidden(GenerWorkFlowAttr.WFState, ">", "1");
 
                 map.DTSearchKey = GenerWorkFlowAttr.RDT;
                 map.DTSearchLabel = "时间";
                 map.DTSearchWay = Sys.DTSearchWay.ByDate;
 
                 //把不等于 0 的去掉.
-                map.AddHidden(GenerWorkFlowAttr.WFState, ">", "1"); 
 
                 RefMethod rm = new RefMethod();
 
@@ -622,17 +631,6 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                ////rm.Icon = "../../WF/Img/Btn/CC.gif";
-                //rm.Icon = "icon-social-tumblr";
-                //rm.Title = "跳转";
-                //rm.IsForEns = false;
-                //rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
-
-
-
                 rm = new RefMethod();
                 rm.Title = "轨迹修改";
                 rm.Icon = "icon-graph";
@@ -640,7 +638,6 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "调整流程";
@@ -726,8 +723,7 @@ namespace BP.WF.Data
 
         public string DoFlowOver(string msg)
         {
-            BP.WF.Dev2Interface.Flow_DoFlowOver(this.WorkID, msg,0);
-
+            BP.WF.Dev2Interface.Flow_DoFlowOver(this.WorkID, msg, 0);
             return "执行成功.";
         }
         /// <summary>

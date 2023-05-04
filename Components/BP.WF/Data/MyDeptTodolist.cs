@@ -690,9 +690,15 @@ namespace BP.WF.Data
                 map.AddDDLEntities(MyDeptTodolistAttr.FK_Emp, null, "当前处理人", new BP.WF.Data.MyDeptEmps(), false);
                 map.AddTBIntPK(MyDeptTodolistAttr.WorkID, 0, "工作ID", true, true);
 
+                //查询关键字.
+                map.AddTBSKeyWords(4000);
+
                 //查询条件.
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Emp);
+
+
+             
 
                 ////增加隐藏的查询条件.
                 //SearchNormal search = new SearchNormal(MyDeptTodolistAttr.WorkerDept, "部门",

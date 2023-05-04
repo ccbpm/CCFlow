@@ -383,6 +383,14 @@ namespace BP.WF.Template.Frm
                         BP.WF.Template.FrmOrgAttr.FrmID,
                         BP.WF.Template.FrmOrgAttr.OrgNo, "适用组织");
                 }
+
+                rm = new RefMethod();
+                rm.Title = "特别控件特别用户权限";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
+                rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-note";
+                map.AddRefMethod(rm);
                 #endregion
 
                 #region 开发接口.
@@ -981,6 +989,12 @@ namespace BP.WF.Template.Frm
         public string DoInitScript()
         {
             return "../../Admin/FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+        }
+
+        public string DoSpecFieldsSpecUsers()
+        {
+            return "../../Admin/FoolFormDesigner/SepcFiledsSepcUsers.htm?FrmID=" +
+                   this.No + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
         /// 傻瓜表单属性.

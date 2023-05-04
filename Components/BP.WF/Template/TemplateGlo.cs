@@ -1541,10 +1541,10 @@ namespace BP.WF.Template
             }
             nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
             nd.NodeID = nodeID;
-            nd.HisDeliveryWay = DeliveryWay.BySelected; //@hongyan.
+            nd.HisDeliveryWay = DeliveryWay.BySelected; 
             nd.X = x;
             nd.Y = y;
-            nd.ICON = icon;
+            nd.Icon = icon;
             nd.Step = idx;
 
             //节点类型.
@@ -1696,7 +1696,7 @@ namespace BP.WF.Template
 
                 flow.PTable = "ND" + int.Parse(flow.No) + "Rpt";
 
-                //@hongyan. 设置创建人，创建日期.
+                // 设置创建人，创建日期.
                 flow.SetValByKey(FlowAttr.CreateDate, DataType.CurrentDateTime);
                 flow.SetValByKey(FlowAttr.Creater, BP.Web.WebUser.No);
                 flow.SetValByKey("Icon", "icon-people");
@@ -1715,7 +1715,6 @@ namespace BP.WF.Template
                 //    fe.DirectUpdate();
                 //}
 
-
                 BP.WF.Node nd = new BP.WF.Node();
                 nd.NodeID = int.Parse(flow.No + "01");
                 nd.Name = "Start Node";//  "开始节点"; 
@@ -1727,7 +1726,8 @@ namespace BP.WF.Template
                 nd.X = 200;
                 nd.Y = 150;
                 nd.NodePosType = NodePosType.Start;
-                nd.ICON = "前台";
+                nd.HisReturnRole = ReturnRole.CanNotReturn; //不能退回. @hongyan.
+                nd.Icon = "前台";
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = DirCondModel.ByDDLSelected; //默认的发送方向.
@@ -1771,7 +1771,7 @@ namespace BP.WF.Template
                 string fileNewNode = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true && 1 == 2)
                 {
-                    DataSet myds = new DataSet();  //@hongyan
+                    DataSet myds = new DataSet();  
                     myds.ReadXml(fileNewNode);
                     DataTable dt = myds.Tables[0];
                     foreach (DataColumn dc in dt.Columns)
@@ -1785,7 +1785,7 @@ namespace BP.WF.Template
                     nd.HisNodeWorkType = NodeWorkType.Work;
                     nd.X = 200;
                     nd.Y = 250;
-                    nd.ICON = "审核";
+                    nd.Icon = "审核";
                     nd.NodePosType = NodePosType.End;
 
                     //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
@@ -1828,7 +1828,7 @@ namespace BP.WF.Template
                 string file = BP.Difference.SystemConfig.PathOfDataUser + "XML/TempleteSheetOfStartNode.xml";
                 if (System.IO.File.Exists(file) == true && 1 == 2)
                 {
-                    //throw new Exception("@开始节点表单模版丢失" + file);  @hongyan
+                    //throw new Exception("@开始节点表单模版丢失" + file); 
                     /*如果存在开始节点表单模版*/
                     DataSet ds = new DataSet();
                     ds.ReadXml(file);

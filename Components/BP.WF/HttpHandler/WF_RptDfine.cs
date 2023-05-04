@@ -184,7 +184,7 @@ namespace BP.WF.HttpHandler
             Flow fl = new Flow(this.FK_Flow);
             ht.Add("FlowName", fl.Name);
 
-            string advEmps =  BP.Difference.SystemConfig.AppSettings["AdvEmps"];
+            string advEmps = BP.Difference.SystemConfig.AppSettings["AdvEmps"];
             if (advEmps != null && advEmps.Contains(BP.Web.WebUser.No) == true)
             {
                 ht.Add("Adminer", "高级查询");
@@ -299,7 +299,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir =  BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
+            string tmpDir = BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
@@ -404,7 +404,18 @@ namespace BP.WF.HttpHandler
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.Title));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowStarter));
             //  mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowStartRDT));
-            mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FK_Dept));
+            Entity en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FK_DeptName);
+            if (en == null)
+            {
+                MapAttr attr = new MapAttr();
+                attr.MyPK = rptNo + "_" + GERptAttr.FK_DeptName;
+                if (attr.RetrieveFromDBSources() != 0)
+                    en = attr;
+
+            }
+            if (en != null)
+                mattrsOfSystem.AddEntity(en);
+
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.WFState));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, GERptAttr.FlowEmps));
 
@@ -413,7 +424,7 @@ namespace BP.WF.HttpHandler
             attrs.RemoveEn(rptNo + "_OID");
             attrs.RemoveEn(rptNo + "_Title");
             attrs.RemoveEn(rptNo + "_FlowStarter");
-            attrs.RemoveEn(rptNo + "_FK_Dept");
+            attrs.RemoveEn(rptNo + "_FK_DeptName");
             attrs.RemoveEn(rptNo + "_WFState");
             attrs.RemoveEn(rptNo + "_WFSta");
             attrs.RemoveEn(rptNo + "_FlowEmps");
@@ -488,7 +499,9 @@ namespace BP.WF.HttpHandler
                 default:
                     return "err@" + this.SearchType + "标记错误.";
             }
-
+            //需要增加状态的查询
+            qo.addAnd();
+            qo.AddWhere(GERptAttr.WFState, ">", 1);
             #region 关键字查询
             string searchKey = ""; //关键字查询
             if (mapData.IsSearchKey)
@@ -524,6 +537,7 @@ namespace BP.WF.HttpHandler
 
                     if (i == 1)
                     {
+                        qo.addAnd();
                         qo.addLeftBracket();
                         if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
                             qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
@@ -915,7 +929,7 @@ namespace BP.WF.HttpHandler
             }
 
             //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
-            string tmpDir =  BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
+            string tmpDir = BP.Difference.SystemConfig.PathOfDataUser + @"TempleteExpEns/" + rptNo;
             if (System.IO.Directory.Exists(tmpDir))
             {
                 if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)

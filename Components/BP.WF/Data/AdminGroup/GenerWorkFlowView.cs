@@ -584,10 +584,10 @@ namespace BP.WF.Data.AdminGroup
                 map.DTSearchKey = GenerWorkFlowAttr.RDT;
                 map.DTSearchWay = DTSearchWay.ByDate;
                 map.DTSearchLabel = "发起日期";
-                  
 
                 //把不等于 0 的去掉.
-                map.AddHidden("OrgNo", "=", "@WebUser.OrgNo");
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    map.AddHidden("OrgNo", "=", "@WebUser.OrgNo");
 
                 RefMethod rm = new RefMethod();
 

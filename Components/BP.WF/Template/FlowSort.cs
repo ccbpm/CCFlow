@@ -108,7 +108,7 @@ namespace BP.WF.Template
 
                 map.AddTBString(FlowSortAttr.Domain, null, "域/系统编号", true, false, 0, 100, 30);
                 map.SetHelperAlert(FlowSortAttr.Domain, "用于区分不同系统的流程,比如:一个集团有多个子系统每个子系统都有自己的流程,就需要标记那些流程是那个子系统的.");
-                map.AddTBInt(FlowSortAttr.Idx, 0, "Idx", false, false);
+                map.AddTBInt(FlowSortAttr.Idx, 0, "目录显示顺序(发起列表)", true, false);
 
                 this._enMap = map;
                 return this._enMap;

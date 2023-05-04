@@ -45,6 +45,10 @@ namespace BP.WF
         /// </summary>
         public const string FK_Dept = "FK_Dept";
         /// <summary>
+        /// 发起人部门名称
+        /// </summary>
+        public const string FK_DeptName = "FK_DeptName";
+        /// <summary>
         /// 流程状态(详细状态)
         /// </summary>
         public const string WFState = "WFState";
@@ -366,6 +370,17 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(GERptAttr.FK_Dept, value);
+            }
+        }
+        public string FK_DeptName
+        {
+            get
+            {
+                return this.GetValStringByKey(GERptAttr.FK_DeptName);
+            }
+            set
+            {
+                this.SetValByKey(GERptAttr.FK_DeptName, value);
             }
         }
         /// <summary>

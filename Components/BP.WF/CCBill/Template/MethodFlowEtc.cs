@@ -355,6 +355,24 @@ namespace BP.CCBill.Template
         }
         #endregion 执行方法.
 
+        protected override void afterInsertUpdateAction()
+        {
+            string flowNo = this.GetValStringByKey(MethodAttr.FlowNo);
+            //@hongyan
+            if (DataType.IsNullOrEmpty(flowNo) == false)
+            {
+                //修改流程的名称
+                BP.WF.Flow flow = new BP.WF.Flow();
+                flow.No = flowNo;
+                if (flow.RetrieveFromDBSources() != 0 && flow.Name.Equals(this.Name) == false)
+                {
+                    flow.Name = this.Name;
+                    flow.Update();
+                }
+            }
+            base.afterInsertUpdateAction();
+        }
+
     }
     /// <summary>
     /// 实体其他业务流程

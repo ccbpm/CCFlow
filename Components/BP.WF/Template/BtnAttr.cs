@@ -420,5 +420,19 @@ namespace BP.WF.Template
         /// </summary>
         public const string RollbackLab = "RollbackLab";
         public const string RollbackEnable = "RollbackEnable";
+
+        /// <summary>
+        /// 切换组织标签
+        /// </summary>
+        public const string ChangeDeptLab = "ChangeDeptLab";
+        /// <summary>
+        /// 是否启用切换组织
+        /// </summary>
+        public const string ChangeDeptEnable = "ChangeDeptEnable";
+        /// <summary>
+        /// 延期发送
+        /// </summary>
+        public const string DelayedSendLab = "DelayedSendLab";
+        public const string DelayedSendEnable = "DelayedSendEnable";
     }
 }

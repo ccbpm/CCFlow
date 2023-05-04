@@ -641,7 +641,7 @@ namespace BP.WF
 
                 //三个主键: WorkID，FK_Emp，FK_Node
                 map.AddTBIntPK(GenerWorkerListAttr.WorkID, 0, "工作ID", true, true);
-                map.AddTBStringPK(GenerWorkerListAttr.FK_Emp, null, "人员", true, false, 0, 20, 100);
+                map.AddTBStringPK(GenerWorkerListAttr.FK_Emp, null, "人员", true, false, 0, 100, 100);
                 map.AddTBIntPK(GenerWorkerListAttr.FK_Node, 0, "节点ID", true, false);
 
                 //干流程WorkID.

@@ -194,8 +194,6 @@ namespace BP.WF.DTS
             }
             #endregion 处理流程.
 
-
-
             BP.DA.Log.DebugWriteInfo(msg);
 
             //删除多余的空格.

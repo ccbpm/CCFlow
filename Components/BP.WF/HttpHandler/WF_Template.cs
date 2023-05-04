@@ -16,12 +16,12 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_Template : BP.WF.HttpHandler.DirectoryPageBase
+    public class TA_App : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
         /// 构造函数
         /// </summary>
-        public WF_Template()
+        public TA_App()
         {
         }
 
@@ -29,6 +29,17 @@ namespace BP.WF.HttpHandler
         public string AccepterRole_Init()
         {
             return "方法未完成";
+        }
+        public string Student_JiaoNaXueFei()
+        {
+            string no = this.GetRequestVal("No");
+            string name = this.GetRequestVal("Name");
+            string note = this.GetRequestVal("Note");
+            var jine = this.GetRequestValFloat("JinE");
+             
+
+            return "学费缴纳成功["+no+"]["+name+"]["+note+"]["+jine+"]";
+
         }
         #endregion 界面方法.
 

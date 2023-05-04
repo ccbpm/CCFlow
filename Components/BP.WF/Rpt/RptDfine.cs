@@ -119,13 +119,13 @@ namespace BP.WF.Rpt
                 #endregion
 
                 #region 我发起的流程.
+                map.AddGroupMethod("我发起的流程");
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -133,7 +133,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -141,7 +140,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -149,7 +147,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 rm.Visable = false;
                 map.AddRefMethod(rm);
 
@@ -158,7 +155,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
                 rm = new RefMethod();
 
@@ -166,7 +162,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -175,17 +170,16 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?如果确定，以前配置将清空。";
                 rm.ClassMethodName = this.ToString() + ".DoReset_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
                 #endregion 我发起的流程.
 
                 #region 我审批的流程.
+                map.AddGroupMethod("我审批的流程");
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -193,7 +187,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -201,7 +194,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -217,7 +209,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -225,7 +216,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
 
@@ -235,17 +225,16 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
                 #endregion 我发起的流程.
 
                 #region 我部门发起的流程.
+                map.AddGroupMethod("本部门发起的流程");
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -253,7 +242,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -261,7 +249,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -269,7 +256,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 rm.Visable = false;
                 map.AddRefMethod(rm);
 
@@ -278,7 +264,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -286,7 +271,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -295,17 +279,16 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_MyDeptFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
                 #endregion 我部门发起的流程.
 
                 #region 高级查询.
+                map.AddGroupMethod("高级查询");
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -313,7 +296,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -321,7 +303,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -329,7 +310,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 rm.Visable=false;
                 map.AddRefMethod(rm);
 
@@ -338,7 +318,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -346,7 +325,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -354,7 +332,6 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoReset_AdminerFlowRight()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
 
@@ -364,7 +341,6 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
                 #endregion 高级查询.
 
@@ -411,7 +387,7 @@ namespace BP.WF.Rpt
         {
             return "../../Admin/RptDfine/S8_RptExportTemplate.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No)+"Rpt" + rptMark;
         }
-        public static string PublicFiels = ",OID,FK_Dept,FlowStarter,Title,FlowStartRDT,FlowEmps,WFState,WFSta,";
+        public static string PublicFiels = ",OID,FK_Dept,FK_DeptName,FlowStarter,Title,FlowStartRDT,FlowEmps,WFState,WFSta,";
         public void InitBaseAttr(MapData md)
         {
             // string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
@@ -456,6 +432,16 @@ namespace BP.WF.Rpt
                         attr.setMaxLen(100);
                         attr.setUIVisible(false);
                         attr.Update();
+                        break;
+                    case GERptAttr.FK_DeptName:
+                        attr.UIBindKey = "";
+                        //attr.UIBindKey = "BP.Port.Depts";
+                        attr.setUIContralType(UIContralType.TB);
+                        attr.setLGType(FieldTypeS.Normal);
+                        attr.setUIVisible(false);
+                        attr.DefVal = "";
+                        attr.setMaxLen(100);
+                        attr.setUIVisible(false);
                         break;
                     case GERptAttr.FK_NY:
                         attr.UIBindKey = "BP.Pub.NYs";

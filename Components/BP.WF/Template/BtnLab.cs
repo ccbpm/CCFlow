@@ -1092,6 +1092,9 @@ namespace BP.WF.Template
                 //map.SetHelperBaidu(BtnAttr.SendJS, "ccflow 发送前数据完整性判断"); //增加帮助.
                 map.SetHelperUrl(BtnAttr.SendJS, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
 
+                map.AddTBString(BtnAttr.DelayedSendLab, "延期发送", "延期发送按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.DelayedSendEnable, false, "是否启用", true, true);
+
                 map.AddTBString(BtnAttr.SaveLab, "保存", "保存按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.SaveEnable, true, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.SaveLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577137&doc_id=31094"); //增加帮助
@@ -1293,6 +1296,8 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(NodeAttr.JumpWay, 0, "跳转规则", true, true, NodeAttr.JumpWay);
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
+                map.AddTBString(BtnAttr.ChangeDeptLab, "切换部门", "切换部门标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ChangeDeptEnable, false, "是否启用切换组织/部门", true, true);
 
                 map.AddGroupAttr("查看器按钮权限");
                 map.AddBoolean(BtnAttr.ShowParentFormEnableMyView, false, "查看父流程是否启用", true, true);

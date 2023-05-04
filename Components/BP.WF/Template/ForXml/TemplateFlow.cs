@@ -69,11 +69,11 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowAppType, 0, "流程类型", false, false);
                 map.AddTBInt(FlowAttr.ChartType, 1, "节点图形类型", false, false);
 
-                map.AddTBInt(FlowAttr.IsFrmEnable, 0, "是否显示表单", true, true);
+                //map.AddTBInt(FlowAttr.IsFrmEnable, 0, "是否显示表单", true, true);
                 map.AddTBInt(FlowAttr.IsTruckEnable, 1, "是否显示轨迹图", true, true);
                 map.AddTBInt(FlowAttr.IsTimeBaseEnable, 1, "是否显示时间轴", true, true);
                 map.AddTBInt(FlowAttr.IsTableEnable, 1, "是否显示时间表", true, true);
-                map.AddTBInt(FlowAttr.IsOPEnable, 0, "是否显示操作", true, true);
+                //map.AddTBInt(FlowAttr.IsOPEnable, 0, "是否显示操作", true, true);
                 map.AddTBInt(FlowAttr.TrackOrderBy, 0, "排序方式", true, true);
                 map.AddTBInt(FlowAttr.SubFlowShowType, 0, "子流程轨迹图显示模式", true, true);
 

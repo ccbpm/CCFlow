@@ -542,13 +542,10 @@ namespace BP.WF
                 {
                     wl.WorkID = nextUsersWorkID;
                 }
-
                 wl.FID = nextUsersFID;
                 wl.FK_Node = toNodeId;
                 wl.FK_NodeText = town.HisNode.Name;
-
                 wl.FK_Emp = dt.Rows[0][0].ToString();
-
                 Emp emp = new Emp();
                 emp.UserID = wl.FK_Emp;
                 if (emp.RetrieveFromDBSources() == 0)
@@ -1706,53 +1703,138 @@ namespace BP.WF
 
             //按照指定的字段抄送.
             string ccMsg2 = WorkFlowBuessRole.DoCCByEmps(node, this.rptGe, this.WorkID, this.HisWork.FID);
+            string ccMsg3 = "";
             //手工抄送
             if (this.HisNode.HisCCRole == CCRoleEnum.HandCC)
             {
                 //获取抄送人员列表
                 CCLists cclist = new CCLists(node.NodeID, this.WorkID, this.HisWork.FID);
                 if (cclist.Count == 0)
-                    ccMsg1 = "@没有选择抄送人。";
-
-                if (cclist.Count > 0)
                 {
-                    ps.SQL = "UPDATE WF_CCList SET Sta=0, RDT=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RDT,Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title  WHERE  WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ";
-                    ps.Add(CCListAttr.RDT, DataType.CurrentDateTime); //设置完成日期.
-                    ps.Add(CCListAttr.Title, this.HisGenerWorkFlow.Title); //设置完成日期.
-                    ps.Add(CCListAttr.WorkID, this.WorkID);
-                    ps.Add(CCListAttr.FK_Node, node.NodeID);
-                    DBAccess.RunSQL(ps);
-
-                    ccMsg1 = "@消息手动抄送给";
-                    PushMsgs pms = new PushMsgs();
-                    pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
-                    PushMsg pushMsg = null;
-                    if (pms.Count > 0)
-                        pushMsg = pms[0] as PushMsg;
-                    string mytemp = "";
-                    if (pushMsg != null)
+                    //查看WorkOpt中是否存在数据
+                    WorkOpt opt = new WorkOpt();
+                    opt.MyPK = WebUser.No + "_" + node.NodeID + "_" + this.WorkID;
+                    int i = opt.RetrieveFromDBSources();
+                    if(i == 0) ccMsg1 = "@没有选择抄送人。";
+                    else
                     {
-                        string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
-                        mytemp = pushMsg.SMSDoc;
-                        mytemp = mytemp.Replace("{Title}", title);
-                        mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
-                        mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
-                        mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
-                        mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
+                        if(DataType.IsNullOrEmpty(opt.CCNote) ==false)
+                        ccMsg3 = "抄送信息:"+opt.CCNote;
+                        DataTable dt = opt.GenerCCers();
+                        if(dt.Rows.Count ==0) ccMsg1 = "@没有选择抄送人。";
+                        else
+                        {
+                            ccMsg1 = "@消息手动抄送给";
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                string toUserNo = dr[0].ToString();
+                                string toUserName = dr[1].ToString();
+                                //抄送信息.
+                                ccMsg1 += "(" + toUserNo + " - " + toUserName + ");";
+                                CCList list = new CCList();
+                                list.setMyPK(this.WorkID + "_" + node.NodeID + "_" + dr[0].ToString());
+                                list.FK_Flow = node.FK_Flow;
+                                list.FlowName = node.FlowName;
+                                list.FK_Node = node.NodeID;
+                                list.NodeName = node.Name;
+                                list.Title = opt.GetValStrByKey(WorkOptAttr.Title);
+                                list.Doc = opt.CCNote;
+                                list.CCTo = dr[0].ToString();
+                                list.CCToName = dr[1].ToString();
+                                list.RDT = DataType.CurrentDateTime;
+                                list.Rec = WebUser.No;
+                                list.WorkID = this.WorkID;
+                                list.FID = this.HisWork.FID;
 
-                        /*如果仍然有没有替换下来的变量.*/
-                        if (mytemp.Contains("@") == true)
-                            mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe);
-                    }
+                                list.InEmpWorks = node.CCWriteTo == CCWriteTo.CCList ? false : true;
 
-                    string atParas = "@FK_Flow=" + node.FK_Flow + "@WorkID=" + this.WorkID + "@NodeID=" + node.NodeID + "@FK_Node=" + node.NodeID;
-                    foreach (CCList cc in cclist)
-                    {
-                        ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
-                        if (pushMsg != null) //抄送的WorkID=0,目的不让其删除.
-                            BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel, 0, null, atParas);
+                                //写入待办和写入待办与抄送列表,状态不同
+                                if (node.CCWriteTo == CCWriteTo.All || node.CCWriteTo == CCWriteTo.Todolist)
+                                    list.HisSta = CCSta.UnRead;
+                                //结束节点只写入抄送列表
+                                if (node.IsEndNode == true)
+                                {
+                                    list.HisSta = CCSta.UnRead;
+                                    list.InEmpWorks = false;
+                                }
+                                try
+                                {
+                                    list.Insert();
+                                }
+                                catch
+                                {
+                                    list.Update();
+                                }
+                                PushMsgs pms = new PushMsgs();
+                                pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
+
+                                if (pms.Count > 0)
+                                {
+                                    PushMsg pushMsg = pms[0] as PushMsg;
+                                    BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(list.CCTo);
+
+                                    string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                                    string mytemp = pushMsg.SMSDoc;
+                                    mytemp = mytemp.Replace("{Title}", title);
+                                    mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                                    mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                                    mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
+                                    mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
+
+                                    /*如果仍然有没有替换下来的变量.*/
+                                    if (mytemp.Contains("@") == true)
+                                        mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe, null);
+                                    BP.WF.Dev2Interface.Port_SendMsg(wfemp.No, title, mytemp, null, BP.WF.SMSMsgType.CC, list.FK_Flow, list.FK_Node, list.WorkID, list.FID, pushMsg.SMSPushModel);
+                                }
+                            }
+                        }
                     }
                 }
+                else
+                {
+                    if (cclist.Count > 0)
+                    {
+                        ps.SQL = "UPDATE WF_CCList SET Sta=0, RDT=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "RDT,Title=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Title  WHERE  WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID AND FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node ";
+                        ps.Add(CCListAttr.RDT, DataType.CurrentDateTime); //设置完成日期.
+                        ps.Add(CCListAttr.Title, this.HisGenerWorkFlow.Title); //设置完成日期.
+                        ps.Add(CCListAttr.WorkID, this.WorkID);
+                        ps.Add(CCListAttr.FK_Node, node.NodeID);
+                        DBAccess.RunSQL(ps);
+
+                        ccMsg1 = "@消息手动抄送给";
+                        PushMsgs pms = new PushMsgs();
+                        pms.Retrieve(PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.CCAfter);
+                        PushMsg pushMsg = null;
+                        if (pms.Count > 0)
+                            pushMsg = pms[0] as PushMsg;
+                        string mytemp = "";
+                        if (pushMsg != null)
+                        {
+                            string title = string.Format("工作抄送:{0}.工作:{1},发送人:{2},需您查阅", node.FlowName, node.Name, WebUser.Name);
+                            mytemp = pushMsg.SMSDoc;
+                            mytemp = mytemp.Replace("{Title}", title);
+                            mytemp = mytemp.Replace("@WebUser.No", WebUser.No);
+                            mytemp = mytemp.Replace("@WebUser.Name", WebUser.Name);
+                            mytemp = mytemp.Replace("@WorkID", this.WorkID.ToString());
+                            mytemp = mytemp.Replace("@OID", this.WorkID.ToString());
+
+                            /*如果仍然有没有替换下来的变量.*/
+                            if (mytemp.Contains("@") == true)
+                                mytemp = BP.WF.Glo.DealExp(mytemp, this.rptGe);
+                        }
+
+                        string atParas = "@FK_Flow=" + node.FK_Flow + "@WorkID=" + this.WorkID + "@NodeID=" + node.NodeID + "@FK_Node=" + node.NodeID;
+                        foreach (CCList cc in cclist)
+                        {
+                            ccMsg1 += "(" + cc.CCTo + " - " + cc.CCToName + ");";
+                            if (pushMsg != null) //抄送的WorkID=0,目的不让其删除.
+                                BP.WF.Dev2Interface.Port_SendMessage(cc.CCTo, mytemp, title, EventListNode.CCAfter, "WKAlt" + node.NodeID + "_" + this.WorkID, BP.Web.WebUser.No, "", pushMsg.SMSPushModel, 0, null, atParas);
+                        }
+                    }
+                }
+                   
+
+                
             }
             string ccMsg = ccMsg1 + ccMsg2;
 
@@ -1760,7 +1842,7 @@ namespace BP.WF
             {
                 this.addMsg("CC", BP.WF.Glo.multilingual("@自动抄送给:{0}.", "WorkNode", "cc", ccMsg));
 
-                this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, node.NodeID, node.Name, ccMsg1 + ccMsg2, node);
+                this.AddToTrack(ActionType.CC, WebUser.No, WebUser.Name, node.NodeID, node.Name, ccMsg1 + ccMsg2+ ccMsg3, node);
             }
         }
         /// <summary>
@@ -2337,6 +2419,7 @@ namespace BP.WF
             //string htmlInfo = string.Format("@任务自动发送给{0}如下处理人{1}.", this.nextStationName,this._RememberMe.EmpsExt);
             //string textInfo = string.Format("@任务自动发送给{0}如下处理人{1}.", this.nextStationName,this._RememberMe.ObjsExt);
 
+           
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
                 //Img 的路径问题.
@@ -6471,7 +6554,7 @@ namespace BP.WF
                     gwl.Save();
 
                 }
-                BP.WF.Dev2Interface.Node_SetDraft2Todolist(node.FK_Flow, workid);
+                BP.WF.Dev2Interface.Node_SetDraft2Todolist(workid);
             }
             else
             {
@@ -8144,7 +8227,7 @@ namespace BP.WF
             bool isStart = true;
             if (DataType.IsNullOrEmpty(this.HisGenerWorkFlow.Sender) == false)
                 isStart = false;
-            if (isStart == false) //@hongyan
+            if (isStart == false) 
                 return;
             if (isStart == true)
                 this.rptGe.SetValByKey("RDT", DataType.CurrentDateTimess);
@@ -8224,8 +8307,11 @@ namespace BP.WF
             this.HisWork.SetValByKey("Title", this.HisGenerWorkFlow.Title);
             if (isStart == true)
                 this.HisGenerWorkFlow.RDT = DataType.CurrentDateTimess;  // this.HisWork.RDT;
-            this.HisGenerWorkFlow.Starter = this.Execer;
-            this.HisGenerWorkFlow.StarterName = this.ExecerName;
+            if(this.HisGenerWorkFlow.WFState == WFState.Runing)
+            {
+                this.HisGenerWorkFlow.Starter = this.Execer;
+                this.HisGenerWorkFlow.StarterName = this.ExecerName;
+            }
             this.HisGenerWorkFlow.FK_Flow = this.HisNode.FK_Flow;
             this.HisGenerWorkFlow.FlowName = this.HisNode.FlowName;
             this.HisGenerWorkFlow.FK_FlowSort = this.HisNode.HisFlow.FK_FlowSort;
@@ -8263,7 +8349,7 @@ namespace BP.WF
                 string sql = this.HisFlow.SDTOfFlowRoleSQL;
                 //配置的SQL为空
                 if (DataType.IsNullOrEmpty(sql) == false)
-                    throw new Exception(BP.WF.Glo.multilingual("@初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "配置的SQL为空"));
+                    throw new Exception(BP.WF.Glo.multilingual("@计算流程应完成时间错误,初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "配置的SQL为空"));
 
                 //替换SQL中的参数
                 sql = Glo.DealExp(sql, this.HisWork);
@@ -8271,7 +8357,7 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(sdtOfFlow) == false)
                     this.HisGenerWorkFlow.SDTOfFlow = sdtOfFlow;
                 else
-                    throw new Exception(BP.WF.Glo.multilingual("@初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "根据SQL配置查询的结果为空"));
+                    throw new Exception(BP.WF.Glo.multilingual("@计算流程应完成时间错误,初始化开始节点数据错误:{0}.", "WorkNode", "wf_eng_error_5", "根据SQL配置查询的结果为空"));
             }
 
             //按照所有节点之和,
@@ -8447,8 +8533,6 @@ namespace BP.WF
             t.EmpFrom = this.Execer;
             t.EmpFromT = this.ExecerName;
             t.FK_Flow = this.HisNode.FK_Flow;
-
-            //     t.Tag = tag + "@SendNode=" + this.HisNode.NodeID;
 
             t.NDTo = gwl.FK_Node;
             t.NDToT = gwl.FK_NodeText;

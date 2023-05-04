@@ -114,7 +114,7 @@ namespace BP.WF
                 /*处理表单权限控制方案: 如果是绑定单个表单的时候. */
 
                 //这两个变量在累加表单用到.
-                FrmNode frmNode = new FrmNode();
+               FrmNode frmNode = new FrmNode();
                 Flow flow = new Flow(fk_flow);
                 myds.Tables.Add(flow.ToDataTableField("WF_Flow"));
 
@@ -123,7 +123,7 @@ namespace BP.WF
                     || flow.FlowDevModel == FlowDevModel.JiJian)
                 {
                     
-                    int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID, FrmNodeAttr.FK_Node, nd.NodeID);
+                     int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID, FrmNodeAttr.FK_Node, nd.NodeID);
                     if (count == 0)
                         frmNode.IsEnableLoadData = true;
                     if (count!=0 && frmNode.FrmSln != 0)
@@ -254,6 +254,7 @@ namespace BP.WF
                     }
                 }
                 #endregion 没有审核组件分组就增加上审核组件分组.
+
                 #region 增加父子流程组件
                 if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
                 {
@@ -551,6 +552,61 @@ namespace BP.WF
 
                 }
                 #endregion 增加 groupfields
+
+                #region 处理节点表单是傻瓜表单的特定用户特定权限
+                MapExts nexts = (MapExts)md.MapExts.GetEntitiesByKey(MapExtAttr.ExtType, "SepcFieldsSepcUsers");
+                GroupFields groupFields = md.GroupFields;
+                //加入分组表.
+                if (nexts != null && nexts.Count != 0)
+                {
+                    string oids = ",";
+                    string sq1l = "";
+                    string tag1 = "";
+                    foreach (MapExt ext in nexts)
+                    {
+                        tag1 = ext.Tag1;
+                        tag1 = tag1.Replace("，", ",");
+                        if (ext.Tag.Equals("Emps"))
+                            tag1 = "," + tag1 + ",";
+
+                        if (ext.Tag.Equals("Emps") && tag1.Contains("," + WebUser.No + ",") == true)
+                            oids += ext.Doc + ",";
+                        if (ext.Tag.Equals("Stas") == true)
+                        {
+                            if (tag1.EndsWith(","))
+                                tag1 = tag1.Substring(0, tag1.Length - 1);
+                            tag1 = tag1.Replace(",", "','") + "'";
+                            sq1l = "SELECT count(*) From Port_DeptEmpStation WHERE FK_Station IN(" + tag1 + ") AND FK_Emp='" + WebUser.No + "'";
+                            if (DBAccess.RunSQLReturnValInt(sq1l) != 0)
+                                oids += ext.Doc + ",";
+                        }
+                        if (ext.Tag.Equals("Depts") == true)
+                        {
+                            if (tag1.EndsWith(","))
+                                tag1 = tag1.Substring(0, tag1.Length - 1);
+                            tag1 = tag1.Replace(",", "','") + "'";
+                            sq1l = "SELECT count(*) From Port_DeptEmp WHERE FK_Dept IN(" + tag1 + ") AND FK_Emp='" + WebUser.No + "'";
+                            if (DBAccess.RunSQLReturnValInt(sq1l) != 0)
+                                oids += ext.Doc + ",";
+                        }
+                        if (ext.Tag.Equals("SQL") == true)
+                        {
+                            tag1 = BP.WF.Glo.DealExp(tag1, wk);
+                            if (DBAccess.RunSQLReturnValInt(tag1) != 0)
+                                oids += ext.Doc + ",";
+                        }
+                    }
+                    DataTable gfdt = myds.Tables["Sys_GroupField"];
+                    foreach (DataRow dr in gfdt.Rows)
+                    {
+                        if (oids.Contains(dr["OID"] + ","))
+                            dr["ShowType"]=2;
+
+                    }
+                }
+                #endregion 处理节点表单是傻瓜表单的特定用户特定权限
+
+
 
                 #region 流程设置信息.
                 if (isView == false)

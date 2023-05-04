@@ -226,8 +226,8 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            MapFrmFool cols = new MapFrmFool(this.FK_MapData);
-            cols.DoCheckFixFrmForUpdateVer();
+         //   MapFrmFool cols = new MapFrmFool(this.FK_MapData);
+          //  cols.DoCheckFixFrmForUpdateVer();
             return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
@@ -2577,7 +2577,28 @@ namespace BP.WF.HttpHandler
             return "设置成功.";
         }
 
-    }
+        public string SysEnumList_SelectEnum()
+        {
+            string sql = "";
+            string EnumName = this.GetRequestVal("EnumName");
+		   if (EnumName == "")
+			   sql = "SELECT * FROM Sys_EnumMain";
+		   else
+			   sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
+		   DataTable dt = DBAccess.RunSQLReturnTable(sql);
+		   return BP.Tools.Json.ToJson(dt);
+	   }
+
+        public string SysEnumList_MapAttrs()
+        {
+            string sql = "SELECT A.FK_MapData,A.KeyOfEn,A.Name From Sys_MapAttr A,Sys_MapData B Where A.FK_MapData=B.No " +
+				       "AND A.UIBindKey='" + this.GetRequestVal("UIBindKey") + "' AND B.OrgNo='" + this.GetRequestVal("OrgNo") + "'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+		    return BP.Tools.Json.ToJson(dt);
+        }
+
+}
 
     public class WSMethod
     {

@@ -874,7 +874,7 @@ namespace BP.WF.Template.Frm
                 map.SetHelperAlert(MapDtlAttr.H, "对傻瓜表单有效");
 
                 //移动端数据显示方式
-                map.AddDDLSysEnum(MapDtlAttr.MobileShowModel, 0, "移动端数据显示方式", true, true, MapDtlAttr.MobileShowModel, "@0=新页面显示模式@1=列表模式");
+                map.AddDDLSysEnum(MapDtlAttr.MobileShowModel, 0, "移动端数据显示方式", true, true, MapDtlAttr.MobileShowModel, "@0=新页面显示模式@1=列表模式@2=主页面平铺模式");
                 map.AddTBString(MapDtlAttr.MobileShowField, null, "移动端列表显示字段", true, false, 0, 100, 20, false);
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
@@ -1280,6 +1280,7 @@ namespace BP.WF.Template.Frm
                     BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(oldMyPK);
                     athDesc.MyPK = attr.MyPK;
                     athDesc.setFK_MapData(this.No);
+                    athDesc.FK_Node = this.FK_Node;
                     athDesc.DirectInsert();
                 }
             }
@@ -1454,12 +1455,10 @@ namespace BP.WF.Template.Frm
             gfs.RetrieveByLike(GroupFieldAttr.CtrlID, this.No + "%");
             gfs.Delete();
 
-            //如果启用了附件也需要删除
-            if (this.IsEnableAthM == true)
-            {
-                FrmAttachment ath = new FrmAttachment();
-                ath.Delete(FrmAttachmentAttr.MyPK, this.No + "_AthMDtl");
-            }
+            
+            FrmAttachment ath = new FrmAttachment();
+            ath.Delete(FrmAttachmentAttr.FK_MapData, this.No);
+           
 
 
             //执行清空缓存到的AutoNum.

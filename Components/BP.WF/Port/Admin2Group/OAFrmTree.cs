@@ -72,9 +72,9 @@ namespace BP.WF.Port.Admin2Group
                     return this._enMap;
                 Map map = new Map("Port_OrgAdminerFrmTree", "表单目录权限");
                 map.AddMyPK();
-                map.AddTBString(OAFrmTreeAttr.OrgNo, null, "组织", true, false, 0, 50, 20);
-                map.AddTBString(OAFrmTreeAttr.FK_Emp, null, "管理员", true, false, 0, 50, 20);
-                map.AddTBString(OAFrmTreeAttr.RefOrgAdminer, null, "组织管理员", true, false, 0, 50, 20);
+                map.AddTBString(OAFrmTreeAttr.OrgNo, null, "组织", true, false, 0, 100, 20);
+                map.AddTBString(OAFrmTreeAttr.FK_Emp, null, "管理员", true, false, 0, 100, 20);
+                map.AddTBString(OAFrmTreeAttr.RefOrgAdminer, null, "组织管理员", true, false, 0, 100, 20);
 
                 //map.AddDDLEntities(OAFrmTreeAttr.FK_Emp, null, "管理员", new Emps(), false);
                 //map.AddDDLEntities(OAFrmTreeAttr.RefOrgAdminer, null, "管理员", new Emps(), false);

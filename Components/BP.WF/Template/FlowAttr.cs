@@ -200,11 +200,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程轨迹中显示的Tab标签页的控制
         /// </summary>
-        public const string IsFrmEnable = "IsFrmEnable";
+        //public const string IsFrmEnable = "IsFrmEnable";
         public const string IsTruckEnable = "IsTruckEnable";
         public const string IsTimeBaseEnable = "IsTimeBaseEnable";
         public const string IsTableEnable = "IsTableEnable";
-        public const string IsOPEnable = "IsOPEnable";
+        //public const string IsOPEnable = "IsOPEnable";
         /// <summary>
         /// 排序方式
         /// </summary>

@@ -217,7 +217,7 @@ namespace BP.WF.HttpHandler
                         if (DataType.IsNullOrEmpty(item) == true)
                             continue;
                         String[] strs = item.Split(',');
-                        sBuilder.Append("UPDATE WF_NodeSubFlow SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK=" + strs[0] + ";");
+                        sBuilder.Append("UPDATE WF_NodeSubFlow SET X=" + strs[1] + ",Y=" + strs[2] + " WHERE MyPK='" + strs[0] + "';");
                     }
                 }
                 //保存节点位置. @101,2,30@102,3,1
@@ -1011,7 +1011,20 @@ namespace BP.WF.HttpHandler
             }
             return "@登录成功.";
         }
-        #endregion
 
-    }
+        public string AdminerChange()
+        {
+
+            string mysql = "SELECT ";
+            mysql += "No as \"No\", ";
+            mysql += "Name as \"Name\", ";
+            mysql += "UseSta as \"UseSta\", ";
+            mysql += "RootOfDept as \"RootOfDept\" ";
+            mysql += " FROM  WF_Emp WHERE No LIKE '" + this.GetRequestVal("UserNo") + "@%' ";
+		    DataTable dt = DBAccess.RunSQLReturnTable(mysql);
+		    return BP.Tools.Json.ToJson(dt);
+	}
+    #endregion
+
+}
 }

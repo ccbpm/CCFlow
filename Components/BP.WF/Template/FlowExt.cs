@@ -185,7 +185,6 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
                 map.SetHelperUrl(FlowAttr.No, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661868&doc_id=31094"); //使用alert的方式显示帮助信息.
                 // map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
-
                 //处理流程类别.
                 string sql = "";
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
@@ -257,9 +256,9 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(FlowAttr.ChartType, (int)FlowChartType.Icon, "节点图形类型", true, true,
                     "ChartType", "@0=几何图形@1=肖像图片");
                 map.SetHelperUrl(FlowAttr.ChartType, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661883&doc_id=31094");
-
+                map.AddTBString(FlowAttr.Idx, null, "显示顺序号(发起列表)", true, false, 0, 300, 10);
                 // map.AddTBString(FlowAttr.HostRun, null, "运行主机(IP+端口)", true, false, 0, 40, 10, true);
-                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true); //@hongyan.
+                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true);
                 map.AddTBString(FlowAttr.Creater, null, "创建人", true, true, 0, 100, 10, true);
                 #endregion 基本属性。
 
@@ -312,11 +311,11 @@ namespace BP.WF.Template
 
                 #region 轨迹信息
                 map.AddGroupAttr("轨迹");
-                map.AddBoolean(FlowAttr.IsFrmEnable, false, "是否显示表单", true, true, false);
+                //map.AddBoolean(FlowAttr.IsFrmEnable, false, "是否显示表单", true, true, false);
                 map.AddBoolean(FlowAttr.IsTruckEnable, true, "是否显示轨迹图", true, true, false);
                 map.AddBoolean(FlowAttr.IsTimeBaseEnable, true, "是否显示时间轴", true, true, false);
                 map.AddBoolean(FlowAttr.IsTableEnable, true, "是否显示时间表", true, true, false);
-                map.AddBoolean(FlowAttr.IsOPEnable, false, "是否显示操作", true, true, false);
+                //map.AddBoolean(FlowAttr.IsOPEnable, false, "是否显示操作", true, true, false);
                 map.AddDDLSysEnum(FlowAttr.SubFlowShowType, 0, "子流程轨迹图显示模式", true, true, FlowAttr.SubFlowShowType, "@0=平铺模式显示@1=合并模式显示");
                 map.AddDDLSysEnum(FlowAttr.TrackOrderBy, 0, "排序方式", true, true, FlowAttr.TrackOrderBy, "@0=按照时间先后顺序@1=倒序(新发生的在前面)");
                 #endregion 轨迹信息
@@ -373,13 +372,13 @@ namespace BP.WF.Template
                 rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "修改ICON"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoNodesICON";
-                //  rm.Icon = "../../WF/Img/Event.png";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "icon-heart";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "修改ICON"; // "调用事件接口";
+                //rm.ClassMethodName = this.ToString() + ".DoNodesICON";
+                ////  rm.Icon = "../../WF/Img/Event.png";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Icon = "icon-heart";
+                //map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
@@ -398,7 +397,6 @@ namespace BP.WF.Template
                 // rm.GroupName = "实验中的功能";
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
-
 
                 //rm = new RefMethod();
                 //rm.Title = "批量发起";
@@ -427,13 +425,13 @@ namespace BP.WF.Template
                 rm.Icon = "icon-clock";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
+                /*rm = new RefMethod();
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/CH.png";
                 rm.ClassMethodName = this.ToString() + ".DoDeadLineRole()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 // rm.GroupName = "实验中的功能";
                 rm.Icon = "icon-clock";
-                map.AddRefMethod(rm);
+                map.AddRefMethod(rm);*/
 
                 rm = new RefMethod();
                 rm.Title = "预警、超期消息事件";
@@ -699,6 +697,14 @@ namespace BP.WF.Template
                 rm.Icon = "icon-briefcase";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "一键设置施工-监理模式";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.ClassMethodName = this.ToString() + ".DoSDGaoSu()";
+                rm.Icon = "icon-briefcase";
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "删除NDxxRpt表,多余字段.";
                 //rm.ClassMethodName = this.ToString() + ".DoDeleteFields()";
@@ -723,6 +729,43 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 设置施工监理审核模式.
+        /// </summary>
+        /// <returns></returns>
+        public string DoSDGaoSu()
+        {
+            Nodes nds = new Nodes();
+            nds.Retrieve("FK_Flow", this.No);
+
+
+            foreach (Node nd in nds)
+            {
+                if (nd.IsStartNode == true)
+                    continue; //开始节点不处理.
+
+                //如果第2个节点.
+                if (nd.NodeID.ToString().EndsWith("02") == true)
+                {
+                    nd.HisDeliveryWay = DeliveryWay.BySQL;
+                    //   nd.DeliveryParas = "";
+                }
+                else
+                {
+                    //接受人模式与指定的节点相同。
+                    nd.HisDeliveryWay = DeliveryWay.BySpecNodeEmp;
+                    nd.DeliveryParas = int.Parse(this.No + "02").ToString();
+                }
+
+                //设置协作模式.
+                nd.TodolistModel = TodolistModel.Teamup;
+                nd.IsExpSender = false; //是否排除当前人员.
+                nd.Update();
+            }
+
+            return "执行成功";
+        }
 
         #region 流程监控.
 
@@ -774,27 +817,13 @@ namespace BP.WF.Template
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             string msg = "如下流程ID被删除:";
-            List<ManualResetEvent> manualEvents = new List<ManualResetEvent>();
-            HttpContext ctx = HttpContextHelper.Current;
             foreach (DataRow dr in dt.Rows)
             {
                 Int64 workid = Int64.Parse(dr["WorkID"].ToString());
                 string fk_flow = dr["FK_Flow"].ToString();
+                DoDelFlowByWorkID(workid, fk_flow);
                 msg += " " + workid;
-                //实例化同步工具
-                ManualResetEvent mre = new ManualResetEvent(false);
-                manualEvents.Add(mre);
-                //SendSingleSubFlow(subFlowH, ht, gwf);
-                //将任务放入线程池中，让线程池中的线程执行该任务
-                ThreadPool.QueueUserWorkItem(o =>
-                {
-                    HttpContext.Current = ctx;
-                    DoDelFlowByWorkID(workid, fk_flow);
-                    mre.Set();
-                });
-
             }
-            WaitHandle.WaitAll(manualEvents.ToArray());
             return msg;
         }
         public void DoDelFlowByWorkID(Int64 workid, string fk_flow)
@@ -1724,6 +1753,19 @@ namespace BP.WF.Template
             // 同步流程数据表.
             string ndxxRpt = "ND" + int.Parse(this.No) + "Rpt";
             Flow fl = new Flow(this.No);
+            //判断流程是不是有对应的实体绑定的流程,不同步修改低代码导出系统导入时报错 @hongyan
+            if (DBAccess.IsExitsObject("Frm_Method") == true)
+            {
+                string dbstr = SystemConfig.AppCenterDBVarStr;
+                string sql = "UPDATE Frm_Method SET Name=" + dbstr + "Name WHERE FlowNo=" + dbstr + "FlowNo AND MethodID=" + dbstr + "MethodID";
+                Paras paras = new Paras();
+                paras.SQL = sql;
+                paras.Add("Name", this.Name);
+                paras.Add("FlowNo", this.No);
+                paras.Add("MethodID", this.No);
+                DBAccess.RunSQL(paras);
+            }
+            
             MapData md = new MapData(ndxxRpt);
             if (md.PTable.Equals(fl.PTable) == false)
             {
@@ -1734,7 +1776,7 @@ namespace BP.WF.Template
                 nds.Retrieve(NodeAttr.FK_Flow, this.No);
                 foreach (Node nd in nds)
                 {
-                    string sql = "";
+                   string sql = "";
                     if (nd.IsSubThread == true)
                         sql = "UPDATE Sys_MapData SET PTable=No WHERE No='ND" + nd.NodeID + "'";
                     else
@@ -1800,8 +1842,6 @@ namespace BP.WF.Template
             fl.No = this.No;
             fl.RetrieveFromDBSources();
             fl.Update();
-
-
 
             base.afterInsertUpdateAction();
         }

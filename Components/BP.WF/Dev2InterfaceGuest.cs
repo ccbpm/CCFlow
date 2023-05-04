@@ -115,7 +115,7 @@ namespace BP.WF
                                 //设置属性.
                                 daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
                             }
-                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+                            daDtl.Insert(); //插入数据.
                         }
                     }
                 }

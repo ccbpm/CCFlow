@@ -791,7 +791,7 @@ namespace BP.WF.Template
             {
                 ps = new Paras();
                 ps.Add("FK_Node", this.town.HisNode.NodeID);
-                ps.SQL = "select No,Name from Port_Emp where FK_Dept in(select FK_dept from wf_nodeDept where FK_node =" + dbStr + "FK_node)";
+                ps.SQL = "SELECT A.No,A.Name FROM Port_Emp A,Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept IN(SELECT FK_dept FROM WF_NodeDept WHERE FK_Node =" + dbStr + "FK_Node)";
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
                 {
@@ -930,10 +930,10 @@ namespace BP.WF.Template
             }
             #endregion
 
-            #region 按角色计算(以部门集合为纬度).
+            /*#region 按角色计算(以部门集合为纬度).
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
-                /* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. */
+                *//* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. *//*
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
@@ -963,7 +963,7 @@ namespace BP.WF.Template
                         return dt; //可能处理跳转,在没有处理人的情况下.
                 }
             }
-            #endregion
+            #endregion*/
 
             #region 按照自定义的URL来计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelfUrl)
@@ -1068,7 +1068,37 @@ namespace BP.WF.Template
                 }
                 return dt;
             }
-            #endregion 按照自定义的URL来计算
+            #endregion 按照组织模式人员选择器
+            #region 选择其他组织的联络员
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.BySelectEmpByOfficer)
+            {
+                ps = new Paras();
+                ps.Add("FK_Node", this.town.HisNode.NodeID);
+                ps.Add("WorkID", this.currWn.HisWork.OID);
+                ps.SQL = "SELECT FK_Emp FROM WF_SelectAccper WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND AccType=0 ORDER BY IDX";
+                dt = DBAccess.RunSQLReturnTable(ps);
+                if (dt.Rows.Count == 0)
+                {
+                    /*从上次发送设置的地方查询. */
+                    SelectAccpers sas = new SelectAccpers();
+                    int i = sas.QueryAccepterPriSetting(this.town.HisNode.NodeID);
+                    if (i == 0)
+                    {
+                        throw new Exception("url@./WorkOpt/AccepterOfOfficer.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + this.currWn.HisNode.NodeID + "&ToNode=" + toNode.NodeID + "&WorkID=" + this.WorkID);
+                    }
+
+                    //插入里面.
+                    foreach (SelectAccper item in sas)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr[0] = item.FK_Emp;
+                        dt.Rows.Add(dr);
+                    }
+                    return dt;
+                }
+                return dt;
+            }
+            #endregion 选择其他组织的联络员
 
             #region 发送人的上级部门的负责人: 2022.2.20 benjing. by zhoupeng  
             if (town.HisNode.HisDeliveryWay == DeliveryWay.BySenderParentDeptLeader)

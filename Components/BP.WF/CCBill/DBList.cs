@@ -671,7 +671,7 @@ namespace BP.CCBill
                 attr.setUIVisible(false);
                 attr.setUIIsEnable(false);
                 attr.setMinLen(0);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -765,7 +765,7 @@ namespace BP.CCBill
                 attr.setUIVisible(false);
                 attr.setUIIsEnable(false);
                 attr.setMinLen(0);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.Idx = -1;
                 attr.Insert();
             }

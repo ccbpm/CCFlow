@@ -330,10 +330,21 @@ namespace BP.WF
             }
             Work work = this.HisWork;
             work.OID = this.WorkID;
+            work.RetrieveFromDBSources();
+            // 退回后发送的消息事件
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
+            work.NodeID = this.HisNode.NodeID;
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.ReturnToNode, work, null, null, null, this.ReturnToEmp);
+            }
             //退回后事件
+            atPara += "@SendToEmpIDs=" + this.ReturnToEmp;
             string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, work, null, atPara);
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
+
             // 返回退回信息.
             if (this.ReturnToNode.IsGuestNode)
             {
@@ -351,6 +362,13 @@ namespace BP.WF
         /// <returns></returns>
         private string ReturnToParentFlow()
         {
+            //退回前事件
+            string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+            //如果事件返回的信息不是null，就终止执行。
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null, atPara);
+            if (msg != null)
+                return msg;
+
             //当前 gwf.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
@@ -425,14 +443,19 @@ namespace BP.WF
             pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
             Work work = this.HisWork;
             work.OID = gwfP.WorkID;
+            work.RetrieveFromDBSources();
             work.NodeID = this.HisNode.NodeID;
             foreach (PushMsg pm in pms)
             {
                 pm.DoSendMessage(this.ReturnToNode, work, null, null, null, returnEmps);
             }
-
+            //如果事件返回的信息不是 null，就终止执行。
+            atPara += "@SendToEmpIDs=" + returnEmps;
+            msg = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, work, null, atPara);
+            if (String.IsNullOrEmpty(msg) == true) //  如果有消息，就返回消息.
+                msg = "";
             //返回退回信息.
-            return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].";
+            return "成功的退回到[" + gwfP.FlowName + " - " + this.ReturnToNode.Name + "],退回给[" + toEmps + "].\n\r" + msg;
         }
         /// <summary>
         /// 执行退回到分流节点，完全退回.
@@ -710,6 +733,14 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn2_4()
         {
+            //退回前事件
+            string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+
+            //如果事件返回的信息不是null，就终止执行。
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null, atPara);
+            if (msg != null)
+                return msg;
+
             //更新运动到节点,但是仍然是退回状态.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
@@ -786,7 +817,14 @@ namespace BP.WF
             {
                 pm.DoSendMessage(this.HisNode, this.HisNode.HisWork, null, null, null, returnEmp);
             }
-            return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ")";
+            //退回后事件
+            atPara += "@SendToEmpIDs=" + returnEmp;
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
+            if (text != null && text.Length > 1000)
+                text = "退回事件:无返回信息.";
+            if (text == null)
+                text = "";
+            return "成功的把信息退回到：" + this.ReturnToNode.Name + " , 退回给:(" + this.ReturnToEmp + ").\n\r" + text;
         }
         /// <summary>
         /// 子线程退回给分流点
@@ -794,6 +832,13 @@ namespace BP.WF
         /// <returns></returns>
         private string ExeReturn5_2()
         {
+            //退回前事件
+            string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+
+            //如果事件返回的信息不是null，就终止执行。
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null, atPara);
+            if (msg != null)
+                return msg;
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
             string info = "@工作已经成功的退回到（" + ReturnToNode.Name + "）退回给：";
@@ -900,21 +945,33 @@ namespace BP.WF
             //退回消息事件
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
-            Work work = this.HisNode.HisWork;
-            work.OID = this.WorkID;
             foreach (PushMsg pm in pms)
             {
-                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+                pm.DoSendMessage(this.HisNode, this.HisWork, null, null, null, toEmp);
             }
-
+            //退回后事件
+            atPara += "@SendToEmpIDs=" + toEmp;
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
+            if (text != null && text.Length > 1000)
+                text = "退回事件:无返回信息.";
+            if (text == null)
+                text = "";
             // 返回退回信息.
-            return info;
+            return info+".\n\r" + text;
         }
         /// <summary>
         /// 合流点向子线程退回
         /// </summary>
         private string ExeReturn3_4()
         {
+            //退回前事件
+            string atPara = "@ToNode=" + this.ReturnToNode.NodeID;
+
+            //如果事件返回的信息不是null，就终止执行。
+            string msg = ExecEvent.DoNode(EventListNode.ReturnBefore, this.HisNode, this.HisWork, null, atPara);
+            if (msg != null)
+                return msg;
+
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.FK_Node = this.ReturnToNode.NodeID;
 
@@ -990,14 +1047,19 @@ namespace BP.WF
             //退回消息事件
             PushMsgs pms = new PushMsgs();
             pms.Retrieve(PushMsgAttr.FK_Node, this.HisNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
-            Work work = this.HisNode.HisWork;
-            work.OID = this.WorkID;
             foreach (PushMsg pm in pms)
             {
-                pm.DoSendMessage(this.HisNode, work, null, null, null, toEmp);
+                pm.DoSendMessage(this.HisNode, this.HisWork, null, null, null, toEmp);
             }
+            //退回后事件
+            atPara += "@SendToEmpIDs=" + toEmp;
+            string text = ExecEvent.DoNode(EventListNode.ReturnAfter, this.HisNode, this.HisWork, null, atPara);
+            if (text != null && text.Length > 1000)
+                text = "退回事件:无返回信息.";
+            if (text == null)
+                text = "";
             // 返回退回信息.
-            return info;
+            return info + ".\n\r" + text;
         }
         /// <summary>
         /// 合流点向分流点退回
@@ -1242,8 +1304,13 @@ namespace BP.WF
                 BP.DA.Log.DebugWriteError(ex.Message);
             }
 
-            //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
-            // string text = fl.DoFlowEventEntity(EventListNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
+            // 退回后发送的消息事件
+            PushMsgs pms = new PushMsgs();
+            pms.Retrieve(PushMsgAttr.FK_Node, this.ReturnToNode.NodeID, PushMsgAttr.FK_Event, EventListNode.ReturnAfter);
+            foreach (PushMsg pm in pms)
+            {
+                pm.DoSendMessage(this.ReturnToNode, this.HisWork, null, null, null, this.ReturnToEmp);
+            }
 
             // 把消息
             atPara += "@SendToEmpIDs=" + this.ReturnToEmp;

@@ -4,6 +4,7 @@ using BP.Web;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using BP.Difference;
 
 namespace BP.CCOA.KnowledgeManagement
 {
@@ -251,14 +252,13 @@ namespace BP.CCOA.KnowledgeManagement
             //qo.addOr();
             //qo.AddWhere(KnowledgeAttr.KnowledgeSta, 1);
 
-
             //qo.addLeftBracket();
             //qo.AddWhere(KnowledgeAttr.KnowledgeSta, 1);
             //qo.addAnd();
             //qo.AddWhere(KnowledgeAttr.Emps, " like ", "%," + WebUser.No + ",%");
             //qo.addRightBracket();
 
-            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
                 qo.addAnd();
                 qo.AddWhere(KnowledgeAttr.OrgNo, " = ", WebUser.OrgNo);
@@ -286,7 +286,7 @@ namespace BP.CCOA.KnowledgeManagement
             //qo.AddWhere(KnowledgeAttr.Emps, " like ", "%," + WebUser.No + ",%");
             //qo.addRightBracket();
 
-            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
             {
                 qo.addAnd();
                 qo.AddWhere(KnowledgeAttr.OrgNo, " = ", WebUser.OrgNo);
@@ -349,21 +349,67 @@ namespace BP.CCOA.KnowledgeManagement
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
 
 
-        public string Selecter_DeptEmps()
+        public string Selecter_DeptEmps(string deptNo)
         {
             DataSet ds = new DataSet();
 
             Depts depts = new Depts();
-            depts.RetrieveAll();
+            QueryObject qo = new QueryObject(depts);
+            qo.AddWhere(DeptAttr.ParentNo, " = ", deptNo);
+            if(SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            {
+                qo.addAnd();
+                qo.AddWhere(DeptAttr.OrgNo, WebUser.OrgNo);
 
+            }
+            qo.addOrderBy(DeptAttr.Idx);
+            qo.DoQuery();
+
+            //获取这个部门下的人员
             Emps emps = new Emps();
-            emps.RetrieveAll();
+            emps.Retrieve(EmpAttr.FK_Dept, deptNo);
 
             ds.Tables.Add(depts.ToDataTableField("Depts"));
             ds.Tables.Add(emps.ToDataTableField("Emps"));
 
             return BP.Tools.Json.ToJson(ds);
 
+        }
+        public string SelectEmpByKey(string searchKey)
+        {
+            string dbStr =SystemConfig.AppCenterDBVarStr;
+            string sql = " SELECT A.No,A.Name,B.NameOfPath,B.Name AS DeptName From Port_Emp A ,Port_Dept B WHERE A.FK_Dept=B.No AND (A.No like";
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                    sql += " CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "No,'%') OR A.Name like CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "Name,'%'))";
+                    break;
+                case DBType.MSSQL:
+                    sql += " '%'+" + SystemConfig.AppCenterDBVarStr + "No+'%' OR A.Name like '%'+" + SystemConfig.AppCenterDBVarStr + "Name+'%')";
+                    break;
+                case DBType.Oracle:
+                    sql += " '%'||" + SystemConfig.AppCenterDBVarStr + "No||'%' OR A.Name like '%'||" + SystemConfig.AppCenterDBVarStr + "Name||'%')";
+                    break;
+                default:
+                    throw new System.Exception("err@数据据" + SystemConfig.AppCenterDBType + "还未解析");
+
+            }
+            if (SystemConfig.CCBPMRunModel!=CCBPMRunModel.Single)
+                sql += " AND A.OrgNo='" + WebUser.OrgNo + "' AND B.OrgNo='" + WebUser.OrgNo + "'";
+            Paras paras = new Paras();
+            paras.SQL = sql;
+            paras.Add("No", searchKey);
+            paras.Add("Name", searchKey);
+            DataTable dt = DBAccess.RunSQLReturnTable(paras);
+            if(SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "NameOfPath";
+                dt.Columns[3].ColumnName = "DeptName";
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
     }
 

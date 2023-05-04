@@ -654,10 +654,15 @@ namespace BP.WF.HttpHandler
 
         public string WXGZH_AthUpload()
         {
-            string imageData = this.GetRequestVal("ImageData");
-            if (DataType.IsNullOrEmpty(imageData) == true)
-                return "";
-            Log.DebugWriteInfo("上传附件信息ImageData:" + imageData);
+            HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            if(file == null)
+            {
+                return "err@请选择文件";
+            }
+            //string imageData = this.GetRequestVal("ImageData");
+            //if (DataType.IsNullOrEmpty(imageData) == true)
+            //    return "";
+            //Log.DebugWriteInfo("上传附件信息ImageData:" + imageData);
             // 多附件描述.
             string pkVal = this.GetRequestVal("PKVal");
             string attachPk = this.GetRequestVal("AttachPK");
@@ -705,16 +710,18 @@ namespace BP.WF.HttpHandler
             {
                 savePath = BP.Difference.SystemConfig.PathOfTemp +fileName + ".tmp";
             }
+
+            file.SaveAs(savePath);
             
-            using (System.IO.FileStream fs = new FileStream(savePath, FileMode.Create))
-            {
-                using (BinaryWriter bw = new BinaryWriter(fs))
-                {
-                    byte[] data = Convert.FromBase64String(imageData);
-                    bw.Write(data);
-                    bw.Close();
-                }
-            }
+            //using (System.IO.FileStream fs = new FileStream(savePath, FileMode.Create))
+            //{
+            //    using (BinaryWriter bw = new BinaryWriter(fs))
+            //    {
+            //        byte[] data = Convert.FromBase64String(imageData);
+            //        bw.Write(data);
+            //        bw.Close();
+            //    }
+            //}
             string ny = DateTime.Now.ToString("yyyy_MM");
             if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
             {

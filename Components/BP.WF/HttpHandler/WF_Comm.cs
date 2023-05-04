@@ -181,7 +181,7 @@ namespace BP.WF.HttpHandler
             string vals = "";
             foreach (string str in ap.HisHT.Keys)
             {
-               string val =  this.GetRequestVal(str);
+                string val = this.GetRequestVal(str);
                 if (DataType.IsNullOrEmpty(val) == false)
                     vals += "@" + str + "=" + val;
                 else
@@ -622,11 +622,11 @@ namespace BP.WF.HttpHandler
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
-                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+                    en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
                 }
 
                 //保存参数属性.
-                string frmParas = this.GetValFromFrmByKey("frmParas", "");
+                string frmParas = HttpUtility.UrlDecode(this.GetValFromFrmByKey("frmParas", ""));
                 if (DataType.IsNullOrEmpty(frmParas) == false)
                 {
                     AtPara ap = new AtPara(frmParas);
@@ -1419,8 +1419,15 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(attr.UIBindKey) == false
                     && ds.Tables.Contains(attr.Key) == false)
                 {
-                    //获取SQl
-                    string sql = BP.WF.Glo.DealExp(attr.UIBindKey, null, null);
+                    //获取SQL
+                    string sql = attr.UIBindKey;
+                    if (attr.UIBindKey.Contains("SELECT") == false)
+                    {
+                        SFTable sf = new SFTable(attr.UIBindKey);
+                        sql = sf.SelectStatement;
+                    }
+
+                    sql = BP.WF.Glo.DealExp(sql, null, null);
                     DataTable dtSQl = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataColumn col in dtSQl.Columns)
                     {
@@ -1462,7 +1469,7 @@ namespace BP.WF.HttpHandler
         {
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
-            ur.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
+            ur.setMyPK(WebUser.UserID + "_" + this.EnsName + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             DataSet ds = new DataSet();
@@ -1707,7 +1714,7 @@ namespace BP.WF.HttpHandler
             string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
             bool isFirst = true; //是否第一次拼接SQL
-
+            Attrs attrs = map.Attrs;
             #region 关键字字段.
             if (DataType.IsNullOrEmpty(map.SearchFields) == false)
             {
@@ -1765,7 +1772,7 @@ namespace BP.WF.HttpHandler
                             qo.addOr();
 
                         if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
-                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + valIdx + "+'%'"));
+                            qo.AddWhere(field, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + field + valIdx + ",'%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + valIdx + "+'%'"));
                         else
                             qo.AddWhere(field, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + field + valIdx + "||'%'");
                         qo.MyParas.Add(field + valIdx, val);
@@ -1778,10 +1785,11 @@ namespace BP.WF.HttpHandler
             }
             else
             {
+
                 if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
                 {
                     Attr attrPK = new Attr();
-                    foreach (Attr attr in map.Attrs)
+                    foreach (Attr attr in attrs)
                     {
                         if (attr.IsPK)
                         {
@@ -1793,64 +1801,99 @@ namespace BP.WF.HttpHandler
                     string enumKey = ","; //求出枚举值外键.
                     keyWord = keyWord.Replace(",", ";").Replace(" ", ";");
                     string[] strVals = keyWord.Split(';');
-                    foreach (Attr attr in map.Attrs)
+                    if (strVals.Length > 1)
                     {
-                        switch (attr.MyFieldType)
-                        {
-                            case FieldType.Enum:
-                                enumKey = "," + attr.Key + "Text,";
-                                break;
-                            case FieldType.FK:
-                                //enumKey = "," + attr.Key + "Text,";
-                                // case FieldType.PKFK:
-                                continue;
-                            default:
-                                break;
-                        }
-
-                        if (attr.MyDataType != DataType.AppString)
-                            continue;
-
-                        //排除枚举值关联refText.
-                        if (attr.MyFieldType == FieldType.RefText)
-                        {
-                            if (enumKey.Contains("," + attr.Key + ",") == true)
-                                continue;
-                        }
-
-                        if (attr.Key == "FK_Dept")
-                            continue;
-                        int valIdx = 0;
+                        //判断是否存在SKeWord
+                        Attr keyAttr = attrs.GetAttrByKeyOfEn("SKeyWords");
+                        if (keyAttr == null)
+                            throw new Exception("err@没有关键字SKeyWords不能按照多关键字查询");
                         foreach (string val in strVals)
                         {
                             i++;
-                            valIdx++;
                             if (i == 1)
                             {
                                 isFirst = false;
                                 /* 第一次进来。 */
                                 qo.addLeftBracket();
                                 if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
-                                    qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + ", '%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "+'%'"));
+                                    qo.AddWhere("SKeyWords", " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + ", '%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + "+'%'"));
                                 else
-                                    qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "|| '%'");
+                                    qo.AddWhere("SKeyWords", " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + "|| '%'");
 
-                                qo.MyParas.Add("SKey" + valIdx, val);
+                                qo.MyParas.Add("SKeyWords" + i, val);
 
                                 continue;
                             }
-                            qo.addOr();
+                            qo.addAnd();
 
                             if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
-                                qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + ", '%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "+'%'"));
+                                qo.AddWhere("SKeyWords", " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + ", '%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + "+'%'"));
                             else
-                                qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "|| '%'");
+                                qo.AddWhere("SKeyWords", " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKeyWords" + i + "|| '%'");
 
-                            qo.MyParas.Add("SKey" + valIdx, val);
+                            qo.MyParas.Add("SKeyWords" + i, val);
                         }
-
                     }
+                    else
+                    {
+                        foreach (Attr attr in map.Attrs)
+                        {
+                            switch (attr.MyFieldType)
+                            {
+                                case FieldType.Enum:
+                                    enumKey = "," + attr.Key + "Text,";
+                                    break;
+                                case FieldType.FK:
+                                    //enumKey = "," + attr.Key + "Text,";
+                                    // case FieldType.PKFK:
+                                    continue;
+                                default:
+                                    break;
+                            }
 
+                            if (attr.MyDataType != DataType.AppString)
+                                continue;
+
+                            //排除枚举值关联refText.
+                            if (attr.MyFieldType == FieldType.RefText)
+                            {
+                                if (enumKey.Contains("," + attr.Key + ",") == true)
+                                    continue;
+                            }
+
+                            if (attr.Key == "FK_Dept")
+                                continue;
+                            int valIdx = 0;
+                            foreach (string val in strVals)
+                            {
+                                i++;
+                                valIdx++;
+                                if (i == 1)
+                                {
+                                    isFirst = false;
+                                    /* 第一次进来。 */
+                                    qo.addLeftBracket();
+                                    if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                                        qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + ", '%')") : (" '%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "+'%'"));
+                                    else
+                                        qo.AddWhere(attr.Key, " LIKE ", " '%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "|| '%'");
+
+                                    qo.MyParas.Add("SKey" + valIdx, val);
+
+                                    continue;
+                                }
+                                qo.addOr();
+
+                                if (BP.Difference.SystemConfig.AppCenterDBVarStr == "@" || BP.Difference.SystemConfig.AppCenterDBVarStr == "?")
+                                    qo.AddWhere(attr.Key, " LIKE ", BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + ", '%')") : ("'%'+" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "+'%'"));
+                                else
+                                    qo.AddWhere(attr.Key, " LIKE ", "'%'||" + BP.Difference.SystemConfig.AppCenterDBVarStr + "SKey" + valIdx + "|| '%'");
+
+                                qo.MyParas.Add("SKey" + valIdx, val);
+                            }
+
+                        }
+                    }
                     qo.addRightBracket();
 
                 }
@@ -2020,7 +2063,7 @@ namespace BP.WF.HttpHandler
                         attr.DefaultSymbol = "=";
                         attr.DefaultVal = val;
                     }
-                        
+
                     //获得真实的数据类型.
                     if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
                     {
@@ -2090,7 +2133,6 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 获得查询数据.
-            Attrs attrs = en.EnMap.Attrs;
             foreach (string str in ap.HisHT.Keys)
             {
                 if (keys.Contains(str) == false)
@@ -2109,26 +2151,28 @@ namespace BP.WF.HttpHandler
                 isFirst = false;
                 qo.addLeftBracket();
                 Attr attr = attrs.GetAttrByKeyOfEn(str);
-                //if (attr != null && attr.IsFK && attr.HisFKEn.IsTreeEntity == true)
-                //{
-                //    //需要获取当前数据选中的数据和子级(先阶段只处理部门信息)
-                //    DataTable dt = null;
-                //    try
-                //    {
-                //        dt = DBAccess.RunSQLReturnTable(BP.WF.Dev2Interface.GetDeptNoSQLByParentNo(val, attr.HisFKEn.EnMap.PhysicsTable));
-                //    }catch(Exception ex)
-                //    {
-                //        if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                //            throw new Exception("err@请在web.config中数据库连接配置中增加Allow User Variables=True;");
-                //        throw new Exception(ex.Message);
-                //    }
-                //    if (dt.Rows.Count == 0)
-                //        qo.AddWhere(attr.Key, val);
-                //    else
-                //        qo.AddWhereIn(attr.Key, dt);
-                //    qo.addRightBracket();
-                //    continue;
-                //}
+                if (attr != null && attr.IsFK && attr.UIBindKey.Contains(",TS.")==false 
+                    && attr.HisFKEn.IsTreeEntity == true)
+                {
+                    //需要获取当前数据选中的数据和子级(先阶段只处理部门信息)
+                    DataTable dt = null;
+                    try
+                    {
+                        dt = DBAccess.RunSQLReturnTable(BP.WF.Dev2Interface.GetDeptNoSQLByParentNo(val, attr.HisFKEn.EnMap.PhysicsTable));
+                    }
+                    catch (Exception ex)
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            throw new Exception("err@请在web.config中数据库连接配置中增加Allow User Variables=True;");
+                        throw new Exception(ex.Message);
+                    }
+                    if (dt.Rows.Count == 0)
+                        qo.AddWhere(attr.Key, val);
+                    else
+                        qo.AddWhereIn(attr.Key, dt);
+                    qo.addRightBracket();
+                    continue;
+                }
                 //多选
                 if (val.IndexOf(",") != -1)
                 {
@@ -2450,8 +2494,8 @@ namespace BP.WF.HttpHandler
                     string result = obj.ToString();
                     if (result.IndexOf("url@") != -1 || result.IndexOf("err@") != -1)
                         return result;
-                   
-                    result = "info@"+result;
+
+                    result = "info@" + result;
                     return result;
                 }
                 foreach (string mypk in pks)
@@ -2652,7 +2696,7 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr item in attrs)
             {
-                if (item.IsEnum==false)
+                if (item.IsEnum == false)
                     continue;
 
                 SysEnums ses = new SysEnums(item.UIBindKey, item.UITag);
@@ -2825,7 +2869,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entities_Delete()
         {
-            
+
             if (this.Paras == null)
                 return "err@删除实体，参数不能为空";
             string[] myparas = this.Paras.Split('@');
@@ -3057,7 +3101,7 @@ namespace BP.WF.HttpHandler
                 if (item.IsCanBatch == false)
                     continue;
                 DataRow mydr = dt.NewRow();
-                item.HisEn = en; //@hongyan. 增加上.
+                item.HisEn = en; // 增加上.
                 string myurl = "";
                 if (item.RefMethodType != RefMethodType.Func)
                 {
@@ -3595,7 +3639,17 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             string token = this.GetRequestVal("Token");
             if (DataType.IsNullOrEmpty(token) == false)
-                BP.WF.Dev2Interface.Port_LoginByToken(token);
+            {
+                if(DataType.IsNullOrEmpty(WebUser.Token) == false && token.Equals(WebUser.Token) == true){
+
+                }
+                else
+                {
+                    BP.WF.Dev2Interface.Port_LoginByToken(token);
+                }
+                    
+            }
+               
 
             if (DataType.IsNullOrEmpty(token) == true)
             {
@@ -3609,7 +3663,6 @@ namespace BP.WF.HttpHandler
                     BP.WF.Dev2Interface.Port_LoginByToken(token);
                 }
             }
-
             //需要同步.
             ht.Add("No", WebUser.No);
             ht.Add("Name", WebUser.Name);
@@ -3927,6 +3980,12 @@ namespace BP.WF.HttpHandler
             ddlDr["No"] = "SUM";
             ddlDr["Name"] = "求和";
             ddlDr["Selected"] = "true";
+            ddlDt.Rows.Add(ddlDr);
+            ddlDr = ddlDt.NewRow();
+            ddlDr["No"] = "AVG";
+            ddlDr["Name"] = "求平均";
+            if (ur.Vals.IndexOf("@Group_Number=AVG") != -1)
+                ddlDr["Selected"] = "true";
             ddlDt.Rows.Add(ddlDr);
             ds.Tables.Add(ddlDt);
 

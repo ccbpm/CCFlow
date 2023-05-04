@@ -12,7 +12,7 @@ namespace BP.WF
     /// <summary>
     /// 流程实例
     /// </summary>
-    public class GenerWorkFlowAttr
+    public class GenerWorkFlowAttr:EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -210,6 +210,7 @@ namespace BP.WF
         /// 耗时
         /// </summary>
         public const string LostTimeHH = "LostTimeHH";
+     
         #endregion
     }
     /// <summary>
@@ -828,7 +829,7 @@ namespace BP.WF
 
                 //设置耗时. @hongyan.
                 TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
-                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours);
+                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH,  ts.TotalHours.ToString("0.00"));
             }
         }
         /// <summary>
@@ -853,7 +854,7 @@ namespace BP.WF
 
                 //设置耗时. @hongyan.
                 TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
-                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours);
+                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours.ToString("0.00"));
             }
         }
         /// <summary>
@@ -1217,6 +1218,8 @@ namespace BP.WF
         {
             //this.WorkID = workId
             //this.Retrieve();
+            if (workId == 0)
+                throw new Exception("工作 GenerWorkFlow 查询参数错误,WorkID不能为 0 .");
 
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(GenerWorkFlowAttr.WorkID, workId);
@@ -1326,7 +1329,8 @@ namespace BP.WF
 
                 // 审核组件，签批组件最后一个人的意见填写到这里.
                 map.AddTBString(GenerWorkFlowAttr.FlowNote, null, "流程备注", true, false, 0, 500, 200);
-                map.AddTBFloat(GenerWorkFlowAttr.LostTimeHH, 0, "耗时", true, true);
+              //  map.AddTBString(GenerWorkFlowAttr.LostTimeHH, null, "流程备注", true, false, 0, 500, 200);
+                //  map.AddTBFloat(GenerWorkFlowAttr.LostTimeHH, 0, "耗时", true, true);
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "工作轨迹";  // "工作报告";

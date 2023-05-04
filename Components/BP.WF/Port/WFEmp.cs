@@ -20,7 +20,7 @@ namespace BP.WF.Port
         public const string Name = "Name";
         public const string LoginData = "LoginData";
         public const string Tel = "Tel";
-        public const string Email = "Email";
+        //public const string Email = "Email";
         public const string Stas = "Stas";
         public const string Depts = "Depts";
         public const string FK_Dept = "FK_Dept";
@@ -163,7 +163,7 @@ namespace BP.WF.Port
             }
         }
 
-        public string Email
+       /* public string Email
         {
             get
             {
@@ -173,7 +173,7 @@ namespace BP.WF.Port
             {
                 SetValByKey(WFEmpAttr.Email, value);
             }
-        }
+        }*/
 
         /// <summary>
         /// 发起流程.
@@ -259,7 +259,7 @@ namespace BP.WF.Port
 
                 map.AddTBString(WFEmpAttr.Tel, null, "Tel", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.FK_Dept, null, "FK_Dept", true, true, 0, 100, 36);
-                map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
+                //map.AddTBString(WFEmpAttr.Email, null, "Email", true, true, 0, 50, 20);
 
                 map.AddTBString(WFEmpAttr.Stas, null, "角色s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "部门s", true, true, 0, 100, 36);

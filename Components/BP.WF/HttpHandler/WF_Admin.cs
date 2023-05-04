@@ -160,7 +160,7 @@ namespace BP.WF.HttpHandler
 
                     case DeliveryWay.ByBindEmp:
                         //sql = "SELECT No,Name from Port_Emp where No in (select FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
-                        if (CCBPMRunModel.SAAS ==  BP.Difference.SystemConfig.CCBPMRunModel)
+                        if (CCBPMRunModel.SAAS == BP.Difference.SystemConfig.CCBPMRunModel)
                             sql = "SELECT UserID,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.UserID=B.FK_Emp AND B.FK_Node=" + nodeid;
                         else
                             sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid;
@@ -280,7 +280,7 @@ namespace BP.WF.HttpHandler
         {
             string userNo = this.GetRequestVal("UserNo");
             BP.WF.Dev2Interface.Port_Login(userNo);
-            string sid = BP.WF.Dev2Interface.Port_GenerToken(userNo);
+            string sid = BP.WF.Dev2Interface.Port_GenerToken();
             string url = "../../WF/Port.htm?UserNo=" + userNo + "&Token=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
         }
@@ -305,7 +305,7 @@ namespace BP.WF.HttpHandler
 
                 //判断是不是有.
                 if (DBAccess.IsExitsObject("WF_Flow") == true)
-                    return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='../Portal/Login.htm' >这里直接登录流程设计器</a>";
+                    return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='/Portal/Standard/Login.htm' >这里直接登录流程设计器</a>";
 
                 Hashtable ht = new Hashtable();
                 ht.Add("OSModel", 1); //组织结构类型.
@@ -331,18 +331,18 @@ namespace BP.WF.HttpHandler
             BP.WF.Glo.DoInstallDataBase(lang, demoTye);
 
             //执行ccflow的升级。
-            BP.WF.Glo.UpdataCCFlowVer();
+            //  BP.WF.Glo.UpdataCCFlowVer();
 
             //加注释.
             BP.Pub.PubClass.AddComment();
 
-            if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
+            /*if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
             {
                 DBAccess.DropTableColumn("Port_Emp", "EmpSta");
                 //string sql = "UPDATE Port_Emp SET EmpSta=1 ";
                 //if (DBAccess.RunSQLReturnValInt(sql, 1) == 0)
                 //    return "err@该用户已经被禁用.";
-            }
+            }*/
 
             return "info@系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);

@@ -21,7 +21,6 @@ namespace BP.WF.HttpHandler
         }
         /// <summary>
         /// 设置该流程的所有节点都是用该方案。
-        /// @hongyan, 有变化.
         /// </summary>
         /// <returns></returns>
         public string RefOneFrmTree_SetAllNodeFrmUseThisSln()

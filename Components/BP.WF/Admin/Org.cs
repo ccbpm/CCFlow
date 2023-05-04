@@ -133,7 +133,7 @@ namespace BP.WF.Admin
 
                 Map map = new Map("Port_Org", "系统信息");
 
-                map.AddTBStringPK(OrgAttr.No, null, "编号", true, true, 1, 30, 40);
+                map.AddTBStringPK(OrgAttr.No, null, "编号", true, true, 1, 50, 40);
                 map.AddTBString(OrgAttr.Name, null, "单位", true, false, 0, 60, 200);
 
                 map.AddTBInt("FlowNums", 0, "流程模板数", true, true);

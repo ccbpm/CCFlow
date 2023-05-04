@@ -335,7 +335,7 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.ReadReceipts,
                     "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3882411&doc_id=31094");
 
-                //map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", true, false, 0, 300, 10);
+                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置", false, false, 0, 300, 10);
                 //map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                 //  "@0=由连接线条件控制@1=按照用户选择计算@2=发送按钮旁下拉框选择");
                 //map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
@@ -435,6 +435,7 @@ namespace BP.WF.Template
 
                 BtnLab lab = new BtnLab();
                 map.AddAttrs(lab.EnMap.Attrs, true);
+                map.AddTBAtParas(500);
 
                 #region 基础功能.
                 map.AddGroupMethod("基本信息");
@@ -1471,7 +1472,7 @@ namespace BP.WF.Template
             btnLab.NodeID = this.NodeID;
             btnLab.RetrieveFromDBSources();
             Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
-
+            Cash.ClearCash(btnLab.ToString());
 
             CC cc = new CC();
             cc.NodeID = this.NodeID;
@@ -1531,7 +1532,7 @@ namespace BP.WF.Template
             }
 
             base.afterInsertUpdateAction();
-
+            
 
             //写入日志.
             BP.Sys.Base.Glo.WriteUserLog("更新节点属性：" + this.Name + " - " + this.NodeID);

@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
     <SccProjectName>
@@ -120,9 +120,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\RefDLL\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
@@ -149,9 +146,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Spire.Pdf.dll</HintPath>
     </Reference>
-    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -166,20 +160,11 @@
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web">
       <Name>System.Web</Name>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml">
@@ -188,12 +173,6 @@
     <Reference Include="ThoughtWorks.QRCode, Version=1.0.2774.19990, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\ThoughtWorks.QRCode.dll</HintPath>
-    </Reference>
-    <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
-    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\NingBoBD\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -293,6 +272,7 @@
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
+    <Compile Include="DTS\GenerSKeyWords.cs" />
     <Compile Include="DTS\Service\Auto_Rpt_Dtl_DTS.cs" />
     <Compile Include="DTS\Service\AddAuthStation.cs" />
     <Compile Include="DTS\Service\GenerAllEmpsStartFlows.cs" />
@@ -300,6 +280,7 @@
     <Compile Include="DTS\CheckErr\Tool_RepairTodoList.cs" />
     <Compile Include="DTS\CheckErr\Tool_RepairCHAtPara.cs" />
     <Compile Include="DTS\DTSAutoRpt.cs" />
+    <Compile Include="DTS\UpdateEmpDeptNo.cs" />
     <Compile Include="FixFieldNames.cs" />
     <Compile Include="CCBill\Dev2Interface.cs" />
     <Compile Include="CCBill\EnumLab.cs" />
@@ -428,6 +409,7 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_PrintTemplate.cs" />
     <Compile Include="HttpHandler\WF_CCForm_JS.cs" />
     <Compile Include="HttpHandler\WF_CommTS.cs" />
+    <Compile Include="HttpHandler\WF_TSDev2Interface.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_FlowOperation.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_Batch.cs" />
@@ -484,6 +466,16 @@
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptStation.cs" />
     <Compile Include="Admin\Flow.cs" />
+    <Compile Include="TA\EnumLab.cs" />
+    <Compile Include="TA\TaskAPI.cs" />
+    <Compile Include="TA\Template\Node.cs" />
+    <Compile Include="TA\Template\Sort.cs" />
+    <Compile Include="TA\Template\Template.cs" />
+    <Compile Include="TA\WorkerList.cs" />
+    <Compile Include="TA\Track.cs" />
+    <Compile Include="TA\Task.cs" />
+    <Compile Include="TA\Project.cs" />
+    <Compile Include="TA\TA_App.cs" />
     <Compile Include="Template\CCEn\CCRole2022.cs" />
     <Compile Include="Template\ForXml\TemplateFlow.cs" />
     <Compile Include="Template\ForXml\TempalteNode.cs" />
@@ -714,7 +706,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
-      <Project>{8e484457-b3a3-441c-aee3-4e49bb30e203}</Project>
+      <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>

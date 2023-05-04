@@ -243,8 +243,9 @@ namespace BP.WF
                                     {
                                         String SigantureNO = en.GetValStrByKey(attr.KeyOfEn);
                                         String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
-                                        text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
-                                    }else if (attr.UIContralType == UIContralType.SignCheck)//是不是签批字段
+                                        text = "<img src='" + src + SigantureNO + ".jpg' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.jpg\"' style='height:50px;'  alt='图片丢失' /> ";
+                                    }
+                                    else if (attr.UIContralType == UIContralType.SignCheck)//是不是签批字段
                                     {
                                         //获取当前节点的审核意见
                                         DataTable mydt = GetWorkcheckInfoByNodeIDs(dt, en.GetValStrByKey(attr.KeyOfEn));
@@ -266,6 +267,13 @@ namespace BP.WF
                                     if (attr.TextModel == 3)
                                     {
                                         text = text.Replace("white-space: nowrap;", "");
+                                    }
+
+                                    if (attr.UIContralType == UIContralType.AthShow)
+                                    {
+                                        FrmAttachmentDBs athDBsFrom = new FrmAttachmentDBs();
+                                        int i = athDBsFrom.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, attr.MyPK, FrmAttachmentDBAttr.RefPKVal, workid);
+                                        text = "附件(" + i + "个)";
                                     }
                                 }
 
@@ -679,7 +687,7 @@ namespace BP.WF
                     String html = ""; // "<table style='width:100%;valign:middle;height:auto;' >";
 
                     //#region 生成审核信息.
-                    
+
 
                     //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
                     sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + workid;
@@ -743,7 +751,7 @@ namespace BP.WF
                             if (singType == "1")
                             {
                                 String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
-                                empStrs = "<img src='" + src + dr["EmpFrom"] + ".JPG' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
+                                empStrs = "<img src='" + src + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;'  alt='图片丢失' /> ";
                             }
 
                         }
@@ -761,7 +769,7 @@ namespace BP.WF
             sb.Append("</table>");
             return sb;
         }
-        
+
         /// <summary>
         /// 这里做了一些不为空的判断，获得document的元素的时候.
         /// 注意同步.
@@ -896,9 +904,22 @@ namespace BP.WF
                         _html += "<table style='width:100%'><tbody>";
                         foreach (DataRow dr in mydt.Rows)
                         {
+                            string sql2 = "SELECT SigantureEnabel FROM WF_Node  WHERE NodeID ='" + dr[5].ToString() + "'";
+                            string singType = DBAccess.RunSQLReturnString(sql2);
+
                             _html += "<tr><td style='border: 1px solid #D6DDE6;'>";
                             _html += "<div style='word-wrap: break-word;line-height:20px;padding:5px;padding-left:50px;'><font color='#999'>" + dr[1].ToString() + "</font></div>";
-                            _html += "<div style='text-align:right;padding-right:5px'>" + dr[3].ToString() + "(" + dr[2].ToString() + ")</div>";
+                            string empstr = "";
+                            if (singType == "0" || singType == "2")
+                            {
+                                empstr = dr[3].ToString();
+                            }
+                            if (singType == "1")
+                            {
+                                string src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
+                                empstr = "<img src='" + src + dr[4].ToString() + ".jpg'title='" + dr[3].ToString() + "' style='height:40px;' alt='图片丢失' />";
+                            }
+                            _html += "<div style='text-align:right;padding-right:5px'>" + empstr + "(" + dr[2].ToString() + ")</div>";
                             _html += "</td></tr>";
                         }
                         _html += "</tbody></table></div>";
@@ -1079,7 +1100,7 @@ namespace BP.WF
                                 {
                                     String SigantureNO = gedtl.GetValStrByKey(attr.KeyOfEn);
                                     String src = BP.Difference.SystemConfig.HostURL + "/DataUser/Siganture/";
-                                    text = "<img src='" + src + SigantureNO + ".JPG' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.JPG\"' style='height:50px;'  alt='图片丢失' /> ";
+                                    text = "<img src='" + src + SigantureNO + ".jpg' title='" + SigantureNO + "' onerror='this.src=\"" + src + "Siganture.jpg\"' style='height:50px;'  alt='图片丢失' /> ";
                                 }
                                 else
                                 {
@@ -1294,7 +1315,7 @@ namespace BP.WF
 
             Hashtable ht = new Hashtable();
             #region 单表单打印
-            if (node.HisFormType == NodeFormType.RefOneFrmTree || node.IsNodeFrm==true)
+            if (node.HisFormType == NodeFormType.RefOneFrmTree || node.IsNodeFrm == true)
             {
                 resultMsg = setPDFPath("ND" + node.NodeID, workid, flowNo, gwf);
                 if (resultMsg.IndexOf("err@") != -1)
@@ -2079,7 +2100,7 @@ namespace BP.WF
 
             if (File.Exists(path) == false)
             {
-                path = BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".JPG";
+                path = BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + userNo + ".jpg";
                 if (File.Exists(path) == true)
                     return "<img src='" + path + "' style='border:0px;width:100px;height:30px;'/>";
                 else

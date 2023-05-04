@@ -710,6 +710,7 @@ namespace BP.WF.Data
                 Map map = new Map("WF_GenerWorkFlow", "我部门的流程");
                 map.setEnType(EnType.View);
 
+                #region 字段.
                 map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 300, 150, true);
                 map.AddTBInt(MyFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
@@ -725,16 +726,15 @@ namespace BP.WF.Data
 
                 map.AddDDLSysEnum(MyDeptFlowAttr.WFSta, 0, "状态", true, false, MyDeptFlowAttr.WFSta);
              //   map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
-
                 map.AddTBStringDoc(MyDeptFlowAttr.FlowNote, null, "备注", true, false,true);
-               
-
                 //工作ID
                 map.AddTBIntPK(MyDeptFlowAttr.WorkID, 0, "工作ID", true, true);
-
                 //隐藏字段.
                 map.AddTBInt(MyDeptFlowAttr.FID, 0, "FID", false, false);
-                map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 30, 10);
+                map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 50, 10);
+                //查询关键字.  搜索 SKeyWords
+                map.AddTBSKeyWords(4000);
+                #endregion 字段.
 
 
                 #region 查询条件.
@@ -754,7 +754,7 @@ namespace BP.WF.Data
                 map.SearchNormals.Add(search);
                 #endregion 查询条件.
 
-
+                #region 方法.
                 RefMethod rm = new RefMethod();
                 rm.Title = "表单/轨迹";  
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
@@ -762,7 +762,9 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsForEns = true;
                 map.AddRefMethod(rm);
-              
+                #endregion 方法.
+
+
                 this._enMap = map;
                 return this._enMap;
             }

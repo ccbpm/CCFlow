@@ -171,7 +171,6 @@ namespace BP.WF.HttpHandler
                 root.Insert();
             }
             root.NodeType = "root";
-
             appendFormTrees.AddEntity(root);
 
             foreach (SysFormTree formTree in formTrees)
@@ -186,8 +185,6 @@ namespace BP.WF.HttpHandler
                     root.No = formTree.No;
                     continue;
                 }
-
-                 
 
                 //文件夹
                 BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();

@@ -547,11 +547,15 @@ namespace BP.WF
                 //其他参数.
                 map.AddTBAtParas(500);
 
+                //map.IsShowSearchKey = false;
+                //map.SearchFields="Tel,Addr,"
+             
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+        
 
         /// <summary>
         /// 发送邮件
@@ -583,7 +587,7 @@ namespace BP.WF
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string displayName =  BP.Difference.SystemConfig.GetValByKey("SendEmailDisplayName", "高凌BPM");
+                string displayName =  BP.Difference.SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
                 myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
                 myEmail.To.Add(mail);
@@ -610,8 +614,8 @@ namespace BP.WF
                 //调用自带的异步方法
 
                 client.Send(myEmail);
-                client.SendMailAsync(myEmail);
-                client.SendAsync(myEmail, userState);
+               /* client.SendMailAsync(myEmail);
+                client.SendAsync(myEmail, userState);*/
             }
             catch (Exception e)
             {

@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
             string toEmps = this.GetRequestVal("ToEmps");
 
             string editFiles = nd.GetParaString("EditFields");
-            //多表单的签批组件的修改 @Hongyan
+            //多表单的签批组件的修改 
             FrmNode frmNode = null;
             if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
             {

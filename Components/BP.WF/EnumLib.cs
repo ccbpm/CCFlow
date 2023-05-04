@@ -988,7 +988,7 @@ namespace BP.WF
         /// <summary>
         /// 按角色计算(以部门集合为纬度)
         /// </summary>
-        ByStationAndEmpDept = 10,
+        //ByStationAndEmpDept = 10,
         /// <summary>
         /// 按指定节点的人员或者指定字段作为人员的角色计算
         /// </summary>
@@ -1098,6 +1098,10 @@ namespace BP.WF
         /// 智能计算
         /// </summary>
         ByPreviousNodeFormStationsOnly = 54,
+        /// <summary>
+        /// 选择其他组织的联络员
+        /// </summary>
+        BySelectEmpByOfficer = 55,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

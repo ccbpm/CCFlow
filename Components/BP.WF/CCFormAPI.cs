@@ -12,6 +12,7 @@ using BP.En;
 using BP.Sys;
 using BP.Difference;
 using BP.WF.Template.Frm;
+using System.Text.RegularExpressions;
 
 namespace BP.WF
 {
@@ -726,7 +727,8 @@ namespace BP.WF
             myds.Tables.Add(Sys_MapAttr);
 
             //明细表的配置信息.
-            DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
+            MapExts mes = dtl.MapExts;
+            DataTable Sys_MapExt = mes.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
 
             //启用附件，增加附件信息
@@ -735,9 +737,8 @@ namespace BP.WF
             #endregion 加载从表表单模版信息.
 
             #region 把从表的- 外键表/枚举 加入 DataSet.
-            MapExts mes = dtl.MapExts;
+            
             MapExt me = null;
-
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
             foreach (MapAttr attr in attrs)
@@ -849,43 +850,81 @@ namespace BP.WF
 
             #region  把从表的数据放入.
             DataTable dtDtl = GetDtlInfo(dtl,en, dtlRefPKVal);
-            //从表数据的填充
-            if (dtDtl.Rows.Count == 0 && DataType.IsNullOrEmpty(dtl.InitDBAttrs) == false)
+            //从表集合为空时填充从表的情况
+            if (dtDtl.Rows.Count == 0)
             {
-                string[] keys = dtl.InitDBAttrs.Split(',');
                 GEDtl endtl = null;
-                MapAttr attr = null;
-                foreach (string keyOfEn in keys)
+                //1.行初始化字段，设置了改字段值时默认就添加枚举值集合的行数据，一般不再新增从表数据
+                if (DataType.IsNullOrEmpty(dtl.InitDBAttrs) == false)
                 {
-                    Entity ent  = dtl.MapAttrs.GetEntityByKey(dtl.No + "_" + keyOfEn);
-                    if (ent == null)
-                        continue;
-                    attr = ent as MapAttr;
-                    if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
-                        continue;
-                    DataTable dt = null;
-                    //枚举字段
-                    if(attr.LGType == FieldTypeS.Enum && attr.MyDataType == DataType.AppInt)
-                        dt = myds.Tables[attr.UIBindKey];
-                    //外键、外部数据源
-                    if ((attr.LGType == FieldTypeS.FK && attr.MyDataType == DataType.AppString)
-                        || (attr.LGType == FieldTypeS.Normal && attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL))
-                        dt = myds.Tables[attr.UIBindKey];
-                    if (dt == null)
-                        continue;
-                    foreach(DataRow dr in dt.Rows)
+                    string[] keys = dtl.InitDBAttrs.Split(',');
+                   
+                    MapAttr attr = null;
+                    foreach (string keyOfEn in keys)
+                    {
+                        Entity ent = dtl.MapAttrs.GetEntityByKey(dtl.No + "_" + keyOfEn);
+                        if (ent == null)
+                            continue;
+                        attr = ent as MapAttr;
+                        if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
+                            continue;
+                        DataTable dt = null;
+                        //枚举字段
+                        if (attr.LGType == FieldTypeS.Enum && attr.MyDataType == DataType.AppInt)
+                            dt = myds.Tables[attr.UIBindKey];
+                        //外键、外部数据源
+                        if ((attr.LGType == FieldTypeS.FK && attr.MyDataType == DataType.AppString)
+                            || (attr.LGType == FieldTypeS.Normal && attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL))
+                            dt = myds.Tables[attr.UIBindKey];
+                        if (dt == null)
+                            continue;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            endtl = new GEDtl(dtl.No);
+                            endtl.ResetDefaultVal();
+                            endtl.SetValByKey(keyOfEn, dr[0]);
+                            endtl.RefPK = dtlRefPKVal;
+                            endtl.FID = fid;
+                            endtl.Insert();
+                        }
+
+                    }
+                }
+                //2.从表装载填充
+                me = mes.GetEntityByKey("ExtModel", MapExtXmlList.PageLoadFullDtl) as MapExt;
+                if (me != null && me.DoWay==1 && DataType.IsNullOrEmpty(me.Doc) ==false)
+                {
+                    string sql = Glo.DealSQLExp(me.Doc, en, null);
+                    int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                    if (num == 1)
+                    {
+                        string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                        sqlext = sql.Substring(sqlext.Length + 1);
+                        if (sqlext.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    }
+                    if (num > 1 && sql.Contains("@"))
+                        throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
                     {
                         endtl = new GEDtl(dtl.No);
-                        endtl.ResetDefaultVal();
-                        endtl.SetValByKey(keyOfEn, dr[0]);
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            endtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                        }
                         endtl.RefPK = dtlRefPKVal;
                         endtl.FID = fid;
-                        endtl.Insert();
-                    }   
 
+                        endtl.RDT = DataType.CurrentDateTime;
+                        endtl.Rec = WebUser.No;
+                        endtl.Insert();
+                    }
                 }
-                dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
+
+               dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
             }
+
 
 
             // 为明细表设置默认值.
@@ -921,7 +960,7 @@ namespace BP.WF
 
             return myds;
         }
-        public static  DataTable GetDtlInfo(MapDtl dtl,GEEntity en,string dtlRefPKVal)
+        public static  DataTable GetDtlInfo(MapDtl dtl,GEEntity en,string dtlRefPKVal,bool isReload=false)
         {
             QueryObject qo = null;
             GEDtls dtls = new GEDtls(dtl.No);
@@ -977,8 +1016,15 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                dtls.GetNewEntity.CheckPhysicsTable();
-                return GetDtlInfo(dtl, en,dtlRefPKVal);
+                dtl.IntMapAttrs();
+                dtl.CheckPhysicsTable();
+                CashFrmTemplate.Remove(dtl.No);
+                Cash.SetMap(dtl.No, null);
+                Cash.SQL_Cash.Remove(dtl.No);
+                if (isReload == false)
+                    return GetDtlInfo(dtl, en, dtlRefPKVal, true);
+                else
+                    throw new Exception("获取从表[" + dtl.Name + "]失败,错误:" + ex.Message);
             }
  
         }

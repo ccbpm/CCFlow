@@ -714,29 +714,32 @@ namespace BP.CCFast.CCMenu
             }
 
             dt = ds.Tables["Methods"];
-            foreach (DataRow dr in dt.Rows)
+            if (dt != null)
             {
-                BP.CCBill.Template.Method myen = new BP.CCBill.Template.Method();
-                myen.Row.LoadDataTable(dt, dr);
-
-                myen.FrmID = realFrmID;
-
-                switch (myen.MethodModel)
+                foreach (DataRow dr in dt.Rows)
                 {
-                    case "FlowEtc": //其他业务流程.
-                        myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
-                        break;
-                    case "FlowBaseData": //修改基础资料流程
-                        myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
-                        break;
-                    case "Func": //功能.
-                        break;
-                    default:
-                        break;
+                    BP.CCBill.Template.Method myen = new BP.CCBill.Template.Method();
+                    myen.Row.LoadDataTable(dt, dr);
+
+                    myen.FrmID = realFrmID;
+
+                    switch (myen.MethodModel)
+                    {
+                        case "FlowEtc": //其他业务流程.
+                            myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                            break;
+                        case "FlowBaseData": //修改基础资料流程
+                            myen.FlowNo = ImpSystem_Imp_Dict_FlowEtc(myen.FlowNo, myen.Name, path, system);
+                            break;
+                        case "Func": //功能.
+                            break;
+                        default:
+                            break;
+                    }
+                    //    en.OrgNo = Web.WebUser.OrgNo;
+                    myen.No = DBAccess.GenerGUID();
+                    myen.DirectInsert();
                 }
-                //    en.OrgNo = Web.WebUser.OrgNo;
-                myen.No = DBAccess.GenerGUID();
-                myen.DirectInsert();
             }
 
             //导入实体集合.

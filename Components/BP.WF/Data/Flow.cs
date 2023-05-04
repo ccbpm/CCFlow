@@ -1,4 +1,5 @@
 ﻿using BP.En;
+using BP.Sys;
 
 namespace BP.WF.Data
 {
@@ -157,6 +158,13 @@ namespace BP.WF.Data
         /// </summary>
         public FlowSimples() { }
         #endregion
+        public override int RetrieveAll()
+        {
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAll();
+
+            return base.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
+        }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

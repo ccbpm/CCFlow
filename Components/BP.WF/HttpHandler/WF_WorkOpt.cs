@@ -64,7 +64,11 @@ namespace BP.WF.HttpHandler
             AutoRunStratFlows en = new AutoRunStratFlows();
             string msg = en.Do() as string;
 
-            return "执行完成。 <br>" + msg + "<br>" + msg1;
+
+            ccbpmServices dts3 = new ccbpmServices();
+            string msg3 = dts3.Do() as string;
+
+            return "执行完成。 <br>" + msg + "<br>" + msg1 + " <br>" + msg3;
         }
 
         /// <summary>
@@ -1322,7 +1326,34 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
+        /// <summary>
+        /// 获取本组织之外的联络人员
+        /// </summary>
+        /// <returns></returns>
+        public string AccepterOfOfficer_Init()
+        {
+            Paras paras = new Paras();
+            paras.SQL = "SELECT A.No,A.Name,FK_Dept, B.NameOfPath As DeptName,A.OrgNo From Port_Emp A,Port_Dept B WHERE A.FK_Dept = B.No AND IsOfficer=1 AND A.OrgNo!=" + SystemConfig.AppCenterDBVarStr + "OrgNo";
+            paras.Add("OrgNo", WebUser.OrgNo);
+            DataTable dt = DBAccess.RunSQLReturnTable(paras);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string deptNo = dr[2] as string;
+                string deptName = dr[3] as string;
+                if (deptName.Contains("/") == false)
+                {
+                    string name = BP.WF.Dev2Interface.GetParentNameByCurrNo(deptNo, "Port_Dept", dr[4] as string);
+                    if (deptName.Equals(name) == false)
+                    {
+                        DBAccess.RunSQL("UPDATE Port_Dept SET NameOfPath='" + name + "' WHERE No='" + deptNo + "'");
+                        dr[3] = name;
+                    }
 
+                }
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
         #region 会签.
         /// <summary>
         /// 会签
@@ -1413,8 +1444,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_Delete()
         {
-             BP.WF.Dev2Interface.Node_HuiQian_Delete(this.WorkID, this.GetRequestVal("FK_Emp"));
-             return HuiQian_Init();
+            BP.WF.Dev2Interface.Node_HuiQian_Delete(this.WorkID, this.GetRequestVal("FK_Emp"));
+            return HuiQian_Init();
         }
         /// <summary>
         /// 增加审核人员
@@ -3422,38 +3453,34 @@ namespace BP.WF.HttpHandler
                 dtDept.Columns[2].ColumnName = "ParentNo";
             }
 
-            if (SystemConfig.CustomerNo == "TianYe")
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                string specFlowNos = SystemConfig.AppSettings["SpecFlowNosForAccpter"];
-                if (DataType.IsNullOrEmpty(specFlowNos) == true)
-                    specFlowNos = ",,";
-
-                string specEmpNos = "";
-                if (specFlowNos.Contains("," + this.FK_Node.ToString() + ",") == false)
-                    specEmpNos = " AND No!='00000001' ";
-
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' " + specEmpNos + "  ORDER BY Idx ";
+                sql = "SELECT distinct CONCAT('Emp_',A.UserID ) AS No, A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT distinct 'Emp_'+A.UserID AS No, A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
+                sql += " ORDER BY A.Idx ";
 
             }
             else
             {
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                // 原来的SQL sql = "SELECT distinct CONCAT('Emp_', A.No) AS No,A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
+                
+                sql = "SELECT CONCAT('Emp_',No) AS No, Name, FK_Dept,Idx FROM Port_Emp WHERE FK_Dept='" + fk_dept + "'";
+                sql += " UNION ";
+                sql += "SELECT CONCAT('Emp_',A.No) AS No,A.Name, A.FK_Dept,A.Idx FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='" + fk_dept + "'";
+
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                 {
-                    sql = "SELECT distinct CONCAT('Emp_',A.UserID ) AS No, A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT distinct 'Emp_'+A.UserID AS No, A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
-
+                    sql = "SELECT  'Emp_'+ No AS No, Name, FK_Dept,Idx FROM Port_Emp WHERE FK_Dept='" + fk_dept + "'";
+                    sql += " UNION ";
+                    sql += "SELECT  'Emp_'+ A.No AS No,A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A ,Port_DeptEmp B  WHERE A.No=B.FK_Emp AND B.FK_Dept='" + fk_dept + "' ";
                 }
-                else
-                {
-                    sql = "SELECT distinct CONCAT('Emp_', A.No) AS No,A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
-                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT distinct 'Emp_'+ A.No AS No,A.Name, '" + fk_dept + "' as FK_Dept, a.Idx FROM Port_Emp A LEFT JOIN Port_DeptEmp B  ON A.No=B.FK_Emp WHERE A.FK_Dept='" + fk_dept + "' OR B.FK_Dept='" + fk_dept + "' ";
-
-                }
-
-                sql += " ORDER BY A.Idx ";
+                sql = "SELECT Distinct * FROM (" + sql + ")A Order By Idx";
             }
+           
+
+
 
             DataTable dtEmps = DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
@@ -3650,7 +3677,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
             DataTable dt = new DataTable();
             dt.Columns.Add("No", typeof(string));
-            dt.Columns.Add("Name", typeof(string)); //@hongyan.
+            dt.Columns.Add("Name", typeof(string));
             dt.TableName = "Selected";
             if (select.IsAutoLoadEmps == true)
             {
@@ -3705,7 +3732,7 @@ namespace BP.WF.HttpHandler
 
                         DataRow dr = dt.NewRow();
                         dr[0] = emp[0];
-                        dr[1] = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Emp WHERE No='" + emp[0] + "'"); //@hongyan.
+                        dr[1] = DBAccess.RunSQLReturnString("SELECT Name FROM Port_Emp WHERE No='" + emp[0] + "'");
                         dt.Rows.Add(dr);
                     }
                 }
@@ -5133,22 +5160,15 @@ namespace BP.WF.HttpHandler
             //组合要发送到的人员编号：把部门人员，三者相加进来.
             emps = workOpt.CCEmps;
             emps += BP.Port.Glo.GenerEmpNosByDeptNos(workOpt.CCDepts);
-            emps += BP.Port.Glo.GenerEmpNosByStationNos(workOpt.CCStas);
+            emps += BP.Port.Glo.GenerEmpNosByStationNos(workOpt.CCStations);
             string ccMsg = BP.WF.Dev2Interface.Node_CCToEmps(workOpt.NodeID, workOpt.WorkID, emps, "来自" + BP.Web.WebUser.Name + "的抄送", workOpt.CCNote);
             #endregion 执行抄送.
 
             return sendStr + ccMsg;
         }
 
-        private void SaveCC(WorkOpt workOpt)
-        {
-            //执行抄送
-            BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, "", workOpt.GetValStringByKey(WorkOptAttr.CCNote)
-                , workOpt.GetValStringByKey(WorkOptAttr.CCEmps), workOpt.GetValStringByKey(WorkOptAttr.CCDepts), workOpt.GetValStringByKey(WorkOptAttr.CCStas));
 
-            //该节点上设置为未启动.
-            DBAccess.RunSQL("UPDATE WF_CCList SET Sta=-1 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node);
-        }
+
         private void SaveWorkCheck(WorkOpt workOpt)
         {
             //暂时未处理

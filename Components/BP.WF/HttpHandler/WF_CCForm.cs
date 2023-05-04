@@ -276,8 +276,6 @@ namespace BP.WF.HttpHandler
                                 string fk_dtl = ss[0];
                                 if (ss[1] == "" || ss[1] == null)
                                     continue;
-                                //string dtlKey = System.Web.HttpContext.Current.Session["DtlKey"] as string;
-                                //string dtlKey = HttpContextHelper.SessionGet("DtlKey") as string;
                                 string dtlKey = this.GetRequestVal("DtlKey");
                                 if (dtlKey == null)
                                     dtlKey = key;
@@ -335,7 +333,6 @@ namespace BP.WF.HttpHandler
                             /* 获取要个性化填充的下拉框. */
                             DataTable dt1 = new DataTable("Head");
                             dt1.Columns.Add("DDL", typeof(string));
-                            //    dt1.Columns.Add("SQL", typeof(string));
                             if (DataType.IsNullOrEmpty(me.Tag) == false)
                             {
                                 string[] strs = me.Tag.Split('$');
@@ -347,7 +344,6 @@ namespace BP.WF.HttpHandler
                                     string[] ss = str.Split(':');
                                     DataRow dr = dt1.NewRow();
                                     dr[0] = ss[0];
-                                    // dr[1] = ss[1];
                                     dt1.Rows.Add(dr);
                                 }
                                 return JSONTODT(dt1);
@@ -1296,10 +1292,12 @@ namespace BP.WF.HttpHandler
                 CCBill.DBList dblist = new CCBill.DBList(this.EnsName);
                 MapData md = new MapData(this.EnsName);
                 DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(dblist.No);
-
+               
                 #region 把主表数据放入.
                 string atParas = "";
                 GEEntity en = new GEEntity(this.EnsName);
+                
+                
 
                 string pk = this.GetRequestVal("OID");
                 if (DataType.IsNullOrEmpty(pk) == true)
@@ -1401,6 +1399,12 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
+                // 执行表单事件. FrmLoadBefore .
+                en.SetPara("FrmType", "DBList");
+                string msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, en);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@错误:" + msg;
+
                 //增加主表数据.
                 DataTable mainTable = en.ToDataTableField(md.No);
                 mainTable.TableName = "MainTable";
@@ -1467,7 +1471,7 @@ namespace BP.WF.HttpHandler
                 ddlTable.TableName = "UIBindKey";
                 ds.Tables.Add(ddlTable);
                 #endregion End把外键表加入DataSet
-
+               
                 return BP.Tools.Json.DataSetToJson(ds, false);
             }
             catch (Exception ex)
@@ -1690,6 +1694,8 @@ namespace BP.WF.HttpHandler
                 MapExts mes = md.MapExts;
 
                 MapExt me = mes.GetEntityByKey("ExtType", MapExtXmlList.PageLoadFull) as MapExt;
+                if(me == null)
+                    me = mes.GetEntityByKey("ExtModel", MapExtXmlList.PageLoadFullMainTable) as MapExt;
                 if (isLoadData == true && md.IsPageLoadFull && me != null && GetRequestValInt("IsTest") != 1)
                 {
                     //执行通用的装载方法.
@@ -2099,7 +2105,10 @@ namespace BP.WF.HttpHandler
                 DataTable mainTable = en.ToDataTableField("MainTable");
                 ds.Tables.Add(mainTable);
                 #endregion 加入主表的数据.
-
+                // 执行表单事件. FrmLoadAfter .
+                msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadAfter, en);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@错误:" + msg;
                 string json = BP.Tools.Json.DataSetToJson(ds, false);
 
                 //DataType.WriteFile("c:/aaa.txt", json);
@@ -2470,6 +2479,8 @@ namespace BP.WF.HttpHandler
         public string Dtl_Save()
         {
             MapDtl mdtl = new MapDtl(this.EnsName);
+            string dtlRefPKVal = this.RefPKVal;
+            string fk_mapDtl = this.FK_MapDtl;
             FrmEvents fes = new FrmEvents(this.EnsName); //获得事件.
             GEEntity mainEn = null;
             //获取集合
@@ -2486,11 +2497,40 @@ namespace BP.WF.HttpHandler
                     throw new Exception(msg);
             }
             #endregion 从表保存前处理事件.
+
+            #region 处理权限方案。
+            if (this.FK_Node != 0 && this.FK_Node != 999999 && mdtl.No.Contains("ND") == false)
+            {
+                Node nd = new Node(this.FK_Node);
+                if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    FrmNode fn = new FrmNode(nd.NodeID, this.FK_MapData);
+                    if (fn.FrmSln == FrmSln.Self)
+                    {
+                        string no = fk_mapDtl + "_" + nd.NodeID;
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = no;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            mdtl = mdtlSln;
+                            fk_mapDtl = no;
+                        }
+                    }
+                }
+
+                dtlRefPKVal = BP.WF.Dev2Interface.GetDtlRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, mdtl);
+                if (dtlRefPKVal.Equals("0") == true)
+                    dtlRefPKVal = this.RefPKVal;
+            }
+            #endregion 处理权限方案。
+
             #region 保存的业务逻辑.
             GEDtls dtls = new GEDtls(this.EnsName);
             GEDtl dtl = dtls.GetNewEntity as GEDtl;
             Attrs attrs  = dtl.EnMap.Attrs;
             JArray json = JArray.Parse(str);
+            int idx = 0;
             foreach(JObject item in json)
             {
                 JToken result = item.GetValue("OID");
@@ -2523,29 +2563,40 @@ namespace BP.WF.HttpHandler
                 }
                 dtl.SetValByKey("OID", oid);
                 //关联主赋值.
-                dtl.RefPK = this.RefPKVal;
-                switch (mdtl.DtlOpenType)
-                {
-                    case DtlOpenType.ForEmp:  // 按人员来控制.
-                        dtl.RefPK = this.RefPKVal;
-                        break;
-                    case DtlOpenType.ForWorkID: // 按工作ID来控制
-                        dtl.RefPK = this.RefPKVal;
-                        dtl.FID = this.FID;
-                        break;
-                    case DtlOpenType.ForFID: // 按流程ID来控制.
-                        dtl.RefPK = this.RefPKVal;
-                        dtl.FID = this.FID;
-                        break;
-                }
+                dtl.RefPK = dtlRefPKVal;
+                if (this.FID == 0)
+                    dtl.FID = Int64.Parse(dtl.RefPK);
+                else
+                    dtl.FID = this.FID;
+
+                //如果是新建，并且里面是ForFID的模式.
+                if (mdtl.DtlOpenType == DtlOpenType.ForFID)
+                    dtl.FID = Int64.Parse(dtlRefPKVal);
                 dtl.Rec = WebUser.No;
+                dtl.SetValByKey("Idx", idx);
                 if (oid == 0)
                 {
                     dtl.Insert();
+                    //处理从表行数据插入成功后，更新FrmEleDB中数据
+                    string dbstr = SystemConfig.AppCenterDBVarStr;
+                    Paras paras = new Paras();
+                   /* if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                        paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=EleID||'_'||" + dtl.OID.ToString() + "||'_'||Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+                        paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=CONCAT(EleID,'_'," + dtl.OID.ToString() + ",'_',Tag1)  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    else
+                        paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK= EleID+'_'+'" + dtl.OID.ToString() + "'+'_'+Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";*/
+                    paras.Add("RefPKVal", dtl.OID.ToString());
+                    paras.Add("OldRefPKVal", this.RefPKVal + "_" + idx);
+                    DBAccess.RunSQL(paras);
+                    //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
+                    paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    DBAccess.RunSQL(paras);
+                    idx++;
                     continue;
                 }
-                dtl.Update();  
-
+                dtl.Update();
+                idx++;
             }
             if (fes.Count > 0)
             {
@@ -2554,8 +2605,111 @@ namespace BP.WF.HttpHandler
                     throw new Exception(msg);
             }
             #endregion 保存的业务逻辑.
+            DataTable dt = CCFormAPI.GetDtlInfo(mdtl, mainEn, RefPKVal);
 
-            return "保存成功";
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 从表移动
+        /// </summary>
+        /// <returns></returns>
+        public string DtlList_Move()
+        {
+            int newIdx= this.GetRequestValInt("newIdx");
+            int oldIdx = this.GetRequestValInt("oldIdx");
+            Int64 newOID = this.GetRequestValInt("newOID");
+            Int64 oldOID = this.GetRequestValInt("oldOID");
+            //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
+            Paras paras = new Paras();
+            paras.Add("FK_MapData", this.FK_MapData);
+
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData";
+            string eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData";
+
+            if (newOID == 0 && oldOID == 0)
+            {
+                //先改变oldID的附件信息
+                /*paras.Add("RefPKVal", this.RefPKVal + "_" + oldIdx + "_"+ oldIdx);
+                paras.Add("OldRefPKVal", this.RefPKVal + "_" + oldIdx);
+                paras.SQL = athSQL;
+                DBAccess.RunSQL(paras);
+                paras.SQL = eleSQL;
+                DBAccess.RunSQL(paras);*/
+
+                paras.Add("RefPKVal", this.RefPKVal + "_" + newIdx+"_"+newIdx);
+                paras.Add("OldRefPKVal", this.RefPKVal + "_" + oldIdx);
+                paras.SQL = athSQL;
+                DBAccess.RunSQL(paras);
+                paras.SQL = eleSQL;
+                DBAccess.RunSQL(paras);
+                paras.Add("RefPKVal", this.RefPKVal + "_" + oldIdx+"_"+oldIdx);
+                paras.Add("OldRefPKVal", this.RefPKVal + "_" + newIdx);
+                paras.SQL = athSQL;
+                DBAccess.RunSQL(paras);
+                paras.SQL = eleSQL;
+                DBAccess.RunSQL(paras);
+                return "从表拖拽完成";
+            }
+            if(newOID == 0)
+            {
+                paras.Add("RefPKVal", this.RefPKVal + "_" + newIdx+"_"+newIdx);
+                paras.Add("OldRefPKVal", this.RefPKVal + "_" + oldIdx);
+                paras.SQL = athSQL;
+                DBAccess.RunSQL(paras);
+                paras.SQL = eleSQL;
+                DBAccess.RunSQL(paras);
+
+            }
+            if (oldOID == 0)
+            {
+                paras.Add("RefPKVal", this.RefPKVal + "_" + oldIdx+"_"+oldIdx);
+                paras.Add("OldRefPKVal", this.RefPKVal + "_" + newIdx);
+            }
+            paras.SQL = athSQL;
+            DBAccess.RunSQL(paras);
+            paras.SQL = eleSQL;
+            DBAccess.RunSQL(paras);
+            return "从表拖拽完成";
+        }
+        
+        public string DtlList_MoveAfter()
+        {
+            Paras paras = new Paras();
+            paras.Add("FK_MapData", this.FK_MapData);
+            int newIdx = this.GetRequestValInt("newIdx");
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            string athSQL = "";
+            string eleSQL = "";
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,0,CHARINDEX('_', RefPKVal, CHARINDEX('_', RefPKVal) + 1))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal+'[_]%[_]%' AND FK_MapData=" + dbstr + "FK_MapData";
+                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTRING(RefPKVal,0,CHARINDEX('_', RefPKVal, CHARINDEX('_', RefPKVal) + 1))  WHERE RefPKVal LIKE "+dbstr+ "RefPKVal+'[_]%[_]%' AND FK_MapData=" + dbstr + "FK_MapData";
+                    break;
+                case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
+                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,0,INSERT(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
+                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTRING(RefPKVal,0,INSERT(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
+                    break;
+                case DBType.MySQL:
+                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,1,LOCATE('_', RefPKVal, LOCATE('_', RefPKVal)+1)-1)  WHERE RefPKVal LIKE CONCAT(" + dbstr + "RefPKVal,'\\\\_%\\\\_%') AND FK_MapData=" + dbstr + "FK_MapData";
+                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTRING(RefPKVal,1,LOCATE('_', RefPKVal, LOCATE('_', RefPKVal)+1)-1)  WHERE RefPKVal LIKE CONCAT(" + dbstr + "RefPKVal,'\\\\_%\\\\_%') AND FK_MapData=" + dbstr + "FK_MapData";
+                    break;
+                case DBType.PostgreSQL:
+                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,1,CHAR_LENGTH(RefPKVal)-POSITION('_' in REVERSE(RefPKVal)))  WHERE RefPKVal LIKE CONCAT(" + dbstr + "RefPKVal,'!_%!_%')  ESCAPE '!' AND FK_MapData=" + dbstr + "FK_MapData";
+                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTRING(RefPKVal,1,CHAR_LENGTH(RefPKVal)-POSITION('_' in REVERSE(RefPKVal)))  WHERE RefPKVal LIKE CONCAT(" + dbstr + "RefPKVal,'!_%!_%')  ESCAPE '!' AND FK_MapData=" + dbstr + "FK_MapData";
+                    break;
+                default:
+                    return "err@" + SystemConfig.AppCenterDBType + "还未解析";
+            }
+            paras.Add("RefPKVal", this.RefPKVal);
+            paras.SQL = athSQL;
+            DBAccess.RunSQL(paras);
+            paras.SQL = eleSQL;
+            DBAccess.RunSQL(paras);
+            return "";
         }
         /// <summary>
         /// 导出excel与附件信息,并且压缩一个压缩包.
@@ -2695,16 +2849,17 @@ namespace BP.WF.HttpHandler
                 string dbstr = SystemConfig.AppCenterDBVarStr;
                 Paras paras = new Paras();
                 if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
-                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=EleID||'_'||"+ dtl.OID.ToString()+ "||'_'||Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=EleID||'_'||"+ dtl.OID.ToString()+ "||'_'||Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData";
                 else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
-                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=CONCAT(EleID,'_'," + dtl.OID.ToString() + ",'_',Tag1)  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK=CONCAT(EleID,'_'," + dtl.OID.ToString() + ",'_',Tag1)  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData"; 
                 else
-                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK= EleID+'_'+'" + dtl.OID.ToString() + "'+'_'+Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                    paras.SQL = "UPDATE Sys_FrmEleDB SET RefPKVal=" + dbstr + "RefPKVal,MyPK= EleID+'_'+'" + dtl.OID.ToString() + "'+'_'+Tag1  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData"; 
                 paras.Add("RefPKVal", dtl.OID.ToString());
                 paras.Add("OldRefPKVal", refval);
+                paras.Add("FK_MapData", fk_mapDtl);
                 DBAccess.RunSQL(paras);
                 //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
-                paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+                paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData=" + dbstr + "FK_MapData";
                 DBAccess.RunSQL(paras);
             }
             else
@@ -2756,7 +2911,8 @@ namespace BP.WF.HttpHandler
             paras.Add("OldRefPKVal", refval);
             DBAccess.RunSQL(paras);
             //处理从表行数据插入成功后，更新FrmAttachmentDB中数据
-            paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal";
+            paras.SQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=" + dbstr + "RefPKVal  WHERE RefPKVal=" + dbstr + "OldRefPKVal AND FK_MapData="+dbstr+"FK_MapData";
+            paras.Add("FK_MapData", this.FK_MapData);
             DBAccess.RunSQL(paras);
             return "执行成功";
         }
@@ -2838,7 +2994,7 @@ namespace BP.WF.HttpHandler
             }
             //如果可以上传附件这删除相应的附件信息
             FrmAttachmentDBs dbs = new FrmAttachmentDBs();
-            dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID, FrmAttachmentDBAttr.NodeID, this.FK_Node);
+            dbs.Delete(FrmAttachmentDBAttr.FK_MapData, this.FK_MapDtl, FrmAttachmentDBAttr.RefPKVal, this.RefOID);
             return "删除成功";
         }
         /// <summary>
@@ -3885,7 +4041,7 @@ namespace BP.WF.HttpHandler
             }
 
             //求主键. 如果该表单挂接到流程上.
-            if (this.FK_Node != 0 && athDesc.NoOfObj.Contains("AthMDtl") == false)
+            if (this.FK_Node != 0 && !(athDesc.NoOfObj.Contains("AthMDtl") == true || athDesc.GetParaBoolen("IsDtlAth")== true))
             {
                 //判断表单方案。
                 FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
@@ -4502,7 +4658,7 @@ namespace BP.WF.HttpHandler
                 dtlEn.SetValByKey("Rec", this.GetRequestVal("UserNo"));
                 //dtlEn.OID = (int)DBAccess.GenerOID(ensName);
 
-                dtlEn.InsertAsOID((int)DBAccess.GenerOID(ensName));
+                dtlEn.Insert();
                 return dtlEn.OID.ToString();
             }
 

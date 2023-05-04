@@ -270,22 +270,18 @@ namespace BP.WF.HttpHandler
 
 
                         /*撤销发送*/
-                        GenerWorkerLists workerlists = new GenerWorkerLists();
-                        QueryObject info = new QueryObject(workerlists);
-                        info.AddWhere(GenerWorkerListAttr.FK_Emp, WebUser.No);
-                        info.addAnd();
-                        info.AddWhere(GenerWorkerListAttr.IsPass, 1);
-                        info.addAnd();
-                        info.AddWhere(GenerWorkerListAttr.IsEnable, 1);
-                        info.addAnd();
-                        info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
+                        sql = "SELECT WorkID,FK_Emp,FK_Node,WhoExeIt From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND ((IsPass=0 AND WhoExeIt=1) OR IsPass=1) AND IsEnable=1 AND WorkID=" + this.WorkID;
+                        DataTable dtt = DBAccess.RunSQLReturnTable(sql);
 
-                        if (info.DoQuery() > 0 || powers.Contains("FlowDataUnSend") == true)
+                        if (dtt.Rows.Count > 0 || powers.Contains("FlowDataUnSend") == true)
                         {
                             dr = dt.NewRow();
                             dr["No"] = "UnSend";
                             dr["Name"] = "撤销";
-                            dr["Oper"] = "UnSend()";
+                            if(dtt.Rows.Count > 0 && dtt.Rows[0][3].ToString().Equals("1"))
+                                dr["Oper"] = "UnSend(1)";
+                            else
+                                dr["Oper"] = "UnSend()";
                             dt.Rows.Add(dr);
                         }
 
@@ -565,6 +561,25 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyView_UnSend()
         {
+            bool isUnDelayedSend = this.GetRequestValBoolen("IsUnDelayedSend");
+            //是否撤销延期发送
+            if(isUnDelayedSend == true)
+            {
+                GenerWorkerList gwl = new GenerWorkerList();
+                int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
+                if (i != 0)
+                {
+                    gwl.WhoExeIt = 0;
+                    gwl.SetPara("Day",0);
+                    gwl.SetPara("hour", 0);
+                    gwl.SetPara("Minute", 0);
+                    gwl.SetPara("DelayedData", "");
+                    gwl.SetPara("ToNodeID", 0);
+                    gwl.SetPara("ToEmps", "");
+                    gwl.Update();
+                }
+                return "撤销成功";
+            }
             //获取用户当前所在的节点
             String currNode = "";
             switch (DBAccess.AppCenterDBType)
@@ -737,19 +752,19 @@ namespace BP.WF.HttpHandler
             bool isCanDoCurrWorker = false;
 
             string toDoEmps = ";" + gwf.TodoEmps;
-
+            bool isReadonly = this.GetRequestValBoolen("IsReadonly");
             //当前的流程还是运行中的，并且可以执行当前工作,如果是，就直接转到工作处理器.
             if (gwf.FID != 0)
             {
                 Node nd = new Node(gwf.FK_Node);
-                if (nd.IsSubThread ==true && toDoEmps.Contains(";" + WebUser.No + ","))
+                if (nd.IsSubThread ==true && toDoEmps.Contains(";" + WebUser.No + ",") && isReadonly==false)
                 {
                     WF_MyFlow handler = new WF_MyFlow();
                     return handler.MyFlow_Init();
                 }
             }
 
-            if (gwf.FID == 0 && gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ","))
+            if (gwf.FID == 0 && gwf.WFState != WFState.Complete && toDoEmps.Contains(";" + WebUser.No + ",") && isReadonly == false)
             {
                 WF_MyFlow handler = new WF_MyFlow();
                 return handler.MyFlow_Init();
@@ -960,7 +975,7 @@ namespace BP.WF.HttpHandler
                 urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
             }
 
-            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
             url = url.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
             if (urlExt.Contains("&NodeID") == false)

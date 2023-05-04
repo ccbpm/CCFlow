@@ -61,8 +61,10 @@ namespace BP.WF.HttpHandler
             string SortNo = GetRequestVal("SortNo");
             string FlowName = GetRequestVal("FlowName");
             string url = GetRequestVal("Url");
-
             string frmURL = GetRequestVal("FrmUrl");
+            string frmID = GetRequestVal("FrmID");
+            if (DataType.IsNullOrEmpty(frmURL) == true)
+                frmURL = frmID;
             //执行创建流程模版.
             string flowNo = BP.WF.Template.TemplateGlo.NewFlowTemplate(SortNo, FlowName, DataStoreModel.ByCCFlow, null, null);
             Flow fl = new Flow(flowNo);
@@ -72,6 +74,8 @@ namespace BP.WF.HttpHandler
 
             fl.FrmUrl = frmURL;
             fl.Update();
+            //发起测试人为当前登录人No
+            DBAccess.RunSQL("UPDATE WF_Flow SET Tester = '" + BP.Web.WebUser.No + "' WHERE No='" + flowNo + "'");
 
             //设置极简类型的表单信息.
             if (this.FlowDevModel == FlowDevModel.JiJian)
@@ -173,24 +177,32 @@ namespace BP.WF.HttpHandler
                     nd.HisFormType = NodeFormType.SheetTree;
                     nd.DirectUpdate();
                     FrmNode fn = new FrmNode();
-                    fn.FK_Frm = fl.FrmUrl;
-                    if (nd.IsStartNode == true)
-                    {
-                        fn.IsEnableFWC = FrmWorkCheckSta.Disable;
-                        fn.FrmSln = FrmSln.Default;
-                    }
-                    else
-                    {
-                        fn.IsEnableFWC = FrmWorkCheckSta.Enable;
-                        fn.FrmSln = FrmSln.Readonly;
-                    }
+                    string[] frmIDs = fl.FrmUrl.Split(',');
 
-                    fn.FK_Node = nd.NodeID;
-                    fn.FK_Flow = flowNo;
-                    fn.FrmSln = FrmSln.Readonly;
-                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
-                    //执行保存.
-                    fn.Save();
+                    foreach (string str in frmIDs)
+                    {
+                        if (DataType.IsNullOrEmpty(str) == true)
+                            continue;
+
+                        fn.FK_Frm = str;
+                        fn.FrmNameShow =DBAccess.RunSQLReturnString("SELECT Name FROM Sys_MapData WHERE No='"+str+"'");
+                        if (nd.IsStartNode == true)
+                        {
+                            fn.IsEnableFWC = FrmWorkCheckSta.Disable;
+                            fn.FrmSln = FrmSln.Default;
+                        }
+                        else
+                        {
+                            fn.IsEnableFWC = FrmWorkCheckSta.Enable;
+                            fn.FrmSln = FrmSln.Readonly;
+                        }
+
+                        fn.FK_Node = nd.NodeID;
+                        fn.FK_Flow = flowNo;
+                        fn.FrmSln = FrmSln.Readonly;
+                        fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
+                        fn.Save(); //执行保存.
+                    }
                 }
             }
             if (this.FlowDevModel == FlowDevModel.SDKFrm)

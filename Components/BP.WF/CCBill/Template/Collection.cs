@@ -244,10 +244,8 @@ namespace BP.CCBill.Template
                 map.AddTBString(CollectionAttr.MethodModel, null, "方法模式", true, true, 0, 300, 10);
                 map.AddTBString(CollectionAttr.Tag1, null, "Tag1", true, true, 0, 300, 10);
                 map.AddTBString(CollectionAttr.Mark, null, "Mark", true, true, 0, 300, 10);
-
                 map.AddTBString(CollectionAttr.FrmID, null, "表单ID", true, true, 0, 300, 10);
                 map.AddTBString(CollectionAttr.FlowNo, null, "流程编号", true, true, 0, 10, 10);
-
                 map.AddTBString(CollectionAttr.Icon, null, "图标", true, false, 0, 50, 10, true);
 
                 //临时存储.
@@ -292,6 +290,7 @@ namespace BP.CCBill.Template
             this.DoOrderDown(CollectionAttr.FrmID, this.FrmID, CollectionAttr.Idx);
         }
         #endregion 移动.
+
         protected override bool beforeInsert()
         {
             if (DataType.IsNullOrEmpty(this.No) == true)

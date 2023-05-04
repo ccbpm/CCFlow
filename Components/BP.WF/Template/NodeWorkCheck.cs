@@ -804,23 +804,23 @@ namespace BP.WF.Template
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
             fl.Update();
-
-            if(this.FWCLab.Equals("审核组件") == false)
+            GroupField gf = new GroupField();
+            if (this.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
-                GroupFields groupFields = new GroupFields();
-                groupFields.Retrieve(GroupFieldAttr.FrmID, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
-                if (groupFields.Count == 1)
+                gf.Delete(GroupFieldAttr.FrmID, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
+            }
+            else
+            {
+                if (gf.IsExit(GroupFieldAttr.FrmID, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC) == false)
                 {
-                    GroupField gf = groupFields[0] as GroupField;
-                    if (gf.Lab.Equals(this.FWCLab) == false)
-                    {
-                        gf.Lab = this.FWCLab;
-                        gf.Update();
-                    }
-
+                    gf = new GroupField();
+                    gf.FrmID = "ND" + this.NodeID;
+                    gf.CtrlType = GroupCtrlType.FWC;
+                    gf.Lab = "审核组件";
+                    gf.Idx = 0;
+                    gf.Insert(); //插入.
                 }
             }
-
             base.afterInsertUpdateAction();
         }
     }

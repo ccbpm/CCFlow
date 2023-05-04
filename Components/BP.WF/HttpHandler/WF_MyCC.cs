@@ -351,7 +351,7 @@ namespace BP.WF.HttpHandler
                 #endregion 开始组合url.
 
 
-                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
                 toUrl = toUrl.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
                 //增加fk_node
@@ -520,7 +520,7 @@ namespace BP.WF.HttpHandler
                 urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
             }
 
-            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海驰骋提出. 
             url = url.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
 
             if (urlExt.Contains("&NodeID") == false)
@@ -577,24 +577,24 @@ namespace BP.WF.HttpHandler
                 bool isCheckOver = list.IsExit(CCListAttr.WorkID, this.WorkID,
                    CCListAttr.CCTo, WebUser.No,CCListAttr.Sta,(int)CCSta.CheckOver);
                 DataRow dr = dt.NewRow();
-                if (isMobile == false)
-                {
-                    if (isCheckOver == true)
-                    {
-                        dr["No"] = "Close";
-                        dr["Name"] = "关闭";
-                        dr["Oper"] = "CloseWindow();";
-                    }
-                    else
-                    {
-                        dr["No"] = "ReadAndClose";
-                        dr["Name"] = "阅件完毕";
-                        dr["Oper"] = "ReadAndClose();";
-                    }
+                //if (isMobile == false)
+                //{
+                //    if (isCheckOver == true)
+                //    {
+                //        dr["No"] = "Close";
+                //        dr["Name"] = "关闭";
+                //        dr["Oper"] = "CloseWindow();";
+                //    }
+                //    else
+                //    {
+                //        dr["No"] = "ReadAndClose";
+                //        dr["Name"] = "阅件完毕";
+                //        dr["Oper"] = "ReadAndClose();";
+                //    }
 
-                    dt.Rows.Add(dr);
+                //    dt.Rows.Add(dr);
 
-                }
+                //}
 
                 if (btnLab.GetValBooleanByKey(BtnAttr.ShowParentFormEnableMyCC) && this.PWorkID != 0)
                 {

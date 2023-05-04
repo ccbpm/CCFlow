@@ -661,7 +661,7 @@ namespace BP.WF.HttpHandler
 
             string paras= string.Format("FK_Node={0}&WorkID={1}&FK_Flow={2}&FID={3}&FromWorkOpt=1&CCSta=" + this.GetRequestValInt("CCSta"),  nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
             string url = "";
-            if (flow.IsFrmEnable == true)
+            /*if (flow.IsFrmEnable == true)
             {
                 
                 Node nd = new Node(nodeID);
@@ -679,7 +679,7 @@ namespace BP.WF.HttpHandler
                 dr["Url"] = url;
                 dr["IsDefault"] = 0;
                 dt.Rows.Add(dr);
-            }
+            }*/
 
             if (flow.IsTruckEnable == true)
             {
@@ -711,16 +711,7 @@ namespace BP.WF.HttpHandler
                 dt.Rows.Add(dr);
             }
 
-            if (flow.IsOPEnable == true)
-            {
-                dr = dt.NewRow();
-                dr["No"] = "Oper";
-                dr["Name"] = "操作";
-                dr["Url"] = "OP.htm?" + paras;
-                dr["IsDefault"] = 0;
-                dt.Rows.Add(dr);
-
-            }
+            
 
             return BP.Tools.Json.ToJson(dt);
         }

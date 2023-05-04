@@ -39,6 +39,8 @@ namespace BP.WF.DTS
                 return true;
             }
         }
+
+
         /// <summary>
         /// 执行
         /// </summary>
@@ -72,15 +74,15 @@ namespace BP.WF.DTS
                         strs = fl.RunObj.Split('@');
 
                     if (fl.HisFlowRunWay == FlowRunWay.SpecEmpAdv)
-                        strs = fl.StartGuidePara2.Split('@');
+                        strs = fl.StartGuidePara2.Split('@'); //@11:15@12:15
 
                     bool isHave = false; //是否可以执行.
                     foreach (string s in strs)
                     {
                         if (string.IsNullOrEmpty(s))
                             continue;
-
-                        string str = s.Clone() as string;
+                        // 去除首尾空格
+                        string str = s.Trim().Clone() as string;
 
                         //如果有周.
                         if (str.Contains("Week.") == true)
@@ -107,6 +109,7 @@ namespace BP.WF.DTS
                             str = str.Replace("Week.5", "");
                             str = str.Replace("Week.6", "");
                             str = str.Replace("Week.7", "");
+                            str = str.Trim();
                         }
 
                         //是否每月的最后一天？
@@ -116,43 +119,49 @@ namespace BP.WF.DTS
                             int days = DateTime.DaysInMonth(dt.Year, dt.Month);
                             if (dt.Day != days)
                                 continue;
-                            str = str.Replace("LastDayOfMonth", "");
+                            str = str.Replace("LastDayOfMonth", "").Trim();
                         }
 
                         //如果自动发起流程过多，会延迟判断时间点，要补偿自动发起
-                        if (str.Contains(":") == false)
+                        if (!str.Contains(":"))
                             continue;
 
-                        if (str.Contains(":"))
-                        {
+                        // 逻辑修正， 不包含: 不执行，不用再判断:
+                        //是不是到时间了？
+                        //if (str.Contains(":"))
+                        //{
                             int i = str.Length;
                             string currTime01 = currTime.Substring(currTime.Length - i);
                             DateTime dt1 = Convert.ToDateTime(str);
                             DateTime dt2 = Convert.ToDateTime(currTime01);
-                            if (dt1 > dt2)
-                            {
-                                continue;
-                            }
-                        }
+                            if (DateTime.Compare(dt1, dt2) > 0) continue;
+                        //}
 
                         //记录执行过的时间点，如果有该时间点，就不要在执行了。
+                        // 这里的时间点是有问题的，之前是根据当前时刻计算，其实是不对的。
+                        // 应该根据设定的时间保存时刻。
                         string pkval = "";
                         //是按照一天的时间点计算的.
-                        if (str.Length <= 6)
-                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMMDD") + str;
-                        if (str.Contains("Week.") == true) //按周计算.
-                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMM") + dt.DayOfWeek + str;
-                        if (str.Contains("LastDayOfMonth.") == true)
-                            pkval = "AutoFlow_" + fl.No + "_" + dt.ToString("yyyyMM")  + str;
+                        if (s.Contains("LastDayOfMonth")) // 月度任务
+                            pkval = "AutoFlow_" + fl.No + "_" + dt1.ToString("yyyyMM") + str;
+                        else if (s.Contains("Week.")) //按周计算.
+                            pkval = "AutoFlow_" + fl.No + "_" + dt1.ToString("yyyyMMdd") + dt.DayOfWeek + str;
+                        else if (str.Length <= 6)
+                            pkval = "AutoFlow_" + fl.No + "_" + dt1.ToString("yyyyMMdd") + str;
+                        else
+                            BP.DA.Log.DebugWriteError("不合法的发起规则: " + s);
 
-                        BP.Sys.GloVar gv = new GloVar();
-                        gv.No = pkval;
+
+                        BP.Sys.GloVar gv = new GloVar
+                        {
+                            No = pkval
+                        };
                         if (gv.RetrieveFromDBSources() == 0)
                         {
-
                             gv.Name = fl.Name + "自动发起.";
                             gv.GroupKey = "AutoStartFlow";
                             gv.Insert();
+                            BP.DA.Log.DebugWriteInfo("任务发起：" + gv.Name + ", No: " + gv.No);
                             isHave = true; //可以执行.
                             break;
                         }
@@ -161,6 +170,8 @@ namespace BP.WF.DTS
                         continue;
                 }
                 #endregion 高级设置模式，是否达到启动的时间点？
+
+
 
                 // 以此用户进入.
                 switch (fl.HisFlowRunWay)
@@ -301,6 +312,7 @@ namespace BP.WF.DTS
                     strs += dr[0].ToString() + ";";
                 }
                 emps = strs.Split(';');
+                BP.DA.Log.DebugWriteInfo("strs:" + strs);
             }
             else
             {

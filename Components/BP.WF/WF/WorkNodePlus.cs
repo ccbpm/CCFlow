@@ -259,6 +259,7 @@ namespace BP.WF
                 //求出原来的值.
                 string[] strs = flow.StartLimitPara.Split(',');
                 string val = "";
+                int paraLength = 0;
                 foreach (string str in strs)
                 {
                     if (string.IsNullOrEmpty(str) == true)
@@ -266,6 +267,7 @@ namespace BP.WF
                     try
                     {
                         val += wk.GetValStringByKey(str);
+                        paraLength++;
                     }
                     catch (Exception ex)
                     {
@@ -279,8 +281,10 @@ namespace BP.WF
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string v = dr[0] + "" + dr[1] + "" + dr[2];
-                    if (v == val)
+                    string v = "";
+                    for(int i=0;i<paraLength;i++)
+                        v += dr[i];
+                    if (v.Equals(val))
                         return false;
                 }
                 return true;
@@ -319,7 +323,6 @@ namespace BP.WF
                 if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
                     return true;
 
-                //  string title = dt.Rows[0]["Title"].ToString();
                 string starter = dt.Rows[0]["Starter"].ToString();
                 string rdt = dt.Rows[0]["RDT"].ToString();
 
@@ -901,7 +904,6 @@ namespace BP.WF
                 else
                     mysql = "SELECT NDFrom,EmpFrom FROM " + ptable + " WHERE WorkID =" + wn.WorkID + " AND ActionType!= " + (int)ActionType.UnSend + " AND NDTo = " + wn.HisNode.NodeID + " AND(NDTo != NDFrom) AND NDFrom In(Select Node From WF_Direction Where ToNode=" + wn.HisNode.NodeID + " AND FK_Flow='" + wn.HisFlow.No + "') ORDER BY RDT DESC";
 
-                //DataTable mydt = DBAccess.RunSQLReturnTable("SELECT FK_Node,FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!=" + this.HisNode.NodeID + " ORDER BY RDT DESC ");
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
                     throw new Exception("系统错误，没有找到上一个节点.");

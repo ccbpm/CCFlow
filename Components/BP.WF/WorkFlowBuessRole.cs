@@ -714,7 +714,7 @@ namespace BP.WF
                     /*找开始节点的处理人员. */
                     strs = int.Parse(fl.No) + "01";
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ORDER BY CDT "; 
                     ps.Add("FK_Node", int.Parse(strs));
                     ps.Add("OID", workid);
                     dt = DBAccess.RunSQLReturnTable(ps);
@@ -1135,10 +1135,10 @@ namespace BP.WF
             }
             #endregion
 
-            #region 按角色计算(以部门集合为纬度).
+           /* #region 按角色计算(以部门集合为纬度).
             if (toNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {
-                /* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. */
+                *//* 考虑当前操作人员的部门, 如果本部门没有这个角色就不向上寻找. *//*
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
@@ -1159,7 +1159,7 @@ namespace BP.WF
                 else
                     throw new Exception("@节点访问规则(" + toNode.HisDeliveryWay.ToString() + ")错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 按角色计算(以部门集合为纬度)。技术信息,执行的SQL=" + ps.SQLNoPara);
             }
-            #endregion
+            #endregion*/
 
             string empNo = WebUser.No;
             string empDept = WebUser.FK_Dept;
@@ -1671,7 +1671,6 @@ namespace BP.WF
                 list.WorkID = workid;
                 list.FID = fid;
 
-                // if (this.HisNode.CCWriteTo == CCWriteTo.Todolist)
                 list.InEmpWorks = node.CCWriteTo == CCWriteTo.CCList ? false : true;    //added by liuxc,2015.7.6
 
                 //写入待办和写入待办与抄送列表,状态不同

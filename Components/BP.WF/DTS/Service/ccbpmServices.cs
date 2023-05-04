@@ -7,6 +7,7 @@ using BP.Port;
 using BP.Sys;
 using BP.WF.Template;
 using BP.Web;
+using BP.Difference;
 
 namespace BP.WF.DTS
 {
@@ -48,6 +49,10 @@ namespace BP.WF.DTS
 
             BP.WF.Dev2Interface.Port_Login("admin");
 
+            //自动发起流程.
+            AutoRunStratFlows fls = new AutoRunStratFlows();
+            fls.Do();
+
             //执行自动任务,机器执行的节点.
             AutoRun_WhoExeIt myen = new AutoRun_WhoExeIt();
             myen.Do();
@@ -56,10 +61,7 @@ namespace BP.WF.DTS
             //自动发起流程.
             AutoRunWF_Task wf_task = new AutoRunWF_Task();
             wf_task.Do();
-
-            //自动发起流程.
-            AutoRunStratFlows fls = new AutoRunStratFlows();
-            fls.Do();
+         
 
             //扫描消息表,想外发送消息.
             DoSendMsg();
@@ -417,7 +419,7 @@ namespace BP.WF.DTS
                             {
                                 Emp myemp = new Emp(doOutTime);
 
-                                bool boo = BP.WF.Dev2Interface.WriteToSMS(myemp.UserID, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
+                                bool boo = BP.WF.Dev2Interface.Port_WriteToSMS(myemp.UserID, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "系统发送逾期消息",
                                     "您的流程:'" + title + "'的完成时间应该为'" + compleateTime + "',流程已经逾期,请及时处理!", "系统消息", workid);
                                 if (boo)
                                     msg = "'" + title + "'逾期消息已经发送给:'" + myemp.Name + "'";
@@ -560,7 +562,15 @@ namespace BP.WF.DTS
             #region 发送邮件.
             if (string.IsNullOrEmpty(sms.Email))
             {
-                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(sms.SendToEmpNo);
+                BP.Port.Emp emp = null;// new BP.WF.Port.WFEmp(sms.SendToEmpNo);
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                {
+                    emp = new BP.Port.Emp(WebUser.OrgNo + "_" + sms.SendToEmpNo);
+                }
+                else
+                {
+                    emp = new BP.Port.Emp(sms.SendToEmpNo);
+                }
                 sms.Email = emp.Email;
             }
 

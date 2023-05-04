@@ -389,7 +389,7 @@ namespace BP.WF.HttpHandler
                     Entities ens = ClassFactory.GetEns(this.EnsName);
 
                     if (ens == null)
-                        return "err@类名错误" + this.EnsName; //@李国文.
+                        return "err@类名错误" + this.EnsName;  
 
                     en = ens.GetNewEntity;
                 }
@@ -436,7 +436,6 @@ namespace BP.WF.HttpHandler
 
                 //附件类型.
                 md.SetPara("BPEntityAthType", (int)map.HisBPEntityAthType);
-
 
                 //多附件上传
                 if ((int)map.HisBPEntityAthType == 2)
@@ -705,10 +704,50 @@ namespace BP.WF.HttpHandler
 
                     dtM.Rows.Add(dr); //增加到rows.
                 }
-                #endregion 增加 上方法.
-
                 //增加方法。
                 ds.Tables.Add(dtM);
+                #endregion 增加 上方法.
+                #region 从表
+                DataTable dtl = new DataTable("Dtl");
+                dtl.Columns.Add("No");
+                dtl.Columns.Add("Title");
+                dtl.Columns.Add("Url");
+                dtl.Columns.Add("GroupName");
+                EnDtls enDtls = en.EnMapInTime.Dtls;
+                foreach (EnDtl enDtl in enDtls)
+                {
+                    if (enDtl.DtlEditerModel == DtlEditerModel.DtlBatch 
+                        || enDtl.DtlEditerModel == DtlEditerModel.DtlSearch
+                        || enDtl.DtlEditerModel == DtlEditerModel.DtlURL)
+                        continue;
+                    //判断该dtl是否要显示?
+                    string url = "";
+                    if(enDtl.DtlEditerModel != DtlEditerModel.DtlURLEnonly)
+                    {
+                        Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
+                        myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值.
+                        if (myEnDtl.HisUAC.IsView == false)
+                            continue;
+                        if (enDtl.DtlEditerModel == DtlEditerModel.DtlBatch)
+                            url = "DtlBatch.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+                        else
+                            url = "DtlSearch.htm?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString();
+                    }
+                    else
+                    {
+                        url = enDtl.UrlExt;
+                        url = BP.WF.Glo.DealExp(url, en);
+                    }
+                    DataRow dr = dtl.NewRow();
+                    dr["No"] = enDtl.DtlEditerModel == DtlEditerModel.DtlURLEnonly? enDtl.Desc:enDtl.EnsName;
+                    dr["Title"] = enDtl.Desc;
+                    dr["Url"] = url;
+                    dr["GroupName"] = enDtl.GroupName;
+                    dtl.Rows.Add(dr);
+                }
+                #endregion 增加 从表.
+
+                ds.Tables.Add(dtl);
 
                 return BP.Tools.Json.ToJson(ds);
             }
@@ -760,6 +799,7 @@ namespace BP.WF.HttpHandler
 
             //保存位置
             string filepath = "";
+            string relativePath = "";
 
 
             //如果是天业集团则保存在ftp服务器上
@@ -824,7 +864,7 @@ namespace BP.WF.HttpHandler
                     System.IO.Directory.CreateDirectory(fileSavePath);
 
                 filepath = fileSavePath + "/" + this.PKVal + "." + ext;
-
+                relativePath = "/DataUser/" + enName + '/' + this.PKVal + "." + ext;
                 //存在文件则删除
                 if (System.IO.File.Exists(filepath) == true)
                     System.IO.File.Delete(filepath);
@@ -839,11 +879,43 @@ namespace BP.WF.HttpHandler
             en.SetValByKey("MyFilePath", filepath);
             en.SetValByKey("MyFileExt", ext);
             en.SetValByKey("MyFileSize", size);
-            en.SetValByKey("WebPath", filepath);
+            en.SetValByKey("WebPath", relativePath);
 
             en.Update();
             return "文件保存成功";
         }
+
+        /// <summary>
+        /// 实体单附件删除
+        /// </summary>
+        /// <returns></returns>
+        public string EntityAth_Delete()
+        {
+            string pkval = this.PKVal;
+            string enName = this.EnName;
+            if(DataType.IsNullOrEmpty(pkval) || DataType.IsNullOrEmpty(enName))
+            {
+                return "err@删除实体附件需要传入PKVal和EnName";
+            }
+            Entity en = ClassFactory.GetEn(this.EnName);
+            en.PKVal = pkval;
+            en.RetrieveFromDBSources();
+                
+            string filePath = en.GetValStringByKey("MyFilePath");
+            try
+            {
+                System.IO.File.Delete(filePath);
+                return "附件删除成功";
+            }
+            catch (Exception e)
+            {
+                string errMsg = "err@删除失败," + "filePath: " + filePath + e.ToString();
+                BP.DA.Log.DebugWriteError(errMsg);
+                return errMsg;
+            }
+
+        }
+
         /// <summary>
         /// 实体多附件上传
         /// </summary>
@@ -1224,6 +1296,10 @@ namespace BP.WF.HttpHandler
                 EnDtls enDtls = en.EnMapInTime.Dtls;
                 foreach (EnDtl enDtl in enDtls)
                 {
+                    if (enDtl.DtlEditerModel == DtlEditerModel.DtlBatchEnonly 
+                        || enDtl.DtlEditerModel == DtlEditerModel.DtlSearchEnonly
+                        || enDtl.DtlEditerModel == DtlEditerModel.DtlURLEnonly)
+                        continue;
                     //判断该dtl是否要显示?
                     Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
                     myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值.
@@ -1260,15 +1336,11 @@ namespace BP.WF.HttpHandler
                     dr["GroupName"] = enDtl.GroupName;
                     dr["Icon"] = enDtl.Icon;
                     dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
-
                     dtM.Rows.Add(dr);
                 }
                 #endregion 增加 从表.
 
                 ds.Tables.Add(dtM);
-
-
-
                 return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)
@@ -1382,7 +1454,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
                 qo.addAnd();
-                qo.AddWhere("OrgNo", rootno);
+                qo.AddWhere("OrgNo", WebUser.OrgNo);
             }
             qo.DoQuery();
             DataTable dt = ensMen.ToDataTableField();

@@ -109,7 +109,7 @@ namespace BP.WF.Port
 
                 Map map = new Map("WF_DeptFlowSearch", "流程部门数据查询权限");
                 map.AddMyPK();
-                map.AddTBString(DeptFlowSearchAttr.FK_Emp, null, "操作员", true, true, 1, 50, 11);
+                map.AddTBString(DeptFlowSearchAttr.FK_Emp, null, "操作员", true, true, 1, 100, 11);
                 map.AddTBString(DeptFlowSearchAttr.FK_Flow, null, "流程编号", true, true, 1, 4, 11);
                 map.AddTBString(DeptFlowSearchAttr.FK_Dept, null, "部门编号", true, true, 1, 100, 11);
                 this._enMap = map;

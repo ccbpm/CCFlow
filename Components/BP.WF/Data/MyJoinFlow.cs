@@ -714,6 +714,7 @@ namespace BP.WF.Data
                 Map map = new Map("WF_GenerWorkFlow", "我审批的流程");
                 map.setEnType(EnType.View);
 
+                #region 基本字段.
                 map.AddTBIntPK(MyFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBInt(MyFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
@@ -721,7 +722,6 @@ namespace BP.WF.Data
                 map.AddDDLEntities(MyFlowAttr.FK_Flow, null, "流程名称", new Flows(), false);
                 map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 50);
                 map.AddTBString(MyFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 40);
-
 
                 map.AddTBDateTime(MyFlowAttr.RDT, "发起日期", true, true);
                 map.AddDDLSysEnum(MyFlowAttr.WFSta, 0, "状态", true, false, MyFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
@@ -735,23 +735,27 @@ namespace BP.WF.Data
 
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
+                //查询关键字.
+                map.AddTBSKeyWords(4000);
+                #endregion 基本字段.
 
 
+
+                #region 查询条件.
                 map.DTSearchKey = GenerWorkFlowAttr.SDTOfNode;
                 map.DTSearchLabel = "节点应完成时间";
                 map.DTSearchWay = DTSearchWay.ByDate;
-
-                //   map.AddSearchAttr(MyFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyFlowAttr.WFSta);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
                 //map.IsShowSearchKey = false;
-
                 //增加隐藏的查询条件. 我参与的流程.
                 SearchNormal search = new SearchNormal(MyFlowAttr.Emps, "人员",
                     MyFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%", 0, true);
                 map.SearchNormals.Add(search);
+                #endregion 查询条件.
 
 
+                #region 相关功能.
                 RefMethod rm = new RefMethod();
                /* rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
@@ -767,6 +771,8 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.IsForEns = true;
                 map.AddRefMethod(rm);
+                #endregion 相关功能.
+
 
                 this._enMap = map;
                 return this._enMap;

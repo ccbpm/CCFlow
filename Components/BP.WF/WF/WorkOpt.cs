@@ -1,6 +1,8 @@
-﻿using BP.En;
+﻿using BP.DA;
+using BP.En;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +34,7 @@ namespace BP.WF
         /// <summary>
         /// 发送到角色.
         /// </summary>
-        public const string SendStas = "SendStas";
+        public const string SendStations = "SendStations";
         /// <summary>
         /// 发送内容
         /// </summary>
@@ -49,7 +51,7 @@ namespace BP.WF
         /// <summary>
         /// 抄送到角色.
         /// </summary>
-        public const string CCStas = "CCStas";
+        public const string CCStations = "CCStations";
         /// <summary>
         /// 抄送内容
         /// </summary>
@@ -64,6 +66,14 @@ namespace BP.WF
         public const string SenderName = "SenderName";
         public const string SendRDT = "SendRDT";
         public const string SendSDT = "SendSDT";
+        /// <summary>
+        /// 发起人
+        /// </summary>
+        public const string StarterName = "StarterName";
+        /// <summary>
+        /// 发起日期
+        /// </summary>
+        public const string StartRDT = "StartRDT";
     }
     /// <summary>
     /// 退回轨迹
@@ -173,11 +183,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValStringByKey(WorkOptAttr.SendStas);
+                return this.GetValStringByKey(WorkOptAttr.SendStations);
             }
             set
             {
-                SetValByKey(WorkOptAttr.SendStas, value);
+                SetValByKey(WorkOptAttr.SendStations, value);
             }
         }
         public string CCEmps
@@ -202,15 +212,15 @@ namespace BP.WF
                 SetValByKey(WorkOptAttr.CCDepts, value);
             }
         }
-        public string CCStas
+        public string CCStations
         {
             get
             {
-                return this.GetValStringByKey(WorkOptAttr.CCStas);
+                return this.GetValStringByKey(WorkOptAttr.CCStations);
             }
             set
             {
-                SetValByKey(WorkOptAttr.CCStas, value);
+                SetValByKey(WorkOptAttr.CCStations, value);
             }
         }
         public string CCNote
@@ -222,6 +232,41 @@ namespace BP.WF
             set
             {
                 SetValByKey(WorkOptAttr.CCNote, value);
+            }
+        }
+
+        public string SendRDT
+        {
+            get
+            {
+                return this.GetValStrByKey(WorkOptAttr.SendRDT);
+            }
+            set
+            {
+                SetValByKey(WorkOptAttr.SendRDT, value);
+            }
+        }
+
+        public string StarterName
+        {
+            get
+            {
+                return this.GetValStrByKey(WorkOptAttr.StarterName);
+            }
+            set
+            {
+                SetValByKey(WorkOptAttr.StarterName, value);
+            }
+        }
+        public string StartRDT
+        {
+            get
+            {
+                return this.GetValStrByKey(WorkOptAttr.StartRDT);
+            }
+            set
+            {
+                SetValByKey(WorkOptAttr.StartRDT, value);
             }
         }
         #endregion
@@ -265,8 +310,8 @@ namespace BP.WF
                 map.AddTBString(WorkOptAttr.SendDepts, null, "发送到部门", true, true, 0, 500, 10, true);
                 map.AddTBString(WorkOptAttr.SendDepts + "T", null, "发送到部门", false, false, 0, 500, 10, true);
 
-                map.AddTBString(WorkOptAttr.SendStas, null, "发送到角色", true, true, 0, 100, 10, true);
-                map.AddTBString(WorkOptAttr.SendStas + "T", null, "发送到角色", false, false, 0, 500, 10, true);
+                map.AddTBString(WorkOptAttr.SendStations, null, "发送到角色", true, true, 0, 100, 10, true);
+                map.AddTBString(WorkOptAttr.SendStations + "T", null, "发送到角色", false, false, 0, 500, 10, true);
                 map.AddTBStringDoc(WorkOptAttr.SendNote, null, "小纸条", true, true, true);
 
                 map.AddGroupAttr("抄送");
@@ -276,8 +321,8 @@ namespace BP.WF
                 map.AddTBString(WorkOptAttr.CCDepts, null, "抄送到部门", true, true, 0, 100, 10, true);
                 map.AddTBString(WorkOptAttr.CCDepts + "T", null, "抄送到部门", false, false, 0, 500, 10, true);
 
-                map.AddTBString(WorkOptAttr.CCStas, null, "抄送到角色", true, true, 0, 100, 10, true);
-                map.AddTBString(WorkOptAttr.CCStas + "T", null, "抄送到部门", false, false, 0, 500, 10, true);
+                map.AddTBString(WorkOptAttr.CCStations, null, "抄送到角色", true, true, 0, 100, 10, true);
+                map.AddTBString(WorkOptAttr.CCStations + "T", null, "抄送到部门", false, false, 0, 500, 10, true);
                 map.AddTBStringDoc(WorkOptAttr.CCNote, null, "抄送说明", true, true, true);
 
                 map.AddGroupAttr("工作信息");
@@ -285,14 +330,17 @@ namespace BP.WF
                 map.AddTBString(WorkOptAttr.NodeName, null, "当前节点", true, true, 0, 500, 10, false, null);
                 map.AddTBString(WorkOptAttr.ToNodeName, null, "到达节点", true, true, 0, 500, 10, false, null);
 
+                map.AddTBString(WorkOptAttr.StarterName, null, "发起人", true, true, 0, 200, 10, false, null);
+                map.AddTBDateTime(WorkOptAttr.StartRDT, null, "发起日期", true, true);
+
                 map.AddTBInt(WorkOptAttr.ToNodeID, 0, "到达节点ID", false, false);
 
-                map.AddTBString(WorkOptAttr.TodoEmps, null, "当前处理人", true, true, 0, 200, 10,true);
+                map.AddTBString(WorkOptAttr.TodoEmps, null, "当前处理人", true, true, 0, 200, 10, true);
                 map.AddTBString(WorkOptAttr.SenderName, null, "发送人", true, true, 0, 100, 10);
 
                 map.AddTBString(WorkOptAttr.SendRDT, null, "发送日期", true, true, 0, 100, 10);
                 map.AddTBString(WorkOptAttr.SendSDT, null, "限期", true, true, 0, 100, 10);
-                map.AddTBInt(WorkOptAttr.WorkID, 0,"工作ID", true, true);
+                map.AddTBInt(WorkOptAttr.WorkID, 0, "工作ID", true, true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -300,6 +348,73 @@ namespace BP.WF
         }
         #endregion
 
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (BP.DA.DataType.IsNullOrEmpty(this.StartRDT) == true)
+            {
+                this.StarterName = BP.Web.WebUser.FK_DeptName + "\\" + BP.Web.WebUser.Name;
+                this.StartRDT = BP.DA.DataType.CurrentDateTime;
+            }
+            return base.beforeUpdateInsertAction();
+        }
+        /// <summary>
+        /// 获取手动抄送时抄送人信息
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GenerCCers()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("No", typeof(string)));
+            dt.Columns.Add(new DataColumn("Name", typeof(string)));
+
+            DataTable mydt = new DataTable();
+            DataRow dr = null;
+            string sql = "";
+            //抄送到人员
+            if (DataType.IsNullOrEmpty(this.CCEmps) == false)
+            {
+                string[] empNos = this.CCEmps.Split(',');
+                string[] empNames = this.GetValStrByKey(WorkOptAttr.CCEmps + "T").Split(',');
+                for (int i = 0; i < empNos.Length; i++)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = empNos[i];
+                    dr["Name"] = empNames[i];
+                    dt.Rows.Add(dr);
+                }
+            }
+            //抄送到部门
+            if (DataType.IsNullOrEmpty(this.CCDepts) == false)
+            {
+                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmp B  WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "= B.FK_Emp AND B.FK_Dept IN(" + BP.Port.Glo.GenerWhereInSQL(this.CCDepts) + ")";
+                mydt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow mydr in mydt.Rows)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = mydr["No"];
+                    dr["Name"] = mydr["Name"];
+                    dt.Rows.Add(dr);
+                }
+            }
+            //抄送到岗位
+            if (DataType.IsNullOrEmpty(this.CCStations) == false)
+            {
+                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B  WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "= B.FK_Emp AND B.FK_Station IN("+ BP.Port.Glo.GenerWhereInSQL(this.CCStations) + ")";
+                mydt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow mydr in mydt.Rows)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = mydr["No"];
+                    dr["Name"] = mydr["Name"];
+                    dt.Rows.Add(dr);
+                }
+            }
+            //将dt中的重复数据过滤掉  
+            DataView myDataView = new DataView(dt);
+            //此处可加任意数据项组合  
+            string[] strComuns = { "No", "Name" };
+            return myDataView.ToTable(true, strComuns);
+        }
     }
     /// <summary>
     /// 退回轨迹s 

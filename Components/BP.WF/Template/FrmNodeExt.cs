@@ -134,6 +134,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 #region 基本信息.
+                map.AddGroupAttr("基本信息");
                 map.AddMyPK();
                 //map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单", true, true, 0, 300, 20);
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
@@ -202,7 +203,7 @@ namespace BP.WF.Template
                 #endregion 隐藏字段.
 
                 #region 相关功能..
-                map.AddGroupAttr("基本信息");
+                map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
                 rm.Title = "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoDFrm()";

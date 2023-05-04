@@ -1315,6 +1315,10 @@ namespace BP.WF
             gwf.SetPara("StopFlowType", stopFlowType); //结束流程类型.
             gwf.Update();
 
+            //生成关键字.
+            this.GenerSKeyWords(gwf, wn.rptGe);
+
+
             //调用结束后事件.
             stopMsg += ExecEvent.DoFlow(EventListFlow.FlowOverAfter, wn, null);
             #endregion 处理后续的业务.
@@ -1350,6 +1354,36 @@ namespace BP.WF
                     DBAccess.RunSQL("UPDATE " + rpt.EnMap.PhysicsTable + " SET BillState=100 WHERE OID=" + this.WorkID);
             }
             return stopMsg;
+        }
+        /// <summary>
+        /// 归档关键字查询
+        /// </summary>
+        /// <param name="gwf"></param>
+        /// <param name="en"></param>
+        public void GenerSKeyWords(GenerWorkFlow gwf, Entity en)
+        {
+            //获取WF_GenerWorkFlow的关键字.
+            string keyworkd = gwf.Title + gwf.TodoEmps + "," + gwf.FlowName;
+            foreach (Attr item in en.EnMap.Attrs)
+            {
+                if (item.UIContralType == UIContralType.DDL)
+                    continue;
+
+                if (item.MyDataType == DataType.AppString && item.MaxLength <= 100)
+                {
+                    keyworkd += en.GetValStrByKey(item.Key)+",";
+                    continue;
+                }
+                keyworkd += en.GetValStrByKey(item.Key)+",";
+            }
+
+            if (DBAccess.IsExitsTableCol("WF_GenerWorkFlow", "SKeyWords") == false)
+                return;
+
+            Paras pa = new Paras();
+            pa.SQL = "UPDATE WF_GenerWorkFlow SET SKeyWords=" + SystemConfig.AppCenterDBVarStr + "SKeyWords WHERE WorkID=" + this.WorkID;
+            pa.Add("SKeyWords", keyworkd);
+            DBAccess.RunSQL(pa);
         }
         public string GenerFHStartWorkInfo()
         {
@@ -1832,7 +1866,7 @@ namespace BP.WF
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND FK_Emp='" + checker + "' AND WorkID=" + this.HisGenerWorkFlow.WorkID);
 
             this.HisGenerWorkFlow.HungupTime = DataType.CurrentDateTime;
-            this.HisGenerWorkFlow.WFState = WFState.Runing; 
+            this.HisGenerWorkFlow.WFState = WFState.Runing;
             this.HisGenerWorkFlow.Update();
 
             string ptable = this.HisFlow.PTable;
@@ -1970,7 +2004,7 @@ namespace BP.WF
                 this.HisGenerWorkFlow.FK_Node, GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
 
             //更新业务表的状态.
-            DBAccess.RunSQL("UPDATE "+this.HisFlow.PTable+" SET WFState="+(int)WFState.Hungup+" WHERE OID="+this.WorkID);
+            DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET WFState=" + (int)WFState.Hungup + " WHERE OID=" + this.WorkID);
 
             return "已经同意挂起.";
         }

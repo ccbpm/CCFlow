@@ -1247,7 +1247,7 @@ namespace BP.CCBill
             DataTable listDT = null;
             string explist = dblist.ExpList;
             //替换
-            if (dblist.DBType == 0)
+            if (dblist.DBType.Equals("local"))
             {
 
                 if (explist.ToUpper().Contains("WHERE") == false)
@@ -2604,8 +2604,8 @@ namespace BP.CCBill
                 if ((SearchDataRole)md.GetParaInt("SearchDataRole") == SearchDataRole.ByOnlySelf && DataType.IsNullOrEmpty(hidenField) == true
                 || (md.GetParaInt("SearchDataRoleByDeptStation") == 0 && DataType.IsNullOrEmpty(ap.GetValStrByKey("FK_Dept")) == true))
                 {
-                    qo.addAnd();
-                    qo.AddWhere("Starter", "=", WebUser.No);
+                    //qo.addAnd();
+                    //qo.AddWhere("Starter", "=", WebUser.No);
                 }
 
             }

@@ -828,5 +828,61 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+     
+    public  string NodeStationGroup_Init() 
+    {
+        string sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in " +
+			"(select Fk_StationType from Port_Station where OrgNo ='" + this.GetRequestVal("orgNo") + "') group by No,Name";
+
+		DataTable dt = DBAccess.RunSQLReturnTable(sql);
+		return BP.Tools.Json.ToJson(dt);
+	}
+    /**
+	 删除,该组织下已经保存的岗位.
+	 @return
+	 */
+    public  void NodeStationGroup_Dele()
+    {
+        string sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + this.GetRequestVal("orgNo") + "') AND FK_Node=" + this.GetRequestVal("nodeID");
+        DBAccess.RunSQL(sql);
     }
+    /**
+	 删除,该组织下已经保存的岗位.
+	 @return
+	 */
+    public void NodeDept_Dele()
+    {
+        string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID");
+        DBAccess.RunSQL(sql);
+    }
+    /**
+	 删除,该组织下已经保存的岗位.
+	 @return
+	 */
+    public void NodeDeptGroup_Dele() 
+    {
+        string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID") + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + this.GetRequestVal("orgNo") + "')";
+        DBAccess.RunSQL(sql);
+    }
+
+    /**
+	 WF_Node_Up
+	 @return
+	 */
+    public  void WF_Node_Up() 
+    {
+        string sql = "UPDATE WF_Node SET NodeAppType=" + this.GetRequestVal("appType") + " WHERE NodeID=" + this.GetRequestVal("nodeID");
+        DBAccess.RunSQL(sql);
+    }
+    /**
+	 NodeStationGroup_init
+	 @return
+	 */
+    public  String NodeAppType() 
+    {
+        string sql = "SELECT NodeAppType FROM WF_Node WHERE NodeID=" + this.GetRequestVal("FK_Node");
+        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+		return BP.Tools.Json.ToJson(dt);
+    }
+}
 }

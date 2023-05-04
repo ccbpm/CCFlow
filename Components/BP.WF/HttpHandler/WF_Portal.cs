@@ -61,11 +61,6 @@ namespace BP.WF.HttpHandler
         }
 
 
-        public string CheckEncryptEnable()
-        {
-            return BP.Difference.SystemConfig.FrontEndEncrypt;
-        }
-
         public string Home_DoMove()
         {
             string[] mypks = this.MyPK.Split(',');
@@ -86,6 +81,12 @@ namespace BP.WF.HttpHandler
         public WF_Portal()
         {
         }
+        public string CheckEncryptEnable()
+        {
+            if (SystemConfig.IsEnablePasswordEncryption == true)
+                return "1";
+            return "0";
+        }
         /// <summary>
         /// 系统信息
         /// </summary>
@@ -104,6 +105,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Init()
         {
+            /*DTS.GenerSKeyWords gsw = new DTS.GenerSKeyWords();
+            gsw.Do();*/
             //判断是否已经安装数据库，是否需要更新
             if (CheckIsDBInstall() == true)
                 return "url@/WF/Admin/DBInstall.htm";
@@ -183,13 +186,13 @@ namespace BP.WF.HttpHandler
         private bool isBeenLock(String userNo)
         {
             // 如果包含此用户，判断是否到锁定结束时间。
-            if( lockTable.ContainsKey(userNo))
+            if (lockTable.ContainsKey(userNo))
             {
                 // 如果正被锁定
-                if(this.getTimeStamp() < (Int64)lockTable[userNo])
+                if (this.getTimeStamp() < (Int64)lockTable[userNo])
                 {
                     return true;
-                } 
+                }
                 else
                 {
                     // 超时解锁用户
@@ -208,7 +211,7 @@ namespace BP.WF.HttpHandler
             {
                 int failCount = 1;
                 failRecord.Add(userNo, failCount);
-                
+
             }
             else
             {
@@ -229,7 +232,7 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        
+
 
         public string Login_Submit()
         {
@@ -239,8 +242,15 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(gotoSystem) == true)
                     gotoSystem = "";
 
+                //@hongyan. 是不是中间件.
+                string val = this.GetRequestVal("IsZZJ");
+                if (DataType.IsNullOrEmpty(val) == true)
+                    val = "0";
+                if (val.Equals("1") == true)
+                    gotoSystem = "CCFlow";
+
                 string userNo = this.GetRequestVal("TB_No");
-                if(this.isBeenLock(userNo))
+                if (this.isBeenLock(userNo))
                 {
                     return "err@账号已被锁定";
                 }
@@ -256,68 +266,58 @@ namespace BP.WF.HttpHandler
                     pass = this.GetRequestVal("TB_Pass");
 
                 pass = pass.Trim();
-
-  
-
                 BP.Port.Emp emp = new BP.Port.Emp();
                 emp.UserID = userNo;
-                if (emp.RetrieveFromDBSources() == 0)
+                //是否存在用户
+                bool isExist = emp.RetrieveFromDBSources() == 0?false:true;
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
                 {
-                    if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
+                    ps.Add("NikeName", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
                     {
-                        /*如果包含昵称列,就检查昵称是否存在.*/
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
-                        ps.Add("NikeName", userNo);
-                        string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                        if (no == null)
-                        {
-                            this.handleLoginFail(userNo);
-                            return "err@用户名或者密码错误.";
-                            //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
-                        }
-
                         emp.No = no;
-                        int i = emp.RetrieveFromDBSources();
-                        if (i == 0)
-                        {
-                            this.handleLoginFail(userNo);
-                            //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
-                            return "err@用户名或者密码错误.";
-                        }
-                    }
-
-                    if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
-                    {
-                        /*如果包含Name列,就检查Name是否存在.*/
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
-                        ps.Add("Tel", userNo);
-                        string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                        if (no == null)
-                        {
-                            this.handleLoginFail(userNo);
-                            //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
-                            return "err@用户名或者密码错误.";
-                        }
-
-                        emp.No = no;
-                        int i = emp.RetrieveFromDBSources();
-                        if (i == 0)
-                        {
-                            this.handleLoginFail(userNo);
-                            //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
-                            return "err@用户名或者密码错误.";
-                        }
-                    }
-                    else
-                    {
-                        this.handleLoginFail(userNo);
-                        //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
-                        return "err@用户名或者密码错误.";
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
                     }
                 }
-
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
+                {
+                    /*如果包含Name列,就检查Name是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
+                    ps.Add("Tel", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
+                    {
+                        emp.No = no;
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
+                    }
+                }
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "Email") == true)
+                {
+                    /*如果包含Name列,就检查Name是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE Email=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Email";
+                    ps.Add("Email", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
+                    {
+                        emp.No = no;
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
+                    }
+                }
+                if (isExist==false)
+                {
+                    this.handleLoginFail(userNo);
+                    return "err@用户名不存在.";
+                }
+               
                 #region 校验验证码.
                 //WFEmp wfEmp = new WFEmp();
                 //wfEmp.No = emp.UserID;
@@ -356,18 +356,17 @@ namespace BP.WF.HttpHandler
 
                 #endregion 校验验证码.
 
-                if (this.CheckEncryptEnable() == "1")
+                if (SystemConfig.IsEnablePasswordEncryption == true)
                 {
                     try
                     {
                         String md5Pass = BP.Tools.Cryptography.MD5UpperCase(emp.Pass);
-                        if(!md5Pass.Equals(pass))
+                        if (!md5Pass.Equals(pass))
                         {
                             this.handleLoginFail(userNo);
-                            //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
                             return "err@用户名或者密码错误.";
                         }
-                       
+
                     }
                     catch (Exception e)
                     {
@@ -379,11 +378,10 @@ namespace BP.WF.HttpHandler
                 else if (emp.CheckPass(pass) == false)
                 {
                     this.handleLoginFail(userNo);
-                    //HttpContextHelper.AddCookie("CCS", this.ToString() + "_Login_Error", this.ToString() + "_Login_Error");
                     return "err@用户名或者密码错误.";
                 }
 
- 
+
                 #endregion 先校验用户名也密码.
 
                 if (DataType.IsNullOrEmpty(userNo) == false && userNo.Equals("admin"))
@@ -409,7 +407,7 @@ namespace BP.WF.HttpHandler
                     if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
                     {
                         string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
-                        if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
+                        if (DBAccess.RunSQLReturnValInt(sql,0) == 1)
                             return "err@该用户已经被禁用.";
                     }
 
@@ -787,7 +785,7 @@ namespace BP.WF.HttpHandler
 
 
             //求流程内容.
-            sql = "SELECT No as \"No\",Name as \"Name\",FrmType,FK_FormTree,PTable,DBSrc,Icon,EntityType FROM Sys_MapData WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
+            sql = "SELECT No as \"No\",Name as \"Name\",FrmType,FK_FormTree,PTable,DBSrc,Icon,EntityType,Ver FROM Sys_MapData WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
             DataTable dtFlow = null;
             try
             {
@@ -810,7 +808,7 @@ namespace BP.WF.HttpHandler
                 dtFlow.Columns[5].ColumnName = "DBSrc";
                 dtFlow.Columns[6].ColumnName = "Icon";
                 dtFlow.Columns[7].ColumnName = "EntityType";
-
+                dtFlow.Columns[8].ColumnName = "Ver";
                 //dtFlow.Columns[2].ColumnName = "WorkModel";
                 //dtFlow.Columns[3].ColumnName = "AtPara";
                 //dtFlow.Columns[4].ColumnName = "FK_FlowSort";
@@ -870,7 +868,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
                 Paras ps = new Paras();
-                sql = "SELECT No,Name,ParentNo From WF_FlowSort  WHERE OrgNo='" + WebUser.OrgNo + "' or parentNo='" + WebUser.FK_Dept + "'";
+                sql = "SELECT No,Name,ParentNo From WF_FlowSort  WHERE OrgNo='" + WebUser.OrgNo + "' or ParentNo='" + WebUser.FK_Dept + "'";
                 ps.SQL = sql;
                 dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 1)
@@ -925,7 +923,6 @@ namespace BP.WF.HttpHandler
                         sqlWhere += " AND No IN(SELECT FlowSortNo From Port_OrgAdminerFlowSort Where OrgNo='" + BP.Web.WebUser.OrgNo + "' AND FK_Emp='" + WebUser.No + "')";
                 }
             }
-
             else
                 sqlWhere = "   ParentNo!='0' ";
             sql = "SELECT No as \"No\",Name as \"Name\", 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_FlowSort WHERE  " + sqlWhere + " ORDER BY Idx ";
@@ -975,7 +972,7 @@ namespace BP.WF.HttpHandler
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //求流程内容.
-            sql = "SELECT No as \"No\",Name as \"Name\",WorkModel, FK_FlowSort, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_Flow WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
+            sql = "SELECT No as \"No\",Name as \"Name\",WorkModel, FK_FlowSort, 0 as WFSta2, 0 as WFSta3, 0 as WFSta5, Ver FROM WF_Flow WHERE 1=1 " + sqlWhere + " ORDER BY Idx ";
             DataTable dtFlow = DBAccess.RunSQLReturnTable(sql);
             if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -987,6 +984,7 @@ namespace BP.WF.HttpHandler
                 dtFlow.Columns[4].ColumnName = "WFSta2";
                 dtFlow.Columns[5].ColumnName = "WFSta3";
                 dtFlow.Columns[6].ColumnName = "WFSta5";
+                dtFlow.Columns[7].ColumnName = "Ver";
             }
 
             // 给状态赋值.

@@ -733,8 +733,8 @@ namespace BP.WF
             }
 
             //给icon设置默认值.
-            if (this.GetValStrByKey(NodeAttr.ICON) == "")
-                this.ICON = "审核.png";
+            if (this.GetValStrByKey(NodeAttr.Icon) == "")
+                this.Icon = "审核.png";
 
             #region 如果是数据合并模式，就要检查节点中是否有子线程，如果有子线程就需要单独的表.
             if (this.IsSubThread == true)
@@ -877,6 +877,7 @@ namespace BP.WF
                     attr.setLGType(FieldTypeS.Normal);
                     attr.setUIVisible(false);
                     attr.setUIIsEnable(false);
+                    attr.setMaxLen(100);
                     attr.DefVal = "0";
                     attr.HisEditType = BP.En.EditType.Readonly;
                     attr.Insert();
@@ -1091,11 +1092,11 @@ namespace BP.WF
         /// <summary>
         /// 节点头像
         /// </summary>
-        public string ICON
+        public string Icon
         {
             get
             {
-                string s = this.GetValStrByKey(NodeAttr.ICON);
+                string s = this.GetValStrByKey(NodeAttr.Icon);
                 if (DataType.IsNullOrEmpty(s))
                     if (this.IsStartNode)
                         return "审核.png";
@@ -1105,7 +1106,7 @@ namespace BP.WF
             }
             set
             {
-                this.SetValByKey(NodeAttr.ICON, value);
+                this.SetValByKey(NodeAttr.Icon, value);
             }
         }
         /// <summary>
@@ -2762,7 +2763,7 @@ namespace BP.WF
 
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
 
-                map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 70, 10);
+                map.AddTBString(NodeAttr.Icon, null, "节点ICON图片路径", true, false, 0, 70, 10);
 
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);
                // map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);
@@ -3152,7 +3153,7 @@ namespace BP.WF
                 attr.setLGType(FieldTypeS.Normal);
                 attr.setUIVisible(false);
                 attr.setUIIsEnable(false);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.setMinLen(0);
                 attr.DefVal = "@WebUser.No";
                 attr.Insert();
@@ -3189,7 +3190,7 @@ namespace BP.WF
                 attr.setUIVisible(false);
                 attr.setUIIsEnable(false);
                 attr.setMinLen(0);
-                attr.setMaxLen(50);
+                attr.setMaxLen(100);
                 attr.Insert();
             }
 
@@ -3382,6 +3383,20 @@ namespace BP.WF
             attr.setEditType(BP.En.EditType.UnDel);
             attr.SetValByKey(MapAttrAttr.KeyOfEn, "FK_Dept");
             attr.SetValByKey(MapAttrAttr.Name, "操作员部门");
+            attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+            attr.setUIContralType(UIContralType.TB);
+            attr.SetValByKey(MapAttrAttr.UIVisible, false);
+            attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+            attr.setLGType(FieldTypeS.Normal);
+            attr.SetValByKey(MapAttrAttr.MinLen, 0);
+            attr.SetValByKey(MapAttrAttr.MaxLen, 50);
+            attr.Insert();
+
+            attr = new BP.Sys.MapAttr();
+            attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+            attr.setEditType(BP.En.EditType.UnDel);
+            attr.SetValByKey(MapAttrAttr.KeyOfEn, "FK_DeptName");
+            attr.SetValByKey(MapAttrAttr.Name, "操作员部门名称");
             attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
             attr.setUIContralType(UIContralType.TB);
             attr.SetValByKey(MapAttrAttr.UIVisible, false);

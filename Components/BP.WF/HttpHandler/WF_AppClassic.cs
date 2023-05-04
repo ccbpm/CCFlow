@@ -259,42 +259,53 @@ namespace BP.WF.HttpHandler
 
                 BP.Port.Emp emp = new Emp();
                 emp.UserID = userNo;
-                if (emp.RetrieveFromDBSources() == 0)
+                //是否存在用户
+                bool isExist = emp.RetrieveFromDBSources() == 0 ? false : true;
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
                 {
-                    if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
+                    ps.Add("NikeName", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
                     {
-                        /*如果包含昵称列,就检查昵称是否存在.*/
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE NikeName=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "NikeName";
-                        ps.Add("NikeName", userNo);
-                        string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                        if (no == null)
-                            return "err@用户名或者密码错误.";
-
                         emp.No = no;
-                        int i = emp.RetrieveFromDBSources();
-                        if (i == 0)
-                            return "err@用户名或者密码错误.";
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
                     }
-                    else if (DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
+                }
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "Tel") == true)
+                {
+                    /*如果包含Name列,就检查Name是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
+                    ps.Add("Tel", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
                     {
-                        /*如果包含Name列,就检查Name是否存在.*/
-                        Paras ps = new Paras();
-                        ps.SQL = "SELECT No FROM Port_Emp WHERE Tel=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Tel";
-                        ps.Add("Tel", userNo);
-                        string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                        if (no == null)
-                            return "err@用户名或者密码错误.";
-
                         emp.No = no;
-                        int i = emp.RetrieveFromDBSources();
-                        if (i == 0)
-                            return "err@用户名或者密码错误.";
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
                     }
-                    else
+                }
+                if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "Email") == true)
+                {
+                    /*如果包含Name列,就检查Name是否存在.*/
+                    Paras ps = new Paras();
+                    ps.SQL = "SELECT No FROM Port_Emp WHERE Email=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Email";
+                    ps.Add("Email", userNo);
+                    string no = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                    if (DataType.IsNullOrEmpty(no) == false)
                     {
-                        return "err@用户名或者密码错误.";
+                        emp.No = no;
+                        if (emp.RetrieveFromDBSources() != 0)
+                            isExist = true;
                     }
+                }
+                if (isExist == false)
+                {
+                    return "err@用户名不存在.";
                 }
 
                 if (emp.CheckPass(pass) == false)
@@ -302,7 +313,7 @@ namespace BP.WF.HttpHandler
 
                 //调用登录方法.
                 BP.WF.Dev2Interface.Port_Login(emp.UserID);
-
+                BP.WF.Dev2Interface.Port_GenerToken();
 
                 return "登陆成功";
             }

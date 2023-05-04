@@ -47,14 +47,14 @@ namespace BP.WF.DTS
         /// <param name="empName">人员名称</param>
         public static void GenerIt(string empID, string empName)
         {
-            string path =  BP.Difference.SystemConfig.PathOfDataUser + "Siganture/T.JPG";
+            string path =  BP.Difference.SystemConfig.PathOfDataUser + "Siganture/T.jpg";
             string fontName = "宋体";
 
-            string pathMe =  BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + empID + ".JPG";
+            string pathMe =  BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + empID + ".jpg";
             if (System.IO.File.Exists(pathMe))
                 return;
 
-            File.Copy(BP.Difference.SystemConfig.PathOfDataUser + "Siganture/Templete.JPG",
+            File.Copy(BP.Difference.SystemConfig.PathOfDataUser + "Siganture/Templete.jpg",
                 path, true);
 
             System.Drawing.Image img = System.Drawing.Image.FromFile(path);
@@ -68,7 +68,7 @@ namespace BP.WF.DTS
             g.Dispose();
 
             File.Copy(pathMe,
-            BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + empName + ".JPG", true);
+            BP.Difference.SystemConfig.PathOfDataUser + "Siganture/" + empName + ".jpg", true);
         }
         /// <summary>
         /// 执行

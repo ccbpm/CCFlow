@@ -747,6 +747,7 @@ namespace BP.WF
                         rpt.FlowStartRDT = DataType.CurrentDateTime;
 
                         rpt.FK_Dept = emp.FK_Dept;
+                        rpt.FK_DeptName = emp.FK_DeptText;
                         rpt.FlowEnder = emp.UserID;
                         rpt.FlowEndNode = this.StartNodeID;
                         rpt.FlowStarter = emp.UserID;
@@ -779,6 +780,7 @@ namespace BP.WF
 
                         rpt.FK_NY = DataType.CurrentYearMonth;
                         rpt.FK_Dept = emp.FK_Dept;
+                        rpt.FK_DeptName = emp.FK_DeptText;
                         rpt.FlowEnder = emp.UserID;
                         rpt.FlowStarter = emp.UserID;
                         rpt.SaveAsOID((int)wk.OID); //执行保存.
@@ -2179,7 +2181,7 @@ namespace BP.WF
                 string name = this.Name;
                 name = BP.Tools.StringExpressionCalculate.ReplaceBadCharOfFileName(name);
                 name = name + ".xml";
-                string filePath = path + name;
+                string filePath = path + "/" + name;
                 ds.WriteXml(filePath);
             }
             return ds;
@@ -2781,6 +2783,7 @@ namespace BP.WF
                         attr.setMaxLen(100);
                         attr.Update();
                         break;
+
                     case "FK_NY":
                         //  attr.UIBindKey = "BP.Pub.NYs";
                         attr.setUIContralType(UIContralType.TB);
@@ -2929,7 +2932,7 @@ namespace BP.WF
                 attr.setUIVisible(true);
                 attr.setUIIsEnable(false);
                 attr.setMinLen(0);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -2966,7 +2969,7 @@ namespace BP.WF
                 attr.setUIVisible(true);
                 attr.setUIIsEnable(false);
                 attr.setMinLen(0);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.Idx = -1;
                 attr.Insert();
             }
@@ -3102,7 +3105,7 @@ namespace BP.WF
                 attr.setUIIsEnable(false);
                 attr.UIIsLine = true;
                 attr.setMinLen(0);
-                attr.setMaxLen(32);
+                attr.setMaxLen(100);
                 attr.Idx = -100;
                 attr.Insert();
             }
@@ -3206,6 +3209,23 @@ namespace BP.WF
                 attr.setMinLen(0);
                 attr.setMaxLen(100);
                 attr.Idx = -100;
+                attr.Insert();
+            }
+
+            if (attrs.Contains(md.No + "_" + GERptAttr.FK_DeptName) == false)
+            {
+                MapAttr attr = new BP.Sys.MapAttr();
+                attr.SetValByKey(MapAttrAttr.FK_MapData, md.No);
+                attr.setEditType(BP.En.EditType.UnDel);
+                attr.SetValByKey(MapAttrAttr.KeyOfEn, "FK_DeptName");
+                attr.SetValByKey(MapAttrAttr.Name, "操作员部门名称");
+                attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppString);
+                attr.setUIContralType(UIContralType.TB);
+                attr.SetValByKey(MapAttrAttr.UIVisible, false);
+                attr.SetValByKey(MapAttrAttr.UIIsEnable, false);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.SetValByKey(MapAttrAttr.MinLen, 0);
+                attr.SetValByKey(MapAttrAttr.MaxLen, 50);
                 attr.Insert();
             }
             #endregion 补充上流程字段。
@@ -3655,14 +3675,6 @@ namespace BP.WF
             }
         }
 
-        public bool IsFrmEnable
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FlowAttr.IsFrmEnable);
-            }
-        }
-
         public bool IsTruckEnable
         {
             get
@@ -3687,13 +3699,6 @@ namespace BP.WF
             }
         }
 
-        public bool IsOPEnable
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FlowAttr.IsOPEnable);
-            }
-        }
         #endregion
 
         #region 构造方法
@@ -3771,11 +3776,11 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.FlowAppType, 0, "流程类型", false, false);
                 map.AddTBInt(FlowAttr.ChartType, 1, "节点图形类型", false, false);
 
-                map.AddTBInt(FlowAttr.IsFrmEnable, 0, "是否显示表单", true, true);
+                //map.AddTBInt(FlowAttr.IsFrmEnable, 0, "是否显示表单", true, true);
                 map.AddTBInt(FlowAttr.IsTruckEnable, 1, "是否显示轨迹图", true, true);
                 map.AddTBInt(FlowAttr.IsTimeBaseEnable, 1, "是否显示时间轴", true, true);
                 map.AddTBInt(FlowAttr.IsTableEnable, 1, "是否显示时间表", true, true);
-                map.AddTBInt(FlowAttr.IsOPEnable, 0, "是否显示操作", true, true);
+                //map.AddTBInt(FlowAttr.IsOPEnable, 0, "是否显示操作", true, true);
                 map.AddTBInt(FlowAttr.TrackOrderBy, 0, "排序方式", true, true);
                 map.AddTBInt(FlowAttr.SubFlowShowType, 0, "子流程轨迹图显示模式", true, true);
 
@@ -3882,6 +3887,8 @@ namespace BP.WF
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
+
+                map.AddMyFile("sss");
 
 
                 this._enMap = map;

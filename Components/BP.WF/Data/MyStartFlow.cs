@@ -705,6 +705,7 @@ namespace BP.WF.Data
                 if (this._enMap != null)
                     return this._enMap;
 
+                #region 基本字段.
                 Map map = new Map("WF_GenerWorkFlow", "我发起的流程");
                 map.setEnType(EnType.View);
 
@@ -723,17 +724,19 @@ namespace BP.WF.Data
                 map.AddTBString(MyStartFlowAttr.NodeName, null, "停留节点", true, true, 0, 100, 100, false);
                 map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, false);
                 map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
-
-
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 100, true);
 
                 // map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
-
                 //隐藏字段.
                 map.AddTBInt(MyStartFlowAttr.WFState, 0, "状态", false, false);
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
+                //查询关键字.
+                map.AddTBSKeyWords(4000);
+                #endregion 基本字段.
+
+                #region 查询条件.
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
@@ -750,8 +753,10 @@ namespace BP.WF.Data
                 search = new SearchNormal(MyStartFlowAttr.WFState, "流程状态",
                     MyStartFlowAttr.WFState, "not in", "('0')", 0, true);
                 map.SearchNormals.Add(search);
+                #endregion 查询条件.
 
-               RefMethod rm = new RefMethod();
+
+                RefMethod rm = new RefMethod();
                 /*  rm.Title = "轨迹";
                  rm.ClassMethodName = this.ToString() + ".DoTrack";
                  rm.RefMethodType = RefMethodType.LinkeWinOpen;

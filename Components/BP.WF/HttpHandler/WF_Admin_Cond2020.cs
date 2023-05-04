@@ -115,6 +115,17 @@ namespace BP.WF.HttpHandler
                 return "不符合规范:" + str;
             }
         }
+        /// <summary>
+        /// 初始化岗位
+        /// </summary>
+        /// <returns></returns>
 
-    }
+        public string SelectStation_StationTypes()
+        {
+            string sql = "select No,Name FROM port_StationType WHERE No in (SELECT Fk_StationType from Port_Station WHERE OrgNo ='" + this.GetRequestVal("OrgNo") + "')";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+	}
 }

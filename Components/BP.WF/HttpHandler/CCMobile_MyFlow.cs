@@ -356,7 +356,7 @@ namespace BP.WF.HttpHandler
                     BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
 
                 if (fl.DraftRole == DraftRole.SaveToTodolist)
-                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.FK_Flow, this.WorkID);
+                    BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.WorkID);
             }
             return str;
         }

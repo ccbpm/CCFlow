@@ -268,26 +268,18 @@ namespace BP.WF.HttpHandler
         public string ChangeDept_Submit()
         {
             string deptNo = this.GetRequestVal("DeptNo");
+           
             BP.Port.Dept dept = new BP.Port.Dept(deptNo);
 
             BP.Web.WebUser.FK_Dept = dept.No;
             BP.Web.WebUser.FK_DeptName = dept.Name;
             BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
 
-            ////重新设置cookies.
-            //string strs = "";
-            //strs += "@No=" + WebUser.No;
-            //strs += "@Name=" + WebUser.Name;
-            //strs += "@FK_Dept=" + WebUser.FK_Dept;
-            //strs += "@FK_DeptName=" + WebUser.FK_DeptName;
-            //strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
-            //BP.Web.WebUser.SetValToCookie(strs);
-
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.StartFlows = "";
             emp.Update();
-
-            try
+            //去掉切换主部门
+           /* try
             {
                 string sql = "";
 
@@ -295,15 +287,13 @@ namespace BP.WF.HttpHandler
                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE UserID='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
                 else
                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE No='" + WebUser.No + "'";
-
-
                 DBAccess.RunSQL(sql);
                 BP.WF.Dev2Interface.Port_Login(WebUser.No);
             }
             catch (Exception ex)
             {
 
-            }
+            }*/
 
             return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
         }

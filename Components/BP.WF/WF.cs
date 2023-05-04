@@ -89,6 +89,10 @@ namespace BP.WF
         public const string Tools = "Tools";
         public const string ToolsSmall = "ToolsSmall";
         public const string Runing = "Runing";
+        public const string Draft = "Draft";
+
+        public const string Flows = "Flows";
+        public const string Frms = "Frms";
         /// <summary>
         /// 工作处理器
         /// </summary>

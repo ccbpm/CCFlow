@@ -365,7 +365,7 @@ namespace BP.WF.Template
         /// <summary>
         /// icon头像
         /// </summary>
-        public const string ICON = "ICON";
+        public const string Icon = "Icon";
         /// <summary>
         /// 自定义参数字段
         /// </summary>

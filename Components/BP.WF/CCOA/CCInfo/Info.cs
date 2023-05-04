@@ -3,6 +3,8 @@ using BP.DA;
 using BP.Web;
 using BP.En;
 using BP.Sys;
+using Org.BouncyCastle.Asn1.Mozilla;
+using System.IO;
 
 namespace BP.CCOA.CCInfo
 {
@@ -167,7 +169,7 @@ namespace BP.CCOA.CCInfo
                 Map map = new Map("OA_Info", "信息");
 
                 map.AddTBStringPK(InfoAttr.No, null, "编号", false, true, 1, 59, 59);
-                map.AddTBString(InfoAttr.Name, null, "标题", true, false, 0, 100, 10, true);
+                map.AddTBString(InfoAttr.Name, null, "标题", true, false, 0, 300, 10, true);
 
                 map.AddTBStringDoc("Docs", "Docs", null, "内容", true, false, 0, 5000, 20, true, true);
 
@@ -194,7 +196,8 @@ namespace BP.CCOA.CCInfo
                     map.AddTBString(InfoAttr.OrgNo, null, "组织", true, true, 0, 100, 10);
 
                 //增加附件.
-                map.AddMyFileS();
+                map.AddMyFile();
+
 
                 #region 设置查询条件.
                 map.DTSearchKey = InfoAttr.RDT;
@@ -254,10 +257,14 @@ namespace BP.CCOA.CCInfo
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.SetValByKey(InfoAttr.OrgNo, BP.Web.WebUser.OrgNo);
 
+            this.No = DBAccess.GenerGUID();
+
 
             return base.beforeInsert();
         }
         #endregion 执行方法.
+
+        
     }
     /// <summary>
     /// 信息 s
@@ -284,6 +291,50 @@ namespace BP.CCOA.CCInfo
         public override int RetrieveAll()
         {
             return base.RetrieveAll();
+        }
+
+        public string Init_Data()
+        {
+            string path = @"C:\\Users\\zhoup\\Documents\\WXWork\\1688851964626505\\WeDrive\\济南泉亿信息技术有限公司\\软文";
+            string[] strs = System.IO.Directory.GetDirectories(path);
+            foreach (string dirPath in strs)
+            {
+                string[] files = System.IO.Directory.GetFiles(dirPath);
+                foreach (string filePath in files)
+                {
+                    System.IO.FileInfo finfo = new FileInfo(filePath);
+                    if (finfo.Name.Contains("WeDrive") == true)
+                        continue;
+
+                    BP.CCOA.CCInfo.Info en = new BP.CCOA.CCInfo.Info();
+                    en.Name = finfo.Name;
+                    en.No = DBAccess.GenerGUID();
+                    if (en.IsExit("Name", en.Name) == true)
+                        continue;
+
+                    en.Docs = finfo.Name;
+                    en.SetValByKey("MyFileName", en.Name);
+                    en.SetValByKey("MyFileExt", finfo.Extension.Replace(".", ""));
+
+                    string file = "/DataUser/TS.CCOA.CCInfo.Info/" + en.No + "" + finfo.Extension;
+                    en.SetValByKey("WebPath", file);
+                    en.SetValByKey("MyFileSize", finfo.Length.ToString());
+                    en.SetValByKey("InfoSrcType", 1);
+
+                    if (DataType.IsImgExt(finfo.Extension) == true)
+                    {
+                        string html = "<p>";
+                        html += "<img src='http://81.69.38.157:8090:" + file + "' alt='" + en.Name + "' />";
+                        html += "</p>";
+                        en.Docs = html;
+                    }
+
+                    //复制文件.
+                    System.IO.File.Copy(filePath, BP.Difference.SystemConfig.PathOfDataUser + "/TS.CCOA.CCInfo.Info/" + en.No + "" + finfo.Extension);
+                    en.Insert();
+                }
+            }
+            return "info@执行成功.";
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

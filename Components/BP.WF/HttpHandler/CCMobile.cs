@@ -9,6 +9,7 @@ using BP.Port;
 using BP.En;
 using BP.WF.Port.Admin2Group;
 using BP.Difference;
+using BP.CCFast.CCMenu;
 
 namespace BP.WF.HttpHandler
 {
@@ -306,15 +307,129 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
             ht.Add("Todolist_Complete", BP.WF.Dev2Interface.Todolist_Complete);
-            //ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
             ht.Add("Todolist_CCWorks", BP.WF.Dev2Interface.Todolist_CCWorks);
-            //ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
-            //ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
 
             ht.Add("Todolist_HuiQian", BP.WF.Dev2Interface.Todolist_HuiQian); //会签数量.
             ht.Add("Todolist_Drafts", BP.WF.Dev2Interface.Todolist_Draft); //会签数量.
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+        public string Default_Init()
+        {
+            DataSet ds = new DataSet();
+            //获取最近发起的流程
+            string sql = "";
+            int top = GetRequestValInt("Top");
+            if (top == 0) top = 8;
+
+            switch (BP.Difference.SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    sql = " SELECT TOP " + top + "  FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "' ORDER By SendDT DESC";
+                    break;
+                case DBType.MySQL:
+                case DBType.PostgreSQL:
+                case DBType.UX:
+                    sql = " SELECT DISTINCT FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + top;
+                    break;
+                case DBType.Oracle:
+                case DBType.DM:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
+                    sql = " SELECT * FROM (SELECT DISTINCT FK_Flow as \"FK_Flow\",FlowName as \"FlowName\",F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "' GROUP BY FK_Flow,FlowName,ICON Order By SendDT) WHERE  rownum <=" + top;
+                    break;
+                default:
+                    throw new Exception("err@系统暂时还未开发使用" + BP.Difference.SystemConfig.AppCenterDBType + "数据库");
+            }
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Flows";
+            ds.Tables.Add(dt);
+            //应用中心
+            MySystems systems = new MySystems();
+            systems.RetrieveAll();
+            MySystems systemsCopy = new MySystems();
+            //权限中心.
+            BP.CCFast.CCMenu.PowerCenters pcs = new BP.CCFast.CCMenu.PowerCenters();
+            pcs.RetrieveAll();
+            string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
+            string mystas = ""; //我的角色.
+            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+            foreach (DataRow dr in mydeptsDT.Rows)
+            {
+                mydepts += dr[0].ToString() + ",";
+                mystas += dr[1].ToString() + ",";
+            }
+
+            //首先解决系统的权限.
+            string ids = "";
+            foreach (MySystem item in systems)
+            {
+                //如果被禁用了.
+                if (item.IsEnable == false) continue;
+
+                //找到关于系统的控制权限集合.
+                PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, item.No) as PowerCenters;
+                //如果没有权限控制的描述，就默认有权限.
+                if (mypcs == null)
+                {
+                    systemsCopy.AddEntity(item);
+                    continue;
+                }
+
+                //控制遍历权限.
+                foreach (PowerCenter pc in mypcs)
+                {
+                    if (pc.CtrlModel.Equals("Anyone") == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+                    if (pc.CtrlModel.Equals("Adminer") == true && BP.Web.WebUser.No.Equals("admin") == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+
+                    if (pc.CtrlModel.Equals("AdminerAndAdmin2") == true && BP.Web.WebUser.IsAdmin == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+                    ids = "," + pc.IDs + ",";
+                    if (pc.CtrlModel.Equals("Emps") == true && ids.Contains("," + BP.Web.WebUser.No + ",") == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+
+                    //是否包含部门？
+                    if (pc.CtrlModel.Equals("Depts") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mydepts) == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+
+                    //是否包含角色？
+                    if (pc.CtrlModel.Equals("Stations") == true && BP.DA.DataType.IsHaveIt(pc.IDs, mystas) == true)
+                    {
+                        systemsCopy.AddEntity(item);
+                        break;
+                    }
+
+                    //SQL？
+                    if (pc.CtrlModel.Equals("SQL") == true)
+                    {
+                        sql = BP.WF.Glo.DealExp(pc.IDs, null, "");
+                        if (DBAccess.RunSQLReturnValFloat(sql) > 0)
+                        {
+                            systemsCopy.AddEntity(item);
+                        }
+                        break;
+                    }
+                }
+            }
+            ds.Tables.Add(systemsCopy.ToDataTableField("Systems"));
+            return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 查询

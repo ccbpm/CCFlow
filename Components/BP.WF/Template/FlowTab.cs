@@ -156,6 +156,7 @@ namespace BP.WF.Template
                 map.AddTBString(FlowTabAttr.Mark, null, "标记", false, false, 0, 50, 10);
                 map.AddTBString(FlowTabAttr.Tip, null, "Tip", false, false, 0, 200, 10);
 
+                map.AddTBInt(FlowTabAttr.IsEnable, 1, "IsEnable", true, false);
                 map.AddTBString(FlowTabAttr.UrlExt, null, "url链接", false, false, 0, 300, 10);
                 map.AddTBString(FlowTabAttr.Icon, null, "Icon", false, false, 0, 50, 10);
                 map.AddTBString(FlowTabAttr.OrgNo, null, "OrgNo", false, false, 0, 50, 10);
@@ -215,7 +216,7 @@ namespace BP.WF.Template
 
             BP.WF.GERpts rpts = new BP.WF.GERpts();
 
-        //    GEEntitys ens = new GEEntitys(rptNo);
+            //    GEEntitys ens = new GEEntitys(rptNo);
 
             GenerWorkFlows ens = new GenerWorkFlows();
             BP.En.QueryObject qo = new QueryObject(ens);
@@ -245,14 +246,14 @@ namespace BP.WF.Template
             qo.addLeftBracket();
             qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.addOr();
-            qo.AddWhere(BP.WF.GERptAttr.FlowStarter, BP.Web.WebUser.No );
+            qo.AddWhere(BP.WF.GERptAttr.FlowStarter, BP.Web.WebUser.No);
             qo.addRightBracket();
             qo.addOrderBy("RDT");
             qo.Top = 100;
             qo.DoQuery();
             ds.Tables.Add(ens.ToDataTableField("DT"));
 
-           
+
             //表单的ID
             string frmID = "ND" + int.Parse(flowNo) + "Rpt";
             Flow flow = new Flow(flowNo);
@@ -274,7 +275,7 @@ namespace BP.WF.Template
             MapAttrs mattrsOfSystem = new MapAttrs();
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.Title));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowStarter));
-           // mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.fk)); @hongyan. 去掉.
+            // mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.fk)); @hongyan. 去掉.
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.WFState));
             mattrsOfSystem.AddEntity(attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, BP.WF.GERptAttr.FlowEmps));
 
@@ -299,7 +300,7 @@ namespace BP.WF.Template
             Flow flow = new Flow(flowNo);
             if (flow.FlowDevModel == FlowDevModel.RefOneFrmTree)
                 frmID = flow.FrmUrl;
-            if(flow.FlowDevModel == FlowDevModel.Prefessional)
+            if (flow.FlowDevModel == FlowDevModel.Prefessional)
             {
                 //获取第一个节点的表单方案
                 Node nd = new Node(int.Parse(flowNo) + "01");
@@ -327,7 +328,7 @@ namespace BP.WF.Template
         }
 
 
-        public string Search_SearchData(string flowNo,int pageIdx,int pageSize)
+        public string Search_SearchData(string flowNo, int pageIdx, int pageSize)
         {
             //表单编号
             string rptNo = "ND" + int.Parse(flowNo) + "Rpt";
@@ -472,7 +473,7 @@ namespace BP.WF.Template
             #endregion 外键或者枚举的查询
 
 
-           
+
 
             #region 日期处理
             if (mapData.DTSearchWay != DTSearchWay.None)

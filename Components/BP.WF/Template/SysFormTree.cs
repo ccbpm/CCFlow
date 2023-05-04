@@ -120,10 +120,10 @@ namespace BP.WF.Template
                 Map map = new Map("Sys_FormTree", "表单树");
                 //map.CodeStruct = "2";
 
-                map.DepositaryOfEntity= Depositary.None;
+                map.DepositaryOfEntity = Depositary.None;
                 map.DepositaryOfMap = Depositary.Application;
 
-                map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 10, 40);
+                map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 50, 40);
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点编号", false, false, 0, 100, 40);
                 map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
@@ -162,13 +162,15 @@ namespace BP.WF.Template
         {
             if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
-            this.No = DBAccess.GenerOID(this.ToString()).ToString();
+           
+            if (DataType.IsNullOrEmpty(this.No) == true)
+                this.No = DBAccess.GenerOID(this.ToString()).ToString();
             return base.beforeInsert();
         }
 
         protected override bool beforeDelete()
         {
-            string sql = "SELECT COUNT(*) as Num FROM Sys_MapData WHERE FK_FormTree='" + this.No+"'";
+            string sql = "SELECT COUNT(*) as Num FROM Sys_MapData WHERE FK_FormTree='" + this.No + "'";
             int num = DBAccess.RunSQLReturnValInt(sql);
             if (num != 0)
                 throw new Exception("err@您不能删除该目录，下面有表单。");
@@ -199,10 +201,10 @@ namespace BP.WF.Template
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = DBAccess.GenerOID(this.ToString()).ToString();
+            en.No = DBAccess.GenerGUID(10); 
             en.Name = name;
             en.Insert();
-            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
                 BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
@@ -222,7 +224,7 @@ namespace BP.WF.Template
         {
             SysFormTree en = new SysFormTree();
             en.Copy(this);
-            en.No = DBAccess.GenerOID(this.ToString()).ToString();
+            en.No = DBAccess.GenerGUID(10); 
             en.ParentNo = this.No;
             en.Name = name;
             en.Insert();
@@ -272,9 +274,9 @@ namespace BP.WF.Template
         }
         public override int RetrieveAll()
         {
-            if (BP.Difference.SystemConfig.CCBPMRunModel== CCBPMRunModel.SAAS 
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS
                 || BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                return this.Retrieve(SysFormTreeAttr.OrgNo,BP.Web.WebUser.OrgNo);
+                return this.Retrieve(SysFormTreeAttr.OrgNo, BP.Web.WebUser.OrgNo);
 
 
             int i = base.RetrieveAll();

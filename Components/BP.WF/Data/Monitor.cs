@@ -669,7 +669,7 @@ namespace BP.WF.Data
                 map.AddTBIntPK(MonitorAttr.WorkID, 0, "工作ID", true, true);
                 map.AddTBInt(MonitorAttr.FID, 0, "FID", false, false);
                 map.AddTBString(MonitorAttr.Title, null, "流程标题", true, false, 0, 300, 10,true);
-                map.AddTBString(MonitorAttr.FK_Emp, null, "当前处理人员", true, false, 0, 30, 10);
+                map.AddTBString(MonitorAttr.FK_Emp, null, "当前处理人员", true, false, 0, 50, 10);
                 map.AddDDLEntities(MonitorAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddDDLEntities(MonitorAttr.FK_Dept, null, "发起部门", new BP.Port.Depts(), false);
                 map.AddTBString(MonitorAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);

@@ -1072,7 +1072,7 @@ namespace BP.WF
             {
                 string s = BP.Difference.SystemConfig.AppSettings["PrintBackgroundWord"];
                 if (string.IsNullOrEmpty(s))
-                    s = "高凌工作流引擎@开源高凌 - ccflow@openc";
+                    s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
                 return s;
             }
         }
@@ -1572,7 +1572,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20221023;
+        public static int Ver = 20230221;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -1607,7 +1607,43 @@ namespace BP.WF
             int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
             if (currDBVer != null && currDBVer != 0 && currDBVer >= Ver)
                 return null; //不需要升级.
-
+            #region 升级流程模式的存储方式
+            if(DBAccess.IsExitsTableCol("WF_Flow", "FlowDevModel") == false)
+            {
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowDevModel INT NULL");
+                        break;
+                    case DBType.Oracle:
+                    case DBType.Informix:
+                    case DBType.PostgreSQL:
+                    case DBType.UX:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
+                        DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowDevModel INTEGER NULL");
+                        break;
+                    case DBType.MySQL:
+                        DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowDevModel INT NULL");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Flows flows = new Flows();
+            QueryObject qo = new QueryObject(flows);
+            qo.AddWhere("AtPara", "Like", "%FlowDevModel=%");
+            qo.DoQuery();
+            foreach(Flow flow in flows)
+            {
+                int flowDevModel = flow.GetParaInt("FlowDevModel");
+                flow.FlowDevModel = (FlowDevModel)flowDevModel;
+                string atPara = flow.GetValStringByKey("AtPara");
+                atPara = atPara.Replace("@FlowDevModel=" + flowDevModel, "");
+                flow.SetValByKey("AtPara", atPara);
+                flow.DirectUpdate();
+            }
+            #endregion 升级流程模式的存储方式
             #region 升级文本框字段类型.  TextModel=0普通文本，1密码，2=TextArea,3=富文本.
             //说明没有升级. TextModel=0
             if (DBAccess.IsExitsTableCol("Sys_MapAttr", "IsRichText") == true)
@@ -1698,7 +1734,7 @@ namespace BP.WF
 
 
             //升级支持ts.
-            UpdataTSModel();
+            // UpdataTSModel();
 
             //升级日志.
             UserLogLevel ul = new UserLogLevel();
@@ -1706,6 +1742,9 @@ namespace BP.WF
             UserLogType ut = new UserLogType();
             ut.CheckPhysicsTable();
 
+            //添加IsEnable
+            BP.WF.Template.FlowTab fb = new BP.WF.Template.FlowTab();
+            fb.CheckPhysicsTable();
 
             if (DBAccess.IsExitsTableCol("Sys_GroupField", "EnName") == true)
             {
@@ -1721,7 +1760,6 @@ namespace BP.WF
             //检查BPM.现在暂时不使用原菜单结构
             // if (!SystemConfig.OrganizationIsView)
             //    CheckGPM();
-
 
             MapData mapData = new MapData();
             mapData.CheckPhysicsTable();
@@ -2018,7 +2056,7 @@ namespace BP.WF
             #region 升级填充数据.
             //pop自动填充
             MapExts exts = new MapExts();
-            QueryObject qo = new QueryObject(exts);
+            qo = new QueryObject(exts);
             qo.AddWhere(MapExtAttr.ExtType, " LIKE ", "Pop%");
             qo.DoQuery();
             foreach (MapExt ext in exts)
@@ -2703,44 +2741,38 @@ namespace BP.WF
 
                 #region 升级表单树
                 // 首先检查是否升级过.
-                sql = "SELECT * FROM Sys_FormTree WHERE No = '1'";
-                DataTable formTree_dt = DBAccess.RunSQLReturnTable(sql);
-                if (formTree_dt.Rows.Count == 0)
-                {
-                    /*没有升级过.增加根节点*/
-                    SysFormTree formTree = new SysFormTree();
-                    formTree.No = "1";
-                    formTree.Name = "表单库";
-                    formTree.ParentNo = "0";
-                    // formTree.TreeNo = "0";
-                    formTree.Idx = 0;
-                    formTree.IsDir = true;
+                //sql = "SELECT * FROM Sys_FormTree WHERE No = '1'";
+                //DataTable formTree_dt = DBAccess.RunSQLReturnTable(sql);
+                //if (formTree_dt.Rows.Count == 0)
+                //{
+                //    /*没有升级过.增加根节点*/
+                //    SysFormTree formTree = new SysFormTree();
+                //    formTree.No = "1";
+                //    formTree.Name = "表单库";
+                //    formTree.ParentNo = "0";
+                //    // formTree.TreeNo = "0";
+                //    formTree.Idx = 0;
+                //    formTree.IsDir = true;
+                //        formTree.DirectInsert();
 
-                    try
-                    {
-                        formTree.DirectInsert();
-                    }
-                    catch
-                    {
-                    }
-                    //将表单库中的数据转入表单树
-                    SysFormTrees formSorts = new SysFormTrees();
-                    formSorts.RetrieveAll();
+                //    //将表单库中的数据转入表单树
+                //    SysFormTrees formSorts = new SysFormTrees();
+                //    formSorts.RetrieveAll();
 
-                    foreach (SysFormTree item in formSorts)
-                    {
-                        if (item.No == "0")
-                            continue;
-                        SysFormTree subFormTree = new SysFormTree();
-                        subFormTree.No = item.No;
-                        subFormTree.Name = item.Name;
-                        subFormTree.ParentNo = "0";
-                        subFormTree.Save();
-                    }
-                    //表单于表单树进行关联
-                    sql = "UPDATE Sys_MapData SET FK_FormTree=FK_FrmSort WHERE FK_FrmSort <> '' AND FK_FrmSort IS not null";
-                    DBAccess.RunSQL(sql);
-                }
+                //    foreach (SysFormTree item in formSorts)
+                //    {
+                //        if (item.No == "0")
+                //            continue;
+                //        SysFormTree subFormTree = new SysFormTree();
+                //        subFormTree.No = item.No;
+                //        subFormTree.Name = item.Name;
+                //        subFormTree.ParentNo = "0";
+                //        subFormTree.Save();
+                //    }
+                //    //表单于表单树进行关联
+                //    sql = "UPDATE Sys_MapData SET FK_FormTree=FK_FrmSort WHERE FK_FrmSort <> '' AND FK_FrmSort IS not null";
+                //    DBAccess.RunSQL(sql);
+                //}
                 #endregion
 
                 #region 执行admin登陆. 2012-12-25 新版本.
@@ -2897,7 +2929,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 检查是否可以安装高凌BPM系统
+        /// 检查是否可以安装驰骋BPM系统
         /// </summary>
         /// <returns></returns>
         public static bool IsCanInstall()
@@ -3008,7 +3040,7 @@ namespace BP.WF
                     DBAccess.RunSQL(sql);
                 }
 
-                string info = "高凌工作流引擎 - 检查数据库安装权限出现错误:";
+                string info = "驰骋工作流引擎 - 检查数据库安装权限出现错误:";
                 info += "\t\n1. 当前登录的数据库帐号，必须有创建、删除视图或者table的权限。";
                 info += "\t\n2. 必须对表有增、删、改、查的权限。 ";
                 info += "\t\n3. 必须有删除创建索引主键的权限。 ";
@@ -3341,8 +3373,8 @@ namespace BP.WF
                     wfEmp.Copy(emp);
                     wfEmp.No = emp.UserID;
 
-                    if (wfEmp.Email.Length == 0)
-                        wfEmp.Email = emp.UserID + "@citydo.com.cn";
+                    /* if (wfEmp.Email.Length == 0)
+                         wfEmp.Email = emp.UserID + "@citydo.com.cn";*/
 
                     if (wfEmp.Tel.Length == 0)
                         wfEmp.Tel = "82374939-6" + i.ToString().PadLeft(2, '0');
@@ -3360,7 +3392,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.UserID + "','200" + myIdx + "-01','成都.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -3373,7 +3405,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','成都.高凌" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','成都.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -3417,31 +3449,34 @@ namespace BP.WF
                 // fss.RetrieveAll();
                 //  fss.Delete();
                 DBAccess.RunSQL("DELETE FROM WF_FlowSort ");
-
                 FlowSort fs = new FlowSort();
                 fs.Name = "流程树";
                 fs.No = "1";
                 fs.ParentNo = "0";
                 fs.Insert();
 
-                FlowSort s1 = (FlowSort)fs.DoCreateSubNode();
-                s1.Name = "日常办公类";
-                s1.Update();
+                fs = new FlowSort();
+                fs.No = "101";
+                fs.ParentNo = "1";
+                fs.Name = "日常办公类";
+                fs.Insert();
 
                 //加载一个模版,不然用户不知道如何新建流程.
-                BP.WF.Template.TemplateGlo.LoadFlowTemplate(s1.No, BP.Difference.SystemConfig.PathOfData + "Install/QingJiaFlowDemoInit.xml",
+                BP.WF.Template.TemplateGlo.LoadFlowTemplate(fs.No, BP.Difference.SystemConfig.PathOfData + "Install/QingJiaFlowDemoInit.xml",
                     ImpFlowTempleteModel.AsTempleteFlowNo);
 
                 Flow fl = new Flow("001");
                 fl.DoCheck(); //做一下检查.
 
-                s1 = (FlowSort)fs.DoCreateSubNode();
-                s1.Name = "财务类";
-                s1.Update();
+                fs.No = "102";
+                fs.ParentNo = "1";
+                fs.Name = "财务类";
+                fs.Insert();
 
-                s1 = (FlowSort)fs.DoCreateSubNode();
-                s1.Name = "人力资源类";
-                s1.Update();
+                fs.No = "103";
+                fs.ParentNo = "1";
+                fs.Name = "人力资源类";
+                fs.Insert();
 
 
                 //创建一个空白的流程，不然，整个结构就出问题。
@@ -3456,18 +3491,23 @@ namespace BP.WF
                 ftree.ParentNo = "0";
                 ftree.Insert();
 
-                SysFormTree subFrmTree = (SysFormTree)ftree.DoCreateSubNode();
+                SysFormTree subFrmTree = new SysFormTree();
                 subFrmTree.Name = "流程独立表单";
-                subFrmTree.Update();
+                subFrmTree.ParentNo = "1";
+                subFrmTree.No = "101";
+                subFrmTree.Insert();
 
-                subFrmTree = (SysFormTree)ftree.DoCreateSubNode();
+                subFrmTree = new SysFormTree(); ;
+                subFrmTree.No = "102";
                 subFrmTree.Name = "常用信息管理";
-                subFrmTree.Update();
+                subFrmTree.ParentNo = "1";
+                subFrmTree.Insert();
 
-                subFrmTree = (SysFormTree)ftree.DoCreateSubNode();
+                subFrmTree = new SysFormTree(); ;
                 subFrmTree.Name = "常用单据";
-                subFrmTree.Update();
-
+                subFrmTree.No = "103";
+                subFrmTree.ParentNo = "1";
+                subFrmTree.Insert();
             }
             #endregion 装载demo.flow
 
@@ -3540,7 +3580,7 @@ namespace BP.WF
             tmp = DBAccess.RunSQLReturnString(tmp);
             if (string.IsNullOrEmpty(tmp))
             {
-                tmp = "INSERT INTO WF_FlowSort(No,Name,ParentNo,TreeNo,idx,IsDir) values('01','流程树',0,'',0,0)";
+                tmp = "INSERT INTO WF_FlowSort(No,Name,ParentNo,TreeNo,idx,IsDir) values('1','流程树',0,'',0,0)";
                 DBAccess.RunSQLReturnString(tmp);
             }
 
@@ -3549,7 +3589,7 @@ namespace BP.WF
             tmp = DBAccess.RunSQLReturnString(tmp);
             if (string.IsNullOrEmpty(tmp))
             {
-                tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,Idx,IsDir) values('001','表单树',0,0,0)";
+                tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,Idx,IsDir) values('1','表单树',0,0,0)";
                 DBAccess.RunSQLReturnString(tmp);
             }
 
@@ -3709,7 +3749,7 @@ namespace BP.WF
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Width = img.Width; // 图片宽度
             //        //    WordDoc.Application.ActiveDocument.InlineShapes[1].Height = img.Height; // 图片高度
             //    }
-            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[高凌业务流程管理系统 http://citydo.com.cn]");
+            //    WordApp.ActiveWindow.ActivePane.Selection.InsertAfter("[驰骋业务流程管理系统 http://citydo.com.cn]");
             //    WordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft; // 设置右对齐
             //    WordApp.ActiveWindow.View.SeekView = Word.WdSeekView.wdSeekMainDocument; // 跳出页眉设置
             //    WordApp.Selection.ParagraphFormat.LineSpacing = 15f; // 设置文档的行间距
@@ -4089,6 +4129,7 @@ namespace BP.WF
                 //  str += GERptAttr.CWorkID + ",";
                 str += GERptAttr.FID + ",";
                 str += GERptAttr.FK_Dept + ",";
+                str += GERptAttr.FK_DeptName + ",";
                 str += GERptAttr.FK_NY + ",";
                 str += GERptAttr.FlowDaySpan + ",";
                 str += GERptAttr.FlowEmps + ",";
@@ -6880,7 +6921,8 @@ namespace BP.WF
             }
 
             #endregion 求计算属性.
-
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                ch.SetValByKey(CHAttr.OrgNo, WebUser.OrgNo);
             //执行保存.
             try
             {
@@ -7043,7 +7085,7 @@ namespace BP.WF
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
             //查询使用的workId
             string ctrlWayId = "";
-            if (FK_FrmAttachment.Contains("AthMDtl") == true)
+            if (FK_FrmAttachment.Contains("AthMDtl") == true || athDesc.GetParaBoolen("IsDtlAth")== true)
                 ctrlWayId = pkval;
             else
             {
@@ -7060,31 +7102,28 @@ namespace BP.WF
                 return dbs;
 
             BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+            //从表附件
+            if (FK_FrmAttachment.Contains("AthMDtl") || athDesc.GetParaBoolen("IsDtlAth") == true)
+            {
+                /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                qo.DoQuery();
+                return dbs;
+            }
             if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
             {
-                if (FK_FrmAttachment.Contains("AthMDtl"))
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+                if (isContantSelf == false)
                 {
-                    /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-
-                    qo.DoQuery();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
                 }
-                else
-                {
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
-                    if (isContantSelf == false)
-                    {
-                        qo.addAnd();
-                        qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
-                    }
-                    qo.addOrderBy("Idx,RDT");
-                    qo.DoQuery();
-
-                }
+                qo.addOrderBy("Idx,RDT");
+                qo.DoQuery();
                 return dbs;
             }
 

@@ -385,7 +385,7 @@ namespace BP.WF.HttpHandler
             {
                 foreach (string s in strs)
                 {
-                    if (s == null)
+                    if (DataType.IsNullOrEmpty(s)==true)
                         continue;
                     if (s.Contains(attr.KeyOfEn + ":") == false)
                         continue;

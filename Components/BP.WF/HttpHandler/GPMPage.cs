@@ -61,7 +61,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string tempFile =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg";
+                string tempFile = BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -73,7 +73,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" ;
+                return "err@";
             }
 
             HttpContextHelper.UploadFile(f, BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg");
@@ -91,6 +91,9 @@ namespace BP.WF.HttpHandler
 
             BP.Port.Depts depts = new BP.Port.Depts();
             string parentNo = this.GetRequestVal("ParentNo");
+            if (DataType.IsNullOrEmpty(parentNo) == true)
+                parentNo = "0";
+
             if (DataType.IsNullOrEmpty(parentNo) == true)
             {
                 if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
@@ -113,7 +116,7 @@ namespace BP.WF.HttpHandler
             }
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc || SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-               qo.AddWhere(BP.Port.DeptAttr.No, WebUser.OrgNo);
+                qo.AddWhere(BP.Port.DeptAttr.No, WebUser.OrgNo);
             }
             qo.addOrderBy(BP.Port.DeptAttr.Idx);
             qo.DoQuery();
@@ -122,7 +125,7 @@ namespace BP.WF.HttpHandler
 
         }
 
-        public  string Organization_GetDeptsByParentNo()
+        public string Organization_GetDeptsByParentNo()
         {
 
             BP.Port.Depts depts = new BP.Port.Depts();
@@ -131,14 +134,14 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(BP.Port.DeptAttr.ParentNo, parentNo);
             qo.addOrderBy(BP.Port.DeptAttr.Idx);
             qo.DoQuery();
-		    return depts.ToJson("dt");
-	    }
+            return depts.ToJson("dt");
+        }
 
-    /// <summary>
-    /// 获取本部门及人员信息
-    /// </summary>
-    /// <returns></returns>
-    public string DeptEmp_Init()
+        /// <summary>
+        /// 获取本部门及人员信息
+        /// </summary>
+        /// <returns></returns>
+        public string DeptEmp_Init()
         {
 
             BP.Port.Depts depts = new BP.Port.Depts();
@@ -315,7 +318,7 @@ namespace BP.WF.HttpHandler
             var appNo = this.GetRequestVal("AppNo");
 
             Paras ps = new Paras();
-            string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
+            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             ps.SQL = "SELECT No FROM GPM_Menu WHERE MenuType=" + dbstr + "MenuType AND FK_App=" + dbstr + "FK_App";
             ps.Add("MenuType", 2);
             ps.Add("FK_App", appNo);
@@ -620,7 +623,7 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     //先看看数据是否有?
-                  BP.Port.Station stationEn = new BP.Port.Station();
+                    BP.Port.Station stationEn = new BP.Port.Station();
                     if (stationEn.Retrieve("Name", str) == 1)
                         continue;
 
@@ -771,7 +774,7 @@ namespace BP.WF.HttpHandler
 
 
                 //先求出来父节点.
-              BP.Port.Dept parentDept = new BP.Port.Dept();
+                BP.Port.Dept parentDept = new BP.Port.Dept();
                 int i = parentDept.Retrieve("Name", parentDeptName);
                 if (i == 0)
                     return "err@没有找到当前部门[" + deptName + "]的上一级部门[" + parentDeptName + "]";
@@ -785,7 +788,7 @@ namespace BP.WF.HttpHandler
 
                 //插入部门.
                 myDept.Name = deptName;
-             //   myDept.OrgNo = BP.Web.WebUser.OrgNo;
+                //   myDept.OrgNo = BP.Web.WebUser.OrgNo;
                 myDept.No = DBAccess.GenerGUID();
                 myDept.ParentNo = parentDept.No;
                 myDept.Leader = leader; //领导.
@@ -841,7 +844,7 @@ namespace BP.WF.HttpHandler
 
                 //插入角色.
                 string[] staNames = stationNames.Split(',');
-              BP.Port.Station sta = new BP.Port.Station();
+                BP.Port.Station sta = new BP.Port.Station();
                 foreach (var staName in staNames)
                 {
                     if (DataType.IsNullOrEmpty(staName) == true)
@@ -855,18 +858,18 @@ namespace BP.WF.HttpHandler
                     des.FK_Dept = dept.No;
                     des.FK_Emp = empNo;
                     des.FK_Station = sta.No;
-                 //   des.OrgNo = WebUser.OrgNo;
+                    //   des.OrgNo = WebUser.OrgNo;
                     des.setMyPK(des.FK_Dept + "_" + des.FK_Emp + "_" + des.FK_Station);
                     des.Delete();
                     des.Insert();
                 }
 
                 //插入到数据库.
-                emp.No =   empNo;
-             //   emp.UserID = empNo;
+                emp.No = empNo;
+                //   emp.UserID = empNo;
                 emp.Name = empName;
                 emp.FK_Dept = dept.No;
-               // emp.OrgNo = WebUser.OrgNo;
+                // emp.OrgNo = WebUser.OrgNo;
                 emp.Tel = tel;
                 //emp.Email = email;
                 //emp.Leader = leader;
@@ -878,7 +881,7 @@ namespace BP.WF.HttpHandler
 
 
             //删除临时文件
-          //  System.IO.File.Delete(filePath);
+            //  System.IO.File.Delete(filePath);
 
             return "执行完成.";
         }
@@ -886,47 +889,85 @@ namespace BP.WF.HttpHandler
         public string EnpDepts_Init()
         {
             String empNo = this.FK_Emp;
-		    if(DataType.IsNullOrEmpty(empNo)==true)
-			    return "err@参数FK_Emp不能为空";
-		    Emp emp = new Emp(empNo);
+            if (DataType.IsNullOrEmpty(empNo) == true)
+                return "err@参数FK_Emp不能为空";
+            Emp emp = new Emp(empNo);
             DataSet ds = new DataSet();
             string dbstr = SystemConfig.AppCenterDBVarStr;
             //获取当前人员所在的部门及兼职部门
             string sql = "SELECT B.No AS \'FK_Dept\',B.Name AS \'FK_DeptText\',A.MyPK AS \'MyPK\' From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp=" + dbstr + "FK_Emp";
-		    if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-			    sql +=" B.OrgNo='"+WebUser.OrgNo+"'";
-		    Paras ps = new Paras();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                sql += " B.OrgNo='" + WebUser.OrgNo + "'";
+            Paras ps = new Paras();
             ps.SQL = sql;
-		    ps.Add("FK_Emp",empNo);
-		    DataTable dt = DBAccess.RunSQLReturnTable(ps);
-		    if(dt.Rows.Count==0){
-			    DeptEmp deptEmp = new DeptEmp();
-                deptEmp.FK_Dept=emp.FK_Dept;
-			    deptEmp.FK_Emp=emp.No;
-			    deptEmp.MyPK=emp.FK_Dept + "_" + emp.No;
-			    deptEmp.Insert();
-			    DataRow dr = dt.NewRow();
-                dr[0]=emp.FK_Dept;
-			    dr[1]=emp.FK_DeptText;
-			    dr[2]=deptEmp.MyPK;
-			    dt.Rows.Add(dr);
-		    }
+            ps.Add("FK_Emp", empNo);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (dt.Rows.Count == 0)
+            {
+                DeptEmp deptEmp = new DeptEmp();
+                deptEmp.FK_Dept = emp.FK_Dept;
+                deptEmp.FK_Emp = emp.No;
+                deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
+                deptEmp.Insert();
+                DataRow dr = dt.NewRow();
+                dr[0] = emp.FK_Dept;
+                dr[1] = emp.FK_DeptText;
+                dr[2] = deptEmp.MyPK;
+                dt.Rows.Add(dr);
+            }
             dt.TableName = "Port_DeptEmp";
-		    ds.Tables.Add(dt);
+            ds.Tables.Add(dt);
             ps.Clear();
-		    //获取岗位
-		    sql="SELECT B.No AS \'FK_Station\',B.Name AS \'FK_StationText\' ,A.FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp="+dbstr+"FK_Emp";
-		    if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-			    sql +=" B.OrgNo='"+WebUser.OrgNo+"'";
+            //获取岗位
+            sql = "SELECT B.No AS \'FK_Station\',B.Name AS \'FK_StationText\' ,A.FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp=" + dbstr + "FK_Emp";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                sql += " B.OrgNo='" + WebUser.OrgNo + "'";
 
-		    ps.SQL = sql;
-		    ps.Add("FK_Emp",empNo);
-		    dt = DBAccess.RunSQLReturnTable(ps);
-		    dt.TableName = "Port_DeptEmpStation";
-		    ds.Tables.Add(dt);
-		    return BP.Tools.Json.ToJson(ds);
-	    }
+            ps.SQL = sql;
+            ps.Add("FK_Emp", empNo);
+            dt = DBAccess.RunSQLReturnTable(ps);
+            dt.TableName = "Port_DeptEmpStation";
+            ds.Tables.Add(dt);
+            return BP.Tools.Json.ToJson(ds);
+        }
 
+        /**
+        取消人员部门岗位管理关系
+        @return
+        */
+        public string DeptEmpStation_Dele()
+        {
+            string sql = "delete from Port_DeptEmpStation where FK_Emp='" + this.GetRequestVal("FK_Emp") + "' and FK_Dept='" + this.GetRequestVal("FK_Dept") + "'";
+            DBAccess.RunSQL(sql);
+            return "执行成功 ";
+        }
+        /// <summary>
+        /// 绑定人员
+        /// </summary>
+        /// <returns></returns>
+        public string BindEmp()
+        {
+            string deptNo = this.GetRequestVal("DeptNo");
 
+            Emps emps = new Emps();
+            emps.Retrieve("FK_Dept", deptNo,"Idx");
+            DataTable dt = emps.ToDataTableField();
+            dt.Columns.Add("State");
+
+            string sql = "SELECT No,Name,Tel,Email FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='"+deptNo+"' AND A.FK_Dept!='"+deptNo+"'";
+            DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow mydr in mydt.Rows)
+            {
+                DataRow dr = dt.NewRow();
+                dr["No"] = mydr[0];
+                dr["Name"] = mydr[1];
+                dr["Tel"] = mydr[2];
+                dr["Email"] = mydr[3];
+                dr["State"] =1; //兼职人员.
+                //加入里面.
+                dt.Rows.Add(dr);
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
     }
 }

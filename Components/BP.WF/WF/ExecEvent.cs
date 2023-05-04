@@ -95,7 +95,7 @@ namespace BP.WF
                 // 如果这些计算人员的方式有角色的因素，就需要把当前人员授权岗增加上去.
                 if (wn.HisNode.HisDeliveryWay == DeliveryWay.ByStation
                     || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly
-                    || wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept
+                    //|| wn.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept
                     || wn.HisNode.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 {
                     string sql = "SELECT A.FK_Dept, A.FK_Station FROM Port_DeptEmpStation A, WF_NodeStation B ";

@@ -631,7 +631,7 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.SenderT, null, "发送人名称", true, true, 0, 200, 5);
 
 
-                map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
+                map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 100, 3);
                 map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 200, 5);
 
                 //为邓州增加的属性. 解决多人处理一个节点的工作的问题.
@@ -660,7 +660,7 @@ namespace BP.WF.Data
                 map.AddTBFloat(CHAttr.Points, 0, "总扣分", true, true);
                 #endregion 计算属性.
 
-                map.AddTBString(CHAttr.OrgNo, null, "组织", false, false, 0, 4, 3);
+                map.AddTBString(CHAttr.OrgNo, null, "组织", false, false, 0, 100, 3);
 
 
                 this._enMap = map;

@@ -135,8 +135,21 @@ namespace BP.WF.Port.Admin2Group
                 return "err@用户编号错误:" + adminer;
 
             //如果指定的人员.
-            if (emp.FK_Dept.Equals(this.No) == false)
-                return "err@管理员不在本部门下，您不能设置他为管理员.";
+            if (emp.FK_Dept.Equals(this.No) == false) {
+                Depts depts = new Depts();
+                depts.Retrieve(DeptAttr.ParentNo, this.No);
+                bool isHave = false;
+                foreach (Dept dept in depts)
+                {
+                    if (emp.FK_Dept.Equals(dept.No))
+                    {
+                        isHave = true;
+                        break;
+                    }
+                }
+                if (isHave == false)
+                    return "err@管理员不在本部门及本部门下级部门下，您不能设置他为管理员.";
+            }
 
             //检查该部门是否是独立组织.
             BP.WF.Port.Admin2Group.Org org = new BP.WF.Port.Admin2Group.Org();

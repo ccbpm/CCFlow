@@ -264,7 +264,7 @@ namespace BP.WF.Data
                 map.AddTBInt(CHNodeAttr.FK_Node, 0, "节点", true, true);
                 map.AddTBString(CHNodeAttr.NodeName, null, "节点名称", true, true, 0, 50, 5);
 
-                map.AddTBString(CHAttr.FK_Emp, null, "处理人", true, true, 0, 30, 3);
+                map.AddTBString(CHAttr.FK_Emp, null, "处理人", true, true, 0, 100, 3);
                 map.AddTBString(CHAttr.FK_EmpT, null, "处理人名称", true, true, 0, 200, 5);
 
                 map.AddTBString(CHNodeAttr.StartDT, null, "计划开始时间", true, true, 0, 50, 5);

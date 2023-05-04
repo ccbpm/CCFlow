@@ -132,9 +132,9 @@ namespace BP.Port
                 Map map = new Map("Port_DeptEmpStation", "部门角色人员对应");
 
                 map.AddTBStringPK("MyPK", null, "主键MyPK", false, true, 1, 150, 10);
-                map.AddTBString(DeptEmpStationAttr.FK_Dept, null, "部门", true, true, 1, 50, 1);
+                map.AddTBString(DeptEmpStationAttr.FK_Dept, null, "部门", true, true, 1, 100, 1);
                 map.AddTBString(DeptEmpStationAttr.FK_Station, null, "角色", true, true, 1, 50, 1);
-                map.AddTBString(DeptEmpStationAttr.FK_Emp, null, "操作员", true, true, 1, 50, 1);
+                map.AddTBString(DeptEmpStationAttr.FK_Emp, null, "操作员", true, true, 1, 100, 1);
                 map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", true, true, 0, 50, 50);
 
                 this._enMap = map;
@@ -145,12 +145,10 @@ namespace BP.Port
 
         protected override bool beforeDelete()
         {
-            BP.Sys.Base.Glo.WriteUserLog("删除:" + this.ToJson(), "组织数据操作");
             return base.beforeDelete();
         }
         protected override bool beforeInsert()
         {
-            BP.Sys.Base.Glo.WriteUserLog("新建:" + this.ToJson(), "组织数据操作");
             return base.beforeInsert();
         }
 

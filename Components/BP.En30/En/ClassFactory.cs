@@ -513,6 +513,21 @@ namespace BP.En
                 else
                     return new GEEntity(className); //表单实体.
             }
+            if (className.StartsWith("TS."))
+            {
+                Map map = BP.EnTS.Glo.GenerMap(className);
+                if (map.Attrs.Contains("No"))
+                    return new TSEntityNoName(className);
+                if (map.Attrs.Contains("OID"))
+                    return new TSEntityOID(className);
+                if (map.Attrs.Contains("MyPK"))
+                    return new TSEntityMyPK(className);
+                if (map.Attrs.Contains("WorkID"))
+                    return new TSEntityWorkID(className);
+                if (map.Attrs.Contains("NodeID"))
+                    return new TSEntityNodeID(className);
+                throw new Exception("err@没有判断的类型.");
+            }
 
             return GetObject_OK(className) as Entity;
 

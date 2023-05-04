@@ -765,7 +765,7 @@ namespace BP.Sys
             }
             set
             {
-                this.GetValStrByKey(MapAttrAttr.DefVal, value);
+                this.SetValByKey(MapAttrAttr.DefVal, value);
             }
         }
         public void setDefVal(object val)
@@ -1669,7 +1669,7 @@ namespace BP.Sys
             if (this.MyDataType == DataType.AppDate)
                 this.UIWidth = 125;
             if (this.MyDataType == DataType.AppDateTime)
-                this.UIWidth = 145;
+                this.UIWidth = 165;
 
             return base.beforeUpdateInsertAction();
         }

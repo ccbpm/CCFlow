@@ -55,6 +55,10 @@ namespace BP.Port
         public const string PinYin = "PinYin";
 
         public const string EmpSta = "EmpSta";
+        /// <summary>
+        /// 是否是联络员
+        /// </summary>
+        //public const string IsOfficer = "IsOfficer";
 
         #endregion
     }
@@ -64,17 +68,6 @@ namespace BP.Port
     public class Emp : EntityNoName
     {
         #region 扩展属性
-        public new string No
-        {
-            get
-            {
-                return this.GetValStringByKey(EmpAttr.No);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.No, value);
-            }
-        }
         public string PinYin
         {
             get
@@ -84,18 +77,6 @@ namespace BP.Port
             set
             {
                 this.SetValByKey(EmpAttr.PinYin, value);
-            }
-        }
-
-        public int EmpSta
-        {
-            get
-            {
-                return this.GetValIntByKey(EmpAttr.EmpSta);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.EmpSta, value);
             }
         }
 
@@ -369,6 +350,8 @@ namespace BP.Port
                 map.AddTBString(EmpAttr.LeaderName, null, "领导名", true, true, 0, 20, 130);
                 map.AddTBString(EmpAttr.OrgNo, null, "组织编号", true, true, 0, 50, 50);
                 map.AddTBInt(EmpAttr.EmpSta, 0, "状态", false, false);
+                //if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                //   map.AddBoolean(EmpAttr.IsOfficer, false, "是否是联络员", true, true);
                 map.AddTBInt(EmpAttr.Idx, 0, "Idx", false, false);
                 #endregion 字段
 
@@ -376,7 +359,6 @@ namespace BP.Port
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     map.AddHidden("OrgNo", "=", "@WebUser.OrgNo");
-
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "设置图片签名";
@@ -394,8 +376,6 @@ namespace BP.Port
                 map.AttrsOfOneVSM.AddBranches(new DeptEmps(), new BP.Port.Depts(),
                    BP.Port.DeptEmpAttr.FK_Emp,
                    BP.Port.DeptEmpAttr.FK_Dept, "部门维护", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
-
-
 
 
                 rm = new RefMethod();
@@ -463,8 +443,6 @@ namespace BP.Port
                 this.OrgNo = dept.OrgNo;
             }
 
-          
-
             return base.beforeInsert();
         }
 
@@ -483,7 +461,6 @@ namespace BP.Port
                     this.OrgNo = dept.OrgNo;
                 }
             }
-
 
             //增加拼音，以方便查找.
             if (DataType.IsNullOrEmpty(this.Name) == true)
@@ -537,7 +514,7 @@ namespace BP.Port
             }
 
             //记录日志.
-            BP.Sys.Base.Glo.WriteUserLog("新建/修改人员:" + this.ToJson(),"组织数据操作");
+            BP.Sys.Base.Glo.WriteUserLog("新建/修改人员:" + this.ToJson(), "组织数据操作");
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeDelete()
@@ -553,7 +530,6 @@ namespace BP.Port
             }
 
             BP.Sys.Base.Glo.WriteUserLog("删除人员:" + this.ToJson(), "组织数据操作");
-
             return base.beforeDelete();
         }
 
@@ -565,9 +541,7 @@ namespace BP.Port
             string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
             int count = DBAccess.RunSQLReturnValInt(sql);
             if (count == 0)
-                sql = "INSERT INTO WF_Emp (No,Name,Email) VALUES('" + this.No + "','" + this.Name + "','" + this.Email + "')";
-            else
-                sql = "UPDATE WF_Emp SET Email='" + this.Email + "'";
+                sql = "INSERT INTO WF_Emp (No,Name) VALUES('" + this.No + "','" + this.Name + "')";
             DBAccess.RunSQL(sql);
 
             DeptEmp deptEmp = new DeptEmp();
@@ -712,7 +686,7 @@ namespace BP.Port
             sql = "UPDATE WF_Emp SET UseSta=0 WHERE No='" + this.No + "'";
             DBAccess.RunSQL(sql);
             //this.Delete();
-            this.EmpSta = 1;
+            this.SetValByKey("EmpSta", 1);
             this.Update();
             return this.Name + "已禁用";
 
@@ -804,10 +778,10 @@ namespace BP.Port
         {
             //if (BP.Web.WebUser.No != "admin")
             //    throw new Exception("@您没有查询的权限.");
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAll();
 
-
-            return base.RetrieveAll();
-
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
         /// <summary>
         /// 重写重数据源查询全部适应从WS取数据需要
@@ -816,8 +790,10 @@ namespace BP.Port
         public override int RetrieveAllFromDBSource()
         {
 
-            return base.RetrieveAllFromDBSource();
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAllFromDBSource();
 
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo);
         }
         #endregion 重写查询.
 

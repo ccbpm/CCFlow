@@ -1474,6 +1474,8 @@ namespace BP.DA
         {
             if (oldfield.Equals(newfield) == true)
                 return;
+            if (DBAccess.IsExitsTableCol(table, oldfield) == false)
+                return;
             if (DBAccess.IsExitsTableCol(table, newfield) == true)
                 return;
             string sql = "";
@@ -1494,7 +1496,7 @@ namespace BP.DA
                 case DBType.DM:
                     sql = "select COLUMN_TYPE, COLUMN_DEFAULT  FROM information_schema.columns WHERE TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "' AND table_name='" + table + "' AND  column_Name='" + oldfield + "'";
                     dt = DBAccess.RunSQLReturnTable(sql);
-                    sql = "ALTER TABLE " + table + " CHANGE " + oldfield + " " + newfield + " " + dt.Rows[0][0] + " DEFAULT " + dt.Rows[0][1];
+                    sql = "ALTER TABLE " + table + " CHANGE " + oldfield + " " + newfield + " " + dt.Rows[0][0] ;
                     break;
                 default:
                     throw new Exception("err@DropTablePK不支持的数据库类型." + SystemConfig.AppCenterDBType);

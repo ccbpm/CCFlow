@@ -141,7 +141,7 @@ namespace BP.Port
                 map.AddSearchAttr(StationAttr.FK_StationType);
 
                 //角色下的用户.
-                map.AddDtl(new DeptEmpStations(), DeptEmpStationAttr.FK_Station, null, DtlEditerModel.DtlSearch, null);
+               // map.AddDtl(new DeptEmpStations(), DeptEmpStationAttr.FK_Station, null, DtlEditerModel.DtlSearch, null);
 
                 this._enMap = map;
                 return this._enMap;

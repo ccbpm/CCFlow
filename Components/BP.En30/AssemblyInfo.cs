@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 //
 
 [assembly: AssemblyTitle("chichengsoft")]
-[assembly: AssemblyDescription("高凌软件实体基类类库")]
+[assembly: AssemblyDescription("驰骋软件实体基类类库")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("成都高凌信息技术有限公司")]
+[assembly: AssemblyCompany("济南驰骋信息技术有限公司")]
 [assembly: AssemblyProduct("BP.En30")]
-[assembly: AssemblyCopyright("高凌软件2003-2022")]
+[assembly: AssemblyCopyright("驰骋软件2003-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]	
 

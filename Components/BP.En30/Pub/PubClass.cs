@@ -271,6 +271,8 @@ namespace BP.Pub
                     
                     ens = (Entities)obj;
                     string className = ens.ToString();
+                    if (className == null)
+                        continue;
                     switch (className.ToUpper())
                     {
                         case "BP.WF.STARTWORKS":
@@ -694,41 +696,17 @@ namespace BP.Pub
             {
                 if (DataType.IsNullOrEmpty(key) )
                     continue;
+                string val = HttpContextHelper.RequestParams(key);
                 string mykey = key.Replace("TB_", "");
                 mykey = key.Replace("DDL_", "");
                 mykey = key.Replace("CB_", "");
                 mykey = key.Replace("RB_", "");
+                val = HttpUtility.UrlDecode(val, Encoding.UTF8);
 
-
-                if (key.Contains("TB_"))
-                {
-
-                    string val = HttpContextHelper.RequestParams(key);
-                    if (htMain.ContainsKey(key.Replace("TB_", "")) == false)
-                    {
-                        val = HttpUtility.UrlDecode(val, Encoding.UTF8);
-                        htMain.Add(key.Replace("TB_", ""), val);
-                    }
-                    continue;
-                }
-
-                if (key.Contains("DDL_"))
-                {
-                    htMain.Add(key.Replace("DDL_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("CB_"))
-                {
-                    htMain.Add(key.Replace("CB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
-
-                if (key.Contains("RB_"))
-                {
-                    htMain.Add(key.Replace("RB_", ""), HttpContextHelper.RequestParams(key));
-                    continue;
-                }
+                if (htMain.ContainsKey(mykey) == true)
+                    htMain[mykey] = val;
+                else
+                    htMain.Add(mykey, val);
             }
             return htMain;
         }

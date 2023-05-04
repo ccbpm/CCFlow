@@ -365,7 +365,7 @@ namespace BP.Sys
 
             if (DataType.IsNullOrEmpty(str) == false)
             {
-                str = "err@如下字段存在，您不能删除:"+ str;
+                str = "err@分组ID:"+this.OID+"删除分组错误:如下字段存在，您不能删除:"+ str;
                 str += "\t\n 您要删除这个分组，请按照如下操作。";
                 str += "\t\n 1. 移除字段到其他分组里面去. ";
                 str += "\t\n 2. 删除字段. ";

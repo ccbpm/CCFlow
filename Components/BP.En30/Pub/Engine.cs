@@ -565,7 +565,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                     if (singType == "1")
                     {
-                        empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" /> " + dr["EmpFromT"];
+                        empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.jpg'\" /> " + dr["EmpFromT"];
                     }
 
                 }
@@ -736,16 +736,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
                     {
-                        FrmImgAthDB dbImgAth = new FrmImgAthDB();
-                        dbImgAth.setMyPK(strs[0].Trim() + "_" + this.HisGEEntity.PKVal);
-                        int count = dbImgAth.RetrieveFromDBSources();
-                        if (count == 1)
-                        {
-                            path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + dbImgAth.FileName + ".png";
-                            if (!File.Exists(path1))
-                                return this.GetCode(key);
-                        }
-                        return "";
+                        return path1;
                     }
                     //定义rtf中图片字符串.
                     StringBuilder mypict = new StringBuilder();

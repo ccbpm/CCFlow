@@ -178,11 +178,16 @@ namespace BP.En
         {
             Paras paras = new Paras();
             string pk = en.PK;
-
+            Attrs attrs = en.EnMap.Attrs;
+            Attr attr1 = null;
             switch (pk)
             {
                 case "OID":
-                    paras.Add("OID", en.GetValIntByKey("OID"));
+                    attr1 = attrs.GetAttrByKey("OID");
+                    if (attr1.IsNum)
+                        paras.Add("OID", en.GetValIntByKey("OID"));
+                    else
+                        paras.Add("OID", en.GetValStrByKey("OID"));
                     return paras;
                 case "No":
                     paras.Add("No", en.GetValStrByKey("No"));
@@ -194,14 +199,18 @@ namespace BP.En
                     paras.Add("NodeID", en.GetValIntByKey("NodeID"));
                     return paras;
                 case "WorkID":
-                    paras.Add("WorkID", en.GetValIntByKey("WorkID"));
+                    attr1 = attrs.GetAttrByKey("WorkID");
+                    if (attr1.IsNum)
+                        paras.Add("WorkID", en.GetValIntByKey("WorkID"));
+                    else
+                        paras.Add("WorkID", en.GetValStrByKey("WorkID"));
                     return paras;
                 default:
                     break;
             }
 
 
-            foreach (Attr attr in en.EnMap.Attrs)
+            foreach (Attr attr in attrs)
             {
                 if (attr.MyFieldType == FieldType.PK
                     || attr.MyFieldType == FieldType.PKFK
@@ -2731,7 +2740,7 @@ namespace BP.En
                         string da = en.GetValStringByKey(attr.Key);
                         if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true && DataType.IsNullOrEmpty(da) == true)
                         {
-                            da = GetDefValByDataType(attr.IsSupperText); ;
+                            da = GetDefValByDataType(attr.IsSupperText);
                         }
 
                         if (da.IndexOf("_DATE") == -1)

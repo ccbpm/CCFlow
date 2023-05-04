@@ -499,6 +499,17 @@ namespace BP.En
             dtl.Icon = icon;
             this.Dtls.Add(dtl);
         }
+        public void AddDtl(string  url, string refKey, string groupName = null, DtlEditerModel model = DtlEditerModel.DtlBatch, string icon = null,string desc="")
+        {
+            EnDtl dtl = new EnDtl();
+            dtl.UrlExt = url;
+            dtl.RefKey = refKey;
+            dtl.GroupName = this.currGroupMethodName;
+            dtl.Desc = desc;
+            dtl.DtlEditerModel = model;
+            dtl.Icon = icon;
+            this.Dtls.Add(dtl);
+        }
         /// <summary>
         /// 相关功能s
         /// </summary> 
@@ -2203,7 +2214,15 @@ namespace BP.En
         /// <param name="fieldLength"></param>
         public void AddTBAtParas(int fieldLength = 4000)
         {
-            this.AddTBString("AtPara", null, "AtPara", false, true, 0, fieldLength, 10);
+            this.AddTBString(EntityNoNameAttr.AtPara, null, "AtPara", false, true, 0, fieldLength, 10);
+        }
+        /// <summary>
+        /// 查询关键字：系统字段
+        /// </summary>
+        /// <param name="fieldLength"></param>
+        public void AddTBSKeyWords(int fieldLength = 4000)
+        {
+            this.AddTBString(EntityNoNameAttr.SKeyWords, null, "查询关键字", false, true, 0, fieldLength, 10);
         }
         /// <summary>
         /// 主键

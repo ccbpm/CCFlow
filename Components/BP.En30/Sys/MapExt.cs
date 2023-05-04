@@ -871,6 +871,8 @@ namespace BP.Sys
         {
             if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
                 return;
+            if (DataType.IsNullOrEmpty(this.MyPK) == false)
+                return;
 
             switch (this.ExtType)
             {
@@ -967,6 +969,17 @@ namespace BP.Sys
             if (this.MyPK.Contains("_") == true)
             {
                 string[] strs = this.MyPK.Split('_');
+                //对应的字段包含_
+                if (strs.Length > 3)
+                {
+                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                        this.FK_MapData = strs[0];
+                    
+                    if (DataType.IsNullOrEmpty(this.ExtModel) == true)
+                        this.ExtModel = strs[strs.Length-1];
+                    if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
+                        this.AttrOfOper = this.MyPK.Replace(this.FK_MapData + "_", "").Replace( "_"+ this.ExtModel, "");
+                }
                 if (strs.Length == 3)
                 {
                     if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
@@ -977,6 +990,14 @@ namespace BP.Sys
 
                     if (DataType.IsNullOrEmpty(this.ExtModel) == true)
                         this.ExtModel = strs[2];
+                }
+                if (strs.Length == 2) //主表、从表的装载填充
+                {
+                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                        this.FK_MapData = strs[0];
+
+                    if (DataType.IsNullOrEmpty(this.ExtModel) == true)
+                        this.ExtModel = strs[1];
                 }
             }
             #endregion 处理ts程序更新前的，补充填写其他的数据.
@@ -1126,62 +1147,105 @@ namespace BP.Sys
         /// <returns></returns>
         public string GetDataTableByField(string field, string paras,string sqlWhere,string oid)
         {
-            //执行SQL获取
-            if (this.DBType.Equals("0") == true && this.Row.ContainsKey(field) == true)
+            if (this.DBType.Equals("0") == false)
+                return "err@数据源类型不是按照SQL查询,DBType="+this.DBType;
+            if (DBAccess.IsExitsTableCol("Sys_MapExt", field) == false)
+                return "err@传的参数不正确,Field=" + field+"在Sys_MapExt表中不存在";
+            string sql = this.GetValStringByKey(field);
+            if (DataType.IsNullOrEmpty(sql) == true)
+                return "err@字段" + field + "执行的SQL为空";
+            //填充下拉框
+            GEEntity en = null;
+            if (DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
+                en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+            if (this.ExtType == MapExtXmlList.FullData && field.Equals("Tag")==true)
             {
-                string sql = this.GetValStringByKey(field);
-                if (DataType.IsNullOrEmpty(sql) == true)
-                    return "err@字段" + field + "执行的SQL为空";
-                if(DataType.IsNullOrEmpty(sqlWhere) == false)
+                string[] strs = sql.Split('$');
+                DataSet ds = new DataSet();
+                foreach (string str in strs)
                 {
-                    if (sql.ToLower().IndexOf("where") == -1)
-                        sql += "WHERE 1=1";
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+                    string[] ss = str.Split(':');
+                    if(ss.Length == 2)
+                    {
+                       
+                        sql = DealExp(ss[1], paras, en);
+                        DataTable dtt = null;
+                        if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+                        {
+                            SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                            dtt = sfdb.RunSQLReturnTable(sql);
+                        }
+                        else
+                            dtt = DBAccess.RunSQLReturnTable(sql);
+                        if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                        {
+                            dtt.Columns["NO"].ColumnName = "No";
+                            dtt.Columns["NAME"].ColumnName = "Name";
 
-                    sql += sqlWhere;
+                            //判断是否存在PARENTNO列，避免转换失败
+                            if (dtt.Columns.Contains("PARENTNO") == true)
+                                dtt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                        }
+
+                        if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                        {
+                            dtt.Columns["no"].ColumnName = "No";
+                            dtt.Columns["name"].ColumnName = "Name";
+
+                            //判断是否存在PARENTNO列，避免转换失败
+                            if (dtt.Columns.Contains("parentno") == true)
+                                dtt.Columns["parentno"].ColumnName = "ParentNo";
+                        }
+                        dtt.TableName = ss[0];
+                        ds.Tables.Add(dtt); 
+                    }
                 }
-                GEEntity en = null;
-                if(DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
-                    en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
-                    
-                sql = DealExp(sql,paras, en);
-               
-               //if (sql.Contains("@") == true)
-               //     return "err@字段" + field + "执行的SQL中有@符号";
-
-                DataTable dt = null;
-                if(DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local")==false)
-                {
-                    SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
-                    dt = sfdb.RunSQLReturnTable(sql);
-                }
-                else
-                    dt = DBAccess.RunSQLReturnTable(sql);
-
-                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
-                {
-                    dt.Columns["NO"].ColumnName = "No";
-                    dt.Columns["NAME"].ColumnName = "Name";
-
-                    //判断是否存在PARENTNO列，避免转换失败
-                    if(dt.Columns.Contains("PARENTNO")==true)
-                        dt.Columns["PARENTNO"].ColumnName = "ParentNo";
-                }
-
-                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-                {
-                    dt.Columns["no"].ColumnName = "No";
-                    dt.Columns["name"].ColumnName = "Name";
-
-                    //判断是否存在PARENTNO列，避免转换失败
-                    if (dt.Columns.Contains("parentno") == true)
-                        dt.Columns["parentno"].ColumnName = "ParentNo";
-                }
-
-                return BP.Tools.Json.ToJson(dt);
-
+                return BP.Tools.Json.ToJson(ds);
             }
-            string msg = this.DBType.Equals("1") == true ? "执行url返回JSON" : "执行JS返回的JSON";
-            return "err@执行有误，是根据" + msg;
+           
+                
+            if(DataType.IsNullOrEmpty(sqlWhere) == false)
+            {
+                if (sql.ToLower().IndexOf("where") == -1)
+                    sql += "WHERE 1=1";
+
+                sql += sqlWhere;
+            }
+               
+            sql = DealExp(sql,paras, en);
+
+            DataTable dt = null;
+            if(DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local")==false)
+            {
+                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                dt = sfdb.RunSQLReturnTable(sql);
+            }
+            else
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+
+                //判断是否存在PARENTNO列，避免转换失败
+                if(dt.Columns.Contains("PARENTNO")==true)
+                    dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+
+                //判断是否存在PARENTNO列，避免转换失败
+                if (dt.Columns.Contains("parentno") == true)
+                    dt.Columns["parentno"].ColumnName = "ParentNo";
+            }
+
+            return BP.Tools.Json.ToJson(dt);
         }
 
 
@@ -1226,6 +1290,87 @@ namespace BP.Sys
             return BP.Tools.Json.ToJson(dt);
         }
 
+        public string GetDataTableByTableSearch(string paras)
+        {
+            string sql = this.Tag2;
+            string sqlWhere = "";
+            if (sql.ToLower().IndexOf("where") == -1)
+                sql += "WHERE 1=1";
+            else
+                sqlWhere = sql.ToLower().Substring(sql.ToLower().IndexOf("where"));
+            if (DataType.IsNullOrEmpty(paras) == false)
+            {
+                Newtonsoft.Json.Linq.JObject json = Newtonsoft.Json.Linq.JObject.Parse(paras);
+                foreach (var item in json)
+                {
+                    string val = item.Value!=null?item.Value.ToString():"";
+                    if (item.Key.Equals("Key"))
+                    {
+                        sql = sql.Replace("@Key", val);
+                        continue;
+                    }
+                       
+                    if (item.Key.StartsWith("DTFrom_"))
+                    {
+                        string key = item.Key.Replace("DTFrom_", "");
+                        if (sqlWhere.Contains(key) == false && DataType.IsNullOrEmpty(val)==false)
+                            sql += " AND " + key + " >='" + val+"'";
+                        else
+                            sql = sql.Replace("@DTFrom_", val);
+                        continue;
+                    }
+                    if (item.Key.StartsWith("DTTo_"))
+                    {
+                        string key = item.Key.Replace("DTTo_", "");
+                        if (sqlWhere.Contains(key) == false && DataType.IsNullOrEmpty(val) == false)
+                            sql += " AND " + key + " <='" + val + " 23:59'";
+                        else
+                            sql = sql.Replace("@DTFrom_", val);
+                        continue;
+                    }
+                    if (sqlWhere.Contains(item.Key) == false)
+                    {
+                        if(DataType.IsNullOrEmpty(val) == false)
+                            sql += " AND " + item.Key + "='" + val+"'";
+                        else
+                            sql = sql.Replace("@"+item.Key, val);
+                    }
+                }
+            }
+            
+            sql = DealExp(sql, "", null);
+
+            DataTable dt = null;
+            if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+            {
+                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                dt = sfdb.RunSQLReturnTable(sql);
+            }
+            else
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+
+                //判断是否存在PARENTNO列，避免转换失败
+                if (dt.Columns.Contains("PARENTNO") == true)
+                    dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+
+                //判断是否存在PARENTNO列，避免转换失败
+                if (dt.Columns.Contains("parentno") == true)
+                    dt.Columns["parentno"].ColumnName = "ParentNo";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+       
         private  string DealExp(string exp,string paras, Entity en)
         {
             //替换字符

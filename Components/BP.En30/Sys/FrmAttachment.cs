@@ -571,8 +571,8 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.NoOfObj, value);
             }
         }
-        
-      
+
+
         /// <summary>
         /// H
         /// </summary>
@@ -787,7 +787,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.TopNumOfUpload, 99, "最大上传数量", true, false);
                 map.AddTBInt(FrmAttachmentAttr.FileMaxSize, 10240, "附件最大限制(KB)", true, false);
                 map.AddTBInt(FrmAttachmentAttr.UploadFileNumCheck, 0, "上传校验方式", true, false);
-                 
+
                 map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20);
 
                 map.AddTBFloat(FrmAttachmentAttr.H, 150, "H", false, false);
@@ -818,7 +818,7 @@ namespace BP.Sys
 
                 #region 流程属性.
                 //对于父子流程有效.
-                map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);
+                map.AddTBInt(FrmAttachmentAttr.CtrlWay, 4, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);
                 map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", false, false);
                 map.AddTBInt(FrmAttachmentAttr.ReadRole, 0, "阅读规则", true, true);
 

@@ -1765,12 +1765,16 @@ namespace BP.En
                 if (this.PKVal != null && this.PKVal.Equals("0") == true)
                     this.PKVal = DBAccess.GenerOID(this.ClassID);
 
-                //@hongyan. 判断是否有参数字段.
+                // 判断是否有参数字段.
                 if (this.EnMap.ParaFields != null)
                 {
                     string[] strs = this.EnMap.ParaFields.Split(',');
                     foreach (string key in strs)
                     {
+                        if (DataType.IsNullOrEmpty(key) == true)
+                            continue;
+                        if (this.Row.ContainsKey(key) == false)
+                            continue;
                         this.SetPara(key, this.Row[key].ToString());
                     }
                 }

@@ -29,7 +29,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-                uac.Readonly();//@hongyan.
+                uac.Readonly();
 
                 return uac;
             }

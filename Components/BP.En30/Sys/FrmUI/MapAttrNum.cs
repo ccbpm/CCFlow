@@ -291,6 +291,9 @@ namespace BP.Sys.FrmUI
                     BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, float.Parse(this.DefVal));
                 if (this.MyDataType == BP.DA.DataType.AppMoney)
                     BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, decimal.Parse(this.DefVal));
+                //清空对应的表单的row值
+                GEEntity en = new GEEntity(this.FK_MapData);
+                en.Row = null;
             }
             #endregion 修改默认值.
 

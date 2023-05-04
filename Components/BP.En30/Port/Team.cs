@@ -99,7 +99,7 @@ namespace BP.Port
                 throw new Exception("请输入名称");
 
             if (DataType.IsNullOrEmpty(this.FK_TeamType) == true)
-                throw new Exception("请选择类型"); //@hongyan.
+                throw new Exception("请选择类型"); 
 
             return base.beforeUpdateInsertAction();
         }

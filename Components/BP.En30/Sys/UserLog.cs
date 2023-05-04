@@ -23,6 +23,7 @@ namespace BP.Sys
         /// 日志标记
         /// </summary>
         public const string LogFlag = "LogFlag";
+        public const string Level = "Level";
         /// <summary>
         /// 处理内容
         /// </summary>
@@ -147,14 +148,17 @@ namespace BP.Sys
                     return this._enMap;
                 Map map = new Map("Sys_UserLogT", "用户日志");
                 map.AddMyPK();
-                map.AddTBString(UserLogAttr.EmpNo, null, "用户账号", true, true, 0, 30, 20);
+                map.AddTBString(UserLogAttr.EmpNo, null, "用户账号", true, true, 0, 50, 20);
                 map.AddTBString(UserLogAttr.EmpName, null, "用户名", true, true, 0, 30, 20);
                 map.AddTBString(UserLogAttr.RDT, null, "记录日期", true, true, 0, 20, 20);
                 map.AddTBString(UserLogAttr.IP, null, "IP", true, true, 0, 200, 20);
                 map.AddTBStringDoc(UserLogAttr.Docs, null, "说明", true, true, true);
 
-                map.AddDDLEntities(UserLogAttr.LogFlag, null, "类型", new UserLogTypes(), false);
-                map.AddDDLEntities("Level", null, "级别", new UserLogLevels(), false);
+                //map.AddDDLEntities(UserLogAttr.LogFlag, null, "类型", new UserLogTypes(), false);
+                //map.AddDDLEntities(UserLogAttr.Level, null, "级别", new UserLogLevels(), false);
+                map.AddTBString(UserLogAttr.LogFlag, null, "类型", true, true, 0, 200, 20);
+                map.AddTBString(UserLogAttr.Level, null, "级别", true, true, 0, 200, 20);
+
 
                 map.DTSearchKey = UserLogAttr.RDT;
                 map.DTSearchWay = DTSearchWay.ByDate;

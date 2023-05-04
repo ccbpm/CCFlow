@@ -482,7 +482,6 @@ namespace BP.En
         {
             get
             {
-#warning new a entity.
                 return this.HisFKEns.GetNewEntity;
 
                 if (_HisFKEn == null)
@@ -507,6 +506,17 @@ namespace BP.En
                     }
                     else if (this.MyFieldType == FieldType.FK || this.MyFieldType == FieldType.PKFK)
                     {
+                        if (this.UIBindKey.Contains(",TS."))
+                        {
+                            int idx = this.UIBindKey.LastIndexOf(",TS.");
+                            string className = this.UIBindKey.Substring(idx + 1);
+
+                            TSEntitiesNoName ens = new TSEntitiesNoName(className);
+                            if (ens == null)
+                                throw new Exception("err@ClassID=" + className + " 没有注册.");
+                            _HisFKEns = ens; // BP.EnTS ClassFactory.GetEns(className);
+                        }
+
                         if (this.UIBindKey.Contains("."))
                             _HisFKEns = ClassFactory.GetEns(this.UIBindKey);
                         else
@@ -1068,8 +1078,8 @@ namespace BP.En
                     return;
             }
 
-            if (isClearGroupName==false)
-            attr.GroupName = this.currGroupAttrName;
+            if (isClearGroupName == false)
+                attr.GroupName = this.currGroupAttrName;
 
             this.InnerList.Add(attr);
 
@@ -1090,7 +1100,7 @@ namespace BP.En
             {
 
                 Attr myattr = new Attr();
-                myattr.GroupName = this.currGroupAttrName;
+                myattr.GroupName = attr.GroupName;
                 myattr.MyFieldType = FieldType.RefText;
                 myattr.MyDataType = DataType.AppString;
                 myattr.UIContralType = UIContralType.TB;
@@ -1126,7 +1136,7 @@ namespace BP.En
             {
 
                 Attr myattr = new Attr();
-                myattr.GroupName = this.currGroupAttrName;
+                myattr.GroupName = attr.GroupName;
                 myattr.MyFieldType = FieldType.Normal;
                 myattr.MyDataType = DataType.AppString;
                 myattr.UIContralType = UIContralType.TB;

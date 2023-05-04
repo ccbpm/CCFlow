@@ -116,7 +116,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-              return BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/" + this.FK_MapData + "/";
+                return BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/" + this.FK_MapData + "/";
             }
         }
         #endregion 参数属性.
@@ -321,7 +321,7 @@ namespace BP.Sys.FrmUI
             }
 
         }
-       
+
         /// <summary>
         /// H
         /// </summary>
@@ -522,7 +522,7 @@ namespace BP.Sys.FrmUI
                  "@0=只读@1=可编辑全部区域@2=可编辑非数据标签区域");
                 map.SetHelperAlert(FrmAttachmentAttr.AthEditModel, "用于控制附件的在线编辑模式");
 
-             
+
                 #endregion 基本属性。
 
                 #region 权限控制。
@@ -537,7 +537,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.AthUploadWay, "@0=继承模式@1=协作模式");
 
-                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, "Ath" + FrmAttachmentAttr.CtrlWay,
+                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 4, "控制呈现控制方式", true, true, "Ath" + FrmAttachmentAttr.CtrlWay,
                     "@0=PK-主键@1=FID-干流程ID@2=PWorkID-父流程ID@3=仅能查看自己上传的字段单附件@4=WorkID-按照WorkID计算(对流程节点表单有效)@5=P2WorkID@6=P3WorkID");
                 #endregion 权限控制。
 

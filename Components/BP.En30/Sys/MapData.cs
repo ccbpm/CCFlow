@@ -518,15 +518,15 @@ namespace BP.Sys
         /// <summary>
         /// 附件模板列表
         /// </summary>
-       // public SysFileManagers sysFileManagers
-       // {
-       //     get
-       //     {
-       //         var ens = this.GetEntitiesAttrFromAutoNumCash(new SysFileManagers(),
-       //SysFileManagerAttr.FK_MapData, this.No);
-       //         return ens as SysFileManagers;
-       //     }
-       // }
+        // public SysFileManagers sysFileManagers
+        // {
+        //     get
+        //     {
+        //         var ens = this.GetEntitiesAttrFromAutoNumCash(new SysFileManagers(),
+        //SysFileManagerAttr.FK_MapData, this.No);
+        //         return ens as SysFileManagers;
+        //     }
+        // }
 
         /// <summary>
         /// 图片附件
@@ -896,7 +896,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FrmW, value);
             }
         }
-        
+
         /// <summary>
         /// 应用类型.  0独立表单.1节点表单
         /// </summary>
@@ -1550,7 +1550,7 @@ namespace BP.Sys
                             string htmlCode = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                
+
                                 if (dc.ColumnName.Equals("HtmlTemplateFile") == true)
                                 {
                                     htmlCode = dr[dc.ColumnName] as string;
@@ -1560,9 +1560,9 @@ namespace BP.Sys
                                 if (val == null)
                                     continue;
 
-                                
+
                                 string colName = dc.ColumnName.ToLower();
-                                if (colName.Equals("no") == true || colName.Equals("name")==true)
+                                if (colName.Equals("no") == true || colName.Equals("name") == true)
                                     md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
                                 else
                                     md.SetValByKey(dc.ColumnName, val.ToString());
@@ -2219,7 +2219,13 @@ namespace BP.Sys
             #region 删除相关的数据。
             sql = "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'";
             //  sql += "@DELETE FROM Sys_FrmLine WHERE " + whereFK_MapData;
-            sql += "@DELETE FROM Sys_FrmEvent WHERE " + whereFK_MapData;
+
+            //@hongyan.
+            if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "FrmID"))
+                DBAccess.RunSQL("DELETE FROM Sys_FrmEvent WHERE " + whereEnsName);
+            if (DBAccess.IsExitsTableCol("Sys_FrmEvent", "FK_MapData"))
+                DBAccess.RunSQL("DELETE FROM Sys_FrmEvent WHERE " + whereFK_MapData);
+
             sql += "@DELETE FROM Sys_FrmBtn WHERE " + whereFK_MapData;
             // sql += "@DELETE FROM Sys_FrmLab WHERE " + whereFK_MapData;
             //sql += "@DELETE FROM Sys_FrmLink WHERE " + whereFK_MapData;

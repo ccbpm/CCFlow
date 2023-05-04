@@ -73,7 +73,7 @@ namespace BP.Port
         protected override bool beforeUpdateInsertAction()
         {
             if (DataType.IsNullOrEmpty(this.Name) == true)
-                throw new Exception("请输入名称"); //@hongyan.
+                throw new Exception("请输入名称"); 
             return base.beforeUpdateInsertAction();
         }
     }

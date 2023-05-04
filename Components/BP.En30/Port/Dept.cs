@@ -341,9 +341,7 @@ namespace BP.Port
         /// <returns></returns>
         public override int Retrieve()
         {
-
             return base.Retrieve();
-
         }
         /// <summary>
         /// 查询.

@@ -210,7 +210,7 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-                map.IndexField = FrmImgAthDBAttr.FK_MapData;
+                map.IndexField = FrmRBAttr.FK_MapData;
 
                 map.AddMyPK();
                 map.AddTBString(FrmRBAttr.FK_MapData, null, "表单ID", true, false, 0, 200, 20);

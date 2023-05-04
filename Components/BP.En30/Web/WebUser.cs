@@ -170,8 +170,9 @@ namespace BP.Web
             #endregion 解决部门的问题.
 
             WebUser.FK_Dept = em.FK_Dept;
-            WebUser.FK_DeptName = em.FK_DeptText;
+            WebUser.FK_DeptName = dept.Name;
             WebUser.DeptParentNo = dept.ParentNo;
+            WebUser.OrgNo = dept.OrgNo;
             WebUser.SysLang = lang;
             if (BP.Difference.SystemConfig.IsBSsystem)
             {
@@ -649,6 +650,15 @@ namespace BP.Web
                 SetSessionByKey("No", value.Trim());
             }
         }
+        public static string UserID
+        {
+            get
+            {
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    return WebUser.OrgNo + "_" + WebUser.No;
+                return WebUser.No;
+            }
+        }
         /// <summary>
         /// 名称
         /// </summary>
@@ -737,6 +747,8 @@ namespace BP.Web
                     if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     {
                         string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE UserID='" + WebUser.No + "'");
+                        if (DataType.IsNullOrEmpty(no) == true)
+                            throw new Exception("err@SAAS模式下,人员["+BP.Web.WebUser.No+"]的组织编号不能为空.");
                         SetSessionByKey("OrgNo", no);
                         return no;
                     }
@@ -744,6 +756,8 @@ namespace BP.Web
                     if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
                     {
                         string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE No='" + WebUser.No + "'");
+                        if (DataType.IsNullOrEmpty(no) == true)
+                            throw new Exception("err@集团模式下,人员[" + BP.Web.WebUser.No + "]的组织编号不能为空.");
                         SetSessionByKey("OrgNo", no);
                         return no;
                     }

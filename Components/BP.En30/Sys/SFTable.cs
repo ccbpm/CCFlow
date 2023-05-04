@@ -349,11 +349,13 @@ namespace BP.Sys
                 string apiUrl = this.SelectStatement;
                 if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
                     apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
-
+                string[] strs = apiUrl.Split('?');
                 //api接口地址
-                string apiHost = apiUrl.Split('?')[0];
+                string apiHost = strs[0];
                 //api参数
-                string apiParams = apiUrl.Split('?')[1];
+                string apiParams = "";
+                if(strs.Length==2)
+                    apiParams = strs[1];
                 //执行POST
                 postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
 
@@ -903,7 +905,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this.No.Contains("BP.") == true)
+                if (this.No.ToUpper().Contains("BP.") == true)
                     return SrcType.BPClass;
                 else
                 {

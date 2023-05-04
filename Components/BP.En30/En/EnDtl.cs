@@ -16,7 +16,21 @@ namespace BP.En
         /// <summary>
         /// 查询编辑模式
         /// </summary>
-        DtlSearch = 1
+        DtlSearch = 1,
+        /// <summary>
+        /// 自定义URL
+        /// </summary>
+        DtlURL = 2,
+        /// <summary>
+        /// 在EnOnly显示查询
+        /// </summary>
+        DtlBatchEnonly = 3,
+        /// <summary>
+        /// 在EnOnly
+        /// </summary>
+        DtlSearchEnonly = 4,
+
+        DtlURLEnonly = 5,
     }
     /// <summary>
     /// EnDtl 的摘要说明。
@@ -47,10 +61,12 @@ namespace BP.En
         /// 明细
         /// </summary>
         public Entities Ens = null;
+        public string UrlExt = null;
         /// <summary>
         /// 他关连的 key
         /// </summary>
         public string RefKey = null;
+        private string _desc = "";
         /// <summary>
         /// 描述
         /// </summary>
@@ -58,7 +74,13 @@ namespace BP.En
         {
             get
             {
-                return this.Ens.GetNewEntity.EnDesc;
+                if(DataType.IsNullOrEmpty(_desc))
+                    return this.Ens.GetNewEntity.EnDesc;
+                return this._desc;
+            }
+            set
+            {
+                this._desc = value;
             }
         }
         /// <summary>

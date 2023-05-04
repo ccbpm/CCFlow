@@ -551,18 +551,7 @@ namespace BP.Difference
             }
         }
 
-
-        public static string FrontEndEncrypt
-        {
-            get
-            {
-                string s = AppSettings["FrontEndEncrypt"];
-                if (s == null)
-                    s = "请在web.config中配置FrontEndEncrypt名称。";
-                return s;
-            }
-        }
-
+         
         public static string UserLockTimeSeconds
         {
             get

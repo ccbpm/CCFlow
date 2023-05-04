@@ -22,6 +22,14 @@ namespace BP.En
         /// 名称简称
         /// </summary>
         public const string NameOfS = "NameOfS";
+        /// <summary>
+        /// 查询的关键字（系统字段）
+        /// </summary>
+        public const string SKeyWords = "SKeyWords";
+        /// <summary>
+        /// 参数字段（系统字段）
+        /// </summary>
+        public const string AtPara = "AtPara";
         #endregion 基本属性.
 
         #region 附件属性.

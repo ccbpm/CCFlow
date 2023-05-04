@@ -214,7 +214,10 @@ namespace BP.En
         {
             
             EntityTree en = this.CreateInstance() as EntityTree;
-            en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
+            if (this.ClassID.Contains("FlowSort") || this.ClassID.Contains("SysFormTree"))
+                en.No = DBAccess.GenerGUID();
+            else
+                en.No = DBAccess.GenerOID(this.ToString()).ToString(); // en.GenerNewNoByKey(EntityTreeAttr.No);
             if (name == null)
                 en.Name = "新建节点" + en.No;
             else
@@ -233,7 +236,10 @@ namespace BP.En
         {
             EntityTree en = this.CreateInstance() as EntityTree;
             en.Copy(this);
-            en.No = DBAccess.GenerOID(this.ToString()).ToString();  
+            if (this.ClassID.Contains("FlowSort") || this.ClassID.Contains("SysFormTree"))
+                en.No = DBAccess.GenerGUID(10, null, null);
+            else
+                en.No = DBAccess.GenerOID(this.ToString()).ToString();
             if (name == null)
                 en.Name = "新建节点" + en.No;
             else

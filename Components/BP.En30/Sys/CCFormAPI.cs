@@ -4,6 +4,7 @@ using System.Data;
 using System.Text;
 using BP.En;
 using BP.DA;
+using BP.Web;
 
 namespace BP.Sys
 {
@@ -553,7 +554,7 @@ namespace BP.Sys
             attr.setName("审核人");// "审核人";
             attr.setMyDataType(DataType.AppString);
             attr.setUIContralType(UIContralType.TB);
-            attr.setMaxLen(50);
+            attr.setMaxLen(100);
             attr.setMinLen(0);
             attr.setUIIsEnable(true);
             attr.setUIIsLine(false);
@@ -777,7 +778,7 @@ namespace BP.Sys
             DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
             ds.Tables.Add(Sys_MapData);
 
-            //加入分组表.
+
             DataTable Sys_GroupField = md.GroupFields.ToDataTableField("Sys_GroupField");
             ds.Tables.Add(Sys_GroupField);
 

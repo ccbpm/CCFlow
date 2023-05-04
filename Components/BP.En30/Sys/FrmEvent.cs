@@ -698,8 +698,13 @@ namespace BP.Sys
 
             if (this.FK_MapData.StartsWith("ND") == true)
             {
-                int nodeid = int.Parse(this.FK_MapData.Replace("ND", ""));
-                this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + nodeid);
+                string nodeStr = this.FK_MapData.Replace("ND", "");
+                if (DataType.IsNumStr(nodeStr) == true)
+                {
+                    int nodeid = int.Parse(nodeStr);
+                    this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + nodeid);
+                }
+               
             }
 
             return base.beforeUpdateInsertAction();
@@ -931,7 +936,12 @@ namespace BP.Sys
             }
 
             if (dotype == EventListFrm.FrmLoadBefore)
-                en.Retrieve(); /*如果不执行，就会造成实体的数据与查询的数据不一致.*/
+            {
+                string frmType = en.GetParaString("FrmType");
+                if (DataType.IsNullOrEmpty(frmType) == true || frmType.Equals("DBList") == false)
+                    en.Retrieve(); /*如果不执行，就会造成实体的数据与查询的数据不一致.*/
+            }
+               
 
             switch (nev.HisDoType)
             {

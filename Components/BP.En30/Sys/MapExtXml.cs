@@ -63,6 +63,14 @@ namespace BP.Sys
         /// </summary>
         public const string PageLoadFull = "PageLoadFull";
         /// <summary>
+        /// 主表的装载填充
+        /// </summary>
+        public const string PageLoadFullMainTable = "PageLoadFullMainTable";
+        /// <summary>
+        /// 从表的装载填充
+        /// </summary>
+        public const string PageLoadFullDtl = "PageLoadFullDtl";
+        /// <summary>
         /// 发起流程
         /// </summary>
         public const string StartFlow = "StartFlow";

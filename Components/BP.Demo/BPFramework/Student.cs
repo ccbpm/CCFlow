@@ -230,6 +230,9 @@ namespace BP.Demo
                 UAC uac = new UAC();
                 //  uac.LoadRightFromCCGPM(this); //从GPM里面装载.
                 // return uac;
+                //uac.OpenAllForStation("001,002");
+                //return uac;
+
                 if (BP.Web.WebUser.No.Equals("admin") == true)
                 {
                     uac.IsDelete = true;
@@ -307,8 +310,8 @@ namespace BP.Demo
                 map.AddRadioBtnSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
                 //外键字段.
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BanJis(), true);
-                string sql = "SELECT No,Name FROM CN_SF "; //这个sql语句可以支持表达式 @WebUser.* , 也可以是本实体的属性名称比如 @No.
-                map.AddDDLSQL(StudentAttr.FK_SF, null, "省份", sql, true);
+                //string sql = "SELECT No,Name FROM CN_SF "; //这个sql语句可以支持表达式 @WebUser.* , 也可以是本实体的属性名称比如 @No.
+                //map.AddDDLSQL(StudentAttr.FK_SF, null, "省份", sql, true);
 
                 //map.AddDDLEntities(StudentAttr.FK_PQ, null, "片区",new BP.CN.PQs(),true);
                 //map.AddDDLEntities(StudentAttr.FK_SF, null, "省份",new BP.CN.SFs(),true);
@@ -333,21 +336,19 @@ namespace BP.Demo
                 map.DTSearchKey = "RegDate";
                 map.DTSearchLabel = "注册日期";
                 map.DTSearchWay = Sys.DTSearchWay.ByYearMonth;
-
                 //设置Search.htm页面查询条件换行的规则是增加的查询字段的宽度超过4000，则换行
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.ZZMM);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
-
                 //隐藏条件的查询: 仅仅查询我录入的.
                 //  map.AddHidden(StudentAttr.RecNo, " = ", "@WebUser.No");
                 #endregion 设置查询条件
 
                 #region 基本操作 - 分组.
                 map.AddGroupMethod("基本操作");
-                //多对多的映射.
-                map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
-                  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
+                ////多对多的映射.
+                //map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
+                //  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
 
                 //查询模式.
                 map.AddDtl(new Resumes(), ResumeAttr.StudentNo, null, DtlEditerModel.DtlSearch, "icon-drop");

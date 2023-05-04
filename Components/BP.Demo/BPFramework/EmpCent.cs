@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 
-namespace BP.Demo
+namespace BP.Demo.BPFramework
 {
     /// <summary>
     /// 员工考核得分 属性

@@ -9,147 +9,239 @@ using BP.DA;
 namespace BP.MES
 {
     /// <summary>
-    /// 订单 Attr
+    /// 电气柜 Attr
     /// </summary>
     public class ND2RptAttr : NDXRptBaseAttr
     {
         #region 基本属性
         /// <summary>
-        /// 箱体名称
+        /// 电气柜编码
         /// </summary>
-        public const string XiangTiMingCheng = "XiangTiMingCheng";
+        public const string BoxCode = "BoxCode";
         /// <summary>
-        /// 订单号
+        /// 所属项目
         /// </summary>
-        public const string DingDanHao = "DingDanHao";
+        public const string FK_Project = "FK_Project";
+        /// <summary>
+        /// 出厂编号
+        /// </summary>
+        public const string SerialNumber = "SerialNumber";
+        /// <summary>
+        /// 设备尺寸
+        /// </summary>
+        public const string BoxSize = "BoxSize";
+        /// <summary>
+        /// 生产日期
+        /// </summary>
+        public const string ProdDate = "ProdDate";
+        /// <summary>
+        /// 关联图纸编号
+        /// </summary>
+        public const string DwgNo = "DwgNo";
+        /// <summary>
+        /// 所属装配
+        /// </summary>
+        public const string BomCode = "BomCode";
         /// <summary>
         /// 期限限定
         /// </summary>
-        public const string QiXianXianDing = "QiXianXianDing";
+        public const string FinishDate = "FinishDate";
         /// <summary>
         /// 紧急程度
         /// </summary>
-        public const string JJCD = "JJCD";
-        public const string JJCDText = "JJCDText";
-
+        public const string EmgLevel = "EmgLevel";
         /// <summary>
-        /// 图纸编号
+        /// 时限状态
         /// </summary>
-        public const string TuZhiBianHao = "TuZhiBianHao";
+        public const string TimeStatus = "TimeStatus";
         /// <summary>
-        /// 图纸制图人
+        /// 生产状态
         /// </summary>
-        public const string TuZhiZhiTuRen = "TuZhiZhiTuRen";
-
-        /// <summary>
-        /// 发货人
-        /// </summary>
-        public const string KeHuMingCheng = "KeHuMingCheng";
-
+        public const string ProdStatus = "ProdStatus";
         #endregion
     }
     /// <summary>
-    /// 订单
+    /// 电气柜
     /// </summary>
     public class ND2Rpt : NDXRptBase
     {
         #region 属性
         /// <summary>
-        /// 请假人部门名称
+        /// 电气柜编码
         /// </summary>
-        public string TuZhiBianHao
+        public string BoxCode
         {
             get
             {
-                return this.GetValStringByKey(ND2RptAttr.TuZhiBianHao);
+                return this.GetValStringByKey(ND2RptAttr.BoxCode);
             }
             set
             {
-                this.SetValByKey(ND2RptAttr.TuZhiBianHao, value);
+                this.SetValByKey(ND2RptAttr.BoxCode, value);
             }
         }
-        public string DingDanHao
+        /// <summary>
+        /// 所属项目
+        /// </summary>
+        public string FK_Project
         {
             get
             {
-                return this.GetValStringByKey(ND2RptAttr.DingDanHao);
+                return this.GetValStringByKey(ND2RptAttr.FK_Project);
             }
             set
             {
-                this.SetValByKey(ND2RptAttr.DingDanHao, value);
+                this.SetValByKey(ND2RptAttr.FK_Project, value);
             }
         }
-      
         /// <summary>
-        /// 请假人编号
+        /// 所属项目名称
         /// </summary>
-        public string TuZhiZhiTuRen
+        public string FK_ProjectText
         {
             get
             {
-                return this.GetValStringByKey(ND2RptAttr.TuZhiZhiTuRen);
+                return this.GetValRefTextByKey(ND2RptAttr.FK_Project);
+            }
+        }
+        /// <summary>
+        /// 出厂编号
+        /// </summary>
+        public string SerialNumber
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.SerialNumber);
             }
             set
             {
-                this.SetValByKey(ND2RptAttr.TuZhiZhiTuRen, value);
+                this.SetValByKey(ND2RptAttr.SerialNumber, value);
             }
         }
         /// <summary>
-        /// 请假人名称
+        /// 设备尺寸
         /// </summary>
-        //public string ZhuangPeiFuZeRen
-        //{
-        //    get
-        //    {
-        //        return this.GetValStringByKey(ND2RptAttr.ZhuangPeiFuZeRen);
-        //    }
-        //    set
-        //    {
-        //        this.SetValByKey(ND2RptAttr.ZhuangPeiFuZeRen, value);
-        //    }
-        //}
-        /// <summary>
-        /// 请假人部门编号
-        /// </summary>
-        public int JJCD
+        public string BoxSize
         {
             get
             {
-                return this.GetValIntByKey(ND2RptAttr.JJCD);
+                return this.GetValStringByKey(ND2RptAttr.BoxSize);
             }
             set
             {
-                this.SetValByKey(ND2RptAttr.JJCD, value);
+                this.SetValByKey(ND2RptAttr.BoxSize, value);
             }
         }
-
         /// <summary>
-        /// 总经理意见
+        /// 关联图纸编号
         /// </summary>
-        public string JJCDText
+        public string DwgNo
         {
             get
             {
-                return this.GetValRefTextByKey(ND2RptAttr.JJCD);
+                return this.GetValStringByKey(ND2RptAttr.DwgNo);
             }
-
+            set
+            {
+                this.SetValByKey(ND2RptAttr.DwgNo, value);
+            }
         }
         /// <summary>
-        /// 人力资源意见
+        /// 所属装配
         /// </summary>
-
+        public string BomCode
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.BomCode);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.BomCode, value);
+            }
+        }
+        /// <summary>
+        /// 生产日期
+        /// </summary>
+        public string ProdDate
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.ProdDate);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.ProdDate, value);
+            }
+        }
+        /// <summary>
+        /// 期限限定
+        /// </summary>
+        public string FinishDate
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.FinishDate);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.FinishDate, value);
+            }
+        }
+        /// <summary>
+        /// 紧急程度
+        /// </summary>
+        public string EmgLevel
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.EmgLevel);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.EmgLevel, value);
+            }
+        }
+        /// <summary>
+        /// 时限状态
+        /// </summary>
+        public string TimeStatus
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.TimeStatus);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.TimeStatus, value);
+            }
+        }
+        /// <summary>
+        /// 生产状态
+        /// </summary>
+        public string ProdStatus
+        {
+            get
+            {
+                return this.GetValStringByKey(ND2RptAttr.ProdStatus);
+            }
+            set
+            {
+                this.SetValByKey(ND2RptAttr.ProdStatus, value);
+            }
+        }
         #endregion
 
         #region 构造函数
         /// <summary>
-        /// 请假
+        /// 电气柜
         /// </summary>
         public ND2Rpt()
         {
 
         }
         /// <summary>
-        /// 请假
+        /// 电气柜
         /// </summary>
         /// <param name="workid">工作ID</param>
         public ND2Rpt(Int64 workid)
@@ -166,25 +258,32 @@ namespace BP.MES
             {
                 if (this._enMap != null)
                     return this._enMap;
-
-                Map map = new Map("ND2Rpt", "订单信息");
+                //数据表映射配置
+                Map map = new Map("ND2Rpt", "电气柜生产装配信息");
 
                 #region 流程的基本字段
                 map.AddTBIntPKOID();
-                map.AddTBString(ND2RptAttr.Title, null, "标题", true, true, 0, 500, 10);
-                map.AddTBString(ND2RptAttr.BillNo, null, "编号", true, true, 0, 50, 10);
-
-                map.AddTBString(ND2RptAttr.DingDanHao, null, "订单号", true, true, 0, 50, 10);
-                 map.AddTBString(ND2RptAttr.KeHuMingCheng, null, "客户名称", false, true, 0, 50, 10);
-                map.AddTBString(ND2RptAttr.PrjName, null, "项目名称", true, true, 0, 50, 10);
-                map.AddTBString(ND2RptAttr.QiXianXianDing, null, "期限限定", true, true, 0, 50, 10);
-                map.AddDDLSysEnum(ND2RptAttr.JJCD, 0, "紧急程度", true, true, ND2RptAttr.JJCD, "@0=低，@1=中，@2=高");
-
+                map.AddTBString(ND2RptAttr.Title, String.Empty, "标题", true, true, 0, 500, 10);
+                map.AddTBString(ND2RptAttr.BillNo, String.Empty, "编号", true, true, 0, 50, 10);
+                map.AddTBString(ND2RptAttr.BoxCode, String.Empty, "电气柜编号", true, false, 1, 50, 50);
+                map.AddTBString(ND2RptAttr.SerialNumber, String.Empty, "出厂编号", true, false, 0, 30, 100);
+                map.AddTBString(ND2RptAttr.BoxSize, String.Empty, "设备尺寸", true, false, 0, 100, 100);
+                map.AddTBString(ND2RptAttr.ProdDate, String.Empty, "生产日期", true, false, 0, 20, 50);
+                map.AddTBString(ND2RptAttr.BomCode, String.Empty, "所属装配", true, false, 0, 10, 50);
+                map.AddTBString(ND2RptAttr.DwgNo, String.Empty, "关联图纸", true, false, 0, 100, 50);
+                //日期字段
+                map.AddTBDate(ND2RptAttr.FinishDate, String.Empty, "期限限定", true, false);
+                //外键字段
+                map.AddDDLEntities(ND2RptAttr.FK_Project, String.Empty, "所属项目", new Projects(), true);
+                //枚举字段
+                map.AddDDLSysEnum(ND2RptAttr.EmgLevel, 0, "紧急程度", true, true, ND2RptAttr.EmgLevel, "@0=一般@1=紧急");
+                map.AddDDLSysEnum(ND2RptAttr.TimeStatus, 0, "时限状态", true, false, ND2RptAttr.TimeStatus, "@0=未开始@1=正常@2=逾期");
+                map.AddDDLSysEnum(ND2RptAttr.ProdStatus, 0, "生产状态", true, false, ND2RptAttr.ProdStatus, "@0=未开始@1=生产中@2=已挂起@3=已完成@4=已终止");
                 map.AddTBInt(ND2RptAttr.FlowEndNode, 0, "订单状态(运行的节点)", false, true);
                 #endregion 流程的基本字段
 
                 //箱体信息.
-              //  map.AddDtl(new ND201Dtl1s(), ND201Dtl1Attr.RefPK);
+                //map.AddDtl(new ND201Dtl1s(), ND201Dtl1Attr.RefPK);
 
                 this._enMap = map;
                 return this._enMap;
@@ -194,77 +293,11 @@ namespace BP.MES
 
     }
     /// <summary>
-    /// 订单s
+    /// 电气柜s
     /// </summary>
     public class ND2Rpts : NDXRptBases
     {
 
-        /// <summary>
-        /// 打包
-        /// </summary>
-        /// <returns></returns>
-        public string DaBao_Init()
-        {
-            ///ND1Rpt rpts = new ND1Rpt();
-            string sql = "SELECT B.OID, B.XiangTiMingCheng AS Name, A.Title FROM ND2Rpt A, ND201Dtl1 B WHERE B.XTSta=3 AND A.OID=B.RefPK ORDER BY A.PWorkID";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            return BP.Tools.Json.ToJson(dt);
-        }
-        /// <summary>
-        /// 物流单
-        /// </summary>
-        /// <param name="XiangTiDtls">箱体的IDs</param>
-        /// <param name="relEmpNo">发货人</param>
-        /// <param name="dtRel">发货日期</param>
-        ///  <param name="fhBill">发货单号</param>
-        /// <returns></returns>
-        public string DaBao_Save(string XiangTiDtls, string relEmpNo, string dtRel, string fhBill,string fhName)
-        {
-            try
-            {
-                WuLiuBill en = new WuLiuBill();
-                en.RelEmpNo = relEmpNo;
-                en.XiangTiDtls = XiangTiDtls;
-                en.DTRel = dtRel;
-                en.FaHuoBill = fhBill;
-                en.KuaiDiName = fhName;
-
-
-                en.Insert();
-
-                //遍历箱体.
-                string[] strs = XiangTiDtls.Split(',');
-                foreach (string mystr in strs)
-                {
-                    if (DataType.IsNullOrEmpty(mystr) == true)
-                        continue;
-
-                    DBAccess.RunSQL("UPDATE ND201Dtl1 SET XTSta = 4, FaHuoRen = '" + relEmpNo + "', FaHuoRQ = '" + dtRel + "', FaHuoBill ='" + fhBill + "',FaHuoBillOID=" + en.OID + "  WHERE OID = " + mystr);
-                }
-
-                //获得该物流单，包含的 订单. 检查每个订单是否都已经发货，如果发货，就让其结束。
-                string sql = "select distinct RefPK from ND201Dtl1 where FaHuoBillOID=" + en.OID;
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    Int64 workIDOf002 = Int64.Parse(dr[0].ToString()); //订单的workID.
-
-                    sql = "select * from ND201Dtl1 where XTSta !=4   and refpk=" + workIDOf002;
-                    DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    if (mydt.Rows.Count == 0)
-                    {
-                        //所有的订单的下的箱子 已经发货了。
-                        BP.WF.Dev2Interface.Flow_DoFlowOver(workIDOf002, "已经发货完毕，执行订单结束");
-                    }
-                }
-
-                return "执行成功..";
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
         #region 方法
         /// <summary>
         /// 得到它的 Entity 

@@ -5,7 +5,7 @@ using BP.En;
 using BP.WF;
 using BP.Port;
 
-namespace BP.Demo
+namespace BP.Demo.BPFramework
 {
     /// <summary>
     /// ◊¢≤·”√ªß  Ù–‘

@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BP.Demo</RootNamespace>
     <AssemblyName>BP.Demo</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -52,44 +56,24 @@
     <Compile Include="BPFramework\School.cs" />
     <Compile Include="BPFramework\Student.cs" />
     <Compile Include="BPFramework\StudentKeMu.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="CN\Area.cs" />
-    <Compile Include="CN\City.cs" />
-    <Compile Include="CN\DQ.cs" />
-    <Compile Include="CN\PQ.cs" />
-    <Compile Include="CN\QXS.cs" />
-    <Compile Include="CN\SF.cs" />
     <Compile Include="DemoCRM\Customer.cs" />
     <Compile Include="DemoCRM\Product.cs" />
     <Compile Include="F069.cs" />
-    <Compile Include="JianYu\AppHandler.cs" />
-    <Compile Include="JianYu\F001.cs" />
-    <Compile Include="JianYu\Prison.cs" />
-    <Compile Include="JianYu\JianQu.cs" />
-    <Compile Include="JianYu\FenJianQu.cs" />
-    <Compile Include="JianYu\Fanren.cs" />
-    <Compile Include="JianYu\PrisonSta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
-      <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
+      <Project>{8e484457-b3a3-441c-aee3-4e49bb30e203}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
     <ProjectReference Include="..\BP.WF\BP.WF.csproj">
-      <Project>{04147518-e5e6-4b01-a797-094b8ba9cfd5}</Project>
+      <Project>{f7f2f45d-937e-4777-87b4-ec9ac5ed03fa}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="KeLun\" />
-    <Folder Include="LIMS\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="BPFramework\Readme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

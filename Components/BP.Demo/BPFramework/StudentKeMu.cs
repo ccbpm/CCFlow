@@ -3,7 +3,7 @@ using System.Data;
 using BP.DA;
 using BP.En;
 
-namespace BP.Demo
+namespace BP.Demo.BPFramework
 {
 	/// <summary>
 	/// 学生科目对应 -属性

@@ -55,6 +55,9 @@ if (typeof DeliveryWay == "undefined") {
         //按表单选择岗位
         DeliveryWay.ByPreviousNodeFormStationsAI = 53,
         DeliveryWay.ByPreviousNodeFormStationsOnly = 54,
+        //选择其他组织的联络员
+        DeliveryWay.BySelectEmpByOfficer = 55,
+
         //按表单选择部门
         // 与上一节点的人员相同
         DeliveryWay.ByPreviousNodeEmp = 6,
@@ -114,7 +117,7 @@ if (typeof DeliveryWay == "undefined") {
 
         //外部用户可以发起
         DeliveryWay.ByGuest = 51,
-
+       
         // 按照ccflow的BPM模式处理
         DeliveryWay.ByCCFlowBPM = 100
 }

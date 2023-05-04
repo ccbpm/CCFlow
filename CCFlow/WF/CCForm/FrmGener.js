@@ -420,7 +420,7 @@ function SaveIt(saveType) {
 
     //监听提交
     layui.form.on('submit(Save)', function (data) {
-        debugger;
+        //debugger;
         //保存信息
         var formData = getFormData(data.field);
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
@@ -475,7 +475,7 @@ function Save(isSend) {
         return false;
 
     //审核组件
-    if ($("#WorkCheck_Doc").length == 1  || $("textarea[id='WorkCheck_Doc0']").length == 1) {
+    if ($("#WorkCheck_Doc").length == 1 || $("textarea[id='WorkCheck_Doc0']").length == 1 ||$("#WorkCheck_Doc0").length == 1) {
         //保存审核信息
         SaveWorkCheck();
         if (isSend == 1 && isCanSend == false)

@@ -694,7 +694,7 @@ namespace CCFlow.WF.CCForm
                                     if (daDtl.IsBlank == false)
                                     {
                                         daDtl.RefPK = pkValue;
-                                        daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
+                                        daDtl.Insert();
                                     }
                                 }
 

@@ -23,7 +23,11 @@ function InitBar(optionKey) {
     html += "</select>";
 
     var sorts = new Entities("BP.WF.Admin.FlowSorts");
-    sorts.RetrieveAll();
+    var webUser = new WebUser();
+    if (webUser.CCBPMRunModel == 0)
+        sorts.RetrieveAll();
+    else
+        sorts.Retrieve("OrgNo", WebUser.OrgNo);
     html += "&nbsp;存放目录:";
     html += "<select id=DDL_FlowSort >";
     var sortNo = GetQueryString("SortNo");
@@ -73,11 +77,15 @@ function Save() {
             alert(data);
             return;
         }
-
+        //流程列表增加表单节点
+        if (typeof window.parent.AppendFlowToFlowSort != "undefined") {
+            window.parent.AppendFlowToFlowSort(newFlowInfo.FlowSort, data, newFlowInfo.FlowName);
+        }
         var webUser = new WebUser();
         var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&Token=" + webUser.Token + "&UserNo=" + webUser.No + "&From=Ver2021";
-        //  var url = "";
-        SetHref(url);
+        if (window.parent && window.parent.layer)
+            window.parent.layer.close(window.parent.layer.index);
+        WinOpenFull(url, data);
     }, 1000);
 
 }

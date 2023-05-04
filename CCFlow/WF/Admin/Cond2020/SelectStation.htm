@@ -61,9 +61,14 @@
                 Stations = new Entities("BP.Port.Stations");
                 Stations.Retrieve("OrgNo", orgNo);
                 //查询出来数据.
-                var sql = "select No,Name FROM port_StationType WHERE No in (SELECT Fk_StationType from Port_Station WHERE OrgNo ='" + orgNo + "')";
+               /* var sql = "select No,Name FROM port_StationType WHERE No in (SELECT Fk_StationType from Port_Station WHERE OrgNo ='" + orgNo + "')";
                 //获得要增加的流程集合.
-                StationTypes = DBAccess.RunSQLReturnTable(sql);
+                StationTypes = DBAccess.RunSQLReturnTable(sql);*/
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond2020");
+                handler.AddPara("OrgNo", orgNo);
+                StationTypes = handler.DoMethodReturnString("SelectStation_StationTypes");
+                StationTypes = JSON.parse(StationTypes);
             }
             //初始化岗位Table显示
             InitStationTable(StationTypes, Stations);
@@ -93,7 +98,7 @@
                     }
                 }
 
-                var title = "<tr><td colspan='3'><label for='CB_type_" + typeno + "' ><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/>" + stationTypes[i].Name + "</label></td></tr>";
+                var title = "<tr><td colspan='3'><label for='CB_type_" + typeno + "' ><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this.checked,'" + ids + "')\"/>" + stationTypes[i].Name + "</label></td></tr>";
                 $("#t1").append(title);
 
                 for (var k = 0, klen = curstas.length; k < klen; k++) {
@@ -107,14 +112,14 @@
             }
         }
 
-        function SetSelected(checked, ids) {
+        function SetSelected(checked,ids){
             var checkeds = ids.split(',');
             for (var i = 0; i < checkeds.length; i++) {
-                var checkid = document.getElementById('emp_' + checkeds[i]);
+                var checkid =document.getElementById('emp_'+checkeds[i]);
                 checkid.checked = checked;
             }
         }
-
+        
         function Save() {
             var emps = ",";
             var html = "";

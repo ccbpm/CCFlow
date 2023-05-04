@@ -220,6 +220,7 @@ function BindFrm() {
             if (frmNode != null && frmNode != undefined) {
                 frmNode = frmNode[0];
                 if (frmNode.FrmType == 0) { //傻瓜表单
+                    $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
                     Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
                     GenerFoolFrm(flowData);
                 }

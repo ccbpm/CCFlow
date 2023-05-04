@@ -223,7 +223,7 @@
           if (valid) {
             const handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_FlowOperation");
             handler.AddPara("FK_Flow", this.toNode.FK_Flow);
-              handler.AddPara("ToNodeID", this.toNode.FK_Node);
+              handler.AddPara("ToNodeID", this.toNode.NodeID || this.toNode.FK_Node);
             handler.AddPara("WorkID", GetQueryString("WorkID"));
             handler.AddPara("Emps", this.$refs.cascader.getCheckedNodes(true).map(item => item.data.value));
             handler.AddPara("Note", this.form.desc);

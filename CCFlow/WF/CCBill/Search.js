@@ -44,6 +44,7 @@ function isHaveActiveDDLSearchCond(mapAttr) {
 * @param defVal
 */
 function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
+	const defaultValue = defVal;
     defVal = "," + defVal + ",";
     var operations = [];
     var isAutoFull = isHaveAutoFull(mapAttr);
@@ -89,7 +90,7 @@ function InitDDLOperation(frmData, mapAttr, defVal, ddlShowWays, selectSearch) {
         })
     }
 
-
+	defVal = defaultValue;
     if ((isAutoFull == true || isActiveDDL == true) && defVal == 'all') {
         defVal = operations[0].value;
 
@@ -988,7 +989,10 @@ function OpenLink(no, source) {
         return;
     }
     url = url.indexOf("?") == -1 ? url + "?1=1" : url;
-    url += "&FrmID=" + frmID;
+    url = url.replace(/@FrmID/g, frmID);
+    url = url.replace(/@FK_MapData/g, frmID);
+    if(url.indexOf("FrmID")==-1)
+        url += "&FrmID=" + frmID;
     url = DealExp(url);
     var w = link.PopWidth || window.innerWidth * 2/3;
     if (w < window.innerWidth * 2 / 3)
@@ -1139,7 +1143,7 @@ function OpenFlowEntity(no, source) {
         return;
     }
     var menuNo = flowM.FrmID + "_" + flowNo;
-    var url = "../CCBill/Opt/StartFlowByNewEntity.htm?FK_Flow=" + flowNo + "&MenuNo=" + menuNo;
+    var url = "/WF/CCBill/Opt/StartFlowByNewEntity.htm?FK_Flow=" + flowNo + "&MenuNo=" + menuNo;
     window.top.vm.openTab(flowM.Name, url);
 }
 /**
@@ -1237,10 +1241,21 @@ function DoMethod(methodNo, workid, jsonStr) {
 
     //超链接.
     if (method.MethodModel == "Link") {
-        if (method.Tag1.indexOf('?') > 0)
-            method.Docs = method.Tag1 + "&FrmID=" + method.FrmID + "&WorkID=" + workid;
+        method.Tag1 = method.Tag1.replace(/@FrmID/g, method.FrmID);
+        method.Tag1 = method.Tag1.replace(/@FK_MapData/g, method.FrmID);
+        method.Tag1 = method.Tag1.replace(/@OID/g, workid);
+        method.Tag1 = method.Tag1.replace(/@WorkID/g, workid);
+        if (method.Tag1.indexOf('?') == -1)
+            method.Docs = method.Tag1 + "?1=1";
         else
-            method.Docs = method.Tag1 + "?FrmID=" + method.FrmID + "&WorkID=" + workid;
+            method.Docs = method.Tag1;
+
+        method.Docs = DealJsonExp(jsonStr, method.Docs);
+
+        if (method.Tag1.indexOf('FrmID') == -1)
+            method.Docs += "&FrmID=" + method.FrmID;
+        if (method.Tag1.indexOf('WorkID') == -1)
+            method.Docs += "&WorkID=" + workid;
     }
 
     if (method.Docs === "") {

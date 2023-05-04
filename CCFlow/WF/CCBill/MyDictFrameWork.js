@@ -174,10 +174,20 @@ window.onload = function () {
 
                 //超链接.
                 if (method.MethodModel == "Link") {
-                    if (method.Tag1.indexOf('?') > 0)
-                        method.Docs = method.Tag1 + "&FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                    
+                    method.Tag1 = method.Tag1.replace(/@FrmID/g, GetQueryString("FrmID"));
+                    method.Tag1 = method.Tag1.replace(/@FK_MapData/g, GetQueryString("FrmID"));
+                    method.Tag1 = method.Tag1.replace(/@OID/g, GetQueryString("WorkID"));
+                    method.Tag1 = method.Tag1.replace(/@WorkID/g, GetQueryString("WorkID"));
+
+                    if (method.Tag1.indexOf('?') == -1)
+                        method.Docs = method.Tag1 + "?1=1";
                     else
-                        method.Docs = method.Tag1 + "?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID");
+                        method.Docs = method.Tag1;
+                    if (method.Tag1.indexOf('FrmID') == -1)
+                        method.Docs += "&FrmID=" + GetQueryString("FrmID");
+                    if (method.Tag1.indexOf('WorkID') == -1)
+                        method.Docs +="&WorkID=" + GetQueryString("WorkID");
                 }
 
                 if (method.Docs === "") {

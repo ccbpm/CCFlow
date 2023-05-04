@@ -298,7 +298,7 @@
             }
 
             if (barkEn.MyDataType == 6 || barkEn.MyDataType == 7)
-                url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrDate&MyPK=" + mypk;
+                url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&MyPK=" + mypk;
 
             if (barkEn.MyDataType == 4)
                 url = "./En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&MyPK=" + mypk;
@@ -325,7 +325,7 @@
                     return;
                 }
             }
-            dblist.ExpEn = encodeURIComponent(doc);
+            dblist.ExpEn = doc;
             dblist.Update();
             SaveNames();
             Reload();

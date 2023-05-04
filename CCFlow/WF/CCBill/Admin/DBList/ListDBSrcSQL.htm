@@ -51,7 +51,7 @@
 
             var frmID = GetQueryString("FrmID");
             var dblist = new Entity("BP.CCBill.DBList", frmID);
-            dblist.ExpList = encodeURIComponent($("#TB_DBSrc").val());
+            dblist.ExpList = $("#TB_DBSrc").val();
             if (dblist.ExpList == "") {
                 alert("列表数据源不能为空");
                 return;

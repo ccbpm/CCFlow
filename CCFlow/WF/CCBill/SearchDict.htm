@@ -355,6 +355,25 @@
                     laydate.render({
                         elem: '#' + item.id //指定元素
                         , type: $(item).attr("data-info")
+                        ,done: function (value, date, endDate) {
+                            //判断结束时间不能小于开始时间
+                            if(value == "")
+                                return;
+                            //比对的时间字段值
+                            var operVal = $('#TB_DTFrom').val();
+                            var msg = "";
+                            var dtFrom = GetPara(atPara, "DTSearchLabel");
+                            if (value < operVal && operVal != "") {
+                                msg = "所选日期不能小于[" + dtFrom + "]对应的日期时间";
+                            }
+
+                            if (msg != "") {
+                                layer.alert(msg);
+                                value = "";
+                            }
+
+                            $(this.elem).val(value);
+                        }
                     });
                 })
             }
@@ -546,6 +565,7 @@
          */
         var searchData = {};
         var mapExts;
+        var atPara;
         function InitToolBar() {
             var handler = new HttpHandler("BP.CCBill.WF_CCBill");
             handler.AddPara("FrmID", frmID);
@@ -559,7 +579,7 @@
             //单据表单属性
             var mapData = data.Sys_MapData;
             var attrs = data.Attrs;
-            var atPara = mapData[0].AtPara;
+            atPara = mapData[0].AtPara;
             mapExts = data.Sys_MapExt;
 
             var inputSearch = [];

@@ -546,7 +546,6 @@ var vm = new Vue({
         },
         // 初始化饼图
         initPieChart: function (el, item) {
-            debugger
             var pieChart = echarts.init(el);
             //console.log(pieChart)
             //var name = item.Name
@@ -715,7 +714,6 @@ var vm = new Vue({
                 return;
             }
             var data = JSON.parse(item.Docs);
-            debugger
             var jsonKey = [];
             for (var jsonVal in data[0]) {
                 jsonKey.push(jsonVal);

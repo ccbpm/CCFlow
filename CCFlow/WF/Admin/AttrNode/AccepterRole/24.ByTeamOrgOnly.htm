@@ -81,7 +81,7 @@
         function Save() {
 
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay = DeliveryWay.ByTeamOrgOnly;
             node.Update();
         }

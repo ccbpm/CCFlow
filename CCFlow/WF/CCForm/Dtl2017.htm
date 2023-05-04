@@ -45,6 +45,7 @@
     <script src="../Scripts/layui/layui/layui.js"></script>
     <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <script src="../Scripts/layui/LayuiDialog.js"></script>
+    <script type="text/javascript" src="../Portal/js/sortjs/Sortable.min.js"></script>
     <style>
         th, td {
             white-space: normal;
@@ -280,7 +281,6 @@
 
         //插入行.
         function insertRow(EditModel) {
-
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
             if (EditModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
@@ -307,13 +307,14 @@
                 }
             }
 
-            var insertTr = $('<tr></tr>');
+           
 
             var threadTr = $('#dtlDiv div table thead tr');
             var newRowIndex = $('#dtlDiv div table tbody tr').length;
             if (statisticsFlag && newRowIndex > 0) {	// 统计行不计
                 newRowIndex--;
             }
+            var insertTr = $('<tr data-id="'+newRowIndex+'"></tr>');
             if (statisticsFlag) {
                 // 将数据行插入到统计行前
                 var statisticsRow = $("#dtlDiv div table tbody").find("tr").last();
@@ -351,7 +352,7 @@
                             }
 
                         });
-                        var td = $('<td></td>');
+                        var td = $('<td align="center" style="vertical-align: middle;"></td>');
                         if (o.data().UIVisible == 0)
                             td = $('<td style="display:none"></td>');
                     } else {
@@ -438,7 +439,7 @@
                         tmplate.val(textVal);
                     }
 
-                    var td = $('<td></td>');
+                    var td = $('<td  style="vertical-align: middle;"></td>');
                     if (o.data().UIVisible == 0)
                         td = $('<td style="display:none"></td>');
                     td.append(tmplate);
@@ -515,11 +516,11 @@
         }
         function setIframeHeight() {
             var h = $("body").height();
-            if ($("body").height() < 260) {
-                h = 260;
+            if ($("body").height() < 230) {
+                h = 230;
             }
             if (window.frameElement != null)
-                $("#" + window.frameElement.getAttribute("id"), parent.document).height(h + 40);
+                $("#" + window.frameElement.getAttribute("id"), parent.document).height(h);
         }
 
         //行最后的保存按钮
@@ -576,6 +577,8 @@
         var isMulti = false;
         var mapAttrs = [];
         var dbDtl;
+        var isCanSave = false;
+        var isHaveAth = false;
         function InitPage() {
 
             var isReadonly = GetQueryString("IsReadonly");
@@ -618,6 +621,7 @@
             var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
             mapAttrs = sys_mapAttr;
             mapExts = sys_mapExtDtl;
+            isHaveAth = mapAttrs.filter(attr => attr.UIContralType === 6).length > 0;
             dbDtl = data["DBDtl"]; //从表数据.
             var dbVerPK = GetQueryString("DBVerPK");
             if (dbVerPK && dbVerPK != "") {
@@ -807,8 +811,11 @@
                 var IsExp = sys_MapDtl.IsImp;//导出
                 var th = $("<th style='width:120px;white-space: nowrap;'" + rowspan + "></th>");
                 var imgStr = "";
-                if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1")
+                if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
+                    isCanSave = true;
                     imgStr = '<img title="保存" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="SaveAll();" />';
+
+                }
                 if (IsExp == 1) {
 
                     imgStr += '<img title="导出" style="width: 30px;padding: 0px 5px;cursor:pointer;" src="../Img/Btn/ExportToExcel.gif" onclick="ExpOption();" />';
@@ -905,6 +912,7 @@
                     //循环TBODY
                     var tbodyTrs = $('#dtlDiv div table tbody tr');
                     $.each(tbodyTrs, function (m, tbodyTrObj) {
+                        $(tbodyTrObj).attr("data-id", m);
                         var threadTh = getUseHeadTh();
                         var index = m;
                         $.each(threadTh, function (k, threadThObj) {
@@ -1003,6 +1011,7 @@
                                     }
                                     else {
                                         // 判断下拉框是否有对应option, 若没有则追加
+
                                         if (o.data().LGType == 2 || o.data().UIContralType == "1") {
                                             if ($("option[value='" + textVal + "']", tmplate).length == 0) {
                                                 try {
@@ -1063,6 +1072,8 @@
                         $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
                         $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
                         $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+
+
                     } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.EditModel != 0) {
                         tbodyTrs.on("dblclick", function () {
                             updateRow($(this).data().data.OID, lsys_MapDtl.EditModel);
@@ -1132,6 +1143,8 @@
             //       });
             $('#Msg').hide();
             setIframeHeight();
+            debugger
+           initSortable();
             return;
 
             /********解析数据组装datagrid表*****/
@@ -1152,6 +1165,120 @@
 
         }
 
+
+        function initSortable() {
+            setTimeout(() => {
+                var tbodyEl = $("#dtlDiv div table tbody");
+                if (!tbodyEl.length != 0) {
+                    console.error('拖动功能初始化失败');
+                    return;
+                }
+                tbodyEl = tbodyEl[0];
+                sortablejsRef = new Sortable(tbodyEl, {
+                    animation: 150,
+                    //dataIdAttr: 'data-row-key',
+                    onEnd: async (evt) => {
+                        const oldIndex = evt.oldIndex || 0;
+                        const newIdex = evt.newIndex || 0;
+                        const isMoveUp = newIdex < oldIndex;
+                        const sortedList = sortablejsRef?.toArray() || [];
+                        // 因为这个表格有个隐藏列，需要去掉第1项
+                        if (sortedList.length <2) {
+                            return;
+                        }
+                        //更改变更记录
+                        var idxs = ",";
+                        if (isMoveUp) {
+                            let count = 0;
+                            for (let idx = sortedList.length - 1; idx >= 0; idx--) {
+                                if (parseInt(sortedList[idx]) != idx) {
+                                    if (count > oldIndex - newIdex) break;
+                                    count++;
+                                   
+                                    var newIdx = parseInt(sortedList[idx]);
+                                    var oldIdx = idx;
+                                    if (idxs.indexOf("," + newIdx + ",") != -1)
+                                        continue;
+                                    var newTr = $('table tbody tr')[newIdx];
+                                    var oldTr = $('table tbody tr')[oldIdx];
+                                    var newOID = $(newTr).data().data.OID || 0;
+                                    var oldOID = $(oldTr).data().data.OID || 0;
+                                    if (tableSortChange(newIdx, oldIdx, newOID, oldOID, idxs) == true) {
+                                        var snTd = $($(newTr).children('td')[0]);
+                                        snTd.text(newIdx + 1);
+                                        //更改行中元素的id
+                                        Array.from($(newTr).find($('[id]'))).forEach(function (ele) {
+                                            ele.id = ele.id.substring(0, ele.id.lastIndexOf("_")) + "_" + newIdx;
+                                        });
+                                        $(newTr).attr("data-id", newIdx);
+                                    }
+                                   
+                                    if (idxs.indexOf("," + newIdx + ",") == -1)
+                                        idxs += newIdx + ",";
+                                }
+                            }
+                        } else {
+                            //更换次数
+                            let count = 0;
+                            for (let idx = 0; idx < sortedList.length; idx++) {
+                                if (parseInt(sortedList[idx]) != idx) {
+                                    if (count > newIdex - oldIndex) break;
+                                    count++;
+                                    var newIdx = parseInt(sortedList[idx]);
+                                    var oldIdx = idx;
+                                    if (idxs.indexOf("," + newIdx + ",") != -1)
+                                        continue;
+                                    var newTr = $('table tbody tr')[newIdx];
+                                    var oldTr = $('table tbody tr')[oldIdx];
+                                    var newOID = $(newTr).data().data.OID || 0;
+                                    var oldOID = $(oldTr).data().data.OID || 0;
+                                    if (tableSortChange(newIdx, oldIdx, newOID, oldOID, idxs) == true) {
+                                        var snTd = $($(newTr).children('td')[0]);
+                                        snTd.text(newIdx + 1);
+                                        //更改行中元素的id
+                                        Array.from($(newTr).find($('[id]'))).forEach(function (ele) {
+                                            ele.id = ele.id.substring(0, ele.id.lastIndexOf("_")) + "_" + newIdx;
+                                        });
+                                        $(newTr).attr("data-id", newIdx);
+                                        
+                                    }
+                                    if (idxs.indexOf("," + newIdx + ",") == -1)
+                                        idxs += newIdx + ",";
+                                   
+                                    
+                                }
+                            }
+                        }
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm")
+                        handler.AddPara('RefPKVal', GetQueryString("WorkID"));
+                        handler.AddPara('FK_MapData', sys_MapDtl.No);
+                        handler.DoMethodReturnString('DtlList_MoveAfter');
+                        $.each($('table tbody tr'),function (idx,tr) {
+                            AfterBindEn_DealMapExt(tr, idx);
+                        })
+                       
+                    }
+                });
+            }, 200);
+        }
+
+        function tableSortChange(newIdx, oldIdx, newOID, oldOID) {
+            if (newOID === 0 || oldOID == 0) {
+                const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                handler.AddPara('newIdx', newIdx);
+                handler.AddPara('oldIdx', oldIdx);
+                handler.AddPara('newOID', newOID);
+                handler.AddPara('oldOID', oldOID);
+                handler.AddPara('RefPKVal', GetQueryString("WorkID"));
+                handler.AddPara('FK_MapData',sys_MapDtl.No);
+                var data = handler.DoMethodReturnString('DtlList_Move');
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return false;
+                }
+            }
+            return true;
+        }
         /**
          * 默认值的转化
          * @param defVal 默认值
@@ -1350,10 +1477,11 @@
             if ($.isArray(extArr)) {
                 $.each(extArr, function (i, extObj) {
                     var columnsName = getColumnElementsName(extObj.DtlColumn);
-                    if ($(":input[name=" + columnsName + "]").length == 0)
+                    var targetElement = $(":input[name=" + columnsName + "]")
+                    if (targetElement.length == 0)
                         doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
-
-                    $(":input[name=" + columnsName + "]").each(function (i, e) {
+                    targetElement.each(function (i, e) {
+                        console.log("selector:" + ":input[name=" + columnsName + "]" + " - bindchange:", i, e)
                         $(e).bind("change", function (o) {
                             doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document), $("#TB_" + extObj.DaXieAttrOfOper, parent.document));
                             //是否使用合计计算其他值
@@ -1361,7 +1489,6 @@
                             if (extObj.Tag == "1" && funcName != "") {
                                 DBAccess.RunFunctionReturnStr(extObj.Tag1);
                             }
-
                         });
                         if (i == 0) {
                             $(e).trigger("change");
@@ -1377,13 +1504,24 @@
         * @param template 统计单元格jquery对象
         */
         function doStatistics(exp, name, template, DXTemplate) {
+            var childTableElements = [];
+            var queryExp = "input[name=" + name + "]"
+            if (window.parent) {
+                var iframes = window.parent.document.querySelectorAll('iframe')
+                iframes.forEach(function (iframe) {
+                    var elem = iframe.contentWindow.$(queryExp)
+                    for (var i = 0; i < elem.length; i++) {
+                        childTableElements.push(elem[i]);
+                    }
+                })
+            }
             var expVal = 0;
             if (exp == "Sum") {	// 和
                 var sum = 0;
                 //判断值是否含有小数
                 var flag = false;
                 var bit = 0;
-                $(":input[name=" + name + "]").each(function (i, e) {
+                childTableElements.forEach(function (e, i) {
                     var val = $(e).val();
                     val = val.replace(/,/g, "");
                     val = val.replace(/￥/g, "");
@@ -1408,10 +1546,11 @@
                 }
                 expVal = sum;
                 template.val(sum);
+
             } else if (exp == "Avg") {	// 平均数
                 var sum = 0;
                 var count = 0;
-                $(":input[name=" + name + "]").each(function (i, e) {
+                childTableElements.forEach(function (e, i) {
                     var val = $(e).val();
                     val = val.replace(/,/g, "");
                     val = val.replace(/￥/g, "");
@@ -1427,7 +1566,7 @@
                 }
             } else if (exp == "Max") {	// 最大
                 var max = null;
-                $(":input[name=" + name + "]").each(function (i, e) {
+                childTableElements.forEach(function (e, i) {
                     var val = $(e).val();
                     val = val.replace(/,/g, "");
                     val = val.replace(/￥/g, "");
@@ -1444,7 +1583,7 @@
                 template.val(max);
             } else if (exp == "Min") {	// 最小
                 var min = null;
-                $(":input[name=" + name + "]").each(function (i, e) {
+                childTableElements.forEach(function (e, i) {
                     var val = $(e).val();
                     val = val.replace(/,/g, "");
                     val = val.replace(/￥/g, "");
@@ -1530,6 +1669,8 @@
                         title = unescape(results[2]);
                     }
                 }
+                //先保存从表数据
+                SaveAll();
                 window.parent.OpenBootStrapModal(url, "eudlgframe", title, digWidth, digHeight, "icon-edit", false, function () { }, null, function () {
                     location = location;
                 });
@@ -1666,7 +1807,7 @@
 
                 }
                 if (keyOfEn != "" && tr.data().customRowType != "statistics" && trData[keyOfEn] != undefined) {
-                    if (isEncode==true)
+                    if (isEncode == true)
                         trData[keyOfEn] = encodeURIComponent(value);
                     else
                         trData[keyOfEn] = value;
@@ -2163,7 +2304,7 @@
                 var index = i;
 
                 //让界面的值=DAT 的值
-                setTrDataByData(index,true);
+                setTrDataByData(index, true);
 
                 var trData = $($('table tbody tr')[index]).data().data;
                 var rowData = trData;
@@ -2214,6 +2355,7 @@
                     continue;
                 }
             };  //循环表格
+
 
             if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
                 $('#Msg').hide();
@@ -2329,6 +2471,11 @@
 
             } else { //移除  新增的 尚未入库
                 var tr = $(obj).parent().parent();
+                //移除可能存在的附件
+                var ens = new Entities("BP.Sys.FrmAttachmentDBs");
+                ens.Delete("FK_MapData", sys_MapDtl.No, "RefPKVal", GetQueryString("RefPKVal") + "_" + rowCurrentIndex);
+                var ens = new Entities("BP.Sys.FrmEleDBs");
+                ens.Delete("FK_MapData", sys_MapDtl.No, "RefPKVal", GetQueryString("RefPKVal") + "_" + rowCurrentIndex);
                 updateTableSn(tr);
                 tr.remove();
                 triggerStatistics(); // 重新计算
@@ -2343,6 +2490,7 @@
                     }
                 } catch (e) {
                 }
+               
 
             }
         }
@@ -2380,7 +2528,7 @@
             if (!isNaN(parseInt(sn))) {
                 newRowIndex = parseInt(sn);
             }
-            var insertTr = $('<tr></tr>');
+            var insertTr = $('<tr data-id="' + newRowIndex+'"></tr>');
             insertTr.insertAfter(tr);
             //更改表格序号
             updateTableSn(insertTr, "add");
@@ -2391,35 +2539,70 @@
         function updateTableSn(tr, type) {
             type = type || "remove";
             tr = $(tr).next();
+
+            if (type === "add") {
+                var index = tr.attr("data-id");
+                var trs = $('table tbody tr');
+                for (var i = trs.length-1; i > index; i--) {
+                    tr = $(trs[i]);
+                    var snTd = $(tr.children('td')[0]);
+                    snTd.text(i+1);
+                    var newIdx = i;
+                    var oldIdx = i -1;
+                    $(tr).attr("data-id", newIdx);
+                    //更改行中元素的id
+                    Array.from($(tr).find($('[id]'))).forEach(function (ele) {
+                        ele.id = ele.id.substring(0, ele.id.lastIndexOf("_")) + "_" + newIdx;
+                    })
+                    var dtlOID = $(tr).parent().parent().data().data.OID || 0;
+                    if (dtlOID != 0) {
+                        AfterBindEn_DealMapExt(tr, newIdx);
+                        continue;
+                    }
+                        
+                    //更改pop弹窗得数据和附件
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                    handler.AddPara("WorkID", GetQueryString("WorkID"));
+                    handler.AddPara("oldRowIdx", oldIdx);
+                    handler.AddPara("newRowIdx", newIdx);
+                    handler.AddPara("FK_MapData", sys_MapDtl.No);
+                    var data = handler.DoMethodReturnString("Dtl_ChangePopAndAthIdx");
+                    if (data.indexOf('err@') != -1) {
+                        alert(data.replace('err@', ""));
+                        return;
+                    }
+                    AfterBindEn_DealMapExt(tr, newIdx);
+                }
+                return;
+            }
             while (tr.length == 1) {
                 var snTd = $(tr.children('td')[0]);
                 var sn = snTd.text();
-                var oldRowIdx = 0;
+                var oldRowIdx = $(tr).attr("data-id");
                 var newRowIdx = 0;
-                if (type == "remove") {
-                    if (!isNaN(parseInt(sn))) {
-                        oldRowIdx = parseInt(sn);
-                        newRowIdx = parseInt(sn) - 2;
-                        snTd.text(parseInt(sn) - 1);
-                    }
+               
+                if (!isNaN(parseInt(oldRowIdx))) {
+                    newRowIdx = parseInt(oldRowIdx) - 1;
+                    snTd.text(parseInt(oldRowIdx));
                 }
-                if (type == "add") {
-                    if (!isNaN(parseInt(sn))) {
-                        oldRowIdx = parseInt(sn) - 1;
-                        newRowIdx = parseInt(sn);
-                        snTd.text(parseInt(sn) + 1);
-                    }
-                    //更改行中元素的id
-                    Array.from($(tr).find($('[id]'))).forEach(function (ele) {
-                        ele.id = ele.id.substring(0, ele.id.lastIndexOf("_")) + "_" + newRowIdx;
-                    })
-
+                //更改行中元素的id
+                Array.from($(tr).find($('[id]'))).forEach(function (ele) {
+                    ele.id = ele.id.substring(0, ele.id.lastIndexOf("_")) + "_" + newRowIdx;
+                })
+               
+                $(tr).attr("data-id", newRowIdx);
+                var dtlOID = $(tr).parent().parent().data().data.OID || 0;
+                if (dtlOID != 0) {
+                    AfterBindEn_DealMapExt(tr, newIdx);
+                    tr = $(tr).next();
+                    continue;
                 }
                 //更改pop弹窗得数据和附件
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
                 handler.AddPara("WorkID", GetQueryString("WorkID"));
                 handler.AddPara("oldRowIdx", oldRowIdx);
                 handler.AddPara("newRowIdx", newRowIdx);
+                handler.AddPara("FK_MapData", sys_MapDtl.No);
                 var data = handler.DoMethodReturnString("Dtl_ChangePopAndAthIdx");
                 if (data.indexOf('err@') != -1) {
                     alert(data.replace('err@', ""));
@@ -2504,7 +2687,8 @@
                 if (PopModel != undefined && PopModel != "" && mapExt.ExtType == mapAttr.GetPara("PopModel") && mapAttr.GetPara("PopModel") != "None") {
                     var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                     var tbID = tbAuto.attr('id');
-
+                    if (mapAttr.UIIsEnable == 0 || isCanSave == false)
+                        continue;
                     PopDtlMapExt(mapAttr, mapExt, tbID, rowIndex, OID, tr);
                     continue;
                 }
@@ -2560,7 +2744,7 @@
                     case "MultipleChoiceSmall":
                         var tbMulti = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
                         var tbID = tbMulti.attr('id');
-                        if (mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) {
+                        if ((mapAttr.UIIsEnable == 0 && mapExt.Tag == 0) || isCanSave == false) {
                             var oid = (pageData.WorkID || pageData.OID || "");
                             var ens = new Entities("BP.Sys.FrmEleDBs");
                             ens.Retrieve("FK_MapData", mapAttr.FK_MapData, "EleID", mapAttr.KeyOfEn, "RefPKVal", oid);
@@ -2577,7 +2761,7 @@
                         MultipleChoiceSmall(mapExt, mapAttr, workNode, tbID, rowIndex, OID); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                         break;
                     case "MultipleChoiceSearch":
-                        if (mapAttr.UIIsEnable == 0)
+                        if (mapAttr.UIIsEnable == 0 || isCanSave == false)
                             break;
                         MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                         break;
@@ -3112,8 +3296,13 @@
                     //修改值
                     if (mapAttr[0].MyDataType == 2)
                         tmpResult = parseInt(tmpResult);
-                    else
-                        tmpResult = formatNumber(tmpResult, 2, ',');
+                    else {
+                        var defVal = mapAttr[0].DefVal;
+                        var bit = defVal.substring(defVal.indexOf(".") + 1).length;
+                        bit = bit.length == 0 ? 2 : bit;
+                        tmpResult = tmpResult.toFixed(bit);
+                        tmpResult = formatNumber(tmpResult, bit, ',');
+                    }
                     attrOfOperEle.val(tmpResult);
                     attrOfOperEle.trigger("change"); // 触发合计计算
 
@@ -3157,8 +3346,13 @@
                 //修改值
                 if (mapAttr[0].MyDataType == 2)
                     tmpResult = parseInt(tmpResult);
-                else
-                    tmpResult = formatNumber(tmpResult, 2, ',');
+                else {
+                    var defVal = mapAttr[0].DefVal;
+                    var bit = defVal.substring(defVal.indexOf(".") + 1).length;
+                    bit = bit.length == 0 ? 2 : bit;
+                    tmpResult = tmpResult.toFixed(bit);
+                    tmpResult = formatNumber(tmpResult, bit, ',');
+                }
                 attrOfOperEle.val(tmpResult);
                 attrOfOperEle.trigger("change"); // 触发合计计算
 
@@ -3184,6 +3378,8 @@
                     enums = $.grep(enums, function (value) {
                         return value.EnumKey == mapAttr.UIBindKey;
                     });
+
+
                     $.each(enums, function (i, obj) {
                         if (obj.IntKey == -1)
                             return false;

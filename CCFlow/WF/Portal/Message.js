@@ -11,14 +11,12 @@
     methods: {
         DoDelete: function (mypk) {
             if (confirm('确定要删除吗') == true) {
-                var en = new Entity("BP.WF.SMS", mypk);
-                console.log(mypk);
-               // en.DoMethodReturnString("DoDelete");
+                var en = new Entity("BP.WF.SMS");
+                en.SetPKVal(mypk);
                 en.Delete();
                 this.initData();
             }
 
-            //en.Delete();
         },
         //OpenIt: function (mypk, paraStr) {
         OpenIt: function (item) {

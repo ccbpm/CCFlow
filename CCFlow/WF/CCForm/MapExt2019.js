@@ -112,10 +112,25 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
  * @param {any} dbSource 如果是SQL的时，SQL的查询来源，本地，外部数据源
  * @param {any} keyVal 选择替换的值
  */
-function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
+function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal,mapExt,field) {
     // debugger
     if (dbSrc == null || dbSrc == undefined || dbSrc == "")
         return null;
+    if (dbType == 0) {
+        var mypk = mapExt.MyPK;
+        mapExt = new Entity("BP.Sys.MapExt", mapExt);
+        mapExt.MyPK = mypk;
+        //增加表单上的
+        var paras = getPageData() + "@&Key=" + keyVal;
+        var pkval = GetQueryString("WorkID") || GetQueryString("OID");
+        var data = mapExt.DoMethodReturnString("GetDataTableByField", field, paras, null, pkval);
+        if (data.indexOf("err@") != -1) {
+            alert(data);
+            return null;
+        }
+        var dataObj = JSON.parse(data);
+        return dataObj;
+    }
     //处理sql，url参数.
     dbSrc = dbSrc.replace(/~/g, "'");
     if (keyVal != null) {
@@ -137,9 +152,8 @@ function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal) {
 * 文本自动完成表格展示
 */
 function showDataGrid(tbid, selectVal, mapExtMyPK) {
-    debugger
     var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
-    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal);
+    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal,mapExt,"Tag4");
     var columns = mapExt.Tag3;
     $("#divInfo").remove();
     $("#" + tbid).after("<div style='position:relative;z-index:999;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);width:100%' id='divInfo'><table class='layui-hide' style='width:100%;' id='autoTable' lay-filter='autoTable'></table></div>");
@@ -955,8 +969,16 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
     var doc = mapExt.Tag;
     if (doc == "" || doc == null)
         return;
-
+    if (mapExt.DBType == 0) {
+        //按照SQL
+        var dbs = GetDataTableByDB(src, mapExt.DBType, mapExt.FK_DBSrc, selectVal, mapExt, "Tag");
+        for (var key in dbs)
+            GenerBindDDL("DDL_" + key, dbs[key]);
+        layui.form.render("select");
+        return;
+    }
     var dbSrcs = doc.split('$'); //获得集合.
+
     for (var i = 0; i < dbSrcs.length; i++) {
 
         var dbSrc = dbSrcs[i];
@@ -1118,5 +1140,83 @@ function isLegalName(name) {
         return false;
     }
     return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+}
+
+/**
+ * 获取页面数据
+ * */
+function getPageData() {
+    var formss = $('#divCCForm').serialize() || "";
+    var params = "";
+    var formArr = formss.split('&');
+    var formArrResult = [];
+    $.each(formArr, function (i, ele) {
+        if (ele.split('=')[0].indexOf('CB_') == 0) {
+            //如果ID获取不到值，Name获取到值为复选框多选
+            var targetId = ele.split('=')[0];
+            if ($('#' + targetId).length == 1) {
+                if ($('#' + targetId + ':checked').length == 1) {
+                    ele = targetId.replace("CB_", "") + '=1';
+                } else {
+                    ele = targetId.replace("CB_", "") + '=0';
+                }
+                params += "@" + ele;
+            }
+        } else if (ele.split('=')[0].indexOf('DDL_') == 0) {
+            var ctrlID = ele.split('=')[0];
+            var item = $("#" + ctrlID).children('option:checked').text();
+            var mystr = ctrlID.replace("DDL_", "") + 'T=' + item;
+            params += "@" + mystr;
+            params += "@" + ele.replace("DDL_", "");
+        } else {
+            params += "@" + ele.replace("TB_", "");
+        }
+
+    });
+
+
+
+    //获取表单中禁用的表单元素的值
+    var disabledEles = $('#divCCForm :disabled');
+    $.each(disabledEles, function (i, disabledEle) {
+
+        var name = $(disabledEle).attr('id');
+
+        switch (disabledEle.tagName.toUpperCase()) {
+
+            case "INPUT":
+                switch (disabledEle.type.toUpperCase()) {
+                    case "CHECKBOX": //复选框
+                        params += "@" + name.replace("CB_", "") + '=' + $(disabledEle).is(':checked') ? 1 : 0;
+
+                        break;
+                    case "TEXT": //文本框
+                    case "HIDDEN":
+                        params += "@" + name.replace("TB_", "") + '=' + $(disabledEle).val();
+                        break;
+                    case "RADIO": //单选钮
+                        name = $(disabledEle).attr('name');
+                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
+                        params += "@" + eleResult.replace("RB_", "");
+                        break;
+                }
+                break;
+            //下拉框            
+            case "SELECT":
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if ($("#" + tbID).length == 1)
+                    params += "@" + tbID.replace("DDL_", "") + '=' + $(disabledEle).children('option:checked').text();
+
+                break;
+
+            //文本区域                    
+            case "TEXTAREA":
+                params += "@" + name.replace("TB_", "") + '=' + $(disabledEle).val()
+                break;
+        }
+    });
+
+    return params;
+
 }
 

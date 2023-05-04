@@ -48,7 +48,7 @@
                 }
 
         .item-name {
-            width: 40%;
+            width: 35%;
             text-overflow: ellipsis;
 			overflow: hidden;
             white-space: nowrap;
@@ -57,9 +57,15 @@
         }
 
         .item-other {
-            width: 12%;
+            width: 10%;
         }
-
+        .item-Date {
+            width: 15%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+        }
         .item-index {
             background-color: #FAFAFA;
             padding-right: 40px;
@@ -104,13 +110,15 @@
             <!--<div class="item item-name">流程名称</div>-->
 
             <div class="item item-name">
-                <!--<div class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
-                </div>-->
+                <div class="item item-content">
+                    <a href="http://ccflow.org/ke.htm" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;视频教程</font></a>
+                </div>
             </div>
 
             <div class="item item-other">实例</div>
             <div class="item item-other">运行中</div>
             <div class="item item-other">退回</div>
+            <div class="item item-Date">创建日期</div>
             <div class="item item-other">操作</div>
         </div>
         <div ref="sort-main" id="s-main">
@@ -126,9 +134,11 @@
                         <!--<span @click.stop="EditSort(item.No,item.Name)">{{item.Name}}</span>-->
                         <span :id="item.No">{{item.Name}}</span>
                         <!--<div class="item item-other">{{item.WFSta2 + item.WFSta3 + item.WFSta5}}</div>
-                        <div class="item item-other">{{item.WFSta2}}</div>
-                        <div class="item item-other">{{item.WFSta5}}</div>-->
+        <div class="item item-other">{{item.WFSta2}}</div>
+        <div class="item item-other">{{item.WFSta5}}</div>-->
                     </div>
+                    
+
                     <div class="item item-other" style="background-color:azure;">
                         <button @click.stop="NewFlow(item.No)" :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">
                             新建流程
@@ -136,6 +146,7 @@
                     </div>
                     <div class="item item-other" style="text-align: left; background-color:azure;"></div>
                     <div class="item item-other" style="text-align: left; background-color:azure;"></div>
+                    <div class="item item-Date" style="text-align: left; background-color:azure;"></div>
                     <div class="item item-other ">
                         <button @click.stop :data-no="item.No" :data-name="item.Name" :data-idx="index" class="layui-btn layui-btn-primary layui-border-black layui-btn-sm t-btn">
                             <i class="layui-icon layui-icon-down layui-font-12"></i> 目录
@@ -153,9 +164,10 @@
                             <i class="icon-heart" style="margin-right: 8px"></i>
                             <span>{{flow.No}}.{{flow.Name}}</span>
                         </div>
-                        <div class="item item-other">{{flow.WFSta2 + flow.WFSta3 + flow.WFSta5}}</div>
+                        <div class="item item-other">{{parseInt(flow.WFSta2) + parseInt(flow.WFSta3) + parseInt(flow.WFSta5)}}</div>
                         <div class="item item-other">{{flow.WFSta2}}</div>
                         <div class="item item-other">{{flow.WFSta5}}</div>
+                        <div class="item item-Date" >{{flow.Ver}}</div>
                         <div class="item item-other">
                             <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn" :data-name="flow.Name" :data-no="flow.No" :data-pidx="index" :data-idx="idx">
                                 <i class="layui-icon layui-icon-down layui-font-12"></i>流程

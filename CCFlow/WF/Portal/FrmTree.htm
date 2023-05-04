@@ -1,0 +1,550 @@
+﻿<html>
+
+<head>
+    <title>表单管理</title>
+    <meta charset="UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="./icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="./icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./layui/css/customer.css">
+    <script type="text/javascript" src="./js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./js/vue/vue.js"></script>
+    <style>
+        .flow {
+            width: 75%;
+        }
+
+        .flow .row {
+            display: flex;
+            justify-content: flex-start;
+            flex: 0.2;
+            height: 40px;
+            line-height: 40px;
+            background-color: #FAFAFA;
+        }
+
+        .flow .row .item {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            text-align: center;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-name {
+            width: 40%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            padding-left: 30px;
+        }
+
+        .item-other {
+            width: 12%;
+        }
+
+        .item-index {
+            background-color: #FAFAFA;
+            padding-right: 40px;
+            color: #999999
+        }
+
+        .flow .row .folder-item {
+            box-sizing: border-box;
+            width: 76%;
+            padding-left: 20px;
+            cursor: pointer;
+        }
+
+        .wrapper .row {
+            background-color: #fff;
+        }
+
+        #s-main {
+            transition: all ease .4s;
+            margin-top: 40px;
+        }
+
+        .fixed {
+            position: fixed;
+            top: 0;
+            left: 25%;
+            width: 75%;
+        }
+    </style>
+    <script type="text/javascript">
+        var frms;
+        $(function () {
+            //获取流程类别
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+            var data = handler.DoMethodReturnString("Frms_InitSort");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data.indexOf("err@", ""));
+                return;
+            }
+            data = JSON.parse(data);
+            webUserJsonString = null;
+            var webUser = new WebUser();
+            var emp = new Entity("BP.Port.Emp", webUser.No);
+            var rootNo = webUser.OrgNo;
+            if (emp.FK_Dept != webUser.FK_Dept)
+                rootNo = webUser.FK_Dept;
+
+            data = CoverDataToTree(data, rootNo)
+            layui.tree.render({
+                elem: '#frmSort'
+                , data: data
+                , id: "frmSort"
+                //, edit: ['add', 'update', 'del'] //操作节点的图标
+                , click: function (obj) {
+                    //根据id获取流程集合
+                    frms = new Entities("BP.Sys.MapDatas");
+                    frms.Retrieve("FK_FormTree", obj.data.id);
+                    baseInfo.frms = frms.GetEns().data;
+                    for (var j = 0; j < baseInfo.frms.length; j++) {
+                        var frm = baseInfo.frms[j];
+                       
+                        if (frm.FrmType == 1) frm.FrmType = "傻瓜表单";
+                        if (frm.FrmType == 0) frm.FrmType = "傻瓜表单";
+                        if (frm.FrmType == 2) frm.FrmType = "自由表单";
+                        if (frm.FrmType == 3) frm.FrmType = "嵌入式表单";
+                        if (frm.FrmType == 4) frm.FrmType = "Word表单";
+                        if (frm.FrmType == 5) frm.FrmType = "在线编辑模式Excel表单";
+                        if (frm.FrmType == 6) frm.FrmType = "VSTO模式Excel表单";
+                        if (frm.FrmType == 7) frm.FrmType = "实体类组件";
+                        if (frm.FrmType == 8) frm.FrmType = "开发者表单";
+                        if (frm.FrmType == 10) frm.FrmType = "章节表单";
+
+
+                        if (frm.Icon == "" || frm.Icon == null) {
+                            if (frm.EntityType == 0) frm.Icon = "icon-flag";
+                            if (frm.EntityType == 1) frm.Icon = "icon-info";
+                            if (frm.EntityType == 2) frm.Icon = "icon-doc";
+                            if (frm.EntityType == 3) frm.Icon = "icon-organization";
+                        }
+
+                        if (frm.EntityType === 0) frm.EntityType = "独立表单";
+                        if (frm.EntityType === 1) frm.EntityType = "单据";
+                        if (frm.EntityType === 2) frm.EntityType = "实体";
+                        if (frm.EntityType === 3) frm.EntityType = "树结构实体";
+                    }
+                    baseInfo.SortNo = obj.data.id;
+                    setTimeout(function () {
+                        baseInfo.bindMenu();
+                        //baseInfo.initSortArea();
+                    }, 800);
+
+                }
+            });
+
+            var dropdown = layui.dropdown
+            var topNodeItems = [
+                { title: '<i class=icon-plus></i> 新建表单', id: "NewFrm", Icon: "icon-plus" },
+                { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
+                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
+                //{ title: '<i class=icon-share-alt ></i> 导入表单模版', id: "ImpFlowTemplate", Icon: "icon-plus" },
+                //{ title: '<i class=icon-share-alt ></i> 批量导出表单模版', id: "BatchExpFrmTemplate", Icon: "icon-plus" },
+                { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
+            ]
+            dropdown.render({
+                elem: '.layui-tree-txt',
+                trigger: 'contextmenu',
+                data: topNodeItems,
+                click: function (data) {
+                    topNodeOption(data.id, $(this.elem).parent().parent().parent().data().id, $(this.elem)[0].innerHTML)
+                }
+            });
+
+        })
+        function topNodeOption(key, frmSortNo, name, idx) {
+            switch (key) {
+                case "EditSort":
+                    var val = prompt("请输入名称", name);
+                    if (val == null || val == '')
+                        return;
+                    var en = new Entity("BP.WF.Template.SysFormTree", frmSortNo);
+                    en.Name = val;
+                    en.Update();
+
+                    Reload();
+                    return;
+                    break;
+                case "NewSort":
+                    layer.prompt({
+                        value: '',
+                        title: '新建子级表单类别',
+                    }, function (value, index, elem) {
+                        layer.close(index);
+                        var en = new Entity("BP.WF.Template.SysFormTree", frmSortNo);
+                        var data = en.DoMethodReturnString("DoCreateSubFormNodeMy", value);
+                        console.log(data);
+                        layer.alert("创建成功" + data);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 800);
+                    });
+                    break;
+                case "DeleteSort":
+                    if (window.confirm("确定要删除吗?") == false)
+                        return;
+
+                    var en = new Entity("BP.WF.Template.SysFormTree", frmSortNo);
+                    var data = en.Delete();
+                    layer.msg(data);
+
+                    //如果有错误.
+                    if (data.indexOf("err@") == 0)
+                        return;
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000)
+                    break;
+                case "NewFrm":
+                     url = basePath + "/WF/Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + frmSortNo + "&From=Frms.htm&RunModel=1&s=" + Math.random();
+                    url += "&UserNo=" + GetQueryString("UserNo");
+                    url += "&Token=" + GetQueryString("Token");
+                    window.open(url); break;
+                    break;
+                default:
+                    layer.alert("没有判断的命令" + key);
+                    break;
+            }
+        }
+        function CoverDataToTree(treeJson, rootNo) {
+            var appendToTree = function (treeToAppend, o) {
+                $.each(treeToAppend, function (i, child) {
+                    if (o.id == child.ParentNo)
+                        o.children.push({
+                            "id": child.No,
+                            "title": child.Name,
+                            "spread": true,
+                            "children": []
+                        });
+                });
+
+                $.each(o.children, function (i, o) {
+                    appendToTree(treeJson, o);
+                });
+
+            };
+
+            var jsonTree = [];
+            var jsonchildTree = [];
+            if (treeJson.length > 0 && typeof rootNo !== "undefined") {
+                $.each(treeJson, function (i, o) {
+                    if (o.No == rootNo) {
+                        jsonchildTree.push(o);
+                        jsonTree.push({
+                            "id": o.No,
+                            "title": o.Name,
+                            "spread": true,
+                            "children": []
+                        });
+                    }
+                });
+
+                $.each(jsonTree, function (i, o) {
+                    appendToTree(treeJson, o);
+                });
+
+            }
+
+            function _(treeArray) {
+                $.each(treeArray, function (i, o) {
+                    if ($.isArray(o.children)) {
+                        if (o.children.length == 0) {
+                            o.children = undefined;
+                        } else {
+                            _(o.children);
+                        }
+                    }
+                });
+            }
+            _(jsonTree);
+            return jsonTree;
+        }
+    </script>
+
+</head>
+
+<body style="background-color:white">
+    <div class="layui-row">
+        <!--流程类别-->
+        <div class="layui-col-sm3 layui-col-md3 layui-col-xs3" style="border:1px solid #f5f5ff ">
+            <div id="frmSort" class="" style="width: 100%; height: calc(100%); ">
+            </div>
+        </div>
+        <!--流程信息-->
+        <div class="layui-col-sm8 layui-col-md8 layui-col-xs4 flow" id="flow" v-cloak>
+            <div class="row fixed">
+                <div class="item item-name">表单名称</div>
+                <div class="item item-other">表单类型</div>
+                <div class="item item-other">应用模式</div>
+                <div class="item item-other">存储表</div>
+                <div class="item item-other">操作</div>
+            </div>
+            <div ref="child-row" id="s-main">
+                <div class="row" v-for="(flow,idx) in frms" :key="idx" :data-pid="SortNo" :data-id="flow.No">
+
+                    <div class="item item-name item-name-dp" @click.stop="Designer(flow.No,flow.Name)" style="text-align: left" :data-no="flow.No" :data-name="flow.Name" :data-idx="idx">
+                        <i class="icon-heart" style="margin-right: 8px"></i>
+                        <span>{{flow.No}}.{{flow.Name}}</span>
+                    </div>
+                    <div class="item item-other">{{flow.FrmType}}</div>
+                    <div class="item item-other">{{flow.EntityType}}</div>
+                    <div class="item item-other">{{flow.PTable}}</div>
+                    <div class="item item-other">
+                        <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn" :data-name="flow.Name" :data-no="flow.No" :data-idx="idx">
+                            <i class="layui-icon layui-icon-down layui-font-12"></i>表单
+                        </button>
+                    </div>
+                </div>
+            </div>
+           </div>
+        </div>
+    <script type="text/javascript">
+        var baseInfo = new Vue({
+            el: '#flow',
+            data: {
+                frms: [],
+                SortNo:""
+            },
+            methods: {
+              
+                bindMenu: function () {
+                    var _this = this
+                    layui.use('dropdown', function () {
+                        var dropdown = layui.dropdown
+                        var childNodeMenuItems = [
+                            { title: '<i class=icon-star></i> 表单属性', id: "Attr", Icon: "icon-options" },
+                            { title: '<i class=icon-settings></i> 设计表单', id: "Designer", Icon: "icon-settings" },
+                            { title: '<i class=icon-plane></i> 运行表单', id: "Start", Icon: "icon-paper-plane" },
+                            { title: '<i class=icon-docs></i> 复制表单', id: "Copy", Icon: "icon-docs" },
+                            { title: '<i class=icon-close></i> 删除表单', id: "Delete", Icon: "icon-close" }
+                        ]
+                        var cRenderOptions = [{
+                            elem: '.item-name-dp',
+                            trigger: 'contextmenu',
+                            data: childNodeMenuItems,
+                            click: function (data, othis) {
+                                _this.childNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
+                            }
+                        }, {
+                            elem: '.c-btn',
+                            trigger: 'click',
+                            data: childNodeMenuItems,
+                            click: function (data, othis) {
+                                _this.childNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.pidx, $(this.elem)[0].dataset.idx)
+                            }
+                        }]
+                        layui.dropdown.render(cRenderOptions[0]);
+                        layui.dropdown.render(cRenderOptions[1]);
+                    })
+                },
+
+                //如果w=0 则是100%的宽度.
+                openLayer: function (uri, name, w, h) {
+                    //console.log(uri, name);
+
+                    if (w == 0)
+                        w = window.innerWidth;
+
+                    if (w == undefined)
+                        w = window.innerWidth / 2;
+
+                    if (h == undefined)
+                        h = window.innerHeight;
+
+                    layer.open({
+                        type: 2,
+                        title: name,
+                        content: [uri, 'no'],
+                        area: [w + 'px', h + 'px'],
+                        offset: 'rb',
+                        shadeClose: true
+                    })
+                },
+
+                Designer: function (no, name) {
+                    var sid = GetQueryString("Token");
+                    var webUser = new WebUser();
+                    var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
+                    window.top.vm.openTab(name, url);
+                },
+               
+               
+                flowAttr: function (no, name) {
+                    var url = "/WF/Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&PKVal=" + no + "&s=" + Math.random();
+                    window.top.vm.openTab(name, url);
+                    //this.openLayer(url, name,900);
+                },
+                StartFrm: function (no, name) {
+                    var sid = GetQueryString("Token");
+                    var webUser = new WebUser();
+                    var en = new Entity("BP.Sys.MapData", no);
+                    if (en.EntityType == 0) {
+                        layer.alert(en.Name + "是独立表单不能运行");
+                        return;
+                    }
+                    var url = "";
+                    if (en.EntityType == 1)
+                        url = basePath + "/WF/CCBill/SearchDict.htm?FrmID=" + en.No;
+                    if (en.EntityType == 2)
+                        url = basePath + "/WF/CCBill/SearchBill.htm?FrmID=" + en.No;
+                    if (en.EntityType == 3)
+                        url = basePath + "/WF/CCBill/SearchTree.htm?FrmID=" + en.No;
+
+                    window.top.vm.openTab(name, url);
+
+                },
+
+                copyFrm: function (no) {
+                  
+                    var flow = new Entity("BP.Sys.MapData", no);
+                    var frmID = promptGener("表单ID:" + no + "Copy", no + "Copy");
+
+                    if (frmID == undefined || frmID == null || frmID == '') return;
+
+                    var frmName = promptGener("表单名称:" + flow.Name + "Copy", flow.Name + "Copy");
+                    if (frmName == undefined || frmName == null || frmName == '') return;
+                    var data = flow.DoMethodReturnString("DoCopy", frmID + '~' + frmName);
+                    layer.msg(data);
+                    Reload();
+               
+                },
+                DeleteFlow: function (no, pidx, idx) {
+                    var msg = "提示: 确定要删除该表单吗?";
+                    //   msg += "\t\n1.如果该流程下有实例，您不能删除。";
+                    //  msg += "\t\n2.该流程为子流程的时候，被引用也不能删除.";
+                    if (window.confirm(msg) == false)
+                        return;
+
+                    var load = layer.msg("正在处理,请稍候...", {
+                        icon: 16,
+                        anim: 5
+                    })
+
+                    //开始执行删除.
+                    var en = new Entity("BP.Sys.MapData", no);
+                    en.Delete();
+
+                    layer.msg(data);
+                    if (data.indexOf("err@") == 0)
+                        return;
+
+                    layer.close(load);
+
+                    Reload();
+                    return;
+                },
+
+                childNodeOption: function (key, data, name, pidx, idx) {
+
+                    switch (key) {
+                        case "Attr":
+                            this.flowAttr(data, name);
+                            break;
+                        case "Designer":
+                            this.Designer(data, name);
+                            break;
+                        case "Start":
+                            this.StartFrm(data, name);
+                            break;
+                        case "Copy":
+                            this.copyFrm(data);
+                            break;
+                        case "Delete":
+                            this.DeleteFlow(data, pidx, idx);
+                            break;
+                    }
+                },
+                updateFlow(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId) {
+                    // todo 需要重新实现接口
+                    return;
+
+                    // 流程排序..
+                    //console.log(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId);
+                    //  return;
+
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+                    handler.AddPara("SortNo", sortNo); //所在的组编号.
+                    handler.AddPara("EnNos", flowNos); // 流程编号.
+
+                    var data = handler.DoMethodReturnString("Flows_Move");
+                    layer.msg(data)
+                },
+                initSortArea: function () {
+                    var _this = this
+                    this.$nextTick(function () {
+                       
+                        var childSortableContainers = this.$refs['child-row']
+                        console.log(childSortableContainers);
+                        for (var i = 0; i < childSortableContainers.length; i++) {
+                            var csc = childSortableContainers[i]
+                            new Sortable(csc, {
+                                group: {
+                                    name: 'shared'
+                                },
+                                animation: 150,
+                                dataIdAttr: 'data-id',
+                                ghostClass: 'blue-background-class',
+                                onStart: function ( /**Event*/ evt) {
+                                    _this.loadingDialog = layer.msg('正在移动...', {
+                                        timeout: 900 * 1000
+                                    })
+                                },
+                                onEnd: function (evt) {
+
+                                    /**
+                                     * 这里区分两种情况，一种是跨列移动，一种非跨列移动
+                                     * 如果跨列移动，可以利用以下四个参数来实现
+                                     *
+                                     * @param pastNodeArrStr    被移出的列的子节点排序
+                                     * @param pastNodeId        被移出的列的节点id
+                                     * @param currentNodeArrStr 移入的列的子节点排序
+                                     * @param currentNodeId     移入的列的节点id
+                                     *
+                                     * 假如非跨列，此时被移出的和移入的为同一个，使用前两个参数或者后两个参数都可以实现
+                                     */
+                                    layer.close(_this.loadingDialog)
+                                    var pastNodeArrStr = Array.from(evt.from.querySelectorAll('div[data-id]')).map(function (item) {
+                                        return item.dataset.id
+                                    }).join(',')
+                                    var pastNodeId = evt.from.dataset.pid
+                                    var currentNodeArrStr = Array.from(evt.to.querySelectorAll('div[data-id]')).map(function (item) {
+                                        return item.dataset.id
+                                    }).join(',')
+                                    var currentNodeId = evt.to.dataset.pid
+                                    // 二级菜单的排序
+                                    _this.updateFlow(pastNodeArrStr, pastNodeId, currentNodeArrStr, currentNodeId)
+                                    // 二级菜单的排序
+                                    // _this.updateFlow(evt.item.dataset.pid, arr.join(','));
+                                }
+                            })
+                        }
+
+                    })
+                }
+            },
+            mounted: function () {
+                document.body.ondrop = function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+               
+              
+               
+            }
+        })
+    </script>
+</body>
+
+</html>

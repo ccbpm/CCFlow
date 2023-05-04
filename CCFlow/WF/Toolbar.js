@@ -1,4 +1,4 @@
-﻿
+﻿/***toolbar的图标颜色81C4FF，大小20 */
 var wf_node = null;
 var webUser = new WebUser();
 var toolbarPos = getConfigByKey("ToolbarPos", '0');  //签名图片的默认后缀
@@ -142,7 +142,7 @@ $(function () {
             $("#ContentDiv").parent().css("padding-bottom", btnH + "px");
         }
     }
-    
+    $('[name=SaveBtn]').attr("saveType", 0);
 
     $('.layui-bar').on('click', function () {
         var oper = $(this).data("info");
@@ -163,7 +163,7 @@ $(function () {
                     return false;
 
             if (typeof Save != 'undefined' && Save instanceof Function)
-                Save(0);
+                Save(1);
             initModal("returnBack");
         });
     }
@@ -277,7 +277,7 @@ $(function () {
                 var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
                 myPFlow = gwf.PFlowNo;
             }
-            var url = "MyView.htm?WorkID=" + myPWorkID + "&FK_Flow=" + myPFlow;
+            var url = "MyView.htm?WorkID=" + myPWorkID + "&FK_Flow=" + myPFlow+"&IsReadonly=1";
             window.open(url);
         });
     }
@@ -339,18 +339,154 @@ $(function () {
     if ($('[name=OpenFrm]').length > 0) {
         $('[name=OpenFrm]').bind('click', function () { initModal("OpenFrm"); });
     }
+    //切换组织
+    if ($('[name=ChangeOrg]').length > 0) {
+        $('[name=ChangeOrg]').bind('click', function () {
+            //获取所有的部门
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var depts = handler.DoMethodReturnString("ChangeDept_Init");
+            if (depts.indexOf('err@') == 0) {
+                layer.alert(depts);
+                return;
+            }
 
+            depts = JSON.parse(depts);
+            if (depts.length == 1) {
+                layer.alert("您只有一个部门[" + depts[0].Name + "],不需要切换部门");
+                return;
+            }
+            var _html = "";
+            depts.forEach(function (dept) {
+                if(webUser.FK_Dept === dept.No)
+                    _html += '<a href="javascript:void(0)" onclick="ChangeDept(\'' + dept.No + '\')"><span style="color:green">' + dept.Name + '(当前部门)</span></a></br>';
+                else
+                    _html += '<a href="javascript:void(0)" onclick="ChangeDept(\'' + dept.No + '\')">' + dept.Name + '</a></br>';
+            })
+            layer.open({
+                title: '切换部门'
+                , content: _html
+            });
+
+        });
+    }
+    //延期发送
+    if ($('[name=DelayedSend]').length > 0) {
+        $('[name=DelayedSend]').bind('click', function () {
+            DelayedSend();
+        });
+    }
     HelpAlter();
     if (typeof AfterToolbarLoad == "function")
         AfterToolbarLoad();
 });
+
+function DelayedSend(formType) {
+    //设置延期发送，需要验证表单填写内容是否全面
+    if (beforeSendCheck(formType) == false)
+        return false;
+    //需要先保存，当前表单的数据
+    isSaveOnly = true;
+    $('[name=SaveBtn]').attr("saveType", 1);
+    $('[name=SaveBtn]').trigger("click");
+    $('[name=SaveBtn]').attr("saveType", 0);
+    if (isSaveOnly == false)
+        return;
+    var toNodeID = 0;
+    var selectToNode;
+    var isSelectEmps = false;
+    if ($('#DDL_ToNode').length > 0) {
+        selectToNode = $('#TB_ToNode').data();
+        toNodeID = selectToNode.id;
+        if (["1", "2", "3", "4", "5"].includes(selectToNode.IsSelectEmps))
+            isSelectEmps = true;
+    }
+
+    if (isSelectEmps == true) {
+        Send(false, formType,1);
+        return;
+    }
+    var _html = `<form class="layui-form" action="">
+                    <div class="layui-form-item">
+                         <div class="layui-input-inline">
+                          <input type="text" name="TB_Day" id="TB_Day"  class="layui-input" value="0">
+                        </div>
+                        <label class="layui-form-label">天</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="TB_Hour" id="TB_Hour"  class="layui-input"value="0">
+                        </div>
+                        <label class="layui-form-label">小时</label>
+                       <div class="layui-input-inline">
+                              <select name="DDL_Minute" id="DDL_Minute">
+                                <option value="0">0</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                              </select>
+                        </div>
+                        <label class="layui-form-label">分</label>
+                    </div>
+                </form>
+                `;
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        layer.open({
+            title: '设置延期发送'
+            , content: _html,
+            area: ['auto', '350px'],
+            yes: function (index, layero) {
+               
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+                handler.AddUrlData();
+                var day = $("#TB_Day").val() || 0;
+                var hour = $("#TB_Hour").val() || 0;
+                var minute = $("#DDL_Minute").val() || 0;
+                if (day == 0 && hour == 0 && minute == 0) {
+                    layer.alert("请设置延期发送的时间");
+                    return;
+                }
+                    
+                handler.AddPara("TB_Day", day);
+                handler.AddPara("TB_Hour", hour);
+                handler.AddPara("DDL_Minute", minute);
+                handler.AddPara("ToNodeID", toNodeID);
+                var data = handler.DoMethodReturnString("DelayedSend");
+                if (data.indexOf("err@") != -1) {
+                    layer.alert(data);
+                    return;
+                }
+                layer.alert("延期发送设置成功");
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                closeWindow();
+            }
+        });
+        form.render();
+    });
+}
+function SelectEmps(selectEmpType,toNodeID) {
+    if (selectEmpType == "1")
+        initModal("sendAccepter", toNodeID, 0);
+
+}
+function ChangeDept(deptNo) {
+    if (deptNo == WebUser.FK_Dept)
+        return;
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+    handler.AddPara("DeptNo", deptNo);
+    var data = handler.DoMethodReturnString("ChangeDept_Submit");
+
+    if (data.indexOf('err@') == 0) {
+        layer.alert(data);
+        return;
+    }
+    SetHref(GetHrefUrl());
+}
 //添加保存动态
 function SaveOnly() {
 
     $("button[name=Save]").html("<img src='./Img/Btn/Save.png' width='22px' height='22px'>&nbsp;正在保存...");
-
     try {
-        Save(0);
+        Save($('[name=SaveBtn]').attr("saveType"));
     } catch (e) {
         alert(e);
         return;
@@ -365,12 +501,11 @@ function setModalMax() {
 }
 
 //初始化退回、移交、加签窗口
-function initModal(modalType, toNode, url) {
+function initModal(modalType, toNode, url, isDelayedSend) {
 
     $("#returnWorkModal").on('hide.bs.modal', function () {
         setToobarEnable();
     });
-
     var isFrameCross = GetHrefUrl().indexOf(basePath) == -1 ? 1 : 0;
     var modalIframeSrc = '';
     var width = window.innerWidth / 2;
@@ -517,7 +652,7 @@ function initModal(modalType, toNode, url) {
             case "Accepter":
             case "accepter":
                 title = "选择下一个节点及下一个节点接受人";
-                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross + "&IsDelayedSend=" + isDelayedSend;
                 isShowColseBtn = 0;
                 break;
 
@@ -528,7 +663,7 @@ function initModal(modalType, toNode, url) {
                 title = "选择接受人(到达节点:" + nodeOne.Name + ")";
                 width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/Accepter.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross + "&IsDelayedSend=" + isDelayedSend;
                 isShowColseBtn = 0;
                 break;
             case "SelectNodeUrl":
@@ -580,13 +715,19 @@ function initModal(modalType, toNode, url) {
                 title = "选择接受人";
                 width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOrg.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross + "&IsDelayedSend=" + isDelayedSend;
                 break;
             case "AccepterOfDept":
                 title = "选择接受人";
                 width = window.innerWidth * 4 / 5;
                 height = 80;
-                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfDept.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross + "&IsDelayedSend=" + isDelayedSend;
+                break;
+            case "AccepterOfOfficer":
+                title = "选择联络员";
+                width = window.innerWidth * 3 / 5;
+                height = 80;
+                modalIframeSrc = ccbpmPath + "/WF/WorkOpt/AccepterOfOfficer.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&ToNode=" + toNode + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross + "&IsDelayedSend=" + isDelayedSend;
                 break;
             case "DBTemplate":
                 title = "历史发起记录&模版";
@@ -785,14 +926,7 @@ function InitToNodeDDL(JSonData, wf_node) {
 
 }
 
-/**
- * 流程发送的方法,这个是通用的方法
- * @param {isHuiQian} isHuiQian 是否是会签模式
- * @param {formType} formType 表单方案模式
- */
-var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
-var isSaveOnly = true;
-function Send(isHuiQian, formType) {
+function beforeSendCheck(formType) {
     if (wf_node != null && wf_node.ScripRole == 2) {
         var gwf = new Entity("BP.WF.GenerWorkFlow", GetQueryString("WorkID"));
         var ScripNodeID = gwf.GetPara("ScripNodeID");
@@ -862,8 +996,19 @@ function Send(isHuiQian, formType) {
         else
             UserLogInsert("TodoList", "处理待办");
     }
-
-
+    return true;
+}
+/**
+ * 流程发送的方法,这个是通用的方法
+ * @param {isHuiQian} isHuiQian 是否是会签模式
+ * @param {formType} formType 表单方案模式
+ */
+var IsRecordUserLog = getConfigByKey("IsRecordUserLog", false);
+var isSaveOnly = true;
+function Send(isHuiQian, formType, isDelayedSend) {
+    isDelayedSend = isDelayedSend || 0;
+    if (beforeSendCheck(formType) == false)
+        return false;
 
     /**发送前处理的信息 End**/
     var isShowToNode = true;
@@ -878,12 +1023,14 @@ function Send(isHuiQian, formType) {
         }
         if (isShowToNode == true) {
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType",0);
             if (isSaveOnly == false)
                 return;
             var url = ccbpmPath + "/WF/WorkOpt/ToNodes.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&PWorkID=" + GetQueryString("PWorkID") + "&IsSend=0" + "&s=" + Math.random();
 
-            initModal("SelectNodeUrl", null, url);
+            initModal("SelectNodeUrl", null, url, isDelayedSend);
             return false;
         }
 
@@ -914,19 +1061,23 @@ function Send(isHuiQian, formType) {
             isReturnNode = 1;
         if (selectToNode.IsSelectEmps == "1" && isLastHuiQian == true) { //跳到选择接收人窗口
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
             if (isSaveOnly == false)
                 return;
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
-                initModal("sendAccepter", toNodeID);
+                initModal("sendAccepter", toNodeID, null, isDelayedSend);
             }
             return false;
         }
         if (selectToNode.IsSelectEmps == "2") {
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
             if (isSaveOnly == false)
                 return;
             if (isHuiQian == true) {
@@ -935,41 +1086,62 @@ function Send(isHuiQian, formType) {
                 var url = selectToNode.DeliveryParas;
                 if (url != null && url != undefined && url != "") {
                     url = url + "?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNodeID + "&s=" + Math.random();
-                    initModal("BySelfUrl", toNodeID, url);
+                    initModal("BySelfUrl", toNodeID, url, isDelayedSend);
                     return false;
                 }
             }
         }
         if (selectToNode.IsSelectEmps == "3") {
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
             if (isSaveOnly == false)
                 return;
             //Save(1); //执行保存.
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
-                initModal("sendAccepterOfOrg", toNodeID);
+                initModal("sendAccepterOfOrg", toNodeID, null, isDelayedSend);
             }
             return false;
         }
 
         if (selectToNode.IsSelectEmps == "4") {
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
             if (isSaveOnly == false)
                 return;
 
             if (isHuiQian == true) {
                 initModal("HuiQian", toNodeID);
             } else {
-                initModal("AccepterOfDept", toNodeID);
+                initModal("AccepterOfDept", toNodeID, null, isDelayedSend);
+            }
+            return false;
+        }
+        if (selectToNode.IsSelectEmps == "5") {
+            isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
+            $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
+            if (isSaveOnly == false)
+                return;
+
+            if (isHuiQian == true) {
+                initModal("HuiQian", toNodeID);
+            } else {
+                initModal("AccepterOfOfficer", toNodeID, null, isDelayedSend);
             }
             return false;
         }
         if (isHuiQian == true) {
             isSaveOnly = true;
+            $('[name=SaveBtn]').attr("saveType", 1);
             $('[name=SaveBtn]').trigger("click");
+            $('[name=SaveBtn]').attr("saveType", 0);
             if (isSaveOnly == false)
                 return;
             initModal("HuiQian", toNodeID);
@@ -1065,6 +1237,19 @@ function execSend(toNodeID, formType, isReturnNode) {
                 initModal("AccepterOfDept", toNodeID);
                 return false;
             }
+            if (data.indexOf("AccepterOfOfficer") != -1) {
+                var params = data.split("&");
+
+                for (var i = 0; i < params.length; i++) {
+                    if (params[i].indexOf("ToNode") == -1)
+                        continue;
+
+                    toNodeID = params[i].split("=")[1];
+                    break;
+                }
+                initModal("AccepterOfOfficer", toNodeID);
+                return false;
+            }
 
             if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
 
@@ -1118,7 +1303,7 @@ function returnWorkWindowClose(data) {
             }
             window.close();
         }
-
+        return;
     }
     //通过下发送按钮旁的下拉框选择下一个节点
     if (data != null && data != undefined && data.indexOf('SaveOK@') == 0) {
@@ -1580,13 +1765,14 @@ function Press() {
  * 
  * 撤销
  */
-function UnSend() {
-
+function UnSend(type) {
+    type = type || 0;
     if (window.confirm('您确定要撤销本次发送吗？') == false)
         return;
-
+    
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
     handler.AddUrlData();
+    handler.AddPara("IsUnDelayedSend", type);
     var data = handler.DoMethodReturnString("MyView_UnSend");
     if (data.indexOf('err@') == 0) {
         data = data.replace('err@', '');

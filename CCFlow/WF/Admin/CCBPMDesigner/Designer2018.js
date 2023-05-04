@@ -12,7 +12,7 @@ var subFlowShowType = flow.SubFlowShowType;
 
 var webUser = new WebUser();
 var basepath = "";
-var flowDevModel = flow.GetPara("FlowDevModel"); //设计模式.
+var flowDevModel = flow.GetPara("FlowDevModel") || flow.FlowDevModel ; //设计模式.
 var pageFrom = GetQueryString("From");
 pageFrom = pageFrom == null || pageFrom == undefined ? "" : pageFrom;
 
@@ -986,17 +986,14 @@ function SaveFlow(_canvas) {
 
 //修改节点名称
 function SaveNodeName(activeId) {
-    debugger
     ReLoginByToken();
 
     var text = document.getElementById("TB_" + activeId).value; //新修改的值.
     $("#span_" + activeId).text(text);
 
     //执行数据库保存.
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
-    handler.AddPara("NodeID", activeId);
-    handler.AddPara("Name", text);
-    var data = handler.DoMethodReturnString("Designer_SaveNodeName");
+    var node = new Entity("BP.WF.Template.NodeExt", activeId);
+    node.DoMethodReturnString("Do_SaveNodeName", text);
     $("#span_" + activeId).text(text); //更新节点名称与显示
     return;
 }
@@ -1401,7 +1398,7 @@ function NodeAccepterRole(nodeID) {
     return;
 }
 
-function Reload() {
+function MyReload() {
     if (confirm('您确定要刷新吗？刷新将不能保存.') == false)
         return;
     Reload();
@@ -1412,7 +1409,7 @@ function OpenEasyUiDialogExt(url, title, w, h, isReload) {
 
     OpenEasyUiDialog(url, "eudlgframe", title, w, h, "icon-property", true, null, null, null, function () {
         if (isReload == true) {
-            Reload();
+            MyReload();
         }
     });
 }

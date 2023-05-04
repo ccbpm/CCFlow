@@ -78,6 +78,11 @@
                     en.DoDoc = en.DoDoc.replace(/~/g, "'");
                     $("#TB_Doc").val(en.DoDoc);
                 }
+                if (en.EventDoType == 7) {
+                    $("#DDL_Doc").show();
+                    $("#TB_Doc").hide();
+                    $("#DDL_Doc").val(en.DoDoc);
+                }
                 if (en.EventDoType == 2) {
                     $("#DBSrc").show();
                 }
@@ -118,9 +123,9 @@
 
             //如果是业务单元.
             if (en.EventDoType == 7) {
-                en.DoDoc = encodeURIComponent($("#DDL_Doc").val());
+                en.DoDoc = $("#DDL_Doc").val();
             } else {
-                en.DoDoc = encodeURIComponent($("#TB_Doc").val());
+                en.DoDoc = $("#TB_Doc").val();
             }
 
 

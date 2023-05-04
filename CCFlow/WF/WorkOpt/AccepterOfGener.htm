@@ -7,27 +7,27 @@
     2，需要 FK_Flow, FK_Node,WorkID, FID.
     3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
-    
-    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
-    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
-    <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+     <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+
+     <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />-->
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Scripts/layui/layui/lay/modules/layer.js"></script>
     <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/DealErrInfo.js"></script>
-
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -78,11 +78,19 @@
             padding: 4px 15px;
         }
 
-            button:hover {
-                background: #f5f5f5 !important;
-                color: #000;
-                border: 1px solid #ccc !important;
-            }
+        button:hover {
+            background: #f5f5f5 !important;
+            color: #000;
+            border: 1px solid #ccc !important;
+        }
+        .form-unit {
+            font-size: 17px;
+            /* font-style: oblique; */
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -98,8 +106,13 @@
         if ("undefined" == typeof WF_WorkOpt_LeftSecond) {
             var WF_WorkOpt_LeftSecond = 30;
         }
+        var isDelayedSend = GetQueryString("IsDelayedSend") || "0";
         $(function () {
-
+            if (isDelayedSend == "1") {
+                $("#Btn_Send").hide();
+                $("#Div_DelayedSend").show();
+                $("#Btn_DelayedSend").show();
+            }
             if (IsSend == null || IsSend == undefined || IsSend == "")
                 IsSend = "1";
             if (IsSend == "0")
@@ -139,20 +152,20 @@
             $('body').append($(selectEmpModalHtml));
 
             //获得部门编号.
-            
+
             var u = new WebUser();
             var dept = u.FK_Dept;
-           
+
             var IsSelectMore = isSigleSelect == false ? 1 : 0;
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&FK_Node=" + GetQueryString("FK_Node") + "&IsSelectMore=" + IsSelectMore + "&s=" + Math.random();
 
             //为天业集团做的特殊判断.
             url = url.replace('=101&', '=10102&');
 
-            $('#iframeSelectEmpsForm').attr('src', url);
+
 
             $('#Btn_SelectEmps').bind('click', function () {
-
+                $('#iframeSelectEmpsForm').attr('src', url);
                 $('#SelectEmpsModal').modal().show();
 
             });
@@ -281,7 +294,32 @@
 
             $(".foot").hide();
         }
-
+        function DelayedSend() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var day = $("#TB_Day").val() || 0;
+            var hour = $("#TB_Hour").val() || 0;
+            var minute = $("#DDL_Minute").val() || 0;
+            if (day == 0 && hour == 0 && minute == 0) {
+                layer.alert("请设置延期发送的时间");
+                return;
+            }
+            var trs = $("table tbody tr").length;
+            if (trs == 0) {
+                layer.alert("请选择下一个节点的接收人");
+                return;
+            }
+            handler.AddPara("TB_Day", day);
+            handler.AddPara("TB_Hour", hour);
+            handler.AddPara("DDL_Minute", minute);
+            handler.AddPara("ToNodeID", GetQueryString("ToNode"));
+            var data = handler.DoMethodReturnString("DelayedSend");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            CloseAll();
+        }
         //执行发送.
         function Send() {
 
@@ -595,8 +633,32 @@
     </div>
     <div class="techMsg" style="text-align: left;padding-left:25px; display:none;">
     </div>
-
-
+    <div style="display:none;margin:10px" id="Div_DelayedSend">
+        <div class="form-unit">设置延期时间</div>
+        <div class="layui-form" style="margin-top:10px">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="text" name="TB_Day" id="TB_Day" class="layui-input" value="0" />
+                </div>
+                <label class="layui-form-label">天</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="TB_Hour" id="TB_Hour" class="layui-input" value="0" />
+                </div>
+                <label class="layui-form-label">小时</label>
+                <div class="layui-input-inline">
+                    <select name="DDL_Minute" id="DDL_Minute">
+                        <option value="0">0</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">分</label>
+            </div>
+        </div>
+        <div class="form-unit">选择接收人</div>
+    </div>
+ 
 
     <table class="table table-striped" id="Table1" style="width:98%;padding:5px; margin:10px;">
         <!-- <caption>下一步接受人员列表</caption>-->
@@ -618,9 +680,9 @@
         <div style="float:left;margin-top:4px">
 
             <input type="text" id="TB_Emps" name="TB_Emps"
-                   title="输入: zs或zhangs或zhangsan"
-                   placeholder="查张三,您可输入: zs或zhangs或zhangsan"
-                   value='' style="width:350px;" />
+                    title="输入: zs或zhangs或zhangsan"
+                    placeholder="查张三,您可输入: zs或zhangs或zhangsan"
+                    value='' style="width:350px;" />
 
             <div id="SelectEmp"></div>
             <div style="float:right;padding-bottom:5px;">
@@ -631,32 +693,19 @@
 
         </div>
         <div id="next">
-            <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
-            <!--<input type="button" id="Btn_SelectAdv" onclick="AdvSelect()" value='选Bate' />-->
-
-
             <button onclick="Send();" id="Btn_Send">
                 <img src="../Img/Btn/Send.png" /> 发送
+            </button>
+
+            <button onclick="DelayedSend();" id="Btn_DelayedSend" style="display:none">
+                <img src="../Img/Btn/Send.png" /> 延期发送
             </button>
 
             <button onclick="CloseModel();" id="Btn_Close">
                 <img src="../Img/Btn/Close.png" /> 关闭
             </button>
-
-            <!--<a href="javascript:Help()">帮助?</a>-->
-            <!--<div id="HelpInfo">
-                <ul>
-                    <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
-                    <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
-                    <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
-                </ul>
-            </div>-->
         </div>
 
     </div>
-
-    <br />
-
-
-</body>
+    </body>
 </html>

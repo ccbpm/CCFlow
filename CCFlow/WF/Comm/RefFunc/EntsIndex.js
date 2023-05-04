@@ -383,18 +383,6 @@ window.onload = function () {
             },
 
             initMenus: function () {
-                /* var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
-                var data = handler.DoMethodReturnString("Default_Init");
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
-                if (data.indexOf('url@') == 0) {
-                    var url = data.replace('url@', '');
-                    SetHref(url);
-                    return;
-                }
-                data = JSON.parse(data);*/
                 var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
                 var enName = GetQueryString("EnName");
                 var type = GetQueryString("type");

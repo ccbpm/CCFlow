@@ -263,7 +263,7 @@
                 _html += '</div>';
                 _html += '</div>';
                 _html += '<div class="layui-inline" style="width:100px;margin-top:5px">';
-                _html += "<select style='width:80%' class='form-control' name='DDL_Aly_" + analyAtts[i].Field + "' ID='DDL_Aly_" + analyAtts[i].Field + "' onchange='javascript:ShowData(this,\"\")'>" + InitDDLAnalysisOperation(data, analyAtts[i], null) + "</select>";
+                _html += "<select style='width:80%' class='form-control' name='DDL_Aly_" + analyAtts[i].Field + "' ID='DDL_Aly_" + analyAtts[i].Field + "' onchange='javascript:ShowData(this,\"\")' lay-filter='switch'>" + InitDDLAnalysisOperation(data, analyAtts[i], null) + "</select>";
                 _html += '</div>';
                 _html += '</div>';
                 _html += '</div>';
@@ -490,7 +490,7 @@
                             url += "&" + o.KeyOfEn + "=" + data[o.KeyOfEn];
                     });
 
-                    return "<a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\"  class='btn btn-default btn - sm easyui- linkbutton'>查看</a>"
+                    return "<a href=\"javascript:WinOpen('" + url + "', 'wincommgroup',900,900);\" style='color: dodgerblue' class='btn btn-default btn-sm easyui-linkbutton'>查看</a>"
                 }
             });
 
@@ -875,6 +875,9 @@
             var table = layui.table;
             var form = layui.form;
             form.on('checkbox(switch)', function (data) {
+                ShowData();
+            });
+            form.on('select(switch)', function(data){
                 ShowData();
             });
             if ($("#TB_DTFrom").length == 1) {

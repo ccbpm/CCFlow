@@ -29,6 +29,7 @@ function InitBar(optionKey) {
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save' onclick='Save()' value='保存' />保存</button>";
     //    html += "<input  id='Btn_SaveAndClose' type=button onclick='SaveAndClose()' value='保存并关闭' />";
     //    html += "<input  id='Btn_Help' type=button onclick='Help()' value='视频帮助' />";
+    if (optionKey != StartGuideWay.None)
     html += "<button  id='Btn_Help' class='cc-btn-tab btn-setting' onclick='Adv()' value='高级设置' />高级设置</button>";
     html += "<button  id='Btn_Help' class='cc-btn-tab btn-save' onclick='HelpOnline()' value='在线帮助' />在线帮助</button>";
 

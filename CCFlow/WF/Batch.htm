@@ -51,7 +51,7 @@
                 return;
             }
 
-            var listbox = "<ul>";
+            var listbox = "<div class='row row-cols-3'>";
             //循环显示批处理的流程节点数量
             for (var idx = 0; idx < data.length; idx++) {
 
@@ -71,10 +71,17 @@
                 //自定义url模式.
                 if (en.BatchRole == 3)
                     url = "javascript:ToSelfUrl('" + en.NodeID + "');";
-
-                listbox += "<li style='list-style-type:square; color:#959595;'><a href='" + url + "'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + en.FlowName + " --> " + en.Name + "(" + en.NUM + ")" + "</a></li><br/>";
+                 listbox += `<div class="col-sm-2">
+                                   <div class="panel panel-info">
+                                  <div class="panel-heading">${en.FlowName}</div>
+                                  <div class="panel-body">
+                                   <a href='${url}'>${en.Name}</a> &nbsp;<span class="badge label label-danger">${en.NUM}</span>
+                                  </div>
+                                </div>
+                                </div>`
+                //listbox += "<li class='col-3' style='list-style-type:square; color:#959595;'><a href='" + url + "'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + en.FlowName + " --> " + en.Name + "(" + en.NUM + ")" + "</a></li><br/>";
             }
-            listbox += '</ul>';
+            listbox += '</div>';
             $("#lists").append(listbox);
         });
 
@@ -84,13 +91,31 @@
             SetHref(url);
         }
     </script>
+    <style type="text/css">
+
+        .bd-callout {
+            padding: 1.25rem;
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #eee;
+            border-left-width: .25rem;
+            border-radius: .25rem;
+            background: #fff;
+        }
+        .bd-callout-info{
+            border-left-color: #5bc0de;
+        }
+    </style>
 </head>
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
 
         <fieldset>
-            <legend> 请选择要批处理的节点 </legend>
-            <div class="row c" id="lists" style="  padding-left:70px;"></div>
+<!--            <legend> 请选择要批处理的节点 </legend>-->
+            <div class="bd-callout bd-callout-info" >
+                请选择要批处理的节点
+            </div>
+            <div class="row c" id="lists" style="padding-left:40px;"></div>
         </fieldset>
 
     </div>

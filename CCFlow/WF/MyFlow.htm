@@ -27,7 +27,7 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("MyFlow_Init");
+            var data = handler.DoMethodReturnString("MyFlow_Init") || "";
 
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);

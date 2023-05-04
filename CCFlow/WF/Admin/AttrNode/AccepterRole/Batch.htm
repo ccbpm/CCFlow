@@ -54,19 +54,17 @@
                 ////元素权限.
                 //html += "<td><a href=\"javascript:EditFrmNode('" + json.MyPK + "');\" >详情</a></td>";
                 //html += "</tr>";
-                $("<tr><td>" + (i + 1) + "</td><td>" + json.NodeID + "</td><td>" + json.Name + "</td><td><select id='DDL_FrmSln_" + json.NodeID + "' onchange=Save('" + json.NodeID + "') class='form-control'></select></td><td align=center><a href=\"javascript:changeOption('" + json.NodeID + "','" + node.FK_Flow + "');\" class='btn btn-primary btn-xs'>详情</a></td></tr>").appendTo($("#sln"));
+                $("<tr><td>" + (i + 1) + "</td><td>" + json.NodeID + "</td><td>" + json.Name + "</td><td><select id='DDL_FrmSln_" + json.NodeID + "' onchange=Save('" + json.NodeID + "') class='form-control' style='width:90%></select></td><td align=center><a href=\"javascript:changeOption('" + json.NodeID + "','" + node.FK_Flow + "');\" class='btn btn-primary btn-xs'>详情</a></td></tr>").appendTo($("#sln"));
                 InitBar(json.NodeID, node.FK_Flow);
             }
-
-
             return;
 
         });
         function InitBar(nodeID, flowNo) {
             //var str = nodeID.substr(nodeID.length - 2);
             var isSatrtNode = false;
-            //if (str == "01")
-            //    isSatrtNode = true;
+            if (nodeID == parseInt(parseInt(flowNo) + "01"))
+                isSatrtNode = true;
             html = "";
             html += "<option value=null  disabled='disabled'>+按组织结构绑定</option>";
             var webUser = new WebUser();
@@ -268,7 +266,7 @@
                     roleName = "0.ByStation.htm";
                     break;
             }
-            SetHref( roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo);
+            SetHref(roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo);
         }
 
         //下拉列表选择的时候自动保存
@@ -303,13 +301,13 @@
 </head>
 <body style=" margin:10px; padding:20px;">
     <div style="margin:0px auto; width:60%">
-      
+
         <h3><a href="javascript:Back()" class="pull-right btn btn-sm btn-warning">返回</a> 批量编辑节点绑定接收人规则 </h3>
-            <div>
-                <table id="sln" class="table table-bordered table-hover table-condensed">
-                </table>
-            </div>
-        
+        <div>
+            <table id="sln" class="table table-bordered table-hover table-condensed">
+            </table>
+        </div>
+
     </div>
 </body>
 </html>

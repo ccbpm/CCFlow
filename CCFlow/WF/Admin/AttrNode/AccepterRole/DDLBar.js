@@ -60,11 +60,12 @@ function InitBar(optionKey) {
             html += "<option value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
             html += "<option value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
             html += "<option value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+         
         }
 
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
-        html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
+       // html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
         html += "<option value=" + DeliveryWay.BySpecNodeEmpStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定节点的人员岗位计算</option>";
         html += "<option value=" + DeliveryWay.BySetDeptAsSubthread + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定部门计算，该部门一人处理标识该工作结束(子线程)</option>";
 
@@ -89,7 +90,7 @@ function InitBar(optionKey) {
         html += "<option value=null disabled='disabled' >+按指定节点处理人</option>";
         html += "<option value=" + DeliveryWay.ByStarter + " >&nbsp;&nbsp;&nbsp;&nbsp;与开始节点处理人相同</option>";
         html += "<option value=" + DeliveryWay.ByPreviousNodeEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;与上一节点处理人相同</option>";
-        html += "<option value=" + DeliveryWay.BySpecNodeEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;与指定节点处理人相同</option>";
+       
     }
 
 
@@ -140,6 +141,7 @@ function InitBar(optionKey) {
 
         if (webUser.CCBPMRunModel == 1) {
             html += "<option value=" + DeliveryWay.BySelectedEmpsOrgModel + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人通过“人员选择器”选择接受人(集团模式)</option>";
+            html += "<option value=" + DeliveryWay.BySelectEmpByOfficer + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点发送人选择其他组织的联络员</option>";
         }
 
         html += "<option value=" + DeliveryWay.BySelfUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义人员选择器</option>";
@@ -453,6 +455,9 @@ function changeOption() {
         case DeliveryWay.ByPreviousNodeFormStationsOnly:
             roleName = "54.ByPreviousNodeFormStationsOnly.htm";
             break;
+        case DeliveryWay.BySelectEmpByOfficer:
+            roleName = "55.BySelectEmpByOfficer.htm";
+            break;
         case DeliveryWay.ByPreviousNodeEmp:
             roleName = "6.ByPreviousNodeEmp.htm";
             break;
@@ -546,6 +551,7 @@ function changeOption() {
         case DeliveryWay.ByGuest:
             roleName = "51.ByGuest.htm";
             break;
+       
         default:
             roleName = "0.ByStation.htm";
             break;
@@ -578,7 +584,7 @@ function SaveIt() {
 // 保存之后要做的事情.
 function AfterSave() {
     //清除.
-    DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
+    AccepterRole_ClearAllOrgStartFlowsCash();
 }
 
 //打开窗体.

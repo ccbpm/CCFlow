@@ -151,17 +151,26 @@
                 },
                 SelectEnum: function () {
                     var EnumName = document.getElementById("EnumValue").value;
-                    var sql = "";
+                    /*var sql = "";
                     if (EnumName == "")
                         sql = "SELECT * FROM Sys_EnumMain";
                     else
                         sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
-                    var sysList = DBAccess.RunSQLReturnTable(sql);
+                    var sysList = DBAccess.RunSQLReturnTable(sql);*/
+
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                    handler.AddPara("EnumName", EnumName);
+                    var sysList = handler.DoMethodReturnString("SysEnumList_SelectEnum");
+                    sysList = JSON.parse(sysList);
+
                     this.sysList = $.grep(sysList, function (item) {
                         var atPara = item.AtPara;
                         atPara = atPara == null || atPara == undefined ? "" : atPara;
                         var idx = atPara.indexOf("ParentKey");
                         return idx == 0 || idx == -1;
+
+
+
                     })
                     var pn = Math.ceil(this.sysList.length / this.pagenum)
                     
@@ -250,10 +259,15 @@
                         mapAttrs = new Entities("BP.Sys.MapAttrs");
                         mapAttrs.Retrieve("UIBindKey", sysEnumMain.No);
                     } else {
-                        var sql = "SELECT A.FK_MapData,A.KeyOfEn,A.Name From Sys_MapAttr A,Sys_MapData B Where A.FK_MapData=B.No AND A.UIBindKey='" + sysEnumMain.No + "' AND B.OrgNo='" + this.webUser.OrgNo + "'";
-                        mapAttrs = DBAccess.RunSQLReturnTable(sql);
-                    }
+                        /*var sql = "SELECT A.FK_MapData,A.KeyOfEn,A.Name From Sys_MapAttr A,Sys_MapData B Where A.FK_MapData=B.No AND A.UIBindKey='" + sysEnumMain.No + "' AND B.OrgNo='" + this.webUser.OrgNo + "'";
+                        mapAttrs = DBAccess.RunSQLReturnTable(sql);*/
 
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+                        handler.AddPara("UIBindKey", sysEnumMain.No);
+                        handler.AddPara("OrgNo", this.webUser.OrgNo);
+                        mapAttrs = handler.DoMethodReturnString("SysEnumList_MapAttrs");
+                        mapAttrs = JSON.parse(mapAttrs);
+                    }
 
                     var info = '';
                     for (var i = 0; i < mapAttrs.length; i++) {

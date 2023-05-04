@@ -45,13 +45,13 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID) {
         var en = new Entity("BP.Sys.SFTable", mapExt.Tag2);
         ens = en.DoMethodReturnJSON("GenerDataOfJson");
     } else {
-        ens = GetDataTableByDB(mapExt.Tag2, mapExt.DBType, mapExt.FK_DBSrc, null);
+        ens = GetDataTableByDB(mapExt.Tag2, mapExt.DBType, mapExt.FK_DBSrc, null,mapExt,"Tag2");
     }
        
     //如果是分组的时候处理
     if (popType == "PopGroupList") {
         //获取分组信息
-        var groups = GetDataTableByDB(mapExt.Tag1, mapExt.DBType, mapExt.FK_DBSrc);
+        var groups = GetDataTableByDB(mapExt.Tag1, mapExt.DBType, mapExt.FK_DBSrc,null,mapExt,"Tag1");
         var myidx = 0;
         var oOfEn = "";
         for (var obj in ens[0]) {
@@ -320,7 +320,7 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
         return;
     }
 
-    var json = GetDataTableByDB(treeUrl, mapExt.DBType, mapExt.FK_DBSrc, rootNo);
+    var json = GetDataTableByDB(treeUrl, mapExt.DBType, mapExt.FK_DBSrc, rootNo,mapExt,'Tag2');
     var data = TreeJson(json, rootNo, frmEleDBs);
     layui.use('xmSelect', function () {
         var xmSelect = layui.xmSelect;
@@ -342,7 +342,7 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
                 }
                 setTimeout(function () {
                     var url = mapExt.Tag1.replace(/~/g, "'") + "";
-                    var json = GetDataTableByDB(url, mapExt.DBType, mapExt.FK_DBSrc, val);
+                    var json = GetDataTableByDB(url, mapExt.DBType, mapExt.FK_DBSrc, val,mapExt,"Tag1");
                     //var data = findChildren(json, item.value);
                     cb(json);
 
@@ -358,7 +358,7 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
                 load: function (item, cb) {
                     setTimeout(function () {
                         var url = mapExt.Tag2.replace(/~/g, "'") + "";
-                        var json = GetDataTableByDB(url, mapExt.DBType, mapExt.FK_DBSrc, item.No);
+                        var json = GetDataTableByDB(url, mapExt.DBType, mapExt.FK_DBSrc, item.No,mapExt,"Tag2");
                         var data = findChildren(json, item.No);
                         cb(data);
 

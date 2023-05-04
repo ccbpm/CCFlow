@@ -28,7 +28,7 @@
             <legend>人员身份规则</legend>
             <ul>
                 <li style="list-style:none">
-                    <input type="radio" value="0" id="SF_0" v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
+                    <input type="radio" value="0" id="SF_0"  v-model="SF" checked="checked" /> <label style="font-weight:bolder" for="SF_0"> 当前人员的身份（默认）</label>
                     <ol class="olText">
                         <li>说明：就是上一步发送作为当前节点的人员身份。 </li>
                     </ol>
@@ -36,8 +36,7 @@
                     <input type="radio" value="1" id="SF_1" v-model="SF" /> <label style="font-weight:bolder" for="SF_1"> 指定节点的人员身份</label>
                     <ol class="olText">
                         <li> 说明：指定节点发送人的作为当前节点的人员身份。 </li>
-                        <li>
-                            请选择节点:
+                        <li>请选择节点:
                             <select id="DDL_Nodes" v-model="node">
                                 <option v-for="option in nodes" :value="option.NodeID">{{option.Name}}</option>
                             </select>
@@ -46,8 +45,7 @@
                     <input type="radio" value="2" id="SF_2" v-model="SF" /> <label style="font-weight:bolder" for="SF_2"> 按表单字段作为人员身份（该字段里存储的是账号）</label>
                     <ol class="olText">
                         <li> 说明：指定表单字段作为人员编号作为当前节点的人员身份，比如：我替别人请假，请假人字段作为人员身份。 </li>
-                        <li>
-                            请选择字段:
+                        <li>请选择字段:
                             <select id="DDL_Fields" v-model="field">
                                 <option v-for="option in fields" :value="option.KeyOfEn">{{option.Name}}</option>
                             </select>
@@ -77,18 +75,18 @@
             </div>
         </fieldset>
         <fieldset>
-            <legend>岗位计算方式:</legend>
-            <ul>
-                <li>
-                    <select name="DDL_StationReqEmpsWay" id="DDL_StationReqEmpsWay" v-model="StationReqEmpsWay">
-                        <option value="0">岗位集合模式</option>
-                        <option value="1">岗位切片-严谨模式</option>
-                        <option value="2">岗位切片-宽泛模式</option>
-                    </select>
-                </li>
-            </ul>
+        <legend>岗位计算方式:</legend>
+        <ul>
+            <li>
+                <select name="DDL_StationReqEmpsWay" id="DDL_StationReqEmpsWay" v-model="StationReqEmpsWay">
+                    <option value="0">岗位集合模式</option>
+                    <option value="1">岗位切片-严谨模式</option>
+                    <option value="2">岗位切片-宽泛模式</option>
+                </select>
+            </li>
+        </ul>
         </fieldset>
-        <fieldset>
+       <fieldset>
             <legend>岗位找人规则:</legend>
             <ul>
                 <li>
@@ -99,8 +97,8 @@
                 </li>
             </ul>
         </fieldset>
-        <fieldset>
-            <legend>找人算法</legend>
+        <fieldset>            
+			<legend>找人算法</legend>
             <ul>
                 <li>第0步：首先从本级部门内的人员寻找，该节点绑定的岗位，如果找不到人就进入下一步寻找。 </li>
                 <li>第1步：直线上级寻找，一直查询到根节点，如果找不到人就进入下一步寻找。 </li>
@@ -151,8 +149,8 @@
                 field:"",
                 webuser: null,
                 deliverWay: DeliveryWay.ByStation,
-                StationReqEmpsWay: 0,
-                StationFindWay:0
+                StationReqEmpsWay:0,
+ 				StationFindWay:0
             },
             methods: {
                 OpenDot2DotStations: function () {
@@ -216,7 +214,7 @@
                 //岗位计算模式.
                 var val = node.GetPara('StationReqEmpsWay');
                 this.StationReqEmpsWay = val;
-                val = node.GetPara('StationFindWay') || "0";
+ 				val = node.GetPara('StationFindWay') || "0";
                 this.StationFindWay = parseInt(val);
             }
         });
@@ -231,7 +229,7 @@
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             if (Baseinfo.SF == 1) {
                 node.SetPara("ShenFenVal", Baseinfo.node);
             }
@@ -243,7 +241,6 @@
             node.SetPara("ShenFenModel", Baseinfo.SF);
             node.DeliveryWay = Baseinfo.deliverWay;
             node.SetPara('StationReqEmpsWay', Baseinfo.StationReqEmpsWay);
-            node.SetPara('StationFindWay', Baseinfo.StationFindWay);
             node.Update();
         }
     </script>

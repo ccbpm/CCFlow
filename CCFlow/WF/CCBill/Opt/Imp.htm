@@ -37,6 +37,9 @@
                 var attr = mapAttrs[i];
                 if (attr.UIIsVisable == false)
                     continue;
+                //排除OID（主键）
+                if(attr.KeyOfEn == 'OID')
+                    continue;
 
                 cols += "<th>"+ attr.Name + "</th>";
             }

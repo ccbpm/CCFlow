@@ -263,17 +263,18 @@
                     }
                 });
 
-               
+
 
                 var focusField = "";
                 if (cfg.IsEnableFocusField == 1)
                     focusField = cfg.FocusField;
 
-                var orderBys = {};
-                if (ur.OrderBy != "")
-                    orderBys = { field: ur.OrderBy, type: ur.OrderWay };
-                if (ur.OrderBy == "" && cfg.OrderBy != "")
-                    orderBys = { field: cfg.OrderBy.split(",")[0], type: cfg.IsDeSc == 1 ? 'desc' : 'asc' };
+                //OrderBys按RDT排序有问题
+                //var orderBys = {};
+                //if (ur.OrderBy != "")
+                //    orderBys = { field: ur.OrderBy, type: ur.OrderWay };
+                //if (ur.OrderBy == "" && cfg.OrderBy != "")
+                //    orderBys = { field: cfg.OrderBy.split(",")[0], type: cfg.IsDeSc == 1 ? 'desc' : 'asc' };
 
                 var data = SearchData("search");
                 //获取列
@@ -283,8 +284,14 @@
 
                 //渲染table
                 var tableName = mapBase.EnDesc;
-                if (typeof window.top.vm != "undefined" && window.top.vm.tabsList.length > window.top.vm.selectedTabsIndex)
-                    tableName = window.top.vm.tabsList[window.top.vm.selectedTabsIndex].name;
+                //防止出现跨域
+                try {
+                    if (typeof window.top.vm != "undefined" && window.top.vm.tabsList.length > window.top.vm.selectedTabsIndex)
+                        tableName = window.top.vm.tabsList[window.top.vm.selectedTabsIndex].name;
+                } catch (e) {
+                    tableName = mapBase.EnDesc;
+                }
+                
                 //主页面数据
                 vtable = table.render({
                     elem: '#tableSearch',
@@ -292,11 +299,11 @@
                     data: tableData,
                     title: tableName,
                     limit: Number.MAX_VALUE,
-                    height: $(document).height() - $("#toolbar").height()*2 - 100,
+                    height: $(document).height() - $("#toolbar").height() * 2 - 100,
                     cellMinWidth: 120,
                     cols: cols,
                     autoSort: false,
-                    initSort: orderBys,
+                    //initSort: orderBys,
                     page: false
                 });
                 renderLaypage();
@@ -308,7 +315,7 @@
 
                         var rowstr = JSON.stringify(row);
                         rowstr = encodeURIComponent(rowstr);
-                        OpenEn(pkval, "", 0, rowstr);
+                        OpenEn(pkval, "", 0, rowstr, obj);
                     });
                 }
                 if (cfg.DoubleOrClickModel == 1) {
@@ -318,7 +325,7 @@
 
                         var rowstr = JSON.stringify(row);
                         rowstr = encodeURIComponent(rowstr);
-                        OpenEn(pkval, "", 0, rowstr);
+                        OpenEn(pkval, "", 0, rowstr,obj);
                     });
                 }
 
@@ -335,7 +342,7 @@
                     }
                     //下载事件
                     if (obj.event == "Btn_En1") {
-                        var func1 = cfg.EnBtnJS1 ||"";
+                        var func1 = cfg.EnBtnJS1 || "";
                         if (func1 == "")
                             return;
                         func1 = func1.replace(/~/g, "'");
@@ -477,7 +484,7 @@
             html += "\n .layui-form-select dl dd.layui-this{\n background-color:" + data.selectedMenu + " !important;\n}";
             html += "\n .layui-tab-title .layui-this{\n background-color:" + data.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + data.selectedMenu + ";}";
             html += "\n .layui-a-this{\n background-color:" + data.selectedMenu + ";\n color: #fff;\n}";
-            
+
             styleScope.innerHTML = filterXSS(html);
         })
     </script>

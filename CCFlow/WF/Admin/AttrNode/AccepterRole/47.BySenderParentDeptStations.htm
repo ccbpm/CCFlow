@@ -183,7 +183,7 @@
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             if (Baseinfo.SF == 1) {
                 node.SetPara("ShenFenVal", Baseinfo.node);
             }

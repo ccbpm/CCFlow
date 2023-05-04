@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="../../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/vue.js"></script>
+    <script src="../../../Admin.js"></script>
+   
+</head>
+<body>
+    <div id="bar">
+    </div>
+    
+    <fieldset>
+        <legend>绑定岗位</legend>
+        <ul>
+            <li><a href="javascript:OpenDot2DotStations()">绑定岗位-分组模式</a> </li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>已经绑定的岗位</legend>
+        <div >
+            <ul id="stas">
+            </ul>
+        </div>
+    </fieldset>
+   
+    <script type="text/javascript">
+
+        //组织主键.
+        var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+        var en = new Entity("BP.Sys.MapExt");
+        en.MyPK = mypk;
+        var i = en.RetrieveFromDBSources();
+        if (i == 0)
+            $("#Btn_Delete").attr("disabled", true);
+        else
+            $("#Btn_Delete").removeAttr("disabled");
+        var arr = [];
+        $(function () {
+            InitBar(5);
+            var tag1 = en.Tag1 || "";
+            if (tag1 == "")
+                return;
+            try {
+                arr = JSON.parse(replaceAll(tag1, '\\\\\"', '"'));
+            } catch {
+                arr = [];
+            }
+            ShowStations();
+        })
+        
+        function ShowStations() {
+           
+            var _html = "";
+            if (arr.length == 0) {
+                _html = '<li>未设置</li>';
+                $("#stas").html(_html);
+                return;
+            }
+            arr.forEach(function (item) {
+                _html += '<li><img src="../../../../Img/Author.gif" />'+item.Name+'</li>';
+            })
+            $("#stas").html(_html);
+        }
+        function OpenDot2DotStations() {
+            var w = window.innerWidth / 2;
+            var h = window.innerHeight - 40;
+            var url = "../../../../Comm/RefFunc/DotGroup.htm?Dot2DotEnName=BP.Sys.MapExt&SaveFiled=Tag1";
+            url += "&AttrOfMInMM=FK_Station&EnsOfM=BP.Port.Stations";
+            url += "&DefaultGroupAttrKey=FK_StationType&PKVal="+mypk;
+            OpenEasyUiDialog(url,'iframID', '设置岗位', w, h, null,true,function () {
+                arr = $("#iframID")[0].contentWindow.Btn_OK();
+                ShowStations(arr);
+            });
+        }
+        //保存
+        function Save() {
+            $("#Btn_Save").val("正在保存请稍候...");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.ExtType = "MultipleChoiceSmall";
+            en.MyPK = mypk;
+            en.DoWay = 5;
+            en.Tag1 = JSON.stringify(arr);
+            if (en.Update() == 0)
+                en.Insert();
+            Reload();
+        }
+    </script>
+</body>
+</html>

@@ -99,7 +99,8 @@
                 return;
             var mypk = dtl + '_' + fk_node;
             var en = new Entity("BP.WF.Template.Frm.MapDtlExt");
-            en.Delete("No",mypk);
+            en.SetPKVal(mypk);
+            en.Delete();
             alert("删除成功!");
             Reload();
         }

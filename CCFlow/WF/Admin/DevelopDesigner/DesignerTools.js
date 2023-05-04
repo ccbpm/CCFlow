@@ -75,7 +75,19 @@ function FrmAttr() {
 
 //表单属性.
 function OpenFoolFrm() {
-
+    var redirectUrl = GetQueryString("RedirectUrl");
+    if (redirectUrl) {
+        var frmID = GetQueryString("FK_MapData");
+        if (!frmID) {
+            frmID = GetQueryString("FrmID");
+        }
+        var en = new Entity("BP.Sys.MapData", frmID);
+        en.FrmType = 0;
+        en.Update();
+        redirectUrl = decodeURIComponent(redirectUrl);
+        window.location.href = redirectUrl;
+        return;
+    }
     var url = "../FoolFormDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow");
     url += "&FK_Node=" + GetQueryString("FK_Node");
     url += "&FK_MapData=" + GetQueryString("FK_MapData");

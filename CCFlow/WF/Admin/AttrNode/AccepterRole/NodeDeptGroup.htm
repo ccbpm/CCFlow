@@ -190,8 +190,11 @@
             var orgNo = GetQueryString("OrgNo");
 
             //删除,该组织下已经保存的岗位.
-            var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID;
-            DBAccess.RunSQL(sql);
+            //var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID;
+            //DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("nodeID", nodeID);
+            handler.DoMethodReturnString("NodeDept_Dele");
 
             //获取复选框选中的节点
             var nodes = $('#tree').tree('getChecked');

@@ -177,6 +177,15 @@ function InitAthPage(athDivID, uploadUrl) {
             var src = _this.parent().css("background-image").replace("url(\"", "").replace("\")", "")
             imgShow(this, src);
         });
+        $(".athImg").on("mousemove", function () {
+            debugger
+            var _this = $(this);
+            $(_this.children()[0]).show();
+        })
+        $(".athImg").on("mouseout", function () {
+            var _this = $(this);
+            $(_this.children()[0]).hide();
+        })
     }
     //4.2 普通附件的展示方式（包含图片，word文档，pdf等）
     else {
@@ -503,9 +512,11 @@ function FileShowPic(athDesc, dbs, uploadUrl) {
         var db = dbs[i];
         var url = GetFileStream(db.MyPK, db.FK_FrmAttachment);
         _Html += "<div id='" + db.MyPK + "' class='image-item athInfo' style='background-image: url(&quot;" + url + "&quot;);'>";
-        if ((athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == webUser.No)))
+        if(pageData.IsReadonly != 1 &&((athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == webUser.No))))
             _Html += "<div class='image-close' onclick='Del(\"" + db.MyPK + "\",\"" + db.FK_FrmAttachment + "\")'>X</div>";
-        _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>";
+        _Html += "<div style ='width: 100%; height: 100%;' class='athImg' >";
+        _Html += "<div class='Img_ShowText'><span>上传人:"+db.RecName+"</span><br/><span>上传时间:"+db.RDT+"</span></div>";
+        _Html +="</div > ";
         _Html += "<div class='image-name' id = 'name-0-0' > ";
         if (athDesc.IsDownload == 0)
             _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' >" + db.FileName + "</p>";

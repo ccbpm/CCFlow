@@ -681,11 +681,12 @@
             }
             html += "</tbody>";
 
-            //取消人员部门岗位管理关系. @不能出现sql.
-            var deptEmps = new Entities("BP.Port.DeptEmps");
-            deptEmps.DoMethodReturnString("DelteNotInEmp");
-            var deptEmpStas = new Entities("BP.Port.DeptEmpStations");
-            deptEmpStas.DoMethodReturnString("DelteNotInEmp");
+            //取消人员部门岗位管理关系.
+            //var deptEmps = new Entities("BP.Port.DeptEmps");
+            //deptEmps.DoMethodReturnString("DelteNotInEmp");
+
+            //var deptEmpStas = new Entities("BP.Port.DeptEmpStations");
+            //deptEmpStas.DoMethodReturnString("DelteNotInEmp");
 
 
             //查询出来兼职人员.
@@ -881,8 +882,10 @@
             }
 
             //取消人员部门岗位管理关系
-            var sql = "delete from Port_DeptEmpStation where FK_Emp='" + no + "' and FK_Dept='" + deptNo + "'";
-            DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
+            handler.AddPara("FK_Emp", no);
+            handler.AddPara("FK_Dept", deptNo);
+            handler.DoMethodReturnString("DeptEmpStation_Dele");
             //   var en = new Entity("BP.Port.DeptEmpStation");
             //  en.Delete("FK_Dept",);
             // SELECT * FROM Port_DeptEmpStation WHERE FK_Dept+'_'+FK_Emp not in (select MyPK FROM PORT_DEPTEMP)

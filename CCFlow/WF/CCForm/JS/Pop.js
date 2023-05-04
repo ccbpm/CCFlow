@@ -134,8 +134,8 @@ function PopBranchesAndLeaf(mapExt, val, targetId, index, oid, objtr) {
 function GetInitJsonData(mapExt, oid, val) {
     var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
     frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
-    if (frmEleDBs.length == 0 && val != "")
-        frmEleDBs = [{ "Tag1": "", "Tag2": val }];
+    /*if (frmEleDBs.length == 0 && val != "")
+        frmEleDBs = [{ "Tag1": "", "Tag2": val }];*/
     var initJsonData = [];
     $.each(frmEleDBs, function (i, o) {
         initJsonData.push({
@@ -809,83 +809,6 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2, tag5) {
 }
 
 
-/**
- * 获取页面数据
- * */
-function getPageData() {
-    var formss = $('#divCCForm').serialize() || "";
-    var params = "";
-    var formArr = formss.split('&');
-    var formArrResult = [];
-    $.each(formArr, function (i, ele) {
-        if (ele.split('=')[0].indexOf('CB_') == 0) {
-            //如果ID获取不到值，Name获取到值为复选框多选
-            var targetId = ele.split('=')[0];
-            if ($('#' + targetId).length == 1) {
-                if ($('#' + targetId + ':checked').length == 1) {
-                    ele = targetId.replace("CB_", "") + '=1';
-                } else {
-                    ele = targetId.replace("CB_", "") + '=0';
-                }
-                params += "@" + ele;
-            }
-        } else if (ele.split('=')[0].indexOf('DDL_') == 0) {
-            var ctrlID = ele.split('=')[0];
-            var item = $("#" + ctrlID).children('option:checked').text();
-            var mystr = ctrlID.replace("DDL_", "") + 'T=' + item;
-            params += "@" + mystr;
-            params += "@" + ele.replace("DDL_", "");
-        } else {
-            params += "@" + ele.replace("TB_", "");
-        }
-
-    });
-
-
-
-    //获取表单中禁用的表单元素的值
-    var disabledEles = $('#divCCForm :disabled');
-    $.each(disabledEles, function (i, disabledEle) {
-
-        var name = $(disabledEle).attr('id');
-
-        switch (disabledEle.tagName.toUpperCase()) {
-
-            case "INPUT":
-                switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX": //复选框
-                        params += "@" + name.replace("CB_", "") + '=' + $(disabledEle).is(':checked') ? 1 : 0;
-
-                        break;
-                    case "TEXT": //文本框
-                    case "HIDDEN":
-                        params += "@" + name.replace("TB_", "") + '=' + $(disabledEle).val();
-                        break;
-                    case "RADIO": //单选钮
-                        name = $(disabledEle).attr('name');
-                        var eleResult = name + '=' + $('[name="' + name + '"]:checked').val();
-                        params += "@" + eleResult.replace("RB_", "");
-                        break;
-                }
-                break;
-            //下拉框            
-            case "SELECT":
-                var tbID = name.replace("DDL_", "TB_") + 'T';
-                if ($("#" + tbID).length == 1)
-                    params += "@" + tbID.replace("DDL_", "") + '=' + $(disabledEle).children('option:checked').text();
-
-                break;
-
-            //文本区域                    
-            case "TEXTAREA":
-                params += "@" + name.replace("TB_", "") + '=' + $(disabledEle).val()
-                break;
-        }
-    });
-
-    return params;
-
-}
 
 
 

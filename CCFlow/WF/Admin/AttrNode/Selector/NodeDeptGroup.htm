@@ -186,8 +186,12 @@
             var orgNo = GetQueryString("OrgNo");
 
             //删除,该组织下已经保存的岗位. 
-            var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "')";
-            DBAccess.RunSQL(sql);
+            //var sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + nodeID + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + orgNo + "')";
+           // DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("nodeID", nodeID);
+            handler.AddPara("orgNo", orgNo);
+            handler.DoMethodReturnString("NodeDeptGroup_Dele");
 
             //获取复选框选中的节点
             var nodes = $('#tree').tree('getChecked');
@@ -201,7 +205,7 @@
             }
 
 
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay = 4;
             node.Update();
 

@@ -77,30 +77,8 @@
                 </div>
             </div>
             <table class="table  table-striped">
-                <thead>
-                    <tr>
-                        <th style="width:30px;">
-                            #
-                        </th>
-                        <!--<th>
-                            流程
-                        </th>-->
-                        <th>
-                            节点
-                        </th>
-                        <th>
-                            状态
-                        </th>
-                        <th>
-                            抄送人
-                        </th>
-                        <th style="width:60%;">
-                            标题
-                        </th>
-                        <th>
-                            日期
-                        </th>
-                    </tr>
+                <thead id="theadDiv">
+
                 </thead>
                 <tbody id="Table1"></tbody>
             </table>
@@ -123,6 +101,8 @@
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
+    <!-- 处理多语言 -->
+    <script src="Data/lang/load.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
         function More() {
@@ -185,7 +165,7 @@
             window.open(url);
             return;
         }
- 
+
         function GroupBarClick(groupName) {
 
             var alt = document.getElementById('Img' + groupName).alert;
@@ -228,7 +208,27 @@
         var groupNames = [];
         //页面启动函数.
         $(function () {
-            //GetRuningData(pageIdx);
+            var _html = `<tr>
+                            <th style="width:30px;">
+                                #
+                            </th>
+                            <th>
+                                ${window.lang.jiedian}
+                            </th>
+                            <th>
+                                ${window.lang.zhuangtai}
+                            </th>
+                            <th>
+                                ${window.lang.chaosongren}
+                            </th>
+                            <th style="width:60%;">
+                                 ${window.lang.biaoti}
+                            </th>
+                            <th>
+                                 ${window.lang.rq}
+                            </th>
+                        </tr>`;
+            $("#theadDiv").html(_html);
             InitPage();
             Paginator(pageCount, pageIdx);
 

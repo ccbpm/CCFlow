@@ -30,7 +30,7 @@ function Start() {
 2. 返回的是一个json格式的数据集合，具有 WorkID,FK_Flow,FK_Node,Title 等列.
 3. 您调用这个方法后，可以生成您自己的发起页面,并连接到工作处理器上. 比如: /WF/MyFlow.htm?FK_Flow=001&WorkID=9999&FK_Node=103
 */
-function Todolist_Init() {
+function Todolist() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF");
     var data = handler.DoMethodReturnString("Todolist_Init");
@@ -60,4 +60,14 @@ function Runing() {
     data = JSON.parse(data);
     return data;
 }
- 
+function Runing() {
+
+    var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+    var data = handler.DoMethodReturnString("Runing_Init");
+    if (data.indexOf('err@') == 0) {
+        alert(data);
+        return;
+    }
+    data = JSON.parse(data);
+    return data;
+}

@@ -59,7 +59,7 @@
         }
         
         .item-other {
-            width: 12%;
+            width: 10%;
         }
         
         .item-index {
@@ -107,6 +107,7 @@
             <div class="item item-other">应用模式</div>
             <div class="item item-other">存储表</div>
             <!--<div class="item item-other">数据源</div>-->
+            <div class="item item-other">当前版本</div>
             <div class="item item-other">操作</div>
         </div>
         <div ref="sort-main" id="s-main">
@@ -127,6 +128,7 @@
                             新建表单
                         </button>
                     </div>
+                    <div class="item item-other"></div>
                     <div class="item item-other"></div>
                     <div class="item item-other"></div>
                     <div class="item item-other ">
@@ -151,6 +153,7 @@
                         <div class="item item-other">{{flow.FrmType}}</div>
                         <div class="item item-other">{{flow.EntityType}}</div>
                         <div class="item item-other">{{flow.PTable}}</div>
+                        <div class="item item-other">{{flow.Ver}}</div>
                         <!--<div class="item item-other">{{flow.DBSrc}}</div>-->
                         <div class="item item-other">
                             <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn" :data-name="flow.Name" :data-no="flow.No" :data-pidx="index" :data-idx="idx">  <i class="layui-icon layui-icon-down layui-font-12"></i> 表单</button>

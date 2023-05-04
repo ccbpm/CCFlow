@@ -23,6 +23,19 @@ function GetQueryString(name) {
 
 }
 
+function GetQueryStringByUrl(url, name) {
+    //if (typeof name === 'string' && name.toLocaleLowerCase() === 'token') {
+   //     return filterXSS(localStorage.getItem("Token"))
+    //}
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+
+    var r = url.match(reg);
+
+    if (r != null)
+        return filterXSS(decodeURI(r[2]));
+    return null;
+}
+
 //通过URL获取QueryString的数组
 function getQueryStringFromUrl(url) {
     if (url.indexOf('?') >= 0) {

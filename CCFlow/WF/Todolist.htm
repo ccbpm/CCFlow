@@ -39,8 +39,7 @@
 
     <!-- 处理多语言 -->
     <script src="Data/lang/load.js" type="text/javascript"></script>
-    <script src="Data/lang/js/zh-cn.js"></script>
-    <script src="Data/lang/lang.js" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         var webUser = null;
@@ -141,7 +140,7 @@
             tablet += "<th>" + window.lang.qixian + "</th>";
             tablet += "<th>" + window.lang.zhuangtai + "</th>";
             tablet += "<th>" + window.lang.leixing + "</th>";
-            tablet += "<th>优先级</th>";
+            tablet += "<th>" + window.lang.youxianji + "</th>";
 
             $("#tablet").html(tablet);
 
@@ -432,21 +431,21 @@
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
-
+                var url = data;
+                url = url.replace('/WF//WF/', '/WF/');
+                if (url.indexOf("http") == -1) {
+                    if (url.indexOf('/WF/') == -1)
+                        url = '/WF/' + url;
+                    url = basePath + url;
+                }
                 try {
-
-                    var url = data;
-                    if (url.indexOf("My")>=0) {
-                        if (window.top.location.href.indexOf("WF/") != -1)
-                            url = "../" + url;
-                        else
-                            url = basePath +"/WF/" + url;
+                    if (window.top.vm != undefined) {
+                        window.top.vm.openTab(title, url);
+                        return;
                     }
-                        
-
-                    window.top.vm.openTab(title, url);
-                    return;
+                    window.open(url); //打开流程.
                 } catch (e) {
+                    data = data.replace('/WF//WF/', '/WF/');
                     window.open(data); //打开流程.
                     return;
                 }
@@ -482,7 +481,7 @@
                     return "<font color=#bc65e0>" + window.lang.caogao + "</font>";
                 case 2:
                     if (auther != null && auther != undefined && auther != "")
-                        return "<font color=orange>授权</font>";
+                        return "<font color=orange>window.lang.auth</font>";
                     return "<font color=green>" + window.lang.daiban + "</font>";
                     break;
                 case 3: //已完成.

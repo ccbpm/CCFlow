@@ -38,8 +38,12 @@
                 return;
             }
 
-            var sql = "SELECT \"NodeAppType\" FROM WF_Node WHERE NodeID=" + GetQueryString("FK_Node");
-            var val = DBAccess.RunSQLReturnTable(sql);
+            //var sql = "SELECT \"NodeAppType\" FROM WF_Node WHERE NodeID=" + GetQueryString("FK_Node");
+           // var val = DBAccess.RunSQLReturnTable(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var val = handler.DoMethodReturnString("NodeAppType");
+            val = JSON.parse(val);
 
             var type = val[0].NodeAppType;
 
@@ -56,8 +60,12 @@
 
             var nodeID = GetQueryString("FK_Node");
             var appType = $("#DDL_NodeAppType").val();
-            var sql = "UPDATE WF_Node SET NodeAppType=" + appType + " WHERE NodeID=" + nodeID;
-            DBAccess.RunSQL(sql);
+            //var sql = "UPDATE WF_Node SET NodeAppType=" + appType + " WHERE NodeID=" + nodeID;
+           // DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("appType", appType);
+            handler.AddPara("nodeID", nodeID);
+            handler.DoMethodReturnString("WF_Node_Up");
             Reload();
         }
     </script>

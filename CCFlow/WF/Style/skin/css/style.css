@@ -685,7 +685,7 @@ code{background-color:#F9F2F4;border-radius:4px;color:#ca4440;font-size:90%;padd
 .ibox:after,.ibox:before{display:table}
 .ibox-title{height:41px;border-color:#edf1f2;background-color:#f6f8f8;color:#333;font-weight:700;border-radius:2px 2px 0 0;padding:15px 15px 3px 15px;border-bottom:1px solid transparent;display:block;clear:both}
 .ibox-contents{background-color:#fff;color:inherit;padding:10px 0px 0px 0px;border-color:#e7eaec;-webkit-border-image:none;-o-border-image:none;border-image:none;border-style:solid solid none;border-width:1px 0}
-.ibox-content{background-color:#fff;color:inherit;padding:10px 20px 20px 20px;border-color:#e7eaec;-webkit-border-image:none;-o-border-image:none;border-image:none;border-style:solid solid none;border-width:0px}
+.ibox-content{background-color:#fff;color:inherit;padding:10px 20px 30px 20px;border-color:#e7eaec;-webkit-border-image:none;-o-border-image:none;border-image:none;border-style:solid solid none;border-width:0px}
 .ibox-content li{ line-height: 24px; font-size: 13px; list-style-type: square;}
 .ibox-content li a{ color:#666;}
 .ibox-content li a:hover{ color:#337ab7; text-decoration: underline;}

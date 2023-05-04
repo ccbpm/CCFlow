@@ -338,7 +338,7 @@
                     $.each(jsonArray, function (idx, item) {
                         child = [];
                         if (doc != "") {
-                            var data = GetDataTableByDB(doc, en.DBType, en.FK_DBSrc, item.No);
+                            var data = GetDataTableByDB(doc, en.DBType, en.FK_DBSrc, item.No,en,"Doc");
                             $.each(data, function (idx, obj) {
                                 child.push({
                                     title: obj.Name,

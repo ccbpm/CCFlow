@@ -340,7 +340,26 @@ function InitToolbar(type) {
             layui.laydate.render({
                 elem: '#' + item.id, //指定元素
                 format: format,
-                type: type
+                type: type,
+                done: function (value, date, endDate) {
+                    //判断结束时间不能小于开始时间
+                    if(value == "")
+                        return;
+                    //比对的时间字段值
+                    var operVal = $('#TB_DTFrom').val();
+                    var msg = "";
+                    var searchLabel = '开始时间';
+                    if (value < operVal && operVal != "") {
+                        msg = "所选日期不能小于[" + searchLabel + "]对应的日期时间";
+                    }
+
+                    if (msg != "") {
+                        layer.alert(msg);
+                        value = "";
+                    }
+
+                    $(this.elem).val(value);
+                }
             });
         })
     }
@@ -349,10 +368,10 @@ function InitToolbar(type) {
         var selectVal = json[field];
         var urlVal = GetQueryString(field);
         if (urlVal != null && urlVal != undefined)
-            selectVal = GetQueryString(attr.Field);
+            selectVal = GetQueryString(field);
         selectVal = selectVal || "all";
         var exts = $.grep(mapExts, function (obj) {
-            return obj.AttrOfOper == attr.Field;
+            return obj.AttrOfOper == field;
         });
         $("#DDL_" + field).val(selectVal);
         if (exts.length == 0)
@@ -774,7 +793,7 @@ function GetColoums(data, thrMultiTitle, secMultiTitle, colorSet, sortColumns, f
             align: field.toLowerCase() == "icon" ? "center" : "left",
             rowspan: keyRowSpan,
             templet: function (row) {
-                //如果这个字段是Icon
+            	//如果这个字段是Icon
                 if (this.field.toLowerCase() == "icon" && row[this.field] != "") {
                     return "<i  class='" + row[this.field] + "'></i>";
                 }
@@ -1329,7 +1348,7 @@ function SearchData(pageType, orderBy, orderWay) {
     return data;
 }
 
-
+var searchTableData = [];
 function transferHtmlData(tableData) {
     tableData = JSON.parse(filterXSS(JSON.stringify(tableData)))
     var val = "";
@@ -1347,6 +1366,7 @@ function transferHtmlData(tableData) {
             })
         });
     }
+    searchTableData = tableData;
     return tableData;
 }
 function htmlEncodeByRegExp(str) {
@@ -1382,9 +1402,7 @@ function htmlDecodeByRegExp(str) {
 }
 
 
-
-function OpenEn(pk, paras, flag, row) {
-
+function OpenEn(pk, paras, flag, row,obj) {
     if (row != null && row != undefined && row != "")
         row = JSON.parse(decodeURIComponent(row));
 
@@ -1451,8 +1469,10 @@ function OpenEn(pk, paras, flag, row) {
     var openModel = cfg.OpenModel;
 
     if (openModel == 0) {
-        if (cfg.IsRefreshParentPage == 1)
-            OpenLayuiDialog(url, mapBase.EnDesc + ' : 详细', windowW, 100, "r", true);
+        if (cfg.IsRefreshParentPage == 1) 
+            OpenLayuiDialog(url, mapBase.EnDesc + ' : 详细', windowW, 100, "r", false, false, false, null, function () {
+                ChangeTableData(pk,enName,obj);
+            });
         else
             OpenLayuiDialog(url, mapBase.EnDesc + ' : 详细', windowW, 100, "r", false);
     } else {
@@ -1472,6 +1492,43 @@ function OpenEn(pk, paras, flag, row) {
 
 }
 
+function ChangeTableData(pkVal, enName, obj) {
+    if (typeof obj != "undefined") {
+        //根据PK获取到改行的最新信息
+        var en = new Entity(enName);
+        en.SetPKVal(pkVal);
+        en.RetrieveFromDBSources();
+
+        searchTableData.forEach(item => {
+            if (item[enPK] == pkVal) {
+                if (richAttrs.length != 0) {
+                    richAttrs.forEach(key => {
+                        var val = item[key];
+                        if (val != "") {
+                            en[key] = filterXSS(val);
+                            console.log(item[key])
+                        }
+                    });
+                }
+                for (var key in item)
+                    item[key] = en[key];
+                if (typeof obj != "undefined") {
+                    obj.update(item);
+                }
+                return;
+            }
+        });
+    }
+    
+    if (typeof obj === "undefined") {
+        pageIdx = 1;
+        var data = SearchData("search");
+        //获取列
+        var tableData = transferHtmlData(data["DT"]);
+        layui.table.reload('tableSearch', { data: tableData });
+    }
+        
+}
 
 function New() {
     OpenEn("", "", 0, null);
@@ -1590,10 +1647,13 @@ function executeFunction(jsString, label) {
 
 //执行删除
 function Delete() {
+   
     if (batchData.length == 0) {
         layer.alert("请选择要删除的行");
         return;
     }
+    if (confirm("确定要删除选择的行吗") == false)
+        return;
     var deleteRow = batchData;
     //执行删除操作
     var enName = ensName.substring(0, ensName.length - 1);

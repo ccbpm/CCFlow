@@ -171,7 +171,7 @@ function Frm() {
 
     var flow = new Entity("BP.WF.Flow", flowNo);
 
-    var flowDevModel = flow.GetPara("FlowDevModel"); //设计模式.
+    var flowDevModel = flow.GetPara("FlowDevModel") || flow.FlowDevModel; //设计模式.
     if (flowDevModel == undefined || flowDevModel == null)
         flowDevModel = 0;
 

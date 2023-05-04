@@ -20,6 +20,25 @@
     <link href="css/default.css" rel="stylesheet" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
 
+    <script type="text/javascript">
+        var url = window.location.href;
+        if (url.toLowerCase().includes('token=')) {
+            var startIdx = url.indexOf('Token=');
+            var containTokenStr = url.substring(startIdx);
+            var tokenEndIdx = containTokenStr.indexOf('&');
+            var token = '';
+            if (tokenEndIdx == -1) {
+                token = containTokenStr.substring(6);
+            } else {
+                token = containTokenStr.substring(6, tokenEndIdx);
+            }
+            if (token) {
+                localStorage.setItem("Token", token);
+            }
+            var targetUrl = url.replace('&Token=' + token, '');
+            window.location.href = targetUrl
+        }
+    </script>
     <!--引入CSS样式 end-->
     <!--UEditer Begin-->
     <script src="js/ueditor/ueditor.config.js"></script>

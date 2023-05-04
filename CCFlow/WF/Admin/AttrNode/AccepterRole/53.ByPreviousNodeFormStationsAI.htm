@@ -1,0 +1,112 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend>请选择一个岗位字段.</legend>
+            <div style="margin-top:15px">
+                请选择一个节点字段:
+                <select name="DDL_ByPreviousNodeFormStations" id="DDL_ByPreviousNodeFormStations" v-model="selectMapAttr">
+                    <option :value="mapAttr.KeyOfEn" v-for="mapAttr in mapAttrs"> {{mapAttr.KeyOfEn}}  - {{mapAttr.Name}}</option>
+                </select>
+            </div>
+
+            <legend>岗位计算方式:</legend>
+            <ul>
+                <li>
+                    <select name="DDL_StationReqEmpsWay" id="DDL_StationReqEmpsWay" v-model="StationReqEmpsWay">
+                        <option value="0">岗位集合模式</option>
+                        <option value="1">岗位切片-严谨模式</option>
+                        <option value="2">岗位切片-宽泛模式</option>
+                    </select>
+                </li>
+            </ul>
+
+        </fieldset>
+
+        <fieldset> 
+			<legend>按照指定的岗位智能计算</legend>
+			<ul>
+				<li>#### 帮助</li>
+				
+				<li>- 该计算模式如按绑定的岗位智能计算，唯一不同的按绑定的岗位智能计算是固定的，而这个岗位集合是由表单内容确定的。</li>
+				<li>- 我们通常的做法是，把一个字段设置为小范围多选，或者Pop选择岗位，在下一个节点按照这用户选择的岗位集合作为接受人。</li>
+				<li>- 请仔细理解按岗位智能计算的算法。</li>
+				
+				<li>#### 选择字段</li>
+				<li>- 可以选择的字段，都是节点表单的字段.</li>
+				<li>- 如果没有您要选择的字段，需要使用流程设计器的检查流程就可以显示出来。</li>
+
+				<li>#### 岗位计算方式</li>
+				<li>- 岗位集合模式： 就是指定的部门下的人员与岗位集合下的人员交集，如果有人员就作为接受人返回，没有人员就找上一级部门。</li>
+				<li>- 岗位切片模式： 遍历岗位集合下的每个岗位人员集合与指定部门的人员集合的交集，如果有人员就作为接受人返回，没有人员就找上一级部门，把每个岗位争取都找到人然后合并起来，做为节点的接受人。</li>
+				<li>- 切片模式严谨模式是一个岗位如果找不到就强制抛出异常不让节点向下运动，宽泛模式则可以向下运动。</li>
+			</ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.ByPreviousNodeFormStationsAI,
+                sql: '',
+                nodeId: GetQueryString("FK_Node"),
+                mapAttrs: [],
+                selectMapAttr: '',
+                StationReqEmpsWay:0
+            },
+            created() {
+                InitBar(this.deliverWay);
+                var node = new Entity("BP.WF.Node", this.nodeId);
+                var paras = node.DeliveryParas;
+                var FK_Flow = node.FK_Flow;
+                var FK_MapData = "ND" + parseInt(FK_Flow) + "Rpt";
+
+                var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", FK_MapData);
+                this.mapAttrs = $.grep(mapAttrs, function (obj, i) {
+                    return obj.UIVisible == 1;
+                })
+
+                //初始话下拉列表值
+                if (node.DeliveryWay == DeliveryWay.ByPreviousNodeFormStationsAI) {
+                    if (paras != null && paras != "")
+                        this.selectMapAttr = paras;
+                }
+
+                //岗位计算模式.
+                var val = node.GetPara('StationReqEmpsWay');
+                this.StationReqEmpsWay = val;
+               
+            }
+        });
+        function Save() {
+            var node = new Entity("BP.WF.Template.NodeExt", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryParas = Baseinfo.selectMapAttr;
+            node.SetPara('StationReqEmpsWay', Baseinfo.StationReqEmpsWay);
+            node.Update();
+        }
+    </script>
+</body>
+</html>

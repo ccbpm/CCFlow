@@ -102,7 +102,7 @@
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay =Baseinfo.deliverWay;
             var object = document.getElementsByName("RB_NodeNo");
             var DeliveryParas = "";

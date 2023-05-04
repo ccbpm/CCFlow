@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>驰骋工作流</title>
+    <link href="../../Scripts/easyUI145/themes/color.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Scripts/bootstrap/css/style.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 自己的系统风格统一. -->
+    <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../Admin.js"></script>
+
+    <script type="text/javascript" language="javascript">
+
+        var nodeID = 0;
+        var frmID = GetQueryString("FrmID");
+        var flowNo = null;
+
+        //页面启动函数.
+        $(function () {
+
+            nodeID = GetQueryString("FK_Node");
+            if (nodeID == null)
+                nodeID = 101;
+
+            var mapData = new Entity("BP.WF.Template.Frm.MapFrmFool", frmID);
+            if (mapData.FrmType != 0 && mapData.No.indexOf("ND")!=0) {
+                alert("该模式只使用于节点的傻瓜表单");
+                return;
+            }
+            //加载表单字段
+            var groups = new Entities("BP.Sys.GroupFields");
+            groups.Retrieve("FrmID", frmID);
+
+            $.each(groups, function (idx, group) {
+                var html = "<tr>";
+                html += "<td>" + (idx + 1) + "</td>";
+                html += "<td><label><input type=checkbox id='CB_" + group.OID + "' name='" + group.OID + "'/>" + group.OID + "-" + group.Lab + "</label></td>";
+                html += "</tr>";
+
+                $("#Table1").append(html);
+            })
+            //for (var i = 0; i < groups.length; i++) {
+            //    var mapAttr = mapAttrs[i];
+
+            //    if (mapAttr.UIVisible == 0) continue;
+            //    if (mapAttr.UIIsEnable == 1) continue;
+
+            //    var html = "<tr>";
+            //    html += "<td>" + (i + 1) + "</td>";
+            //    html += "<td><label><input type=checkbox id='CB_" + mapAttr.KeyOfEn + "' name='" + mapAttr.KeyOfEn + "'/>" + mapAttr.KeyOfEn + "-" + mapAttr.Name + "</label></td>";
+            //    html += "</tr>";
+
+            //    $("#Table1").append(html);
+            //}
+
+            //加载历史设置.
+            var ens = new Entities("BP.Sys.MapExts");
+            ens.Retrieve("FK_MapData", frmID, "ExtType", "SepcFieldsSepcUsers");
+
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                var html = "<tr>";
+                html += "<td>" + en.Doc + "</td>";
+                html += "<td>" + en.Tag1 + "</td>";
+                html += "<td><a href=\"javascript:Del('" + en.MyPK + "');\">删除</a></td>";
+                html += "</tr>";
+                $("#History").append(html);
+            }
+        });
+
+        function Del(pkval) {
+
+            if (window.confirm('您确认要删除吗？') == false)
+                return;
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.SetPKVal(pkval);
+            mapExt.Delete();
+            Reload();
+        }
+
+        function SaveField(expModel) {
+
+            //获得选择的字段.
+            var arrObj = document.all;
+            var fields = '';
+            for (var i = 0; i < arrObj.length; i++) {
+                if (typeof arrObj[i].type != "undefined" && arrObj[i].type == 'checkbox') {
+                    var cid = arrObj[i].name + ',';
+                    if (arrObj[i].checked) {
+                        fields += arrObj[i].name + ',';
+                    }
+                }
+            }
+            if (fields == '') {
+                alert('请选择要批量设置的分组');
+                return;
+            }
+            var msg = "";
+            if (expModel == "Emps") msg = '请输入要赋给特殊权限的人员,多个人员用逗号分开,比如: zhangsan,lisi,wangwu';
+            if (expModel == "Stas") msg = '请输入要赋给特殊权限的岗位编号,多个用逗号分开,比如: 001,002,003,';
+            if (expModel == "Depts") msg = '请输入要赋给特殊权限的部门编号,多个用逗号分开,比如: 001,002,003,';
+
+            var emps = prompt(msg, '');
+            if (emps == null || emps=='')
+                return;
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.FrmID = frmID;
+            en.FK_MapData = frmID;
+            en.ExtType = "SepcFieldsSepcUsers";
+            en.Doc = fields;
+            en.Tag = expModel;
+            en.Tag1 = emps;
+            en.Insert();
+
+            Reload();
+        }
+    </script>
+</head>
+<body>
+    <div class="container-full">
+        <div class="attrnode-bar-header">
+            <span class="pull-left">
+                协作模式下：要显示的分组。
+            </span>
+
+            <span class="pull-right">
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Stas');">按岗位</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Depts');">按部门</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('Emps');">按人员</button>
+                <button id="Btn_Setting" name="Btn_Setting" class="cc-btn-tab btn-setting" onclick="SaveField('SQL');">按SQL</button>
+            </span>
+
+        </div>
+        <form id="cc">
+            <div class="cs-content-box">
+                <table class="table table-hover" id="Table1">
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            分组/名称
+                        </th>
+                        <!--   <th>类型</th>
+                        <th>业务类型</th>-->
+                        <!-- <th>操作</th>-->
+                    </tr>
+                </table>
+                <table class="table table-hover" id="History" name="History">
+                    <tr>
+                        <th>
+                            指定的分组集合
+                        </th>
+                        <th>
+                            指定的人员集合
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <fieldset>
+                <legend>帮助</legend>
+                <ul>
+                    <li>1.该功能是控制当前表单上指定的分组，让指定的人员可以查看编辑。</li>
+                    <li>2.多用于会签而不使用审核组件的应用环境。</li>
+                    <li>3.比如一个节点上需要n个人处理，每个人只能对指定的分组有填写的权限，就要按照人员为每个人设定指定的分组范围设置可以编辑的权限。</li>
+                </ul>
+            </fieldset>
+
+        </form>
+    </div>
+</body>
+</html>

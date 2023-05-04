@@ -52,64 +52,67 @@
                     <div style="text-align:center">
 
                         <!--<button class="btn btn-light-green" type="button" onclick="ShowNewFlowGif()">
-                            <i class="iconfont icon-xinjian"></i> 新建
-                        </button>-->
+        <i class="iconfont icon-xinjian"></i> 新建
+    </button>-->
 
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Save">
                             <i class="iconfont icon-baocun"></i> 保存
                         </button>
 
                         <!--<button class="btn btn-white" type="button" id="Btn_SaveToColud">
-                            保存到云
-                        </button>-->
+        保存到云
+    </button>-->
 
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_FlowAttr" onclick="FlowProperty()">
                             <i class="iconfont icon-xianxingtubiaozhizuomoban-43"></i> 流程属性
                         </button>
                         <!--<button class="btn btn-info" type="button" id="Btn_Rpt" onclick="FlowRpt()">
-                            定义报表
-                        </button>-->
+        定义报表
+    </button>-->
 
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Check" onclick="FlowCheck()">
                             <i class="iconfont icon-flow-line"></i>检查
                         </button>
 
                         <!--<button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Run" onclick="FlowRun2020()">
-                            <i class="iconfont icon-flow-feiji"></i>测试
-                        </button>-->
-
+        <i class="iconfont icon-flow-feiji"></i>测试
+    </button>-->
                         <!--<button class="btn btn-info" type="button" id="Btn_Run" onclick="FlowRun2020()">
-                            <i class="iconfont icon-feiji"></i>测试
-                        </button>-->
+        <i class="iconfont icon-feiji"></i>测试
+    </button>-->
                         <!--<button class="btn btn-info" type="button" id="Btn_Run" onclick="FlowRun2020()">
-                            <i class="iconfont icon-feiji"></i>测试
-                        </button>-->
+        <i class="iconfont icon-feiji"></i>测试
+    </button>-->
                         <!--<button class="btn btn-light-blue" type="button" id="Btn_FlowRun" onclick="FlowRun()">
-                            <i class="iconfont icon-shouye"></i>前台测试
-                        </button>-->
+        <i class="iconfont icon-shouye"></i>前台测试
+    </button>-->
                         <!--<button class="btn btn-light-red" type="button" id="Btn_RunIt" onclick="FlowRunAdmin()">
-                            admin测试运行
-                        </button>-->
+        admin测试运行
+    </button>-->
                         <!--<button class="btn btn-warning" type="button" id="Btn_Frm" onclick="EidtFrm()">
-                            <i class="iconfont icon-biaodandingzhimoban"></i>设计表单
-                        </button>-->
+        <i class="iconfont icon-biaodandingzhimoban"></i>设计表单
+    </button>-->
 
 
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Batch" onclick="BatchSetting()">
                             <i class="iconfont icon-biaodandingzhimoban"></i>批量设置
                         </button>
 
-                        <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Batch" onclick="Guide()">
+                        <!--<button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Batch" onclick="Guide()">
                             <i class="iconfont icon-biaodandingzhimoban"></i>向导
-                        </button>
+                        </button>-->
 
                         <!--<button class="btn btn-danger" type="button" id="leipi_clear">清空连接</button>-->
                         <!--<button class="btn btn-info" type="button" id="Btn_OldVer" onclick="OldVer()" >旧版本</button>-->
                         <!--<button class="btn btn-white" type="button" id="Btn_Reload" onclick="Reload()">
-                            刷新
-                        </button>-->
+        刷新
+    </button>-->
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Help" onclick="Help()">
                             <i class="iconfont icon-help"></i> 帮助
+                        </button>
+
+                        <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Help" onclick="HelpVideo()">
+                            <i class="iconfont icon-help"></i> 视频教程
                         </button>
 
                         <button type="button" class="layui-btn  layui-toolbar layui-btn-sm" id="Btn_Help" onclick="Frm()">
@@ -403,6 +406,12 @@
 
 
         })
+
+        function HelpVideo() {
+          //  var url = 'https://www.bilibili.com/video/BV1FV41167ch/';
+            var url = 'http://ccflow.org/ke.htm';
+            window.open(url);
+        }
     </script>
 </body>
 

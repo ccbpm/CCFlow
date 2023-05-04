@@ -12,16 +12,13 @@ MenuConvertTools.prototype.getSystemMenus = function () {
     var mypk = new WebUser().No + "_Funcs_HS_" + GetQueryString("EnName");
     var userRegedit = new Entity("BP.Sys.UserRegedit");
     userRegedit.SetPKVal(mypk);
-    userRegedit.RetrieveFromDBSources();
+    var count = userRegedit.RetrieveFromDBSources();
 
     //求出所有的分组名称.
     var systemNode = [];
     var GroupName = [];
     var GroupNames = [];
     var j = 0;
-    /*GroupNames[j] = "基本信息";
-    Gl = { "Name": "基本信息", "No": "Tno" + j, "Icon": "icon-folder"};
-    GroupName.push(Gl);*/
     for (var i = 0; i < endtM.length; i++) {
         var en = endtM[i];
         
@@ -44,10 +41,13 @@ MenuConvertTools.prototype.getSystemMenus = function () {
     for (var i = 0; i < GroupName.length; i++) {
         var systemNode = GroupName[i];
         systemNode.children = [];
-        if (i == 0) { systemNode.open = true; } else {
+        if (i == 0) {
+            systemNode.open = true;
+        } else {
             systemNode.open = false;
         }
-
+        if (count != 0 && userRegedit.MVals.indexOf(",dtM_" + systemNode.Name + ",") != -1)
+            continue;
        /* var gName = GroupName[i];
         if (gName == "")
             continue;
@@ -76,6 +76,10 @@ MenuConvertTools.prototype.getSystemMenus = function () {
                 moduleEn.GroupName = "基本信息";
             if (moduleEn.GroupName != systemNode.Name)
                 continue; //如果不是本系统的.
+
+            if (count!=0 && userRegedit.Vals.indexOf("," + moduleEn.No + ",") != -1)
+                continue;
+
             moduleEn.children = [];
            /* var myName = moduleEn.GroupName;
             if (myName == null || myName == "")
@@ -87,8 +91,6 @@ MenuConvertTools.prototype.getSystemMenus = function () {
             if ((moduleEn.RefAttrKey != null && moduleEn.RefAttrKey != "") || moduleEn.IsCanBatch == "1" || moduleEn.Visable == "0")
                 continue;
 
-            if (userRegedit != null && userRegedit != undefined && userRegedit.Vals.indexOf("," + moduleEn.No + ",") != -1)
-                continue;
             moduleEn.open = false;
            html += "<li>" + GenerRM(en) + "</li>";*/
             if (!moduleEn.Icon) moduleEn.Icon = "icon-drop";

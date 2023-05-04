@@ -171,13 +171,18 @@
             var orgNo = GetQueryString("OrgNo");
 
             //删除,该组织下已经保存的岗位.
-            var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
-            DBAccess.RunSQL(sql);
+            //var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
+            //DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("orgNo", orgNo);
+            handler.AddPara("nodeID", nodeID);
+            handler.DoMethodReturnString("NodeStationGroup_Dele");
+
             //获得该组织的岗位.
             var stas = new Entities("BP.Port.Stations");
             stas.Retrieve("OrgNo", orgNo);
 
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay = 4;
             node.Update();
 

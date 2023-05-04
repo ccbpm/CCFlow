@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html >
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -61,6 +61,8 @@
                 //节点类型
                 newRow += "<td>" + data[i].HisRunModelT + "</td>";
                 //设置处理人（接收人）
+                if (data[i].HisDeliveryWayCountLabel == null)
+                    data[i].HisDeliveryWayCountLabel = "待定";
                 newRow += "<td><a href=\"javascript:FindWorker('" + data[i].NodeID + "');\" >" + data[i].HisDeliveryWayText + "</a>&nbsp;<a href='javascript:FindWorkerSp('" + data[i].HisDeliveryWayJsFnPara + "','" + data[i].NodeID + "');\" >" + data[i].HisDeliveryWayCountLabel + "(" + data[i].HisDeliveryWayCount + ")</a></td>";
                 //抄送人
                 newRow += "<td><a href=\"javascript:NodeCCRole('" + data[i].NodeID + "');\" >" + data[i].HisCCRoleText + "</a></td>";
@@ -89,10 +91,10 @@
             // var url = "../AttrNode/NodeFromWorkModel.htm?FK_Node=" + nodeID;
             var url = "../AttrNode/FrmSln/Default.htm?FK_Node=" + nodeID;
 
-            // window.open(url, 'OpenFrmAttr', 'height=670, width=997, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
-            window.parent.addTab('OpenFrmAttr', '表单方案', url);
+            window.open(url, 'OpenFrmAttr', 'height=670, width=997, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+            //window.parent.addTab('OpenFrmAttr', '表单方案', url);
         }
- 
+
         // URL
         function OpenUrl(url) {
             window.open(url, 'attr', 'height=400, width=500, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
@@ -105,7 +107,7 @@
 
         //显示处理人.
         function FindWorker(nodeID) {
-            var url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + nodeID;
+            var url = "../AttrNode/AccepterRole/Default.htm?FK_Node=" + nodeID;
             window.open(url, 'FindWorker', 'height=720, width=1200, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
         function FindWorkerSp(type, nodeId) {
@@ -138,20 +140,20 @@
         }
 
         function NodeCCRole(nodeID) {
-            var url = "../AttrNode/NodeCCRole.htm?FK_Node=" + nodeID;
+            var url = "../../Comm/RefFunc/EnOnly.htm?EnName=BP.WF.Template.NodeExt&PKVal=" + nodeID;
             window.open(url, 'NodeCCRole', 'height=560, width=660, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
 
         function Action(nodeID, FK_Flow) {
-            var url = "../AttrNode/Action.htm?NodeID=" + nodeID + '&FK_Flow=' + FK_Flow;
+            var url = "../AttrNode/Action.htm?FK_Node=" + nodeID + '&FK_Flow=' + FK_Flow;
             window.open(url, 'Action', 'height=auto, width=1050, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             window.parent.addTab('Action', '消息&事件', url);
 
         }
 
         function Cond(nodeID, FK_Flow) {
-            var url = "../Cond.htm?FK_MainNode=" + nodeID + '&FK_Node=' + nodeID + '&ToNodeID=' + nodeID + '&CondType=1&FK_Flow=' + FK_Flow;
-            //  window.open(url, 'Cond', 'height=545, width=820, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+            var url = "../Cond2020/List.htm?FK_MainNode=" + nodeID + '&FK_Node=' + nodeID + '&ToNodeID=' + nodeID + '&CondType=1&FK_Flow=' + FK_Flow;
+            window.open(url, 'Cond', 'height=545, width=820, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
 
             window.parent.addTab('Cond', '流程完成条件', url);
         }
@@ -159,13 +161,15 @@
         // 按钮权限配置.
         function OpenButtonControl(nodeID) {
             var url = "../../Comm/En.htm?EnName=BP.WF.Template.BtnLab&PKVal=" + nodeID;
-            // window.open(url, 'OpenFrmAttr', 'height=auto, width=810, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+            window.open(url, 'OpenFrmAttr', 'height=auto, width=810, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             window.parent.addTab('Btns', '按钮权限', url);
         }
 
         // 按钮权限配置.
         function OpenSubFlows(nodeID) {
             var url = "../../Comm/En.htm?EnName=BP.WF.Template.SFlow.FrmSubFlow&PKVal=" + nodeID;
+            window.open(url, 'SubFlows', 'height=545, width=820, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+
             window.parent.closeTab('SubFlows');
             window.parent.addTab('SubFlows', '调起子流程', url, 'icon-SubFlows');
         }
@@ -183,7 +187,7 @@
 <body onkeypress="Esc()">
 
     <div style="right:30px; position:absolute; z-index:100;">
-            <input type="button" value="刷新" id="Btn_Save" onclick="Refurbish()" />
+        <input type="button" value="刷新" id="Btn_Save" onclick="Refurbish()" />
     </div>
     <div style="position:relative;top:10px; margin: 8px">
         <table class="table table-bordered table-hover table-condensed" id="Table1" style="width: 100%">
@@ -195,7 +199,7 @@
                     序
                 </th>
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/property.png" alt="节点名称" class="Icon" />节点属性
+                    <img src="../../Img/Btn/List.png" alt="节点名称" class="Icon" />节点属性
                 </th>
                 <th>
                     <img src="../../Img/Form.png" alt="设置表单的工作方式" class="Icon" />表单方案
@@ -204,23 +208,23 @@
                     <img src="../../Img/Btn/SelectAll.gif" alt="节点类型" class="Icon" />节点类型
                 </th>
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/Sender.png" alt="设置处理人" class="Icon" />设置处理人
+                    <img src="../../Img/Btn/AddLeader.png" alt="设置处理人" class="Icon" />设置处理人
                 </th>
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/CC.png" alt="设置处理人" class="Icon" />设置抄送人
+                    <img src="../../Img/Btn/AllotTask.gif" alt="设置处理人" class="Icon" />设置抄送人
                 </th>
                 <th>
                     <img src="../../Img/Event.png" alt="消息&事件" class="Icon" />消息&事件
                 </th>
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/Cond.png" alt="流程完成条件" class="Icon" />流程完成条件
+                    <img src="../../Img/Btn/DocCheck.png" alt="流程完成条件" class="Icon" />流程完成条件
                 </th>
 
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/CheckFlow.png" alt="按钮权限控制" class="Icon" />按钮权限
+                    <img src="../../Img/Btn/ReadAndClose.png" alt="按钮权限控制" class="Icon" />按钮权限
                 </th>
                 <th>
-                    <img src="../CCBPMDesigner/Img/Menu/SubFlows.png" alt="父子流程" class="Icon" />子流程
+                    <img src="../../Img/Btn/CH.png" alt="父子流程" class="Icon" />子流程
                 </th>
             </tr>
         </table>

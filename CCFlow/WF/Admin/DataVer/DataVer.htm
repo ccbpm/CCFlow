@@ -1,0 +1,463 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>版本比对</title>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <style type="text/css">
+        .elStyle{
+            background-color:yellow !important;
+        }
+        .layui-checkbox-disbaled[lay-skin=primary] span {
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: normal !important;
+        }
+    </style>
+    <script type="text/javascript">
+        var frmData = null;
+        $(function () {
+            //初始化页面
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_DataVer");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("DataVer_Init");
+            if (data.indexOf("err@") != -1) {
+                layer.alert(data);
+                return;
+            }
+            data = JSON.parse(data);
+            frmData = data;
+            //获取实体信息
+            var groups = data.Sys_GroupField;
+            var mapAttrs = data.Sys_MapAttr;
+            var mainData = data.MainData[0];
+            var compareData = data.CompareData[0];
+            $("#mainHeader").html("V"+GetQueryString("MainVer") + ".0");
+            $("#compareHeader").html("V" +GetQueryString("CompareVer") + ".0");
+            //显示实体数据
+            GenerFoolFrm(groups, mapAttrs, mainData, compareData, "MainCCFormTabs", GetQueryString("MainVer"));
+            GenerFoolFrm(groups, mapAttrs, compareData, mainData, "CompareCCFormTabs", GetQueryString("CompareVer"));
+
+            //tab标签选中时，比对的版本也需要选中
+            var selectId = "";
+            $.each($("#MainCCFormTabs li"), function (i, item) {
+                $(item).on("click", function () {
+                    var id = this.id;
+                    if (id == selectId) {
+                        selectId = "";
+                        return;
+                    }
+                     
+                    selectId = id;
+                    $("#CompareCCFormTabs #" + id).click();
+                })
+            });
+            $.each($("#CompareCCFormTabs li"), function (i, item) {
+                $(item).on("click", function () {
+                    var id = this.id;
+                    if (id == selectId) {
+                        selectId = "";
+                        return;
+                    }
+                    selectId = id;
+                    $("#MainCCFormTabs #" + id).click();
+                })
+            });
+        })
+        function GenerFoolFrm(groups, mapAttrs, rowData,compareData,divID,ver) {
+            var html = "";
+            html += "<ul class='layui-tab-title'>";
+            $.each(groups, function (i, gf) {
+                var lab = gf.Lab;
+                if (lab.indexOf(',') != -1)
+                    lab = lab.substring(0, lab.indexOf(','));
+                if (groups.length == 1 || i == 0)
+                    html += "<li class='layui-this' id='" + gf.OID + "'>" + lab + "</li>";
+                else
+                    html += "<li id='" + gf.OID + "'>" + lab + "</li>";
+            });
+            html += "</ul>";
+            html += "<div class='layui-tab-content'style=''>";
+            $.each(groups, function (i, gf) {
+                if (groups.length == 1 || i==0)
+                    html += "<div class='layui-tab-item layui-show' id='Item_"+gf.OID+"'>";
+                else
+                    html += "<div class='layui-tab-item'  id='Item_" + gf.OID +"'>";
+
+                html += InitMapAttr(mapAttrs, gf.OID, rowData, ver);
+                html += "</div>";
+            });
+            html += "</div>";
+            $('#' + divID).html("").append(html);
+            if (divID == "MainCCFormTabs")
+                layui.form.render(null, 'main');
+            else
+                layui.form.render(null, 'compare');
+            layui.element.init();
+            //赋值
+            $.each(mapAttrs, function (i, mapAttr) {
+                $('#' + divID +' #TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                $('#' + divID +' #DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                $('#' + divID +' #CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                var defValue = rowData[mapAttr.KeyOfEn];
+                var compareVal = compareData[mapAttr.KeyOfEn] || "";
+                if (defValue != compareVal)
+                    $('#' + divID + ' #DIV_' + mapAttr.KeyOfEn).css("background-color", "yellow");
+                if ($('#' + divID +' #TB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == null || defValue == "null")
+                        return true;
+                    $('#' + divID + ' #TB_' + mapAttr.KeyOfEn).val(defValue);
+                    if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
+                        $("#" + divID +" #menuIconIcon").attr("class", defValue);
+                    }
+                }
+                if ($('#' + divID +' #DDL_' + mapAttr.KeyOfEn).length == 1) {
+                    var uiBindKey = mapAttr.UIBindKey;
+                    if (uiBindKey.toLowerCase().indexOf("select") == -1 && uiBindKey.indexOf("Dept") != -1 && uiBindKey.indexOf(".") != -1) {
+                        var pushData = [];
+                        var selectText = rowData[mapAttr.KeyOfEn + "Text"];
+                        if (defValue == null)
+                            defValue = "";
+                        if (selectText == null || selectText == "") {
+                            selectText = defValue;
+                        }
+                        pushData.push({ "id": defValue, "text": selectText, "children": [] });
+                        if ($("option[value='" + defValue + "']", '#' + divID +' #DDL_' + mapAttr.KeyOfEn).length == 0 && defValue != "")
+                            $('#' + divID +' #DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                    } else {
+                        // 判断下拉框是否有对应option, 若没有则追加
+                        if ($("option[value='" + defValue + "']", '#' + divID +' #DDL_' + mapAttr.KeyOfEn).length == 0) {
+                            var selectText = rowData[mapAttr.KeyOfEn + "Text"];
+                            if (selectText == null || selectText == "")
+                                selectText = defValue;
+                            if (defValue) 
+                                $('#' + divID +' #DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        } else {
+                            //设置选择的值
+                            $('#' + divID +' #DDL_' + mapAttr.KeyOfEn).val(defValue);
+                        }
+                    }
+                    $('#' + divID + ' #DDL_' + mapAttr.KeyOfEn).val(defValue);
+                    
+                    if (defValue != compareVal)
+                        $('#' + divID + ' #DDL_' + mapAttr.KeyOfEn).siblings(":first").find("input").addClass("elStyle");
+                }
+
+                if ($('#' + divID +' #CB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1")
+                        $('#' + divID +' #CB_' + mapAttr.KeyOfEn).attr("checked", true);
+                    else
+                        $('#' + divID +' #CB_' + mapAttr.KeyOfEn).attr("checked", false);
+                }
+            })
+            if (divID =="MainCCFormTabs")
+                layui.form.render(null, 'main');
+            else
+                layui.form.render(null, 'compare');
+
+            //设置不同值的颜色
+            $.each(mapAttrs, function (i, mapAttr) {
+                var defValue = rowData[mapAttr.KeyOfEn];
+                var compareVal = compareData[mapAttr.KeyOfEn] || "";
+                if (defValue != compareVal)
+                    $('#' + divID + ' #DIV_' + mapAttr.KeyOfEn).css("background-color", "yellow");
+                if ($('#' + divID + ' #DDL_' + mapAttr.KeyOfEn).length == 1 && defValue != compareVal) {
+                    $('#' + divID + ' #DDL_' + mapAttr.KeyOfEn).siblings(":first").find("input").addClass("elStyle");
+                }
+            });
+        }
+        function InitMapAttr(mapAttrs, groupID,rowData) {
+            var html = "<div class='layui-row FoolFrmGroupBar' id='Group_" + groupID + "'>";
+            var isDropTR = true;
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                if (attr.KeyOfEn == "MyFileNum" || attr.KeyOfEn == "MyFileName")
+                    continue;
+                if (GetPara(attr.AtPara, "GroupName") != groupID || attr.UIVisible == 0)
+                    continue;
+                var lab = attr.Name;
+                //大文本
+                if (attr.UIHeight >= 10) {
+                    if (attr.TextModel == 3 || attr.ColSpan == 4) {
+                        if (isDropTR == false) {
+                            html += "</div>";
+                        }
+                        isDropTR = true;
+                        html += "<div class='layui-row FoolFrmFieldRow'style=''>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'style='width: 16.66666667%;'>" + lab + "</div>";
+                        html += "</div>";
+                        html += "<div class='layui-row FoolFrmFieldRow'>";
+                        html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput' style='padding-left:calc(16.6% - 10px)'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                        html += "</div>";
+                        continue;
+                    }
+                }
+                //线性展示并且colspan=3
+                if ((attr.ColSpan == 3 || attr.ColSpan == 4) && attr.UIHeight <= 40) {
+                    if (isDropTR == false) {
+                        html += "</div>";
+                    }
+                    isDropTR = true;
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    if (attr.UIContralType == 2) {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    } else {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md10 layui-col-xs10 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    }
+                    html += "</div>";
+                    continue;
+                }
+
+                //线性展示并且colspan=4
+                if ((attr.ColSpan == 4 || attr.ColSpan == 3) && attr.UIHeight > 40) {
+                    if (isDropTR == false) {
+                        html += "</div>";
+                    }
+                    isDropTR = true;
+                    html += "<div class='layui-row FoolFrmFieldRow' style='width: 16.66666667%;'>";
+                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldLabel'>" + lab + "</div>";
+                    html += "</div>";
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    html += "<div class='layui-col-md12 layui-col-xs12 FoolFrmFieldInput' style='padding-left:calc(16.6% - 10px)'>";
+                    html += InitMapAttrOfCtrl(attr, rowData);
+                    html += "</div>";
+                    html += "</div>";
+                    continue;
+                }
+                if (isDropTR == true) {
+                    html += "<div class='layui-row FoolFrmFieldRow'>";
+                    if (attr.UIContralType == 2) {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    } else {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    }
+                    isDropTR = !isDropTR;
+                    continue;
+                }
+                if (isDropTR == false) {
+                    if (attr.UIContralType == 2) {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'><label class='layui-form-label'></label></div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    } else {
+                        html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>" + lab + "</div>";
+                        html += "<div class='layui-col-md4 layui-col-xs4 FoolFrmFieldInput'>";
+                        html += InitMapAttrOfCtrl(attr, rowData);
+                        html += "</div>";
+                    }
+                    html += "</div>";
+                    isDropTR = !isDropTR;
+                    continue;
+                }
+            }
+            if (isDropTR == false)
+                html += "</div>";
+            html += "</div>";
+            return html;
+        }
+        function InitMapAttrOfCtrl(mapAttr) {
+            //下拉框 外键和外部数据源
+            if ((mapAttr.LGType == "0" && (mapAttr.MyDataType == "1" || mapAttr.MyDataType == "2") && mapAttr.UIContralType == 1)
+                || (mapAttr.LGType == "2" && mapAttr.MyDataType == "1")) {
+                var css = "";
+                if (mapAttr.LGType == "0")
+                    css = "class='ddl-ext'";
+                return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><select id = 'DDL_" + mapAttr.KeyOfEn + "' name = 'DDL_" + mapAttr.KeyOfEn + "' " + css + " > " + InitDDLOperation(frmData, mapAttr, "") + "</select></div>";
+
+            }
+            //枚举 单选枚举和下拉框枚举
+            if (mapAttr.LGType == 1) {
+                var ses = frmData[mapAttr.KeyOfEn];
+                if (ses == undefined)
+                    ses = frmData[mapAttr.UIBindKey];
+                if (ses == undefined) {
+                    //枚举类型的.
+                    if (mapAttr.LGType == 1) {
+                        ses = frmData.Sys_Enum;
+                        ses = $.grep(ses, function (value) {
+                            return value.EnumKey == mapAttr.UIBindKey;
+                        });
+                    }
+
+                }
+                if (mapAttr.UIContralType == 1) {//下拉框显示
+                    var operations = "";
+                    $.each(ses, function (i, obj) {
+                        operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                    });
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'><select  name='DDL_" + mapAttr.KeyOfEn + "'  id='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + "  lay-filter='" + mapAttr.KeyOfEn + "' >" + operations + "</select></div>";
+                }
+                if (mapAttr.UIContralType == 2) {//复选框
+                    var rbHtmls = "";
+                    //显示方式,默认为 0=横向展示 3=横向..
+                    var RBShowModel = 0;
+                    if (mapAttr.AtPara.indexOf('@RBShowModel=3') >= 0)
+                        RBShowModel = 3;
+                    for (var i = 0; i < ses.length; i++) {
+                        var se = ses[i];
+                        var br = "";
+                        if (RBShowModel == 0)
+                            br = "<br>";
+                        var checked = "";
+                        rbHtmls += "<input  type=checkbox name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " lay-filter='" + mapAttr.KeyOfEn + "'  class='mcheckbox'  value='" + se.IntKey + "' title='" + se.Lab + "'/>";
+                    }
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
+                }
+
+                if (mapAttr.UIContralType == 3) {//单选按钮显示
+                    var rbHtmls = "";
+                    //显示方式,默认为 0=横向展示 3=横向..
+                    var RBShowModel = 0;
+                    if (mapAttr.AtPara.indexOf('@RBShowModel=3') >= 0)
+                        RBShowModel = 3;
+                    for (var i = 0; i < ses.length; i++) {
+                        var se = ses[i];
+                        var br = "";
+                        if (RBShowModel == 0)
+                            br = "<br>";
+                        var checked = "";
+                        if (se.IntKey == mapAttr.DefVal)
+                            checked = " checked=true ";
+                        rbHtmls += "<input  type=radio name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + se.IntKey + "' value='" + se.IntKey + "' " + checked + " lay-filter='" + mapAttr.KeyOfEn + "'   title='" + se.Lab + "'/>" + br;
+                    }
+                    return "<div id='DIV_" + mapAttr.KeyOfEn + "'>" + rbHtmls + "</div>";
+                }
+            }
+            if (mapAttr.LGType == 0) {
+                switch (parseInt(mapAttr.MyDataType)) {
+                    case 1://普通文本
+                        //富文本编辑器
+                        if (mapAttr.TextModel == 3) {
+                            //使用div展示
+                            var defValue = mainData[mapAttr.KeyOfEn];
+                            defValue = defValue.replace(/white-space: nowrap;/g, "");
+                            return "<div style='margin-bottom:5px;border: 1px solid #cacaca!important;min-height: 50px;padding: 5px;background-color: #f2f2f2;word-wrap: break-word;'>" + defValue + "</div>";
+                        }
+                        //判断是不是大块文本
+                        if (mapAttr.IsSupperText == 1 || mapAttr.UIHeight > 40) {
+                            return "<textarea class='layui-textarea'  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "></textarea>"
+                        }
+                        var baseUrl = "../";
+                        var currentURL = "";
+                        if (currentURL.indexOf("AdminFrm.htm") != -1)
+                            baseUrl = "../../../";
+                        if (currentURL.indexOf("CCBill") != -1 || currentURL.indexOf("CCForm") != -1)
+                            baseUrl = "../../";
+
+                        if (mapAttr.IsSigan == "1" && mapAttr.UIIsEnable == 1 && isReadonly != 0) {
+                            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  value='" + defValue + "' type=hidden />";
+                            //是否签过
+                            var sealData = new Entities("BP.Tools.WFSealDatas");
+                            sealData.Retrieve("OID", pageData.OID, "FK_Node", GetQueryString("FK_Node"), "SealData", GetQueryString("UserNo"));
+
+                            if (sealData.length > 0) {
+                                eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/" + defValue + ".jpg' alt='" + defValue + "'  style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                                isSigantureChecked = true;
+                            }
+                            else {
+                                eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/siganture.jpg'   ondblclick='figure_Template_Siganture(\"" + mapAttr.KeyOfEn + "\",\"" + defValue + "\")' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                            }
+                            return eleHtml;
+                        }
+                        //如果不可编辑，并且是图片名称
+                        if (mapAttr.IsSigan == "1") {
+                            var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                            var html = "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'  value='" + val + "' type=hidden />";
+                            eleHtml += "<img src='" + baseUrl + "DataUser/Siganture/" + val + ".jpg' alt='" + val + "' style='border:0px;width:100px;height:30px;' id='Img" + mapAttr.KeyOfEn + "' />" + html;
+                            return eleHtml;
+                        }
+                        if (mapAttr.KeyOfEn.toLowerCase() == "icon") {
+                            var _html = "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'>";
+                            _html += "<span class='layui-input-prefix'><i id='menuIconIcon' class='icon-settings'></i></span>"
+                            _html += "<input class='layui-input' style='text-align:left;width:calc(100% - 120px)!important;display:inline' type='text' maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>";
+                            if (mapAttr.UIIsEnable == 1 && isReadonly != "1")
+                                _html += "<span class='layui-input-suffix'><a id='menuIconButton' href='javascript:void(0)' class=''  onclick='openIconWindow(\"" + mapAttr.KeyOfEn + "\")'><i class='layui-icon'>&#xe615;</i></a></span>";
+                            _html += "</div>";
+                            return _html;
+
+                        }
+                        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'> <input class='layui-input'  maxlength=" + mapAttr.MaxLen + "  value='" + mapAttr.DefVal + "' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "' type='text' /></div>";
+                    case 2://整数
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+                        _html += "<input class=' layui-input'  value='0' style='text-align:right;padding-right:10px;'  maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+                        _html += "</div>";
+                        return _html;
+                    case 4:  //复选框
+                        var enableAttr = "disabled='disabled'";
+                        return "<div style='line-height:38px;margin-top:10px;' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "'" + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' lay-skin='primary' value='1' title='" + mapAttr.Name + "'></div>";
+                    case 3://浮点
+                    case 5://双精度
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+
+                        _html += "<input class='layui-input'  style='text-align:right;padding-right:10px;' value='0.00'  maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+                        _html += "</div>";
+                        return _html;
+                    case 6://日期类型
+                    case 7://时间类型
+                        var enableAttr = "disabled='disabled' ";
+                        return "<div id='DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group'><i class='input-icon layui-icon layui-icon-date'></i> <input class='layui-input' maxlength=" + mapAttr.MaxLen + " value='" + mapAttr.DefVal + "'  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "'/></div>";
+                    case 8://金额
+                        //获取DefVal,根据默认的小数点位数来限制能输入的最多小数位数
+                        var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
+                        _html += "<input class='layui-input' style='text-align:right;padding-right:10px;' type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00'/>";
+                        _html += "</div>";
+                        return _html;
+                    default:
+                        layer.alert(mapAttr.Name + "的类型没有判断.");
+                        break;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="">
+        <div class="layui-row">
+            <!--版本1的显示-->
+            <div class="layui-col-sm6 layui-col-md6  layui-col-xs6 " style="border: 1px solid #b3adad;">
+                <div class="layui-card">
+                    <div class="layui-card-header" id="mainHeader" style="text-align: center;font-weight: bold;font-size: 16px;"></div>
+                    <div class="layui-card-body">
+                        <div class="layui-form"  lay-filter="main">
+                            <div class="layui-tab layui-tab-brief" id="MainCCFormTabs" style="height:calc(100vh - 50px);"overflow></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--版本2的显示-->
+            <div class="layui-col-sm6 layui-col-md6  layui-col-xs6" style="border: 1px solid #b3adad;">
+                <div class="layui-card">
+                    <div class="layui-card-header" id="compareHeader" style="text-align: center;font-weight: bold;font-size: 16px;"></div>
+                    <div class="layui-card-body">
+                        <div class="layui-form" lay-filter="compare">
+                            <div class="layui-tab layui-tab-brief" id="CompareCCFormTabs"  style="height: calc(100vh - 50px); "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

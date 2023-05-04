@@ -384,7 +384,7 @@ function OpenSubFlowTable(obj,workid,fk_node) {
 
 /* 打开子流程表单. */
 function OpenSubFlow(workid, flowNo, nodeID, pworkid) {
-    var url = "../../MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID+ "&PWorkID=" + pworkid;
+    var url = "../../MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID+ "&PWorkID=" + pworkid+"&IsReadonly=1";
     window.open(url);
     //window.location.url = url;
     return;

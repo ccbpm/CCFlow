@@ -103,7 +103,7 @@
         function changeOrOpenTab(flowName, flowNo) {
             //"&UserNo=" + WebUser.No + "&Token=" + webUser.Token + "&Flow_V=1", node.iconCls
             var webUser = new WebUser();
-            var url = "../CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo;
+            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + flowNo;
 
             url += "&UserNo=" + webUser.No + "&Token=" + webUser.Token + "&Flow_V=1&OrgNo=" + webUser.OrgNo;
             if (top.layui.index) {

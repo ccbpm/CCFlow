@@ -188,7 +188,7 @@
             var nodeID = GetQueryString("FK_Node");
 
             //先保存节点.
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay = 4;
             if (Baseinfo.SF == 1) {
                 node.SetPara("ShenFenVal", Baseinfo.node);

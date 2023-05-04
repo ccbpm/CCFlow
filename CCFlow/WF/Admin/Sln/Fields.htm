@@ -19,6 +19,37 @@
         input[type=checkbox], input[type=radio] {
             margin-top: 0px;
         }
+        p,ul,li,div,a {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #NDs { /*大小*/
+            min-width: 180px;
+
+
+        }
+
+        ul { /*左边导航*/
+            height: 200px;
+            list-style: none;
+            float: left;
+            position: absolute;
+            min-width: 180px;
+        }
+
+
+        li {
+            line-height: 50px;
+            text-align: center;
+        }
+
+        #Table { /*右边显示内容*/
+            width: max-content;
+            overflow: hidden;
+            margin-left: 190px;
+            position: relative;
+        }
     </style>
     <script type="text/javascript">
         var frmID;
@@ -134,20 +165,19 @@
             var ffs = new Entities("BP.WF.Template.FrmNodes");
             ffs.Retrieve("FK_Frm", frmID, "FK_Flow", node.FK_Flow);
 
-            var html = "<table>";
+            var html = "<ul>";
             //    html += "<caption>请选择节点</caption>";
-            html += "<tr>";
-            html += "<td>请选择节点:</td>";
+            html += "<li style='font-size: 18px;'>";
+            html += "选择节点:</li>";
             for (var i = 0; i < ffs.length; i++) {
                 var en = ffs[i];
                 var mynd = new Entity("BP.WF.Node", en.FK_Node);
                 if (en.FK_Node == node.NodeID)
-                    html += "<td><b>" + mynd.Name + "</b></td>";
+                    html += "<li style='background: #f5f5f5;'><b style='color:#007aff'>" + mynd.Name + "</b></li>";
                 else
-                    html += "<td><a href='?FK_MapData=" + frmID + "&FK_Node=" + mynd.NodeID + "' >" + mynd.Name + "</a></td>";
+                    html += "<li><a style='color:black;' href='?FK_MapData=" + frmID + "&FK_Node=" + mynd.NodeID + "' >" + mynd.Name + "</a></li>";
             }
-            html += "</tr>";
-            html += "</table>";
+            html += "</ul>";
 
             $("#NDs").html(html);
 
@@ -359,69 +389,72 @@
             </span>
             <strong> 节点-表单-字段权限</strong>
         </div>
-        <table id="Table1" class="table">
-            <caption>
-                <div id="NDs"></div>
-            </caption>
-            <tr>
-                <th width="60">
-                    序
-                </th>
-                <th>
-                    字段
-                </th>
-                <th>
-                    名称
-                </th>
-                <th>
-                    类型
-                </th>
-                <th>
-                    正则表达式
-                </th>
-                <th>
-                    默认值
-                </th>
-                <th>
-                    <label for="KeyOfEn_UIVisible">
-                        <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
-                        可见
-                    </label>
-                </th>
-                <th>
-                    <label for="KeyOfEn_UIIsEnable">
-                        <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' />
-                        可编辑
-                    </label>
-                </th>
-                <th>
-                    <label for="KeyOfEn_IsSigan">
-                        <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' />
-                        签名
-                    </label>
-                </th>
-                <th>
-                    <label for="KeyOfEn_IsNotNull">
-                        <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' />
-                        必填
-                    </label>
-                </th>
-                <th id="HDRpt">
-                    <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
-                           type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
-                        其他
-                    </label>
-                </th>
-                <!--<th>
-                    <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
-                        type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
-                            写入流程注册表
+        <div >
+            <div id="NDs"></div>
+            <div id="Table" >
+                <table id="Table1" class="table">
+                    <caption>
+
+                    </caption>
+                    <tr>
+                        <th width="60">
+                            序
+                        </th>
+                        <th>
+                            字段
+                        </th>
+                        <th>
+                            名称
+                        </th>
+                        <th>
+                            类型
+                        </th>
+                        <th>
+                            正则表达式
+                        </th>
+                        <th>
+                            默认值
+                        </th>
+                        <th>
+                            <label for="KeyOfEn_UIVisible">
+                                <input onclick="CheckAll('UIVisible');" id='KeyOfEn_UIVisible' type="checkbox" />
+                                可见
+                            </label>
+                        </th>
+                        <th>
+                            <label for="KeyOfEn_UIIsEnable">
+                                <input onclick="CheckAll('UIIsEnable');" id='KeyOfEn_UIIsEnable' type='checkbox' />
+                                可编辑
+                            </label>
+                        </th>
+                        <th>
+                            <label for="KeyOfEn_IsSigan">
+                                <input onclick="CheckAll('IsSigan');" id='KeyOfEn_IsSigan' type='checkbox' />
+                                签名
+                            </label>
+                        </th>
+                        <th>
+                            <label for="KeyOfEn_IsNotNull">
+                                <input onclick="CheckAll('IsNotNull');" id='KeyOfEn_IsNotNull' type='checkbox' />
+                                必填
+                            </label>
+                        </th>
+                        <th id="HDRpt">
+                            <input onclick="CheckAll('IsWriteToFlowTable');" id='KeyOfEn_IsWriteToFlowTable'
+                                   type='checkbox' /><label for="KeyOfEn_IsWriteToFlowTable">
+                            其他
                         </label>
-                </th>-->
-            </tr>
-        </table>
-
-
+                        </th>
+                        <!--<th>
+                            <input onclick="CheckAll('IsWriteToGenerWorkFlow');" id='KeyOfEn_IsWriteToGenerWorkFlow'
+                                type='checkbox' /><label for="KeyOfEn_IsWriteToGenerWorkFlow">
+                                    写入流程注册表
+                                </label>
+                        </th>-->
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 
 </body>

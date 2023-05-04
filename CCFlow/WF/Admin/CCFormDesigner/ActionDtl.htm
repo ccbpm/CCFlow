@@ -80,9 +80,9 @@
 
             //如果是业务单元.
             if (en.EventDoType == 7) {
-                en.DoDoc = encodeURIComponent($("#DDL_DoDoc").val());
+                en.DoDoc = $("#DDL_DoDoc").val();
             } else {
-                en.DoDoc = encodeURIComponent(editor.getValue());
+                en.DoDoc = editor.getValue();
             }
 
             if (en.DoDoc == "") {

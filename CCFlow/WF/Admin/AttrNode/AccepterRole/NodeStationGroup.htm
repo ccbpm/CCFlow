@@ -45,10 +45,14 @@
 			}
 
 			//查询出来数据.
-			var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo ='" + orgNo + "') group by No,Name";
+			//var sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in (select Fk_StationType from Port_Station where OrgNo ='" + orgNo + "') group by No,Name";
 
 			//获得要增加的流程集合.
-			var stationTypes = DBAccess.RunSQLReturnTable(sql);
+			//var stationTypes = DBAccess.RunSQLReturnTable(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("orgNo", orgNo);
+            var stationTypes = handler.DoMethodReturnString("NodeStationGroup_Init");
+            stationTypes = JSON.parse(stationTypes);
 
 			BindGroupModel(stationTypes, stas, ens);
 
@@ -176,8 +180,12 @@
 			var orgNo = GetQueryString("OrgNo");
 
 			//删除,该组织下已经保存的岗位.
-			var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
-			DBAccess.RunSQL(sql);
+			//var sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + orgNo + "') AND FK_Node=" + nodeID;
+			//DBAccess.RunSQL(sql);
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddPara("orgNo", orgNo);
+            handler.AddPara("nodeID", nodeID);
+            handler.DoMethodReturnString("NodeStationGroup_Dele");
 			//获得该组织的岗位.
 			var stas = new Entities("BP.Port.Stations");
 			stas.Retrieve("OrgNo", orgNo);

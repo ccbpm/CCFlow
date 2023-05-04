@@ -49,12 +49,11 @@ INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('11','人力资源助�
 INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('12','外来人员岗','3')  ;
 
 
-
 -- Port_Emp ;
 -- 总经理部 ;
 DELETE FROM Port_Emp;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('admin','admin','123','100','0531-82374939','zhoupeng@ccflow.org',0)  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhoupeng','周朋','123','100','0531-82374939','zhoupeng@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('admin','admin','123','100','0531-82374939','yuwen@ccflow.org',0)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('yuwen','钰雯','123','100','0531-82374939','yuwen@ccflow.org',0)  ;
 
 -- 市场部 ;
 INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('zhanghaicheng','张海成','123','1001','0531-82374939','zhanghaicheng@ccflow.org',0)  ;
@@ -83,7 +82,7 @@ INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,Tel,Email,EmpSta) VALUES('Guest','外
  
 -- Port_DeptEmp 人员与部门的对应 ;
 DELETE FROM Port_DeptEmp;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('100_zhoupeng','zhoupeng','100') ;
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('100_yuwen','yuwen','100') ;
 
 -- 市场部 ;
 INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1001_zhanghaicheng','zhanghaicheng','1001') ;
@@ -107,7 +106,7 @@ INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1005_liping','liping','10
 INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept) VALUES('1005_liyan','liyan','1005') ;
 
 -- Port_DeptEmpStation 人员与岗位的对应 ;
-INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('100_zhoupeng_01','100','zhoupeng','01')  ;
+INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('100_yuwen_01','100','yuwen','01')  ;
 
 -- 市场部; 
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station) VALUES('1001_zhanghaicheng_02','1001','zhanghaicheng','02')  ;

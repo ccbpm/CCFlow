@@ -7,13 +7,13 @@ CREATE VIEW  WF_EmpWorks
 (
 PRI,WorkID,IsRead,Starter,StarterName,WFState, FK_Dept,DeptName,TodoEmpDeptNo,FK_Flow,FlowName,PWorkID,PFlowNo,FK_Node,NodeName,
 Title,RDT,ADT,SDT,FK_Emp,FID,FK_FlowSort,SysType,SDTOfNode,PressTimes,GuestNo,GuestName,BillNo,
-TodoEmps,TodoEmpsNum,TodoSta,TaskSta,ListType,Sender,AtPara,Domain,OrgNo,FlowIdx,FlowSortIdx )
+TodoEmps,TodoEmpsNum,TodoSta,TaskSta,FlowNote,ListType,Sender,AtPara,Domain,OrgNo,FlowIdx,FlowSortIdx )
 AS
 
 SELECT A.PRI,A.WorkID,B.IsRead, A.Starter,A.StarterName,A.WFState,A.FK_Dept,A.DeptName,B.FK_Dept AS TodoEmpDeptNo,  A.FK_Flow, A.FlowName,A.PWorkID,
 A.PFlowNo,B.FK_Node, B.FK_NodeText AS NodeName, A.Title, A.RDT, B.RDT AS ADT, 
 B.SDT, B.FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode,B.PressTimes,
-A.GuestNo,A.GuestName,A.BillNo,A.TodoEmps,A.TodoEmpsNum,A.TodoSta,A.TaskSta,0 as ListType,A.Sender,A.AtPara,
+A.GuestNo,A.GuestName,A.BillNo,A.TodoEmps,A.TodoEmpsNum,A.TodoSta,A.TaskSta,A.FlowNote,0 as ListType,A.Sender,A.AtPara,
 A.Domain,A.OrgNo,C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
 FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B,WF_Flow C,WF_FlowSort D
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
@@ -23,7 +23,7 @@ SELECT A.PRI,A.WorkID,B.Sta AS IsRead, A.Starter,
 A.StarterName,2 AS WFState,A.FK_Dept,A.DeptName,'' AS TodoEmpDeptNo, A.FK_Flow, A.FlowName,A.PWorkID,
 A.PFlowNo,B.FK_Node, B.NodeName, A.Title, A.RDT, B.RDT AS ADT, 
 B.RDT AS SDT, B.CCTo as FK_Emp,B.FID ,A.FK_FlowSort,A.SysType,A.SDTOfNode, 0 as PressTimes,
-A.GuestNo,A.GuestName,A.BillNo,A.TodoEmps,A.TodoEmpsNum,0 as TodoSta,0 AS TaskSta,1 as ListType,B.Rec as Sender,
+A.GuestNo,A.GuestName,A.BillNo,A.TodoEmps,A.TodoEmpsNum,0 as TodoSta,0 AS TaskSta,A.FlowNote,1 as ListType,B.Rec as Sender,
 '@IsCC=1'||A.AtPara as AtPara,
 A.Domain,A.OrgNo,C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
   FROM WF_GenerWorkFlow A, WF_CCList B ,WF_Flow C,WF_FlowSort D

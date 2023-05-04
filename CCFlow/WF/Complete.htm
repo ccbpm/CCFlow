@@ -208,21 +208,21 @@
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
-
+                var url = data;
+                url = url.replace('/WF//WF/', '/WF/');
+                if (url.indexOf("http") == -1) {
+                    if (url.indexOf('/WF/') == -1)
+                        url = '/WF/' + url;
+                    url = basePath + url;
+                }
                 try {
-
-                    var url = data;
-                    if (url.indexOf("My") == 0) {
-                        if (window.top.location.href.indexOf("WF/") != -1)
-                            url = "../" + url;
-                        else
-                            url =basePath+ "/WF/" + url;
+                    if (window.top.vm != undefined) {
+                        window.top.vm.openTab(title, url);
+                        return;
                     }
-
-
-                    window.top.vm.openTab(title, url);
-                    return;
+                    window.open(url); //打开流程.
                 } catch (e) {
+                    data = data.replace('/WF//WF/', '/WF/');
                     window.open(data); //打开流程.
                     return;
                 }

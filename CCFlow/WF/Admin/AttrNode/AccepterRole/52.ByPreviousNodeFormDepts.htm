@@ -1,0 +1,85 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/vue.js" type="text/javascript"></script>
+    <!-- 自己的系统风格统一. -->
+    <link href="../../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
+    <link href="../../../Style/skin/css/Default.css" rel="stylesheet" />
+    <!-- 自己的系统风格统一end -->
+</head>
+<body>
+    <div id="App">
+        <div id="bar"> </div>
+        <fieldset>
+            <legend>请选择一个部门字段.</legend>
+            <div style="margin-top:15px">
+                请选择一个节点字段:
+                <select name="DDL_ByPreviousNodeFormEmpsField" id="DDL_ByPreviousNodeFormEmpsField" v-model="selectMapAttr">
+                    <option :value="mapAttr.KeyOfEn" v-for="mapAttr in mapAttrs">{{mapAttr.Name}}</option>
+                </select>
+            </div>
+
+        </fieldset> 
+        
+        <fieldset>
+            <legend>字段是部门编号</legend>
+            <ul>
+				<li>#### 帮助</li>
+				
+                <li>- 该计算模式是按照表单字段中绑定的岗位计算，岗位集合是由表单字段中的内容确定的。</li>
+				<li>- 我们通常的做法是，把一个字段设置为小范围多选，或者Pop选择岗位，在下一个节点按照这用户选择的岗位集合作为接受人。</li>
+				<li>- 可以选择的字段，必须是节点表单上的某个字段。</li>
+				<li>- 如果表单中有字段，但在选择时没有显示，需要使用流程设计器的检查流程就可以显示出来。</li>
+             </ul>
+        </fieldset>
+    </div>
+    <script type="text/javascript">
+        var Baseinfo = new Vue({
+            el: '#App',
+            data: {
+                deliverWay: DeliveryWay.ByPreviousNodeFormDepts,
+                sql: '',
+                nodeId: GetQueryString("FK_Node"),
+                mapAttrs: [],
+                selectMapAttr: ''
+            },
+            created() {
+                InitBar(this.deliverWay);
+                var node = new Entity("BP.WF.Node", this.nodeId);
+                var paras = node.DeliveryParas;
+                var FK_Flow = node.FK_Flow;
+                var FK_MapData = "ND" + parseInt(FK_Flow) + "Rpt";
+                var mapAttrs = new Entities("BP.Sys.MapAttrs", "FK_MapData", FK_MapData);
+                this.mapAttrs = $.grep(mapAttrs, function (obj, i) {
+                    return obj.UIVisible == 1;
+                })
+
+                //初始话下拉列表值
+                if (node.DeliveryWay == DeliveryWay.ByPreviousNodeFormDepts) {
+                    if (paras != null && paras != "")
+                        this.selectMapAttr = paras;
+                }
+            }
+        });
+        function Save() {
+            var node = new Entity("BP.WF.Template.NodeExt", Baseinfo.nodeId);
+            node.DeliveryWay = Baseinfo.deliverWay;
+            node.DeliveryParas = Baseinfo.selectMapAttr;
+            node.Update();
+        }
+    </script>
+</body>
+</html>

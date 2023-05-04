@@ -219,9 +219,9 @@
 
             }).bind("select_node.jstree", function (e, data) { //点击事件
                 //触发toggle_node 事件 就行了
-                if (isFirst == true)
-                    isFirst = false;
-                else
+                //if (isFirst == true)
+                //    isFirst = false;
+                //else
                     $('#OrgJSTree').jstree("toggle_node", data.node);
 
             }).on("loaded.jstree", function (event, data) {

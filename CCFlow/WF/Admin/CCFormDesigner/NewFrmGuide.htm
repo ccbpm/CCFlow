@@ -362,7 +362,6 @@
                             data = data.replace('url@', '');
 
                             try {
-
                                 //表单库增加表单节点
                                 if (typeof window.parent.AppendFrmToFormTree != "undefined") {
                                     // var sort = $("#HD_FK_FormTree").val();
@@ -383,7 +382,10 @@
                             }
 
                             //切换页面
-                            SetHref(data);
+                            //SetHref(data);
+                            if (window.parent && window.parent.layer)
+                                window.parent.layer.close(window.parent.layer.index);
+                            WinOpenFull(data);
                             return;
                         }
                     </script>

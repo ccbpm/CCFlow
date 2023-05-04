@@ -19,15 +19,18 @@
 
             var webUser = new WebUser();
 
-            var mysql = "SELECT ";
+            /*var mysql = "SELECT ";
             mysql += "No as \"No\", ";
             mysql += "Name as \"Name\", ";
             mysql += "UseSta as \"UseSta\", ";
             mysql += "RootOfDept as \"RootOfDept\" ";
             mysql += " FROM  WF_Emp WHERE No LIKE '" + webUser.No + "@%' ";
 
-            var adminers = DBAccess.RunSQLReturnTable(mysql);
-
+            var adminers = DBAccess.RunSQLReturnTable(mysql);*/
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
+            handler.AddPara("UserNo", webUser.No);
+            var adminers = handler.DoMethodReturnString("AdminerChange");
+            adminers = JSON.parse(adminers);
             var html = "";
             html += "<table style='width:80%;'>";
             html += "<caption>切换组织</caption>";

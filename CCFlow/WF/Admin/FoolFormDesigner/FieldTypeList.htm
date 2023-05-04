@@ -493,7 +493,7 @@
 
                         //附件.
                         function ExtAth() {
-                           
+                           debugger
                             var name = promptGener('请输入附件名称:\t\n比如:报送材料、报销资料', '附件');
                             if (name == null || name == undefined)
                                 return;
@@ -523,7 +523,7 @@
                             mapAttr.FK_MapData = frmID;
                             mapAttr.KeyOfEn = id+"_AthMDtl";
                             mapAttr.Name = name;
-                            mapAttr.GroupID = groupID;
+                            mapAttr.GroupID = groupID || 0;
                             mapAttr.UIContralType = 6; //附件控件.
                             mapAttr.MyDataType = 1;
                             mapAttr.LGType = 0;

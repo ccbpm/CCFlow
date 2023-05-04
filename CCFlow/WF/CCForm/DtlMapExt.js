@@ -297,7 +297,7 @@ function AfterBindEn_DealMapExt(tr, rowIndex) {
                                 //选中的值
                                 var selects = new Entities("BP.Sys.FrmEleDBs");
                                 selects.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", OID);
-                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val);
+                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val,mapExt,"Doc");
                                 var data = [];
                                 dt.forEach(function (item) {
                                     data.push({

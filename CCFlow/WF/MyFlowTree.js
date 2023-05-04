@@ -24,7 +24,8 @@ window.onload = function () {
             FK_Flow: GetQueryString("FK_Flow"),
             FID: GetQueryString("FID"),
             PWorkID: GetQueryString("PWorkID"),
-            IsShowBtn: true
+            IsShowBtn: true,
+            UrlParams: '',
 
         },
         computed: {
@@ -131,7 +132,7 @@ window.onload = function () {
                         isReadonly = "1";
 
                     url = basePath + "/WF/CCForm/Frm.htm";
-                    url += "?FK_MapData=" + formData.No + "&IsEdit=" + isEdit + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + isReadonly;
+                    url += "?FK_MapData=" + formData.No + "&IsEdit=" + isEdit + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + isReadonly + this.UrlParams;
                 }
                 if (formData.No == "PrintDoc")
                     url = basePath + "/WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + Math.random();
@@ -205,6 +206,28 @@ window.onload = function () {
             },
 
             loadData: function () {
+                var params = getQueryStringFromUrl(GetHrefUrl());
+                var paramUrl = "";
+                if (Array.isArray(params)) {
+                    $.each(params, function (i, param) {
+                        if (param.indexOf("FK_MapData") != -1)
+                            return true;
+                        if (param.indexOf("FrmID") != -1)
+                            return true;
+                        if (param.indexOf("WorkID") != -1)
+                            return true;
+                        if (param.indexOf("FID") != -1)
+                            return true;
+                        if (param.indexOf("PWorkID") != -1)
+                            return true;
+                        if (param.indexOf("FK_Node") != -1)
+                            return true;
+                        if (param.indexOf("IsReadonly") != -1)
+                            return true;
+                        paramUrl += "&" + param;
+                    })
+                }
+                this.UrlParams = paramUrl;
                 var url = $('#ccbpmJS')[0].src;
                 var type = getQueryStringByNameFromUrl(url, "type");
                 if (type == "MyView")
@@ -254,7 +277,7 @@ window.onload = function () {
                 })
                
                 
-                this.frmGenerUrl = "./CCForm/Frm.htm?FK_MapData=" + this.forms[0].No + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + this.IsReadonly;
+                this.frmGenerUrl = "./CCForm/Frm.htm?FK_MapData=" + this.forms[0].No + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&PWorkID=" + this.PWorkID + "&IsReadonly=" + this.IsReadonly + this.UrlParams;
                 this.frmGenerName = this.forms[0].Name;
                 this.frmGenerNo = this.forms[0].No;
                 this.openPage(this.forms[0]);

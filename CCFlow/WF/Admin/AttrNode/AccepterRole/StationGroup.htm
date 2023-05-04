@@ -35,7 +35,7 @@
         //保存
         function Save() {
             var nodeID = GetQueryString("FK_Node");
-            var node = new Entity("BP.WF.Node", nodeID);
+            var node = new Entity("BP.WF.Template.NodeExt", nodeID);
             node.DeliveryWay = DeliveryWay.ByStation;
             node.Update();
             alert("保存成功.");

@@ -271,6 +271,7 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
             $("#CB_" + mapAttr.KeyOfEn).attr("value", "1");
             $("#CB_" + mapAttr.KeyOfEn).attr("lay-skin", "primary");
             $("#CB_" + mapAttr.KeyOfEn).attr("lay-filter", mapAttr.KeyOfEn);
+            $("#CB_" + mapAttr.KeyOfEn).addClass("mcheckbox");
             continue;
         }
         //为单选按钮高级设置绑定事件

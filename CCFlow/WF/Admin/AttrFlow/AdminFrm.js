@@ -53,6 +53,8 @@ function GenerWorkNode() {
 
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
     handler.AddUrlData(urlParam);
+    //handler.AddPara("XB", 1);
+    //handler.AddPara("Tel", '2222');
     var data = handler.DoMethodReturnString("GenerWorkNode"); //执行保存方法.
 
     if (data.indexOf('err@') == 0) {

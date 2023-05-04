@@ -12,9 +12,10 @@
 }
 
     .login-box h1 {
-        background: url(../../../DataUser/ICON/logo.png) no-repeat left;
+        background: url(../../../DataUser/ICON/LogBiger.png) no-repeat left;
         height: 88px;
         text-indent: -9999px;
+        background-size: 360px 160px;
     }
 
 .login-form {

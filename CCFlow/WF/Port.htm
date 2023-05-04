@@ -26,6 +26,10 @@
 
             if (data.indexOf('url@') == 0) {
                 var url = data.replace('url@', '');
+                var token = GetQueryStringByUrl(url, "Token");
+                localStorage.setItem('Token', token);
+                //if (IsMobile() == true)
+                //    url = "/CCMobile/" + url;
                 SetHref(url);
                 return;
             }
@@ -44,7 +48,6 @@
 
         <div id="Msg"></div>
     </form>
-
 
 </body>
 </html>

@@ -25,7 +25,7 @@ function InitBar(optionKey) {
  
 
     html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='Save()' >保存</button>";
-    html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='RunIt()' >手工运行</button>";
+    //html += "<button  id='Btn_Save' class='cc-btn-tab btn-save'  onclick='RunIt()' >手工运行</button>";
     //html += "<input  id='Btn_Help' type=button onclick='Adv()' value='高级设置' />";
     html += "<button  id='Btn_Help'class='cc-btn-tab btn-hlep' onclick='HelpOnline()'>在线帮助</button>";
 

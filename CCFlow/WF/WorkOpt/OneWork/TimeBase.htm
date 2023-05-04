@@ -31,7 +31,7 @@
     <script type="text/javascript">
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo, fid, currNodeId, mypk) {
-            var url = "../../MyFrm.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + currNodeId + "&TrackID=" + mypk;
+            var url = "../../MyFrm.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + currNodeId + "&TrackID=" + mypk+"&IsReadonly=1";
             window.open(url);
             return;
         }

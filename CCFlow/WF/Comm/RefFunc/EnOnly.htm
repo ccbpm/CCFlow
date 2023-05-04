@@ -104,6 +104,7 @@
         var mapData;
         var mainData;
         var dtM; //方法集合.
+        var dtl;//从表集合
         var isReadonly = GetQueryString("isReadonly");
         var pkVal = "";
         var webUser = new WebUser();
@@ -151,6 +152,7 @@
             mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
             mainData = frmData["MainTable"][0];
             dtM = frmData["dtM"];
+            dtl = frmData["Dtl"] || [];
             document.title = mapData.Name;
 
             //获取没有解析的外部数据源
@@ -185,8 +187,7 @@
             //生成傻瓜表单.
             GenerFoolFrm(mapData, frmData);
 
-
-
+            
             //解析富文本
             if ($(".rich").length > 0) {
                 var images_upload_url = "";
@@ -600,7 +601,7 @@
                 SetHref(url);
             }
         }
-
+        var isHaveAddAth = false;
         //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, groupID, userRegedit) {
 
@@ -818,7 +819,8 @@
             var entityAthType = mapData.GetPara("BPEntityAthType");
 
             //单附件上传
-            if (entityAthType == 1) {
+            if (entityAthType == 1 && isHaveAddAth == false) {
+                isHaveAddAth = true;
                 html += "<div class='layui-row FoolFrmFieldRow'>";
                 if (fileDesc == "")
                     html += "<div class='layui-col-md2 layui-col-xs2 FoolFrmFieldLabel'>附件上传</div>";
@@ -831,7 +833,8 @@
                 html += "</div>";
             }
             //多附件上传
-            if (entityAthType == 2) {
+            if (entityAthType == 2 && isHaveAddAth == false) {
+                isHaveAddAth = true;
                 //多附件的信息
                 var AttrFiles = frmData.AttrFiles;
                 var FileManagers = frmData.Sys_FileManager;
@@ -840,9 +843,17 @@
                     html += "<div style='display:none'><input type='file' id='File_Upload' name='File_Upload' style='background-color:white;dispaly:none' onchange='MultiUploadFile()' /></div>";
 
             }
-
-
             html += "</div>";
+            dtl.forEach(item => {
+                if (item.GroupName == groupID) {
+                    //增加从表的信息
+                    html += "<div class='layui-col-xs12' style='margin-left: 24px;'>";
+                    html += "<div style='line-height: 40px;font-size: 16px;'>"+item.Title+"</div>";
+                    html += "<iframe style='width:100%;height:350px' name='Dtl' ID='Frame_" + item.No + "'    src='" + item.Url + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=none></iframe>"
+                    html += "</div>";
+                    return;
+                }
+            })
             return html;
         }
 
@@ -1074,7 +1085,6 @@
                     case 6://日期类型
                     case 7://时间类型
                         //生成中间的部分.
-                        debugger
                         var enableAttr = '';
                         var frmDate = 0; //获取日期格式
                         if (mapAttr.MyDataType == 7)

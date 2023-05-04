@@ -86,7 +86,7 @@ layui.define(['jquery', 'laytpl', 'layer'], function (e) {
       //获取数据
       var myPK = _config.url;
       var mapExt = new Entity("BP.Sys.MapExt", myPK);
-      var data = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, _config.filter);
+      var data = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, _config.filter,mapExt,"Tag4");
       $loading.remove();
       _config.data = data;
       _self.renderData(_config.data);

@@ -1,5 +1,5 @@
 <!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -7,7 +7,7 @@
     <title>流程综合查询</title>
     <script src="./Scripts/vue.js"></script>
     <!-- Element Ui -->
-    <link rel="stylesheet" href="./Scripts/element/element.css">
+    <link rel="stylesheet" href="./Scripts/element/element.css" />
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <script src="./Scripts/element/element.js"></script>
@@ -41,9 +41,9 @@
             margin: 20px 10px;
         }
 
-        .box .content {
-            padding-right: 40px;
-        }
+            .box .content {
+                padding-right: 40px;
+            }
 
         .f-left {
             float: left;
@@ -72,7 +72,7 @@
                 <div class="f-left title">日期从：</div>
                 <div class="f-left content">
                     <el-date-picker v-model="date" type="daterange" range-separator="至" start-placeholder="开始日期"
-                        end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                                    end-placeholder="结束日期" value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                 <el-button type="primary" icon="el-icon-search" @click="onSearch">搜索</el-button>
             </div>
         </div>
-        <el-table :data="tableData" border style="width: 100%;">
+        <el-table :data="tableData" border=border style="width: 100%;">
             <el-table-column prop="no" label="序号" type="index" />
             </el-table-column>
             <el-table-column prop="Title" label="标题" />
@@ -129,13 +129,13 @@
                     value: 'all',
                     label: '全部'
                 }, {
-                    value: '0',
+                    value: '2',
                     label: '运行中'
                 }, {
-                    value: '1',
+                    value: '5',
                     label: '退回'
                 }, {
-                    value: '2',
+                    value: '3',
                     label: '已完成'
                 }],
                 status: 'all',
@@ -192,7 +192,7 @@
                         now < SendDT 负
                     */
                     if (item.WFState == 2) {
-                        item.status = now.diff(dayjs(item.SendDT)) <= 0 ? '运行中' : '已逾期';
+                        item.status = now.diff(dayjs(item.SDTOfNode)) <= 0 ? '运行中' : '已逾期';
                     } else if (item.WFState == 3) {
                         item.status = '已完成'
                     } else if (item.WFState == 5) {

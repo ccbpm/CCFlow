@@ -758,7 +758,7 @@ function AfterBindEn_DealMapExt(frmData) {
                                 //选中的值
                                 var selects = new Entities("BP.Sys.FrmEleDBs");
                                 selects.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", pageData.WorkID);
-                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val);
+                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val,mapExt,"Doc");
                                 var data = [];
                                 dt.forEach(function (item) {
                                     data.push({
@@ -1375,6 +1375,8 @@ function SetDateExt(mapExts, mapAttr) {
  * @param {any} mapExts
  * @param {any} mapAttr
  */
+var statisticColumnsSet = new Set();
+var statisticColumnsArr = [];
 function SetNumberMapExt(mapExts, mapAttr) {
     // 主表扩展(统计从表)
     var detailExt = {};
@@ -1498,11 +1500,20 @@ function SetNumberMapExt(mapExts, mapAttr) {
         }
     })
     $.each(detailExt, function (idx, obj) {
-        var iframeDtl = $("#Frame_" + obj[0].DtlNo);
+        var iframeKey = "#Frame_" + obj[0].DtlNo
+        var iframeDtl = $(iframeKey);
+        var statisticColumn = detailExt[obj[0].DtlNo]
+
+        if (!statisticColumnsSet.has(statisticColumn)) {
+            statisticColumnsSet.add(statisticColumn)
+            statisticColumnsArr.push(...statisticColumn)
+            console.log(statisticColumnsArr)
+        }
+
         iframeDtl.load(function () {
-            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(detailExt[obj[0].DtlNo]));
+            $(this).contents().find(":input[id=formExt]").val(JSON.stringify(statisticColumnsArr));
             if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
-                this.contentWindow.parentStatistics(detailExt[obj[0].DtlNo]);
+                this.contentWindow.parentStatistics(statisticColumnsArr);
             }
         });
 
@@ -2384,7 +2395,7 @@ function getFieldAth(mapAttr,aths) {
     var mypk = mapAttr.MyPK;
 
     //获取附件显示的格式
-    var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel");
+    var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel")||"0";
 
     let ath = $.grep(aths, function (ath) { return ath.MyPK == mypk });
     ath = ath.length > 0 ? ath[0] : null;
@@ -2450,6 +2461,7 @@ function getFieldAth(mapAttr,aths) {
             return "<div " + css + "  id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
     var eleHtml = "";
+   
     if (athShowModel == "" || athShowModel == 0)
         return "<div " + css + "  id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >" + clickEvent + "附件(" + dbs.length + ")</label></div>";
 
@@ -2630,7 +2642,7 @@ function OpenAth(title, keyOfEn, athMyPK, atPara, FK_MapData, frmType, isRead) {
     }
     OpenLayuiDialog(url, title, W, H, "auto", false, false, false, null, function () {
         //获取附件显示的格式
-        var athShowModel = GetPara(atPara, "AthShowModel");
+        var athShowModel = GetPara(atPara, "AthShowModel")||"0";
 
         var ath = new Entity("BP.Sys.FrmAttachment");
         ath.MyPK = athMyPK;

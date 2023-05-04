@@ -21,6 +21,8 @@
     <script src=" Comm/Gener.js" type="text/javascript"></script>
     <script src=" Scripts/Cookie.js" type="text/javascript"></script>
     <script src=" Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 处理多语言 -->
+    <script src="Data/lang/load.js" type="text/javascript"></script>
     <style type="text/css">
         * {
             list-style: none;
@@ -174,17 +176,7 @@
                 </div>
             </div>
             <table class="table  table-striped">
-                <thead>
-                    <tr>
-                        <th width="40">序</th>
-                        <th style="width:35%;">标题</th>
-                        <th width="60">发起人</th>
-                        <th width="120">发起部门</th>
-                        <th>当前节点</th>
-                        <th width="120">到达时间</th>
-                        <th width="150">当前处理人</th>
-                        <!--<th width="120">操作</th>-->
-                    </tr>
+                <thead id="threadDiv">
                 </thead>
                 <tbody id="Table1"></tbody>
             </table>
@@ -258,22 +250,21 @@
                 data = data.replace('&DoMethod=MyFlow_Init', '');
                 data = data.replace('&HttpHandlerName=BP.WF.HttpHandler.WF_MyFlow', '');
                 data = data.replace('?&', '?');
-
+                var url = data;
+                url = url.replace('/WF//WF/', '/WF/');
+                if (url.indexOf("http") == -1) {
+                    if (url.indexOf('/WF/') == -1)
+                        url = '/WF/' + url;
+                    url = basePath + url;
+                }
                 try {
-
-                    var url = data;
-                    if (url.indexOf("My") == 0) {
-                        if (window.top.location.href.indexOf("WF/") != -1)
-                            url = "../" + url;
-                        else
-                            url = basePath +"/WF/" + url;
+                    if (window.top.vm != undefined) {
+                        window.top.vm.openTab(title, url);
+                        return;
                     }
-
-
-
-                    window.top.vm.openTab(title, url);
-                    return;
+                    window.open(url); //打开流程.
                 } catch (e) {
+                    data = data.replace('/WF//WF/', '/WF/');
                     window.open(data); //打开流程.
                     return;
                 }
@@ -426,7 +417,16 @@
         var groupNames = [];
         //页面启动函数.
         $(function () {
-            //GetRuningData(pageIdx);
+            var _html = `<tr>
+                        <th width="40">${window.lang.xu}</th>
+                        <th style="width:35%;">${window.lang.biaoti}</th>
+                        <th width="60">${window.lang.fqr}</th>
+                        <th width="200">${window.lang.fqbm}</th>
+                        <th>${window.lang.dqjd}</th>
+                        <th width="120">${window.lang.sdrq}</th>
+                        <th width="150">${window.lang.dqclr}</th>
+                    </tr>`;
+            $("#threadDiv").html(_html);
             InitPage();
             Paginator(pageCount, pageIdx);
 
@@ -676,13 +676,13 @@
                 itemTexts: function (type, page, current) {
                     switch (type) {
                         case "first":
-                            return "首页";
+                            return window.lang.shouye;
                         case "prev":
-                            return "上一页";
+                            return window.lang.shangyiye;
                         case "next":
-                            return "下一页";
+                            return window.lang.xiayiye;
                         case "last":
-                            return "末页";
+                            return window.lang.moye;
                         case "page":
                             return page;
                     }
@@ -690,13 +690,13 @@
                 onPageClicked: function (event, originalEvent, type, page) {
                     pageIdx = page;
                     InitPage(page);
-                    $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                        "页,总共" + total + "条记录。</li>");
+                    $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount} 
+                        ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
-            $('#page_info').html("").append("<li class='disabled controls'>当前第" + pageIdx + "页，总共" + pageCount +
-                "页,总共" + total + "条记录。</li>");
+            $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount} 
+                ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
 
         }
     </script>

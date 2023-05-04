@@ -87,7 +87,7 @@ function GenerFoolFrm(wn, isComPare) {
 function ShowFoolByTable(frmData, tableCol, Sys_GroupFields, node, isComPare) {
     var _html = "";
     var gfLabHtml = "";
-    Sys_GroupFields.forEach(function (gf) {
+    Sys_GroupFields.filter(gf=>gf.ShowType!=2).forEach(function (gf) {
         var ctrlType = gf.CtrlType;
         ctrlType = ctrlType == null ? "" : ctrlType;
         _html += "<div id='Group_" + gf.OID + "'>";
@@ -169,7 +169,16 @@ function ShowFoolByTable(frmData, tableCol, Sys_GroupFields, node, isComPare) {
                 _html += gfLabHtml;
                 _html += "<div class='layui-row'>"
                 _html += "<div class='layui-col-xs12'>";
-                _html += Ele_Frame(frmData, gf);
+                var frames = frmData.Sys_MapFrame;
+                if (frames == undefined || frames.length == 0)
+                    _html += "获取框架信息丢失";
+                else {
+                    frames = frames.filter(frame => frame.MyPK === gf.CtrlID);
+                    if (frames == undefined || frames.length == 0)
+                        _html += "获取框架信息丢失";
+                    else
+                        _html += Ele_Frame(frames[0]);
+                }
                 _html += "</div>";
                 _html += "</div>";
                 break;
@@ -295,7 +304,16 @@ function ShowFoolByTab(frmData, tableCol, Sys_GroupFields, node, isComPare) {
             case "Frame"://框架
                 contHtml += "<div class='layui-row'>"
                 contHtml += "<div class='layui-col-xs12'>";
-                contHtml += Ele_Frame(frmData, gf);
+                var frames = frmData.Sys_MapFrame;
+                if (frames == undefined || frames.length == 0)
+                    contHtml += "获取框架信息丢失";
+                else {
+                    frames = frames.filter(frame => frame.MyPK === gf.CtrlID);
+                    if (frames == undefined || frames.length == 0)
+                        contHtml += "获取框架信息丢失";
+                    else
+                        contHtml += Ele_Frame(frames[0]);
+                }
                 contHtml += "</div>";
                 contHtml += "</div>";
                 break;
@@ -703,10 +721,10 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                             imgPath = "../../";
                         if (currentURL.indexOf("AdminFrm.htm") != -1)
                             imgPath = "../../../";
-                        var imgSrc = imgPath + "DataUser/Siganture/UnName.JPG";
+                        var imgSrc = imgPath + "DataUser/Siganture/UnName.jpg";
                         //如果是图片签名，并且可以编辑
                         var ondblclick = ""
-                        if (mapAttr.UIIsEnable == 1) {
+                        if (mapAttr.UIIsEnable == 1 && isReadonly == false) {
                             ondblclick = " ondblclick='figure_Template_HandWrite(\"" + mapAttr.KeyOfEn + "\",\"" + val + "\")'";
                         }
                         val = val || "";
@@ -724,7 +742,8 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                         if (mapAttr.KeyOfEn == "IDCardAddress") {
                             eleHtml = "<div style='text-align:left;padding-left:0px'  data-type='1'>";
                             eleHtml += "<input type=text class='" + ccsCtrl + " layui-input' style='width:75% !important;display:inline;' class='form-control' maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'/>";
-                            eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo(event)'/>上传身份证</label>";
+                            if (mapAttr.UIIsEnable == 1 && isReadonly == false)
+                                eleHtml += "<label class='image-local' style='margin-left:5px'><input type='file' accept='image/png,image/bmp,image/jpg,image/jpeg' style='width:25% !important;display:none' onchange='GetIDCardInfo(event)'/>上传身份证</label>";
                             eleHtml += "</div>";
                             return eleHtml;
                         }
@@ -744,7 +763,7 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
 
                         //如果编辑
                         var eleHtml = "<div class='score-star' style='text-align:left;padding-left:3px;height:30px;margin-top:10px' data-type='1' id='SC_" + mapAttr.KeyOfEn + "' >";
-                        if (mapAttr.UIIsEnable == 1)
+                        if (mapAttr.UIIsEnable == 1 && isReadonly == false)
                             eleHtml += "<span class='score-simplestar' id='Star_" + mapAttr.KeyOfEn + "'>";
                         else
                             eleHtml += "<span class='score-simplestar'>";

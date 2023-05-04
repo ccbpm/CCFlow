@@ -1018,7 +1018,7 @@ var Entity = (function () {
         var params = {};
         $.each(self, function (n, o) {
             if (typeof self[n] !== "function" && n != "enName" && n != "ensName") {
-                params[n] = self[n];
+                params[n] = encodeURIComponent(self[n]);
             }
         });
         return params;
@@ -2747,14 +2747,14 @@ var HttpHandler = (function () {
             if (!parameters.has('Token')) {
                 parameters.append('Token', GetQueryString('Token'))
             }
-			if(methodName === 'Login_Submit') {
+	    if(methodName === 'Login_Submit') {
                 var isEncrypt = this.customRequest("CheckEncryptEnable")
                 var key = "TB_PW"
-                if(isEncrypt === '1'){
+                if(isEncrypt === '0'){
                     var encryptStr =encodeURIComponent(parameters.get(key));
                     parameters.delete(key);
                     parameters.append(key, encryptStr)
-                }else if(isEncrypt === '2'){
+                }else if(isEncrypt === '1'){
                     var encryptStr = md5(parameters.get(key)).toUpperCase();
                     parameters.delete(key);
                     parameters.append(key, encryptStr)
@@ -2891,17 +2891,24 @@ var WebUser = function () {
                 } else {
                     alert(data);
                 }
-                if (window.top.vm != null)
-                    window.top.vm.logoutExt();
-                else {
-                    if (GetHrefUrl().indexOf("Portal/Standard/") != -1)
-                        SetHref(basePath + "/Portal/Standard/Login.htm");
+                try {
+                    if (!!window.top && !!window.top.vm)
+                        window.top.vm.logoutExt();
+                    else {
+                        if (GetHrefUrl().indexOf("Portal/Standard/") != -1)
+                            SetHref(basePath + "/Portal/Standard/Login.htm");
+                    }
+                } catch (e) {
+                    //可能出现跨域
+                    //SetHref(basePath + "/Portal/Standard/Login.htm");
                 }
+                
                 return;
             }
 
             try {
                 webUserJsonString = JSON.parse(filterXSS(data));
+                localStorage.setItem('Token', webUserJsonString.Token);
 
             } catch (e) {
                 alert("json解析错误: " + data);
@@ -2913,6 +2920,7 @@ var WebUser = function () {
         }
     });
     var self = this;
+    if (webUserJsonString!=null)
     $.each(webUserJsonString, function (n, o) {
         self[n] = filterXSS(o);
     });
@@ -3157,7 +3165,8 @@ function DealJsonExp(json, expStr, webUser) {
     $.each(json, function (n, val) {
         if (expStr.indexOf("@") == -1)
             return;
-        expStr = expStr.replace("@" + n, val);
+        //(str, oldKey, newKey)
+        expStr = replaceAll(expStr, "@" + n,val);
     });
     return expStr;
 }
@@ -3270,28 +3279,12 @@ $(function () {
     }
 
     var url = GetHrefUrl().toLowerCase();
-
-    //var i = url.lastIndexOf('.');
-    //  alert(i);
-
-    //不需要权限信息..
-    if (url.indexOf('login.htm') != -1
-        || url.indexOf('dbinstall.htm') != -1
-        || url.indexOf('scanguide.htm') != -1
-        //|| (url.indexOf('home.htm') != -1 && url.indexOf('/portal/standard/') == -1)
-        || url.indexOf('qrcodescan.htm') != -1
-        //|| (url.indexOf('default.htm') != -1 && url.indexOf('/portal/standard/')==-1)
-        || url.indexOf('index.htm') != -1
-        || url.indexOf('gotourl.htm') != -1
-        || url.indexOf('invited.htm') != -1
-        || url.indexOf('registerbywebsite.htm') != -1
-        || url.indexOf('reqpassword.htm') != -1
-        || url.indexOf('reguser.htm') != -1
-        || url.indexOf('port.htm') != -1
-        || url.indexOf('ccbpm.cn/') != -1
-        || url == basePath
-
-        || url.indexOf('loginwebsite.htm') != -1) {
+    var pageName = window.document.location.pathname.toLowerCase();
+    pageName = pageName.substring(pageName.lastIndexOf("/")+1);
+    
+    //不需要权限信息
+    var listPage = ['login.htm', 'dbinstall.htm', 'scanguide.htm', 'qrcodescan.htm', 'index.htm', 'gotourl.htm', 'invited.htm', 'registerbywebsite.htm', 'reqpassword.htm', 'reguser.htm', 'port.htm', 'ccbpm.cn/', 'loginwebsite.htm', 'goto.htm'];
+    if (listPage.includes(pageName) || url == basePath) {
         localStorage.setItem('Token', '');
         return;
     }
@@ -3326,7 +3319,7 @@ function ChildrenPostMessage(info, action) {
     var pathName = window.document.location.pathname;
     var pos = curPath.indexOf(pathName);
     var localhostPath = curPath.substring(0, pos);
-    parent.postMessage({ action: action, info: info }, localhostPath);
+    window.postMessage({ action: action, info: info }, localhostPath);
 }
 
 /**

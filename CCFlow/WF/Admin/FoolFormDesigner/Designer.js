@@ -358,7 +358,9 @@ function InitPage() {
     $('#contentTable').html(_html);
 
     if ($("#WorkCheck").length == 1)
-        loadScript("../../WorkOpt/WorkCheck.js");
+        loadScript("../../WorkOpt/WorkCheck.js", function () {
+            NodeWorkCheck_Init();
+        });
 
     if ($("#FlowBBS").length == 1)
         loadScript("../../WorkOpt/FlowBBS.js");

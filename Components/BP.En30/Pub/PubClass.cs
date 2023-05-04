@@ -270,6 +270,9 @@ namespace BP.Pub
                 {
                     
                     ens = (Entities)obj;
+                    if (ens == null)
+                        continue;
+
                     string className = ens.ToString();
                     if (className == null)
                         continue;

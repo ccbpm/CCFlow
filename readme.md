@@ -1,6 +1,3 @@
-﻿##### 我们的品牌
-[![驰骋工作流](http://ccflow.org/AD/ADccflowTitle.gif)](http://ccflow.org/?frm=ccflowGit)
-
 #### ccbpm系统概要介绍 
 - 技术交流群:1060674395, 在右上角点:watch,star,fork支持我们,谢谢.
 - 驰骋工作流引擎研发与2003年，具有.net与java两个版本，这两个版本代码结构，数据库结构，设计思想，功能组成， 操作手册，完全相同。 导入导出的流程模版，表单模版两个版本完全通用。

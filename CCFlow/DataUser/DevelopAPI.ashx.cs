@@ -7,6 +7,7 @@ using BP.WF;
 using BP.DA;
 using BP.En;
 using BP.Web;
+using System.Web.SessionState;
 
 namespace CCFlow.DataUser
 {
@@ -16,18 +17,16 @@ namespace CCFlow.DataUser
     /// 2. 所有的请求都有一个DoWhat,SID标记，然后在处理页面处理这个标记.
     /// 3. DoWhat用于标识要处理什么， SID用于标识用户的身份.
     /// </summary>
-    public class DevelopAPI : IHttpHandler
+    public class DevelopAPI : IHttpHandler, IRequiresSessionState
     {
+
         public HttpContext context = null;
         public string SID = "";
         public void ProcessRequest(HttpContext con)
         {
             context = con;
-
-
             string xx = "";
             xx = xx.Replace("''", "'");
-
 
             #region 效验问题.
             //让其支持跨域访问.
@@ -41,6 +40,8 @@ namespace CCFlow.DataUser
                 context.Response.Headers["Access-Control-Allow-Headers"] = "x-requested-with,content-type";
             }
 
+            string domain = context.Request.QueryString["DoMain"];
+
             string doType = null;
             try
             {
@@ -48,6 +49,11 @@ namespace CCFlow.DataUser
                 doType = context.Request.QueryString["DoType"];
                 if (BP.DA.DataType.IsNullOrEmpty(doType) == true)
                     doType = context.Request.QueryString["DoWhat"];
+
+                //首先判断是否有token.
+                string token = context.Request.QueryString["Token"];
+                if (DataType.IsNullOrEmpty(token) == false)
+                    BP.WF.Dev2Interface.Port_LoginByToken(token);
 
                 //如果是请求登录. .
                 if (doType.Equals("Portal_Login_Submit") == true)
@@ -57,7 +63,7 @@ namespace CCFlow.DataUser
 
                     string localKey = BP.Difference.SystemConfig.GetValByKey("PrivateKey", "");
                     if (DataType.IsNullOrEmpty(localKey) == true)
-                        localKey = "di gua di gua,i am ccbpm";
+                        localKey = "DiGuaDiGua,IamCCBPM";
 
                     if (localKey.Equals(key) == false)
                     {
@@ -65,26 +71,23 @@ namespace CCFlow.DataUser
                         return;
                     }
 
-                  
-
                     //执行本地登录.
                     BP.WF.Dev2Interface.Port_Login(userNo);
-                    string toke = BP.WF.Dev2Interface.Port_GenerToken(userNo);
+                    string toke = BP.WF.Dev2Interface.Port_GenerToken();
                     ResponseWrite(toke);
                     return;
                 }
 
-                string sidStr = context.Request.QueryString["Token"];
-                if (DataType.IsNullOrEmpty(doType) == true
-                    || DataType.IsNullOrEmpty(sidStr) == true)
-                {
-                    ResponseWrite("err@参数Token,DoType不能为空.");
-                    return;
-                }
-
-                //执行登录. 2021.07.01 采用新方式.
-                BP.WF.Dev2Interface.Port_LoginByToken(sidStr);
-                this.SID = sidStr; //记录下来他的sid.
+                //string sidStr = context.Request.QueryString["Token"];
+                //if (DataType.IsNullOrEmpty(doType) == true
+                //    || DataType.IsNullOrEmpty(sidStr) == true)
+                //{
+                //    ResponseWrite("err@参数Token,DoType不能为空.");
+                //    return;
+                //}
+                ////执行登录. 2021.07.01 采用新方式.
+                //BP.WF.Dev2Interface.Port_LoginByToken(sidStr);
+                this.SID = token; //记录下来他的sid.
             }
             catch (Exception ex)
             {
@@ -92,6 +95,8 @@ namespace CCFlow.DataUser
                 return;
             }
             #endregion 效验问题.
+
+
 
             #region  与流程处理相关的接口API.
             if (doType.Equals("Node_CreateBlankWorkID") == true)
@@ -153,7 +158,7 @@ namespace CCFlow.DataUser
 
                     }
                 }
-               
+
                 //执行退回.
                 string strs = Dev2Interface.Node_ReturnWork(this.WorkID,
                     toNodeID, returnToEmp, this.GetValByKey("Msg"), this.GetValBoolenByKey("IsBackToThisNode"));
@@ -163,66 +168,103 @@ namespace CCFlow.DataUser
             #endregion 与流程处理相关的接口API.
 
             #region 处理相关功能.
-            
-                switch (doType)
-                {
-                    case "Search_Init": //
-                        Search_Init();
-                        return;
-                    case "DB_Start": //获得发起列表.
-                        DataTable dtStrat = Dev2Interface.DB_StarFlows(BP.Web.WebUser.No);
-                        this.ResponseWrite(BP.Tools.Json.ToJson(dtStrat));
-                        return;
-                    case "DB_Draft": //草稿.
-                        DataTable dtDraft = Dev2Interface.DB_GenerDraftDataTable();
-                        this.ResponseWrite(BP.Tools.Json.ToJson(dtDraft));
-                        return;
-                    case "GenerFrmUrl": //获得发起的URL.
-                        GenerFrmUrl();
-                        return;
-                    case "DB_Todolist": //获得待办.
-                        DataTable dtTodolist = Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No);
-                        this.ResponseWrite(BP.Tools.Json.ToJson(dtTodolist));
-                        return;
-                    case "DB_Runing": //获得未完成(在途).
-                        DataTable dtRuing = Dev2Interface.DB_GenerRuning(BP.Web.WebUser.No);
-                        this.ResponseWrite(BP.Tools.Json.ToJson(dtRuing));
-                        return;
-                    case "Flow_DoPress": //批量催办.
-                        this.Flow_DoPress();
-                        return;
-                    case "CC_BatchCheckOver": //批量抄送审核.
-                        this.CC_BatchCheckOver();
-                        return;
-                    case "Flow_BatchDeleteByFlag": //批量删除.
-                        this.Flow_BatchDeleteByFlag();
-                        return;
-                    case "Flow_BatchDeleteByReal": //批量删除.
-                        this.Flow_BatchDeleteByReal();
-                        break;
-                    case "Flow_BatchDeleteByFlagAndUnDone": //恢复批量删除.
-                        this.Flow_BatchDeleteByFlagAndUnDone();
-                        return;
-                    case "Flow_DoUnSend": //撤销发送..
-                        this.Flow_DoUnSend();
-                        return;
-                    case "Flow_DeleteDraft": //删除草稿箱..
-                        this.Flow_DeleteDraft();
-                        return;
-                    case "Flow_DoFlowOver": //批量结束.
-                        this.Flow_DoFlowOver();
-                        return;
-                    case "Portal_LoginOut": //退出系统..
-                        BP.WF.Dev2Interface.Port_SigOut();
-                        return; 
-                    default:
-                        break;
-                }
 
-                context.Response.ContentType = "text/plain";
-                context.Response.Write("err@没有判断的执行类型:" + doType);
-            
+            switch (doType)
+            {
+                case "Search_Init": //
+                    Search_Init();
+                    return;
+                case "DB_Start": //获得发起列表.
+                    DataTable dtStrat = Dev2Interface.DB_StarFlows(BP.Web.WebUser.No, domain);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dtStrat));
+                    return;
+                case "DB_Draft": //草稿.
+                    DataTable dtDraft = Dev2Interface.DB_GenerDraftDataTable(null, domain);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dtDraft));
+                    return;
+                case "GenerFrmUrl": //获得发起的URL.
+                    GenerFrmUrl();
+                    return;
+                case "DB_Todolist": //获得待办.
+                    DataTable dtTodolist = Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, 0, null, domain, null, null);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dtTodolist));
+                    return;
+                case "DB_Runing": //获得未完成(在途).
+                    DataTable dtRuing = Dev2Interface.DB_GenerRuning(BP.Web.WebUser.No, false, domain);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dtRuing));
+                    return;
+                case "Flow_DoPress": //批量催办.
+                    this.Flow_DoPress();
+                    return;
+                case "CC_BatchCheckOver": //批量抄送审核.
+                    this.CC_BatchCheckOver();
+                    return;
+                case "Flow_BatchDeleteByFlag": //批量删除.
+                    this.Flow_BatchDeleteByFlag();
+                    return;
+                case "Flow_BatchDeleteByReal": //批量删除.
+                    this.Flow_BatchDeleteByReal();
+                    break;
+                case "Flow_BatchDeleteByFlagAndUnDone": //恢复批量删除.
+                    this.Flow_BatchDeleteByFlagAndUnDone();
+                    return;
+                case "Flow_DoUnSend": //撤销发送..
+                    this.Flow_DoUnSend();
+                    return;
+                case "Flow_DeleteDraft": //删除草稿箱..
+                    this.Flow_DeleteDraft();
+                    return;
+                case "Flow_DoFlowOver": //批量结束.
+                    this.Flow_DoFlowOver();
+                    return;
+                case "Portal_LoginOut": //退出系统..
+                    BP.WF.Dev2Interface.Port_SigOut();
+                    return;
+                default:
+                    break;
+            }
             #endregion 处理相关功能.
+
+
+            #region 特殊处理.infoDtl
+           
+
+            switch (doType)
+            {
+                case "InfoSorts":
+                    string sql = "SELECT * FROM OA_InfoType ";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dt));
+                    return;
+                case "InfoDtls":
+                    string sortNo = this.GetValByKey("SortNo");
+                    if (DataType.IsNullOrEmpty(sortNo) == true)
+                        sql = "SELECT * FROM OA_Info WHERE InfoPRI=1 ";
+                    else
+                        sql = "SELECT * FROM OA_Info WHERE InfoType='" + sortNo + "' ";
+
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dt));
+                    return;
+                case "Dtl": //明细信息.
+                    string dtlNo = this.GetValByKey("No");
+                    sql = "SELECT * FROM OA_Info WHERE No='" + dtlNo + "' ";
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    dt.TableName = "OA_InfoDtl";
+                    this.ResponseWrite(BP.Tools.Json.ToJson(dt));
+
+                   // DataSet ds = new DataSet();
+                   // ds.Tables.Add(dt);
+                   // this.ResponseWrite(BP.Tools.Json.ToJson(ds));
+                    return;
+                default:
+                    break;
+            }
+            #endregion 特殊处理.
+
+
+            context.Response.ContentType = "text/plain";
+            context.Response.Write("err@没有判断的执行类型:" + doType);
         }
 
         /// <summary>
@@ -261,7 +303,7 @@ namespace CCFlow.DataUser
 
 
             //任何一个为空.
-            if (DataType.IsNullOrEmpty(dtFrom) ==true || DataType.IsNullOrEmpty(dtTo) == true)
+            if (DataType.IsNullOrEmpty(dtFrom) == true || DataType.IsNullOrEmpty(dtTo) == true)
             {
 
             }
@@ -529,32 +571,32 @@ namespace CCFlow.DataUser
              * 3. 选择SDK表单，把url配置到文本框里去.
              * 比如: /App/F027QingJia.htm
              */
-             
-                int nodeID = this.FK_Node;
-                if (nodeID == 0)
-                    nodeID = int.Parse(this.FK_Flow + "01");
 
-                Int64 workid = this.WorkID;
-                if (workid == 0)
-                    workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, BP.Web.WebUser.No);
+            int nodeID = this.FK_Node;
+            if (nodeID == 0)
+                nodeID = int.Parse(this.FK_Flow + "01");
 
-                string url = "";
-                Node nd = new Node(nodeID);
-                if (nd.FormType == NodeFormType.SDKForm || nd.FormType == NodeFormType.SelfForm)
-                {
-                    //.
-                    url = nd.FormUrl;
-                    if (url.Contains("?") == true)
-                        url += "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
-                    else
-                        url += "?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
-                }
+            Int64 workid = this.WorkID;
+            if (workid == 0)
+                workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, BP.Web.WebUser.No);
+
+            string url = "";
+            Node nd = new Node(nodeID);
+            if (nd.FormType == NodeFormType.SDKForm || nd.FormType == NodeFormType.SelfForm)
+            {
+                //.
+                url = nd.FormUrl;
+                if (url.Contains("?") == true)
+                    url += "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
                 else
-                {
-                    url = "/WF/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&Token=" + this.SID;
-                }
-                ResponseWrite(url);
-            
+                    url += "?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
+            }
+            else
+            {
+                url = "/WF/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&Token=" + this.SID;
+            }
+            ResponseWrite(url);
+
         }
         public void ResponseWrite(string strs)
         {

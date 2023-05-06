@@ -105,7 +105,9 @@ function WorkCheck_Init(FWCVer) {
     //审核组件的数据集合
     var data = JSON.parse(data);
     frmWorkCheck = data.WF_FrmWorkCheck[0];
-    Skip.addJs("/DataUser/OverrideFiles/WorkCheck/WorkCheck.js?t=" + Math.random());
+    if (typeof ccbpmPath == "undefined")
+        ccbpmPath = basePath;
+    loadScript(ccbpmPath+"/DataUser/OverrideFiles/WorkCheck/WorkCheck.js?t=" + Math.random());
     return data;
 
 }

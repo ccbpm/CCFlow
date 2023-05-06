@@ -10,8 +10,10 @@ function getQueryString() {
 //Other
 function GetQueryString(name) {
 
-    if(typeof name === 'string' && name.toLocaleLowerCase() === 'token') {
-        return filterXSS(localStorage.getItem("Token"))
+    if (typeof name === 'string' && name.toLocaleLowerCase() === 'token') {
+        var token = localStorage.getItem("Token");
+        if(token !=null && token!="")
+            return filterXSS(localStorage.getItem("Token"))
     }
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 

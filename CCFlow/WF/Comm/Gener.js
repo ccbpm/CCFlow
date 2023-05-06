@@ -2872,7 +2872,7 @@ var WebUser = function () {
     }
 
     //获得页面上的token. 在登录信息丢失的时候，用token重新登录.
-    var token = localStorage.getItem('Token');
+    var token =GetQueryString('Token');
 
     $.ajax({
         type: 'post',

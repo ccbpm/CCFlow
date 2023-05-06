@@ -19,7 +19,7 @@ $(function () {
             jQuery.getScript(ccbpmPath + "/WF/Comm/Gener.js", function () {
                 if ($('#ccbpmJS').length != 0) {
                     var url = $('#ccbpmJS')[0].src;
-                    var SID = getQueryStringByNameFromUrl(url, "Token");
+                    var SID = getQueryStringByNameFromUrl(url, "Token") || getQueryStringByNameFromUrl(url, "SID");
                     //用户登陆
                     if (SID != null && SID != undefined) {
                         var handler = new HttpHandler("BP.WF.HttpHandler.WF");
@@ -27,6 +27,7 @@ $(function () {
                         handler.AddPara("DoWhat", "PortLogin");
 
                         var data = handler.DoMethodReturnString("Port_Init");
+                        localStorage.setItem('Token', SID);
                     }
                 }
                 

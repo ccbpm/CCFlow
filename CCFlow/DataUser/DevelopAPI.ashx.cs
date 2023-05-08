@@ -106,7 +106,12 @@ namespace CCFlow.DataUser
                 this.ResponseWrite(workid.ToString());
                 return;
             }
-
+            if (doType.Equals("Node_SaveParas") == true)
+            {
+                BP.WF.Dev2Interface.Flow_SaveParas(this.WorkID, context.Request.QueryString["Paras"]);
+                this.ResponseWrite("参数保存成功");
+                return;
+            }
             if (doType.Equals("Node_SendWork") == true)
             {
                 //执行发送.

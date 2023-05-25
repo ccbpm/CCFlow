@@ -1,4 +1,4 @@
-﻿var baseInfo = new Vue({
+var baseInfo = new Vue({
     el: '#flow',
     data: {
         flowNodes: [],
@@ -406,9 +406,7 @@
                 event.stopPropagation();
             }
             var webUser = new WebUser();
-            if (webUser.CCBPMRunModel == 1) {
-                window.location.href = window.location.href.replace("Frms.htm", "FrmTree.htm");
-            }
+           
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
             var fss = handler.DoMethodReturnJSON("Frms_InitSort");
 

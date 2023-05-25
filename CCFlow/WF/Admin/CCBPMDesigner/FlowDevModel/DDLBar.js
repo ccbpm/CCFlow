@@ -1,4 +1,4 @@
-﻿var webUser = new WebUser();
+var webUser = new WebUser();
 
 function InitBar(optionKey) {
 
@@ -27,7 +27,7 @@ function InitBar(optionKey) {
     if (webUser.CCBPMRunModel == 0)
         sorts.RetrieveAll();
     else
-        sorts.Retrieve("OrgNo", WebUser.OrgNo);
+        sorts.Retrieve("OrgNo", webUser.OrgNo);
     html += "&nbsp;存放目录:";
     html += "<select id=DDL_FlowSort >";
     var sortNo = GetQueryString("SortNo");

@@ -1,0 +1,27 @@
+.DS_Store
+node_modules
+/dist
+yarn.lock
+package-lock.json
+# local env files
+# .env.local
+.env.*.local
+# vue.config.js
+# Log files
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+开发计划.xlsx
+.~开发计划.xlsx
+文档.docx
+.~文档.docx
+延期说明.docx
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

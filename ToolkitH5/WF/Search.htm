@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:待办</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        $(function () {
+            SearchIt();
+        });
+
+        function SearchIt(pageIdx) {
+
+            if (pageIdx == undefined || pageIdx == null)
+                pageIdx = 1;
+
+            var url = ccbpmHostDevelopAPI + "?DoType=Search_Init&Token=" + GetToken();
+
+            var key = $("#TB_Key").val();
+            url += "&Key=" + key;
+
+            url += "&DTFrom=" + $("#TB_DTFrom").val() + "&DTTo" + $("#TB_DTTo").val();
+            url += "&Scop=" + $("#DDL_Scop").val();
+            url += "&PageIdx=" + pageIdx;
+
+            //var strs = RunUrlReturnString(url);
+            // alert(strs);
+
+            var json = RunUrlReturnJSON(url);
+
+            var ens = json["gwls"]; //集合数据.
+            var countDT = json["count"];
+            var row = countDT[0];
+            var count = row.CC;//总体数量.
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                Table1 += "<tr>";
+                Table1 += "<td>" + (i + 1) + "</td>"; //序号
+                Table1 += "<td>" + en.Title + "</td>";
+                Table1 += "<td>" + en.StarterName + "</td>";
+                Table1 += "<td>" + en.RDT + "</td>";
+                Table1 += "<td>" + en.FlowName + "</td>"; //停留节点.
+                Table1 += "<td>" + en.NodeName + "</td>";
+                Table1 += "<td>" + en.TodoEmps + "</td>";
+                var wfState = "待办";
+                if (en.WFState == 5)
+                    wfState = "<font color=red><b>退回</b></font>";
+
+                Table1 += "<td><font color=green>" + wfState + "</font></td>";
+                Table1 += "</tr>";
+               
+            }
+            $("#Table1").html(Table1);
+
+
+            $("#Table2").html("条数：" + count)
+            //根据 集合数据 ens 与总体数量 count 显示表格数据，与分页。
+
+        }
+    </script>
+</head>
+<body  class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        
+        <div class="ibox-content">
+            <div class="form-inline">
+                <div class="form-group">
+                    <input type="text" value="" id="TB_Key" class="form-control" placeholder="关键字..." />
+                </div>
+                <div class="form-group">
+                    <select id="DDL_Scop" class="form-control">
+                        <option value="0" selected="selected">我参与的</option>
+                        <option value="1"> 我发起的</option>
+                        <option value="2">  我部门发起的</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    日期从:<input type="text" id="TB_DTFrom" class="form-control"/> 到:<input type="text" id="TB_DTTo" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <button id="Btn" onclick="SearchIt()" class="btn btn-primary">查询</button>
+                </div>
+                </div>
+                <table class="table  table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>标题</th>
+                            <th>发起人</th>
+                            <th>发起日期</th>
+                            <th>流程名称</th>
+                            <th>停留节点</th>
+                            <th>当前处理人</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Table1">
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span id="Table2"></span>
+                    </div>
+                </div>
+</div>
+
+    </div>
+</body>
+</html>

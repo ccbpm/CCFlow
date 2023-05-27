@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:草稿</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js"></script>
+    <script language="javascript" type="text/javascript">
+
+        //什么是草稿，请百度 ccflow 草稿规则,或者查看操作手册.
+        $(function () {
+
+            $("#docs").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+
+            $("#title").html("草稿列表-Demo : <lable style='font-size:16px;color:green'>文件:Dev2Interface.js 方法:DB_Draft</lable>");
+
+            //调用 /WF/Dev2Interface.js 的 DB_Draft 接口，获得当前人员的草稿列表.
+            var db = DB_Draft();
+            //  db = JSON.parse(db);
+            var html = "<table class='table table-bordered table-striped table-hover '>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>标题</th>";
+            html += "<th>流程名称</th>";
+            html += "<th>保存日期</th>";
+            html += "<th>备注</th>";
+            html += "<th>操作</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < db.length; i++) {
+                var en = db[i];
+                html += "<tr>";
+                html += "<td>" + (i + 1) + "</td>"; //序号
+
+                html += "<td><a href=\"javascript:OpenForm('" + en.FK_Flow + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "');\" >" + en.Title + "</a></td>";
+
+                html += "<td>" + en.FlowName + "</td>"; //流程名称.
+                html += "<td>" + en.RDT + "</td>"; //停留节点.
+                html += "<td>" + en.FlowNote + "</td>"; //备注.
+
+
+                //调用 /WF/Dev2Interface.js 里面的 OpenForm 方法打开表单.
+                html += "<td>"; //操作.
+                html += "<a href=\"javascript:DeleteDraft('" + en.WorkID + "')\">删除</a>";
+                html += "</td>";
+
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+        });
+
+        //删除.
+        function DeleteDraft(workid) {
+
+            if (window.confirm('您确定要执行删除草稿吗？') == false)
+                return;
+
+            var sid = $.cookie("MyToken");
+
+            //调用 /WF/Dev2Interface.js 里面的 Flow_DeleteDraft 删除草稿的方法..
+            var str = Flow_DeleteDraft(sid, workid);
+
+            //如果撤销失败就提示信息.
+            if (str.indexOf('err@') == 0) {
+                alert(str);
+                return;
+            }
+            //刷新一下列表，因为这条记录到了待办列表里去了.
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body>
+
+    <div id="title" style="font-family:'Microsoft YaHei';font-size:24px;margin:3px;"></div>
+
+    <div id="docs"></div>
+
+</body>
+</html>

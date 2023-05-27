@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>使用SDK的模式开发工作的调用Demo代码</title>
+    <script src="/Portal/static/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
+    <script src="/Portal/static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="/Portal/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />  <!-- 引入ccbpm 的sdk开发js.  -->
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            var url = "/Portal/Login.htm";
+            window.location.href = url;
+        });
+    </script>
+</head>
+<body>
+
+    <div style="width: 80%; margin:5% auto;">
+
+        <div class="cardBox1" style="text-align:left">
+            <div class="headerBox" style="background-color: #4caf50; padding-top:6%;">
+                <h4>欢迎使用ccbpm的SDK开发 demo. </h4>
+            </div>
+            <div class="bodyBox" style="padding:10px 0;">
+                <p>1.本系统提供了一些驰骋BPM封装好的开发组件，与一些开发实例。</p>
+                <p>2.开发组件目录位于：/WF/*.*</p>
+                <p>
+                    3.开发实例位于：/AppDemo/*.*
+                </p>
+                <p>4.操作说明位于：/Portal/Welcome.htm </p>
+            </div>
+        </div>
+
+        <div class="cardBox2">
+            <div class="headerBox" style="background-color: #5BC0DE;">
+                <h4>流程服务器端信息</h4>
+
+            </div>
+            <div class="bodyBox">
+                <p><a href="http://help.jflow.cn:8083/WF/Admin/Portal/Login.htm" target="_blank"> 驰骋BPM流程系统登录</a></p>
+                <p>登录用户名：admin 密码:123</p>
+                <p>
+                    <a href="http://help.jflow.cn:8083/WF/Admin/Portal/Login.htm" class="label label-info" style="border-radius: .25em;">欢迎登录</a>
+                </p>
+
+            </div>
+        </div>
+        <div class="cardBox2">
+            <div class="headerBox" style="background-color: #5BC0DE;">
+                <h4>本机客户端信息</h4>
+            </div>
+            <div class="bodyBox" style="text-align:left">
+                <p>本机客户端 ERP开发demo地址</p>
+                <p><a href="./Portal/Login.htm"> 登录页面./Portal/Login.htm</a>  </p>
+                <p>
+                    测试人员: admin, zhoutianjiao 密码:123
+                </p>
+            </div>
+        </div>
+        <div class="cardBox2">
+            <div class="headerBox" style="background-color: #5BC0DE;">
+                <h4>更多资料请参考</h4>
+            </div>
+            <div class="bodyBox" style="text-align:left">
+                <p>视频教程:http://ccflow.ke.qq.com</p>
+                <p>资料下载:http://doc.ccbpm.cn</p>
+                <p>官方网站:http://ccflow.org </p>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+
+

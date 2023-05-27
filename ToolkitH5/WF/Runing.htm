@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:在途</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js"></script>
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        $(function () {
+
+            $("#docs").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            // ccbpmHostDevelopAPI 变量是定义在 /config.js 的服务地址. 访问必须两个参数DoWhat,SID.
+            // dowhat 就是一个请求的标记, sid 类似于token，登录的时候写入到 表Port_Emp的SID列的值.
+            //获得当前的SID.
+            var sid = $.cookie("MyToken");
+            var realCount = 0;
+
+            //调用 /WF/Dev2Interface.js 的 DB_Runing() 接口，获得当前人员未处理完的工作列表.
+            var db = DB_Runing();
+            // db = JSON.parse(db);
+
+            tablet += "<th>#</th>";
+            //Table1 += "<th>WorkID</th>";
+            tablet += "<th>标题</th>";
+            //  Table1 += "<th>编号</th>";
+            tablet += "<th>流程名称</th>";
+            tablet += "<th>停留节点</th>";
+            //Table1 += "<th>状态</th>";
+
+            tablet += "<th>发起人</th>";
+            tablet += "<th>部门</th>";
+            tablet += "<th>发起日期</th>";
+
+            tablet += "<th>当前处理人</th>";
+            //Table1 += "<th>参与人</th>";
+
+            tablet += "<th>操作</th>";
+            tablet += "</tr>";
+            $("#tablet").html(tablet);
+
+            for (var i = 0; i < db.length; i++) {
+                var en = db[i];
+                Table1 += "<tr>";
+                Table1 += "<td>" + (i + 1) + "</td>"; //序号
+                //Table1 += "<td>" + en.WorkID + "</td>"; // 工作ID.
+
+
+                Table1 += "<td> <a href=\"javascript:OpenFrm('" + en.WorkID + "','" + en.FK_Node + "','" + en.FK_Flow + "','" + en.FID + "');\" > " + en.Title + "</a></td>"; //标题.
+                // Table1 += "<td>" + en.FK_Flow + "</td>"; //流程编号.
+                Table1 += "<td>" + en.FlowName + "</td>"; //流程名称.
+
+                Table1 += "<td>" + en.NodeName + "</td>"; //停留节点.
+                //Table1 += "<td>" + en.NodeName + "</td>"; //节点名称.
+
+                //Table1 += "<td>" + en.StarterName + "</td>"; //发起人.
+                Table1 += "<td>" + en.StarterName + "</td>"; //发起人名称.
+                //Table1 += "<td>" + en.FK_Dept + "</td>"; //发起人部门.
+                Table1 += "<td>" + en.DeptName + "</td>"; //发起人部门.
+                Table1 += "<td>" + en.RDT + "</td>"; //发起日期.
+
+                Table1 += "<td>" + en.TodoEmps + "</td>"; //当前处理人.
+                //Table1 += "<td>" + en.Emps + "</td>"; //参与人.
+
+                Table1 += "<td>";
+
+                Table1 += " <a href=\"javascript:DoUnSend('" + en.WorkID + "','" + en.FK_Node + "','" + en.FK_Flow + "','" + en.FID + "');\"  class=\"edit btn btn-success btn-sm\">撤销</a>";
+
+                Table1 += " <a href=\"javascript:DoPress('" + en.WorkID + "','" + en.FK_Node + "','" + en.FK_Flow + "','" + en.FID + "');\" class=\"edit btn btn-danger btn-sm\">催办</a>";
+                Table1 += "</td>";
+
+                Table1 += "</tr>";
+                realCount++;
+            }
+            Table1 += "</tbody></table>";
+            $("#Table1").html(Table1);
+            $("#Table2").html("合计: " + realCount + "条");
+        });
+        /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo, fid) {
+            var host = ccbpmHostDevelopAPI.replace('/DataUser/DevelopAPI.ashx', '');
+            //var url = "../WF/MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
+            var url = host + "/WF/MyViewGener.htm?HttpHandlerName=BP.WF.HttpHandler.WF_MyView&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=0&NodeID=" + nodeID + "&Token=" + GetToken();
+            window.open(url);
+            return;
+        }
+        /**
+         * 撤销发送，调用/WF/Dev2Interface.js 的方法.
+         * @param workid
+         */
+        function DoUnSend(workid,fk_node,fk_flow,fid) {
+
+            if (window.confirm('您确定要执行撤销发送吗？') == false)
+                return;
+            //调用 /WF/Dev2Interface.js 里面的 Flow_DoUnSend 撤销发送方法.
+            var str = Flow_DoUnSend(workid);
+
+            //如果撤销失败就提示信息.
+            if (str.indexOf('err@') == 0) {
+                alert(str);
+                return;
+            }
+
+            //如果没有撤销失败，就打开表单.
+            OpenFrm(workid,fk_node,fk_flow,fid);
+
+            //刷新一下列表，因为这条记录到了待办列表里去了.
+            window.location.href = window.location.href;
+        }
+        /**
+         * 催办
+         * @param workid
+         */
+        function DoPress(workid) {
+
+            var str = window.prompt('请输入催办消息', '此工作需要您尽快处理.');
+            //调用 /WF/Dev2Interface.js 里面的 Flow_DoPress 催办方法.
+            var str = Flow_DoPress(workid, str);
+            if (str.indexOf('err@') == 0) {
+                alert(str);
+                return;
+            }
+            alert(str);
+           
+        }
+    </script>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox-content">
+            <table class="table  table-striped">
+                <thead>
+                    <tr id="tablet">
+                    </tr>
+                </thead>
+                <tbody id="Table1">
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="Table2"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<!--body>
+    <div class="main-content">
+        <div class="card">
+            <div id="title" class="card-title"></div>
+
+            <div id="docs"></div>
+        </div>
+    </div>
+</body-->
+</html>

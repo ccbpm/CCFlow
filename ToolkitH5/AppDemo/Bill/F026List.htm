@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>采购单列表</title>
+    <link href="../../Portal/ccbpm.css" rel="stylesheet" />
+    <!-- 引入常用的JS脚本. -->
+    <script src="../../WF/Scripts/QueryString.js"></script>
+    <script src="../../WF/Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/jquery/jquery.cookie.js"></script>
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- 引入列表文件配置文件 -->
+    <script src="../../WF/config.js"></script>
+    <script src="../../WF/Dev2Interface.js"></script>
+    <script src="../DataBase.js"></script>
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        $(function () {
+
+            $("#docs").html("<img src=../../WF/Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            var db = GenerBuyBillSelfPK(); //获取dataBase.js的采购订单.
+
+            var html = "<table class='table table-bordered table-striped table-hover'>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>采购单号</th>";
+            html += "<th>提请部门</th>";
+            html += "<th>单据标题</th>";
+            html += "<th>采购日期</th>";
+            html += "<th>产地</th>";
+            html += "<th colspan=2>状态</th>";
+            html += "</tr>";
+
+            for (var i = 0; i < db.length; i++) {
+                var en = db[i];
+                html += "<tr>";
+                html += "<td>" + i + "</td>"; //序号
+                html += "<td>" + en.DJBH + "</td>"; //流程类别编号.
+                html += "<td>" + en.DeptName + "</td>"; //部门名称.
+                html += "<td>" + en.BillName + "</td>"; //单据标题.
+                html += "<td>" + en.RDT + "</td>"; //提请日期.
+                html += "<td>" + en.Addr + "</td>"; //产地.
+                html += "<td>" + en.Linker + "</td>"; //流程名称.
+
+                //调用 /WF/ListAPI.js 里面的 OpenForm 方法打开表单.
+                html += "<td colspan=2>";
+                html += "  <a href=\"javascript:StartFlowKaiPiao('" + en.BH + "','" + en.MC + "');\" >发起开票流程</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                html += "  <a href=\"javascript:StartFlowCuiKuan('" + en.BH + "','" + en.MC + "');\" >发起催款流程</a>";
+
+                html += "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+
+        });
+
+        /**
+           * 发起开票申请流程
+           * 1. 开票申请流程是内置表单.
+           * 2. 打开表单后，把客户编号，客户名称带入到开始节点表单里.
+           * @param kehubianhao 客户编号,
+           * @param KeHuMingCheng 客户名称.
+           */
+        function StartFlowKaiPiao(kehubianhao, KeHuMingCheng) {
+
+            //组织传入参数,这些参数带入到开始节点表单里.
+            var paras = "&KeHuBianHao=" + kehubianhao + "&KeHuMingChen=" + KeHuMingCheng;
+
+            //调用Dev2Interface.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
+            var url = OpenForm("021", 0, 0, 0, paras);
+
+            //  alert('将要打开的发起流程URL:' + url);
+            //window.open(url);
+        }
+
+        /**
+        * 发起催款流程
+        * 1. 开票申请流程是内置表单.
+        * 2. 打开表单后，把客户编号，客户名称带入到开始节点表单里.
+        * @param kehubianhao 客户编号,
+        * @param KeHuMingCheng 客户名称.
+        */
+        function StartFlowCuiKuan(kehubianhao, KeHuMingCheng) {
+
+            //组织传入参数,这些参数带入到开始节点表单里.
+            var paras = "&KeHuBianHao=" + kehubianhao + "&KeHuMingChen=" + KeHuMingCheng;
+
+            //调用ListAPI.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
+            var url = OpenForm("022", 0, 0, 0, paras);
+            // window.open(url);
+        }
+        function CreateWorkID()
+        {
+
+        }
+    </script>
+</head>
+<body style="background-color: #f2f2f2">
+    <div class="fieldset_block">
+        <center>
+            <fieldset>
+                <legend>发货单 - 自定义主键单据</legend>
+                <div id="docs"></div>
+            </fieldset>
+        </center>
+    </div>
+    <div class="fieldset_block">
+        <center>
+            <fieldset>
+                <legend>说明</legend>
+                <ul>
+                    <li>该页面位于:\DemoTools\Bill\BuyBillList_SDKFrmWorkID.htm </li>
+                    <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
+                    <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
+                    <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
+                    <li>请参考html里面的发起方法。</li>
+                </ul>
+            </fieldset>
+        </center>
+    </div>
+    <style>
+        .fieldset_block {
+            width: 95%;
+            background-color: white !important;
+            margin-top: 20px !important;
+            height: auto;
+            padding: 10px 12px;
+            box-shadow: 0 0px 8px rgba(0, 0, 0, .4);
+            border-radius: 5px;
+        }
+
+        fieldset {
+            margin-inline-start: 2px;
+            margin-inline-end: 2px;
+            padding-block-start: 0.35em;
+            padding-inline-start: 0.75em;
+            padding-inline-end: 0.75em;
+            padding-block-end: 0.625em;
+            min-inline-size: min-content;
+            border-radius: 5px;
+            border-width: 2px;
+            border-style: groove;
+            border-color: rgb(192, 192, 192);
+            border-image: initial;
+        }
+
+        legend {
+            text-align: left;
+            width: auto;
+            color: green;
+            font-size: large;
+            font-weight: bolder;
+            padding-inline-start: 2px;
+            padding-inline-end: 2px;
+            border-width: initial;
+            border-style: none;
+            border-color: initial;
+            border-image: initial;
+        }
+
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+
+        button, input {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+    </style>
+
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--必须引入的-->
+    <script src="../../WF/Scripts/QueryString.js"></script>
+    <script src="../../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- 引入驰骋BPM的组件JS  -->
+    <script src="../../WF/config.js"></script>
+    <script src="../../WF/Toolbar.js"></script>
+    <script type="text/javascript">
+
+        //获得流程参数.
+        var workid = GetQueryString("WorkID"); //工作流ID.
+        var flowNo = GetQueryString("FK_Flow"); //流程模板编号.
+        var nodeID = GetQueryString("FK_Node"); //运行到哪里了。
+
+        //页面启动函数.
+        $(function () {
+
+            var sid = GetToken();
+            if (sid == null || sid == '') {
+                alert('登录信息丢失，请重新登录.');
+                return;
+            }
+            //根据nodeID设置表单是否只读.
+            if (nodeID != 101) {
+                //设置表单元素只读，因为只有开始节点才能可以编辑,其他节点表单只显示审核组件.
+                $("#ccform").attr("readonly", true);
+            }
+        });
+
+        //引用工具栏必须有一个 Save 方法.这个方法用于表单. 要保存到您的数据库里面。
+        function Save() {
+
+            //执行保存检查.
+            if (1 == 1)
+                return true; //保存成功.
+            else
+                return false; //保存失败.
+        }
+    </script>
+
+</head>
+<body>
+    <form id="ccform">
+
+        <center>
+            <table style="width:70%">
+
+                <!--注意标记: 这里是一个工具栏组件: 发送、保存、移交、打印、加签、等按钮的显示与隐藏，
+                 在节点属性里可以配置,要启用的字段.
+                -->
+                <tr>
+                    <th colspan="4">
+                        <div class="CurrentForm-buttom-bar">
+                            <div id="Toolbar" class="Bar" style="height:44px"></div>
+                        </div>
+                    </th>
+                </tr>
+                <!--- toolbar end   -->
+                <tr>
+                    <td>申请人 </td>
+                    <td><input type="text" id="TB_SQR" /> </td>
+                    <td>申请日期 </td>
+                    <td><input type="text" id="TB_AppDate" /> </td>
+                </tr>
+                <tr>
+                    <td>申请部门 </td>
+                    <td colspan="3"><input type="text" id="TB_Dept" /> </td>
+                </tr>
+                <tr>
+                    <td>请假日期从 </td>
+                    <td><input type="text" id="TB_DTFrom" /> </td>
+                    <td>到 </td>
+                    <td><input type="text" id="TB_DTTo" /> </td>
+                </tr>
+                <tr>
+                    <td>天数 </td>
+                    <td><input type="text" id="TB_QingJiaTianShu" /> </td>
+                    <td>请假类型 </td>
+                    <td><input type="text" id="TB_DTTo11" /> </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4" style="background-color:blanchedalmond">请假原因 </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        <textarea id="TB_Note" style="width:100%;"></textarea>
+                    </td>
+                </tr>
+
+                <!-- 注意标记: 这里是一个审核组件: 审核组件有三个状态：禁用，启用，只读，在节点属性里可以配置. -->
+                <tr>
+                    <td colspan="4"> <div id="WorkCheck"></div> </td>
+                </tr>
+                <!--- 审核组件结束 end   -->
+
+            </table>
+
+        </center>
+    </form>
+
+</body>
+</html>

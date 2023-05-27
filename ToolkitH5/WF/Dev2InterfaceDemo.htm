@@ -1,0 +1,649 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:待办</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        //启动函数
+        $(function () {
+
+            var userNo = GetUserNo();
+
+            $("#UserHost").html("<font color=green><b>" + host + "</b></font>");
+            $("#UserHostUrl").html("<font color=green><b>" + ccbpmHostDevelopAPI + "</b></font>");
+            $("#UserPKey").html("<font color=green><b>" + PrivateKey + "</b></font>");
+            $("#UserDomain").html("<font color=green><b>" + domain + "</b></font>");
+
+            var webUser = GetWebUser();
+
+            $("#UserNo").html("<font color=green><b>" + webUser.No + "</b></font>");
+            $("#UserName").html("<font color=green><b>" + webUser.Name + "</b></font>");
+            $("#UserFK_Dept").html("<font color=green><b>" + webUser.FK_Dept + "</b></font>");
+            $("#UserFK_DeptName").html("<font color=green><b>" + webUser.FK_DeptName + "</b></font>");
+            $("#UserOrgNo").html("<font color=green><b>" + webUser.OrgNo + "</b></font>");
+            $("#UserOrgName").html("<font color=green><b>" + webUser.OrgName + "</b></font>");
+            $("#UserToken").html("<font color=green><b>" + webUser.Token + "</b></font>");
+
+        });
+        function Start() {
+            var db = DB_Start();
+            $("#TB_DBInfo").html(JSON.stringify(db));
+            $("#msg").html("<font color=green>方法位置: Dev2Interface.js 方法名: DB_Start.</font>");
+        }
+        function Todolist() {
+            var db = DB_Todolist();
+            $("#TB_DBInfo").html(JSON.stringify(db));
+            $("#msg").html("<font color=green>方法位置: Dev2Interface.js 方法名: DB_Todolist.</font>");
+        }
+        function Runing() {
+            var db = DB_Runing();
+            $("#TB_DBInfo").html(JSON.stringify(db));
+            $("#msg").html("<font color=green>方法位置: Dev2Interface.js 方法名: DB_Runing.</font>");
+        }
+        function Draft() {
+            var db = DB_Draft();
+            $("#TB_DBInfo").html(JSON.stringify(db));
+            $("#msg").html("<font color=green>方法位置: Dev2Interface.js 方法名: DB_Draft.</font>");
+        }
+
+        function CreateWorkID() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = Node_CreateBlankWorkID(flowNo);
+            if (workID == undefined) {
+                $("#msgAPI").html("<font color=red>创建失败,请参考提示.</font>");
+                return;
+            }
+            $("#TB_WorkID").val(workID);
+            $("#msgAPI").html("<font color=green>WorkID创建成功[" + workID + "],如果这个WorkID没有使用再次创建不会变化,创建时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+        function SetTitle() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+
+            var webUser = GetWebUser();
+
+            var title = window.prompt('请输入流程标题:', '部门:' + webUser.FK_DeptName + ' 人员:' + webUser.Name + '发起:' + workID);
+            if (title == undefined || title == null)
+                return;
+
+            var val = Flow_SetTitle(workID, title);
+            $("#msgAPI").html("<font color=green>流程标题设置成功[" + val + "],时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+        function SaveAsDefart() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+
+            var workID = Node_SetDraft(flowNo, workID);
+            $("#msgAPI").html("<font color=green>设置成功，执行了方法 Node_SetDraft 该workID已经是草稿状态，在执行创建workID就是一个新的WorkID.</font>");
+        }
+        function DelFlow() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+
+            if (confirm('您确定要删除[' + workID + ']吗?') == false)
+                return;
+
+            var workID = Flow_DeleteDraft(workID);
+            $("#msgAPI").html("<font color=red>删除成功.</font>");
+            $("#TB_WorkID").val('');
+        }
+        //保存参数.
+        function SaveParas() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+
+            var paras = $("#TB_Paras").val();
+            var workID = Node_SaveParas(workID, paras);
+            $("#msgAPI").html("<font color=green>参数保存成功.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+        function Send() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            if (confirm('您确定要发送FlowNo=[' + flowNo + '],WorkID=[' + workID + ']吗？') == false)
+                return;
+
+            var msg = Node_SendWork(workID, 0, null, null); //执行发送.
+            alert(msg);
+
+            $("#msgAPI").html("<font color=green>发送结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+        function SendWithParas() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            var toNodeID = $("#TB_ToNodeID").val();
+            var toEmps = $("#TB_ToEmps").val();
+            if (confirm('您确定要发送FlowNo=[' + flowNo + '],WorkID=[' + workID + '],发送到[' + toNodeID + '],发送给[' + toEmps + ']吗？') == false)
+                return;
+
+            var msg = Node_SendWork(workID, toNodeID, toEmps, null); //执行发送.
+            $("#msgAPI").html("<font color=green>参数发送：发送结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+
+        }
+        function UnSend() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            if (confirm('您确定要撤销发送FlowNo=[' + flowNo + '],WorkID=[' + workID + ']吗？') == false)
+                return;
+            var msg = Flow_DoUnSend(workID); //撤销.
+            $("#msgAPI").html("<font color=green>撤销发送: - 执行结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+        function DoPress() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            var msg = window.prompt('请输入撤销催办原因', '着急出差请审批.');
+            var msg = Flow_DoPress(workID, msg); //执行发送.
+            $("#msgAPI").html("<font color=green>催办 - 执行结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+        function FlowOver() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            if (confirm('您确定要结束流程吗？FlowNo=[' + flowNo + '],WorkID=[' + workID + ']') == false)
+                return;
+
+            var msg = Flow_DoFlowOver(workID); // 流程结束.
+            $("#msgAPI").html("<font color=green>流程结束: - 执行结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+        function Shift() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            var toEmpID = window.prompt('移交的人员ID：', 'liping');
+            if (toEmpID == null || toEmpID == undefined || toEmpID == '')
+                return;
+
+            var shiftMsg = window.prompt('移交原因：', '我要出差了，请您协助处理.');
+            if (shiftMsg == null || shiftMsg == undefined || shiftMsg == '')
+                return;
+
+            var msg = Node_Shift(workID, toEmpID, shiftMsg); //调用接口.
+            $("#msgAPI").html("<font color=green>移交: - 执行结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+
+
+        function AddEmps() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            var empID = window.prompt('要增加的人员ID：', 'liping');
+            if (empID == null || empID == undefined || empID == '')
+                return;
+
+            var msg = Node_AddTodolist(workID, empID); //调用接口.
+            ShowMsg("给当前节点增加人员: - 执行结果【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]");
+        }
+        function GenerWorkInfo() {
+            var flowNo = $("#TB_FlowNo").val();
+            if (flowNo == null || flowNo == '') {
+                $("#msgAPI").html("<font color=red>流程编号为空.</font>");
+                return;
+            }
+            var workID = $("#TB_WorkID").val();
+            if (workID == 0 || workID == null || workID == '') {
+                $("#msgAPI").html("<font color=red>请生成WorkID.</font>");
+                return;
+            }
+            var msg = Flow_GenerWorkFlow(workID); //调用接口.
+            $("#msgAPI").html("<font color=green>【" + msg + "】.<br/><b>执行时间Date.now()=[" + Date.now() + "]</b></font>");
+        }
+
+        function ShowMsg(msg) {
+            if (msg.indexOf('err@') != -1)
+                $("#msgAPI").html("<font color=red>【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+            else
+                $("#msgAPI").html("<font color=green>【" + msg + "】.执行时间Date.now()=[" + Date.now() + "]</font>");
+        }
+
+    </script>
+    <style>
+        .fieldset_block {
+            width: 95%;
+            background-color: white !important;
+            margin-top: 20px !important;
+            height: auto;
+            padding: 10px 12px;
+            box-shadow: 0 0px 8px rgba(0, 0, 0, .4);
+            border-radius: 5px;
+        }
+
+        fieldset {
+            margin-inline-start: 2px;
+            margin-inline-end: 2px;
+            padding-block-start: 0.35em;
+            padding-inline-start: 0.75em;
+            padding-inline-end: 0.75em;
+            padding-block-end: 0.625em;
+            min-inline-size: min-content;
+            border-radius: 5px;
+            border-width: 2px;
+            border-style: groove;
+            border-color: rgb(192, 192, 192);
+            border-image: initial;
+        }
+        legend {
+            text-align: left;
+            width: auto;
+            color: green;
+            font-size: large;
+            font-weight: bolder;
+            padding-inline-start: 2px;
+            padding-inline-end: 2px;
+            border-width: initial;
+            border-style: none;
+            border-color: initial;
+            border-image: initial;
+        }
+
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+        button ,input{
+            margin-top:2px;
+            margin-bottom:2px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <center>
+            <div class="fieldset_block">
+                <fieldset>
+                    <legend> 系统信息 </legend>
+                    <table id="Tabl1" style="width:80%;" class="table  table-striped">
+                        <tr>
+                            <th>项目</th>
+                            <th>值</th>
+                            <th>获取方法</th>
+                        </tr>
+                        <tr>
+                            <td> BPM服务器-主机地址 </td>
+                            <td><div id="UserHost"></div> </td>
+                            <td>config.js的设置,用于链接BPM服务器</td>
+
+                        </tr>
+
+                        <tr>
+                            <td> 服务地址 </td>
+                            <td><div id="UserHostUrl"></div> </td>
+                            <td>同上</td>
+
+                        </tr>
+                        <tr>
+                            <td> 密钥 </td>
+                            <td><div id="UserPKey"></div> </td>
+                            <td>与bpm服务器交互登陆需要的密钥.</td>
+                        </tr>
+
+                        <tr>
+                            <td> 系统域 </td>
+                            <td><div id="UserDomain"></div> </td>
+                            <td>
+                                <ul>
+                                    <li>应用于流程服务中心的场景,OA,CRM,ERP系统共享一个BPM服务器.</li>
+                                    <li>每个系统都有一个别名,ccbpm称为流程域，配置在流程目录属性里.</li>
+                                    <li>本系统的所有待办、在途、草稿、发起内容都是该域下的数据.</li>
+                                    <li>如果为空，则表示所有的流程.</li>
+                                </ul>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td> 登陆编号 </td>
+                            <td><div id="UserNo"></div> </td>
+                            <td>登陆用户的ID, config.js </td>
+                        </tr>
+
+                        <tr>
+                            <td> 登陆名称 </td>
+                            <td><div id="UserName"></div> </td>
+                            <td>同上</td>
+
+                        </tr>
+
+                        <tr>
+                            <td> 部门编号 </td>
+                            <td><div id="UserFK_Dept"></div> </td>
+                            <td>同上</td>
+
+                        </tr>
+
+                        <tr>
+                            <td> 部门名称 </td>
+                            <td><div id="UserFK_DeptName"></div> </td>
+                            <td>同上</td>
+
+                        </tr>
+
+                        <tr>
+                            <td> 组织编号 </td>
+                            <td><div id="UserOrgNo"></div> </td>
+                            <td>同上</td>
+                        </tr>
+
+                        <tr>
+                            <td> 组织名称 </td>
+                            <td><div id="UserOrgName"></div> </td>
+                            <td> 同上 </td>
+                        </tr>
+
+
+                        <tr>
+                            <td> ccbpm服务器的Token </td>
+                            <td><div id="UserToken"></div> </td>
+                            <td>从ccbpm服务器生成的token.</td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </div>
+        </center>
+        <center>
+            <div class="fieldset_block">
+                <fieldset>
+                    <legend> 登陆集成方法 </legend>
+                    <ul>
+                        <li> 如果有自己框架，自己的组织结构体系,登陆的时候，需要在自己的框架下验证密码用户名,然后调用ccbpm的登陆接口。 </li>
+                        <li> 登陆接口:LoginCCBPM(PrivateKey, userNo) </li>
+                        <li> 请参考:/Portal/Login.htm 页面的登陆方法. </li>
+                    </ul>
+                </fieldset>
+            </div>
+        </center>
+        <center>
+            <div class="fieldset_block">
+                <fieldset>
+                    <legend> 菜单接口 </legend>
+                    <ul>
+                        <li> <button onclick="Start()">获得发起列表</button> -<button onclick="Todolist()">待办</button> -<button onclick="Runing()">在途</button>  -<button onclick="Draft()">草稿</button>   </li>
+                        <li>
+                            点击按钮显示数据，ccbpm已经为您开发好了这些功能文件，请参考/WF/*.*.
+                            <textarea id="TB_DBInfo" style="width:100%;" placeholder="返回的内容回显示到这里."> </textarea>
+                        </li>
+                        <li><div id="msg">按钮事件里调用:Dev2Interface.js的方法.</div></li>
+                    </ul>
+                </fieldset>
+            </div>
+        </center>
+        <center>
+            <div class="fieldset_block">
+                <fieldset>
+                    <legend>流程&节点接口</legend>
+                    <ul>
+                        <li><button onclick="CreateWorkID()">创建WorkID</button> , 新建单据从创建WorkID开始，作为您的单据主键. - <button onclick="GenerWorkInfo()">获得流程信息</button>  </li>
+                        <li> 流程编号: <input type="text" id="TB_FlowNo" value="023" />WorkID:<input type="text" id="TB_WorkID" /> </li>
+                        <li> ### 创建空白的WorkID后，可以执行保存与删除操作. </li>
+                        <li><button onclick="SaveAsDefart()">保存为草稿</button> - <button onclick="DelFlow()">删除草稿/流程</button> - <button onclick="SetTitle()">设置流程标题</button>     </li>
+
+                        <li> ### 保存参数 </li>
+                        <li><button onclick="SaveParas()">保存流程参数,可以作为方向条件.</button> 参数格式: <input type="text" style="width:90%;" id="TB_Paras" value="@HTBH=001@KHMC=济南驰骋技术支持合同@Tel=18660153393@HTJE=2300000.00" /> </li>
+
+                        <li> ### 启动流程 </li>
+                        <li><button onclick="Send()">执行无参发送</button>, 到达的节点与接受人是由定义的流程模板设置方向条件与接受人规则自动计算的.</li>
+                        <li><button onclick="SendWithParas()">执行有参发送</button> 发送到节点ID:<input type="text" id="TB_ToNodeID" value="0" />可以为空, 到人员:<input type="text" id="TB_ToEmps" />多个人员用逗号分开,可以为空.</li>
+
+                        <!--<li> ### 待办-发送 </li>
+        <li>- <button onclick="ReturnWork()">退回</button> </li>-->
+
+                        <li> ### 在途的操作 </li>
+                        <li><button onclick="UnSend()">撤销发送</button> - <button onclick="DoPress()">催办</button></li>
+
+                        <li> ### 流程运维操作 </li>
+                        <li><button onclick="FlowOver()">强制结束流程</button> - <button onclick="Shift()">移交</button> -  <button onclick="AddEmps()">增加接受人</button>  </li>
+
+                        <li><div id="msgAPI">请执行相关操作.</div></li>
+                    </ul>
+                </fieldset>
+            </div>
+        </center>
+       
+        <!--<fieldset>
+            <legend> 系统信息 </legend>
+            <center>
+                <table id="Tabl1" style="width:80%;" class="table  table-striped">
+                    <tr>
+                        <th>项目</th>
+                        <th>值</th>
+                        <th>获取方法</th>
+                    </tr>
+                    <tr>
+                        <td> BPM服务器-主机地址 </td>
+                        <td><div id="UserHost"></div> </td>
+                        <td>config.js的设置,用于链接BPM服务器</td>
+
+                    </tr>
+
+                    <tr>
+                        <td> 服务地址 </td>
+                        <td><div id="UserHostUrl"></div> </td>
+                        <td>同上</td>
+
+                    </tr>
+                    <tr>
+                        <td> 密钥 </td>
+                        <td><div id="UserPKey"></div> </td>
+                        <td>与bpm服务器交互登陆需要的密钥.</td>
+                    </tr>
+
+                    <tr>
+                        <td> 系统域 </td>
+                        <td><div id="UserDomain"></div> </td>
+                        <td>
+                            <ul>
+                                <li>应用于流程服务中心的场景,OA,CRM,ERP系统共享一个BPM服务器.</li>
+                                <li>每个系统都有一个别名,ccbpm称为流程域，配置在流程目录属性里.</li>
+                                <li>本系统的所有待办、在途、草稿、发起内容都是该域下的数据.</li>
+                                <li>如果为空，则表示所有的流程.</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td> 登陆编号 </td>
+                        <td><div id="UserNo"></div> </td>
+                        <td>登陆用户的ID, config.js </td>
+                    </tr>
+
+                    <tr>
+                        <td> 登陆名称 </td>
+                        <td><div id="UserName"></div> </td>
+                        <td>同上</td>
+
+                    </tr>
+
+                    <tr>
+                        <td> 部门编号 </td>
+                        <td><div id="UserFK_Dept"></div> </td>
+                        <td>同上</td>
+
+                    </tr>
+
+                    <tr>
+                        <td> 部门名称 </td>
+                        <td><div id="UserFK_DeptName"></div> </td>
+                        <td>同上</td>
+
+                    </tr>
+
+                    <tr>
+                        <td> 组织编号 </td>
+                        <td><div id="UserOrgNo"></div> </td>
+                        <td>同上</td>
+                    </tr>
+
+                    <tr>
+                        <td> 组织名称 </td>
+                        <td><div id="UserOrgName"></div> </td>
+                        <td> 同上 </td>
+                    </tr>
+
+
+                    <tr>
+                        <td> ccbpm服务器的Token </td>
+                        <td><div id="UserToken"></div> </td>
+                        <td>从ccbpm服务器生成的token.</td>
+                    </tr>
+
+                </table>
+            </center>
+            <br />
+
+            <legend> 登陆集成方法 </legend>
+            <ul>
+                <li> 如果有自己框架，自己的组织结构体系,登陆的时候，需要在自己的框架下验证密码用户名,然后调用ccbpm的登陆接口。 </li>
+                <li> 登陆接口:LoginCCBPM(PrivateKey, userNo) </li>
+                <li> 请参考:/Portal/Login.htm 页面的登陆方法. </li>
+            </ul>
+            <legend> 菜单接口 </legend>
+            <ul>
+                <li> <button onclick="Start()">获得发起列表</button> -<button onclick="Todolist()">待办</button> -<button onclick="Runing()">在途</button>  -<button onclick="Draft()">草稿</button>   </li>
+                <li>
+                    点击按钮显示数据，ccbpm已经为您开发好了这些功能文件，请参考/WF/*.*.
+                    <textarea id="TB_DBInfo" style="width:100%;" placeholder="返回的内容回显示到这里."> </textarea>
+                </li>
+                <li><div id="msg">按钮事件里调用:Dev2Interface.js的方法.</div></li>
+            </ul>
+
+            <legend>流程&节点接口</legend>
+            <ul>
+                <li><button onclick="CreateWorkID()">创建WorkID</button> , 新建单据从创建WorkID开始，作为您的单据主键. - <button onclick="GenerWorkInfo()">获得流程信息</button>  </li>
+                <li> 流程编号: <input type="text" id="TB_FlowNo" value="023" />WorkID:<input type="text" id="TB_WorkID" /> </li>
+                <li> ### 创建空白的WorkID后，可以执行保存与删除操作. </li>
+                <li><button onclick="SaveAsDefart()">保存为草稿</button> - <button onclick="DelFlow()">删除草稿/流程</button> - <button onclick="SetTitle()">设置流程标题</button>     </li>
+
+                <li> ### 保存参数 </li>
+                <li><button onclick="SaveParas()">保存流程参数,可以作为方向条件.</button> 参数格式: <input type="text" style="width:90%;" id="TB_Paras" value="@HTBH=001@KHMC=济南驰骋技术支持合同@Tel=18660153393@HTJE=2300000.00" /> </li>
+
+                <li> ### 启动流程 </li>
+                <li><button onclick="Send()">执行无参发送</button>, 到达的节点与接受人是由定义的流程模板设置方向条件与接受人规则自动计算的.</li>
+                <li><button onclick="SendWithParas()">执行有参发送</button> 发送到节点ID:<input type="text" id="TB_ToNodeID" value="0" />可以为空, 到人员:<input type="text" id="TB_ToEmps" />多个人员用逗号分开,可以为空.</li>-->
+
+                <!--<li> ### 待办-发送 </li>
+            <li>- <button onclick="ReturnWork()">退回</button> </li>-->
+
+                <!--<li> ### 在途的操作 </li>
+                <li><button onclick="UnSend()">撤销发送</button> - <button onclick="DoPress()">催办</button></li>
+
+                <li> ### 流程运维操作 </li>
+                <li><button onclick="FlowOver()">强制结束流程</button> - <button onclick="Shift()">移交</button> -  <button onclick="AddEmps()">增加接受人</button>  </li>
+
+                <li><div id="msgAPI">请执行相关操作.</div></li>
+            </ul>
+
+
+
+        </fieldset>-->
+    </div>
+</body>
+</html>

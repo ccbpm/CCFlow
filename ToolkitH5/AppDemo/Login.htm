@@ -1,0 +1,193 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋BPM工具包模式集成 - 演示系统 </title>
+    <meta charset="UTF-8" />
+    <!-- 引用通用的js文件. -->
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.cookie.js"></script>
+    <link href="../WF/Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="../WF/Scripts/QueryString.js"></script>
+
+    <!-- 引入本系统的配置文件. -->
+    <script src="../CRM_AppConfig.js"></script>
+    <!-- 引入组件配置文件，用于调用Login方法. -->
+    <script src="../WF/config.js"></script>
+    <script src="../DemoAPI/WebAPIConfig.js"></script>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+        $(function () {
+            $.cookie("UserNo", "");
+            $.cookie("SID", "");
+            clearAllCookie();
+            localStorage.setItem('Token', '');
+            localStorage.setItem('UserInfoJson', '');
+
+            var url = host + "/Portal/Standard/Login.htm";
+            var html = "驰骋BPM服务地址" + host + ",您可以在WF/config.js修改.";
+            html += "流程设计维护:<a href='" + url + "' target=_blank >" + url + "</a>";
+
+            $("#tip").html(html);
+        });
+        function clearAllCookie() {
+            var myDate = new Date();
+            myDate.setTime(-1000);//设置时间    
+            var data = document.cookie;
+            var dataArray = data.split("; ");
+            for (var i = 0; i < dataArray.length; i++) {
+                var varName = dataArray[i].split("=");
+                document.cookie = varName[0] + "=''; expires=" + myDate.toGMTString();
+            }
+        }
+
+        //页面启动函数.
+        function LoginCRMSystem() {
+
+            //第1步: 这里是登录本机系统, 自己根据用户名密码去先去校验正确性。
+            var userNo = $("#TB_No").val();
+            var userPass = $("#TB_PW").val();
+            if (userNo == "" || userPass == "") {
+                alert('请输入用户名与密码');
+                return false;
+            }
+
+            //第1步: 请使用自己的系统验证用户名密码的正确性
+            if (1 == 2) {
+                alert('用户名密码不正确.');
+                return; 
+            }
+
+            //第2步: 开始登录ccbpm,获得 token.
+            //  1. 为了系统安全，请把 LoginCCBPM 的方法写入您的后台代码.
+            //  2. LoginCCBPM 方法位于/WF/config.js文件中.
+            var token = LoginCCBPM(PrivateKey, userNo); // token是ccbpm生成的.
+            if (token == null && token.indexOf('err@') == 0) {
+                alert(token);
+                return;
+            }
+            localStorage.setItem('Token', token);
+            //第3步： 把token, UserNo传入到要转入 crm系统的页面 .
+            window.location.href = 'Home.htm?Token=' + token + "&UserNo=" + userNo;
+            return;
+
+              
+
+        }
+        //页面启动函数.
+        function LoginAPIModel() {
+
+            //第1步: 这里是登录本机系统, 自己根据用户名密码去先去校验正确性。
+            var userNo = $("#TB_No").val();
+            var userPass = $("#TB_PW").val();
+            if (userNo == "" || userPass == "") {
+                alert('请输入用户名与密码');
+                return false;
+            }
+
+            //第1步： 正常处理本系统的登录密码校验, 此部分代码与ccbpm无关系.
+            // 处理类文件. 变量:handler 位于.  CRM_AppConfig.js 重点: 此部分代码与ccbpm无关系.
+            var url = handlerOfCRM + "?DoWhat=CRM_Portal_Login_Submit";  //handler 变量位于 AppConfig.js中定义.
+            $.ajax({
+                type: "GET",
+                url: url, //handler 变量位于 CRM_AppConfig.js中定义.
+                data: { No: userNo, Pass: userPass },
+                dataType: "text",
+                async: false,
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+
+                        if (data.indexOf('500') > 0) {
+                            alert("系统环境错误:请检查是否链接到数据库." + data);
+                            return;
+                        }
+                        alert(data);
+                        return;
+                    }
+
+                    //把SID写入到cookie.
+                    $.cookie("MyUserNo", userNo, { expires: 7, path: '/' });
+                    $.cookie("MySID", data, { expires: 7, path: '/' });
+
+                    //第2步: 开始登录ccbpm,获得 token.
+                    //  1. 为了系统安全，请把 LoginCCBPM 的方法写入您的后台代码.
+                    //  2. LoginCCBPM 方法位于/WF/config.js文件中.
+                    var token = LoginCCBPMByAPI(PrivateKey, userNo);
+                    if (token == null && token.indexOf('err@') == 0) {
+                        alert(token);
+                        return;
+                    }
+                   // localStorage.setItem('Token', token);
+                    window.location.href = 'Home.htm?Token=' + token + "&UserNo=" + userNo;
+                    return;
+
+                }, error: function (e) {
+                    alert('登录出现错误status:' + e.status);
+                    return;
+
+                }
+            });
+
+        }
+    </script>
+</head>
+<body style="background-image:url(Img/login_bg.png )">
+
+    <br />
+    <br />
+    <br />
+
+    <center>
+        <form id="Form1">
+
+            <fieldset>
+                <legend>CCBPM工具包模式集成 - 演示系统 </legend>
+                <div style="width:20%">
+                    <div class="form-group">
+                        <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号" lay-verify="required"
+                               class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码为空." lay-verify="required"
+                               class="form-control" />
+                    </div>
+                </div>
+                <div style="width:20%">
+                    <input type="button" onclick="LoginCRMSystem();" class="btn btn-primary btn-block" value="ERP系统-操作员登录(工具包模式)" />
+                    <!--<input type="button" onclick="LoginAPIModel();" class="btn btn-primary btn-block" value="ERP-操作员登录(API模式)" />-->
+                </div>
+
+
+                <legend style="text-align:left;">什么是工具包模式集成?</legend>
+                <ul style="text-align:left; padding-left:50px;">
+                    <li> 工具包模式就是ccbpm为开发这提供一个文件目录,植入到对方开发架构的一种模式. </li>
+                    <li>这个目录通过配置文件与驰骋bpm服务器进行交互，提供一系列的接口函数让开发者调用。 </li>
+                    <li>工具包里，包含一些功能页面，比如:发起、待办、在途、草稿等可以让用户绑定到自己的菜单体系上。 </li>
+                    <li>工具包里包含流程组件：比如：工作处理器工具栏、审核组件、父子流程组件等，可以让用户调用。 </li>
+                </ul>
+
+                <legend style="text-align:left;">说明</legend>
+                <ul style="text-align:left; padding-left:50px;">
+                    <li>测试人员: admin, zhoutianjiao, zhoushengyu, yangyilei 密码:123 </li>
+                    <li>登录后需要写入Port_Emp表的列SID里一个随机的guid作为token，来访问ccbpm的服务. </li>
+                    <li>在根目录下 config.js 里，您需要配置提供服务的ccbpm服务器地址。</li>
+                </ul>
+
+                <legend style="text-align:left;">资源信息</legend>
+                <ul style="text-align:left;padding-left:50px;">
+                    <li> <div id="tip"></li>
+                    <li> 登录用户名：admin 密码:123 </li>
+                </ul>
+
+            </fieldset>
+        </form>
+
+    </center>
+</body>
+</html>

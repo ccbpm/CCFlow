@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>采购单列表</title>
+    <link href="../../Portal/ccbpm.css" rel="stylesheet" />
+    <!-- 引入常用的JS脚本. -->
+    <script src="../../WF/Scripts/QueryString.js"></script>
+    <script src="../../WF/Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/jquery/jquery.cookie.js"></script>
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- 引入列表文件配置文件 -->
+    <script src="../../WF/config.js"></script>
+    <script src="../../WF/Dev2Interface.js"></script>
+    <script src="../DataBase.js"></script>
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        $(function () {
+
+            $("#docs").html("<img src=../../WF/Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            var db = DB_GenerWorkFlow('025'); // 获得当前流程中没有完成的数据.
+
+            var html = "<table class='table table-bordered table-striped table-hover'>";
+            html += "<tr>";
+            html += "<th>#</th>";
+            html += "<th>WorkID</th>";
+            html += "<th>流程状态</th>";
+            html += "<th>标题</th>";
+            html += "<th>采购单号</th>";
+            html += "<th>提请部门</th>";
+            html += "<th>提请日期</th>";
+            html += "<th>提请人</th>";
+
+            html += "<th>停留节点</th>";
+            html += "<th>当前处理人</th>";
+            html += "<th colspan=1>状态</th>";
+
+            html += "<th colspan=1>操作</th>";
+            html += "</tr>";
+
+            var webUser = GetWebUser();
+
+            for (var i = 0; i < db.length; i++) {
+                var en = db[i];
+                html += "<tr>";
+                html += "<td>" + i + "</td>"; //序号
+                html += "<td>" + en.WorkID + "</td>"; //WorkID=OID
+                if (en.WFState <= 1)
+                    html += "<td>" + en.WFState + " - 草稿" + "</td>"; //WorkID.
+                if (en.WFState == 2)
+                    html += "<td>" + en.WFState + " - 运行中" + "</td>"; //WorkID.
+                if (en.WFState == 5)
+                    html += "<td>" + en.WFState + " - 退回" + "</td>"; //WorkID.
+                if (en.WFState == 3)
+                    html += "<td>" + en.WFState + " - 已完成" + "</td>"; //WorkID.
+
+                html += "<td>" + en.Title + "</td>"; //单据标题.
+                html += "<td>" + en.BillNo + "</td>"; //单据编号.
+
+                html += "<td>" + en.DeptName + "</td>"; //部门名称.
+                html += "<td>" + en.RDT + "</td>"; //提请日期.
+                html += "<td>" + en.Starter + "</td>"; //发起人.
+
+                html += "<td>" + en.FK_Node + " - " + en.NodeName + "</td>"; //停留节点.
+                html += "<td>" + en.TodoEmps + "</td>"; //当前处理人.
+
+
+                html += "<td>" + en.WFState + "</td>"; //状态.
+
+                html += "<td colspan=1>";
+                if (en.TodoEmps.indexOf(webUser.No) == -1) { //不能处理当前工作.
+                    html += "  <a href=\"javascript:OpenMyForm('" + en.WorkID + "');\" >查看</a>";
+                } else {
+                    html += "  <a href=\"javascript:OpenMyForm('" + en.WorkID + "');\" >处理</a>";
+                }
+
+                //if (en.WFState == 0 || en.WFState == 1)
+                //    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >启动审批流程</a>";
+                //else
+                //    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >查看单据</a>";
+
+                html += "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#docs").html(html);
+
+        });
+
+        /**
+           * 启动审批流程
+           * @param WorkID .
+           */
+        function OpenMyForm(workID) {
+            //调用Dev2Interface.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
+            var url = OpenForm("025", 0, workID, 0, "");
+            // alert('将要打开的发起流程URL:' + url);
+            //window.open(url);
+        }
+        //创建workID.
+        function NewWorkID() {
+            var flowNo = window.prompt('请输入流程模板编号', '021');
+            if (flowNo == null || flowNo == undefined) {
+                alert('请输入流程模板编号');
+                return;
+            }
+            var workID = Node_CreateBlankWorkID(flowNo);
+            var msg = "创建说明:";
+            msg += "\t\n 1. 调用接口 Node_CreateBlankWorkID 创建一个新的WorkID. ";
+            msg += "\t\n 2. 开发人员根据这个ID, 作为单据的主键创建一个单据. ";
+            msg += "\t\n 3. WorkID=" + workID;
+            alert(msg);
+        }
+        //创建workid并执行发送.
+        function NewWorkIDAndSend() {
+
+            var flowNo = window.prompt('请输入流程模板编号', '025');
+            if (flowNo == null || flowNo == undefined) {
+                alert('请输入流程模板编号');
+                return;
+            }
+            var workID = Node_CreateBlankWorkID(flowNo);
+            alert('创建的WorkID,是通过 Node_CreateBlankWorkID 接口，WorkID=' + workID);
+
+            var msg = Node_SendWork(flowNo, 0, workID, 0, null, null);
+            alert('执行发送调用的:Node_SendWork方法: 发送返回信息. ' + msg);
+        }
+        //创建单据.
+        function NewBill() {
+            alert('系统将要启动025流程');
+            OpenForm("025", 2501, 0, 0, '');
+            //window.open(url);
+        }
+    </script>
+</head>
+<body>
+
+    <h3>采购单025 - WorkID主键单据流程 - <a href="javascript:NewWorkID();">创建WorkID</a> - <button onclick="NewBill();">创建单据</button> </h3>
+    <div id="docs"></div>
+
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>该页面位于:\DemoTools\BuyBillList_SDKFrmWorkID.htm </li>
+            <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
+            <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
+            <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
+            <li>请参考html里面的发起方法。</li>
+        </ul>
+    </fieldset>
+
+</body>
+</html>

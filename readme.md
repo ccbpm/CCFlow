@@ -33,7 +33,7 @@
 2. http://ccflow.org 官方网站
 3. https://ccfast.cc 驰骋低代码开发平台
 4. http://doc.ccbbpm.cn 操作手册
-5. http://ccflow.org/ke.htm 视频教程
+5. http://ccflow.org/Ke.htm 视频教程
 
 ## 后台设计器
  - 登录主页 

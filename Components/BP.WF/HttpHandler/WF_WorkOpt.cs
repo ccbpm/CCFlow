@@ -1453,7 +1453,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_AddEmps()
         {
-            return BP.WF.Dev2Interface.Node_HuiQian_AddEmps(this.WorkID, this.GetRequestVal("HuiQianType"), this.GetRequestVal("TB_Emps"));
+            return BP.WF.Dev2Interface.Node_HuiQian_AddEmps(this.WorkID, this.GetRequestVal("HuiQianType"), this.GetRequestVal("AddEmps"));
         }
         #endregion
 

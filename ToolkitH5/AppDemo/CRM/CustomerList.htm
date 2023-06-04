@@ -98,84 +98,19 @@
         }
 
     </script>
-
 </head>
-<body style="background-color: #f2f2f2">
-    <div class="fieldset_block">
-        <center>
-            <fieldset>
-                <legend>客户列表 - 参数传入调用发起模式</legend>
-                <div id="docs"></div>
-            </fieldset>
-        </center>
-    </div>
-    <div class="fieldset_block">
-        <center>
-            <fieldset>
-                <legend>说明</legend>
-                <ul>
-                    <li>该页面位于:\DemoTools\CRM\CustomerList.htm </li>
-                    <li>每个客户就是一个实体，当前的列表是一个实体集合，对一个客户进行多次发起不同的流程，把实体的信息传入开始节点表单里。我们把这样的模式称为实体业务流程工作工作模式。</li>
-                    <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
-                    <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
-                    <li>请参考html里面的发起方法。</li>
-                </ul>
-            </fieldset>
-        </center>
-    </div>
-   
-    
-        <style>
-            .fieldset_block {
-                width: 95%;
-                background-color: white !important;
-                margin-top: 20px !important;
-                height: auto;
-                padding: 10px 12px;
-                box-shadow: 0 0px 8px rgba(0, 0, 0, .4);
-                border-radius: 5px;
-            }
-
-            fieldset {
-                margin-inline-start: 2px;
-                margin-inline-end: 2px;
-                padding-block-start: 0.35em;
-                padding-inline-start: 0.75em;
-                padding-inline-end: 0.75em;
-                padding-block-end: 0.625em;
-                min-inline-size: min-content;
-                border-radius: 5px;
-                border-width: 2px;
-                border-style: groove;
-                border-color: rgb(192, 192, 192);
-                border-image: initial;
-            }
-
-            legend {
-                text-align: left;
-                width: auto;
-                color: green;
-                font-size: large;
-                font-weight: bolder;
-                padding-inline-start: 2px;
-                padding-inline-end: 2px;
-                border-width: initial;
-                border-style: none;
-                border-color: initial;
-                border-image: initial;
-            }
-
-            li {
-                text-align: left;
-                line-height: 30px;
-                padding-top: 2px;
-                padding-bottom: 2px;
-            }
-
-            button, input {
-                margin-top: 2px;
-                margin-bottom: 2px;
-            }
-        </style>
+<body>
+    <h3>客户列表 - 参数传入调用发起模式 </h3>
+    <div id="docs"></div>
+    <fieldset>
+        <legend>说明</legend>
+        <ul>
+            <li>该页面位于:\DemoTools\CRM\CustomerList.htm </li>
+            <li>每个客户就是一个实体，当前的列表是一个实体集合，对一个客户进行多次发起不同的流程，把实体的信息传入开始节点表单里。我们把这样的模式称为实体业务流程工作工作模式。</li>
+            <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
+            <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
+            <li>请参考html里面的发起方法。</li>
+        </ul>
+    </fieldset>
 </body>
 </html>

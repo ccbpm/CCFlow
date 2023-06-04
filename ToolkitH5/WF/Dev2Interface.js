@@ -11,7 +11,7 @@
 
 //获得发起列表.
 function DB_Start() {
-    var myurl = ccbpmHostDevelopAPI + "?DoType=DB_Start&Token=" + GetToken() + "&Domain=" + domain;
+    var myurl = ccbpmHostDevelopAPI + "DB_Start?token=" + GetToken() + "&domain=" + domain;
     return RunUrlReturnJSON(myurl);
 }
 
@@ -21,25 +21,25 @@ function DB_Start() {
  * 3.获得该数据源,调用
  * */
 function DB_Todolist() {
-    var myurl = ccbpmHostDevelopAPI + "?DoType=DB_Todolist&Token=" + GetToken() + "&Domain=" + domain + "&t=" + new Date().getTime();
+    var myurl = ccbpmHostDevelopAPI + "DB_Todolist?token=" + GetToken() + "&domain=" + domain + "&t=" + new Date().getTime();
     return RunUrlReturnJSON(myurl);
 }
 
 //获得在途.
 function DB_Runing() {
-    var myurl = ccbpmHostDevelopAPI + "?DoType=DB_Runing&Token=" + GetToken() + "&Domain=" + domain;
+    var myurl = ccbpmHostDevelopAPI + "DB_Runing?token=" + GetToken() + "&domain=" + domain;
     return RunUrlReturnJSON(myurl);
 }
 
 //获得草稿.
 function DB_Draft() {
-    var myurl = ccbpmHostDevelopAPI + "?DoType=DB_Draft&Token=" + GetToken() + "&Domain=" + domain;
+    var myurl = ccbpmHostDevelopAPI + "DB_Draft?token=" + GetToken() + "&domain=" + domain;
     return RunUrlReturnJSON(myurl);
 }
 
 //获得流程注册表信息,返回没有完成的数据.
 function DB_GenerWorkFlow(flowNo) {
-    var myurl = ccbpmHostDevelopAPI + "?DoType=DB_GenerWorkFlow&Token=" + GetToken() + "&FK_Flow=" + flowNo;
+    var myurl = ccbpmHostDevelopAPI + "DB_GenerWorkFlow?token=" + GetToken() + "&flowNo=" + flowNo;
     return RunUrlReturnJSON(myurl);
 }
 
@@ -63,7 +63,7 @@ function OpenForm(flowNo, nodeID, workid, fid, paras) {
  * 该表单的URL存储在开始节点表单方案里.
  * @param {流程编号} flowNo
  * @param {节点ID默认为0} nodeID
- * @param {实例的ID} workid
+ * @param {实例的ID} workID
  * @param {默认为:0} fid
  * @param {参数:格式为 &KeHuBianHao=001&KeHuMingCheng=新疆天业} paras
  */
@@ -72,7 +72,7 @@ function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
     debugger;
     // ccbpmHostDevelopAPI 变量是定义在 /config.js 的服务地址. 访问必须两个参数DoWhat,SID.
     //首先获得表单的URL.
-    var myUrl = ccbpmHostDevelopAPI + "?DoType=GenerFrmUrl&Token=" + GetToken() + "&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
+    var myUrl = ccbpmHostDevelopAPI + "GenerFrmUrl?token=" + GetToken() + "&workID=" + workid + "&flowNo=" + flowNo + "&nodeID=" + nodeID + "&fid=" + fid;
     var frmUrl = RunUrlReturnString(myUrl);
     frmUrl += paras;
 
@@ -96,17 +96,17 @@ function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
  * @param {流程编号} flowNo
  */
 function Node_CreateBlankWorkID(flowNo) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_CreateBlankWorkID&Token=" + GetToken() + "&FK_Flow=" + flowNo;
+    var url = ccbpmHostDevelopAPI + "Node_CreateBlankWorkID?token=" + GetToken() + "&flowNo=" + flowNo;
     return RunUrlReturnString(url);
 }
 
 function Node_SetDraft(flowNo, workID) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_SetDraft&Token=" + GetToken() + "&FK_Flow=" + flowNo + "&WorkID=" + workID;
+    var url = ccbpmHostDevelopAPI + "Node_SetDraft?token=" + GetToken() + "&flowNo=" + flowNo + "&workID=" + workID;
     return RunUrlReturnString(url);
 }
 
 function Node_IsCanDealWork(workID) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_Node_IsCanDealWork&Token=" + GetToken() + "&WorkID=" + workID;
+    var url = ccbpmHostDevelopAPI + "Node_Node_IsCanDealWork?token=" + GetToken() + "&workID=" + workID;
     return RunUrlReturnString(url);
 }
 /**
@@ -117,7 +117,7 @@ function Node_IsCanDealWork(workID) {
 function Node_SaveParas(workid, paras) {
 
     //@mhj  这里要对参数格式执行校验,不符合不让保存.
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_SaveParas&Token=" + GetToken() + "&Paras=" + paras + "&WorkID=" + workid;
+    var url = ccbpmHostDevelopAPI + "Node_SaveParas?token=" + GetToken() + "&paras=" + paras + "&workID=" + workid;
     return RunUrlReturnString(url);
 }
 /**
@@ -133,9 +133,9 @@ function Node_SendWork(workid, toNodeID, toEmps, paras = "") {
         paras = "";
     paras = paras.replace('@', '&');
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_SendWork&Token=" + GetToken();
-    url += "&WorkID=" + workid + "&ToNodeID=" + toNodeID;
-    url += "&ToEmps=" + toEmps + "&1=2" + paras;
+    var url = ccbpmHostDevelopAPI + "Node_SendWork?token=" + GetToken();
+    url += "&workID=" + workid + "&toNodeID=" + toNodeID;
+    url += "&toEmps=" + toEmps + "&1=2" + paras;
     return RunUrlReturnString(url);
 }
 
@@ -148,8 +148,8 @@ function Node_SendWork(workid, toNodeID, toEmps, paras = "") {
  */
 function DB_GenerWillReturnNodes(flowNo, workid, fid = 0) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=DB_GenerWillReturnNodes&Token=" + GetToken() + "&FK_Flow=" + flowNo;
-    url += "&WorkID=" + workid + "&FID=" + fid;
+    var url = ccbpmHostDevelopAPI + "DB_GenerWillReturnNodes?token=" + GetToken() + "&flowNo=" + flowNo;
+    url += "&workID=" + workid + "&fid=" + fid;
     return RunUrlReturnString(url);
 }
 
@@ -157,37 +157,36 @@ function DB_GenerWillReturnNodes(flowNo, workid, fid = 0) {
  * 批处理：获得批处理的节点.
  */
 function Batch_Init() {
-    var url = ccbpmHostDevelopAPI + "?DoType=Batch_Init&Token=" + GetToken() + "&Domain=" + domain;
+    var url = ccbpmHostDevelopAPI + "Batch_Init?token=" + GetToken() + "&domain=" + domain;
     return RunUrlReturnJSON(url);
 }
 
 function WorkCheckModel_Init(nodeID) {
-    var url = ccbpmHostDevelopAPI + "?DoType=WorkCheckModel_Init&Token=" + GetToken() + "&NodeID=" + nodeID;
+    var url = ccbpmHostDevelopAPI + "WorkCheckModel_Init?token=" + GetToken() + "&nodeID=" + nodeID;
     return RunUrlReturnJSON(url);
 }
 
 function Node(nodeID) {
-    var url = ccbpmHostDevelopAPI + "?DoType=En_Node&Token=" + GetToken() + "&NodeID=" + nodeID;
+    var url = ccbpmHostDevelopAPI + "En_Node?token=" + GetToken() + "&nodeID=" + nodeID;
     return RunUrlReturnJSON(url);
 }
 function Flow(flowNo) {
-    var url = ccbpmHostDevelopAPI + "?DoType=En_Flow&Token=" + GetToken() + "&No=" + flowNo;
+    var url = ccbpmHostDevelopAPI + "En_Flow?token=" + GetToken() + "&no=" + flowNo;
     return RunUrlReturnJSON(url);
 }
 function Batch_InitDDL(nodeID) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Batch_InitDDL&Token=" + GetToken() + "&NodeID=" + nodeID;
+    var url = ccbpmHostDevelopAPI + "Batch_InitDDL?token=" + GetToken() + "&nodeID=" + nodeID;
     return RunUrlReturnJSON(url);
 }
 function WorkCheckModel_Send(nodeID, CheckNote, ToNode, ToEmps) {
-    var url = ccbpmHostDevelopAPI + "?DoType=WorkCheckModel_Send&Token=" + GetToken() + "&NodeID=" + nodeID + "&ToNode=" + ToNode + "&ToEmps=" + ToEmps + "&CheckNote=" + CheckNote;
+    var url = ccbpmHostDevelopAPI + "WorkCheckModel_Send?token=" + GetToken() + "&nodeID=" + nodeID + "&toNode=" + ToNode + "&toEmps=" + ToEmps + "&checkNote=" + CheckNote;
     return RunUrlReturnString(url);
 }
 
 function Batch_Delete(WorkIDs) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Batch_Delete&Token=" + GetToken() + "&WorkIDs=" + WorkIDs;
+    var url = ccbpmHostDevelopAPI + "Batch_Delete?token=" + GetToken() + "&workIDs=" + WorkIDs;
     return RunUrlReturnString(url);
 }
-
 
 /**
  * 退回
@@ -199,11 +198,11 @@ function Batch_Delete(WorkIDs) {
  * @param {是否原路返回?} isBackToThisNode
  */
 function Node_ReturnWork(workid, returnToNodeID, returnToEmp, msg, isBackToThisNode = false) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_ReturnWork&Token=" + GetToken();
-    url += "&WorkID=" + workid;
-    url += "&ReturnToNodeID=" + returnToNodeID;
-    url += "&ReturnToEmp=" + returnToEmp;
-    url += "&Msg=" + msg;
+    var url = ccbpmHostDevelopAPI + "Node_ReturnWork?token=" + GetToken();
+    url += "&workID=" + workid;
+    url += "&returnToNodeID=" + returnToNodeID;
+    url += "&returnToEmp=" + returnToEmp;
+    url += "&msg=" + msg;
 
     if (isBackToThisNode == true)
         url += "&IsBackToThisNode=1";
@@ -218,9 +217,9 @@ function Node_ReturnWork(workid, returnToNodeID, returnToEmp, msg, isBackToThisN
  * @param  title 流程标题
  */
 function Flow_SetTitle(workID, title) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_SetTitle&Token=" + GetToken();
-    url += "&WorkID=" + workID;
-    url += "&Title=" + title;
+    var url = ccbpmHostDevelopAPI + "Flow_SetTitle?token=" + GetToken();
+    url += "&workID=" + workID;
+    url += "&title=" + title;
     return RunUrlReturnString(url);
 }
 
@@ -229,9 +228,9 @@ function Flow_SetTitle(workID, title) {
  * @param {要执行的实例,多个实例用逗号分开比如：1001,1002,1003} workidStrs
  */
 function Flow_DoPress(workidStrs, msg) {
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_DoPress&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
-    url += "&Msg=" + msg;
+    var url = ccbpmHostDevelopAPI + "Flow_DoPress?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
+    url += "&msg=" + msg;
     return RunUrlReturnString(url);
 }
 
@@ -241,8 +240,8 @@ function Flow_DoPress(workidStrs, msg) {
  */
 function Flow_DoUnSend(workidStrs) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_DoUnSend&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "Flow_DoUnSend?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
     return RunUrlReturnString(url);
 }
 
@@ -253,8 +252,8 @@ function Flow_DoUnSend(workidStrs) {
  */
 function Flow_BatchDeleteByReal(workidStrs, isDeleteSubFlows = true) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_BatchDeleteByReal&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "Flow_BatchDeleteByReal?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
 
     if (isDeleteSubFlows == false)
         url += "&IsDeleteSubFlows=0";
@@ -268,8 +267,8 @@ function Flow_BatchDeleteByReal(workidStrs, isDeleteSubFlows = true) {
  */
 function Flow_BatchDeleteByFlagAndUnDone(workidStrs) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_BatchDeleteByFlagAndUnDone&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "Flow_BatchDeleteByFlagAndUnDone?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
     return RunUrlReturnString(url);
 }
 
@@ -279,8 +278,8 @@ function Flow_BatchDeleteByFlagAndUnDone(workidStrs) {
  */
 function Flow_DoFlowOver(workidStrs) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_DoFlowOver&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "Flow_DoFlowOver?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
     return RunUrlReturnString(url);
 }
 
@@ -291,8 +290,8 @@ function Flow_DoFlowOver(workidStrs) {
 
 function CC_BatchCheckOver(workidStrs) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=CC_BatchCheckOver&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "CC_BatchCheckOver?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
 
     return RunUrlReturnString(url);
 }
@@ -303,8 +302,8 @@ function CC_BatchCheckOver(workidStrs) {
  */
 function Flow_DeleteDraft(workidStrs) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_DeleteDraft&Token=" + GetToken();
-    url += "&WorkIDs=" + workidStrs;
+    var url = ccbpmHostDevelopAPI + "Flow_DeleteDraft?token=" + GetToken();
+    url += "&workIDs=" + workidStrs;
     return RunUrlReturnString(url);
 }
 
@@ -316,10 +315,10 @@ function Flow_DeleteDraft(workidStrs) {
  */
 function Node_Shift(workID, toEmpNo, msg) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_Shift&Token=" + GetToken();
-    url += "&WorkID=" + workID;
-    url += "&ToEmpNo=" + toEmpNo;
-    url += "&Msg=" + msg;
+    var url = ccbpmHostDevelopAPI + "Node_Shift?token=" + GetToken();
+    url += "&workID=" + workID;
+    url += "&toEmpNo=" + toEmpNo;
+    url += "&msg=" + msg;
     return RunUrlReturnString(url);
 }
 
@@ -330,9 +329,9 @@ function Node_Shift(workID, toEmpNo, msg) {
  */
 function Node_AddTodolist(workID, empID) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Node_AddTodolist&Token=" + GetToken();
-    url += "&WorkID=" + workID;
-    url += "&EmpNo=" + empID;
+    var url = ccbpmHostDevelopAPI + "Node_AddTodolist?token=" + GetToken();
+    url += "&workID=" + workID;
+    url += "&empNo=" + empID;
     return RunUrlReturnString(url);
 }
 
@@ -343,8 +342,8 @@ function Node_AddTodolist(workID, empID) {
  */
 function Flow_GenerWorkFlow(workID) {
 
-    var url = ccbpmHostDevelopAPI + "?DoType=Flow_GenerWorkFlow&Token=" + GetToken();
-    url += "&WorkID=" + workID;
+    var url = ccbpmHostDevelopAPI + "Flow_GenerWorkFlow?token=" + GetToken();
+    url += "&workID=" + workID;
     return RunUrlReturnString(url);
 }
 

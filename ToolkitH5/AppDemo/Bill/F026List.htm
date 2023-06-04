@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>采购单列表</title>
-    <link href="../../Portal/ccbpm.css" rel="stylesheet" />
+    <link href="../../AppDemo/ccbpm.css" rel="stylesheet" />
     <!-- 引入常用的JS脚本. -->
     <script src="../../WF/Scripts/QueryString.js"></script>
     <script src="../../WF/Scripts/jquery/jquery.min.js"></script>
@@ -14,6 +14,49 @@
     <script src="../../WF/Dev2Interface.js"></script>
     <script src="../DataBase.js"></script>
     <!-- 引入ccbpm 的sdk开发js.  -->
+    <style>
+        .main{
+            margin-top:-10px;
+        }
+        .table{
+            margin-left:10px;
+        }
+        td, th {
+            font-size: 13px;
+        }
+
+        th {
+            color: #676A6C;
+        }
+
+        td {
+            height: 39px;
+            color: rgb(103, 106, 108);
+        }
+        h4 {
+            margin-left: 10px;
+            color: #676A6C;
+        }
+        fieldset {
+            margin-top: 10px;
+        }
+        legend {
+            margin-left: 10px;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: #676A6C;
+            text-align: left;
+        }
+
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            /*color: rgb(103, 106, 108);*/
+            font-size: 13px;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
 
         //启动函数
@@ -99,81 +142,23 @@
         }
     </script>
 </head>
-<body style="background-color: #f2f2f2">
-    <div class="fieldset_block">
-        <center>
-            <fieldset>
-                <legend>发货单 - 自定义主键单据</legend>
-                <div id="docs"></div>
-            </fieldset>
-        </center>
+<body>
+
+    <div class="main">
+        <h4>发货单 - 自定义主键单据</h4>
+        <div id="docs"></div>
+
+        <fieldset>
+            <legend style="margin-left:10px">说明</legend>
+            <ul style="margin-top:15px">
+                <li>该页面位于:\DemoTools\Bill\BuyBillList_SDKFrmWorkID.htm </li>
+                <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
+                <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
+                <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
+                <li>请参考html里面的发起方法。</li>
+            </ul>
+        </fieldset>
     </div>
-    <div class="fieldset_block">
-        <center>
-            <fieldset>
-                <legend>说明</legend>
-                <ul>
-                    <li>该页面位于:\DemoTools\Bill\BuyBillList_SDKFrmWorkID.htm </li>
-                    <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
-                    <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
-                    <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
-                    <li>请参考html里面的发起方法。</li>
-                </ul>
-            </fieldset>
-        </center>
-    </div>
-    <style>
-        .fieldset_block {
-            width: 95%;
-            background-color: white !important;
-            margin-top: 20px !important;
-            height: auto;
-            padding: 10px 12px;
-            box-shadow: 0 0px 8px rgba(0, 0, 0, .4);
-            border-radius: 5px;
-        }
-
-        fieldset {
-            margin-inline-start: 2px;
-            margin-inline-end: 2px;
-            padding-block-start: 0.35em;
-            padding-inline-start: 0.75em;
-            padding-inline-end: 0.75em;
-            padding-block-end: 0.625em;
-            min-inline-size: min-content;
-            border-radius: 5px;
-            border-width: 2px;
-            border-style: groove;
-            border-color: rgb(192, 192, 192);
-            border-image: initial;
-        }
-
-        legend {
-            text-align: left;
-            width: auto;
-            color: green;
-            font-size: large;
-            font-weight: bolder;
-            padding-inline-start: 2px;
-            padding-inline-end: 2px;
-            border-width: initial;
-            border-style: none;
-            border-color: initial;
-            border-image: initial;
-        }
-
-        li {
-            text-align: left;
-            line-height: 30px;
-            padding-top: 2px;
-            padding-bottom: 2px;
-        }
-
-        button, input {
-            margin-top: 2px;
-            margin-bottom: 2px;
-        }
-    </style>
 
 
 </body>

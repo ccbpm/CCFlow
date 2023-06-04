@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>采购单列表</title>
-    <link href="../../Portal/ccbpm.css" rel="stylesheet" />
+    <link href="../../AppDemo/ccbpm.css" rel="stylesheet" />
     <!-- 引入常用的JS脚本. -->
     <script src="../../WF/Scripts/QueryString.js"></script>
     <script src="../../WF/Scripts/jquery/jquery.min.js"></script>
@@ -14,6 +14,60 @@
     <script src="../../WF/Dev2Interface.js"></script>
     <script src="../DataBase.js"></script>
     <!-- 引入ccbpm 的sdk开发js.  -->
+    <style>
+        .main{
+            margin-top:-10px;
+        }
+        .table {
+            margin-left: 10px;
+        }
+
+        td, th {
+            font-size: 13px;
+        }
+
+        th {
+            color: #676A6C;
+        }
+
+        td {
+            height: 39px;
+            color: rgb(103, 106, 108);
+        }
+        h4 {
+            margin-left: 10px;
+            color: #676A6C;
+        }
+        fieldset{
+            margin-top:10px;
+        }
+        legend {
+            margin-left: 10px;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: #676A6C;
+            text-align: left;
+        }
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            /*color: rgb(103, 106, 108);*/
+            font-size: 13px;
+        }
+        button {
+            background: #316ee6;
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 5px;
+            padding: 0 10px;
+            vertical-align: 2px;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
 
         //启动函数
@@ -25,23 +79,20 @@
 
             var html = "<table class='table table-bordered table-striped table-hover'>";
             html += "<tr>";
-            html += "<th>#</th>";
+            html += "<th >#</th>";
             html += "<th>WorkID</th>";
-            html += "<th>流程状态</th>";
-            html += "<th>标题</th>";
+            html += "<th style='width:100px'>流程状态</th>";
+            html += "<th style='width:155px'>标题</th>";
             html += "<th>采购单号</th>";
-            html += "<th>提请部门</th>";
+            html += "<th style='width:150px'>提请部门</th>";
             html += "<th>提请日期</th>";
             html += "<th>提请人</th>";
 
             html += "<th>停留节点</th>";
-            html += "<th>当前处理人</th>";
+            html += "<th style='width:150px'>当前处理人</th>";
+
             html += "<th colspan=1>状态</th>";
-
-            html += "<th colspan=1>操作</th>";
             html += "</tr>";
-
-            var webUser = GetWebUser();
 
             for (var i = 0; i < db.length; i++) {
                 var en = db[i];
@@ -68,19 +119,12 @@
                 html += "<td>" + en.TodoEmps + "</td>"; //当前处理人.
 
 
-                html += "<td>" + en.WFState + "</td>"; //状态.
-
+                //调用 /WF/ListAPI.js 里面的 OpenForm 方法打开表单.
                 html += "<td colspan=1>";
-                if (en.TodoEmps.indexOf(webUser.No) == -1) { //不能处理当前工作.
-                    html += "  <a href=\"javascript:OpenMyForm('" + en.WorkID + "');\" >查看</a>";
-                } else {
-                    html += "  <a href=\"javascript:OpenMyForm('" + en.WorkID + "');\" >处理</a>";
-                }
-
-                //if (en.WFState == 0 || en.WFState == 1)
-                //    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >启动审批流程</a>";
-                //else
-                //    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >查看单据</a>";
+                if (en.WFState == 0 || en.WFState == 1)
+                    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >启动审批流程</a>";
+                else
+                    html += "  <a href=\"javascript:StartFlow('" + en.WorkID + "');\" >查看单据</a>";
 
                 html += "</td>";
                 html += "</tr>";
@@ -94,13 +138,12 @@
            * 启动审批流程
            * @param WorkID .
            */
-        function OpenMyForm(workID) {
+        function StartFlow(workID) {
             //调用Dev2Interface.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
             var url = OpenForm("025", 0, workID, 0, "");
             // alert('将要打开的发起流程URL:' + url);
             //window.open(url);
         }
-        //创建workID.
         function NewWorkID() {
             var flowNo = window.prompt('请输入流程模板编号', '021');
             if (flowNo == null || flowNo == undefined) {
@@ -113,8 +156,9 @@
             msg += "\t\n 2. 开发人员根据这个ID, 作为单据的主键创建一个单据. ";
             msg += "\t\n 3. WorkID=" + workID;
             alert(msg);
+
+            //  alert('创建的WorkID,是通过 Node_CreateBlankWorkID 接口，WorkID=' + workID);
         }
-        //创建workid并执行发送.
         function NewWorkIDAndSend() {
 
             var flowNo = window.prompt('请输入流程模板编号', '025');
@@ -127,8 +171,8 @@
 
             var msg = Node_SendWork(flowNo, 0, workID, 0, null, null);
             alert('执行发送调用的:Node_SendWork方法: 发送返回信息. ' + msg);
+
         }
-        //创建单据.
         function NewBill() {
             alert('系统将要启动025流程');
             OpenForm("025", 2501, 0, 0, '');
@@ -138,19 +182,22 @@
 </head>
 <body>
 
-    <h3>采购单025 - WorkID主键单据流程 - <a href="javascript:NewWorkID();">创建WorkID</a> - <button onclick="NewBill();">创建单据</button> </h3>
-    <div id="docs"></div>
+    <div class="main">
+        <h4>采购单 - WorkID主键单据流程 - <a href="javascript:NewWorkID();">创建WorkID</a> - <button onclick="NewBill();">创建单据</button> </h4>
+        <div id="docs"></div>
 
-    <fieldset>
-        <legend>说明</legend>
-        <ul>
-            <li>该页面位于:\DemoTools\BuyBillList_SDKFrmWorkID.htm </li>
-            <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
-            <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
-            <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
-            <li>请参考html里面的发起方法。</li>
-        </ul>
-    </fieldset>
+        <fieldset>
+            <legend style="padding: 0px 0 10px 10px;">说明</legend>
+            <ul style="margin-top:15px;">
+                <li>该页面位于:\DemoTools\BuyBillList_SDKFrmWorkID.htm </li>
+                <li>用户在创建单据的时候，首先通过调用ccbpm的接口作为主键,存储到自己的单据表里.</li>
+                <li>比如：对固定资产执行维修、报废流程，发起流程的时候，把固定资产编号传入开始节点表单里。</li>
+                <li>比如：对车辆执行派车流程，把车辆的ID，车辆名称传入派车单里。</li>
+                <li>请参考html里面的发起方法。</li>
+            </ul>
+        </fieldset>
+    </div>
 
 </body>
+
 </html>

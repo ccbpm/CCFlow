@@ -601,8 +601,8 @@ video{width:100%!important;height:auto!important}
 .inmodal .modal-icon{font-size:84px;color:#e2e3e3}
 .modal-footer{margin-top:0}
 #wrapper{width:100%;overflow-x:hidden;background-color:#2f4050}
-.wrapper{padding:0 20px}
-.wrapper-content{padding:20px}
+/*.wrapper{padding:0 20px}*/
+/*.wrapper-content{padding:14px}*/
 #page-wrapper{padding:0 15px;position:inherit;margin:0 0 0 220px}
 .title-action{text-align:right;padding-top:30px}
 .ibox-content h1,.ibox-content h2,.ibox-content h3,.ibox-content h4,.ibox-content h5,.ibox-title h1,.ibox-title h2,.ibox-title h3,.ibox-title h4,.ibox-title h5{margin-top:5px}

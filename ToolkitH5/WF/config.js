@@ -1,23 +1,18 @@
 ﻿
-// 运行平台 .net版本请设置CCFlow, java 版本请设置JFlow.
-var plant = "CCFlow";
-
 //访问的ccbpm服务器地址.
-//var host = "http://101.43.55.81:7001";
-//host = "http://81.69.38.157:8090"
+//var host = "http://101.43.55.81:8022"; //演示服务器. h5登陆地址: http://vue3.ccbpm.cn
 var host = "http://localhost:2296";
 
-var ccbpmHostDevelopAPI = host + "/DataUser/DevelopAPI.ashx";  // For .net版本的CCFlow.
-//var ccbpmHostDevelopAPI = host + "/DataUser/DevelopAPI/ProcessRequest"; //For .java版本的JFlow.
-
-// 流程域名 , 默认为空. 比如:CRM, ERP, OA 等等。 该域名配置流程表单树的属性上.
+// 流程域名 , 默认为空. 比如:CRM, ERP, OA 等等。 该域名配置流程表单树的属性上， 如果要获取全部的就保留为空.
 // 表示该目录下所有的流程都属于这个域里.
-var domain = "ERP";
-var UserNo = null; //当前用户名变量，不要动.
+var domain = "ERP"; //可以为空，则表示获取全部的.
+var plant = "CCFlow"; //For.net 请设置ccflow, forJava请设置JFlow.
 
 //私钥. 这里明文定义到这里了, 为了安全需要写入到后台.
 var PrivateKey = "DiGuaDiGua,IamCCBPM";
 
+var UserNo = null; //当前用户名变量.
+var ccbpmHostDevelopAPI = host + "/WF/API/"; //驰骋BPM流程服务器地址
 function GetHrefUrl() {
     return window.location.href;
     //return GetHrefUrl();
@@ -37,7 +32,7 @@ function GetHrefUrl() {
 function LoginCCBPM(privateKey, userNo) {
 
     //url 地址。
-    var url = ccbpmHostDevelopAPI + "?DoWhat=Portal_Login_Submit&PrivateKey=" + privateKey + "&UserNo=" + userNo;
+    var url = ccbpmHostDevelopAPI + "Portal_Login?privateKey=" + privateKey + "&userNo=" + userNo;
     var str = RunUrlReturnString(url);
 
     var json = JSON.parse(str);
@@ -46,7 +41,18 @@ function LoginCCBPM(privateKey, userNo) {
     UserNo = userNo;
     return json.Token;
 }
+function LoginByToken(token) {
+    //url 地址。
+    var url = ccbpmHostDevelopAPI + "Portal_LoginByToken?privateKey=" + privateKey + "&userNo=" + userNo;
+    var str = RunUrlReturnString(url);
 
+    var json = JSON.parse(str);
+    localStorage.setItem('UserInfoJson', str);
+
+    UserNo = userNo;
+    return json.Token;
+}
+//获得当前登陆信息.
 function GetWebUser() {
     var str = localStorage.getItem('UserInfoJson');
     if (str == null || str == undefined) {
@@ -63,7 +69,7 @@ function GetWebUser() {
 function LoginOut() {
 
     //url 地址。
-    var url = ccbpmHostDevelopAPI + "?DoWhat=Portal_LoginOut&Token=" + GetWebUser().Token;
+    var url = ccbpmHostDevelopAPI + "Portal_LoginOut?Token=" + GetWebUser().Token;
     var token = RunUrlReturnString(url);
     //赋值给公共变量
     UserNo = "";
@@ -82,18 +88,6 @@ function GetUserNo() {
  * */
 function GetToken() {
     return localStorage.Token;// GetWebUser().Token;
-}
-
-//到达后台.
-function GotoCCBPMAdmin() {
-
-    var userNo = GetUserNo();
-    if (userNo == null || userNo != 'admin') {
-        alert("非管理员用户不能登录。");
-        return;
-    }
-    var url = host + "/WF/Portal/Login.htm?SID=" + GetToken() + "&UserNo=" + GetUserNo();
-    window.open(url);
 }
 
 /**
@@ -142,10 +136,6 @@ function RunUrlReturnString(url) {
         async: false,
         url: url,
         dataType: 'html',
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         success: function (data) {
 
             if (data.indexOf('err@url') != -1) {
@@ -164,62 +154,10 @@ function RunUrlReturnString(url) {
                 window.open(url);
                 return;
             }
-            //  alert('系统异常RunUrlReturnString:' + url + ' textStatus:' + textStatus );
-            // alert("HttpHandler-RunUrlCrossReturnString-", textStatus);
         }
     });
     return string;
 }
-
-function basePath() {
-    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
-    var curPath = window.document.location.href;
-    //获取主机地址之后的目录，如： jflow-web/index.jsp
-    var pathName = window.document.location.pathname;
-    if (pathName == "/") { //说明不存在项目名
-        if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
-            if (ccbpmPath != curPath)
-                return ccbpmPath;
-        }
-        return curPath;
-    }
-    var pos = curPath.indexOf(pathName);
-    //获取主机地址，如： http://localhost:80  
-    var localhostPath = curPath.substring(0, pos);
-    //获取带"/"的项目名，如：/jflow-web
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-
-    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
-        if (ccbpmPath != localhostPath)
-            return ccbpmPath;
-    }
-
-    return localhostPath;
-}
-
-
-var IsIELower10 = false;
-
-var ver = IEVersion();
-if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
-    IsIELower10 = true;
-
-function IEVersion() {
-    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
-    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
-    var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
-    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
-    if (isIE) {
-        if (document.documentMode) return document.documentMode;
-    } else if (isEdge) {
-        return 'edge';//edge
-    } else if (isIE11) {
-        return 11; //IE11  
-    } else {
-        return -1;//不是ie浏览器
-    }
-}
-
 
 /**
 * 动态异步加载JS的方法
@@ -288,4 +226,51 @@ function GetPara(key, atparaStr) {
     return undefined;
 }
 
+function basePath() {
+    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
+    var curPath = window.document.location.href;
+    //获取主机地址之后的目录，如： jflow-web/index.jsp
+    var pathName = window.document.location.pathname;
+    if (pathName == "/") { //说明不存在项目名
+        if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+            if (ccbpmPath != curPath)
+                return ccbpmPath;
+        }
+        return curPath;
+    }
+    var pos = curPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:80  
+    var localhostPath = curPath.substring(0, pos);
+    //获取带"/"的项目名，如：/jflow-web
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 
+    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+        if (ccbpmPath != localhostPath)
+            return ccbpmPath;
+    }
+
+    return localhostPath;
+}
+
+
+var IsIELower10 = false;
+
+var ver = IEVersion();
+if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
+    IsIELower10 = true;
+
+function IEVersion() {
+    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+    var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+    var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+    if (isIE) {
+        if (document.documentMode) return document.documentMode;
+    } else if (isEdge) {
+        return 'edge';//edge
+    } else if (isIE11) {
+        return 11; //IE11  
+    } else {
+        return -1;//不是ie浏览器
+    }
+}

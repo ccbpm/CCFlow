@@ -1102,7 +1102,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #23527c;
+  color: #000;
   text-decoration: underline;
 }
 a:focus {
@@ -2303,7 +2303,7 @@ th {
   padding: 5px;
 }
 .table-bordered {
-  border: 1px solid #ddd;
+  border: 1px solid #f0f0f0;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
@@ -2312,6 +2312,7 @@ th {
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
   border: 1px solid #ddd;
+  border-color:#f0f0f0;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -2496,24 +2497,33 @@ fieldset {
   padding: 0;
   margin: 0;
   border: 0;
+  margin-top:-10px;
 }
 legend {
   display: block;
   width: 100%;
-  padding: 0;
+  padding: 0 0 10px 20px;
   margin-bottom: 20px;
-  font-size: 21px;
+  font-size: 16px;
   line-height: inherit;
-  color: #333;
+  color: #444444;
   border: 0;
   border-bottom: 1px solid #e5e5e5;
 }
-label {
-  display: inline-block;
-  max-width: 100%;
-  margin-bottom: 5px;
-  font-weight: bold;
+fieldset ul li {
+    margin: 5px 0;
+    text-align: left;
+    line-height: 30px;
+    /*color: rgb(103, 106, 108);*/
+    font-size: 13px;
+    margin-top:-10px;
 }
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
 input[type="search"] {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;

@@ -339,7 +339,19 @@ window.onload = function () {
 
                 this.openTab(menu.Name, menu.Url,menu.No, alignRight);
             },
-            openTab: function (name, src,no, alignRight) {
+            openTab: function (name, src, no, alignRight) {
+                if ((src.indexOf("https:") != -1 || src.indexOf("http") != -1)
+                    && src.indexOf(basePath)==-1) {
+                    var bschitchat = window.open(src, name, 'toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+                    bschitchat.moveTo(0, 0);
+                    bschitchat.resizeTo(screen.availWidth, screen.availHeight);
+                    bschitchat.outerWidth = screen.availWidth;
+                    bschitchat.outerHeight = screen.availHeight;
+                    return;
+                }
+                if (src.indexOf("https:") == -1 && src.indexOf("http") == -1) {
+                    src = basePath + src;
+                }
                 //如果发起实体类的流程，是通过一个页面中专过去的.
                 /*
                  *  /WF/CCBill/Opt/StartFlowByNewEntity.htm

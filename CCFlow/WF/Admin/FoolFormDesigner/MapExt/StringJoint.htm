@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动计算</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            //组织主键,
+            var mypk = "StringJoint_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.SetPKVal(mypk);
+
+            var i = en.RetrieveFromDBSources(); //执行查询..
+            if (i == 1)
+                document.getElementById("Btn_Delete").disabled = false;
+
+            document.getElementById("TB_Doc").value = en.Doc;
+            $("#Msg").html("");
+
+        });
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../../SettingTemplate.htm?TemplateType=AutoFull";
+            WinOpen(url, 'ss');
+        }
+
+        function Save() {
+
+            var doc = $("#TB_Doc").val();
+            if (doc == null || doc == undefined || doc == "") {
+                alert("请输入内容.");
+                return;
+            }
+
+            doc = doc.replace("'", "~");
+
+            $("#Msg").html("正在保存,请稍后......");
+
+            //组织主键,
+            var mypk = "StringJoint_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.SetValByKey("FK_MapData", GetQueryString("FK_MapData"));
+            en.SetValByKey("AttrOfOper", GetQueryString("KeyOfEn"));
+            en.SetValByKey("ExtType", "StringJoint");
+            en.SetValByKey("Doc", doc);
+            en.Save();
+
+            Reload();
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return false;
+
+            //组织主键,
+            var mypk = "StringJoint_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.Delete(); //执行删除.
+
+            Reload();
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <div style="right:10px; position:absolute; z-index:100; top:-3px">
+            <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
+            <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+            <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+            
+        </div>
+        <table id="table" style="width: 100%;">
+            <caption>
+                字符串拼接
+                <a href="javascript:ShowHidden('sqlexp')"><img src="../../../Img/Btn/Help.gif" />填充表达式帮助:</a>
+            </caption>
+            <tr>
+                <td colspan="3" style="width: 95%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:98%;"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li> 字符串拼接，请输入表达式.</li>
+                        </ul>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+
+
+        <div id="Msg">
+        </div>
+
+
+    </form>
+</body>
+</html>

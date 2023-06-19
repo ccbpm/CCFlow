@@ -300,6 +300,7 @@ function setEnable(FK_MapData, KeyOfEn, selectVal, frmType) {
             }
 
         }
+        layui.form.render();
     }
     if (!$.isArray(mapAttrs[KeyOfEn])) {
         mapAttrs[KeyOfEn] = [];
@@ -398,6 +399,7 @@ function SetCtrlUnEnable(key) {
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         ctrl.attr("disabled", "disabled");
+       
     }
 
     ctrl = $("#CB_" + key);

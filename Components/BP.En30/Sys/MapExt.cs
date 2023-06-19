@@ -1411,7 +1411,7 @@ namespace BP.Sys
                         if (DataType.IsNullOrEmpty(key) == true)
                             continue;
                         var attrKeyOfEn = key.Split('=')[0];
-                        var val = key.Split('=')[1];
+                        var val = key.Split('=').Length==1?"": key.Split('=')[1];
                         exp = exp.Replace("@" + attrKeyOfEn, val);
                         if (exp.Contains("@") == false)
                             break;

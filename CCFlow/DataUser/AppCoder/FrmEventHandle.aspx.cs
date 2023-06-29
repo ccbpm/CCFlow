@@ -14,39 +14,44 @@ using BP.Web;
 public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
 {
     #region 属性
+    public string GetVal(string key)
+    {
+        string val = this.Request.QueryString[key];
+        return BP.Tools.DealString.DealStr(val);
+    }
     public string SID
     {
         get
         {
-            return this.Request.QueryString["SID"];
+            return this.GetVal("Token");
         }
     }
     public string WebUserNo
     {
         get
         {
-            return this.Request.QueryString["WebUserNo"];
+            return this.GetVal("WebUserNo");
         }
     }
     public string FK_MapData
     {
         get
         {
-            return this.Request.QueryString["FK_MapData"];
+            return this.GetVal("FK_MapData");
         }
     }
     public string FK_Event
     {
         get
         {
-            return this.Request.QueryString["FK_Event"];
+            return this.GetVal("FK_Event");
         }
     }
     public int OID
     {
         get
         {
-            return int.Parse(this.Request.QueryString["OID"]);
+            return int.Parse(this.GetVal("OID"));
         }
     }
     #endregion 属性
@@ -105,7 +110,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
             /* 当表单保存后. */
             //GEEntity en = new GEEntity(this.FK_MapData, this.OID);
             //string rdt = en.GetValStrByKey("RDT");
-            //string fid = this.Request.QueryString["FID"];
+            //string fid = this.GetVal("FID"];
             //string rec = en.GetValStrByKey("Rec");
 
             ////访问数据库案例。

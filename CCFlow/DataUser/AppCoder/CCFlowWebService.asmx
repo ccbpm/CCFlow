@@ -14,20 +14,7 @@ using System.Web.Services.Protocols;
 // [System.Web.Script.Services.ScriptService]
 public class CCFlowWebService : System.Web.Services.WebService
 {
-    /// <summary>
-    /// 方法用途:检查用户名与密码是否正确.
-    /// 调用位置: \WF\UC\Login.ascx.cs
-    /// 实现的意义:重写这个方法的意义是您可以修改实现逻辑，实现您自己的校验方式。
-    /// 比如：
-    /// 1，用户不存在怎么办？
-    /// 2，用户岗位不全怎么办？
-    /// 3, 用户没有部门或者部门编号不对怎么办？
-    /// 4，需要把密码进行二次加密怎么处理？
-    /// </summary>
-    /// <param name="userNo"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
-    public bool CheckUserPass(string userNo, string password)
+    public bool CheckUserPass(string userNo, string strpw)
     {
         BP.Port.Emp emp = new BP.Port.Emp();
         emp.No = userNo;
@@ -52,7 +39,7 @@ public class CCFlowWebService : System.Web.Services.WebService
         #endregion 校验用户是否被禁用了。
 
         #region 校验密码.
-        if (emp.Pass == password)
+        if (emp.Pass == strpw)
             return true; /*密码正确：这里是用明文密码做的校验，您可以修改成自己的加密方式*/
         return false;
         #endregion 校验密码.

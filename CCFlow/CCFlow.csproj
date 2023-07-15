@@ -9328,7 +9328,6 @@
     <Content Include="WF\Style\skin\font\iconfont.woff" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

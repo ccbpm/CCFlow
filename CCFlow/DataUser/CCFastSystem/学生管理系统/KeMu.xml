@@ -1,0 +1,26 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <SFTable>
+    <No>KeMu</No>
+    <Name>科目</Name>
+    <SrcType>7</SrcType>
+    <SrcTypeText>系统字典表</SrcTypeText>
+    <CodeStruct>0</CodeStruct>
+    <CodeStructText>普通的编码表(具有No,Name)</CodeStructText>
+    <RootVal />
+    <FK_Val />
+    <TableDesc />
+    <DefVal />
+    <NoGenerModel>1</NoGenerModel>
+    <NoGenerModelText>流水号</NoGenerModelText>
+    <FK_SFDBSrc>local</FK_SFDBSrc>
+    <FK_SFDBSrcText>本机数据源(默认)</FK_SFDBSrcText>
+    <SrcTable />
+    <ColumnValue />
+    <ColumnText />
+    <ParentValue />
+    <SelectStatement />
+    <RDT>2021-10-02 08:48</RDT>
+    <OrgNo />
+  </SFTable>
+</NewDataSet>

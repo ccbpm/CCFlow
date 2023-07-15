@@ -1,0 +1,51 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <MySystem>
+    <No>c289fb1b-b</No>
+    <Name>学生管理系统</Name>
+    <IsEnable>1</IsEnable>
+    <Icon>icon-briefcase</Icon>
+    <OrgNo />
+    <Idx>0</Idx>
+  </MySystem>
+  <Modules>
+    <No>bff7a474-1366-4d87-a3f9-81a6d84646af</No>
+    <Name>字典维护</Name>
+    <SystemNo>c289fb1b-b</SystemNo>
+    <SystemNoText>学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Modules>
+    <No>c39821b9-8609-478f-b635-f13bd906c087</No>
+    <Name>学籍管理</Name>
+    <SystemNo>c289fb1b-b</SystemNo>
+    <SystemNoText>学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Menus>
+    <No>bff7a474-1366-4d87-a3f9-81a6d84646af</No>
+    <Name>字典维护</Name>
+    <SystemNo>c289fb1b-b</SystemNo>
+    <SystemNoText>学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>c39821b9-8609-478f-b635-f13bd906c087</No>
+    <Name>学籍管理</Name>
+    <SystemNo>c289fb1b-b</SystemNo>
+    <SystemNoText>学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Menus>
+</NewDataSet>

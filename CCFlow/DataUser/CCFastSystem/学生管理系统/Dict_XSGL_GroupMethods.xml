@@ -1,0 +1,307 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <GroupMethods>
+    <No>6a50de10-0631-4681-a663-c794b641f34b</No>
+    <FrmID>Dict_XSGL</FrmID>
+    <Name>流程</Name>
+    <Icon>icon-folder</Icon>
+    <Idx>1</Idx>
+    <AtPara />
+  </GroupMethods>
+  <GroupMethods>
+    <No>a9fd3440-29fa-47f1-94f9-c0457e956d79</No>
+    <FrmID>Dict_XSGL</FrmID>
+    <Name>相关操作</Name>
+    <Icon>icon-home</Icon>
+    <Idx>0</Idx>
+    <AtPara />
+  </GroupMethods>
+  <Methods>
+    <No>0dda9538-7a6a-4fdb-88b1-b2bda0a26f6c</No>
+    <Name>二维码</Name>
+    <MethodID>QRCode</MethodID>
+    <GroupID>a9fd3440-29fa-47f1-94f9-c0457e956d79</GroupID>
+    <MethodModel>QRCode</MethodModel>
+    <Tag1>QRCode</Tag1>
+    <Mark>QRCode</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-frame</Icon>
+    <Docs />
+    <RefMethodType>1</RefMethodType>
+    <RefMethodTypeText>新窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>0e321232-43f6-4e00-a30a-25739f14ce4b</No>
+    <Name>数据快照</Name>
+    <MethodID>DataVer</MethodID>
+    <GroupID>a9fd3440-29fa-47f1-94f9-c0457e956d79</GroupID>
+    <MethodModel>DataVer</MethodModel>
+    <Tag1>DataVer</Tag1>
+    <Mark>DataVer</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-camera</Icon>
+    <Docs />
+    <RefMethodType>1</RefMethodType>
+    <RefMethodTypeText>新窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>59031af9-132e-4a08-a59b-28650abffaad</No>
+    <Name>日常记录</Name>
+    <MethodID>FrmBBS</MethodID>
+    <GroupID>a9fd3440-29fa-47f1-94f9-c0457e956d79</GroupID>
+    <MethodModel>FrmBBS</MethodModel>
+    <Tag1>FrmBBS</Tag1>
+    <Mark>FrmBBS</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-film</Icon>
+    <Docs />
+    <RefMethodType>1</RefMethodType>
+    <RefMethodTypeText>新窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>91fd8379-2afa-4c1a-8c3a-d92645290451</No>
+    <Name>注销学籍</Name>
+    <MethodID>ZhuXiaoXueJi</MethodID>
+    <GroupID>a9fd3440-29fa-47f1-94f9-c0457e956d79</GroupID>
+    <MethodModel>Func</MethodModel>
+    <Tag1 />
+    <Mark />
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-energy</Icon>
+    <Docs />
+    <RefMethodType>1</RefMethodType>
+    <RefMethodTypeText>新窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>a808e65d-a6d4-4825-ba5d-fe161a2de090</No>
+    <Name>操作日志</Name>
+    <MethodID>DictLog</MethodID>
+    <GroupID>a9fd3440-29fa-47f1-94f9-c0457e956d79</GroupID>
+    <MethodModel>DictLog</MethodModel>
+    <Tag1>DictLog</Tag1>
+    <Mark>DictLog</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-eye</Icon>
+    <Docs />
+    <RefMethodType>1</RefMethodType>
+    <RefMethodTypeText>新窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>Dict_XSGL_002</No>
+    <Name>三好学生评定</Name>
+    <MethodID>002</MethodID>
+    <GroupID>6a50de10-0631-4681-a663-c794b641f34b</GroupID>
+    <MethodModel>FlowEtc</MethodModel>
+    <Tag1>002</Tag1>
+    <Mark>Search</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo>002</FlowNo>
+    <Icon>icon-paper-plane</Icon>
+    <Docs />
+    <RefMethodType>2</RefMethodType>
+    <RefMethodTypeText>右侧窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>Dict_XSGL_003</No>
+    <Name>资料变更审批</Name>
+    <MethodID>003</MethodID>
+    <GroupID>6a50de10-0631-4681-a663-c794b641f34b</GroupID>
+    <MethodModel>FlowBaseData</MethodModel>
+    <Tag1>003</Tag1>
+    <Mark>Search</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo>003</FlowNo>
+    <Icon>icon-paper-plane</Icon>
+    <Docs />
+    <RefMethodType>2</RefMethodType>
+    <RefMethodTypeText>右侧窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+  <Methods>
+    <No>Dict_XSGL_005</No>
+    <Name>批量转校</Name>
+    <MethodID>005</MethodID>
+    <GroupID>null</GroupID>
+    <MethodModel>FlowEntityBatchStart</MethodModel>
+    <Tag1>005</Tag1>
+    <Mark>Search</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo>005</FlowNo>
+    <Icon>icon-paper-plane</Icon>
+    <Docs />
+    <RefMethodType>2</RefMethodType>
+    <RefMethodTypeText>右侧窗口打开</RefMethodTypeText>
+    <IsMyBillToolBar>1</IsMyBillToolBar>
+    <IsMyBillToolExt>0</IsMyBillToolExt>
+    <IsSearchBar>0</IsSearchBar>
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <MethodDocTypeOfFunc>0</MethodDocTypeOfFunc>
+    <MethodDocTypeOfFuncText>SQL</MethodDocTypeOfFuncText>
+    <DTSDataWay>0</DTSDataWay>
+    <DTSDataWayText>不同步</DTSDataWayText>
+    <DTSSpecFiels />
+    <DTSWhenFlowOver>0</DTSWhenFlowOver>
+    <DTSWhenNodeOver>0</DTSWhenNodeOver>
+    <IsEnable>1</IsEnable>
+    <IsList>0</IsList>
+    <IsHavePara>0</IsHavePara>
+    <Idx>0</Idx>
+  </Methods>
+</NewDataSet>

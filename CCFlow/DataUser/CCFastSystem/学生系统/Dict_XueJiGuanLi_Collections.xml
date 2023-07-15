@@ -1,0 +1,66 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Collections>
+    <No>022b67b8-dd3d-445b-8c57-2381c72dd945</No>
+    <Name>注销学籍</Name>
+    <MethodID>44edf0be-8267-443f-9950-0cd5a6476462</MethodID>
+    <MethodModel>Func</MethodModel>
+    <Tag1 />
+    <Mark>Func</Mark>
+    <FrmID>Dict_XueJiGuanLi</FrmID>
+    <FlowNo />
+    <Icon>icon-energy</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>7017b522-32ce-45f8-9687-54577ac2f34a</No>
+    <Name>缴纳班费</Name>
+    <MethodID>db94f755-abac-4dce-b142-b81070f96f4b</MethodID>
+    <MethodModel>Func</MethodModel>
+    <Tag1 />
+    <Mark>Func</Mark>
+    <FrmID>Dict_XueJiGuanLi</FrmID>
+    <FlowNo />
+    <Icon>icon-energy</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>78b0bafb-e57a-4233-bdae-7a8763e433e6</No>
+    <Name>入校申请流程</Name>
+    <MethodID>FlowNewEntity</MethodID>
+    <MethodModel>FlowNewEntity</MethodModel>
+    <Tag1>003</Tag1>
+    <Mark>FlowNewEntity</Mark>
+    <FrmID>Dict_XueJiGuanLi</FrmID>
+    <FlowNo>003</FlowNo>
+    <Icon>icon-drop</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+</NewDataSet>

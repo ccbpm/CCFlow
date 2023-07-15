@@ -1,0 +1,108 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Collections>
+    <No>177d5547-c6dc-4082-b51d-2a3f6d8a8439</No>
+    <Name>注销学籍</Name>
+    <MethodID>91fd8379-2afa-4c1a-8c3a-d92645290451</MethodID>
+    <MethodModel>Func</MethodModel>
+    <Tag1 />
+    <Mark>Func</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-energy</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>4ffca17c-671e-45e0-9a8c-7e9246f0db4d</No>
+    <Name>批量转校</Name>
+    <MethodID>FlowEntityBatchStart</MethodID>
+    <MethodModel>FlowEntityBatchStart</MethodModel>
+    <Tag1>005</Tag1>
+    <Mark>FlowEntityBatchStart</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo>005</FlowNo>
+    <Icon>icon-drop</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>8283238d-3f9f-4a55-9a9c-3cdc3407cee7</No>
+    <Name>入校申请</Name>
+    <MethodID>FlowNewEntity</MethodID>
+    <MethodModel>FlowNewEntity</MethodModel>
+    <Tag1>004</Tag1>
+    <Mark>FlowNewEntity</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo>004</FlowNo>
+    <Icon>icon-drop</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>d96b169e-e590-45bb-93a8-65c6123247ca</No>
+    <Name>我的按钮</Name>
+    <MethodID>LinkCollection</MethodID>
+    <MethodModel>LinkCollection</MethodModel>
+    <Tag1>www.ccbpm.cn</Tag1>
+    <Mark>LinkCollection</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-drop</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+  <Collections>
+    <No>e49e7cb4-6cf6-4437-9d81-d3acff805633</No>
+    <Name>扫码填报</Name>
+    <MethodID>QRCodeAddDict</MethodID>
+    <MethodModel>QRCodeAddDict</MethodModel>
+    <Tag1 />
+    <Mark>QRCodeAddDict</Mark>
+    <FrmID>Dict_XSGL</FrmID>
+    <FlowNo />
+    <Icon>icon-plus</Icon>
+    <Docs />
+    <PopHeight>0</PopHeight>
+    <PopWidth>0</PopWidth>
+    <WarningMsg />
+    <MsgSuccess />
+    <MsgErr />
+    <WhatAreYouTodo>0</WhatAreYouTodo>
+    <WhatAreYouTodoText>关闭提示窗口</WhatAreYouTodoText>
+    <IsEnable>1</IsEnable>
+    <Idx>0</Idx>
+  </Collections>
+</NewDataSet>

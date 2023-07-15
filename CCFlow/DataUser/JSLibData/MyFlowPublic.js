@@ -74,21 +74,6 @@ function beforeSend() {
     {
         return CheckBlank();
     }
-
-
-
-    if (nodeID === 901) {
-
-        //var km = $("#DDL_KM").val();
-        //var hj = $("#TB_BaoXiaoJinE").val();
-        //if (km == 0 && hj > 10000) {
-        //    alert('报销金额不能超过1w.');
-        //    return false;
-        //}
-        return true;
-       // return CheckBlank();
-    }
-
     return true;
 }
 

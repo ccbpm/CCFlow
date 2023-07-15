@@ -13,7 +13,7 @@
         /** 如果您要把该页面转入其他页面，请按照如下方式处理.
             var url = window.location.href;
             url = url.replace('AthSelf.htm', 'XXXX.jsp');
-                window.location.href = url;
+                window.location.href = filterXSS(url);
                 return;
                 */
 

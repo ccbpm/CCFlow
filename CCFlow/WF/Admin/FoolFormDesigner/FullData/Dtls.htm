@@ -57,7 +57,7 @@
                 if (tag1 != "" && tag1 != null) {
                     //第二批创建从表No是否在第一批创建从表的填充SQL里
                     if (tag1.indexOf(dtl.No) != -1)
-                        sql = tag1.split("$")[i + 1].replace(dtl.No+":",""); //分割字符串，获取sql语句
+                        sql = tag1.split("$")[i + 1].split(":")[1]; //分割字符串，获取sql语句
                     else
                         sql = "";
                 }

@@ -341,7 +341,7 @@ window.onload = function () {
             },
             openTab: function (name, src, no, alignRight) {
                 if ((src.indexOf("https:") != -1 || src.indexOf("http") != -1)
-                    && src.indexOf(basePath)==-1) {
+                    && src.indexOf(basePath) == -1) {
                     var bschitchat = window.open(src, name, 'toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
                     bschitchat.moveTo(0, 0);
                     bschitchat.resizeTo(screen.availWidth, screen.availHeight);
@@ -349,9 +349,9 @@ window.onload = function () {
                     bschitchat.outerHeight = screen.availHeight;
                     return;
                 }
-                if (src.indexOf("https:") == -1 && src.indexOf("http") == -1) {
-                    src = basePath + src;
-                }
+                // if (src.indexOf("https:") == -1 && src.indexOf("http") == -1) {
+                //     src = basePath + src;
+                // }
                 //如果发起实体类的流程，是通过一个页面中专过去的.
                 /*
                  *  /WF/CCBill/Opt/StartFlowByNewEntity.htm
@@ -533,7 +533,13 @@ window.onload = function () {
 
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
                 var data = handler.DoMethodReturnString("Default_LogOut");
-                SetHref(data); // "Login.htm?DoType=Logout";
+                if (data.indexOf("err@") == 0) {
+                    SetHref("./Login.htm?DoType=Logout&SystemNo=CCFast");
+                }
+                else {
+                    SetHref(data); // "Login.htm?DoType=Logout";
+                }
+                
 
                 //  win
                 //  var url = getPortalConfigByKey("LogoutPath", "./") + data;
@@ -631,7 +637,7 @@ window.onload = function () {
                             layer.confirm("您有【" + json.Num + "】个新工作。", {
                                 btn: ["去处理", "忽略"],
                             }, function () {
-                                _this.openTab("待办", "/WF/Todolist.htm", false);
+                                _this.openTab("待办", basePath+"/WF/Todolist.htm", false);
                                 layer.close(layer.index);
                             }, function () {
                                 layer.close(layer.index);

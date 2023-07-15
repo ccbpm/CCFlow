@@ -129,7 +129,7 @@
                 <div class="row item-name-dp" :data-mypk="myEn.MyPK">
                     <div class="item item-index">  {{index + 1}}</div>
 
-                    <div class="item item-docs" @click.stop="EditIt(myEn.No,myEn.WinDocModel)" style="color:deepskyblue">
+                    <div class="item item-docs" @click.stop="EditIt(myEn.MyPK,myEn.WinDocModel)" style="color:deepskyblue">
                         {{myEn.Name}}
                     </div>
 
@@ -143,7 +143,7 @@
                                 <div class="layui-input-block" style="margin: 0px;min-height:auto" :data-id="myEn.MyPK"
                                      @click="changeEnableStatus(myEn,this)">
                                     <input type="checkbox" lay-skin="switch" lay-text="ON|OFF"
-                                           :checked="parseInt(myEn.IsEnable) == 1" />
+                                           :checked="parseInt(myEn.isEnable) == 1" />
                                 </div>
                             </div>
                         </form>

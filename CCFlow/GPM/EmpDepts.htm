@@ -12,73 +12,57 @@
     <script src="../WF/Scripts/layui/layui/lay/modules/layer.js"></script>
 
     <script type="text/javascript">
-
+        var webUser = new WebUser();
         $(function () {
 
             $("#Msg").html("正在加载请稍候...");
 
             var empNo = GetQueryString("FK_Emp");
-
-            if (empNo == null)
-                empNo = 'liping';
-
             var emp = new Entity("BP.Port.Emp", empNo);
 
-            var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
-            handler.AddPara("FK_Emp", empNo);
-            var data = handler.DoMethodReturnString("EnpDepts_Init");
-            if (data.indexOf("err@") != -1) {
-                layer.alert(data);
-                return;
-            }
-            data = JSON.parse(data);
-            var deptEmps = data['Port_DeptEmp'];
-            var deptempStations = data['Port_DeptEmpStation']
-            var html = "<table border=0 style='width:100%;'>";
+            //隶属的部门.
+            var des = new Entities("BP.Port.DeptEmps");
+            des.Retrieve("FK_Emp", empNo);
 
-            html += "<caption >姓名:" + emp.Name + ", 主要部门:" + emp.FK_DeptText + " <a href='javascript:AddDept()'>增加部门</a></caption>";
+            //隶属的部门岗位.
+            var dess = new Entities("BP.Port.DeptEmpStations");
+            dess.Retrieve("FK_Emp", empNo);
+
+            var html = "<table border=0 style='width:100%;'>";
+            html += "<caption >姓名:" + emp.Name + ", 主部门:" + emp.FK_DeptText + " <a href='javascript:AddDept()'>增加部门</a></caption>";
             html += "<tr>";
-            html += "<th>编号</th>";
+            html += "<th>部门</th>";
             html += "<th>部门名称</th>";
-            html += "<th></th>";
-            html += "<th>多个岗位</th>";
+            html += "<th>岗位</th>";
             html += "<th>操作</th>";
             html += "</tr>";
-            deptEmps.forEach(function (deptEmp) {
+
+            for (var i = 0; i < des.length; i++) {
+
+                var deptEmp = des[i];
                 html += "<tr>";
-                if (deptEmp.FK_Dept.length > 23)
-                    html += "<td class='showTD' data-info='" + deptEmp.FK_Dept + "' style='white-space:nowrap;word-break:keep-all;text-overflow: ellipsis;'>" + deptEmp.FK_Dept.substring(0, 23) + "..." + "</td>";
-                else
-                    html += "<td>" + deptEmp.FK_Dept + "</td>";
-                if (emp.FK_Dept == deptEmp.FK_Dept) {
-                    html += "<td><font color=green><b>" + deptEmp.FK_DeptText + "</b></font></td>";
-                    html += "<td> 主部门 </td>";
-                }
-                else {
-                    html += "<td>" + deptEmp.FK_DeptText + "</td>";
-                    html += "<td><a href=\"javascript:SetMainDept('" + deptEmp.FK_Dept + "','" + empNo + "')\">设置主部门</a></td>";
-                }
-                //求岗位集合.
-                var dess = deptempStations.filter(item => item.FK_Dept == deptEmp.FK_Dept);
-                if (dess.length == 0) {
-                    html += "<td>无岗位-<a href=\"javascript:AddStation('" + deptEmp.FK_Dept + "','" + empNo + "')\">增加</a></td>";
-                } else {
-                    var staNames = dess.map(item => item.FK_StationText).join(",");
-                    /*  dess.forEach(function(des){
-                          staNames += des.Name + ",";
-                      })
-                     */
-                    html += "<td><a href=\"javascript:AddStation('" + deptEmp.FK_Dept + "','" + empNo + "')\">" + staNames + "</a></td>";
-                }
+                html += "<td>" + deptEmp.FK_Dept + "</td>";
 
-                if (emp.FK_Dept == deptEmp.FK_Dept)
-                    html += "<td> <a href='javascript:EditMainDept()'>修改主部门</a> </td>";
-                else
-                    html += "<td><a href=\"javascript:Del('" + deptEmp.MyPK + "')\" ><img src='../WF/Img/Btn/Delete.png' ></a></td>";
+                var dept = new Entity("BP.Port.Dept", deptEmp.FK_Dept);
+                html += "<td>" + dept.Name + "</td>";
 
+                var lab = "";
+                for (var idx = 0; idx < dess.length; idx++) {
+                    var en = dess[idx];
+                    if (en.FK_Dept == deptEmp.FK_Dept) {
 
+                        var sta = new Entity("BP.Port.Station", en.FK_Station);
+
+                        lab += sta.Name + ',';
+                    }
+                }
+                if (lab == "")
+                    lab = "无岗位-增加";
+
+                html += "<td><a href=\"javascript:AddStation('" + deptEmp.FK_Dept + "','" + empNo + "')\">" + lab + "</a></td>";
+                html += "<td><a href=\"javascript:Del('" + deptEmp.MyPK + "')\" ><img src='../WF/Img/Btn/Delete.png' >删除</a></td>";
                 html += "</tr>";
-            });
+            }
 
             html += "</table>";
 

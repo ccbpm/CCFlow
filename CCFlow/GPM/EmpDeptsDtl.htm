@@ -2,18 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>人员-部门列表</title>
- <script type="text/javascript" src="../WF/Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../WF/Scripts/jquery/jquery.easyui.min.js"></script>
     <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引入新版本的类库. -->
     <script src="../WF/Scripts/config.js" type="text/javascript"></script>
     <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
-
+        var webUser = new WebUser();
         $(function () {
 
             $("#Msg").html("正在加载请稍候...");
-            debugger
             var empNo = GetQueryString("FK_Emp");
             var deptNo = GetQueryString("FK_Dept");
 
@@ -26,14 +25,23 @@
 
             //所有的岗位类别.
             var stationTypes = new Entities("BP.Port.StationTypes");
-            stationTypes.RetrieveAll();
+
+            if (webUser.CCBPMRunModel == 2)
+                stationTypes.Retrieve("OrgNo", emp.OrgNo);
+            else
+                stationTypes.RetrieveAll();
 
             //所有的岗位s
             var stations = new Entities("BP.Port.Stations");
-            stations.RetrieveAll();
+
+            if (webUser.CCBPMRunModel == 2)
+                stations.Retrieve("OrgNo", emp.OrgNo);
+            else
+                stations.RetrieveAll();
+
 
             var html = "<table border=0 style='width:100%;'>";
-            html += "<caption >姓名:" + emp.Name + ", <a href='javascript:Back()'>返回</a></caption>";
+            html += "<caption >姓名:<font color=green>" + emp.Name + "</font>, <a href='javascript:Back()'>返回</a></caption>";
 
             for (var i = 0; i < stationTypes.length; i++) {
 
@@ -67,14 +75,10 @@
                         }
                     }
 
-
-
-                    if (isHave==true)
-                        html += "<td ><label><input type=checkbox checked=checked onclick=\"SaveStation('" + sta.No + "','"+orgNo+"')\" id='" + sta.No + "'  ><font color=green>" + sta.Name + "</font></label></td>";
+                    if (isHave == true)
+                        html += "<td ><label><input type=checkbox checked=checked onclick=\"SaveStation('" + sta.No + "','" + orgNo + "')\" id='" + sta.No + "'  ><font color=green>" + sta.Name + "</font></label></td>";
                     else
-                        html += "<td ><label><input type=checkbox onclick=\"SaveStation('" + sta.No + "','"+orgNo+"')\" id='" + sta.No + "'  >" + sta.Name + "</label></td>";
-
-
+                        html += "<td ><label><input type=checkbox onclick=\"SaveStation('" + sta.No + "','" + orgNo + "')\" id='" + sta.No + "'  >" + sta.Name + "</label></td>";
 
                     if (ii == 3) {
                         ii = -1;
@@ -90,7 +94,7 @@
         });
 
         //保存
-        function SaveStation(staNo,orgNo) {
+        function SaveStation(staNo, orgNo) {
 
             var empNo = GetQueryString("FK_Emp");
             var deptNo = GetQueryString("FK_Dept");
@@ -106,14 +110,17 @@
                 en.FK_Emp = empNo;
                 en.FK_Station = staNo;
 
-                if(orgNo!= undefined && orgNo!= null && orgNo !="" ){
-                    en.OrgNo=orgNo;
+                if (orgNo != undefined && orgNo != null && orgNo != "") {
+                    en.OrgNo = orgNo;
                 }
                 en.Insert();
                 return;
             }
 
             var mypk = deptNo + '_' + empNo + '_' + staNo;
+            if (webUser.CCBPMRunModel == 2) {
+                mypk = deptNo + "_" + empNo.replace(webUser.OrgNo + "_", "") + "_" + staNo;
+            }
             en.SetPKVal(mypk);
             en.Delete();
         }
@@ -143,7 +150,7 @@
 <body>
 
 
-<div id="Msg"></div>
+    <div id="Msg" style=" padding:10px;"></div>
 
 </body>
 </html>

@@ -18,7 +18,6 @@ var deptEnName = "BP.WF.Port.Admin2Group.Dept";
 var deptEnsName = "BP.WF.Port.Admin2Group.Depts";
 
 
-
 /*  新建人员编号模式. 0=手工输入自己编号.  1=自动生成，由实体类的 beforeInser 生成. */
 var NewEmpNoModel = 0;
 

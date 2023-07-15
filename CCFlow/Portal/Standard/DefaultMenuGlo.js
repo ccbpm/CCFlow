@@ -4,7 +4,6 @@ function DealMenuUrl(menu) {
 
     if (menu.UrlExt == undefined) menu.UrlExt = menu.Url;
 
-    var basePath = "";
     if (menu.MenuModel === "" || menu.MenuModel === null) {
         //alert("没有保存菜单标记 MenuModel  " + menu.MenuModel);
         return menu;
@@ -97,6 +96,14 @@ function DealMenuUrl(menu) {
 
     if (menu.MenuModel === "Windows") {
         menu.Url = basePath + "/WF/Portal/Home.htm?PageID=" + menu.No;
+        if (menu.Tag1 === 'Tabs')
+            menu.Url = basePath + "/WF/Portal/Tabs.htm?PageID=" + menu.No;
+        if (menu.Tag1 === 'Rpt3D')
+            menu.Url = basePath + "/CCFast/Rpt/Rpt3D.htm?RptNo=" + menu.No;
+        if (menu.Tag1 === 'RptBlue')
+            menu.Url = basePath + "/WF/Portal/RptBlue.htm?PageID=" + menu.No;
+        if (menu.Tag1 === 'RptWhite')
+            menu.Url = basePath + "/WF/Portal/RptWhite.htm?PageID=" + menu.No;
         return menu;
     }
 
@@ -114,7 +121,7 @@ function DealMenuUrl(menu) {
         return menu;
     }
     if (menu.MenuModel === "RptWhite") {
-        menu.Url = basePath + "/WF/Portal/RptBlue.htm?PageID=" + menu.No;
+        menu.Url = basePath + "/WF/Portal/RptWhite.htm?PageID=" + menu.No;
         return menu;
     }
 

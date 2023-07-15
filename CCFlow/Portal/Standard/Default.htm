@@ -33,23 +33,23 @@
 
         function GoToFunc(funcName) {
             if (funcName === 'Calendar') {
-                vm.openTab(vm.GetNameByLange('rili'), '/CCFast/Calendar/Month.htm');
+                vm.openTab(vm.GetNameByLange('rili'),basePath+ '/CCFast/Calendar/Month.htm');
                 return;
             }
             if (funcName === 'WorkRec') {
-                vm.openTab(vm.GetNameByLange('rizhi'), '/CCFast/WorkRec/Default.htm');
+                vm.openTab(vm.GetNameByLange('rizhi'), basePath +  '/CCFast/WorkRec/Default.htm');
                 return;
             }
             if (funcName === 'Notepad') {
-                vm.openTab(vm.GetNameByLange('jishiben'), '/CCFast/Notepad/Notepad.htm');
+                vm.openTab(vm.GetNameByLange('jishiben'), basePath + '/CCFast/Notepad/Notepad.htm');
                 return;
             }
             if (funcName === 'Task') {
-                vm.openTab(vm.GetNameByLange('renwu'), '/CCFast/Task/Task.htm');
+                vm.openTab(vm.GetNameByLange('renwu'), basePath + '/CCFast/Task/Task.htm');
                 return;
             }
             if (funcName === 'KnowledgeManagement') {
-                vm.openTab(vm.GetNameByLange('zhishiku'), '/CCFast/KnowledgeManagement/Default.htm');
+                vm.openTab(vm.GetNameByLange('zhishiku'), basePath +  '/CCFast/KnowledgeManagement/Default.htm');
                 return;
             }
         }
@@ -105,6 +105,9 @@
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: 15px;
+        }
+        .menu-name-weight{
+            font-weight:700;
         }
 
         .nav-menu .option {
@@ -313,7 +316,7 @@
 
                         <li v-if="isAdmin" id="iconMenu" class="layui-nav-item layui-hide-xs" onclick="Fasts()">
                             <a href="javascript:void(0)" class="flex-item">
-                                <i class="icon-menu"></i>
+                                <i class="icon-puzzle"></i>
                                 <span>{{GetNameByLange('didaima')}}</span>
                             </a>
                         </li>
@@ -321,7 +324,7 @@
 
                         <li v-if="isAdmin" id="iconFlow" class="layui-nav-item layui-hide-xs" onclick="Flows()">
                             <a href="javascript:void(0)" class="flex-item" style="padding:0 15px">
-                                <i class="icon-heart"></i>
+                                <i class="icon-organization"></i>
                                 <span>{{GetNameByLange('liucheng')}}</span>
                             </a>
                         </li>
@@ -348,11 +351,11 @@
                             </a>
                         </li>
 
-                        <li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenIM()">
+                        <!--<li id="iconIM" class="layui-nav-item layui-hide-xs" onclick="OpenIM()">
                             <a href="javascript:void(0)" style="padding:0 15px">
                                 <i class="icon-bubbles"></i> IM
                             </a>
-                        </li>
+                        </li>-->
 
                         <li id="lange" class="layui-nav-item layui-hide-xs" >
                             <a href="javascript:void(0)" style="padding:0 15px">
@@ -412,13 +415,13 @@
                                 <a v-if="Array.isArray(menuTreeData) && menuTreeData.length > 0"
                                    href="javascript:void(0)" @click="foldMenus(menuTreeData,item)" :class="{'layui-this' : item.No === selectedId}">
                                     <i :class="item.Icon"></i>
-                                    <cite style="margin-left:8px">{{item.Name}}</cite>
+                                    <cite style="margin-left:8px;">{{item.Name}}</cite>
                                     <span class="layui-nav-more"></span>
                                 </a>
                                 <a v-else href="javascript:void(0)" :class="{'layui-this' : item.No === selectedId}"
                                    @click="openTab(item.Name,item.Url,item.No),selectedId = item.No">
                                     <i :class="item.Icon"></i>
-                                    <cite style="margin-left:8px">{{item.Name}}</cite>
+                                    <cite style="margin-left: 8px;">{{item.Name}}</cite>
                                 </a>
                                 <dl v-show="Array.isArray(menuTreeData) && menuTreeData.length > 0 && item.IsOpen"
                                     ref="c-sort-tree" class="layui-nav-child">
@@ -491,8 +494,8 @@
                                     <template v-if="item.children.length > 1 ">
                                         <div class="nav-menu" :class="{'layui-nav-this':item.open === true}"
                                              @click.stop.prevent="item.open = !item.open">
-                                            <i :class="item.Icon"></i>
-                                            <span class="menu-name">{{item.Name}}</span>
+                                            <i :class="item.Icon "></i>
+                                            <span class="menu-name menu-name-weight">{{item.Name}}</span>
                                             <i v-if="item.type" class="option icon-menu" @click.stop.prevent
                                                :data-id="item.No" :data-no="item.No" :data-idx="index"
                                                :data-name="item.Name"></i>

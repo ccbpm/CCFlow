@@ -45,7 +45,7 @@ new Vue({
             var flowNo = GetQueryString("FlowNo");
             var data = ens.DoMethodReturnString("Default_Mover", flowNo, currentNodeArrStr);
 
-  
+
 
         },
         updateSort: function (currentNodeArrStr) {
@@ -85,11 +85,16 @@ new Vue({
             })
         },
         // 是否启用
-        changemyEnEnableStatus(myEn, ctrl) {
+        changeEnableStatus(myEn, ctrl) {
             // 当前启用状态
-            //else
-            //    en.IsEnable = 0; // myEn.IsEnable;
-            //en.Update();
+            var en = new Entity("BP.WF.Template.FlowTab", myEn.MyPK);
+            if (en.isEnable == 0)
+                en.isEnable = 1;
+            else
+                en.isEnable = 0;
+
+            en.Update();
+
             console.log("更新成功..");
         }
     },

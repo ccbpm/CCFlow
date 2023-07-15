@@ -17,6 +17,9 @@ $(function () {
 
     for (var i = 0; i < ens.length; i++) {
         var en = ens[i];
+        if (en.isEnable == 0)
+            continue;
+
         //console.log(en)
         if (pageId == en.MyPK)
             html += "<a href='" + en.UrlExt + "&PageID=" + en.MyPK + "' class='layui-btn layui-btn-danger layui-btn-sm'>" + en.Name + "</a>  ";

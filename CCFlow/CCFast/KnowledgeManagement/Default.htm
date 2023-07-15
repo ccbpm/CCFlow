@@ -12,7 +12,9 @@
     <script src="../layuiadmin/layui/lay/modules/layer.js"></script>
     <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="../../WF/Portal/js/vue/vue.js" type="text/javascript"></script>
-    
+    <script src="../../WF/Scripts/element/element.js"></script>
+    <link rel="stylesheet" href="../../WF/Scripts/element/element.css">
+
     <style>
         html,body {
          padding:10px;
@@ -187,6 +189,10 @@
             color: #f94e4e;
             
         }
+        el-tree-node__expand-icon {
+            color: #C0C4CC !important;
+            cursor: default;
+        }
     </style>
 </head>
 <body>
@@ -326,21 +332,26 @@
             <div class="TaskDepts-title">人员</div>
             <div class="TaskDepts-box">
                 <div class="TaskDepts-input">
-                    <input type="text" class="layui-input" placeholder="请输入内容" id="SearchEmpsKey" @input="selectHandle($event)" placeholder="搜索参与人" />
+                    <el-autocomplete style="width:100%"
+                            v-model="empKey"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请输入内容"
+                            @select="handleSelect"
+                    >
+                    </el-autocomplete>
                 </div>
                 <div class="Depts">
-                    <ul>
-                        <li class="" v-for="(Ditem,dk) in DeptsData" v-if="Ditem.Num > 0">
-                            <p @click.stop="Ditem.open = !Ditem.open">
-                                <i v-if="Ditem.Empslist.length > 0" class="layui-icon"
-                                   :class="Ditem.open ? 'layui-icon-down':'layui-icon-right'"></i> {{Ditem.Name}} {{Ditem.Num}}人
-                            </p>
-                            <div class="Depts-Emps" v-for="(Eitem,dk) in Ditem.Empslist" v-if="Ditem.open || Ditem.Num === 0">
-                                <input type="checkbox" :value="Eitem.No" @click.stop="SelEmpno(Eitem.No,Eitem.Name,Eitem.status)" v-model="Eitem.status" /> {{Eitem.Name}}
-                            </div>
-                        </li>
-
-                    </ul>
+                    <el-tree
+                            :props="props"
+                            :load="loadNode"
+                            node-key="No"
+                            lazy
+                            :check-strictly="true"
+                            show-checkbox
+                            :default-checked-keys="defaultChecks"
+                            @check="handleCheck"
+                            ref="tree"
+                    ></el-tree>
 
                 </div>
             </div>
@@ -359,35 +370,37 @@
                 knowList: [],
                 myknowList: [],
                 IsStar:0,
-                ImgUrl: 'img/1.png',
-                KnowImgData: [{ 'id': 1, 'imgurl': 'img/1.png' }, { 'id': 2, 'imgurl': 'img/2.png' }, { 'id': 3, 'imgurl': 'img/3.png' }, { 'id': 4, 'imgurl': 'img/4.png' }, { 'id': 5, 'imgurl': 'img/5.png' }, { 'id': 6, 'imgurl': 'img/7.png' }, { 'id': 8, 'imgurl': 'img/8.png' }], 
+                ImgUrl: 'Img/1.png',
+                KnowImgData: [{ 'id': 1, 'imgurl': 'Img/1.png' }, { 'id': 2, 'imgurl': 'Img/2.png' }, { 'id': 3, 'imgurl': 'Img/3.png' }, { 'id': 4, 'imgurl': 'Img/4.png' }, { 'id': 5, 'imgurl': 'Img/5.png' }, { 'id': 6, 'imgurl': 'Img/7.png' }, { 'id': 8, 'imgurl': 'Img/8.png' }],
                 DeptshowLeft: 0,
                 Deptshowtop: 0,
                 DeptsData: [],//人员信息
                 DeptsDatas: [],
                 EmpsData: [],
                 EmpsRaw:'',
+                webUser:{},
+                defaultChecks:[],
+                props: {
+                    children: "children",
+                    label: "Name",
+                },
+                empKey:"",
             },
             methods: {
                 SaveKnow: function () {
-                    
-                    var Empsstr = ''
-                    for (s = 0; s < this.EmpsData.length; s++) {
-                        var de = this.EmpsData[s]                        
+                    let Empsstr = ''
+                    for (let s = 0; s < this.EmpsData.length; s++) {
+                        let de = this.EmpsData[s]
                         Empsstr += de.no+'@'+de.name+';'
                     }
-                  
-                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge");                  
+                    let en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge");
                     en.CopyForm();
                     en.Emps = Empsstr;
                     en.Insert();
                     layer.msg('添加成功', { time: 1000 }, function () {
                         location.href = "Knowledge.htm?No=" + en.No;
                         return;
-                        //window.location.href = "Defaut";
-                        //location.reload();
                     })
-
                 },
 
                 ChooseImg: function (imgurl) {
@@ -397,138 +410,39 @@
                     location.href = "Knowledge.htm?no=" + no
                 },
                 StarType: function (status,no,index) {                  
-                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
+                    let en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
                     en.Retrieve();
-                 
-                    var Foucs=en.Foucs
-                    var webUser = new WebUser();
+                    let Foucs=en.Foucs
                     if (status) {
-                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        Foucs = Foucs.replace(this.webUser.Name + ';', "")
                         $('#gz' + no).removeClass('nyellow')
                         this.knowList[index].gz = 0                      
                     } else {
-                        Foucs += webUser.Name+';'
+                        Foucs += this.webUser.Name+';'
                         $('#gz' + no).addClass('nyellow')
                         this.knowList[index].gz = 1                     
                     }
-                   
                     en.Foucs = Foucs; // 0=未完成， 1=完成.
                     en.Update();
                 },
                 myStarType: function (status, no, index) {
-                    var en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
+                    let en = new Entity("BP.CCOA.KnowledgeManagement.Knowledge", no);
                     en.Retrieve();
-                    var Foucs = en.Foucs
-                    var webUser = new WebUser();
+                    let Foucs = en.Foucs
                     if (status) {
-                        Foucs = Foucs.replace(webUser.Name + ';', "")
+                        Foucs = Foucs.replace(this.webUser.Name + ';', "")
                         this.myknowList.splice(index, 1)
-                    } 
-
+                    }
                     en.Foucs = Foucs; // 0=未完成， 1=完成.
                     en.Update();
                 },
-
-                selectHandle: function (event) {
-
-                    var key = event.currentTarget.value;
-                    console.log(key);
-                    var Depts = this.DeptsDatas;
-                    if (key != null) {
-                        var des = []
-                        for (d = 0; d < Depts.length; d++) {
-                            var de = Depts[d]
-                            de.open = false
-                            var childModules = de.Empslist
-                            de.Num = 0
-                            for (c = 0; c < childModules.length; c++) {
-                                var ce = childModules[c]
-
-                                if (ce.Name.indexOf(key) != -1) {
-                                    de.open = true
-                                    de.Num += 1
-                                }
-                            }
-                            if (de.Num) des.push(de)
-                            de.Num = childModules.length
-                        }
-
-                        this.DeptsData = des
-                    } else {
-                        for (d = 0; d < Depts.length; d++) {
-                            var de = Depts[d]
-                            de.open = false
-                            var childModules = de.Empslist
-                            de.Num = childModules.length
-                        }
-
-                        this.DeptsData = Depts
-                        console.log(this.DeptsData);
-                    }
-
-
-                },
                 selectRefShow: function (e) {               
                     this.Deptshow = true;    
-                    var Depts = this.DeptsDatas;
-                    for (d = 0; d < Depts.length; d++) {
-                        var de = Depts[d]
-                        de.open = false
-                        var childModules = de.Empslist
-                        for (c = 0; c < childModules.length; c++) {
-                            var ce = childModules[c]
-                            var splitDate = this.EmpsRaw
-                            ce.status = 0
-                            if (splitDate.indexOf(ce.Name) != -1) {
-                                ce.status = 1
-                                de.open = true
-                            }
-                        }
-                    }
-                    
-                    this.DeptsData = Depts;
-
-                    //this.selectRefShow=true
                     const $circle = this.$refs.RefBox                   
                     this.DeptshowLeft = this.getParentLeft($circle) + 'px'
                     this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
                 },
-                SelEmpno: function (no, name,  status) {                   
-                    if (status == 1) {
-                        status = 0;
-                    } else {
-                        status = 1;
-                    }
-                   
-                    var splitDate = this.EmpsRaw;
-                        if (splitDate) {
-                            if (status == 1) {
-                                if (splitDate.indexOf(name) != -1)
-                                    return
-                                this.EmpsRaw += name + ';'
-                               
-                                this.EmpsData.push({ 'no': no, 'name': name })
-                            } else {
-                                
-                                this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
-                                var newArr = new Array();
-                                for (var i = 0; i < this.EmpsData.length; i++) {
-                                    var j = this.EmpsData[i];
-                                    if (j.no != no) {
-                                        newArr.push(j);
-                                    }
-                                }
-                                this.EmpsData=newArr
-                                
-                            }
-                        } else {
-                            this.EmpsRaw += name + ';'
-                           
-                            this.EmpsData.push({ 'no': no, 'name': name })
-                        }
-                  
-                },
-                DelEmps: function (no, name, index) {
+                DelEmps: function (no, name) {
                     var _this = this
                     this.EmpsRaw = this.EmpsRaw.replace(name + ';', "")
                     var newArr = new Array();
@@ -541,9 +455,9 @@
                     console.log(newArr)
                     this.EmpsData = newArr
                 },
-            /**
-            * 获取顶部div的距离
-            */
+                /**
+                * 获取顶部div的距离
+                */
                 getParentTop: function (e) {
                     var offset = e.offsetTop
                     if (e.offsetParent != null) {
@@ -565,9 +479,25 @@
                     var ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                     ens = ens.DoMethodReturnJSON("Default_Init");
                     var webUser = new WebUser();
+                    var Empsstr = webUser.No + '@' + webUser.Name + ';';
+                    //权限控制
+                    var powerKnow = [];
+                    for (var j = 0; j < ens.length; j++){
+                        var en = ens[j];
+                        var EmpsData = en.Emps;
+                        if(en.KnowledgeSta == 2){
+                            powerKnow.push(en);
+                        }else {
+                            if(EmpsData.indexOf(Empsstr) != -1){
+                                powerKnow.push(en);
+                            }
+                        }
+
+                    }
+                    //判断是否关注
                     var myknow = []
-                    for (i = 0; i < ens.length; i++) {
-                        var en = ens[i];
+                    for (i = 0; i < powerKnow.length; i++) {
+                        var en = powerKnow[i];
                         var FoucsDate = en.Foucs
                         if (FoucsDate.indexOf(webUser.Name)) {
                             en.gz = 0
@@ -577,20 +507,157 @@
                         }
 
                     }
-                    this.knowList = ens;
+                    this.knowList = powerKnow;
                     this.myknowList = myknow;
-                }
+                },
+                /**
+                 * 人员查询
+                 * @param queryString
+                 * @param cb
+                 */
+                querySearchAsync(queryString, cb){
+                    if(queryString === ''){
+                        cb([]);
+                        return;
+                    }
+                     let ensD = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
+                    let data = ensD.DoMethodReturnString("SelectEmpByKey",queryString);
+                    if(data.indexOf("err@")!=-1){
+                        layer.alert(data);
+                        cb([]);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                    data = data.map(item => {
+                        if(!!item.NameOfPath)
+                            return { No: item.No, Name: item.Name, value: item.NameOfPath.replace(/\\/g, '-') + '-' + item.Name }
+                        else
+                            return { No: item.No, Name: item.Name, value: item.DeptName + '-' + item.Name }
+                    });
+                    cb(data);
+                },
+                /**
+                 * 人员自动完成选择人员
+                 * @param item
+                 */
+                handleSelect(item) {
+                    if(this.EmpsRaw.indexOf(item.No)==-1){
+                        this.EmpsRaw += item.No + ';'
+                        this.EmpsData.push({ 'no': item.No, 'name': item.Name });
+                        this.defaultChecks.push(item.No);
+                    }
+                    this.empKey='';
+                    const $circle = this.$refs.RefBox
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
+                //懒加载部门人员树
+                loadNode(node, resolve) {
+                    let deptNo ="";
+                    if (typeof node.data == "undefined") {
+                        if (this.webUser.CCBPMRunModel == 0)
+                            deptNo = this.webUser.FK_Dept;
+                        else
+                            deptNo = this.webUser.OrgNo;
+                    }
+                    else
+                        deptNo = node.data.No;
+                    if (node.level === 0){
+                        let dept = new Entity("BP.Port.Dept",deptNo);
+                        return resolve([{
+                            No:dept.No,
+                            Name:dept.Name,
+                            ParentNo:dept.ParentNo,
+                            leaf:true,
+                            disabled:true
+                        }])
+                    }
+                    let ensD = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
+                    let data = ensD.DoMethodReturnString("Selecter_DeptEmps",deptNo)
+                    if (data.indexOf('err@') == 0) {
+                        layer.alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+                    let treeData=[];
+                    data.Depts.forEach(dept=>{
+                        treeData.push({
+                            No:dept.No,
+                            Name:dept.Name,
+                            ParentNo:dept.ParentNo,
+                            leaf:true,
+                            disabled:true
+                        })
+                    })
+                    data.Emps.forEach(emp=>{
+                        treeData.push({
+                            No:emp.No,
+                            Name:emp.Name,
+                            leaf:false,
+                            disabled:false
+                        })
+                    })
+                    resolve(treeData);
+                    return;
+
+                },
+                /**
+                 * 人员部门树的人员选择
+                 * @param data
+                 * @param checked
+                 */
+                handleCheck(data, checked){
+                    let checkedKeys = checked.checkedKeys;
+                    let arr = checkedKeys.filter(item=>item==data.No);
+                    //存在
+                    if(arr.length>0){
+                        if(this.EmpsRaw.indexOf(data.No)==-1){
+                            this.EmpsRaw += data.No + ';'
+                            this.EmpsData.push({ 'no': data.No, 'name': data.Name });
+                            this.defaultChecks.push(data.No);
+                        }
+                    }
+                    //取消
+                    if(arr.length==0){
+                        if(this.EmpsRaw.indexOf(data.No)==-1)
+                            this.DelEmps(data.No,data.Name);
+                        let idx = this.defaultChecks.findIndex(function(no){
+                            no = data.No;
+                        })
+                        if(idx!=-1)
+                            this.defaultChecks.slice(idx,1);
+                    }
+                    const $circle = this.$refs.RefBox
+                    this.DeptshowLeft = this.getParentLeft($circle) + 'px'
+                    this.Deptshowtop = this.getParentTop($circle) + 30 + 'px'
+                },
             },
             mounted: function () {
-
-                var ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
+                this.webUser = new WebUser();
+                let ens = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                 ens = ens.DoMethodReturnJSON("Default_Init");
-                var webUser = new WebUser();
-                var myknow=[]
-                for (i = 0; i < ens.length; i++) {
-                    var en = ens[i];
-                    var FoucsDate = en.Foucs
-                    if (FoucsDate.indexOf(webUser.Name)) {
+
+                let Empsstr = this.webUser.No + '@' + this.webUser.Name + ';';
+                //权限控制
+                let powerKnow = [];
+                for (let j = 0; j < ens.length; j++){
+                    let en = ens[j];
+                    let EmpsData = en.Emps;
+                    if(en.KnowledgeSta == 2){
+                        powerKnow.push(en);
+                    }else {
+                        if(EmpsData.indexOf(Empsstr) != -1){
+                            powerKnow.push(en);
+                        }
+                    }
+                }
+                //判断是否关注
+                let myknow=[]
+                for (let i = 0; i < powerKnow.length; i++) {
+                    let en = powerKnow[i];
+                    let FoucsDate = en.Foucs
+                    if (FoucsDate.indexOf(this.webUser.Name)) {
                         en.gz=0
                     } else {
                         en.gz = 1
@@ -598,37 +665,11 @@
                     }
 
                 }
-
-                this.knowList = ens;
+                this.knowList = powerKnow;
                 this.myknowList = myknow;
-                //人员信息
-                var ensD = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
-                var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");
-                var Depts = DeptEmps.Depts
-                var Emps = DeptEmps.Emps
-                for (d = 0; d < Depts.length; d++) {
-                    var de = Depts[d]
-                    de.Empslist = []
-                    de.open = false
-                    var childModules = Emps.filter(function (module) {
-                        // return module.SystemNo === ''                 
-                        return module.FK_Dept === de.No
-                    })
-                    de.Num = childModules.length
-                    for (c = 0; c < childModules.length; c++) {
-                        var ce = childModules[c]
-                        ce.status = 0
-                    }
-                    de.Empslist = childModules
-
-                }
-
-
-                this.DeptsDatas = Depts;
-
-               
-                this.EmpsRaw = webUser.Name+';'
-                this.EmpsData.push({ 'no': webUser.No, 'name': webUser.Name })
+                this.EmpsRaw = this.webUser.No+';'
+                this.EmpsData.push({ 'no': this.webUser.No, 'name': this.webUser.Name });
+                this.defaultChecks.push(this.webUser.No);
             }
 
         });

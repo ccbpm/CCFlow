@@ -472,7 +472,7 @@
             <div class="know-side-menu">
                 <div class="menu-system sideHover">
                     <span class="pull-right"><i class="iconfont icon-add t-btn"></i></span>
-                    <span @click.stop="cateShow=true,pageShow=false,delShow=false,cateSideActive=0" data-sysno=""><i class="iconfont icon-anli"></i> 目录</span>
+                    <span @click.stop="cateShow=true,pageShow=false,delShow=false,athShow=false,cateSideActive=0" data-sysno=""><i class="iconfont icon-anli"></i> 目录</span>
                 </div>
                 <div class="menu-list">
                     <div class="tree-box" v-for="(item,ink) in TreeData" :class="cateSideActive==item.No?'cateSideActive':''">
@@ -510,6 +510,9 @@
                     </div>
 
                 </div>
+            </div>
+            <div class="know-side-del sideHover" @click.stop="cateShow=false,pageShow=false,athShow=true,AthList()" :class="cateSideActive==1?'cateSideActive':''">
+                <span><i class="iconfont icon-attach"></i> 附件</span>
             </div>
             <div class="know-side-del sideHover" @click.stop="cateShow=false,pageShow=false,delShow=true,DtlDel()" :class="cateSideActive==1?'cateSideActive':''">
                 <span><i class="iconfont icon-shanchu1"></i> 最近删除</span>
@@ -623,7 +626,7 @@
                 <div class="del-list">
                     <div class="list-tab">
                         <ul>
-                            <li class="active">文档</li>
+                            <li class="active">最近删除</li>
                         </ul>
                     </div>
                     <div class="list-box">
@@ -634,6 +637,28 @@
                                 </div>
                                 <div class="list-title">
                                     <i class="layui-icon layui-icon-file"></i>{{ditem.Name}}
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <div class="know-del-main" v-if="athShow" @click.stop="athShow=true">
+                <div class="del-list">
+                    <div class="list-tab">
+                        <ul>
+                            <li class="active">附件</li>
+                        </ul>
+                    </div>
+                    <div class="list-box">
+                        <ul>
+                            <li v-for="(ditem,din) in athList">
+                                <div class="pull-right kndelbtn">
+                                     <span class="tgray"> 文件大小：{{ditem.MyFileSize}} KB</span> <span class="tblue" @click.stop="DownloadAth(ditem.MyFilePath)">下载</span>
+                                </div>
+                                <div class="list-title">
+                                    <i class="iconfont icon-attach"></i> {{ditem.MyFileName}}
                                 </div>
                             </li>
                         </ul>
@@ -801,6 +826,7 @@
             data: {
                 cateShow: true,
                 delShow: false,
+                athShow: false,
                 pageShow: false,
                 cateEdit: false,
                 cateTreeShow: false,
@@ -824,10 +850,11 @@
                 AddEdit: 1,
                 KnowTreetitle: '',
                 ImgUrl: '',
-                KnowImgData: [{ 'id': 1, 'imgurl': 'img/1.png' }, { 'id': 2, 'imgurl': 'img/2.png' }, { 'id': 3, 'imgurl': 'img/3.png' }, { 'id': 4, 'imgurl': 'img/4.png' }, { 'id': 5, 'imgurl': 'img/5.png' }, { 'id': 6, 'imgurl': 'img/7.png' }, { 'id': 8, 'imgurl': 'img/8.png' }],
+                KnowImgData: [{ 'id': 1, 'imgurl': 'Img/1.png' }, { 'id': 2, 'imgurl': 'Img/2.png' }, { 'id': 3, 'imgurl': 'Img/3.png' }, { 'id': 4, 'imgurl': 'Img/4.png' }, { 'id': 5, 'imgurl': 'Img/5.png' }, { 'id': 6, 'imgurl': 'Img/7.png' }, { 'id': 8, 'imgurl': 'Img/8.png' }],
                 cateSideActive: '',
                 myDtlgzList: [],
                 delList: [],
+                athList: [],
                 dtlEditShow: false,
                 DeptshowLeft: 0,
                 Deptshowtop: 0,
@@ -913,6 +940,14 @@
                     }
 
                 },
+                //下载附件
+                DownloadAth: function (filepath){
+                    var link = document.createElement('a');
+                    link.setAttribute("download", "");
+                    link.href = filepath;
+                    link.click();
+                },
+
                 StarType: function (status, no, index) {
                     var en = new Entity("BP.CCOA.KnowledgeManagement.KMDtl", no);
                     en.Retrieve();
@@ -1007,6 +1042,7 @@
                     this.pageShow = true
                     this.cateShow = false
                     this.delShow = false
+                    this.athShow = false
                     this.cateSideActive = no
                     if (type == 1) {
                         var enTree = new Entity("BP.CCOA.KnowledgeManagement.KMTree", no);
@@ -1045,9 +1081,24 @@
                         } else {
                             pageData.gz = 1
                         }
+                        if(pageData.Docs.indexOf('&lt;') != -1)
+                            pageData.Docs = this.escape2Html(pageData.Docs);
                         this.pageinfoData = pageData;
                         this.flieType = 2
                     }
+                },
+                escape2Html(str) {
+					//&lt;转html标签
+                    var temp = document.createElement("div");
+
+                    temp.innerHTML = str;
+
+                    var output = temp.innerText || temp.textContent;
+
+                    temp = null;
+
+                    return output;
+
                 },
                 addTreeCate: function () { //创建目录.
 
@@ -1062,7 +1113,6 @@
                     en.Name = $("#TB_KnowTree_title").val();
                     en.KnowledgeNo = knno;
                     en.Insert();
-
 
                     layer.msg('添加成功', { time: 1000 })
                     this.cateTreeShow = false
@@ -1118,13 +1168,15 @@
                     var pageData = new Entity("BP.CCOA.KnowledgeManagement.KMDtl", no);
                     this.KnowledgeNo = pageData.KnowledgeNo
                     this.knowInfo = pageData;
-                   
+                    if(this.knowInfo.Docs.indexOf('&lt;') != -1)
+                        this.knowInfo.Docs = this.escape2Html(this.knowInfo.Docs);
                     this.editor.txt.html(this.knowInfo.Docs)
                     /*var reoadUrl = 'KnowPageEdit.htm?no=' + no
                     OpenLayuiDialog(reoadUrl, "", 90000, false, false, true, false, false, false, false);*/
 
                 },
                 SaveKnowDtl: function (knno) {
+
                     this.dtlEditShow = false;
                     this.pageinfoData.Docs = this.editor.txt.html()
                     this.pageinfoData.Name = $('#TB_Name').val();
@@ -1132,9 +1184,10 @@
                     console.log(this.knowInfo);
                     var en = new Entity("BP.CCOA.KnowledgeManagement.KMDtl", knno);
                     en.Docs = this.editor.txt.html();
-                    en.CopyForm();
+                    en.Name = $('#TB_Name').val();
                     en.Update();
-                  
+                    
+                    this.refTreecate(this.knowInfo.RefTreeNo);
                     layer.msg('修改成功', { time: 1000 }, function () {
                         this.dtlEditShow = false;
                         return;
@@ -1145,12 +1198,7 @@
                 },
                 NewTree: function (title, no, stauts, type, Name) {
 
-                    var en = new Entity("BP.CCOA.KnowledgeManagement.KMDtl");
-                    en.title = "新建";
-                    en.RefTreeNo = no;
-                    en.KnowledgeNo = GetQueryString("no");
-                    en.Docs = "新建文档";
-                    en.Insert();
+
 
                    /* var url = "../../WF/Comm/RefFunc/EnOnly.htm?EnName=BP.CCOA.KnowledgeManagement.KMDtl&No=" + en.No;
                     OpenLayuiDialog(url, en.Name, 900, 0, null, true, false, false, false, null);
@@ -1164,6 +1212,49 @@
                     this.AddEdit = type
                     this.KnowTreetitle = Name
                 },
+
+                NewPage: function (title, no, status, type, Name){
+                    var en = new Entity("BP.CCOA.KnowledgeManagement.KMDtl");
+                    en.Name = "新建";
+                    en.RefTreeNo = no;
+                    en.KnowledgeNo = GetQueryString("no");
+                    en.Docs = "新建文档";
+                    en.Insert();
+
+                    this.cateTreeShow = false;
+                    this.DTreeTitle = title;
+                    this.TreeParentNo = no;
+                    this.TreeType = status;
+                    this.AddEdit = type;
+                    this.KnowTreetitle = Name;
+
+                    this.refTreecate(no);
+                },
+
+                NewAth: function (no){
+                    var e = document.createElement('input');
+                    e.type = 'file';
+                    e.onchange = function (){
+                        debugger
+                        var fileObj = this.files;
+
+                        if(fileObj.length == 0)   return;
+
+                        var handler = new HttpHandler("BP.NB.AppHandler");
+                        handler.AddPara("file", fileObj[0]);
+                        handler.AddPara("No", no);
+                        var data = handler.DoMethodReturnString("Knowledge_UploadFile");
+                        if (data.indexOf("err@") != -1) {
+                            layer.alert(data);
+                            return;
+                        }
+                        layer.msg("上传成功", { time: 1000 }, function () {
+                        });
+                    }
+
+                    e.click();
+                },
+
                 bindMenu: function () {
                     var _this = this
                     layui.use('dropdown', function () {
@@ -1179,7 +1270,19 @@
                             this.cateTreeD = true
                             var no = knno;
                             var name = "";// $(this.elem)[0].dataset.sysname;
-                            _this.NewTree(data.name, no, data.type, 1);
+                            //新建文件夹
+                            if(data.type == '1'){
+                                _this.NewTree(data.name, no, data.type, 1);
+                            }
+                            //新建文档
+                            if(data.type == '2'){
+                                _this.NewPage(data.name, no, data.type, 1, '');
+                            }
+                            //上传附件
+                            if(data.type == '3'){
+                                _this.NewAth(no);
+                            }
+
                             // _this.topNodeOption(data.id, $(this.elem)[0].dataset.no, $(this.elem)[0].dataset.name, $(this.elem)[0].dataset.idx)
                         }
                         var systemOptions = [{
@@ -1201,7 +1304,7 @@
                             //console.log(parentno)
                             switch (data.id) {
                                 case 'NewPage':
-                                    _this.NewTree(data.name, parentno, data.type, 1);
+                                    _this.NewPage(data.name, parentno, data.type, 1, '');
                                     break;
 
                             }
@@ -1270,7 +1373,7 @@
                             var ens = new Entities("BP.CCOA.KnowledgeManagement.KMDtls");
                             ens.Retrieve("RefTreeNo", no);
                             if (ens.length != 0) {
-                                layer.msg('该目录下存在文档');
+                                layer.msg('该目录或最近删除下存在文档，请您清理文档后再删除');
                                 return;
                             }
                             var knDel = new Entity("BP.CCOA.KnowledgeManagement.KMTree", no);
@@ -1311,13 +1414,22 @@
 
                     // this.inte()
                 },
+                AthList: function () {
+                    var enDtl = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
+                    enDtl.Retrieve("No", knno);
+
+                    var enDtlData = enDtl.TurnToArry();
+                    this.athList = enDtlData;
+                    this.delShow = false;
+                },
                 DtlDel: function () {
                     var enDtl = new Entities("BP.CCOA.KnowledgeManagement.KMDtls");
                     enDtl.Retrieve("KnowledgeNo", knno, "IsDel", 1);
 
                     // ens.Retrieve("ParentNo", knno);
                     var enDtlData = enDtl.TurnToArry();
-                    this.delList = enDtlData
+                    this.delList = enDtlData;
+                    this.athShow = false;
                 },
                 selectHandle: function (event) {
                     var key = event.currentTarget.value;
@@ -1466,7 +1578,7 @@
                 this.bindMenu();
 
 
-                //人员信息
+                /*//人员信息
                 var ensD = new Entities("BP.CCOA.KnowledgeManagement.Knowledges");
                 var DeptEmps = ensD.DoMethodReturnJSON("Selecter_DeptEmps");
                 var Depts = DeptEmps.Depts
@@ -1499,7 +1611,7 @@
                     this.EmpsRaw += EmpsFg[0]
                 }
                 console.log(this.EmpsData)
-
+*/
             }
 
         });

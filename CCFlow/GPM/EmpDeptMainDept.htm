@@ -175,11 +175,17 @@
         function fillter(zTreeObj) {
             //获得树形图对象
             var nodeList = zTreeObj.getNodes(); //展开第一个根节点
-            if(nodeList.length>1)
-                for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
-                    zTreeObj.expandNode(nodeList[i], true, false, true);
+            if (nodeList.length == 0) {
+                alert("没有获取到根节点");
+                return;
+            }
+            zTreeObj.expandNode(nodeList[i], true, false, true, true);
 
-                }
+            //if(nodeList.length>1)
+            //    for (var i = 0; i < nodeList.length; i++) { //设置节点展开第二级节点
+            //        zTreeObj.expandNode(nodeList[i], true, false, true, true);
+
+            //    }
         }
         //转换ztree需要的数据格式
         var treeJson = [];

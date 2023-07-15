@@ -604,7 +604,9 @@
                 sort: true,
                 templet: function (data) {
                     if (this.field == "Title") {
-                        return "<a style='color:#1e9fff' href='javaScript:void(0)' onclick='OpenIt(\""+data.Title+"\"," + data.OID + "," + data.FlowEndNode + "," + data.FID + ")'>" + data[this.field] + "</a>";
+                        return "<a style='color:
+                        
+                        ' href='javaScript:void(0)' onclick='OpenIt(\""+data.Title+"\"," + data.OID + "," + data.FlowEndNode + "," + data.FID + ")'>" + data[this.field] + "</a>";
                     }
                     return data[this.field];
                 }
@@ -614,6 +616,7 @@
         /**
          * 查询数据
          */
+
         function SearchData() {
             if (orderBy != null && orderBy != undefined)
                 ur.OrderBy = orderBy;
@@ -646,6 +649,11 @@
     </script>
     <script>
         $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                styleScope.innerHTML = "\n .layui-btn{\n background-color::'#5053f1';\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color::'#5053f1';\n}";
+                styleScope.innerHTML += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color::'#5053f1' !important\n}";
+                styleScope.innerHTML += "\n .layui-form-select dl dd.layui-this{\n background-color:'#5053f1' !important;\n}";
+            }
             var theme = DealText(localStorage.getItem("themeColorInfo"));
             theme = JSON.parse(theme);
             var styleScope = document.getElementById("theme-data")

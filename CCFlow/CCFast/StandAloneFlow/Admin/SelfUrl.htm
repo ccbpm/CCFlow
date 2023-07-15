@@ -42,19 +42,49 @@
                 return;
             }
 
-            //更新节点表单类型.
-            var refMenuNo = GetQueryString("RefMenuNo");
+            var no = document.getElementById("TB_No").value;
+            if (no == "" || no == null) {
+                $("#Msg").html("编号不能为空...");
+                return;
+            }
+            var flowNo = GetQueryString("FlowNo");
 
-            var en = new Entity("BP.CCFast.CCMenu.TabDtl");
-            en.RefMenuNo = refMenuNo;
+            var en = new Entity("BP.WF.Template.FlowTab");
             en.Name = name;
-            en.UrlExt = url ; //窗口内容模式.
-            en.Icon = "icon-fire";
-            en.Model = "Self";
+            en.Mark = "self";
+            en.Tip = "请填下相关说明";
+            en.FK_Flow = flowNo;
+            en.MyPK = flowNo + "_" + no;
+            en.UrlExt = url;
+            en.IsEnable = 1;
+            en.Icon = "icon-drop";
+            en.Idx = 0;
             en.Insert();
 
             SetHref("../../../WF/Comm/En.htm?EnName=BP.CCFast.CCMenu.TabDtl&No=" + en.No);
 
+        }
+        function GenerPinYin() {
+            //是否是全拼.
+            var isQuanPin = 0;
+            if (document.getElementById("RB_PinYinModel_0").checked == true)
+                isQuanPin = 1;
+
+            // var name = $('#TB_Nam').val();
+            var name = document.getElementById("TB_Name").value;
+            if (name == "")
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCFormDesigner");
+            handler.AddPara("IsQuanPin", isQuanPin);
+            handler.AddPara("TB_Name", encodeURIComponent(name));
+            var data = handler.DoMethodReturnString("NewFrmGuide_GenerPinYin");
+            $("#Msg").html("");
+            if (data.indexOf('err@') >= 0) {
+                $("#Msg").html("<font color=red>" + data + "</font>");
+                return;
+            }
+            $("#TB_No").val(data);
+            return;
         }
     </script>
 </head>
@@ -65,7 +95,7 @@
         <fieldset>
 
             <legend>创建标签页 </legend>
-            <ul>
+            <!--<ul>
                 <li> 标题</li>
                 <li><input type="text" id="TB_Name" value="我的菜单1" placeholder="不能为空" /> </li>
                 <li> Url</li>
@@ -80,7 +110,30 @@
                 <li>创建后，就可以编辑熟悉与权限控制。</li>
                 <li><img src="Html.png" class="HelpImg" /> </li>
 
-            </ul>
+            </ul>-->
+            <table style="width: 80%;border: white;">
+                <tr>
+                    <td>标题</td>
+                    <td>
+                        <input type="text" id="TB_Name" name="TB_Name" placeholder="不能为空" onblur="GenerPinYin()" />
+                    </td>
+                    <td>
+                        <input id="RB_PinYinModel_0" type="radio" name="RB_PinYinModel" value="0" checked="checked" onclick="GenerPinYin()" /><label for="RB_PinYinModel_0" onclick="GenerPinYin()">全拼</label>
+                        <input id="RB_PinYinModel_1" type="radio" name="RB_PinYinModel" value="1" onclick="GenerPinYin()" /><label for="RB_PinYinModel_1" onclick="GenerPinYin()">简拼</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>编号</td>
+                    <td><input type="text" id="TB_No" name="TB_No" placeholder="不能为空" /></td>
+                </tr>
+                <tr>
+                    <td>功能链接</td>
+                    <td><input type="text" id="TB_Url" value="http://ccfast.cc" placeholder="不能为空" /></td>
+                </tr>
+                <tr>
+                    <div id="Msg"></div>
+                </tr>
+            </table>
         </fieldset>
     </form>
 </body>

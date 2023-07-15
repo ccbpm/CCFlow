@@ -42,6 +42,8 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\ToolKit.xml</DocumentationFile>
+    <NoWarn>1591;</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -82,6 +84,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\RefDLL\Office12\Microsoft.Office.Interop.Word.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\RefDLL\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -113,9 +118,6 @@
     </Reference>
     <Reference Include="Spire.Pdf, Version=5.12.16.18040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
       <HintPath>..\packages\Spire.Doc.7.12.23\lib\net40\Spire.Pdf.dll</HintPath>
-    </Reference>
-    <Reference Include="Swagger.Net">
-      <HintPath>..\RefDLL\Swagger.Net.dll</HintPath>
     </Reference>
     <Reference Include="Swashbuckle.Core">
       <HintPath>..\RefDLL\Swashbuckle.Core.dll</HintPath>
@@ -3115,11 +3117,8 @@
     <Content Include="WF\CCForm\Components\GovDocFile.htm" />
     <Content Include="WF\CCForm\Components\GovDocFile.js" />
     <Content Include="WF\CCForm\DownFile.aspx" />
-    <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\Dtl.js" />
     <Content Include="WF\CCForm\Dtl2017.htm" />
-    <Content Include="WF\CCForm\Dtl2018.htm" />
-    <Content Include="WF\CCForm\Dtl2019.htm" />
     <Content Include="WF\CCForm\DtlAth.js" />
     <Content Include="WF\CCForm\DtlAttr.js" />
     <Content Include="WF\CCForm\DtlCard.htm" />
@@ -3147,8 +3146,6 @@
     <Content Include="WF\CCForm\FrmExcel.htm" />
     <Content Include="WF\CCForm\FrmFool.js" />
     <Content Include="WF\CCForm\FrmFoolReadonly.htm" />
-    <Content Include="WF\CCForm\FrmFoolReadonly.js" />
-    <Content Include="WF\CCForm\FrmFree.js" />
     <Content Include="WF\CCForm\FrmGener.htm" />
     <Content Include="WF\CCForm\FrmGener.js" />
     <Content Include="WF\CCForm\FrmReadme.txt" />
@@ -9108,6 +9105,7 @@
     <None Include="DataUser\CyclostyleFile\单据打印样本.rtf" />
     <None Include="DataUser\CyclostyleFile\驰骋费用报销单.rtf" />
     <Content Include="DataUser\FrmOfficeTemplate\Excel表单插件安装程序.zip" />
+    <Content Include="DataUser\DevelopAPI.ashx" />
     <None Include="DataUser\OfficeTemplate\1XX银通知.doc" />
     <None Include="DataUser\OfficeTemplate\2XX银报告.doc" />
     <None Include="DataUser\OfficeTemplate\3XX银请示.doc" />
@@ -9370,6 +9368,9 @@
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DataUser\DevelopAPI.ashx.cs">
+      <DependentUpon>DevelopAPI.ashx</DependentUpon>
+    </Compile>
     <Compile Include="DataUser\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
@@ -9393,6 +9394,9 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
@@ -9478,7 +9482,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>2207</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2206/</IISUrl>
+          <IISUrl>http://localhost:2207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

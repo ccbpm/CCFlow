@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <SilverlightApplicationList>
     </SilverlightApplicationList>
     <UseIISExpress>true</UseIISExpress>
@@ -520,7 +520,6 @@
     <Content Include="DataUser\JSLib\onkeyup\01.RMB转大写形式.js" />
     <Content Include="DataUser\JSLib\onkeyup\03.主表单金额自动同步明细表金额列合计（特殊应用）.js" />
     <Content Include="DataUser\JSLib\readme.txt" />
-    <Content Include="DataUser\LocalWS.asmx" />
     <Content Include="DataUser\LogOfUser\readme.txt" />
     <Content Include="DataUser\Log\readme.txt" />
     <Content Include="DataUser\NodeIcon\CEO.png" />
@@ -799,11 +798,8 @@
     <Content Include="GPM\themes\icons\xitongleibie.png" />
     <Content Include="DataUser\Do.aspx" />
     <Content Include="DataUser\Event.asmx" />
-    <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
-    <Content Include="DataUser\PortalInterface.asmx" />
     <Content Include="Global.asax" />
     <Content Include="DataUser\Handler.ashx" />
-    <Content Include="DataUser\SFTableHandler.ashx" />
     <Content Include="DataUser\AppCoder\ccbpmServices.bat" />
     <Content Include="Portal\Default.htm" />
     <Content Include="Portal\RuoYi\code\Default.htm" />
@@ -9144,7 +9140,6 @@
     <Content Include="Portal\Standard\layui\font\iconfont.ttf" />
     <Content Include="Portal\Standard\layui\font\iconfont.woff" />
     <Content Include="Portal\Standard\layui\font\iconfont.woff2" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -9333,6 +9328,7 @@
     <Content Include="WF\Style\skin\font\iconfont.woff" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9354,23 +9350,8 @@
     <Compile Include="DataUser\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="DataUser\IndustrialAutomationWorkflowAPI.asmx.cs">
-      <DependentUpon>IndustrialAutomationWorkflowAPI.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataUser\LocalWS.asmx.cs">
-      <DependentUpon>LocalWS.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DataUser\OverrideFiles\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="DataUser\PortalInterface.asmx.cs">
-      <DependentUpon>PortalInterface.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataUser\SFTableHandler.ashx.cs">
-      <DependentUpon>SFTableHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -9379,7 +9360,6 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WF\CCForm\CCFormAPI.asmx.cs">
       <DependentUpon>CCFormAPI.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -9418,7 +9398,9 @@
     <Folder Include="DataUser\ReturnLog\212\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="DataUser\Temp\" />
+    <Folder Include="NewFolder1\" />
     <Folder Include="Portal\Jeesite\" />
+    <Folder Include="Properties\" />
     <Folder Include="WF\Comm\Utilities\" />
     <Folder Include="WF\Data\Multilingual\" />
     <Folder Include="WF\Scripts\Tools\html2canvas\" />

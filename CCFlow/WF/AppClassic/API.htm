@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:发起</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="/WF/Scripts/QueryString.js"></script>
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="/WF/Scripts/config.js"></script>
+    <style>
+        .fieldset_block {
+            width: 98%;
+            background-color: white !important;
+            margin-bottom: 20px !important;
+            height: auto;
+            padding: 10px 12px;
+            box-shadow: 0 0px 2px rgba(0, 0, 0, .2);
+            border-radius: 5px;
+        }
+
+        fieldset {
+            border-radius: 5px;
+            margin-inline-start: 2px;
+            margin-inline-end: 2px;
+            padding-block-start: 0.35em;
+            padding-inline-start: 0.75em;
+            padding-inline-end: 0.75em;
+            padding-block-end: 0.625em;
+            min-inline-size: min-content;
+            border-radius: 5px;
+            border-width: 2px;
+            border-style: groove;
+            border-color: rgb(192, 192, 192);
+            border-image: initial;
+        }
+
+        ul {
+            margin-top: 10px;
+        }
+
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            font-size: 13px;
+        }
+
+        legend {
+            width: auto;
+            font-weight: bolder;
+            padding-inline-start: 2px;
+            padding-inline-end: 2px;
+            border-width: initial;
+            border-style: none;
+            border-color: initial;
+            border-image: initial;
+            margin-left: 10px;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: #676A6C;
+            text-align: left;
+        }
+    </style>
+    <script language="javascript" type="text/javascript">
+        function ShowSwagger() {
+
+            //   var host = window.location.href;
+
+            //  "http://xxx:xxx";
+            var host = basePath;
+
+            var url = "";
+            if (plant === "CCFlow")
+                url = host + "//swagger/ui/index#/API";
+            if (plant === "JFlow")
+                url = host + "/swagger-ui.html";
+            window.open(url);
+        }
+    </script>
+</head>
+
+<body>
+
+    <br />
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;API功能调用说明</legend>
+            <ul>
+                <li>接口列表 <a href="javascript:void(0)" onclick="ShowSwagger()">打开：Swagger</a></li>
+            </ul>
+         </div>
+    </center>
+</body>
+</html>

@@ -1,0 +1,380 @@
+﻿<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="../Comm/fonts/font-icons.min.css" rel="stylesheet" />
+    <title>正在加载请稍候...</title>
+
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--表单样式-->
+    <link href="../Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <link href="../../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" />
+    <!-- layui -->
+    <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Scripts/layui/style/admin.css" rel="stylesheet" />
+    <link href="../Scripts/layui/layui/css/autocomplete.css" rel="stylesheet" />
+    <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-form.js" type="text/javascript"></script>
+    <!--通用的JS-->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./JS/tinymce/tinymce.min.js"></script>
+    <script src="JS/jquery.mousewheel.min.js"></script>
+    <script src="ChapterFrmGener.js"></script>
+    <script src="../Scripts/Tools/jsPdf.debug.js"></script>
+    <script src="../Scripts/Tools/html2canvas.js"></script>
+    <script src="../../WF/CCForm/FrmFool.js"></script>
+    <script src="../../WF/CCForm/FrmEnd.js"></script>
+    <script src="../Comm/JScript.js"></script>
+    <script src="../Scripts/layui/treeTable.js"></script>
+    <script language="javascript" type="text/javascript">
+        var frmID = null;
+        var oid = null;
+        var treeList = [];
+        var groupFields = null;
+        var attrs = null;
+        var showGroup;
+        var showAttrs;
+        var showGroupRes = [];
+        var showAttrRes = [];
+        var table;
+        layui.use(['tree', 'jquery', 'laypage', 'form', 'treeTable', 'table', 'layer'], function () {
+            var treeTable = layui.treeTable, form = layui.form;
+            //页面启动函数.
+            $(function () {
+                frmID = GetQueryString("FrmID");
+                oid = GetQueryString("OID");
+
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                handler.AddPara("FrmID", frmID);
+                handler.AddPara("OID", oid);
+                var data = handler.DoMethodReturnJSON("ChapterFrm_Init");
+                console.log("获取的表单数据：", data)
+
+                groupFields = data["GroupFields"];//章节
+                attrs = data["Sys_MapAttr"];//字段
+
+                var en = new Entity(frmID, oid);
+                console.log("获取的表单设置信息：", en);
+                //存储显示状态
+                showGroup = en.GetPara("ShowGroup");
+                if (showGroup == undefined)
+                    showGroup = [];
+                else showGroup = showGroup.split(',');
+                showAttrs = en.GetPara("ShowAttrs");
+                if (showAttrs == undefined)
+                    showAttrs = [];
+                else showAttrs = showAttrs.split(',');
+                console.log(showGroup, showAttrs);
+
+                //形成树形数据
+                groupFields.forEach((item) => {
+                    if (item.ParentOID === "" || item.ParentOID == null) {
+                        var child = {
+                            id: item.OID.toString(),
+                            title: item.Lab,
+                            children: [],
+                            parentId: "0",
+                            IsShow: hideOrShow(item.OID.toString(), "field"),//判断是否显示
+                            ...item,
+                        };
+                        if (child.IsShow) showGroupRes.push(child.id);
+                        child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                        treeList.push(child);
+                    }
+                });
+                console.log(treeList);
+                //渲染表格
+                tableRender();
+                //渲染表格方法
+                function tableRender() {
+                    table = treeTable.render({
+                        elem: '#menu',
+                        data: treeList,
+                        //toolbar: 'default',
+                        //height: 'full-200',
+                        tree: {
+                            treeSpid: '0',		//最上级的父级id
+                            iconIndex: 1,
+                            isPidData: true,
+                            idName: 'id',//父ID
+                            pidName: 'parentId',//子ID
+                            openName: 'open',// 是否默认展开的字段名
+                        },
+                        defaultToolbar: ['filter', 'print', 'exports'],
+                        cols: [[
+                            { type: 'numbers', fixed: 'left' }
+                            , { field: 'title', title: '名称' }
+                            , {
+                                field: 'CtrlType', title: '内容类型', align: 'center', templet: function (record) {
+                                    return '<span>' + getCtrlTypeText(record.CtrlType) + '</span>';
+                                }
+                            }
+                            , { field: 'IsShow', title: '打开为显示/关闭为隐藏',templet: '#switchTpl', unresize: true, align: 'center' }
+                            //, { toolbar: '#menusState', width: 200, align: 'center', title: '操作' }
+                        ]],
+                        style: 'margin-top:0;'
+                    });
+                }
+
+                // 全部展开
+                $('#btnExpandAll').click(function () {
+                    table.expandAll();
+                });
+
+                // 全部折叠
+                $('#btnFoldAll').click(function () {
+                    table.foldAll();
+                });
+
+                //保存测试使用
+                $('#SaveBtn').click(function () {
+                    Save();
+                });
+
+                //监听显示状态操作
+                form.on('radio(hideOrShow)', function (data) {
+                    console.log(data.value.split('+')[1] === "true");
+                    var id = data.value.split('+')[0];
+                    var isChecked = data.value.split('+')[1] === "true" ? true : false;
+
+                    var isGroup = groupFields.filter((item) => item.OID == id);//本条数据存在于章节数据吗
+                    var isAttrs = attrs.filter((item) => item.KeyOfEn == id);//本条数据存在于字段数据吗
+                    if (isAttrs.length > 0 && isGroup.length > 0) {
+                        alert("无法判断本条数据是章节数据还是字段数据，二者都有这个key");
+                        return;
+                    };
+                    
+                    EachList(id, treeList, isChecked);
+                    tableRender();
+                    table.expand(id,true);//刷新表格后展开当前行
+                });
+
+                
+            });
+            //递归寻找当前节点(显示隐藏状态改变的当前节点),参数：要寻找的id，要遍历的列表,要改变的状态
+            function EachList(id, list,isShow) {
+                $(list).each(function (i, item) {
+                    if (item.id === id) {
+                        item.IsShow = isShow;
+                        changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                        if (item.children && item.children.length > 0 && isShow === false) {
+                            //当本节点的状态变为隐藏，递归改变本节点的子节点状态
+                            EachChildern(item.children, isShow);
+                            return;
+                        }
+                        else if (isShow === true) {
+                            //当本节点的状态变为显示，递归改变本节点的父节点状态
+                            EachParent(id, treeList, isShow);
+                            return;
+                        }
+                    }
+                    if (item.children && item.children.length > 0) {
+                        EachList(id, item.children, isShow)
+                    };
+                });
+            };
+
+            //递归遍历treeList改变表格的状态,如果父亲变为隐藏，则他的后代都变为隐藏；如果父亲变为显示，他的后代状态不变
+            function EachChildern(data, isShow) {
+                $(data).each(function (i, item) {
+                    if (!isShow) {
+                        item.IsShow = isShow;
+                        changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                    }
+                    if (item.children == undefined)
+                        return true;
+                    if (item.children.length > 0) {
+                        EachChildern(item.children, isShow);
+                    }
+                })
+            }
+
+            //递归改变父级的状态，如果某一个节点是显示状态，则他的父辈也是显示状态
+            function EachParent(id, list, isShow) {
+                for (var i = 0; i < list.length; i++) {
+                    var item = list[i];
+                    if (item.id == id) {
+                        item.IsShow = isShow;
+                        return "FindChild";
+                    };
+                    if (item.children && item.children.length > 0) {
+                        var findChild = EachParent(id, item.children, isShow);
+                        if (findChild == "FindChild") {
+                            item.IsShow = isShow;
+                            changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                            return "FindChild";
+                        }
+                    }
+                }
+                return "NotChild";
+            };
+
+            //改变显示结果数组showGroupRes和showAttrRes
+            function changeRes(id, isShow, CtrlType) {
+                if (isShow) {//如果是显示状态
+                    if (CtrlType == undefined) {//没有CtrlType这个属性，说明这个id是字段
+                        showAttrRes.push(id);
+                    } else showGroupRes.push(id);
+                } else {//如果是隐藏状态，从结果数组中去掉这个id
+                    if (CtrlType == undefined) {//没有CtrlType这个属性，说明这个id是字段
+                        showAttrRes = showAttrRes.filter((item) => item != id)
+                    } else showGroupRes = showGroupRes.filter((item) => item != id);
+                }
+            };
+
+            // 保存，测试使用，保存方法在父级
+            function Save() {
+                console.log(showGroupRes.join(','), showAttrRes.join(','));
+                var en = new Entity(frmID, oid);
+                if (showGroupRes.length != 0 )
+                    en.SetPara("ShowGroup", showGroupRes.join(','));
+                if (showAttrRes.length != 0)
+                    en.SetPara("ShowAttrs", showAttrRes.join(','));
+                en.Update();
+            }
+        })
+        //递归构造章节树形结构(获取parentId的孩子)
+        function getChildren(parentId) {
+            var children = [];
+            groupFields.forEach((item) => {
+                if (item.ParentOID === parentId) {
+                    var child = {
+                        id: item.OID.toString(),
+                        title: item.Lab,
+                        children: [],
+                        parentId: parentId.toString(),
+                        IsShow: hideOrShow(item.OID.toString(), "field"),//判断是否显示
+                        ...item,
+                    };
+                    if (child.IsShow) showGroupRes.push(child.id);
+                    child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                    children.push(child);
+                }
+            });
+            return children;
+        }
+        //获取本章节下的attr字段(groupId下的字段)
+        function getAttrChildren(groupId, ctrlType) {
+            var attrList = [];
+            //非Attr型控件，非默认控件，不显示其下字段
+            if (ctrlType != "Attr" && ctrlType != "" && ctrlType != null)
+                return [];
+
+            attrs.forEach((item) => {
+                if (item.GroupID === groupId && item.UIVisible === 1) {//只显示可见的字段
+                    var attr = {
+                        id: item.KeyOfEn,
+                        title: item.Name,
+                        parentId: groupId.toString(),
+                        IsShow: hideOrShow(item.KeyOfEn, "attr"),//判断是否显示
+                        ...item,
+                    }
+                    if ((ctrlType === "" || ctrlType == null) && attr.TextModel != 1) {//默认型控件，只显示文本字段
+                        if (attr.MyDataType == 1 && attr.UIContralType == 0) {
+                            if (attr.IsShow) showAttrRes.push(attr.id);
+                            attrList.push(attr);
+                        };
+
+                    } else if (ctrlType === "Attr") {//Attr控件所有类型的字段都显示
+                        if (attr.IsShow) showAttrRes.push(attr.id);
+                        attrList.push(attr);
+                    };
+                };
+            });
+            return attrList;
+        }
+
+        //获取控件类型的文本 "Dtl":从表；"Ath":附件；"":目录；"Attr":目录；"Dir":目录；
+        function getCtrlTypeText(ctrlType) {
+            switch (ctrlType) {
+                case "Attr":
+                case "":
+                case "Dir":
+                case null:
+                    return "目录";
+                case "Dtl":
+                    return "从表";
+                case "Ath":
+                    return "附件";
+                case "ChapterFrmSelfUrl":
+                    return "自定义Url";
+                case "ChapterFrmLinkFrm":
+                    return "自定义表单";
+                case undefined:
+                    return "字段";
+            };
+        }
+
+        //判断这一个章节或字段是否显示
+        function hideOrShow(key, fieldOrAttr) {
+            if (fieldOrAttr == "field") {
+                if (showGroup.length == 0)//如果showGroup是空，则所有的groupFields都显示
+                    return true;
+                return showGroup.indexOf(key) > -1 ? true : false;
+            } else if (fieldOrAttr == "attr") {
+                if (showAttrs.length == 0)//如果showAttrs是空，则所有的attr都显示
+                    return true;
+                return showAttrs.indexOf(key) > -1 ? true : false;
+            };
+        }
+       
+    </script>
+</head>
+
+<body>
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <!--搜索栏-->
+                        <!--<div class="demoTable">
+                            <div class="layui-inline layui-show-xs-block">
+                                <input type="text" name="UserName" id="demoReload" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block" id="demoTable">
+                                <button class="layui-btn" id="search" data-type="reload" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </div>-->
+                    </div>
+
+                    <div class="layui-card-header">
+                        <button id="btnExpandAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon">&#xe668;</i>展开全部
+                        </button>
+                        <button id="btnFoldAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon">&#xe66b;</i>折叠全部
+                        </button>
+                        <!--保存按钮，测试使用-->
+                        <!--<button class="layui-btn" id="SaveBtn">保存</button>-->
+                    </div>
+
+                    <div class="layui-card-body layui-table-body layui-table-main">
+                        <table class="layui-hide" id="menu" lay-filter="menu"></table>
+                    </div>
+
+                    <script type="text/html" id="switchTpl">
+                        <input type="radio"  value="{{d.id}}+{{true}}" title="显示" {{ d.IsShow == true ? "checked" : "" }} lay-filter="hideOrShow">
+                        <input type="radio"  value="{{d.id}}+{{false}}" title="隐藏" {{ d.IsShow == false ? "checked" : "" }} lay-filter="hideOrShow">
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="menusState">
+        <a class="layui-btn layui-btn-xs" lay-event="up" style="width:auto"><i class="layui-icon">&#xe619;</i>上移</a>
+        <a class="layui-btn layui-btn-xs" lay-event="down" style="width:auto"><i class="layui-icon">&#xe61a;</i>下移</a>
+    </script>
+
+</body>
+
+</html>

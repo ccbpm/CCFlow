@@ -1,0 +1,481 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>驰骋工作流</title>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <!--<link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />-->
+    <!--layui的引用-->
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <!-- end -->
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Scripts/PinYin.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/layui/treeTable.js"></script>
+    <script type="text/javascript" language="javascript">
+        var maxIndx = 0; //定义新增之后的最大序号
+        var fk_sftable = GetQueryString("FK_SFTable");
+        var QueryType = GetQueryString("QueryType");
+        var ens;//获取的字典表的数据
+        var data = [];//表格的数据
+        var table;//表格
+        var NoGenerModel;//编号生成规则
+        var currenNo;
+        var oldData;
+        var isSave = true;
+        layui.use(['tree', 'jquery', 'laypage', 'treeTable', 'table', 'layer', 'dropdown'], function () {
+            var treeTable = layui.treeTable;
+            var dropdown = layui.dropdown;
+            $(function () {
+                InitPage();
+                table.expandAll();
+
+            });
+
+            //初始化页面
+            function InitPage() {
+                const sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                NoGenerModel = sfTable.NoGenerModel;
+                data = [];
+                ens = new Entities("BP.Sys.SFTableDtls");
+                ens.Retrieve("FK_SFTable", fk_sftable);
+                if (ens.toString().indexOf("err@") != -1) {
+                    alert(ens);
+                    return;
+                }
+                //ens对象变为数组
+                var keys = Object.keys(ens);
+                keys.forEach((key, index) => {
+                    if (!isNaN(parseInt(key))) {
+                        var node = {
+                            ...ens[key],
+                            id: ens[key].BH,
+                            index: index,
+                            tool:"toolbar"
+                        }
+                        data.push(node);
+                    }
+                });
+                console.log("树形表格数据：", data, ens);
+                oldData = data;
+                maxIndx = ens.length-1;
+                //渲染表格
+                tableRender();
+                //外键是sql形式的时候，只能查看
+                if (QueryType == "Sql") {
+                    $(".layui-card-header").hide();
+                    $(".droplist").hide();
+                }
+            };
+
+            
+            //渲染表格方法
+            function tableRender() {
+                table = treeTable.render({
+                    elem: '#treeTable',
+                    data: data,
+                    id: 'treeTable',
+                    tree: {
+                        treeSpid: '0',		//最上级的父级id
+                        iconIndex: 1,
+                        isPidData: true,
+                        idName: 'BH',//父ID
+                        pidName: 'ParentNo',//子ID
+                        openName: 'open',// 是否默认展开的字段名
+                    },
+                    cols: [[
+                        { type: 'numbers', fixed: 'left' ,title:"#"}
+                        , { field: 'BH', title: '编号', width: 300, templet: "<span name='TB_BH_{{ d.index }}' id='TB_BH_{{ d.index }}'>{{d.BH}}<span>" }
+                        , { field: 'Name', title: '名称', templet: "<div><input class='layui-input'  name='TB_Name_{{d.index}}' id='TB_Name_{{d.index}}' type='text' value='{{d.Name}}' style='width:98%;'/></div>" }
+                        , { width: 100, align: 'center', title: '操作', toolbar: "#tool", fixed: 'right' }
+                    ]],
+                    style: 'margin-top:0;',
+                    done: function (res, curr, count) {
+                        dropdown.render({
+                            elem: ".droplist",
+                            data: [{
+                                id: "0",
+                                title: "addBro",
+                                templet: "<div>新建同级<div>"
+                            },
+                                {
+                                    id: "1",
+                                    title: "addChild",
+                                    templet: "<div>新建下级<div>"
+                                },
+                                {
+                                    id: "2",
+                                    title: "levelUp",
+                                    templet: "<div>升级<div>"
+                                },
+                                {
+                                    id: "3",
+                                    title: "levelDown",
+                                    templet: "<div>降级<div>"
+                                },
+                                {
+                                    id: "4",
+                                    title: "delete",
+                                    templet: "<div>删除<div>"
+                                }
+                            ],
+                            click: function (data, othis) {
+                                var elem = $(this.elem)
+                                    , rowId = elem.data('id'); //表格列表的预埋数据
+                                console.log(elem);
+                                if (data.title === "addBro") {
+                                    addBro(rowId);
+                                } else if (data.title === "addChild") {
+                                    addChild(rowId);
+                                } else if (data.title === "delete") {
+                                    Delete(rowId, res);
+                                } else if (data.title === "levelUp") {
+                                    levelUp(rowId);
+                                } else if (data.title === "levelDown") {
+                                    levelDown(rowId,res);
+                                };
+                            }
+                        });
+                    }
+                });
+            }
+
+            //新建同级  id:本条数据的id
+            function addBro(id) {
+                //获取本条数据
+                var thisRow = data.filter((item) => item.BH == id)[0];
+                if (thisRow.ParentNo === "0") {
+                    layer.msg('只能有一个根节点', { icon: 7 });  
+                    return;
+                };
+                maxIndx++;
+                var newNo = '';
+                if (NoGenerModel === 4) {
+                    var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                    newNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                } else if (NoGenerModel === 1) {
+                    if (isSave == true) {
+                        var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                        newNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                        currenNo = newNo;
+                    } else {
+                        let num = parseInt(currenNo) + 1;
+                        if (num < 10) newNo = '00' + num.toString();
+                        else if (num >= 10 && num < 100) newNo = '0' + num.toString();
+                        else newNo = num.toString();
+                        currenNo = newNo.toString();
+                    }
+                    isSave = false;
+                } else if (NoGenerModel === 0) {
+                    newNo = prompt('请输入编号', '') || '';
+                    if (newNo === '') {
+                        alert('编号不能为空');
+                        return;
+                    }
+                }
+                var newNode = {
+                    FK_SFTable: fk_sftable,
+                    ParentNo: thisRow.ParentNo,
+                    BH: newNo,
+                    Name:'',
+                    id: newNo,
+                    index: maxIndx,
+                };
+                data.push(newNode);
+                tableRender();
+                table.expandAll();
+
+            };
+
+            //新建下级
+             function addChild(id) {
+                //获取本条数据
+                 var thisRow = data.filter((item) => item.BH === id)[0];
+                 if (thisRow.id == "" || thisRow.id == undefined || thisRow.id == null) {
+                     layer.msg('当前节点尚未生成编号，请保存', { icon: 7 });
+                     return;
+                 };
+                maxIndx++;
+                var newNo = '';
+                if (NoGenerModel === 4) {
+                    var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                    newNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                } else if (NoGenerModel === 1) {
+                    if (isSave) {
+                        var sfTable = new Entity("BP.Sys.SFTable", fk_sftable);
+                        newNo = sfTable.DoMethodReturnString("GenerSFTableNewNo");
+                        currenNo = newNo;
+                    } else {
+                        let num = parseInt(currenNo) + 1;
+                        if (num < 10) newNo = '00' + num.toString();
+                        else if (num >= 10 && num < 100) newNo = '0' + num.toString();
+                        else newNo = num.toString();
+                        currenNo = newNo.toString();
+                    }
+                    isSave = false;
+                } else if (NoGenerModel === 0) {
+                    newNo = prompt('请输入编号', '') || '';
+                    if (newNo === '') {
+                        alert('编号不能为空');
+                        return;
+                    }
+                }
+                 var newNode = {
+                     FK_SFTable: fk_sftable,
+                     ParentNo: thisRow.BH,
+                     BH: newNo,
+                     Name: '',
+                     id: newNo,
+                     index: maxIndx,
+                 };
+                data.push(newNode);
+                tableRender();
+                 table.expandAll();
+            };
+
+            //升级
+            function levelUp(id) {
+                //获取本条数据
+                var thisRow = data.filter((item) => item.BH === id)[0];
+                if (thisRow.ParentNo === "0") {
+                    layer.msg('当前节点已经是根节点，不能升级', { icon: 7 });
+                    return;
+                }
+                //获取父亲节点，如果父亲节点是根节点不能升级
+                var thisRowParent = data.filter((item) => item.BH === thisRow.ParentNo && item.ParentNo != "0")[0];
+                if (!thisRowParent) {
+                    layer.msg('只能有一个根节点', { icon: 7 });
+                    return;
+                }
+                var en = new Entity("BP.Sys.SFTableDtl");
+                var { id, index, children, ...item } = thisRow;
+                en.CopyJSON(item);
+                en.SetValByKey("ParentNo", thisRowParent.ParentNo);
+                en.SetPKVal(item.MyPK);
+                en.Update();
+                InitPage();
+                table.expandAll();
+            };
+            //降级 成为相邻兄弟的孩子，没有兄弟不能降级
+            function levelDown(id, list) {
+                //获取本条数据
+                var thisRow = data.filter((item) => item.BH === id)[0];
+                //获取本节点的父节点结构，判断是否有兄弟
+                var parentNode = findNode(thisRow.ParentNo, list);
+                if (!parentNode || !parentNode.children || parentNode.children.length <= 1) {
+                    layer.msg('当前节点不可降级', { icon: 7 });
+                    return;
+                }
+                var thisIndex;
+                parentNode.children.forEach((item, index) => {
+                    if (item.BH === thisRow.BH) {
+                        thisIndex = index;
+                    }
+                });
+                thisIndex = thisIndex == 0 ? thisIndex + 1 : thisIndex - 1;
+                var { id, index, children, ...item } = thisRow;
+                var en = new Entity("BP.Sys.SFTableDtl");
+                en.CopyJSON(item);
+                en.SetValByKey("ParentNo", parentNode.children[thisIndex].BH);
+                en.SetPKVal(item.MyPK);
+                en.Update();
+                InitPage();
+                table.expandAll();
+            }
+
+            //监听保存
+            $("#save").click(function () {
+                Save();
+            });
+            //保存.
+            function Save() {
+                var saves = [];
+                data.forEach((item, index) => {
+                    newName = $("#TB_Name_" + index).val();
+                    if (item.MyPK == null || item.MyPK == undefined) {
+                        if (newName) {
+                            if (NoGenerModel === 1 || NoGenerModel === 4 || NoGenerModel === 0) {
+                                var en = new Entity("BP.Sys.SFTableDtl");
+                                en.SetPKVal(fk_sftable + "_" + item.BH);
+                                en.SetValByKey("FK_SFTable", fk_sftable);
+                                en.SetValByKey("Name", newName);
+                                en.SetValByKey("BH", item.BH);
+                                en.SetValByKey("ParentNo", item.ParentNo);
+                                saves.push(en.Insert());
+                            }
+                            else if (NoGenerModel === 2) {
+                                //全拼编号
+                                const no = ParsePinYin(newName, true);
+                                var en = new Entity("BP.Sys.SFTableDtl");
+                                en.SetPKVal(fk_sftable + "_" + no);
+                                en.SetValByKey("FK_SFTable", fk_sftable);
+                                en.SetValByKey("Name", newName);
+                                en.SetValByKey("BH", no);
+                                en.SetValByKey("ParentNo", item.ParentNo);
+                                saves.push(en.Insert());
+                            } else if (NoGenerModel === 3) {
+                                //简拼编号
+                                const no = ParsePinYin(newName, false);
+                                var en = new Entity("BP.Sys.SFTableDtl");
+                                en.SetPKVal(fk_sftable + "_" + no);
+                                en.SetValByKey("FK_SFTable", fk_sftable);
+                                en.SetValByKey("Name", newName);
+                                en.SetValByKey("BH", no);
+                                en.SetValByKey("ParentNo", item.ParentNo);
+                                saves.push(en.Insert());
+                            } 
+                        }
+                    } else if (newName != oldData[index].Name) {
+                        saves.push(en.DoMethodReturnString('UpdateData', item.BH, newName, fk_sftable));
+                    }
+                });
+                Promise.all(saves).then(() => {
+                    isSave = true;
+                    InitPage();
+                    table.expandAll();
+                });
+            }
+
+            //删除 id:本行的id，list:树形数组
+            function Delete(id, list) {
+                //if (window.confirm('将会删除所有子节点，您确定要删除吗？') == false)
+                //    return;
+                var thisNode = findNode(id, list);
+                deleteAllSon(thisNode);
+                InitPage(); //刷新.
+                table.expandAll();
+                
+            };
+
+            //递归寻找当前节点 返回当前节点 及其孩子结构
+            function findNode(id, list) {
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].id === id) {
+                        return list[i];
+                    };
+                    if (list[i].children && list[i].children.length > 0) {
+                        var findRes = findNode(id, list[i].children);
+                        if (findRes != null)
+                            return findRes;
+                    }
+
+                };
+                return null;
+            };
+
+            //递归删除本节点及所有后代节点
+            function deleteAllSon(node) {
+                if (node.children != undefined && node.children != null && node.children.length > 0) {
+                    for (var i = 0; i < node.children.length; i++) {
+                        var haveChild = deleteAllSon(node.children[i]);
+                        if (haveChild === "noChild") {
+                            var en = new Entity("BP.Sys.SFTableDtl");
+                            en.SetValByKey("FK_SFTable", fk_sftable);
+                            en.SetPKVal(node.MyPK);
+                            en.Delete();
+                        }
+                        return "noChild";
+                    }
+                } else {
+                    var en = new Entity("BP.Sys.SFTableDtl");
+                    en.SetValByKey("FK_SFTable", fk_sftable);
+                    en.SetPKVal(node.MyPK);
+                    en.Delete();
+                    return "noChild";
+                }
+            };
+            //生成拼音编号
+            const ParsePinYin = (str, model) => {
+                let pinYin;
+                const handler = new HttpHandler('BP.WF.HttpHandler.WF_Admin_FoolFormDesigner');
+                handler.AddPara('name', str);
+                handler.AddPara('flag', model);
+
+                pinYin = handler.DoMethodReturnString('ParseStringToPinyin');
+
+                return pinYin;
+            };
+
+            //展开全部
+            $("#expandAll").click(function () {
+                table.expandAll();
+            });
+            //折叠全部
+            $("#foldAll").click(function () {
+                table.foldAll();
+            });
+            
+        });
+    </script>
+    <style>
+        #divCCForm {
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        td[data-field="tool"] .ew-tree-table-cell.single-line .ew-tree-table-cell-content  {
+            overflow: visible;
+        }
+        .ew-tree-table .ew-tree-table-box {
+            height: calc(100vh - 88px);
+        }
+
+        .layui-table-body {
+            height: calc(100vh - 77px);
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-header" style="align-items: center;display: flex; justify-content: flex-end;">
+                        <button id="expandAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                            展开全部
+                        </button>
+                        <button id="foldAll" class="layui-btn layui-btn-sm layui-btn-primary">
+                            折叠全部
+                        </button>
+                        <button id="save" class="layui-btn layui-btn-sm layui-btn-primary">
+                            <i class="layui-icon layui-icon-file"></i>保存
+                        </button>
+                    </div>
+
+                    <div class="layui-card-body layui-table-body layui-table-main">
+                        <table class="layui-hide" id="treeTable" lay-filter="treeTable"></table>
+                    </div>
+
+                    <!-- 表格操作列---start -->
+                    <script id="tool" type="text/html">
+                        <button class="layui-btn layui-btn-xs droplist" data-id={{d.id}}>
+                            <span>操作</span>
+                            <i class="layui-icon layui-icon-triangle-d"></i>
+                        </button>
+                    </script>
+                    <script id="toolbar_content" type="text/html">
+
+                        <ul class="layui-dropdown-menu lay_menu">
+                            <li lay-event="addBro">新建同级</li>
+                            <li lay-event="addChild">新建下级</li>
+                            <li lay-event="delete">新建删除级</li>
+                        </ul>
+                    </script>
+                    <!-- 表格操作列---end -->
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

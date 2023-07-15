@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:Url接口</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="/WF/Scripts/QueryString.js"></script>
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="/WF/Scripts/config.js"></script>
+    <style>
+        .fieldset_block {
+            width: 98%;
+            background-color: white !important;
+            margin-bottom: 20px !important;
+            height: auto;
+            padding: 10px 12px;
+            box-shadow: 0 0px 2px rgba(0, 0, 0, .2);
+            border-radius: 5px;
+        }
+        fieldset {
+            border-radius: 5px;
+            margin-inline-start: 2px;
+            margin-inline-end: 2px;
+            padding-block-start: 0.35em;
+            padding-inline-start: 0.75em;
+            padding-inline-end: 0.75em;
+            padding-block-end: 0.625em;
+            min-inline-size: min-content;
+            border-radius: 5px;
+            border-width: 2px;
+            border-style: groove;
+            border-color: rgb(192, 192, 192);
+            border-image: initial;
+        }
+        ul {
+            margin-top: 10px;
+        }
+        li {
+            text-align: left;
+            line-height: 30px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            font-size: 13px;
+        }
+        .cancel-list{
+            list-style:none;
+        }
+
+        legend {
+            width: auto;
+            font-weight: bolder;
+            padding-inline-start: 2px;
+            padding-inline-end: 2px;
+            border-width: initial;
+            border-style: none;
+            border-color: initial;
+            border-image: initial;
+            margin-left: 10px;
+            margin-bottom: 0;
+            font-size: 16px;
+            color: #676A6C;
+            text-align: left;
+        }
+    </style>
+   
+</head>
+
+<body style=" padding-bottom: 30px; margin-bottom:20px;">
+    <br />
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;URL接口说明</legend>
+            <ul>
+                <li>url接口是通过使用http协议的模式进行调用流程的功能页面与实现执行流程的功能.</li>
+                <li>这中模式的下的做法是,驰骋bpm独立部署,各个业务系统如果使用流程服务,通过url调用的模式出现.</li>
+                <li>调用方式: <a href="javascript:void(0)">http://xxxx.xxx.xxx/WF/Port.htm?DoWhat=xxxx&UserNo=xxxx&Token=xxxxx</a> &其他参数Key=参数值.</li>
+                <li>调用页面功能页面，比如:发起、待办、在途、工作处理器,可以嵌入到自己的系统中来,让两个系统看起来是一个系统.</li>
+                <li class="cancel-list"><b>必选参数</b></li>
+                <li>DoWhat:是约定的执行内容, 比如:StartFlow,Todolist,Runing</li>
+                <li>Token: 是执行ccbpm登录后返回的校验字符串.</li>
+                <li>身份校验方式开发人员可以自行修改,详见:页面类: BP.WF.HttpHandler.WF 方法 Port_Init 校验安全性部分.</li>
+                <li>为了方便测试开发,ccbpm的原始版本允许传入UserNo,直接让用户登录,以下的说明都是使用UserNo进行说明.</li>
+            </ul>
+        </div>
+    </center>
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;页面功能调用.</legend>
+            <ul>
+                <li>说明:页面调用</li>
+                <li>所谓的页面调用就是输入参数返回url页面,开发人员可以把这个页面嵌入到自己的系统中来.</li>
+            </ul>
+        </div>
+    </center>
+
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;StartFlow 发起指定的流程.</legend>
+            <ul>
+                <li>发起流程进入工作处理器页面.</li>
+                <li class="cancel-list"><b>必选参数:</b></li>
+                <li>执行标记:DoWhat=StartFlow</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>流程模板编号,FK_Flow</li>
+                <li><a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=StartFlow&UserNo=admin&FK_Flow=001</a></li>
+                <li class="cancel-list"><b>可选参数1</b></li>
+                <li>工作ID:WorkID, 如果不传入默认为发起新的流程,传入就打开指定的流程</li>
+                <li>字段值:Field1,Filed2. 比如:&Tel=18660153393&Addr=山东.济南 默认就在表单的Tel,Addr字段赋值.</li>
+                <li class="cancel-list"><b>可选参数2 : 发起流程后直接跳转到指定的节点上去.</b></li>
+                <li>跳转的节点: JumpToNodeID</li>
+                <li>跳转的人员:JumpToEmpNo</li>
+                <li class="cancel-list"><b>可选参数2 : 防止发起流程重复.</b></li>
+                <li>实体主键字段名: EntityPK</li>
+                <li>实体主键值:ZhuangZiBianHao=xxxxx</li>
+                <li><a href="javascript:void(0)"> http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=DealWork&UserNo=admin&EntityPK=ZhuangZiBianHao&ZhuangZiBianHao=xxxx</a></li>
+                <li>说明: 传入在高速公路施工流程中，一个桩子发起一个流程. 如果该桩子编号已经存在就获取出来WorkID，不存在就按这个主键存储.</li>
+            </ul>
+        </div>
+    </center>
+
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;DealWork 处理工作.</legend>
+            <ul>
+                <li>定义:流程在运转的过程中，需要查看流程的表单信息，通过参数来查看指定的流程实例的WorkID的参数。</li>
+                <li>根据需求场景不同,如果当前人员可以操作当前节点的工作，系统直接转入MyFlow 功能页面.</li>
+                <li class="cancel-list"><b>必选参数</b></li>
+                <li>执行标记:DoWhat=DealWork</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>流程实例ID:WorkID</li>
+                <li>实例:打开指定WorkID的工作.</li>
+                <li><a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=DealWork&UserNo=admin&WorkID=xxxx</a></li>
+                <li class="cancel-list"><b>可选参数</b></li>
+                <li>NodeID: 要查看的指定节点的表单，系统转到MyFrm.htm功能页面,该功能页面没有工具栏.</li>
+                <li>实例: /WF/Port.htm?DoWhat=MyView&UserNo=admin&WorkID=xxxx</li>
+            </ul>
+        </div>
+    </center>
+
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;MyView 查看流程表单.</legend>
+            <ul>
+                <li>定义:流程在运转的过程中，需要查看流程的表单信息，通过参数来查看指定的流程实例的WorkID的参数。</li>
+                <li>根据需求场景不同,如果当前人员可以操作当前节点的工作，系统直接转入MyFlow 功能页面.</li>
+                <li class="cancel-list"><b>必选参数</b></li>
+                <li>执行标记:DoWhat=MyView</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>流程实例,WorkID</li>
+                <li>实例:打开表单系统自动定位到最后一个节点上,显示MyView的工具栏,有打印关闭按钮操作.</li>
+                <li><a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=MyView&UserNo=admin&WorkID=xxxx</a></li>
+                <li class="cancel-list"><b>可选参数</b></li>
+                <li>NodeID: 要查看的指定节点的表单，系统转到MyFrm.htm功能页面,该功能页面没有工具栏.</li>
+                <li>实例: /WF/Port.htm?DoWhat=MyView&UserNo=admin&WorkID=xxxx</li>
+            </ul>
+        </div>
+    </center>
+
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp; 打开待办/在途/草稿.</legend>
+            <ul>
+                <li>待办:待办就是等待我要处理的问题，包括退回、移交、撤销的工作。</li>
+                <li>在途:我参与的流程但是该流程没有完成。</li>
+                <li>草稿:开始节点的，保存下来的，没有发送出去的工作。</li>
+                <li class="cancel-list"><b>必选参数</b></li>
+                <li>执行标记:DoWhat=Todolist/Runing/Draft</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>流程实例,WorkID</li>
+                <li>实例:<a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=Todolist&UserNo=admin</a></li>
+                <li class="cancel-list"><b>可选参数1</b></li>
+                <li>NodeID: 要查看的指定节点的待办工作</li>
+                <li>实例: <a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=Todolist&UserNo=admin&NodeID=106</a> 打开停留在106节点的待办.</li>
+                <li class="cancel-list"><b>可选参数2</b></li>
+                <li>FlowNo: 要查看的指定流程的待办</li>
+                <li>实例: <a href="javascript:void(0)"> http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=Todolist&UserNo=admin&FlowNo=009</a> 打开流程009的所有待办.</li>
+            </ul>
+        </div>
+    </center>
+
+    <center>
+        <div class="fieldset_block">
+            <legend><i class="icon iconfont icon-caogao" style="font-size:16px"></i>&nbsp;-&nbsp;StartFrm表单</legend>
+            <ul>
+                <li>定义:流程在运转的过程中，需要查看流程的表单信息，通过参数来查看指定的流程实例的WorkID的参数。</li>
+                <li>根据需求场景不同,如果当前人员可以操作当前节点的工作，系统直接转入MyFlow 功能页面.</li>
+                <li class="cancel-list"><b>新建一个表单</b></li>
+                <li>执行标记:DoWhat=StartFrm</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>表单ID:FrmID=xxxxxx</li>
+                <li>实例:打开表单系统自动定位到最后一个节点上,显示MyView的工具栏,有打印关闭按钮操作.</li>
+                <li><a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=StartFrm&UserNo=admin&FrmID=xxxxx</a></li>
+                <li class="cancel-list"><b>打开表单</b></li>
+                <li>执行标记:DoWhat=StartFrm</li>
+                <li>身份:UserNo=xxxx</li>
+                <li>表单ID:FrmID=xxxxxx</li>
+                <li>实例:打开表单系统自动定位到最后一个节点上,显示MyView的工具栏,有打印关闭按钮操作.</li>
+                <li><a href="javascript:void(0)">http://e.tjzzjt.cn:8080/WF/Port.htm?DoWhat=StartFrm&UserNo=admin&FrmID=xxxxx&OID=xxxxx</a></li>
+            </ul>
+        </div>
+    </center>
+
+</body>

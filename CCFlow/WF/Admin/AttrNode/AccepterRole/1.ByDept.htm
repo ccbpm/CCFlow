@@ -82,7 +82,8 @@
                     var nodeID = GetQueryString("FK_Node");
                     var url = "../../../Comm/RefFunc/Branches.htm?EnName=BP.WF.Template.NodeSheet&Dot2DotEnsName=BP.WF.Template.NodeDepts&Dot2DotEnName=BP.WF.Template.NodeDept&AttrOfOneInMM=FK_Node&AttrOfMInMM=FK_Dept&EnsOfM=BP.Port.Depts&DefaultGroupAttrKey=";
 
-                    url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID;
+                    url += url + '&NodeID=' + nodeID + '&PKVal=' + nodeID
+                    url += url + '&BackBtn=' + 0;
 
                     OpenEasyUiDialogExtCloseFunc(url, '绑定部门', 500, 350, function () {
                         Baseinfo.depts = getDepts();

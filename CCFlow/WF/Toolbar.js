@@ -58,11 +58,15 @@ $(function () {
                 Oper = "onclick=\"" + toolBar.Oper + "\"";
             else
                 Oper = "data-info=\"" + toolBar.Oper + "\"";
+                //Oper = "onclick=\"" + toolBar.Oper + "\"";
+
             if (toolBar.No == "Send")
                 sendBtnOper = Oper;
         }
 
         if (toolBar.No == "Save") {
+            //_html += "<button  class='layui-btn layui-btn-sm layui-btn-primary' lay-submit lay-filter='Save' name='" + toolBar.No + "Btn' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
+
             _html += "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' lay-submit lay-filter='Save' name='" + toolBar.No + "Btn' enable=true " + Oper + "><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
             return true;
         }
@@ -86,8 +90,12 @@ $(function () {
         }
         else {
             if (toolBar.No == "Send")
-                _html += "<button type='button' class='layui-btn layui-btn-sm layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
+                //_html += "<button   class='layui-btn layui-btn-sm layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
+
+                _html += "<button  type='button' class='layui-btn layui-btn-sm layui-btn-primary' name='" + toolBar.No + "Btn' enable=true " + Oper + " lay-submit lay-filter='Send'><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
             else {
+
+                //_html += "<button  class='layui-bar layui-btn-sm layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
 
                 _html += "<button type='button' class='layui-bar layui-btn-sm layui-btn layui-btn-primary' name='" + toolBar.No + "' enable=true " + Oper + " ><img src='" + basePath + "/WF/Img/Btn/" + toolBar.No + ".png' width='20px' height='20px'>&nbsp;" + toolBar.Name + "</button>";
 
@@ -402,6 +410,7 @@ function DelayedSend(formType) {
     }
 
     if (isSelectEmps == true) {
+        debugger;
         Send(false, formType,1);
         return;
     }
@@ -799,10 +808,11 @@ function initModal(modalType, toNode, url, isDelayedSend) {
                 break;
         }
     }
+    height = 100;
     if (isShowColseBtn == 0)
-        OpenLayuiDialog(modalIframeSrc, title, width, height, "auto", false, false, false, null, null, null, 0);
+        OpenLayuiDialog(modalIframeSrc, title, width, height, "r", false, false, false, null, null, null, 0);
     else
-        OpenLayuiDialog(modalIframeSrc, title, width, height, "auto");
+        OpenLayuiDialog(modalIframeSrc, title, width, height, "r");
     return false;
 }
 
@@ -869,10 +879,10 @@ function InitToNodeDDL(JSonData, wf_node) {
         if (dataType != null && dataType != undefined && dataType == "isAskFor")
             return;
     }
-    var _html = '<button class="layui-btn layui-btn-primary layui-btn-sm" id="Btn_ToNode">';
+    var _html = '<button  type="button" class="layui-bar layui-btn layui-btn-sm layui-btn-primary " id="Btn_ToNode">';
     _html += '<span id="DDL_ToNode"></span>';
     _html += '<input type="hidden" id="TB_ToNode"/>';
-    _html += '<i class="layui-icon layui-icon-down layui-font-12"></i>';
+   _html += '<i class="layui-icon layui-icon-down layui-font-12"></i>';
     _html += '</button>';
     $('[name=SendBtn]').after(_html);
     var data = [];
@@ -945,7 +955,7 @@ function beforeSendCheck(formType) {
     //如果启用了流程流转自定义，必须设置选择的游离态节点
     if ($('[name=TransferCustom]').length > 0) {
         var ens = new Entities("BP.WF.TransferCustoms");
-        ens.Retrieve("WorkID", pageData.WorkID, "IsEnable", 1);
+        ens.Retrieve("WorkID", paramData.WorkID, "IsEnable", 1);
         if (ens.length == 0) {
             alert("该节点启用了流程流转自定义，但是没有设置流程流转的方向，请点击流转自定义按钮进行设置");
             return false;
@@ -991,7 +1001,7 @@ function beforeSendCheck(formType) {
             return false;
 
     if (IsRecordUserLog == true) {
-        if (pageData.FK_Node == parseInt(pageData.FK_Flow) + "01")
+        if (paramData.FK_Node == parseInt(paramData.FK_Flow) + "01")
             UserLogInsert("StartFlow", "发起流程");
         else
             UserLogInsert("TodoList", "处理待办");
@@ -1153,17 +1163,32 @@ function Send(isHuiQian, formType, isDelayedSend) {
     execSend(toNodeID, formType, isReturnNode);
 }
 
+//const asyncLoad = () => new Promise((resolve, _) => {
+//    const index = layer.open( {
+//        content: '正在发送...',
+//        shade: [0.2, '#000'],
+//        title: '',
+//        btn: [],
+//        closeBtn: 0,
+//        icon:16,
+//    })
+//    setTimeout(() => {
+//        resolve(index);
+//    },16)
+
+//})
 
 function execSend(toNodeID, formType, isReturnNode) {
     //正在发送弹出层
-    var index = layer.msg('正在发送，请稍后..', {
-        icon: 16
-        , shade: 0.01
-    });
+    //var index = layer.msg('正在发送，请稍后..', {
+    //    icon: 16
+    //    , shade: 0.01,
+    //});
+    //var index = layer.load();//此处用layui加载动画
     //先设置按钮等不可用.
     setToobarDisiable();
-
-    layui.form.on('submit(Send)', function (data) {
+    
+    layui.form.on('submit(Send)', async function (data) {
         //提交信息的校验
         var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
         handler.AddUrlData();
@@ -1176,106 +1201,111 @@ function execSend(toNodeID, formType, isReturnNode) {
 
         handler.AddPara("ToNode", toNodeID);
         handler.AddPara("IsReturnNode", isReturnNode);
-        var data = handler.DoMethodReturnString("Send"); //执行保存方法.
-        layer.close(index);//关闭正在发送
-        if (data.indexOf('err@') == 0) { //发送时发生错误
-
-            var reg = new RegExp('err@', "g")
-            var data = data.replace(reg, '');
-            layer.alert(data);
-            setToobarEnable();
-            return false;
-        }
-
-        if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
-            var url = data;
-            url = url.replace('TurnUrl@', '');
-            SetHref(url);
-            return false;
-        }
-        if (data.indexOf('SelectNodeUrl@') == 0) {
-            var url = data;
-            url = url.replace('SelectNodeUrl@', '');
-            initModal("SelectNodeUrl", null, url);
-            return false;
-        }
-
-        if (data.indexOf('BySelfUrl@') == 0) {  //发送成功时转到自定义的URL 
-            var url = data;
-            url = url.replace('BySelfUrl@', '');
-            initModal("BySelfUrl", null, url);
-            return false;
-        }
-
-
-        if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
-
-            if (data.indexOf("AccepterOfOrg") != -1) {
-                var params = data.split("&");
-
-                for (var i = 0; i < params.length; i++) {
-                    if (params[i].indexOf("ToNode") == -1)
-                        continue;
-
-                    toNodeID = params[i].split("=")[1];
-                    break;
-                }
-                initModal("sendAccepterOfOrg", toNodeID);
+        const idx = await asyncLoad("正在发送，请稍后..");
+        try {
+            var data = handler.DoMethodReturnString("Send"); //执行保存方法.
+            layer.close(idx);//关闭正在发送
+            if (data.indexOf('err@') == 0) { //发送时发生错误
+                var reg = new RegExp('err@', "g")
+                var data = data.replace(reg, '');
+                layer.alert(data);
+                setToobarEnable();
                 return false;
             }
 
-            if (data.indexOf("AccepterOfDept") != -1) {
-                var params = data.split("&");
-
-                for (var i = 0; i < params.length; i++) {
-                    if (params[i].indexOf("ToNode") == -1)
-                        continue;
-
-                    toNodeID = params[i].split("=")[1];
-                    break;
-                }
-                initModal("AccepterOfDept", toNodeID);
+            if (data.indexOf('TurnUrl@') == 0) {  //发送成功时转到指定的URL 
+                var url = data;
+                url = url.replace('TurnUrl@', '');
+                SetHref(url);
                 return false;
             }
-            if (data.indexOf("AccepterOfOfficer") != -1) {
-                var params = data.split("&");
-
-                for (var i = 0; i < params.length; i++) {
-                    if (params[i].indexOf("ToNode") == -1)
-                        continue;
-
-                    toNodeID = params[i].split("=")[1];
-                    break;
-                }
-                initModal("AccepterOfOfficer", toNodeID);
+            if (data.indexOf('SelectNodeUrl@') == 0) {
+                var url = data;
+                url = url.replace('SelectNodeUrl@', '');
+                initModal("SelectNodeUrl", null, url);
                 return false;
             }
 
-            if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
-
-                //求出来 url里面的FK_Node=xxxx 
-                var params = data.split("&");
-
-                for (var i = 0; i < params.length; i++) {
-                    if (params[i].indexOf("ToNode") == -1)
-                        continue;
-
-                    toNodeID = params[i].split("=")[1];
-                    break;
-                }
-                initModal("sendAccepter", toNodeID);
+            if (data.indexOf('BySelfUrl@') == 0) {  //发送成功时转到自定义的URL 
+                var url = data;
+                url = url.replace('BySelfUrl@', '');
+                initModal("BySelfUrl", null, url);
                 return false;
             }
 
 
-            var url = data;
-            url = url.replace('url@', '');
+            if (data.indexOf('url@') == 0) {  //发送成功时转到指定的URL 
 
-            SetHref(url);
+                if (data.indexOf("AccepterOfOrg") != -1) {
+                    var params = data.split("&");
+
+                    for (var i = 0; i < params.length; i++) {
+                        if (params[i].indexOf("ToNode") == -1)
+                            continue;
+
+                        toNodeID = params[i].split("=")[1];
+                        break;
+                    }
+                    initModal("sendAccepterOfOrg", toNodeID);
+                    return false;
+                }
+
+                if (data.indexOf("AccepterOfDept") != -1) {
+                    var params = data.split("&");
+
+                    for (var i = 0; i < params.length; i++) {
+                        if (params[i].indexOf("ToNode") == -1)
+                            continue;
+
+                        toNodeID = params[i].split("=")[1];
+                        break;
+                    }
+                    initModal("AccepterOfDept", toNodeID);
+                    return false;
+                }
+                if (data.indexOf("AccepterOfOfficer") != -1) {
+                    var params = data.split("&");
+
+                    for (var i = 0; i < params.length; i++) {
+                        if (params[i].indexOf("ToNode") == -1)
+                            continue;
+
+                        toNodeID = params[i].split("=")[1];
+                        break;
+                    }
+                    initModal("AccepterOfOfficer", toNodeID);
+                    return false;
+                }
+
+                if (data.indexOf('Accepter') != 0 && data.indexOf('AccepterGener') == -1) {
+
+                    //求出来 url里面的FK_Node=xxxx 
+                    var params = data.split("&");
+
+                    for (var i = 0; i < params.length; i++) {
+                        if (params[i].indexOf("ToNode") == -1)
+                            continue;
+
+                        toNodeID = params[i].split("=")[1];
+                        break;
+                    }
+                    initModal("sendAccepter", toNodeID);
+                    return false;
+                }
+
+
+                var url = data;
+                url = url.replace('url@', '');
+
+                SetHref(url);
+                return false;
+            }
+            OptSuc(data);
+
             return false;
+        } catch {
+            layer.close(idx);
         }
-        OptSuc(data);
-        return false;
     });
 
 
@@ -1544,17 +1574,20 @@ function SaveEnd(formType) {
 
 //关注 按钮.
 function FocusBtn(btn, workid) {
+    btn = $('[name=Focus]');
+    if (btn.length == 1) {
+        if (btn[0].innerText.trim() == "关注") {
+            btn[0].innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消关注";
+        }
+        else {
+            btn[0].innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;关注";
+        }
 
-    if (btn.innerText.trim() == "关注") {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;取消关注";
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddPara("WorkID", workid);
+        handler.DoMethodReturnString("Focus"); //执行保存方法.
     }
-    else {
-        btn.innerHTML = "<img src='Img/Btn/Focus.png' width='22px' height='22px'>&nbsp;关注";
-    }
-
-    var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
-    handler.AddPara("WorkID", workid);
-    handler.DoMethodReturnString("Focus"); //执行保存方法.
+   
 }
 
 //确认 按钮.

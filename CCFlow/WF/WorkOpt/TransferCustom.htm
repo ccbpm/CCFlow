@@ -3,6 +3,8 @@
 <head>
     <title>驰骋工作流</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../Portal/icons/font-icons.min.css" rel="stylesheet" />
+    <link href="../Portal/icons/icons.css" rel="stylesheet" />
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
@@ -27,6 +29,9 @@
             margin: 0px;
             padding: 0px;
         }
+        #cc{
+            margin-top:20px;
+        }
 
         .ccflow-input-span-container {
             border: 0;
@@ -40,11 +45,19 @@
             color: #0a0a0a;
             white-space: nowrap;
             padding: 5px 2px;
-            background-color: #e0ecff;
+            background-color: #f6f6f6;
             font-size: 14px;
             text-align: left;
             font-size: 12px;
             font-weight: bolder;
+        }
+        .vertical {
+            display: table-cell;
+            vertical-align: middle !important;
+        }
+        .small_distance {
+            margin: 0 10px;
+            font-size: 16px;
         }
     </style>
     <script type="text/javascript" language="javascript">
@@ -53,11 +66,11 @@
 
             var html = "<table class='table table-hover table-bordered' style='width:100%;' >";
             html += "<tr>";
-            html += "<th width='5%'>步骤</th>";
+            html += "<th width='10%'>步骤</th>";
             html += "<th width='*'>节点</th>";
             html += "<th width='50%'>处理人</th>";
             //html += "<th width='15%'>应完成时间</th>";
-            html += "<th width='200px'>操作</th>";
+            html += "<th width='150px'>操作</th>";
             html += "</tr>";
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData();
@@ -65,7 +78,7 @@
 
             var nds = data["WF_Node"]; //节点.
             var tcs = data["WF_TransferCustoms"]; //选择的接受人.
-            var gwls = data["WF_GenerWorkerList"]; //选择的接受人.
+            var gwls = data["WF_GenerWorkerlist"]; //选择的接受人.
 
             //输出已经走过的节点.
             html += "<tr><th colspan=5>已经运行的节点</tr>";
@@ -73,10 +86,10 @@
                 var gwl = gwls[i];
 
                 html += "<tr>";
-                html += "<td >" + gwl.FK_Node + " </td>";
-                html += "<td >" + gwl.FK_NodeText + " </td>";
-                html += "<td >" + gwl.FK_EmpText + " </td>";
-                html += "<td >无</td>";
+                html += "<td class='vertical'>" + gwl.FK_Node + " </td>";
+                html += "<td class='vertical' >" + gwl.FK_NodeText + " </td>";
+                html += "<td class='vertical' >" + gwl.FK_EmpText + " </td>";
+                html += "<td class='vertical'>无</td>";
                 html += "</tr>";
             }
 
@@ -88,9 +101,9 @@
                 if (tc.IsEnable == 0)
                     continue;
                 html += "<tr>";
-                html += "<td>" + tc.FK_Node + " </td>";
-                html += "<td>" + tc.NodeName + " </td>";
-                html += "<td >";
+                html += "<td class='vertical'>" + tc.FK_Node + " </td>";
+                html += "<td class='vertical'>" + tc.NodeName + " </td>";
+                html += "<td class='vertical'>";
                 //处理接收人的事件
                 html += "<div id='" + tc.FK_Node + "_mtags' style='width:99%'  class='mtags'></div>";
                 html += " </td>";
@@ -100,10 +113,10 @@
                 //} else {
                 //    html += "<td></td>";
                 //}
-                html += "<td style='padding:3px;'>";
-                html += " <a href=\"javascript:DoUp('" + tc.MyPK + "');\">上移</a>";
-                html += " <a  href=\"javascript:DoDown('" + tc.MyPK + "');\">下移</a>";
-                html += " <a   href=\"javascript:Remove('" + tc.MyPK + "');\">排除</a>";
+                html += "<td style='padding:3px;' class='vertical'>";
+                html += " <a class='small_distance' href=\"javascript:DoUp('" + tc.MyPK + "');\"><i class=icon-arrow-up-circle></i></a>";
+                html += " <a class='small_distance' href=\"javascript:DoDown('" + tc.MyPK + "');\"><i class=icon-arrow-down-circle></i></a>";
+                html += " <a class='small_distance'  href=\"javascript:Remove('" + tc.MyPK + "');\"><i class=icon-close></i></a>";
                 html += "</tr>";
             }
             //可选步骤.
@@ -114,11 +127,11 @@
                     continue;
 
                 html += "<tr>";
-                html += "<td>" + tc.FK_Node + " </td>";
-                html += "<td>" + tc.NodeName + " </td>";
-                html += "<td>" + tc.WorkerName + " </td>";
+                html += "<td class='vertical'>" + tc.FK_Node + " </td>";
+                html += "<td class='vertical'>" + tc.NodeName + " </td>";
+                html += "<td class='vertical'>" + tc.WorkerName + " </td>";
 
-                html += "<td>[<a href=\"javascript:Add('" + tc.MyPK + "');\">增加</a>]</td>";
+                html += "<td class='vertical'>[<a href=\"javascript:Add('" + tc.MyPK + "');\">增加</a>]</td>";
                 html += "</tr>";
             }
 

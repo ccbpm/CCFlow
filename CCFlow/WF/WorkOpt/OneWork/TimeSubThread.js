@@ -36,7 +36,7 @@ function InitPage() {
     var fwc = data["FrmWorkCheck"][0];
 
     //获得工作人员列表.
-    //var gwls = data["WF_GenerWorkerList"];
+    //var gwls = data["WF_GenerWorkerlist"];
 
     //前进的 track. 用于获取当前节点的上一个节点的track.
     var trackDotOfForward = null;

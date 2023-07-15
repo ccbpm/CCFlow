@@ -13,21 +13,25 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+            debugger;
 
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData();
             var data = handler.DoMethodReturnString("Port_Init");
-
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
 
+            var token = GetQueryString("Token");
+            localStorage.setItem('Token', token);
+
             if (data.indexOf('url@') == 0) {
+                console.log(data);
                 var url = data.replace('url@', '');
-                var token = GetQueryStringByUrl(url, "Token");
-                localStorage.setItem('Token', token);
+                //  var token = GetQueryStringByUrl(url, "Token");
+              
                 //if (IsMobile() == true)
                 //    url = "/CCMobile/" + url;
                 SetHref(url);

@@ -17,7 +17,7 @@
 						<div class="usercenter">切换部门</div>
 							<form class="form-horizontal" id="cc">
                                     <div class="form-group">
-                                       <div id="Msg"></div>
+                                       <div id="Msg" style="margin:20px;"></div>
                                     </div>
 							</form>
 				
@@ -44,6 +44,9 @@
 
             data = JSON.parse(data);
 
+            console.log(data);
+
+
             if (data.length == 0) {
                 $("#Msg").html("您有0个部门不需要切换部门.");
                 return;
@@ -53,24 +56,35 @@
                 $("#Msg").html("<br><br>您有1个部门<font color=green >(" + data[0].Name + ")</font>不需要切换部门.<br><br>");
                 return;
             }
-
-            var html = "<ul>";
+            var html = "";
             for (var i = 0; i < data.length; i++) {
-                var dept = data[i];
-
-                if (dept.CurrentDept == 1)
-                    html += "<li ><font color='green'><b>" + dept.Name + "（当前部门）</b></font></li>";
-                else
-                    html += "<li onclick=\"ChangeDept_Submit('" + dept.No + "');\" style='font-color:green;' ><u>" + dept.Name + "</u></li>";
+                var deptRoot = data[i];
+                if (deptRoot.No == deptRoot.OrgNo) {
+                    html = html +"<div style='font-size: 15px;font - weight: bold; '>" + deptRoot.Name + "</div><ul style='padding-left:30px'>";
+                    if (deptRoot.CurrentDept == 1)
+                        html += "<li style='cursor:pointer;'><font color='green'><b>" + deptRoot.Name + "（当前部门）</b></font></li>";
+                    else
+                        html += "<li style='cursor:pointer;' onclick=\"ChangeDept_Submit('" + deptRoot.No + "','" + deptRoot.OrgNo + "');\" style='font-color:green;' ><u>" + deptRoot.Name + "</u></li>";
+                    for (var j = 0; j < data.length; j++) {
+                        var dept = data[j];
+                        if (dept.OrgNo == deptRoot.OrgNo && dept.No != deptRoot.No) {
+                            if (dept.CurrentDept == 1)
+                                html += "<li style='cursor:pointer;' ><font color='green'><b>" + dept.Name + "（当前部门）</b></font></li>";
+                            else
+                                html += "<li style='cursor:pointer;' onclick=\"ChangeDept_Submit('" + dept.No + "','" + dept.OrgNo + "');\" style='font-color:green;' ><u>" + dept.Name + "</u></li>";
+                        }
+                    }
+                    html += "</ul>";
+                    
+                }
             }
-
-            html += "</ul>";
+           
 
             $("#Msg").html(html);
             return;
         });
 
-        function ChangeDept_Submit(deptNo) {
+        function ChangeDept_Submit(deptNo,OrgNo) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             handler.AddPara("DeptNo", deptNo);
@@ -81,7 +95,22 @@
                 return;
             }
             alert(data);
-            history.back();
+            //history.back();
+            history.go(0);
+            console.log(top.document.location.href);
+            //替换页面url
+            var url = top.document.location.href;
+            let param = url.split('?')[1];
+            let params = param.split('&');
+            let paramOrgNo;
+            for (let i = 0; i < params.length; i++) {
+                let param = params[i];
+                if (param.indexOf('OrgNo') > -1)
+                    paramOrgNo = param;
+            }
+            url = url.replace(paramOrgNo, 'OrgNo=' + OrgNo);
+            console.log(url);
+            top.document.location.href = url;
 
         }
     </script>

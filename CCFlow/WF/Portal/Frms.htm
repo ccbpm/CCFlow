@@ -21,35 +21,35 @@
         .flow {
             width: 100%;
         }
-        
-        .flow .row {
-            display: flex;
-            justify-content: flex-start;
-            flex: 0.2;
-            height: 40px;
-            line-height: 40px;
-            background-color: #FAFAFA;
-        }
-        /*.flow .row .item {*/
-        /*    box-sizing: border-box;*/
-        /*    flex-shrink: 0;*/
-        /*    text-align: center;*/
-        /*    width: 20%;*/
-        /*    border: 1px solid #eee;*/
-        /*    font-weight: 600;*/
-        /*}*/
-        
-        .flow .row .item {
-            box-sizing: border-box;
-            flex-shrink: 0;
-            text-align: center;
-            border-right: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
+
+            .flow .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
+            }
+                /*.flow .row .item {*/
+                /*    box-sizing: border-box;*/
+                /*    flex-shrink: 0;*/
+                /*    text-align: center;*/
+                /*    width: 20%;*/
+                /*    border: 1px solid #eee;*/
+                /*    font-weight: 600;*/
+                /*}*/
+
+                .flow .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    text-align: center;
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
         .item-name {
             width: 40%;
             text-overflow: ellipsis;
@@ -57,40 +57,41 @@
             cursor: pointer;
             padding-left: 30px;
         }
-        
+
         .item-other {
             width: 10%;
         }
-        
+
         .item-index {
             background-color: #FAFAFA;
             padding-right: 40px;
             color: #999999
         }
-        
+
         .flow .row .folder-item {
             box-sizing: border-box;
             /*width: 76%;*/
             padding-left: 20px;
             cursor: pointer;
         }
-        
+
         .wrapper .row {
             background-color: #fff;
         }
-        
+
         #s-main {
             transition: all ease .4s;
             margin-top: 40px;
         }
-        
+
         .fixed {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
         }
-        [v-cloak]{
+
+        [v-cloak] {
             display: none !important;
         }
     </style>
@@ -102,7 +103,13 @@
             <div class="item item-other" @click="expandAll = !expandAll">
                 <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs">{{expandAll ? '折叠所有' : '展开所有'}}</button>
             </div>
-            <div class="item item-name">表单名称</div>
+            <div class="item item-name">
+
+                <a href="http://ccflow.org/Ke.html" target="_blank" class="icon-camrecorder"><font color="blue">&nbsp;视频教程</font></a>
+                &nbsp;
+                <a href="FrmTree.htm" class="icon-heart"><font color="blue">&nbsp;树结构</font></a>
+
+            </div>
             <div class="item item-other">表单类型</div>
             <div class="item item-other">应用模式</div>
             <div class="item item-other">存储表</div>

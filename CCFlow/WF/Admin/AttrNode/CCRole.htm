@@ -102,7 +102,7 @@
             if (webUser.CCBPMRunModel != 0)
                 rootNo = webUser.OrgNo;
             url += "&RootNo=" + rootNo;
-
+            url += url + '&BackBtn=' + 0;
             OpenEasyUiDialogExt(url, "抄送部门", 800, 600, true);
         }
 

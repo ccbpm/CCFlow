@@ -1,4 +1,23 @@
-﻿
+﻿/**
+ * 异步加载（layui.open）
+ * @param {any} msg 加载时的提示信息
+ * @returns
+ */
+const asyncLoad = (msg) => new Promise((resolve, _) => {
+    const index = layer.open({
+        content: msg,
+        shade: [0.2, '#000'],
+        title: '',
+        btn: [],
+        closeBtn: 0,
+        icon: 16,
+    })
+    setTimeout(() => {
+        resolve(index);
+    }, 16)
+
+})
+
 function deleteUrlParam(targetUrl, targetKey) {
     if (typeof targetUrl !== 'string') {
         return targetUrl
@@ -448,10 +467,6 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
         type: 'post',
         async: false,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
@@ -481,14 +496,9 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
     $.ajax({
         type: 'post',
         async: true,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=EnsData&EnsName=" + ensName + "&Filter=" + filter + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
-
             data = JSON.parse(data);
             //绑定枚举值.
             GenerBindDDL(ctrlDDLId, data, "No", "Name", selectVal);
@@ -511,10 +521,6 @@ function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
     $.ajax({
         type: 'post',
         async: true,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=SFTable&SFTable=" + sfTable + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
@@ -545,10 +551,6 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
     $.ajax({
         type: 'post',
         async: true,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=SQLList&SQLKey=" + sqlKey + "&Paras=" + paras + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
@@ -899,10 +901,6 @@ function AjaxServiceGener(param, myUrl, callback, scope) {
         data: param, //要发送的数据
         async: true,
         cache: false,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         complete: function () { }, //AJAX请求完成时隐藏loading提示
         error: function (XMLHttpRequest, errorThrown) {
             callback(XMLHttpRequest);
@@ -1041,13 +1039,7 @@ var Entity = (function () {
         return params.join("&");
     }
 
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
 
     Entity.prototype = {
 
@@ -1058,14 +1050,11 @@ var Entity = (function () {
             var pkval = self.pkval;
             if (dynamicHandler == "")
                 return;
+            var token = GetQueryString("Token");
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + encodeURIComponent(pkval) + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + encodeURIComponent(pkval) + "&Token="+token+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -1109,18 +1098,19 @@ var Entity = (function () {
             var self = this;
             var params = getParams(self);
 
+            var token = GetQueryString("Token");
             if (params.length == 0)
                 params = getParams1(self);
-
+            else {
+                if (params.hasOwnProperty("Token") == false)
+                    params["Token"] = token;
+            }
+          
             var result = "";
-
+            
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
                 url: dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
@@ -1169,19 +1159,19 @@ var Entity = (function () {
 
             var self = this;
             var params = getParams(self);
-
+            var token = GetQueryString("Token");
             if (params.length == 0)
                 params = getParams1(self);
+            else {
+                if (params.hasOwnProperty("Token") == false)
+                    params["Token"] = token;
+            }
 
             var result = "";
 
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
                 url: dynamicHandler + "?DoType=Entity_DirectInsert&EnName=" + self.enName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
@@ -1218,15 +1208,18 @@ var Entity = (function () {
 
             var self = this;
             var params = getParams(self);
+
+            var token = GetQueryString("Token");
+           
+            if(params.hasOwnProperty("Token") == false)
+                params["Token"] = token;
+       
+
             var result;
 
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
                 url: dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
@@ -1255,15 +1248,16 @@ var Entity = (function () {
 
             var self = this;
             var params = getParams(self);
+
+            var token = GetQueryString("Token");
+            if (params.hasOwnProperty("Token") == false)
+                params["Token"] = token;
+
             var result;
 
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
                 url: dynamicHandler + "?DoType=Entity_Save&EnName=" + self.enName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
@@ -1290,17 +1284,13 @@ var Entity = (function () {
             var self = this;
             //var params = getParams(self);
             var params = getParams1(this);
-
+            var token = GetQueryString("Token");
             var result;
 
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&Key1=" + key1 + "&Val1=" + val1 + "&Key2=" + key2 + "&Val2=" + val2 + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + this.GetPKVal() + "&Key1=" + key1 + "&Val1=" + val1 + "&Key2=" + key2 + "&Val2=" + val2 + "&Token="+token+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
                 success: function (data) {
@@ -1328,15 +1318,12 @@ var Entity = (function () {
 
             var self = this;
             var params = getParams1(this);
+            var token = GetQueryString("Token");
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params,
+                url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&Token="+token+"&" + params,
                 dataType: 'html',
                 success: function (data) {
                     result = data;
@@ -1454,16 +1441,12 @@ var Entity = (function () {
             }
 
             //  alert(self.GetPKVal()); 
-
+            var token = GetQueryString("Token");
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl,
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + pkavl+"&Token="+token,
                 dataType: 'html',
                 success: function (data) {
                     result = data;
@@ -1506,15 +1489,11 @@ var Entity = (function () {
             var result;
 
             var data = getParams1(self);
-
+            var token = GetQueryString("Token");
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
+                url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self)+"&Token="+token,
                 dataType: 'html',
                 success: function (data) {
 
@@ -1543,8 +1522,11 @@ var Entity = (function () {
                 myparams = "";
 
             $.each(arguments, function (i, o) {
-                if (i != 0)
+                if (i != 0) {
+                    if (!!o && o.indexOf('~') != -1)
+                        o = o.replace(/~/g, '`');
                     params += o + "~";
+                }   
             });
             if (params.lastIndexOf("~") == params.length - 1)
                 params = params.substr(0, params.length - 1);
@@ -1556,17 +1538,14 @@ var Entity = (function () {
                 alert('[' + this.enName + ']没有给主键赋值无法执行查询.');
                 return;
             }
+            var token = GetQueryString("Token");
 
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + encodeURIComponent(pkval) + "&MethodName=" + methodName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + encodeURIComponent(pkval) + "&MethodName=" + methodName + "&Token="+token+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: arguments,
                 success: function (data) {
@@ -1876,15 +1855,12 @@ var Entities = (function () {
                 alert("在初始化实体期间EnsName没有赋值");
                 return;
             }
+            var token = GetQueryString("Token");
 
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&Token=" + token +"&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -1924,15 +1900,11 @@ var Entities = (function () {
                 alert("在初始化实体期间EnsName没有赋值");
                 return;
             }
-
+            var token = GetQueryString("Token");
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entities_Delete&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_Delete&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&Token="+token+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {
@@ -1986,15 +1958,11 @@ var Entities = (function () {
                 alert("在初始化实体期间EnsName没有赋值");
                 return;
             }
-
+            var token = GetQueryString("Token");
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_RetrieveCond&EnsName=" + self.ensName + "&Token="+token+"&t=" + new Date().getTime(),
                 data: { "Paras": self.Paras },
                 dataType: 'html',
                 success: function (data) {
@@ -2047,17 +2015,13 @@ var Entities = (function () {
             for (var key in parameters) {
                 atPara += "@" + key + "=" + parameters[key];
             }
-
+            var token = GetQueryString("Token");
             var self = this;
             var string;
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entities_DoMethodReturnString&EnsName=" + self.ensName + "&MethodName=" + methodName + "&paras=" + params + "&Token="+token+"&t=" + new Date().getTime(),
                 data: atPara = "" ? {} : { atPara: atPara },
                 dataType: 'html',
                 success: function (data) {
@@ -2116,15 +2080,12 @@ var Entities = (function () {
                 var rowUrl = GetHrefUrl();
                 pathRe = rowUrl.substring(0, rowUrl.indexOf('/SDKFlowDemo') + 1);
             }
+            var token = GetQueryString("Token");
             var self = this;
             $.ajax({
                 type: 'post',
                 async: false,
-                xhrFields: {
-                    withCredentials: IsIELower10 == true ? false : true
-                },
-                crossDomain: IsIELower10 == true ? false : true,
-                url: pathRe + dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                url: pathRe + dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&Token="+token+"&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {
@@ -2273,13 +2234,7 @@ var DBAccess = (function () {
     function DBAccess() {
     }
 
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
 
     DBAccess.RunSQL = function (sql, dbSrc) {
         if (dynamicHandler == "")
@@ -2289,10 +2244,6 @@ var DBAccess = (function () {
         $.ajax({
             type: 'post',
             async: false,
-            xhrFields: {
-                withCredentials: IsIELower10 == true ? false : true
-            },
-            crossDomain: IsIELower10 == true ? false : true,
             url: dynamicHandler + "?DoType=DBAccess_RunSQL&t=" + new Date().getTime(),
             dataType: 'html',
             data: { "SQL": encodeURIComponent(sql), "DBSrc": dbSrc },
@@ -2409,10 +2360,6 @@ var DBAccess = (function () {
         $.ajax({
             type: 'post',
             async: false,
-            xhrFields: {
-                withCredentials: IsIELower10 == true ? false : true
-            },
-            crossDomain: IsIELower10 == true ? false : true,
             url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable" + "&t=" + new Date().getTime(),
             dataType: 'html',
             data: { "SQL": encodeURIComponent(sql), "DBSrc": dbSrc },
@@ -2454,10 +2401,6 @@ var DBAccess = (function () {
             url: dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime(),
             data: { urlExt: url },
             dataType: 'html',
-            xhrFields: {
-                withCredentials: IsIELower10 == true ? false : true
-            },
-            crossDomain: IsIELower10 == true ? false : true,
             success: function (data) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);
@@ -2539,13 +2482,7 @@ var HttpHandler = (function () {
         return true;
     }
 
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
 
     HttpHandler.prototype = {
 
@@ -2628,11 +2565,14 @@ var HttpHandler = (function () {
             var files = $("input[type=file]");
             for (var i = 0; i < files.length; i++) {
                 var fileObj = files[i].files[0]; // js 获取文件对象
-                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                if (typeof (fileObj) == "undefined") {
                     alert("请选择上传的文件.");
                     return;
                 }
-                //parameters["file"] = fileObj;
+                if (fileObj.size == 0) {
+                    alert("上传的文件大小为0KB,请查看内容后再重新上传");
+                    return;
+                }
                 parameters.append("file", fileObj)
             }
         },
@@ -2709,10 +2649,6 @@ var HttpHandler = (function () {
                 $.ajax({
                     type: 'post',
                     async: false,
-                    xhrFields: {
-                        withCredentials: !IsIELower10
-                    },
-                    crossDomain: !IsIELower10,
                     url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                     data: new FormData(),
                     dataType: 'html',
@@ -2764,10 +2700,6 @@ var HttpHandler = (function () {
                 $.ajax({
                     type: 'post',
                     async: false,
-                    xhrFields: {
-                        withCredentials: IsIELower10 == true ? false : true
-                    },
-                    crossDomain: IsIELower10 == true ? false : true,
                     url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                     data: parameters,
                     dataType: 'html',
@@ -2793,10 +2725,6 @@ var HttpHandler = (function () {
                 $.ajax({
                     type: 'post',
                     async: false,
-                    xhrFields: {
-                        withCredentials: false
-                    },
-                    crossDomain: false,
                     url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&t=" + Math.random(),
                     data: parameters,
                     dataType: 'html',
@@ -2851,7 +2779,6 @@ var HttpHandler = (function () {
 
 var webUserJsonString = null;
 var WebUser = function () {
-
     if (dynamicHandler == "")
         return;
     if (webUserJsonString != null) {
@@ -2861,26 +2788,12 @@ var WebUser = function () {
         });
         return;
     }
-
-
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
-
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
     //获得页面上的token. 在登录信息丢失的时候，用token重新登录.
     var token =GetQueryString('Token');
-
     $.ajax({
         type: 'post',
         async: false,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=WebUser_Init&Token=" + token + "&t=" + new Date().getTime(),
         dataType: 'html',
         success: function (data) {
@@ -2937,24 +2850,10 @@ var GuestUser = function () {
         });
         return;
     }
-
-
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
-
-
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
     $.ajax({
         type: 'post',
         async: false,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         url: dynamicHandler + "?DoType=GuestUser_Init&t=" + new Date().getTime(),
         dataType: 'html',
         success: function (data) {
@@ -2988,7 +2887,7 @@ var GuestUser = function () {
 };
 
 function ThrowMakeErrInfo(funcName, textStatus, url, XMLHttpRequest, errorThrown) {
-
+    if (url == undefined || url == null) url = '';
     var msg = "1. " + funcName + " err@系统发生异常.";
     msg += "\t\n2.检查请求的URL连接是否错误：" + url;
     msg += "\t\n3.估计是数据库连接错误或者是系统环境问题. ";
@@ -3230,10 +3129,6 @@ function SFTaleHandler(url) {
         type: 'post',
         async: false,
         url: url,
-        xhrFields: {
-            withCredentials: IsIELower10 == true ? false : true
-        },
-        crossDomain: IsIELower10 == true ? false : true,
         dataType: 'html',
         success: function (data) {
             if (data.indexOf("err@") != -1) {
@@ -3270,20 +3165,13 @@ $(function () {
     if (ver == 6 || ver == 7 || ver == 8 || ver == 9) {
         jQuery.getScript(basePath + "/WF/Scripts/jquery.XDomainRequest.js")
     }
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
-
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest";
     var url = GetHrefUrl().toLowerCase();
     var pageName = window.document.location.pathname.toLowerCase();
     pageName = pageName.substring(pageName.lastIndexOf("/")+1);
     
     //不需要权限信息
-    var listPage = ['login.htm', 'dbinstall.htm', 'scanguide.htm', 'qrcodescan.htm', 'index.htm', 'gotourl.htm', 'invited.htm', 'registerbywebsite.htm', 'reqpassword.htm', 'reguser.htm', 'port.htm', 'ccbpm.cn/', 'loginwebsite.htm', 'goto.htm'];
+    var listPage = ['login.htm', 'selectoneorg.htm', 'dbinstall.htm', 'scanguide.htm', 'qrcodescan.htm', 'index.htm', 'gotourl.htm', 'invited.htm', 'registerbywebsite.htm', 'reqpassword.htm', 'reguser.htm', 'port.htm', 'ccbpm.cn/', 'loginwebsite.htm', 'goto.htm','do.htm'];
     if (listPage.includes(pageName) || url == basePath) {
         localStorage.setItem('Token', '');
         return;
@@ -3360,12 +3248,14 @@ function DealDataTableColName(jsonDT, mapAttrs) {
                 data[mapAttr.KeyOfEn] = val; //jsonDT[colName];
                 isHave = true;
                 break;
+            } else {
+                data[colName] = val;
             }
         }
 
-        if (isHave == false) {
-            alert("数据源字段名[" + colName + "]没有匹配到表单字段.");
-        }
+        //if (isHave == false) {
+         //   alert("数据源字段名[" + colName + "]没有匹配到表单字段.");
+        //}
     }
     return data;
 }

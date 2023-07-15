@@ -20,7 +20,7 @@ function InitBar(optionKey) {
     html += "<option value=" + FormSlnType.FreeForm + "  disabled='disabled' >&nbsp;&nbsp;自由表单</option>";
     html += "<option value=" + FormSlnType.FoolTruck + " >&nbsp;&nbsp;累加模式表单</option>";
     html += "<option value=" + FormSlnType.Developer + " >&nbsp;&nbsp;开发者表单</option>";
-    html += "<option value=" + FormSlnType.changeOption + " >&nbsp;&nbsp;章节表单(beta)</option>";
+    html += "<option value=" + FormSlnType.ChapterFrm + " >&nbsp;&nbsp;章节表单(beta)</option>";
 
     // html += "<option value=" + FormSlnType.WebOffice + "  >&nbsp;&nbsp;公文表单(weboffice)</option>";
 
@@ -107,13 +107,10 @@ function DDeveloper() {
     //OpenEasyUiDialogExt(url, '开发者表单设计器', 1100, 600, false);
 }
 
-
 function HelpOnline() {
     var url = "http://doc.ccbpm.cn";
     window.open(url);
 }
-
-
 
 function changeOption() {
     var nodeID = GetQueryString("FK_Node");
@@ -165,6 +162,9 @@ function changeOption() {
             break;
         case FormSlnType.SDKFormSmart:
             url = "13.SDKFormSmart.htm";
+            break;
+        case FormSlnType.ChapterFrm:
+            url = "14.ChapterFrm.htm";
             break;
         case FormSlnType.DisableIt:
             url = "100.DisableIt.htm";

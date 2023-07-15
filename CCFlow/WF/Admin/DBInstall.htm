@@ -10,7 +10,48 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/layui/layui.js"></script>
     <base target="_self" />
+    <style>
+        .body_container {
+            padding: 25px 165px !important;
+            background: #f1f0f0;
+        }
+        #cc {
+            width: 100%;
+            background: #fff;
+            box-shadow: 1px 1px 5px #a9a8a8;
+        }
+        .table_area{
+            border:none;
+        }
+        .top_logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+        }
+        th {
+            padding-left: 30px;
+            background: #f1f0f0;
+            font-weight: 500;
+        }
+        td{
+            border-style:none;
+        }
+        .aligning{
+            margin-left:24px !important;
+        }
+        .select_active{
+            margin-left:5px;
+        }
+        li, .select_active {
+            color: #737372;
+            font-weight: 500;
+        }
+        .bottom_mode{
+            padding-left:27px;
+        }
+    </style>
     <script type="text/javascript">
 
         //初始化页面函数.....
@@ -22,91 +63,114 @@
                 $("#shuoming").html(shuoming);
 
 
-            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue >驰骋工作流引擎ccbpm , 正在为安装做准备.</font>");
             document.getElementById("Btn_Submit").disabled = 'disabled';
 
-            //创建处理类.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
-            if (data.indexOf('err@') == 0) {
-                var html = "安装准备失败:";
-                html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >修改数据库配置信息.</a>";
-                if (data.indexOf('/Portal/Standard') != -1) {
-                    var data = "";
-                    data = "数据库已经安装上了，您不必在执行安装. 点击:<a href='" + basePath + "/Portal/Standard/Login.htm'>这里直接登录流程设计器</a>";
-                }
-                $("#Msg").html(html + "<font color=red><br>" + data + "</font> .");
-                return;
-            }
+            DoCheck();
 
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                SetHref(url);
-                return;
-            }
-
-            //转json.
-            data = JSON.parse(data);
-
-            //给控件赋值.
-            GenerFullAllCtrlsVal(data);
-
-            $("#Msg").html("<font color=green>驰骋工作流引擎安装准备完成，请执行安装...</font>");
 
             document.getElementById("Btn_Submit").disabled = false;
 
-            // $("#Msg").html("<font color=green>" + data + "</font>");
         });
+
+        async function DoCheck() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
+            const index = await asyncLoad('正在检查安装环境，请稍后...');
+            try {
+                //创建处理类.
+                var data = handler.DoMethodReturnString("DBInstall_Init"); //执行方法，返回执行结果.
+                if (data.indexOf('err@') == 0) {
+                    data = data.replace('err@', '');
+                    var html = "安装准备失败:";
+                    html += " <a href='http://ccbpm.mydoc.io/?v=5404&t=296303' target=_blank >修改数据库配置信息.</a>";
+                    if (data.indexOf('/Portal/Standard') != -1) {
+                        data = "";
+                        data = "数据库已经安装上了，您不必在执行安装. 点击:<a href='" + basePath + "/Portal/Standard/Login.htm'>这里直接登录流程设计器</a>";
+                        layer.alert(data, { title: '温馨提示', icon: 1, closeBtn: 0, btn: [] });
+                    } else {
+                        layer.alert(html + data, { title: '温馨提示', icon: 2 });
+                    }
+                    
+
+                    return;
+                }
+
+                if (data.indexOf('url@') == 0) {
+                    var url = data.replace('url@', '');
+                    SetHref(url);
+                    return;
+                }
+
+                //转json.
+                data = JSON.parse(data);
+                //给控件赋值.
+                GenerFullAllCtrlsVal(data);
+
+                //
+
+                setTimeout(() => {
+                    layer.close(index);
+                }, 2000)
+            } catch {
+                layer.close(index);
+            }
+            
+        }
 
         //执行安装.
         function DoInstall() {
 
-            var osRunModel = GetRadioValue("RB_OSRunModel"); //
-            if (osRunModel == null) {
-                alert('请您选择您要安装的模式,是否需要安装GPM ? ');
-                return;
-            }
-
-
-            var demoType = GetRadioValue("DemoType"); //
-            if (demoType == null) {
-                alert('请您选择安装模式,是否需要 Demo ? ');
-                return;
-            }
+            //var osRunModel = GetRadioValue("RB_OSRunModel"); //
+            //if (osRunModel == null) {
+            //    alert('请您选择您要安装的模式,是否需要安装GPM ? ');
+            //    return;
+            //}
 
             var info = "";
-            info += " 安装即将进行，如下几个问题，需要确认：";
-            info += "\t\n 1. 您必须遵守GPL开源协议，点击确定就表明您已经理解了GPL协议内容。";
-            info += "\t\n 2. 如果您需要商务评估，请联系我们 http://ccflow.org 。";
-            info += "\t\n 3. 您配置的连接数据库的用户必须是管理员权限，因为系统会创建删除：表、视图、索引、主键、以及数据的权限.";
+            info += "<h3>安装即将进行，如下几个问题，需要确认：</h3>";
+            info += "<p> 1. 您必须遵守GPL开源协议，点击确定就表明您已经理解了GPL协议内容。</p>";
+            info += "<p> 2. 如果您需要商务评估，请<a href=http://ccflow.org target=_blank>联系我们</a>。</p>";
+            info += "<p> 3. 您配置的连接数据库的用户必须是管理员权限，因为系统会创建删除：表、视图、索引、主键、以及数据的权限。</p>";
+            info += "<p> 4. 由于执行时间太长，浏览器会出现【此页面没有响应】,请点击【<font color=red>等待</font>】按钮。</p>";
 
-            if (confirm(info) == false)
-                return;
 
-            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在安装，请稍候....</font>");
+            layer.confirm(info, {  title: '提示' }, function (index) {
+                isConfirm = true;
+                InstallDB();
+                layer.close(index);
+            });
+        }
 
-            document.getElementById("Btn_Submit").disabled = 'disabled';
-            document.getElementById("Btn_Submit").value = '正在执行安装...';
-
+        async function InstallDB() {
+            //var demoType = GetRadioValue("DemoType"); //
+            //if (demoType == null) {
+            //    //alert('请您选择安装模式,是否需要 Demo ? ');
+            //    layer.alert('请您选择安装模式,是否需要 Demo ? ', { icon: 2 });
+            //    return;
+            //}
             //创建处理类.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin");
-            handler.AddPara("DemoType", demoType);
-
-            var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
-            if (data.indexOf('err@') == 0) {
-                $("#Msg").html("<font color=red>" + data + "</font>");
+            handler.AddPara("DemoType", '2'); //不安装demo.
+            const index = await asyncLoad('正在安装数据库，请稍后... 由于执行时间太长，浏览器会出现【此页面没有响应】,请点击【<font color=red>等待</font>】按钮。');
+            try {
+                var data = handler.DoMethodReturnString("DBInstall_Submit"); //执行方法，返回执行结果.
+               
+                if (data.indexOf('err@') == 0) { //发生错误
+                    var reg = new RegExp('err@', "g")
+                    var err = data.replace(reg, '');
+                    layer.alert(err, { icon: 2 });
+                }
+                if (data.indexOf('info@') == 0) {
+                    var info = data.replace('info@', '');
+                    layer.alert(info);
+                }
+                if (data.indexOf('url@') == 0) {
+                    var url = data.replace('url@', '');
+                    SetHref(url);
+                }
                 return;
+            } catch {
+                layer.close(index);
             }
-
-            if (data.indexOf('url@') == 0) {
-                var url = data.replace('url@', '');
-                SetHref(url);
-                return;
-            }
-
-            document.getElementById("Btn_Submit").value = '祝贺你,安装完成';
-
-            $("#Msg").html("<font color=green><h3>" + data + "</h3></font>");
         }
 
         //公共方法
@@ -136,17 +200,17 @@
         }
     </script>
 </head>
-<body onkeypress="Esc();">
+<body onkeypress="Esc();" class="body_container">
     <form id="cc">
         <center>
-            <table style="text-align: center; width: 600px">
+            <table class="table_area" style="text-align: center; width: 975px;  margin: 10px 0; ">
                 <tr>
-                    <td>
+                    <td class="top_logo">
                         <div style='float: left'>
-                            <img src='../../DataUser/ICON/LogBiger.png' width="300 px" border="0 px" alt="ccbpm" />
+                            <img src='../../DataUser/ICON/LogBiger.png' width="250" border="0px" alt="ccbpm" />
                         </div>
                         <div style='float: right'>
-                            <img src='../Img/ccflowWX.jpg' width="110px" border="0 px" alt="微信" />
+                            <img src='../Img/ccflowWX.jpg' width="100" border="0px" alt="微信" />
                         </div>
                     </td>
                 </tr>
@@ -159,42 +223,41 @@
                     <td>
                         <ul>
                             <li>购买ccbpm的技术支持，请联系我们: 0531-82374939,18660153393(微信同号).</li>
-                            <li>自助服务文档：<a href="http://doc.ccbpm.cn/" target="_blank"> http://doc.ccbpm.cn/  </a> </li>
-                            <li>视频教程：<a href="http://ccflow.org/ke.htm" target="_blank"> http://ccflow.org/ke.htm  </a> </li>
-                            <li>数据库脚本下载：<a href="https://gitee.com/opencc/JFlow/attach_files" target="_blank"> 点击进入下载页面 </a> </li>
+                            <li>自助服务文档：<a href="http://doc.ccbpm.cn/" target="_blank"> http://doc.ccbpm.cn/  </a> 视频教程：<a href="http://ccflow.org/ke.htm" target="_blank"> http://ccflow.org/ke.htm  </a> </li>
+                            <li>若安装失败<font color="red">数据库脚本</font>下载:<a href="https://gitee.com/opencc/JFlow/attach_files" target="_blank"> 点击进入下载页面 </a> </li>
                         </ul>
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        当前数据库安装类型, <a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target="_blank">修改数据库配置信息.</a>
+                        当前数据库安装类&nbsp;&nbsp; <a href="http://ccbpm.mydoc.io/?v=5404&t=296303" target="_blank">修改数据库配置信息.</a>
                     </th>
                 </tr>
                 <tr>
                     <td>
-                        <input id="RB_DBType_MSSQL" type="radio" disabled="disabled" name="RB_DBType" value="MSSQL" /><label for="RB_DBType_MSSQL">SQLServer2000,2005,2008,....系列版本</label>
+                        <input id="RB_DBType_MSSQL" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="MSSQL" /><label class="select_active" for="RB_DBType_MSSQL">SQLServer2000,2005,2008,....系列版本</label>
                         <br />
-                        <input id="RB_DBType_Oracle" type="radio" disabled="disabled" name="RB_DBType" value="Oracle" /><label for="RB_DBType_Oracle">Oracle,Oracle9i,10g...系列版本</label>
+                        <input id="RB_DBType_Oracle" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="Oracle" /><label class="select_active" for="RB_DBType_Oracle">Oracle,Oracle9i,10g...系列版本</label>
                         <br />
-                        <input id="RB_DBType_DM" type="radio" disabled="disabled" name="RB_DBType" value="DM" /><label for="RB_DBType_DM">Dameng 7.6+ 系列版本</label>
+                        <!--<input id="RB_DBType_DM" type="radio" disabled="disabled" name="RB_DBType" value="DM" /><label for="RB_DBType_DM">Dameng 7.6+ 系列版本</label>-->
+                        <!--<br />-->
+                        <input id="RB_DBType_MySQL" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="MySQL" /><label class="select_active" for="RB_DBType_MySQL">MySQL系列版本</label>
                         <br />
-                        <input id="RB_DBType_MySQL" type="radio" disabled="disabled" name="RB_DBType" value="MySQL" /><label for="RB_DBType_MySQL">MySQL系列版本</label>
+                        <input id="RB_DBType_Informix" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="Informix" /><label class="select_active" for="RB_DBType_Informix">Informix 系列版本(首先需要执行:D:\\ccflow\\trunk\\CCFlow\\WF\\Data\\Install\\Informix.sql)</label>
                         <br />
-                        <input id="RB_DBType_Informix" type="radio" disabled="disabled" name="RB_DBType" value="Informix" /><label for="RB_DBType_Informix">Informix 系列版本(首先需要执行:D:\\ccflow\\trunk\\CCFlow\\WF\\Data\\Install\\Informix.sql)</label>
+                        <input id="RB_DBType_PostgreSQL" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="PostgreSQL" /><label class="select_active" for="RB_DBType_PostgreSQL">PostgreSQL</label>
                         <br />
-                        <input id="RB_DBType_PostgreSQL" type="radio" disabled="disabled" name="RB_DBType" value="PostgreSQL" /><label for="RB_DBType_PostgreSQL">PostgreSQL</label>
+                        <input id="RB_DBType_UX" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="UX" /><label class="select_active" for="RB_DBType_UX">优炫</label>
                         <br />
-                        <input id="RB_DBType_UX" type="radio" disabled="disabled" name="RB_DBType" value="UX" /><label for="RB_DBType_UX">优炫</label>
+                        <input id="RB_DBType_DM" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="DM" /><label class="select_active" for="RB_DBType_DM">DM达梦数据库.</label>
                         <br />
-                        <input id="RB_DBType_DM" type="radio" disabled="disabled" name="RB_DBType" value="DM" /><label for="RB_DBType_DM">DM达梦数据库.</label>
+                        <input id="RB_DBType_KingBaseR3" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="KingBaseR3" /><label class="select_active" for="RB_DBType_KingBaseR3">人大金仓数据库R3.</label>
                         <br />
-                        <input id="RB_DBType_KingBaseR3" type="radio" disabled="disabled" name="RB_DBType" value="KingBaseR3" /><label for="RB_DBType_KingBaseR3">人大金仓数据库R3.</label>
-                        <br />
-                        <input id="RB_DBType_KingBaseR6" type="radio" disabled="disabled" name="RB_DBType" value="KingBaseR6" /><label for="RB_DBType_KingBaseR6">人大金仓数据库R6.</label>
+                        <input id="RB_DBType_KingBaseR6" class="aligning" type="radio" disabled="disabled" name="RB_DBType" value="KingBaseR6" /><label class="select_active" for="RB_DBType_KingBaseR6">人大金仓数据库R6.</label>
                         <br />
                     </td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <th>
                         是否安装GPM系统?.
                     </th>
@@ -219,7 +282,7 @@
                     <td>
                         <input id="RB_DemoType_2" type="radio" name="DemoType" value="2" checked="checked" /><label for="RB_DemoType_2">否:不安装demo，仅仅安装空白的ccbpm环境(估计在<font color="red">2-3分钟</font>内安装完成)。</label>
                     </td>
-                </tr>
+                </tr>-->
 
                 <tr>
                     <th>
@@ -227,31 +290,31 @@
                     </th>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="bottom_mode">
                         <label>
-                            <input id="RB_CCBOMRunModel_0" checked="checked" type="radio" disabled="false" name="CCBOMRunModel" value="0" checked="true" />
+                            <input id="RB_CCBPMRunModel_0" checked="checked" type="radio" disabled="false" name="CCBPMRunModel" value="0" checked="true" />
                             单机版
                         </label>
                         <label>
-                            <input id="RB_CCBOMRunModel_1" type="radio" disabled="false" name="CCBOMRunModel" value="1" />集团版
+                            <input id="RB_CCBPMRunModel_1" type="radio" disabled="false" name="CCBPMRunModel" value="1" />集团版
                         </label>
 
                         <label>
-                            <input id="RB_CCBOMRunModel_1" type="radio" disabled="false" name="CCBOMRunModel" value="1" />SAAS版
+                            <input id="RB_CCBPMRunModel_2" type="radio" disabled="false" name="CCBPMRunModel" value="2" />SAAS版
                         </label>
                     </td>
                 </tr>
 
                 <tr>
-                    <td>
+                    <td >
                         <div style="text-align: left">
                             <div id="shuoming">
                             </div>
                             <input type="button" value="接受ccbpm的GPL开源协议并执行安装" id="Btn_Submit" onclick="DoInstall()" />
                             <a href="https://baike.baidu.com/item/GPL/2357903?fr=aladdin" target="_blank">什么是GPL开源协议?</a>
                         </div>
-                        <div style="text-align: right; font-style-color: green">
-                            当前小版本号：<div id="Ver" />
+                        <div style="text-align: right; color: green">
+                            当前小版本号：<div style="display: inline-block;" id="Ver" />
                             <br />
                         </div>
                         <center>

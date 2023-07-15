@@ -338,7 +338,12 @@ new Vue({
             layer.confirm('您确定要删除吗？', { icon: 3, title: '提示' }, function (index) {
 
                 var en = new Entity(enName, no);
-                en.Delete();
+                var data = en.Delete();
+                // console.log("删除后返回结果："+data)
+                if (data.indexOf("err@") != -1){
+                    layer.closeAll();
+                    return;
+                }
 
                 if (enName == "BP.CCFast.CCMenu.Module") {
                     var url = "Menus.htm?SystemNo=" + en.SystemNo;
@@ -353,12 +358,14 @@ new Vue({
                     return;
                 }
 
-                layer.msg("删除成功")
-                // 此处刷新页面更好
-                setTimeout(function () {
+                if(data.indexOf("删除成功") !== -1){
+                    layer.msg(data)
+                    // 此处刷新页面更好
+                    setTimeout(function () {
 
-                    window.location.reload();
-                }, 1500)
+                        window.location.reload();
+                    }, 1500)
+                }
             }, function (index) {
                 layer.msg("已取消删除");
             })
@@ -801,6 +808,8 @@ new Vue({
 
                 menu.MenuModel = "统计分析";
                 if (menu.Icon === "") menu.Icon = "icon-energy";
+
+                if (menu.Tag1 == null) menu.Tag1 = '';
 
                 if (menu.Tag1 == "" || menu.Tag1.length == 0)
                     menu.Tag1 = "RptWhite";

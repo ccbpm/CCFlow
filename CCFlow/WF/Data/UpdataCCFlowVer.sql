@@ -72,12 +72,10 @@ INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_ND','当前年度','DefVa
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@FK_YF','当前月份','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.OrgNo','登录人员组织','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.OrgName','登录人员组织名称','DefVal');
-
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.EmpLeader','直属领导EmpLeader','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.DeptLeader','部门领导DeptLeader','DefVal');
 
  
--- 升级数据源 2016.;
-UPDATE Sys_SFTable SET SrcType=0 WHERE No LIKE '%.%';
-UPDATE Sys_SFTable SET SrcType=1 WHERE No NOT LIKE '%.%' AND SrcType=0;
 
 -- 更新日期长度.;
 UPDATE SYS_MAPATTR SET UIWidth=125 WHERE MYDATATYPE=6;
@@ -161,7 +159,7 @@ UPDATE Sys_MapData SET AppType=0 WHERE No NOT LIKE 'ND%';
 
 -- 2016.07 升级数据源;
 UPDATE Sys_SFTable SET FK_SFDBSrc='local' WHERE FK_SFDBSrc IS NULL OR FK_SFDBSrc='';
-UPDATE Sys_SFTable SET  SrcType=0 WHERE SrcType IS NULL ;
+ -- UPDATE Sys_SFTable SET  SrcType=0 WHERE SrcType IS NULL ;
 -- UPDATE Sys_MapAttr SET ColSpan=4 WHERE ColSpan>=3;
 
 -- 2019.03.10 ; 

@@ -9,6 +9,7 @@
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <link href="Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <style id="theme-data"></style>
     <style>
         /*设置表格内容过长，用省略号代替多余部分，前提:table的style属性*/
         td {
@@ -29,6 +30,13 @@
                 padding: 7px 0 0 15px;
                 color: #777;
             }
+        .btn-sm {
+            padding: 0 10px;
+            height: 26px;
+            line-height: 26px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -49,7 +57,7 @@
                             <input type='text' placeholder="到" id='TB_Key' class="form-control" />-->
 
                         </div>
-                        <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
+                        <button class="btn btn-success btn-sm" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
                     </div>
                 </div>
             </div>
@@ -91,6 +99,7 @@
     <script type="text/javascript" src="Scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="Scripts/bootstrap/bootstrap-paginator/js/bootstrap-paginator.js" type="text/javascript"></script>
+    <link href="Scripts/jquery/themes/default/menu.css" rel="stylesheet" />
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="Scripts/config.js"></script>
     <script type="text/javascript" src="Comm/Gener.js"></script>
@@ -138,39 +147,39 @@
             //时间段列表.
             var tSpans = data['TSpan'];
             if (_tspan == "-1")
-                html = "<button onclick=\"TSpan('');\" class=\"btn btn-info\" type=\"button\">全部</button> ";
+                html = "<button onclick=\"TSpan('');\" class=\"btn btn-info btn-sm\" type=\"button\">全部</button> ";
             else
-                html = "<button onclick=\"TSpan('');\" class=\"btn btn-default \" >全部</button> ";
+                html = "<button onclick=\"TSpan('');\" class=\"btn btn-default btn-sm \" >全部</button> ";
 
             for (var i = 0; i < tSpans.length; i++) {
 
                 var tSpan = tSpans[i];
 
                 if (_tspan == tSpan.IntKey)
-                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-info\" >" + tSpan.Lab + "</button> ";
+                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-info btn-sm\" >" + tSpan.Lab + "</button> ";
                 else
-                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-default \">" + tSpan.Lab + "</button> ";
+                    html += "<button onclick=\"TSpan('" + tSpan.IntKey + "');\" class=\"btn btn-default btn-sm\">" + tSpan.Lab + "</button> ";
             }
             $("#TSpan").html(html);
             //流程名称列表.
             var flows = data['Flows'];
             if (_flowNo == null || _flowNo == "")
-                html = "<button onclick=\"Flows('');\" class=\"btn btn-info\"  >全部</button> ";
+                html = "<button onclick=\"Flows('');\" class=\"btn btn-info btn-sm\"  >全部</button> ";
             else
-                html = "<button onclick=\"Flows('');\"  class=\"btn btn-default \" >全部</button> ";
+                html = "<button onclick=\"Flows('');\"  class=\"btn btn-default btn-sm\" >全部</button> ";
 
             for (var i = 0; i < flows.length; i++) {
                 var en = flows[i];
 
                 if (_flowNo == en.No)
-                    html += "<button onclick=\"Flows('" + en.No + "');\"  class=\"btn btn-info\"  >" + en.Name + "（" + en.Num + "）</button> ";
+                    html += "<button onclick=\"Flows('" + en.No + "');\"  class=\"btn btn-info btn-sm\"  >" + en.Name + "（" + en.Num + "）</button> ";
                 else
-                    html += "<button class=\"btn btn-default \"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
+                    html += "<button class=\"btn btn-default btn-sm\"  onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</button> ";
             }
             $("#Flows").html(html);
         }
 
-      
+
         function InitData() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddPara("TSpan", _tspan);
@@ -188,11 +197,11 @@
                 $("#Table1").html("");
                 return;
             }
-               
-          
+
+
             //当前登录人员的编号.
-           var htmlbox = '';
-            var realIndex = (pageIdx-1)*pageSize;
+            var htmlbox = '';
+            var realIndex = (pageIdx - 1) * pageSize;
             for (var i = 0; i < data.length; i++) {
                 var en = data[i];
                 if (en.FID != 0)
@@ -210,15 +219,15 @@
                     var reg = /[a-zA-Z\,]+/;
                     var idx = 0;
                     while (result = todoEmps.match(reg)) {
-                        if(idx==0)
-                            todoEmps = todoEmps.replace(result[0], '').replace(";","");
+                        if (idx == 0)
+                            todoEmps = todoEmps.replace(result[0], '').replace(";", "");
                         else
                             todoEmps = todoEmps.replace(result[0], '、');
                         idx++;
                     }
                     if (isHaveAdmin == true)
                         todoEmps = idx == 0 ? "admin" : idx == 1 ? "、admin" : todoEmps + "admin";
-                  
+
                     if (en.TodoEmps.indexOf(webUser.No) != -1)
                         isCanDo = true;
                 }
@@ -492,6 +501,19 @@
             });
         }
     </script>
-
+    <script>
+        $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .btn-success{\n background-color: '#5053f1';\n}\n .btn-success:hover{\n background-color:'#5053f1'  ;\n}\n .btn-success:focus{\n background-color: '#5053f1' ;\n}\n .btn-success:active{\n background-color: '#5053f1';\n}\n.btn-success:active:focus{\n background-color:'#5053f1';border-color:'#5053f1'; \n}";
+            }
+            var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+            if (theme == "" || theme == "undefined" || theme == null) return;
+            var data = JSON.parse(theme);
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html += "\n .btn-success{\n background-color: " + data.selectedMenu + "  ;\n}\n .btn-success:hover{\n background-color: " + data.selectedMenu + "  ;\n}\n .btn-success:focus{\n background-color: " + data.selectedMenu + "  ;\n}\n .btn-success:active{\n background-color: " + data.selectedMenu + "  ;\n}\n.btn-success:active:focus{\n background-color:" + data.selectedMenu + ";border-color:" + data.selectedMenu + "; \n}";
+            styleScope.innerHTML = filterXSS(html);
+        })
+    </script>
 </body>
 </html>

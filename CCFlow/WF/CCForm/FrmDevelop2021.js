@@ -16,6 +16,14 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
     if (isComPare == null || isComPare == undefined || isComPare == "")
         isComPare = false;
     $("head").append("<style>.layui-form-radio{margin:0px;padding-right:0px}</style>")
+    var html = "";
+    html="\n .table.sortEnabled tr.firstRow th, table.sortEnabled tr.firstRow td{\n padding-right: 20px;\n  background-repeat: no-repeat;\n  background-position: center right;\n}";
+    $("head").append("<style>" + html + "</style>");
+
+    html = "";
+    html = `<style>.selectTdClass{background-color:#edf5fa !important}table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}table{border-collapse:collapse;display:table;}td,th{padding: 5px 10px !important ;border: 1px solid #DDD !important;}caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}th{border-top:1px solid #BBB;background-color:#F7F7F7;}table tr.firstRow th{border-top-width:2px;}.ue-table-interlace-color-single{ background-color: #fcfcfc; } .ue-table-interlace-color-double{ background-color: #f7faff; }td p{margin:0;padding:0;}</style>`;
+    $("head").append(html);
+    $('head').append('<link href="' + basePath + '/WF/Scripts/bootstrap/css/bootstrap.min.css" rel="Stylesheet" />');
     frmData = wn;
     var htmlContent = "";
     //数据库中查找
@@ -45,8 +53,14 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
     }
     $("#CCForm").html(htmlContent);
 
+    //获取表单中table
+    $.each($("table"), function (idx, table) {
+        var width = table.getAttribute("width") || 0;
+        if (width != 0) {
+            table.style.width = width + 'px';
+        }
+    })
     //解析表单中的数据
-
     var mapAttrs = frmData.Sys_MapAttr;
     var html = "";
     for (var i = 0; i < mapAttrs.length; i++) {

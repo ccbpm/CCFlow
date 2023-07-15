@@ -297,6 +297,7 @@ function PopBranches(mapExt, val, targetId, index, oid, objtr) {
     //这里需要相对路径.
     var localHref = GetLocalWFPreHref();
     var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+    url += url + '&BackBtn=' + 0;
     if (isEnter == false)
         container.on("dblclick", function () {
             clickBranchesEvent(mapExt, targetId, objtr, url, mtagsId, target, oid)

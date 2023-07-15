@@ -1,4 +1,10 @@
 ﻿//import './fonts/SourceHanSans-Normal.ttf'
+
+var pageData = {};
+pageData.IsReadonly = GetQueryString("IsReadonly");
+if (pageData.IsReadonly == null) {
+    pageData.IsReadonly = 0;
+}
 function InitPara(frmID, oid) {
     frmID = GetQueryString("FrmID");
     if (frmID == null)
@@ -15,7 +21,7 @@ function InitPara(frmID, oid) {
         oid = 100;
 }
 //获得从表的url.
-function Ele_Dtl(frmID, isRadeonly) {
+function Ele_Dtl_Chapter(frmID, isRadeonly) {
     isRadeonly = isRadeonly == null || isRadeonly == undefined ? 0 : 1;
     var frmDtl = new Entity("BP.Sys.MapDtl", frmID);
     var src = "";
@@ -105,7 +111,7 @@ function GenerFistKey(key, groupFields, attrs) {
 
     for (var i = 0; i < groupFields.length; i++) {
         var gf = groupFields[i];
-        if (gf.CtrlID.length > 2)
+        if (!!gf.CtrlID && gf.CtrlID.length > 2)
             continue;
 
 
@@ -427,3 +433,172 @@ function TabViews() {
 
 }
 var isBindMouseWheel = false;
+
+
+
+//正则表达式检查
+function CheckReg() {
+    var CheckRegResult = true;
+    var regInputs = $('.CheckRegInput');
+    $.each(regInputs, function (i, obj) {
+        var name = obj.name;
+        var mapExtData = $(obj).data();
+        if (mapExtData.Doc != undefined) {
+            var regDoc = mapExtData.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}').replace(/，/g, ',');
+            var tag1 = mapExtData.Tag1;
+            if ($(obj).val() != undefined && $(obj).val() != '') {
+
+                var result = CheckRegInput(name, regDoc, tag1);
+                if (!result) {
+                    $(obj).addClass('errorInput');
+                    CheckRegResult = false;
+                } else {
+                    $(obj).removeClass('errorInput');
+                }
+            }
+        }
+    });
+    return CheckRegResult;
+}
+
+//获取表单数据
+function getTreeFormData(isCotainTextArea, isCotainUrlParam) {
+    var formss = $('#divCCForm').serialize();
+    if (formss == "")
+        return {};
+
+    var formArr = "\"" + formss.replace(/=/g, "\":\"");
+    var stringObj = "{" + formArr.replace(/&/g, "\",\"") + "\"}";
+    var formArrResult = JSON.parse(stringObj);
+
+    var haseExistStr = ",";
+    var mcheckboxs = "";
+    //1.富文本编辑器
+    if ($(".rich").length > 0 && richTextType == "tinymce") {
+        $(".rich").each(function (i, item) {
+            var edit = layui.tinymce.get('#' + item.id)
+            var val = edit.getContent();
+            formArrResult[item.id] = encodeURIComponent(val);
+            haseExistStr += item.id + ","
+        })
+    }
+    for (var key in formArrResult) {
+        if (key.indexOf('CB_') == 0) {
+            //如果ID获取不到值，Name获取到值为复选框多选
+            if ($('#' + key).length == 1) {
+                if ($('#' + key + ':checked').length == 1) {
+                    formArrResult[key] = 1;
+                } else {
+                    formArrResult[key] = 0;
+                }
+            } else {
+                if (mcheckboxs.indexOf(key + ",") == -1) {
+                    mcheckboxs += key + ",";
+                    var str = "";
+                    $("input[name='" + key + "']:checked").each(function (index, item) {
+                        if ($("input[name='" + key + "']:checked").length - 1 == index) {
+                            str += $(this).val();
+                        } else {
+                            str += $(this).val() + ",";
+                        }
+                    });
+                    formArrResult[key] = str;
+                }
+            }
+        }
+        if (key.indexOf('DDL_') == 0) {
+            var item = $("#" + key).children('option:checked').text();
+            var mystrID = key.replace("DDL_", "TB_") + 'T';
+            formArrResult[mystrID] = item;
+            haseExistStr += mystrID + ",";
+        }
+
+
+    };
+
+
+    //$.each(formArr, function (i, ele) {
+    //    var ctrID = ele.split('=')[0];
+    //    if (ctrID.indexOf('TB_') == 0) {
+    //        if (haseExistStr.indexOf("," + ctrID + ",") == -1) {
+    //            formArrResult.push(ele);
+    //            haseExistStr += ctrID + ",";
+    //        }
+
+
+    //    }
+    //});
+
+
+
+    //获取表单中禁用的表单元素的值
+    var disabledEles = $('#divCCForm :disabled');
+    $.each(disabledEles, function (i, disabledEle) {
+
+        var name = $(disabledEle).attr('id');
+
+        switch (disabledEle.tagName.toUpperCase()) {
+
+            case "INPUT":
+                switch (disabledEle.type.toUpperCase()) {
+                    case "CHECKBOX": //复选框
+                        formArrResult[name] = encodeURIComponent(($(disabledEle).is(':checked') ? 1 : 0));
+                        break;
+                    case "TEXT": //文本框
+                    case "HIDDEN":
+                        if (haseExistStr.indexOf("," + name + ",") == -1) {
+                            formArrResult[name] = encodeURIComponent($(disabledEle).val());
+                            haseExistStr += name + ",";
+                        }
+
+                        break;
+                    case "RADIO": //单选钮
+                        name = $(disabledEle).attr('name');
+                        if ($.inArray(eleResult, formArrResult) == -1) {
+                            formArrResult[name] = $('[name="' + name + '"]:checked').val();
+                        }
+                        break;
+                }
+                break;
+            //下拉框            
+            case "SELECT":
+                formArrResult[name] = encodeURIComponent($(disabledEle).children('option:checked').val());
+                var tbID = name.replace("DDL_", "TB_") + 'T';
+                if ($("#" + tbID).length == 1) {
+                    if (haseExistStr.indexOf("," + tbID + ",") == -1) {
+                        formArrResult[tbID] = $(disabledEle).children('option:checked').text();
+                        haseExistStr += tbID + ",";
+                    }
+                }
+                break;
+
+            //文本区域                    
+            case "TEXTAREA":
+                formArrResult[name] = encodeURIComponent($(disabledEle).val());
+                break;
+        }
+    });
+
+    //获取树形结构的表单值
+    var combotrees = $(".easyui-combotree");
+    $.each(combotrees, function (i, combotree) {
+        var name = $(combotree).attr('id');
+        var tree = $('#' + name).combotree('tree');
+        //获取当前选中的节点
+        var data = tree.tree('getSelected');
+        if (data != null) {
+            formArrResult[name] = data.id;
+            formArrResult[name] = data.text;
+        }
+    });
+
+
+    if (!isCotainTextArea) {
+        formArrResult = $.grep(formArrResult, function (value) {
+            return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
+        });
+    }
+
+
+    return formArrResult;
+}

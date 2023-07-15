@@ -184,7 +184,7 @@ function BindFrm() {
                         }
                         if (mapData.FrmType == 10) {//章节表单
                             var url = GetHrefUrl();
-                            url = url.replace("MyFlowGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No +"&Readonly=1";
+                            url = url.replace("MyViewGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No +"&Readonly=1";
                             $("#CCForm").append("<iframe src='" + url + "' frameborder='0' style='width:100%;height:100%' scroll=no></iframe>");
                             $("#CCForm").css("height", " calc(100vh - 70px)")
                             isChartFrm = true;
@@ -232,7 +232,7 @@ function BindFrm() {
                 }
                 if (frmNode.FrmType == 10) {//章节表单
                     var url = GetHrefUrl();
-                    url = url.replace("MyFlowGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No + "&Readonly=1";;
+                    url = url.replace("MyViewGener.htm", "CCForm/Frm.htm") + "&FK_MapData=" + mapData.No + "&Readonly=1";;
                     $("#CCForm").append("<iframe src='" + url + "' frameborder='0' style='width:100%;height:100%' scroll=no></iframe>");
                     $("#CCForm").css("height", " calc(100vh - 70px)")
                     isChartFrm = true;

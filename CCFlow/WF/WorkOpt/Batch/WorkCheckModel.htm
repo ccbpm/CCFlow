@@ -22,9 +22,7 @@
         var node = null;
         //页面启动函数.
         $(function () {
-
             InitPage();
-
         });
 
         function InitPage() {
@@ -154,11 +152,7 @@
 
             bar += '<button type=button   onclick="Btn_Back()">返回</button>';
 
-           
-
-
             $("#btnDiv").append(bar);
-
 
             //处理下拉框, 到达方向.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
@@ -297,14 +291,10 @@
             handler.AddFormData();
             handler.AddPara("FK_Node", nodeID);
             handler.AddPara("CheckNote", checkNote);
-
             var toNodeID = $("#DDL_ToNode").val();
-
-
             //加入两个可选择参数.
             handler.AddPara("ToNode", toNodeID);
             handler.AddPara("ToEmps", $("#ToEmps").html());
-
 
             var data = handler.DoMethodReturnString("WorkCheckModel_Send");
             if (data.indexOf("err@") != -1) {
@@ -333,7 +323,7 @@
         function SelectEmps(OperHtml, nodeID, workid) {
             toNodeID = nodeID;
             $('#modalHeader').text("选择接受人");
-            modalIframeSrc = "../" + OperHtml + ".htm?FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + workid + "&ToNode=" + nodeID + "&IsSend=0&PageFrom=WorkCheckModel" + "&s=" + Math.random();
+            modalIframeSrc = "../" + OperHtml + ".htm?FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + workid + "&ToNode=" + nodeID + "&IsSend=1&PageFrom=WorkCheckModel" + "&s=" + Math.random();
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show();
         }
@@ -358,8 +348,9 @@
 
         function Btn_Return() {
 
-            if (window.confirm('您确定要执行本次批处理退回操作吗？') == false)
-                return;
+            //if (window.confirm('您确定要执行本次批处理退回操作吗？') == false)
+            //    return;
+
             var workIds = GetWorkIDs();
 
             if (workIds == "") {

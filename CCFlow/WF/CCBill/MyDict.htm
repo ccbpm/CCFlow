@@ -94,8 +94,12 @@
                     return;
                 }
                 var url = GetHrefUrl();
-                url = replaceParamVal(url, "WorkID", workID);
+                if (url.indexOf('WorkID') == -1)
+                    url = url + "&WorkID=" + workID;
+                else
+                    url = replaceParamVal(url, "WorkID", workID);
                 SetHref(url);
+                return;
             }
             ToolBar_Init(2);
         })

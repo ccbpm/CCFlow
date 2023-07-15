@@ -47,7 +47,7 @@
 
                         <li>
                             <a href="../Watchdog.htm" target="mainS">
-                                <i class="icon iconfont icon-liuchengdingyi"></i><b>流程监控</b>
+                                <i class="icon iconfont icon-liuchengdingyi"></i>流程监控
                             </a>
                         </li>
 
@@ -59,7 +59,7 @@
                     </ul>
                     <legend>关键字查询</legend>
                     <ul>
-                        <li><a href="KeySearch.htm" target="mainS"><i class="icon iconfont icon-guanjianzi">
+                        <li class="highlight"><a href="KeySearch.htm" target="mainS"><i class="icon iconfont icon-guanjianzi">
                         </i>关键字查询</a></li>
                     </ul>
                     <!--<legend>按流程查询</legend>-->
@@ -96,7 +96,7 @@
 
         //初始化页面函数.....
         $(function () {
-
+            return;
             var fk_flow = GetQueryString("FK_Flow");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptSearch");
@@ -129,6 +129,18 @@
         });
     </script>
     <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            $("ul li").click(function () {
+                // 获取当前 li 的父元素 ul
+                var currentUl = $(this).parent();
+                // 取消其他所有 ul > li 的高亮
+                $("ul").not(currentUl).find("li").removeClass("highlight");
+                // 取消当前 li 兄弟元素 li 的高亮
+                $(this).siblings().removeClass("highlight");
+                // 高亮当前点击的 li
+                $(this).toggleClass("highlight");
+            })
+        })
         var currShow;
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
@@ -147,5 +159,10 @@
             }
         }
     </script>
+    <style>
+        .highlight {
+            font-weight: bold;
+        }
+    </style>
 </body>
 </html>

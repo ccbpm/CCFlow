@@ -308,15 +308,10 @@ function ShowTableSubFlow(subFlows, sf, node, workID, pworkID, flowNo, nodeID) {
             //    _Html += "<td title='" + item.FlowNote + "'>" + item.FlowNote + "</td>";
 
             _Html += "</tr>";
-
-
         }
     }
-
-
     _Html += "</table>";
     return _Html;
-
 }
 
 //删除子流程

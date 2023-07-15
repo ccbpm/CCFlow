@@ -1,20 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <NewDataSet>
-  <Item Key="UIRowStyleGlo" Name="表格数据行风格(应用全局)" CH="@0=无风格@1=交替风格@2=鼠标移动@3=交替并鼠标移动" EN="" JP="" RU=""/>
-  <Item Key="MoveToShowWay" Name="移动到" CH="@0=不显示@1=下拉列表0@2=平铺" EN="" JP="" RU=""/>
-  <Item Key="EditerType" Name="编辑器类型" CH="@0=无编辑器@1=Sina编辑器0@2=FKEditer@3=KindEditor@4=百度的UEditor" EN="" JP="" RU=""/>
-  <Item Key="UploadFileCheck" Name="多附件文件上传控制" CH="@0=不控制@1=上传附件个数不能为0@2=每个类别下面的个数不能为0" EN="" JP="" RU=""/>
-  <Item Key="CodeStruct" Name="表数据来源类型" CH="@0=普通的编码表(具有No,Name)@1=树结构(具有No,Name,ParentNo)@2=行政机构编码表(编码以两位编号标识级次树形关系)" EN="" JP="" RU=""/>
-  <Item Key="TabType" Name="表数据来源类型" CH="@0=本地表或视图@1=通过一个SQL确定的一个外部数据源@2=通过WebServices获得的一个数据源" EN="" JP="" RU=""/>
-  <Item Key="DtlAddRecModel" CH="@0=按设置的数量初始化空白行@1=用按钮增加空白行" EN="" JP="" RU=""/>
-  <Item Key="DtlSaveModel" CH="@0=自动存盘(失去焦点自动存盘)@1=手动存盘(保存按钮触发存盘)" EN="" JP="" RU=""/>
-  <Item Key="MyDataType" CH="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" EN="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" JP="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" RU="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney"/>
-  <Item Key="EditModel" CH="@0=表格@1=卡片(自由模式)@2=卡片(傻瓜模式)" EN="" JP="" RU=""/>
-  <Item Key="PopValFormat" CH="@0=No(仅编号)@1=Name(仅名称)@2=No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)" EN="" JP="" RU=""/>
-  <Item Key="DTSearchWay" CH="@0=不启用@1=按日期@2=按日期时间" EN="@0=不启用@1=按日期@2=按日期时间" JP="@0=不启用@1=按日期@2=按日期时间" RU="@0=不启用@1=按日期@2=按日期时间"/>
-  <Item Key="CtrlWay" CH="@0=按岗位@1=按部门@2=按人员@3=按SQL" EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" JP="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"/>
-  <Item Key="FrmUrlShowWay" CH="@0=不显示@1=自动大小@2=指定大小@3=新窗口" EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" JP="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"/>
-  <Item Key="TBModel" CH="@0=单行文本@1=多行文本@2=富文本@3=超大文本" EN="@0=单行文本@1=多行文本@2=富文本@3=超大文本" JP="@0=单行文本@1=多行文本@2=富文本@3=超大文本" RU="@0=单行文本@1=多行文本@2=富文本@3=超大文本"/>
-  <Item Key="FrmType" Name="表单类型" CH="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单@10=章节表单" EN="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单" JP="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单" RU="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单"/>
+	<Item Key="UIRowStyleGlo" Name="表格数据行风格(应用全局)" CH="@0=无风格@1=交替风格@2=鼠标移动@3=交替并鼠标移动" EN="" JP="" RU=""/>
+	<Item Key="MoveToShowWay" Name="移动到" CH="@0=不显示@1=下拉列表0@2=平铺" EN="" JP="" RU=""/>
+	<Item Key="EditerType" Name="编辑器类型" CH="@0=无编辑器@1=Sina编辑器0@2=FKEditer@3=KindEditor@4=百度的UEditor" EN="" JP="" RU=""/>
+	<Item Key="UploadFileCheck" Name="多附件文件上传控制" CH="@0=不控制@1=上传附件个数不能为0@2=每个类别下面的个数不能为0" EN="" JP="" RU=""/>
+	<Item Key="CodeStruct" Name="表数据来源类型" CH="@0=编号名称@1=树结构@2=行政机构编码" EN="" JP="" RU=""/>
+	<Item Key="DictSrcType" Name="字典表数据结构" CH="@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表@8=WebApi接口" EN="" JP="" RU=""/>
+
+	<Item Key="TabType" Name="表数据来源类型" CH="@0=本地表或视图@1=通过一个SQL确定的一个外部数据源@2=通过WebServices获得的一个数据源" EN="" JP="" RU=""/>
+	<Item Key="DtlAddRecModel" CH="@0=按设置的数量初始化空白行@1=用按钮增加空白行" EN="" JP="" RU=""/>
+	<Item Key="DtlSaveModel" CH="@0=自动存盘(失去焦点自动存盘)@1=手动存盘(保存按钮触发存盘)" EN="" JP="" RU=""/>
+	<Item Key="MyDataType" CH="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" EN="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" JP="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney" RU="@1=字符串String@2=整数类型Int@3=浮点类型AppFloat@4=判断类型Boolean@5=双精度类型Double@6=日期型Date@7=时间类型Datetime@8=金额类型AppMoney"/>
+	<Item Key="EditModel" CH="@0=表格@1=卡片(自由模式)@2=卡片(傻瓜模式)" EN="" JP="" RU=""/>
+	<Item Key="PopValFormat" CH="@0=No(仅编号)@1=Name(仅名称)@2=No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)" EN="" JP="" RU=""/>
+	<Item Key="DTSearchWay" CH="@0=不启用@1=按日期@2=按日期时间" EN="@0=不启用@1=按日期@2=按日期时间" JP="@0=不启用@1=按日期@2=按日期时间" RU="@0=不启用@1=按日期@2=按日期时间"/>
+	<Item Key="CtrlWay" CH="@0=按岗位@1=按部门@2=按人员@3=按SQL" EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" JP="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"/>
+	<Item Key="FrmUrlShowWay" CH="@0=不显示@1=自动大小@2=指定大小@3=新窗口" EN="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" JP="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file" RU="@0=Disable@1=SQL/Produces@2=URL@3=WebServices@4=exe file"/>
+	<Item Key="TBModel" CH="@0=单行文本@1=多行文本@2=富文本@3=超大文本" EN="@0=单行文本@1=多行文本@2=富文本@3=超大文本" JP="@0=单行文本@1=多行文本@2=富文本@3=超大文本" RU="@0=单行文本@1=多行文本@2=富文本@3=超大文本"/>
+	<Item Key="FrmType" Name="表单类型" CH="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单@10=章节表单" EN="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单" JP="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单" RU="@0=傻瓜表单@1=自由表单@11=累加表单@3=嵌入式表单@4=Word表单@5=在线编辑模式Excel表单@6=VSTO模式Excel表单@7=实体类组件@8=开发者表单@9=Wps表单"/>
 </NewDataSet>

@@ -5,9 +5,10 @@ var uiPlant = 'BS'; //风格文件.
 //  For .net 后台的调用的url ,  java的与.net的不同.
 var plant = 'CCFlow'; //运行平台.
 var basePath = basePath();
-var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
+var Handler = basePath + "/WF/Comm/ProcessRequest"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
 var webUser = null; //定义通用变量用户信息
 var IsIELower10 = false;
+var CustomerNo = "BKGY";//客户编号
 
 var ver = IEVersion();
 if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
@@ -16,32 +17,35 @@ if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
 
 function basePath() {
 
-    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp  
-    var curPath = window.location.href; // GetHrefUrl();
+    //jflow下常用目录
+    var dirs = ['/WF', '/DataUser', '/GPM', '/App', '/Portal', '/CCMobile', '/CCFast', '/CCMobilePortal', '/FastMobilePortal', '/Admin'];
+    //获取当前网址，如： http://localhost:80/jflow-web/index.jsp
+
+    var curPath = window.document.location.href;
     //获取主机地址之后的目录，如： jflow-web/index.jsp  
     var pathName = window.document.location.pathname;
-    if (pathName == "/") { //说明不存在项目名
-        if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
-            if (ccbpmPath != curPath)
-                return ccbpmPath;
-        }
+    if (pathName == "/") //说明不存在项目名
         return curPath;
-    }
     var pos = curPath.indexOf(pathName);
     //获取主机地址，如： http://localhost:80  
     var localhostPath = curPath.substring(0, pos);
     //获取带"/"的项目名，如：/jflow-web
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-
-    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
-        if (ccbpmPath != localhostPath)
-            return ccbpmPath;
+    for (var i = 0; i < dirs.length; i++) {
+        if (projectName == dirs[i]) {
+            projectName = "";
+            break;
+        }
     }
 
-    return localhostPath;
+    var path = localhostPath + projectName;
+    if ("undefined" != typeof ccbpmPath && ccbpmPath != null && ccbpmPath != "") {
+        if (ccbpmPath != path)
+            return ccbpmPath;
+    }
+    return path
 
 }
-
 
 /**
  * 获取项目路径
@@ -49,32 +53,6 @@ function basePath() {
  */
 function getContextPath(){
 	return basePath.substring(basePath.lastIndexOf("/"));
-}
-
-//公共方法
-function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
-    if (!method) method = 'GET';
-    $.ajax({
-        type: method, //使用GET或POST方法访问后台
-        dataType: "text", //返回json格式的数据
-        contentType: "text/plain; charset=utf-8",
-        url: Handler, //要访问的后台地址.
-        data: param, //要发送的数据.
-        async: true,
-        cache: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        crossDomain: true,
-        complete: function () { }, //AJAX请求完成时隐藏loading提示
-        error: function (XMLHttpRequest, errorThrown) {
-            callback(XMLHttpRequest);
-        },
-        success: function (msg) {//msg为返回的数据，在这里做数据绑定
-            var data = msg;
-            callback(data, scope);
-        }
-    });
 }
 
 /**

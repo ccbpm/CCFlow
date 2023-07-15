@@ -399,7 +399,6 @@ function SetCtrlUnEnable(key) {
     ctrl = $("#DDL_" + key);
     if (ctrl.length > 0) {
         ctrl.attr("disabled", "disabled");
-       
     }
 
     ctrl = $("#CB_" + key);

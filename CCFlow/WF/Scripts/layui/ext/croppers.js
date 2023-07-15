@@ -33,23 +33,24 @@ layui.config({
         "        <div class=\"layui-col-xs9\">\n" +
         "            <div class=\"layui-row\">\n" +
         "                <div class=\"layui-col-xs6\">\n" +
-        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-left\" cropper-event=\"rotate\" data-option=\"-15\" title=\"Rotate -90 degrees\"> 向左旋转</button>\n" +
-        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-right\" cropper-event=\"rotate\" data-option=\"15\" title=\"Rotate 90 degrees\"> 向右旋转</button>\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-left layui-btn-fluid1\" cropper-event=\"rotate\" data-option=\"-15\" title=\"Rotate -90 degrees\"> 向左旋转</button>\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-right layui-btn-fluid1\" cropper-event=\"rotate\" data-option=\"15\" title=\"Rotate 90 degrees\"> 向右旋转</button>\n" +
         "                </div>\n" +
         "                <div class=\"layui-col-xs5\" style=\"text-align: right;\">\n" +
-        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-refresh\" cropper-event=\"reset\" title=\"重置图片\"></button>\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-refresh layui-btn-fluid1\" cropper-event=\"reset\" title=\"重置图片\"></button>\n" +
         "                </div>\n" +
         "            </div>\n" +
         "        </div>\n" +
         "        <div class=\"layui-col-xs3\">\n" +
-        "            <button class=\"layui-btn layui-btn-fluid\" cropper-event=\"confirmSave\" type=\"button\"> 保存修改</button>\n" +
+        "            <button class=\"layui-btn layui-btn-fluid1\" cropper-event=\"confirmSave\" type=\"button\"> 保存修改</button>\n" +
         "        </div>\n" +
         "    </div>\n" +
         "\n" +
         "</div>";
     var obj = {
-        render: function(e){
-            $('body').append(html);
+        render: function (e) {
+            if ($(".showImgEdit").length==0)
+                $('body').append(html);
             var self = this,
                 elem = e.elem,
                 saveW = e.saveW,
@@ -64,8 +65,8 @@ layui.config({
                 ,preview = '.showImgEdit .img-preview'
                 ,file = $(".showImgEdit input[name='file']")
                 , options = { aspectRatio: mark, preview: preview, viewMode: 1 };
-           
             $(elem).on('click', function () {
+                editImg = elem;
                 layer.open({
                     type: 1
                     , content: content
@@ -73,7 +74,7 @@ layui.config({
                     , success: function () {
                        
                         //默认的图片附件是不是存在
-                        var elementID = "Img" + $("#editimg").attr("data-ref");
+                        var elementID = "Img" + $(elem).attr("data-ref");
                         //获取原始的图片src
                         var src = $("#" + elementID).attr("src");
                         $(".showImgEdit .readyimg img").cropper('destroy').attr('src', src);
@@ -84,52 +85,59 @@ layui.config({
                         image.cropper('destroy');
                     }
                 });
-            });
-            $(".layui-btn").on('click',function () {
-                var event = $(this).attr("cropper-event");
-                //监听确认保存图像
-                if(event === 'confirmSave'){
-                    image.cropper("getCroppedCanvas",{
-                        width: saveW,
-                        height: saveH
-                    }).toBlob(function(blob){
-                        var formData=new FormData();
-                        formData.append('file',blob,'head.jpg');
-                        $.ajax({
-                            method:"post",
-                            url: url, //用于文件上传的服务器端请求地址
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function (result) {
-                                result = JSON.parse(result);
-                                if (result.SourceImage!=undefined){
-                                    layer.closeAll('page');
-                                    return done(result);
-                                } else if (result.err !=undefined){
-                                    layer.alert("文件上传报错");
-                                }
+                $(".layui-btn-fluid1").on('click', function () {
+                    var event = $(this).attr("cropper-event");
+                    //监听确认保存图像
+                    if (event === 'confirmSave') {
+                        if (editImg == elem) {
+                            image.cropper("getCroppedCanvas", {
+                                width: saveW,
+                                height: saveH
+                            }).toBlob(function (blob) {
+                                var formData = new FormData();
+                                formData.append('file', blob, 'head.jpg');
+                                $.ajax({
+                                    method: "post",
+                                    url: url, //用于文件上传的服务器端请求地址
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (result) {
+                                        if(typeof result == "string")
+                                             result = JSON.parse(result);
+                                        if (result.SourceImage != undefined) {
+                                            layer.closeAll('page');
+                                            return done(result);
+                                        } else if (result.err != undefined) {
+                                            layer.alert("文件上传报错");
+                                        }
 
-                            }
-                        });
-                    });
-                    //监听旋转
-                }else if(event === 'rotate'){
-                    var option = $(this).attr('data-option');
-                    image.cropper('rotate', option);
-                    //重设图片
-                }else if(event === 'reset'){
-                    image.cropper('reset');
-                }
-                //文件选择
-                file.change(function () {
-                    var r= new FileReader();
-                    var f=this.files[0];
-                    r.readAsDataURL(f);
-                    r.onload=function (e) {
-                        image.cropper('destroy').attr('src', this.result).cropper(options);
-                    };
+                                    }
+                                });
+                            });
+                        }
+                        
+                        //监听旋转
+                    } else if (event === 'rotate') {
+                        debugger
+                        var option = $(this).attr('data-option');
+                        image.cropper('rotate', option);
+                        //重设图片
+                    } else if (event === 'reset') {
+                        image.cropper('reset');
+                    }
+
                 });
+            });
+            
+            //文件选择
+            file.change(function () {
+                var r = new FileReader();
+                var f = this.files[0];
+                r.readAsDataURL(f);
+                r.onload = function (e) {
+                    image.cropper('destroy').attr('src', this.result).cropper(options);
+                };
             });
         }
 

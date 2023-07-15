@@ -102,8 +102,14 @@
     <script type="text/javascript">
         var doType = GetQueryString("DoType");
         var isFrameCross = GetQueryString("isFrameCross");
-        var isSimplate=false;
+        var isSimplate = false;
+        var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
         $(function () {
+            if (IsSend == null || IsSend == undefined || IsSend == "")
+                IsSend = "1";
+            if (IsSend == "0")
+                $("#Btn_Send").hide();
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             handler.AddUrlData(); //这里是获得Url的参数.
             var data = handler.DoMethodReturnString("AccepterOfDept_Init");

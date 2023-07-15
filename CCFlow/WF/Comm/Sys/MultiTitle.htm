@@ -344,7 +344,7 @@
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle != undefined) {
                 for (var i = 0; i < fls.length; i++) {
-                    if (multiTitle != "" && multiTitle.indexOf(fls[i]) > 0) {
+                    if (multiTitle != "" && multiTitle.indexOf(","+fls[i]+",") > 0) {
                         alert("错误:该列已经选择过.");
                         return;
                     }
@@ -355,7 +355,7 @@
             if (name == null)
                 return;
             //检查名称是否重复
-            if (multiTitle != undefined && multiTitle.indexOf(name) > 0) {
+            if (multiTitle != undefined && multiTitle.indexOf(name+",") > 0) {
                 alert("错误:名称已经存在.");
                 return;
             }
@@ -417,7 +417,7 @@
             // 3. 选择的字段，在历史的选择中出现也是错误的.
             if (multiTitle1 != undefined) {
                 for (var i = 0; i < fls.length; i++) {
-                    if (multiTitle1 != "" && multiTitle1.indexOf(fls[i]) > 0) {
+                    if (multiTitle1 != "" && multiTitle1.indexOf(","+fls[i]+",") > 0) {
                         alert("错误:该列已经选择过.");
                         return;
                     }
@@ -428,7 +428,7 @@
             if (name == null)
                 return;
             //检查名称是否重复
-            if (multiTitle1 != undefined && multiTitle1.indexOf(name) > 0) {
+            if (multiTitle1 != undefined && multiTitle1.indexOf(name+",") > 0) {
                 alert("错误:名称已经存在.");
                 return;
             }

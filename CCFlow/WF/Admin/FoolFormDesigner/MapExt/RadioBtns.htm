@@ -7,549 +7,567 @@
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../Scripts/layui/layui/layui.js"></script>
+    <link href="../../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script src="../../../Scripts/layui/layui/lay/modules/laytpl.js"></script>
     <script type="text/javascript">
         //页面启动函数.
         var initData = {};
         var pageData = {};
+        var radioValue = -1;//当前选定的列表值，number类型
+        var IsEnableJS = "0";//是否启用 ，string类型
+        var Sys_MapAttr = [];
+        var FrmAttachments = [];//附件
+        var MapDtls = [];//从表
+        var Sys_FrmRB = [];//不同列表值的配置
+        var AttrTableData;
+        var DtlTableData;
+        var AthTableData;
+        var attrTable;
+        let currentSaveRb = [];//要配置的选项
+        var expStrs = "AtPara,FID,OID,Title,MyNum,FK_NY,Emps,RDT,EDT,CDT,Rec,";
+        layui.use(['element', 'table', 'form', 'laydate', 'layer'], function () {
+            var layer = layui.layer;
+            var laydate = layui.laydate;
+            var AttrTable = layui.table;
+            var DtlTable = layui.table;
+            var AthTable = layui.table;
+            var form = layui.form;
+            $(function () {
+                InitPage();
+            });
+            async function InitPage() {
+                const loading = await asyncLoad('正在加载，请稍后...');
+                try {
+                    pageData = {
+                        FK_MapData: GetQueryString("FK_MapData"),
+                        KeyOfEn: GetQueryString("KeyOfEn"),
+                        SelectIntKey: GetQueryString("SelectIntKey"),
+                        MyPK: GetQueryString("MyPK")
+                    };
+                    if (pageData.selectIntKey == null)
+                        pageData.selectIntKey = "0";
+                    //设置是否启用?
+                    var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+                    var attr = new Entity("BP.Sys.MapAttr", pkval);
+                    if (attr.AtPara.indexOf('@IsEnableJS=1') >= 0) {
+                        IsEnableJS = "1";
+                    }
 
-        var expStrs = ",FID,OID,Title,MyNum,FK_NY,Emps,RDT,EDT,CDT,Rec,";
+                    //获得的数据.
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                    handler.AddUrlData();
+                    var data = handler.DoMethodReturnString("RadioBtns_Init");
 
-        $(function () {
+                    if (data != undefined && data.indexOf('err@') == 0) {
+                        console.error(data);
+                        return;
+                    }
 
-            pageData = {
-                FK_MapData: GetQueryString("FK_MapData"),
-                KeyOfEn: GetQueryString("KeyOfEn"),
-                SelectIntKey: GetQueryString("SelectIntKey"),
-                MyPK: GetQueryString("MyPK")
-            };
-            if (pageData.selectIntKey == null)
-                pageData.selectIntKey = "0";
+                    initData = JSON.parse(data);
+                    Sys_MapAttr = initData['Sys_MapAttr'];//字段集合
+                    FrmAttachments = initData['FrmAttachments'];//附件集合
+                    MapDtls = initData['MapDtls'];//从表集合
+                    Sys_FrmRB = initData['Sys_FrmRB'];//列表配置
+                    renderRadioList();//渲染列表值单选框
+                    rederIsEnableJS();//渲染启用禁用下拉框
+                    Reload();
+                    form.render(); //更新全部
+                    setTimeout(() => {
+                        layer.close(loading);
+                    }, 1000);
 
-            //设置是否启用?
-            var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            var attr = new Entity("BP.Sys.MapAttr", pkval);
-            document.getElementById("RB_IsEnableJS_0").checked = true;
-            if (attr.AtPara.indexOf('@IsEnableJS=1') >= 0)
-                document.getElementById("RB_IsEnableJS_1").checked = true;
-
-            //获得的数据.
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddUrlData();
-            var data = handler.DoMethodReturnString("RadioBtns_Init");
-
-            if (data != undefined && data.indexOf('err@') == 0) {
-                console.error(data);
-                return;
-            }
-
-            initData = JSON.parse(data);
-
-            //从表组件集合
-            var mapDtls = initData.MapDtls;
-            //附件组件集合
-            var frmAttachments = initData.FrmAttachments;
-
-            //绑定左侧的列表值
-            var ulListValuesLiHtml = '';
-
-            //显示枚举/外键值
-            $.each(initData.Sys_FrmRB, function (i, rb) {
-                ulListValuesLiHtml += '<li style="list-style-type:none;float:left;" >' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
-            })
-            $('#ulListValues').html(ulListValuesLiHtml);
-
-            //绑定选择事件
-            $('[name=' + pageData.KeyOfEn + ']').bind('change', function (obj) {
-
-                SaveCurrentConfig();
-                pageData.selectIntKey = $(obj.target).val();
-                BindConfig();
-            })
-
-            //绑定表单的所有字段
-            var mapAttrHtml = '';
-            var showMapAttr = [];
-            var myIdx = 0;
-
-            //加载表单字段
-            $.each(initData.Sys_MapAttr, function (i, attr) {
-
-                if (expStrs.indexOf(attr.KeyOfEn) != -1)
-                    return;
-
-                showMapAttr.push(attr);
-
-                myIdx++;
-
-                mapAttrHtml += '<tr>';
-                mapAttrHtml += '<td>' + myIdx + '</td>';
-                mapAttrHtml += '<td alt=' + attr.keyOfEn + ' >' + attr.Name + '</td>';
-                //mapAttrHtml += '<td>' + attr.Name + '</td>';
-                mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td>';
-                if (attr.UIContralType == 6)
-                    mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '4" name="' + attr.KeyOfEn + '" value="4" disabled=disabled/><label for="' + attr.KeyOfEn + '4" >可用且必填</label></td>';
-                else
-                    mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '4" name="' + attr.KeyOfEn + '" value="4" /><label for="' + attr.KeyOfEn + '4" >可用且必填</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/><label for="' + attr.KeyOfEn + '3" >不可见</label></td>';
-
-                //设置的值.
-                //判断是否枚举类型
-                if (attr.MyDataType == 2 && attr.LGType == 1) {
-                    var ses = new Entities("BP.Sys.SysEnums");
-                    ses.Retrieve("EnumKey", attr.UIBindKey);
-                    var operations = "<option  value=''><label>&nbsp;&nbsp;&nbsp;</label></option>";
-                    $.each(ses, function (i, obj) {
-                        operations += "<option  value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
-
-                    });
-                    mapAttrHtml += "<td><div id='DIV_" + attr.KeyOfEn + "'><select class='form-control' name='DDL_" + attr.KeyOfEn + "' id='DDL_" + attr.KeyOfEn + "' style='width:140px'>" + operations + "</select></div></td>";
-                } else {
-                    mapAttrHtml += '<td><input type="text" id="TB_' + attr.KeyOfEn + '" name="TB_' + attr.KeyOfEn + '" value="" /></td>';
+                } catch (e) {
+                    layer.msg('获取数据失败' + e, { icon: 2 });
+                    layer.close(loading);
                 }
 
-                mapAttrHtml += '</tr>';
+            }
+            //刷新表单
+            function Reload() {
+                if (IsEnableJS === "1") {
+                    $("#tabBox").show();
+                    $("#listValue").show();
+                } else {
+                    $("#tabBox").hide();
+                    $("#listValue").hide();
+                }
+                setData();
+                renderTable();
+            }
+            //渲染是否启用下拉框
+            function rederIsEnableJS() {
+                var html = "";
+                html += '<select id="IsEnableJS" name="IsEnableJS" lay-filter="IsEnableJS">';
+                html += '<option value="1" ' + `${IsEnableJS === "1" ? "selected" : ""}` + '>启用</option>';
+                html += '<option value="0" ' + `${IsEnableJS === "0" ? "selected" : ""}` + ' >禁用</option>';
+                html += '</select>';
+                $("#selectIsEnableJS").html(html);
+            };
+            //监听是否启用
+            form.on('select(IsEnableJS)', function (data) {
+                IsEnableJS = data.value;
+                Reload();
 
-                //mapAttrHtml += '<tr><td>' + (i + 1) + '</td><td>' + attr.KeyOfEn + '</td><td>' + attr.Name + '</td><td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td><td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td><td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td></td><td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/> <label for="' + attr.KeyOfEn + '3" >不可见</label></td></tr>';
+            });
+            //渲染列表值单选框
+            function renderRadioList() {
+                var html = "";
+                initData.Sys_FrmRB.forEach((item, index) => {
+                    var checked = "";
+                    if (index === 0) {//首先展示第一个选项的各种值
+                        checked = "checked";
+                        radioValue = item.IntKey;
+                    };
+                    html += '<input type="radio" name="radio" value="' + item.IntKey + '" title="' + item.Lab + '" ' + checked + ' lay-filter="radioList"/>';
+                });
+                $("#radioList").html(html);
+            };
+            //监听列表值单选框，更新当前选中的列表值
+            form.on('radio(radioList)', function (data) {
+                //changeSys_FrmRB();//保存当前打开的列表配置
+                radioValue = parseInt(data.value);//更改当前选中的列表值
+                Reload();
+            });
+            //根据列表值构造表格数据和配置数据
+            function setData() {
+                AttrTableData = [];
+                DtlTableData = [];
+                AthTableData = [];
+                var sys_frmRB = Sys_FrmRB.filter((item) => item.IntKey === radioValue)[0];
 
-            })
-            $('#Fields tbody').html(mapAttrHtml);
+                if (sys_frmRB.FieldsCfg == null) {
+                    sys_frmRB.FieldsCfg = "";
 
-            //加载从表组件
-            mapAttrHtml = '';
-            $.each(mapDtls, function (i, dtl) {
+                }
+                if (sys_frmRB.SetVal == null) {
+                    sys_frmRB.SetVal = "";
+                }
+                if (sys_frmRB.Tip == null) {
+                    sys_frmRB.Tip = "";
+                }
+                if (sys_frmRB.Script == null) {
+                    sys_frmRB.Script = "";
+                }
 
-                myIdx++;
 
-                mapAttrHtml += '<tr>';
-                mapAttrHtml += '<td>' + myIdx + '</td>';
-                mapAttrHtml += '<td>' + dtl.No + '</td>';
-                mapAttrHtml += '<td>' + dtl.Name + '</td>';
-                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '0" name="' + dtl.No + '" value="0"/><label for="' + dtl.No + '0" >不设置</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '1" name="' + dtl.No + '" value="1"/><label for="' + dtl.No + '1" >可用</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '2" name="' + dtl.No + '" value="2"/><label for="' + dtl.No + '2" >可见</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + dtl.No + '3" name="' + dtl.No + '" value="3"/><label for="' + dtl.No + '3" >不可见</label></td>';
-
-                mapAttrHtml += '</tr>';
-            })
-            $('#mapDtls tbody').html(mapAttrHtml);
-
-            //加载附件组件
-            mapAttrHtml = '';
-            $.each(frmAttachments, function (i, ath) {
-
-                myIdx++;
-
-                mapAttrHtml += '<tr>';
-                mapAttrHtml += '<td>' + myIdx + '</td>';
-                mapAttrHtml += '<td>' + ath.MyPK + '</td>';
-                mapAttrHtml += '<td>' + ath.Name + '</td>';
-                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '0" name="' + ath.MyPK + '" value="0"/><label for="' + ath.MyPK + '0" >不设置</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '1" name="' + ath.MyPK + '" value="1"/><label for="' + ath.MyPK + '1" >可用</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '2" name="' + ath.MyPK + '" value="2"/><label for="' + ath.MyPK + '2" >可见</label></td>';
-                mapAttrHtml += '<td><input type="radio" id="' + ath.MyPK + '3" name="' + ath.MyPK + '" value="3"/><label for="' + ath.MyPK + '3" >不可见</label></td>';
-
-                mapAttrHtml += '</tr>';
-
-            })
-            $('#aths tbody').html(mapAttrHtml);
-
-            //为表单字段绑定DATA
-            $.each($('#Fields tbody tr'), function (i, tr) {
-                var mapAttr = showMapAttr[i];
-
-                $(tr).data(mapAttr);
+                var fieldsCfg = sys_frmRB.FieldsCfg.split('@');//数据格式：["xxx=0","xxx=1"],值：0-4
+                fieldsCfg.splice(0, 1);
+                var setVal = sys_frmRB.SetVal.split('@');//数据格式：["xxx=123","xxx=李四"]
+                Sys_MapAttr.forEach((item) => {
+                    var thisRowData = {};
+                    if (item.UIVisible == 1 && expStrs.indexOf(item.KeyOfEn) < 0) {
+                        var thisFieldsCfg = fieldsCfg.filter((i) => i.indexOf(item.KeyOfEn) > -1)[0];
+                        thisFieldsCfg = thisFieldsCfg ? thisFieldsCfg.split('=')[1] : "0";
+                        var thisSetVal = setVal.filter((i) => i.indexOf(item.KeyOfEn) > -1)[0];
+                        thisSetVal = thisSetVal ? thisSetVal.split('=')[1] : "";
+                        thisRowData = {
+                            title: item.Name,
+                            id: item.KeyOfEn,
+                            fieldsCfg: thisFieldsCfg,
+                            setVal: thisSetVal,
+                            UIBindKey: item.UIBindKey,
+                            KeyOfEn: item.KeyOfEn,
+                            MyDataType: item.MyDataType,
+                            LGType: item.LGType,
+                            UIContralType: item.UIContralType,
+                        }
+                        AttrTableData.push(thisRowData);
+                    }
+                });
+                MapDtls.forEach((item) => {
+                    var thisRowData = {};
+                    var thisFieldsCfg = fieldsCfg.filter((i) => i.indexOf(item.No) > -1)[0];
+                    thisFieldsCfg = thisFieldsCfg ? thisFieldsCfg.split('=')[1] : "0";
+                    thisRowData = {
+                        title: item.Name,
+                        id: item.No,
+                        fieldsCfg: thisFieldsCfg,
+                        KeyOfEn: item.No
+                    }
+                    DtlTableData.push(thisRowData);
+                });
+                FrmAttachments.forEach((item) => {
+                    var thisRowData = {};
+                    var thisFieldsCfg = fieldsCfg.filter((i) => i.indexOf(item.MyPK) > -1)[0];
+                    thisFieldsCfg = thisFieldsCfg ? thisFieldsCfg.split('=')[1] : "0";
+                    thisRowData = {
+                        title: item.Name,
+                        id: item.MyPK,
+                        fieldsCfg: thisFieldsCfg,
+                        KeyOfEn: item.MyPK,
+                    }
+                    AthTableData.push(thisRowData);
+                });
+                $("#TB_Script").val(sys_frmRB.Script);
+                $("#TB_Tip").val(sys_frmRB.Tip);
+            }
+            //渲染AttrTable属性值表格
+            function renderTable() {
+                attrTable = AttrTable.render({
+                    elem: '#AttrTable'
+                    , page: false
+                    , height: 'full-200'
+                    , limit: AttrTableData.length
+                    , data: AttrTableData
+                    , cols: [[ //表头
+                        { type: 'numbers', fixed: 'left', }
+                        , { field: 'title', title: '名称', align: 'center', width: 100 }
+                        , { field: 'fieldsCfg', title: '设置', templet: '#radioFieldsCfg', align: 'center', width: 400, unresize: true }
+                        , { field: 'setVal', title: '设置值', align: 'center', templet: '#setValue', unresize: true }
+                    ]]
+                    , done: function (res, curr, count) {
+                        laydate.render({
+                            elem: '#DateTime', //指定元素
+                            type: 'datetime',
+                        });
+                        laydate.render({
+                            elem: '#Date', //指定元素
+                            type: 'date',
+                        });
+                    }
+                });
+                dtlTable = DtlTable.render({
+                    elem: '#DtlTable'
+                    , page: false
+                    , height: 'full-200'
+                    , limit: DtlTableData.length
+                    , data: DtlTableData
+                    , cols: [[ //表头
+                        { type: 'numbers', fixed: 'left', }
+                        , { field: 'title', title: '名称', align: 'center', width: 100, unresize: true }
+                        , { field: 'fieldsCfg', title: '设置', templet: '#radioFieldsCfg', align: 'center', unresize: true }
+                    ]]
+                });
+                athTable = AthTable.render({
+                    elem: '#AthTable'
+                    , page: false
+                    , height: 'full-200'
+                    , limit: AthTableData.length
+                    , data: AthTableData
+                    , cols: [[ //表头
+                        { type: 'numbers', fixed: 'left', }
+                        , { field: 'title', title: '名称', align: 'center', width: 100, unresize: true }
+                        , { field: 'fieldsCfg', title: '设置', templet: '#radioFieldsCfg', align: 'center', unresize: true }
+                    ]]
+                });
+            };
+            form.on("select(setValue)", function (data) {
+                var key = $(data.elem).attr("name").split("-")[1];
+                AttrTableData = $.map(AttrTableData, function (item) {
+                    if (item.KeyOfEn == key) {
+                        return {
+                            ...item,
+                            setVal: data.value.toString(),
+                        }
+                    } else return item;
+                });
+            });
+            form.on("radio(radioFieldsCfg)", function (data) {//改变设置
+                var key = $(data.elem).attr("name").split("-")[1];
+                AttrTableData = $.map(AttrTableData, function (item) {
+                    if (item.KeyOfEn == key) {
+                        return {
+                            ...item,
+                            fieldsCfg: data.value.toString(),
+                        }
+                    } else return item;
+                });
+                DtlTableData = $.map(DtlTableData, function (item) {
+                    if (item.KeyOfEn == key) {
+                        return {
+                            ...item,
+                            fieldsCfg: data.value.toString(),
+                        }
+                    } else return item;
+                })
+                AthTableData = $.map(AthTableData, function (item) {
+                    if (item.KeyOfEn == key) {
+                        return {
+                            ...item,
+                            fieldsCfg: data.value.toString(),
+                        }
+                    } else return item;
+                })
             });
 
-            BindConfig();
+            //监听保存
+            $("#save").click(function () {
+                Save();
+            });
+            //执行保存
+            async function Save() {
+                const loading = await asyncLoad('正在保存...');
+                try {
+                    if (IsEnableJS == "0") {
+                        SaveEnableJS("0");
+                        Sys_FrmRB = $.map(Sys_FrmRB, function (item) {
+                            return {
+                                ...item,
+                                FieldsCfg: '',
+                                Script: '',
+                                SetVal: '',
+                                Tip: '',
+                            };
+                        });
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                        handler.AddPara("data", JSON.stringify(Sys_FrmRB));
+                        handler.AddPara("FK_MapData", pageData.FK_MapData);
+                        handler.AddPara("FK_MapExt", pageData.MyPK);
+                        handler.AddPara("KeyOfEn", pageData.KeyOfEn);
+                        var data = handler.DoMethodReturnString("RadioBtns_Save");
+                    } else {
+                        //保存当前列表值
+                        changeSys_FrmRB();
+                        console.log("保存的数据:", Sys_FrmRB);
+                        SaveEnableJS("1");
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+                        handler.AddPara("data", JSON.stringify(currentSaveRb));
+                        handler.AddPara("FK_MapData", pageData.FK_MapData);
+                        handler.AddPara("FK_MapExt", pageData.MyPK);
+                        handler.AddPara("KeyOfEn", pageData.KeyOfEn);
+                        var data = handler.DoMethodReturnString("RadioBtns_Save");
+                    }
+                } catch (e) {
+                    layer.close(loading);
+                    layer.msg('保存失败：' + e, { icon: 2 });
+                    return;
+                }
+                setTimeout(() => {
+                    layer.close(loading);
+                }, 2000);
+                layer.msg('保存成功', { icon: 1 });
+                Reload();
+            }
+
+            var layer_Tip;
+            //提示信息
+            $("#AttrTableTips").on("mouseenter", function () {
+                layer_Tip = layer.tips("注意:被联动的控件在傻瓜表单模式下要占三行", '#AttrTableTips', {
+                    tips: [1, "#"],  //1-4表示上右下左四个方向，# 可带背景色
+                    area: ['auto', 'auto'], // 提示框宽高
+                    time: 0  //自动关闭所需毫秒,0表示不自动关闭
+                });
+            });
+            $("#AttrTableTips").on('mouseleave', function () { // 监听鼠标移出事件
+                layer.close(layer_Tip);
+            });
+
+            //提示信息
+            $("#SettingTips").on("mouseenter", function () {
+                layer_Tip = layer.tips("需要为每个选择项设置显示与隐藏的内容，设置js, top的提示信息.", '#SettingTips', {
+                    tips: [1, "#"],  //1-4表示上右下左四个方向，# 可带背景色
+                    area: ['auto', 'auto'], // 提示框宽高
+                    time: 0  //自动关闭所需毫秒,0表示不自动关闭
+                });
+            });
+            $("#SettingTips").on('mouseleave', function () { // 监听鼠标移出事件
+                layer.close(layer_Tip);
+            });
         });
 
-        function bindData() {
 
-            //保存切换配置前的
-
-            //绑定切换后的配置
-            BindConfigData();
-        }
-
-        //保存当前配置
-        function SaveCurrentConfig() {
-
-            var currentSaveRb = $.grep(initData.Sys_FrmRB, function (value) {
-                return value.IntKey == pageData.selectIntKey;
-            });
-
-            if (currentSaveRb.length == 0)
-                return;
-            var configData = $('#formFields').serialize();
-
-            //中文序列化乱码
-            configData = decodeURIComponent(configData, true);
-
-            configDataArr = configData.split('&');
-
-            configDataArr = $.grep(configDataArr, function (value) {
-
-                return (value.split('=').length == 2 && value.split('=')[1].length > 0);
-
-            });
-
-            var fieldsCfg = "";
-            var setValue = "";
-
-            if (configDataArr.length > 0) {
-                for (var i = 0; i < configDataArr.length; i++) {
-                    if (configDataArr[i].indexOf("TB_") == -1 && configDataArr[i].indexOf("DDL_") == -1)
-                        fieldsCfg += '@' + configDataArr[i];
-                    else
-                        if (configDataArr[i].indexOf("TB_") >= 0)
-                            setValue += '@' + configDataArr[i].replace("TB_", "");
-                        else
-                            setValue += '@' + configDataArr[i].replace("DDL_", "");
+        //改变当前列表值的值
+        function changeSys_FrmRB() {
+            var fieldsCfg = '';
+            var setVal = '';
+            $.each(AttrTableData, function (index, item) {
+                if (item.FieldsCfg == null && item.SetVal == null && item.Tip == null && item.Script == null) {
+                    item.FieldsCfg = "";
+                    item.SetVal = "";
+                    item.Tip = "";
+                    item.Script = "";
                 }
+                if (item.fieldsCfg != null && item.fieldsCfg != undefined && item.fieldsCfg != "" && item.fieldsCfg != "0") {
+                    fieldsCfg += `@${item.KeyOfEn}=${item.fieldsCfg}`;
+                };
+                if (item.setVal != "" && item.setVal != null && item.setVal != undefined) {
+                    setVal += `@${item.KeyOfEn}=${item.setVal}`;
+                };
+            });
+            $.each(DtlTableData, function (index, item) {
+                if (item.fieldsCfg != null && item.fieldsCfg != undefined && item.fieldsCfg != "" && item.fieldsCfg != "0") {
+                    fieldsCfg += `@${item.KeyOfEn}=${item.fieldsCfg}`;
+                };
+                if (item.setVal != "" && item.setVal != null && item.setVal != undefined) {
+                    setVal += `@${item.KeyOfEn}=${item.setVal}`;
+                };
+            });
+            $.each(AthTableData, function (index, item) {
+                if (item.fieldsCfg != null && item.fieldsCfg != undefined && item.fieldsCfg != "" && item.fieldsCfg != "0") {
+                    fieldsCfg += `@${item.KeyOfEn}=${item.fieldsCfg}`;
+                };
+                if (item.setVal != "" && item.setVal != null && item.setVal != undefined) {
+                    setVal += `@${item.KeyOfEn}=${item.setVal}`;
+                };
+            });
+            var allValues = $("input[type='text']:not(.layui-input)");
 
-            }
+            currentSaveRb = [];
+            Sys_FrmRB.forEach((it) => {
+                if (it.IntKey == radioValue) {
+                    currentSaveRb.push(it);
+                }
+            });
 
-            var script = $('#TB_Script').val();
-            var tip = $('#TB_Tip').val();
+            $.each(allValues, function (index, item) {
+                var key = $(item).attr("name").split("_")[1];
+                var value = $(item).val();
+                if (value != "" && value != null && value != undefined) {
+                    setVal += `@${key}=${value}`;
+                }
+            });
 
-            currentSaveRb[0].Script = script;
             currentSaveRb[0].FieldsCfg = fieldsCfg;
-            currentSaveRb[0].Tip = tip;
-            currentSaveRb[0].SetVal = setValue;
-
-        }
-
-
-        function SaveEditData() {
-            var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
-                return value.IntKey == pageData.selectIntKey;
-            });
-            $('#TB_Script').val(selectRb.Script);
-            $('#TB_Tip').val(selectRb.Tip);
-        }
-
-        //绑定右侧配置信息
-        function BindConfig() {
-            var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
-                return value.IntKey == pageData.selectIntKey;
-            });
-            if (selectRb.length == 0) {
-                $(':text').val(""); //转换之前的文本框设置值清空
-                $('select').val(''); //转换之前的下拉框设置值清空
-                $('#TB_Script').val("");
-                $('#TB_Tip').val("");
-                return;
-            }
-
-            $(':text').val(""); //转换之前的文本框设置值清空
-            $('select').val(''); //转换之前的下拉框设置值清空
-            $('#TB_Script').val(selectRb[0].Script);
-            $('#TB_Tip').val(selectRb[0].Tip);
-            //解析下面的元素显示与否
-            var setVal = selectRb[0].SetVal;
-            if (setVal != null && setVal != "") {
-                var setVals = setVal.split("@");
-                for (var i = 0; i < setVals.length; i++) {
-                    if (setVals[i] != '' && setVals[i]) {
-                        var valObjs = setVals[i].split('=');
-                        if ($("#TB_" + valObjs[0]).length > 0)
-                            $("#TB_" + valObjs[0]).val(valObjs[1]);
-                        if ($("#DDL_" + valObjs[0]).length > 0)
-                            $("#DDL_" + valObjs[0]).val(valObjs[1]);
-                    }
-                }
-
-            }
-            var fieldsCfg = selectRb[0].FieldsCfg;
+            currentSaveRb[0].SetVal = setVal;
+            currentSaveRb[0].Script = $("#TB_Script").val();
+            currentSaveRb[0].Tip = $("#TB_Tip").val();
+        };
 
 
-            //'@ConfigInfo:' + $('[name=xx]:checked').val() + '@ViewSta:' +
-            //开始绑定字段状态信息
-            if (fieldsCfg != undefined) {
-                var viewStaStr = fieldsCfg;
-                var viewStaArr = viewStaStr.split('@');
-                var viewStaObj = {};
-                $.each(viewStaArr, function (i, viewSta) {
-                    if (viewSta != '' && viewSta)
-                        viewStaObj[viewSta.split('=')[0]] = viewSta.split('=')[1];
-                });
-                //为表单字段绑定DATA
-                $.each($('#Fields tbody tr'), function (i, tr) {
-                    var keyOfEn = $(tr).data().KeyOfEn;
-                    if (viewStaObj[keyOfEn] != undefined) {
-                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
-                    } else {
-                        $('#' + keyOfEn + '0').attr('checked', true);
-                    }
-                });
-
-                //为从表绑定DATA
-                $.each(initData.MapDtls, function (i, dtl) {
-                    var keyOfEn = dtl.No;
-                    if (viewStaObj[keyOfEn] != undefined) {
-                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
-                    } else {
-                        $('#' + keyOfEn + '0').attr('checked', true);
-                    }
-                });
-
-                //为附件组件绑定DATA
-                $.each(initData.FrmAttachments, function (i, ath) {
-                    var keyOfEn = ath.MyPK;
-                    if (viewStaObj[keyOfEn] != undefined) {
-                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
-                    } else {
-                        $('#' + keyOfEn + '0').attr('checked', true);
-                    }
-                });
-
-            } else {
-                //为表单字段绑定DATA
-                $.each($('#Fields tbody tr'), function (i, tr) {
-                    var keyOfEn = $(tr).data().KeyOfEn;
-                    $('#' + keyOfEn + '0').attr('checked', true);
-                });
-
-                //为从表绑定DATA
-                $.each(initData.MapDtls, function (i, dtl) {
-                    var keyOfEn = dtl.No;
-                    $('#' + keyOfEn + '0').attr('checked', true);
-                });
-
-                //为附件组件绑定DATA
-                $.each(initData.FrmAttachments, function (i, ath) {
-                    var keyOfEn = ath.MyPK;
-                    $('#' + keyOfEn + '0').attr('checked', true);
-                });
-            }
-        }
-
-        //执行保存
-        function Save() {
-
-            $("#Btn_Save").text("正在保存请稍后...");
-
-            //保存当前打开表单信息
-            SaveCurrentConfig();
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-            handler.AddPara("data", JSON.stringify(initData.Sys_FrmRB));
-            handler.AddPara("FK_MapData", pageData.FK_MapData);
-            handler.AddPara("FK_MapExt", pageData.MyPK);
-            handler.AddPara("KeyOfEn", pageData.KeyOfEn);
-            var data = handler.DoMethodReturnString("RadioBtns_Save");
-
-            Reload();
-
-        }
-
-        function SaveAndClose() {
-            Save();
-            if (parent && parent.parent && typeof parent.parent.doCloseDialog === 'function') {
-                parent.parent.doCloseDialog.call();
-            } else {
-                window.close();
-            }
-        }
-
-        //设置是否启用
-        function SaveEnableJS(ctrl) {
-
+        //设置是否启用：value="0" "1"
+        function SaveEnableJS(value) {
             var pkval = GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var attr = new Entity("BP.Sys.MapAttr", pkval);
-            attr.SetPara("IsEnableJS", ctrl.value);
+            attr.SetPara("IsEnableJS", value);
             attr.Update();
-
         }
 
-        function Close() {
-            if (parent && parent.parent && typeof parent.parent.doCloseDialog === 'function') {
-                parent.parent.doCloseDialog.call();
-            } else {
-                window.close();
-            }
-        }
     </script>
 </head>
+<style>
+    .IsEnableJS {
+        float: left;
+        display: block;
+        padding: 9px 5px;
+        width: 110px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: right;
+        font-size: 18px;
+    }
+
+    #turnOn .layui-form-select {
+        width: 400px;
+    }
+
+    .layui-table-cell {
+        overflow: visible;
+    }
+
+    td .layui-input.layui-unselect {
+        height: 33px;
+    }
+</style>
 <body>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="IsEnableJS">选项联动控件</div>
+            <div style="display:flex;justify-content:flex-end" id="turnOn">
+                <div id="selectIsEnableJS">
 
-
-    <!--<fieldset>
-        <legend>选项联动控件</legend>
-        <h4>
-        </h4>
-    </fieldset>-->
-
-
-    <fieldset>
-        <legend>是否启用？</legend>
-        <input type="radio" value="1" id="RB_IsEnableJS_1" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
-        <label for="RB_IsEnableJS_1">
-            启用
-        </label>
-        <input type="radio" value="0" id="RB_IsEnableJS_0" onclick="SaveEnableJS(this)" name="RB_IsEnableJS" />
-        <label for="RB_IsEnableJS_0">
-            禁用
-        </label>
-        <button onclick="Save()" type="button" id="Btn_Save">
-            保存
-        </button>
-
-        <ul>
-            <li>禁用当前的配置就不生效.</li>
-        </ul>
-
-
-
-
-        <legend>列表值 </legend>
-        <ul id="ulListValues" style="margin: 0; border: 0; padding: 0;">
-        </ul>
-
-        <br />
-
-        <legend>联动其他的控件使其属性该表(可见，只读) </legend>
-        <form id="formFields">
-            <div id="Fields">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                字段
-                            </th>
-
-                            <th>
-                                不设置
-                            </th>
-                            <th>
-                                可编辑
-                            </th>
-                            <th>
-                                可编辑且必填
-                            </th>
-                            <th>
-                                可见？
-                            </th>
-                            <th>
-                                不可见
-                            </th>
-                            <th>
-                                设置值
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                注意:<font color=red>被联动的控件在傻瓜表单模式下要占三行</font>
+                </div>
+                <button type="button" class="layui-btn" id="save">保存</button>
             </div>
-            <br />
-
-            <legend>联动<font color=red>从表控件</font>使其属性该表(可见) </legend>
-
-            <div id="mapDtls">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                从表ID
-                            </th>
-                            <th>
-                                从表名
-                            </th>
-                            <th>
-                                不设置
-                            </th>
-                            <th>
-                                可以编辑
-                            </th>
-                            <th>
-                                可见？
-                            </th>
-                            <th>
-                                不可见
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <br />
-            <legend>联动<font color=red>附件控件</font>使其属性该表(可见) </legend>
-
-            <div id="aths">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                                #
-                            </th>
-                            <th>
-                                附件组件ID
-                            </th>
-                            <th>
-                                附件组件名
-                            </th>
-                            <th>
-                                不设置
-                            </th>
-                            <th>
-                                可以编辑
-                            </th>
-
-                            <th>
-                                可见？
-                            </th>
-                            <th>
-                                不可见
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </form>
-    </fieldset>
-
-
-    <fieldset>
-        <legend>高级设置</legend>
-
-        <ul>
-            <li>需要为每个选择项设置显示与隐藏的内容，设置js,top的提示信息.</li>
-        </ul>
-
-
-        <legend>执行JS脚本(可以为空)</legend>
-
-        <div id="JS">
-            <textarea rows="3" cols="50" id="TB_Script"></textarea>
         </div>
+        <hr />
+    </form>
+    <form class="layui-form" id="listValue">
+        <!--列表值单选框---start-->
 
-        <legend>Tip 提示信息(可以为空)</legend>
-        <div id="Tip">
-            <textarea rows="3" cols="50" id="TB_Tip"></textarea>
+        <div class="layui-form-item">
+            <label class="layui-form-label">列表值</label>
+            <div class="layui-input-block" id="radioList">
+                列表值未渲染
+            </div>
         </div>
-    </fieldset>
-
-
-    <div id='sqlexp' style='color: Gray; display: none'>
-        <ul>
-            <li>当下拉框或者radionbuttn选择的值改变时,需要联动其他的控件也要跟着隐藏与显示.</li>
-            <li>该功能为每个枚举值的展现都设置为状态.</li>
+    </form>
+    <!--列表值单选框---end-->
+    <!--Tab---start-->
+    <div class="layui-tab layui-tab-brief" lay-filter="tab" id="tabBox">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="Attr">属性值</li>
+            <li lay-id="Dtl">从表</li>
+            <li lay-id="Ath">附件</li>
+            <li lay-id="Setting">高级设置</li>
         </ul>
-
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div style="margin-left: 10px">
+                    联动其他的控件使其属性该表(可见，只读)
+                    <i class="layui-icon" style="vertical-align: middle;" id="AttrTableTips">&#xe60b;</i>
+                </div>
+                <table id="AttrTable" lay-filter="AttrTable"></table>
+            </div>
+            <div class="layui-tab-item">
+                <div style="margin-left: 10px">联动从表控件使其属性该表(可见)</div>
+                <table id="DtlTable" lay-filter="DtlTable"></table>
+            </div>
+            <div class="layui-tab-item">
+                <div style="margin-left: 10px">联动附件控件使其属性该表(可见)</div>
+                <table id="AthTable" lay-filter="AthTable"></table>
+            </div>
+            <div class="layui-tab-item">
+                <div style="margin-left:10px">
+                    高级设置
+                    <i class="layui-icon" style="vertical-align: middle;" id="SettingTips">&#xe60b;</i>
+                </div>
+                <div style="margin:10px 20px">
+                    <div>JS脚本</div>
+                    <textarea id="TB_Script" placeholder="请输入" class="layui-textarea"></textarea>
+                    <div>提示信息</div>
+                    <textarea id="TB_Tip" name="" placeholder="请输入" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
+    <!--Tab---end-->
+    <!--设置列---start-->
+    <script type="text/html" id="radioFieldsCfg">
+        <div style="text-align:center;">
+            <input type="radio" lay-filter="radioFieldsCfg" value="0" name="{{"radio-" + d.KeyOfEn}}" title="不设置" {{d.fieldsCfg=='0'?'checked':''}}= />
+            <input type="radio" lay-filter="radioFieldsCfg" value="1" name="{{"radio-" + d.KeyOfEn}}" title="可用" {{d.fieldsCfg=='1'?'checked':''}}= />
+            <input type="radio" lay-filter="radioFieldsCfg" value="2" name="{{"radio-" + d.KeyOfEn}}" title="可见" {{d.fieldsCfg=='2'?'checked':''}}= />
+            <input type="radio" lay-filter="radioFieldsCfg" value="3" name="{{"radio-" + d.KeyOfEn}}" title="不可见" {{d.fieldsCfg=='3'?'checked':''}}= />
+            <input type="radio" lay-filter="radioFieldsCfg" value="4" name="{{"radio-" + d.KeyOfEn}}" title="可用且必填" {{d.fieldsCfg=='4'?'checked':''}}= />
+        </div>
+    </script>
+    <!--设置列---end-->
+    <!--设置值列---start-->
+    <script type="text/html" id="setValue">
+        {{# if ((d.MyDataType == 2 && d.LGType == 1)||(d.UIContralType == 2 && d.MyDataType == 1)) {}}
+        {{# var ses = new Entities("BP.Sys.SysEnums");}}
+        {{# ses.Retrieve("EnumKey", d.UIBindKey);}}
+        <div id="{{"DIV_" + d.KeyOfEn}}">
+            <select class='form-control' name="{{"DDL-" + d.KeyOfEn}}" id="{{"DDL-" + d.KeyOfEn}}" lay-filter="setValue">
+                <option value="" {{d.setVal == "" ? "selected" : ""}}=>请选择</option>
+                {{# layui.each(ses, function(index, i){ }}
+                <option value="{{i.IntKey}}" {{d.setVal == i.IntKey.toString() ? "selected" : ""}}=> {{i.Lab}} </option>
+                {{# }); }}
+            </select>
+        </div>
+        {{# } else if (d.LGType == "0" && d.MyDataType == "1" && d.UIContralType == 1) { }}<!--外键下拉-->
+        {{# var sfTable = new Entity("BP.Sys.SFTable", d.UIBindKey);}}
+        {{# var ens = sfTable.DoMethodReturnJSON("GenerDataOfJson");}}
 
-
+        <div id="{{"DIV_" + d.KeyOfEn}}">
+            <select class='form-control' name="{{"DDL-" + d.KeyOfEn}}" id="{{"DDL-" + d.KeyOfEn}}" lay-filter="setValue">
+                <option value="" {{d.setVal == "" ? "selected" : ""}}=>请选择</option>
+                {{# layui.each(ens, function(index, i){ }}
+                <option value="{{i.No}}" {{d.setVal == i.No.toString() ? "selected" : ""}}=> {{i.Name}} </option>
+                {{# }); }}
+            </select>
+        </div>
+        {{# } else if (d.MyDataType==7) { }}
+        <div class="layui-input-inline">
+            <input type="text" id="DateTime" name="{{"DT_" + d.KeyOfEn }}" value="{{d.setVal}}" />
+        </div>
+        {{# } else if (d.MyDataType==6) {}}
+        <input type="text" id="Date" name="{{"Date_" + d.KeyOfEn }}" value="{{d.setVal}}" />
+        {{# } else { }}
+        <input type="text" id="{{"TB_" + d.KeyOfEn }}" value="{{d.setVal}}" name="{{"TB_" + d.KeyOfEn }}" />
+        {{# } }}
+    </script>
+    <!--设置值列---end-->
 </body>
 </html>

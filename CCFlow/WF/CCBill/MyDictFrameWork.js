@@ -283,6 +283,9 @@ window.onload = function () {
     })
 }
 $(function () {
+    if (CustomerNo != "" && CustomerNo != null) {
+        styleScope.innerHTML = DealText("\n .sidebar .group .group-items .active{\n background-color:'#5053f1';\n}");
+    }
     var theme = DealText(localStorage.getItem("themeColorInfo"));
     theme = JSON.parse(theme);
     var styleScope = document.getElementById("theme-data")

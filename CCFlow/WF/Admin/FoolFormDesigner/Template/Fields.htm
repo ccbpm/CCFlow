@@ -13,8 +13,11 @@
 
         var fk_mapdata = GetQueryString("FK_MapData");
         var groupID = GetQueryString("GroupField");
-        if (groupID == null)
-            groupID = 0;
+        if (groupID == null) {
+            var gfs = new Entities("BP.Sys.GroupFields");
+            gfs.Retrieve("FrmID", fk_mapdata, "CtrlType", "");
+            groupID = gfs.length == 0 ? 0 : gfs[0].OID;
+        }
 
         var fType = GetQueryString("Type");
 
@@ -51,9 +54,9 @@
                 for (var j = 0; j < mapAttrs.length; j++) {
                     var mapAttr = mapAttrs[j];
                     list += "<li><a href=\"javascript:AddMapAttr('" + mapAttr.KeyOfEn + "','" + mapAttr.FK_MapData + "')\" >" + mapAttr.KeyOfEn + "-" + mapAttr.Name;
-                    for (var i = 0; i < mapExts.length; i++) {
-                        if (mapAttr.KeyOfEn == mapExts[i].AttrOfOper) {
-                            list += "-" + mapExts[i].ExtType;
+                    for (var k = 0; k < mapExts.length; k++) {
+                        if (mapAttr.KeyOfEn == mapExts[k].AttrOfOper) {
+                            list += "-" + mapExts[k].ExtType;
                         }
                     }
                     list += "</a></li>";
@@ -105,6 +108,9 @@
             //增加新字段.
             en.FK_MapData = GetQueryString("FK_MapData");
             en.KeyOfEn = field;
+            en.UIHeight = en.UIHeight || 23;
+            en.UIWidth = en.UIWidth || 100;
+            en.GroupID = groupID ;
             en.Idx = 0;
             en.Insert();
             alert('字段插入成功' + en.MyPK);

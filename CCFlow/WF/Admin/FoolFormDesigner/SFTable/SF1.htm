@@ -62,22 +62,22 @@
 
             var en = new Entity("BP.Sys.SFTable");
             var webUser = new WebUser();
-            if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
-                en.CopyForm();
-                if (en.IsExits() == true) {
-                    alert("编号已经存在[" + en.No + "]请使用其他的编号.");
-                    return;
-                }
-                var sfType = GetQueryString("SFType");
-                en.SrcType = sfType; //自定义数据表.
-                en.Insert();
-                alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
-            } else {
-                alert("不支持的运行模式");
+            //   if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
+            en.CopyForm();
+            if (en.IsExits() == true) {
+                alert("编号已经存在[" + en.No + "]请使用其他的编号.");
                 return;
             }
+            var sfType = GetQueryString("SFType");
+            en.DBSrcType = sfType; //自定义数据表.
+            en.Insert();
+            alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
+            //} else {
+            //    alert("不支持的运行模式");
+            //    return;
+            //}
 
-            SetHref( "Default.htm");
+            SetHref("Default.htm");
             SetHref("../SFTableEditData.htm?FK_SFTable=" + en.No);
 
         }

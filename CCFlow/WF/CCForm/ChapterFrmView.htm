@@ -18,6 +18,7 @@
     <script src="../Scripts/layui/layui/layui.js" type="text/javascript"></script>
     <script src="../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <!--通用的JS-->
+    <script src="JS/jquery.mousewheel.min.js"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -26,8 +27,11 @@
     <script src="./JS/jspdf.min.js"></script>
     <script src="./JS/html2canvas.min.js"></script>
     <script src="JS/FrmDBRemark.js" type="text/javascript"></script>
+    <script src="../../WF/CCForm/FrmEnd.js"></script>
+    <script src="../Comm/JScript.js"></script>
+    <script src="../../WF/Portal/layui/layui.js" type="text/javascript"></script>
+    <script src="FrmFool.js" type="text/javascript">></script>
     <script language="javascript" type="text/javascript">
-
         layui.use(['tree', 'dropdown', 'form', 'jquery'], function () {
             var tree = layui.tree, $ = layui.jquery, dropdown = layui.dropdown;
             var frmID = null;
@@ -42,9 +46,14 @@
             var group = [];
             var num = 0;
             var ptype = null;
+            var form = layui.form;
+            var showGroup;//存储章节的显示状态，空则全部显示
+            var showAttrs;//存储字段的显示状态，空则全部显示
+            var groupFields = [];//章节分组.
+            var attrs = [];//字段.
+            var data = [];//表单所有信息，ChapterFrm_Init获取
             //页面启动函数.
             $(function () {
-
                 frmID = GetQueryString("FrmID");
                 oid = GetQueryString("WorkID");
                 if (oid == null)
@@ -54,63 +63,153 @@
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
                 handler.AddPara("FrmID", frmID);
                 handler.AddPara("OID", oid);
-                var data = handler.DoMethodReturnJSON("ChapterFrm_Init");
+                data = handler.DoMethodReturnJSON("ChapterFrm_Init");
+                console.log(data);
+                groupFields = data["GroupFields"];//章节分组.
+                attrs = data["Sys_MapAttr"];//字段.
 
-                var groupFields = data["GroupFields"];//章.
-                var attrs = data["MapAttrs"];//节.
+                //获取显示状态信息
+                var en = new Entity(frmID, oid);
+                console.log("获取的表单设置信息：", en);
+                //存储显示状态
+                showGroup = en.GetPara("ShowGroup");
+                if (showGroup == undefined)
+                    showGroup = [];
+                else showGroup = showGroup.split(',');
+                showAttrs = en.GetPara("ShowAttrs");
+                if (showAttrs == undefined)
+                    showAttrs = [];
+                else showAttrs = showAttrs.split(',');
+                console.log("显示状态", showGroup, showAttrs);
 
-                //获得第一个Key值.
-                GenerFistKey(key, groupFields, attrs);
-
-
-                //形成数据.
-                for (var i = 0; i < groupFields.length; i++) {
-                    var gf = groupFields[i];
-                    gf.children = [];
-                    var list = {
-                        title: gf.Lab,
-                        id: gf.FrmID,
-                        field: gf.Lab,
-                        spread: true,
-                        children: gf.children,
-                        checked: false,
-                        ...gf
+                //形成树形数据
+                groupFields.forEach((item) => {
+                    if (item.ParentOID === "" || item.ParentOID == null) {
+                        var child = {
+                            id: item.OID.toString(),
+                            title: item.Lab,
+                            children: [],
+                            ...item,
+                        };
+                        if ((showGroup.length > 0 && showGroup.indexOf(child.id) > -1) || showGroup.length === 0) {//看设置是否显示
+                            if (item.CtrlType === "Attr") {//Attr控件将其下的字段值放在attrChildren 中方便解析
+                                child.attrChildren = getAttrChildren(item.OID.toString(), item.CtrlType);
+                            } else {
+                                child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                            };
+                            group.push(child);
+                        };
                     }
-                    for (var idx = 0; idx < attrs.length; idx++) {
-                        var attr = attrs[idx];
-                        var clist = {
-                            title: attr.Name,
-                            id: attr.KeyOfEn,
-                            field: attr.Name,
-                            checked: false,
-                            pName: gf.Lab,
-                            ...attr
+                });
+                console.log("树形数组", group);
+
+                var html = "";
+                html += setTree(group, 1);
+                $("#wholeForm").html(html);//插入表单html
+                //渲染layui表单样式
+                form.render();
+                form.render('checkbox');
+                //占一行的元素标签靠左
+                var hang = $(".layui-col-sm12.layui-col-md12.layui-col-xm12.FoolFrmFieldLabel>.layui-form-label");
+                $.each(hang, function (index, item){
+                    $(item).attr("style", "text-align:left");
+                })
+                //iframe高度自适应
+                var thisForm = $('#wholeForm');
+                var iframes = $(thisForm).find("iframe");
+                for (var j = 0; j < iframes.length; j++) {
+
+                    $(iframes[j]).load(function () {
+                        var mainheight = $(this).contents().find("body").height();
+                        $(this).height(mainheight);
+                    });
+                }
+                return;
+
+                //解析Attr类型分组
+                function IniAttr(group) {
+                    var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+                    handler.AddPara("FK_MapData", frmID);
+                    handler.AddPara("OID", GetQueryString("WorkID"));
+                    var result = handler.DoMethodReturnString("ChapterFrm_AttrInit");
+                    if (result.indexOf('err@') == -1) {
+                        data.MainTable[0] = JSON.parse(result);
+                    }
+                    var attrhtm = "";
+                    var thisAttrData = {//改造数据，主要是Sys_MapAttr的字段显示与隐藏
+                        ...data,
+                        Sys_MapAttr: Array.isArray(group.attrChildren) && group.attrChildren.length > 0 ? group.attrChildren : group.children,
+                    }
+
+                    attrhtm += '<div id="Group_' + group.OID + '">';
+                    var tableCol = data.Sys_MapData[0].TableCol === 0 ? 4 : 6;
+                    attrhtm += InitMapAttr(thisAttrData, tableCol, group.OID);
+                    attrhtm += '</div>';
+
+                    //占一行的元素标签靠左
+                    var hang = $(".layui-col-xs12.FoolFrmFieldLabel>.layui-form-label");
+                    $(hang).attr("style", "text-align:left");
+                    //装载表单数据与修改表单元素风格.
+                    LoadFrmDataAndChangeEleStyle(thisAttrData);
+                    //渲染表单
+                    form.render();
+                    form.render('checkbox');
+                    //解析表单的扩展功能
+                    AfterBindEn_DealMapExt(thisAttrData);
+                    $.each($(".ccdate"), function (i, item) {
+                        var format = $(item).attr("data-info");
+                        var type = $(item).attr("data-type");
+                        if (format.indexOf("HH") != -1) {
+                            layui.laydate.render({
+                                elem: '#' + item.id,
+                                format: $(item).attr("data-info"), //可任意组合
+                                type: type,
+                                trigger: 'click',
+                                ready: function (date) {
+                                    var now = new Date();
+                                    var mm = "";
+                                    if (now.getMinutes() < 10)
+                                        mm = "0" + now.getMinutes();
+                                    else
+                                        mm = now.getMinutes();
+
+                                    var ss = "";
+                                    if (now.getSeconds() < 10)
+                                        ss = "0" + now.getSeconds();
+                                    else
+                                        ss = now.getSeconds();
+
+                                    this.dateTime.hours = now.getHours();
+                                    this.dateTime.minutes = mm;
+                                    this.dateTime.seconds = ss;
+                                },
+                                change: function (value, date, endDate) {
+                                    $('.laydate-btns-confirm').click();
+                                },
+                                done: function (value, date, endDate) {
+                                    var data = $(this.elem).data();
+                                    $(this.elem).val(value);
+                                    if (data && data.ReqDay != null && data.ReqDay != undefined)
+                                        ReqDays(data.ReqDay);
+                                }
+                            });
+                        } else {
+                            layui.laydate.render({
+                                elem: '#' + item.id,
+                                format: $(item).attr("data-info"), //可任意组合
+                                type: type,
+                                done: function (value, date, endDate) {
+                                    var data = $(this.elem).data();
+                                    $(this.elem).val(value);
+                                    if (data && data.ReqDay != null && data.ReqDay != undefined)
+                                        ReqDays(data.ReqDay);
+                                }
+                            });
                         }
 
-                        if (clist.GroupID == list.OID) {
-                            list.children.push(clist)
-                        }
-
-                    }
-                    group.push(list)
+                    })
+                    return attrhtm;
                 }
-                
-                function iframeFun(id, url, OId, item) {
-                    var myframe = document.getElementById(id).contentWindow;
-                    if (myframe.Save != undefined) {
-                        myframe.Save();
-                        CheckGroupFieldStr(OId, item);
-                    }
-                    if (myframe.SaveAll != undefined) {
-                        myframe.SaveAll();
-                        CheckGroupFieldStr(OId, item);
-                    }
-                    $("#toIframe").show();
-                    $("#toIframe").attr("src", url);
-                    $("#textRea").hide()
-
-                }
-
                 tree.render({
                     elem: '#test1' //默认是点击节点可进行收缩
                     , data: group,
@@ -144,13 +243,19 @@
                             if (obj.data.CtrlType == "Dtl") {
                                 $("#toIframe").show();
                                 $("#Title").html('')
-                                var url = Ele_Dtl(obj.data.CtrlID,1);
+                                var url = Ele_Dtl_Chapter(obj.data.CtrlID, 1);
                                 $("#toIframe").attr("src", url);
                                 $("#textRea").hide();
+                                $("#divCCForm").hide();
                                 isFrm = false;
                                 isDtl = true;
                                 key = obj.data.CtrlID;
                                 name = obj.data.Lab;
+                            }
+
+                            if (obj.data.CtrlType == "Attr") {
+
+                                IniAttr(obj.data);
                             }
 
                             if (obj.data.CtrlType == "Ath") {
@@ -178,10 +283,18 @@
                                 $("#toIframe").show();
                                 var url = '';
                                 if (obj.data.CtrlID.indexOf('http') == 0)
-                                    var url = obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&IsReadonly=1";
-                                else
-                                    var url = basePath + "" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&IsReadonly=1";
-
+                                    if (obj.data.CtrlID.indexOf('?') > -1) {
+                                        url = obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    } else {
+                                        url = obj.data.CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    }
+                                else {
+                                    if (obj.data.CtrlID.indexOf('?') > -1) {
+                                        url = basePath + "/" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    } else {
+                                        url = basePath + "/" + obj.data.CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    }
+                                }
                                 $("#toIframe").attr("src", url);
                                 $("#textRea").hide();
                                 //$("#template").hide();
@@ -199,10 +312,6 @@
                 function treeSet() {
                     treelist = document.querySelectorAll('.layui-tree-pack >.layui-tree-set');
                     treelist.forEach((item, index) => {
-                        var main = $(item).find('.layui-tree-txt');
-                        var hm = `<span>(${index + 1})&nbsp;</span>`;
-                        $(main).before(hm);
-                        $(item).find('.layui-tree-iconClick').hide();
                         db.push({
                             "attrKey": item.dataset.id,
                             "vals": '',
@@ -216,13 +325,19 @@
                         $(item).attr("id", "Pnode" + group[index].OID);
 
                         var main = $(item).find('.layui-tree-pack ');
-                       // var h = `<i class="icon-check rate"></i>`;
-                       // $(item).find(".layui-tree-main").append(h);
+                        // var h = `<i class="icon-check rate"></i>`;
+                        // $(item).find(".layui-tree-main").append(h);
                         //替换 tree icon
                         if (item.childNodes.length == 1) {
                             var sclass = $(item).find('.layui-tree-iconClick');
                             $(sclass).empty();
                             if (group[index].CtrlType == "Dtl") {
+                                // let i = `<i class="icon-notebook"></i>`
+                                let i = `<i class="icon-folder"></i>`
+                                $(sclass).html(i);
+                            }
+
+                            if (group[index].CtrlType == "Attr") {
                                 // let i = `<i class="icon-notebook"></i>`
                                 let i = `<i class="icon-folder"></i>`
                                 $(sclass).html(i);
@@ -249,56 +364,179 @@
                             let i = `<i class="icon-folder"></i>`
                             $(sclass).html(i);
                         }
-                        //默认第一个选中
-                        if (index == 0) {
-                            if (main.length == 0) {
-                                $('.layui-tree-set').removeClass("tree-txt-active");
-                                $(item).addClass("tree-txt-active");
-                                var url = '';
-                                //如果点击章.
-                                if (group[index].CtrlType == "Dtl") {
-                                    url = Ele_Dtl(group[index].CtrlID);
-                                }
-
-                                if (group[index].CtrlType == "Ath") {
-                                    url = basePath + "/WF/CCForm/Ath.htm?IsReadonly=1&AthPK=" + group[index].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                                }
-
-                                if (group[index].CtrlType == "ChapterFrmLinkFrm") {
-                                    url = basePath + "/WF/CCForm/Frm.htm?IsReadonly=1&FrmID=" + group[index].CtrlID + "&OID=" + oid + "&FK_MapData=" + group[index].CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
-                                }
-
-                                if (group[index].CtrlType == "ChapterFrmSelfUrl") {
-                                    if (group[index].CtrlID.indexOf('http') == 0)
-                                        url = group[index].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&IsReadonly=1";
-                                    else
-                                        url = basePath + "" + group[index].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&IsReadonly=1";
-                                }
-                                if (group[index].CtrlType == '') {
-                                    return;
-                                }
-                                eleOneDom = item;
-                                OId = group[index].OID;
-                                iframeFun("toIframe", url, OId, eleOneDom);
-                            } else {
-                                item.checked = true;
-                                item.children[index].checked = true;
-                                key = item.children[index].KeyOfEn;
-                                tinyInit();
-                                treelist[index].classList.add("tree-txt-active");
-                                name = group[index].children[index].Name;
-                                $("#Title").html(name)
-                                getContent(treelist[index].dataset.id);
-                                Tip = group[index].children[index].Tip;
-                                eleDom = $(treelist[index]).find(".rate");
-                            }
-                        }
-                        
                     })
                     showType(group, Tree_set)
                 }
                 treeSet();
+
+                //遍历树形数组
+                function setTree(list, level) {
+                    var htm = "";
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].Lab != undefined) {//当前节点是一个目录
+                            htm += findTitleLevel(level, list[i].title)
+                            if (Array.isArray(list[i].children) && list[i].children.length > 0) {
+                                var type = setTree(list[i].children, level + 1);
+                                if (type == "MapAttr") {
+                                    list[i].children.forEach((attr) => {
+                                        var cdata = data['MainTable'][0][attr.KeyOfEn];
+                                        htm += '<div class="layui-form-item layui-form-text">';
+                                        htm += '<label class="layui-form-label" style="margin-left: 32px;text-align:left">' + attr.Name + '</label>';
+                                        htm += '<div class="layui-input-block" style="margin-left: 32px;">';
+                                        htm += `<div name="TB_${attr.KeyOfEn}" id="TB_${attr.KeyOfEn}" class="div-textarea" >${cdata}</div>`;
+                                        htm += '</div> </div>';
+                                    })
+                                } else {//否则就是一个html字符串
+                                    htm += type;
+                                }
+                            } else if (list[i].CtrlType == "Attr" && Array.isArray(list[i].attrChildren) && list[i].attrChildren.length > 0) {
+                                htm += '<div class="layui-fluid fluid">';
+                                htm += '<div class="layui-row layui-col-space15" id="ContentDiv_' + list[i].OID + '">';
+                                htm += '<div class="layui-col-md12">';
+                                htm += '<div class="layui-card">';
+                                htm += '<div class="layui-card-body">';
+                                htm += '<form id="divCCForm_' + list[i].OID + '" class="layui-form">';
+                                htm += IniAttr(list[i]);
+                                htm += '</form>';
+                                htm += '</div></div ></div ></div ></div >';
+                            } else if (list[i].CtrlType == "Dtl") {
+                                var url = Ele_Dtl_Chapter(list[i].CtrlID, 1);
+                                htm += '<div class="layui-form">';
+                                htm += '<iframe id="' + list[i].OID + '" src="' + url + '" frameborder="0" style="width: 100%;height:auto; overflow-y: scroll;" ></iframe>';
+                                htm += '</div>';
+                            } else if (list[i].CtrlType == "Ath") {
+                                var url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + list[i].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&IsReadonly=1";
+                                htm += '<div class="layui-form">';
+                                htm += '<iframe id="' + list[i].OID + '" src="' + url + '" frameborder="0" style="width: 100%;height:auto;" scrolling="no" ></iframe>';
+                                htm += '</div>';
+                            } else if (list[i].CtrlType == "ChapterFrmLinkFrm") {
+                                var url = basePath + "/WF/CCForm/Frm.htm?IsReadonly=1&FrmID=" + list[i].CtrlID + "&OID=" + oid + "&FK_MapData=" + list[i].CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
+                                htm += '<div class="layui-form">';
+                                htm += '<iframe id="' + list[i].OID + '" src="' + url + '" frameborder="0"  style="width: 100%;" scrolling="no"></iframe>';
+                                htm += '</div>';
+                            } else if (list[i].CtrlType == "ChapterFrmSelfUrl") {
+                                var url = '';
+                                if (list[i].CtrlID.indexOf('http') == 0)
+                                    if (list[i].CtrlID.indexOf('?') > -1) {
+                                        url = list[i].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    } else {
+                                        url = list[i].CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    }
+                                else {
+                                    if (list[i].CtrlID.indexOf('?') > -1) {
+                                        url = basePath + "/" + list[i].CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    } else {
+                                        url = basePath + "/" + list[i].CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                                    }
+                                }
+                                htm += '<div class="layui-form">';
+                                htm += '<iframe id="' + list[i].OID + '" src="' + url + '" frameborder="0" style="width: 100%;" scrolling="no" ></iframe>';
+                                htm += '</div>';
+                            }
+                        } else {//当前列表的节点没有CtrlType字段 ，说明是一个mapAttr的集合
+                            console.log(list[i].Lab);
+                            return "MapAttr";
+                        }
+                    }
+                    return htm;
+                };
             });
+
+            //第几级标题
+            function findTitleLevel(level, name) {
+                var indent = 10*(level-1);
+                switch (level) {
+                    case 1:
+                        return "<h1 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h1>";
+                    case 2:
+                        return "<h2 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h2>";
+                    case 3:
+                        return "<h3 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h3>";
+                    case 4:
+                        return "<h4 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h4>";
+                    case 5:
+                        return "<h5 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h5>";
+                    case 6:
+                        return "<h6 style='margin:10px; margin-left:" + indent + "px'>" + name + "</h6>";
+
+
+                };
+            };
+
+            
+
+
+            //递归构造章节树形结构，获取parentId的孩子
+            function getChildren(parentId) {
+                var children = [];
+                groupFields.forEach((item) => {
+                    if (item.ParentOID === parentId) {
+                        var child = {
+                            id: item.OID.toString(),
+                            title: item.Lab,
+                            children: [],
+                            attrChildren: [],
+                            ...item,
+                        };
+                        if ((showGroup.length > 0 && showGroup.indexOf(child.id) > -1) || showGroup.length === 0) {//看设置是否显示
+                            if (item.CtrlType === "Attr") {
+                                child.attrChildren = getAttrChildren(item.OID.toString(), item.CtrlType);
+                            } else {
+                                child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                            };
+                            children.push(child);
+                        };
+
+                    }
+                });
+                return children;
+            }
+
+            //获取本章节下的attr字段，groupId下的字段
+            function getAttrChildren(groupId, ctrlType) {
+                var attrList = [];
+                //非Attr型控件，非默认控件，不显示其下字段
+                if (ctrlType != "Attr" && ctrlType != "" && ctrlType != null)
+                    return [];
+
+                for (var i = 0; i < attrs.length; i++) {
+                    var attr = attrs[i];
+                    if (attr.MyDataType != 1 && ctrlType == "")
+                        continue;
+                    if (attr.GroupID === groupId && attr.UIVisible === 1) {//只显示可见的字段
+                        var attr = {
+                            id: attr.KeyOfEn,
+                            title: attr.Name,
+                            ...attr,
+                        };
+                        if (attr.UIContralType == 1) {//如果是下拉框，存储下拉列表值
+                            if (attr.MyDataType == 2)//枚举下拉
+                                attr.DDLlist = $.grep(data['Sys_Enum'], function (item, index) {
+                                    return item.EnumKey == attr.KeyOfEn;
+                                });
+                            else if (attr.MyDataType == 1)//下拉单选
+                                attr.DDLlist = data[attr.KeyOfEn];
+                        }
+                        else if (attr.UIContralType == 3 && attr.MyDataType == 2) {//枚举单选 radio
+                            attr.DDLlist = $.grep(data['Sys_Enum'], function (item, index) {
+                                return item.EnumKey == attr.KeyOfEn;
+                            });
+                        }
+                        if ((showAttrs.length > 0 && showAttrs.indexOf(attr.KeyOfEn) > -1) || showAttrs.length === 0) {//看是否设置显示
+                            if ((ctrlType === "" || ctrlType == null) && attr.TextModel != 1) {//默认型控件，只显示文本字段
+                                if (attr.MyDataType == 1 && attr.UIContralType == 0) {
+                                    attrList.push(attr);
+                                };
+                            } else if (ctrlType === "Attr") {//Attr控件所有类型的字段都显示
+                                attrList.push(attr);
+                            };
+                        };
+                    };
+
+                };
+                return attrList;
+            }
+
 
             function showType(group, Tree_set) {
                 let n = 0;
@@ -348,10 +586,7 @@
             function AddNoDuplicateElements(ele, data) {
 
                 if (ptype != 'print') {
-                    var aphtml = `<div class="itemlist" id="ele_${ele}">
-                                                    <div id="title_${ele}"></div>
-                                                   <div><h4 id="n_${ele}"></h4><p>${data}</p></div>
-                                                  </div>`
+                    var aphtml = `<div class="itemlist" id="ele_${ele}"><div id="title_${ele}"></div><div><h4 id="n_${ele}"></h4><p>${data}</p></div></div>`
                     var arr = []
                     arr.push(ele)
                     for (var i = 0; i < arr.length; i++) {
@@ -364,52 +599,28 @@
                     $("#ele_" + ele).show();
                     addtitle(ele)
                 } else {
-                    var aphtml = `<div class="itemlist">
-                                                   <div id="tit_${ele}"></div>
-                                                    <div><h4 id="nt_${ele}"></h4><p>${data}</p></div>
-                                                  </div>`
+                    var aphtml = `<div class="itemlist"><div id="tit_${ele}"></div><div><h4 id="nt_${ele}"></h4><p>${data}</p></div></div>`
                     $("#print").append(aphtml);
                     addtitle(ele)
                 }
 
 
             }
-
-
-            $('#View').click(function () {
-                if (key == undefined || key == '') {
-                    layer.msg('请先选择子节点', { icon: 6 });
-                    return;
-                } else {
-                    var url = "ChapterFrmView.htm?FrmID=" + frmID + "&OID=" + oid + "&attrKey=" + key;
-                    // WinOpenFull(url);
-                    OpenLayuiDialog(url, '', '1200', '', '', false)
-                }
-
-            })
-            $('#Exp').click(function () {
-                var url = "ChapterFrmExp.htm?FrmID=" + frmID + "&OID=" + oid + "&attrKey=" + key;
-                // WinOpenFull(url);
-                OpenLayuiDialog(url, '', '1200', '', '', false);
-                layer.load(0, {
-                    shade: [0.6, '#fff'],
-                    content: '下载中...',
-                    success: function (layero) {
-                        layero.find('.layui-layer-content').css({
-                            'padding-top': '35px',
-                            'text-align': 'center',
-                            'z-index': '19891016'
-                        });
-                    }
-                });
-                ;
-            })
-
         })
 
     </script>
 
     <style type="text/css">
+        .div-textarea {
+            border-width: 1px;
+            border-style: solid;
+            background-color: #fff;
+            border-radius: 2px;
+            border-color: #eee;
+            box-sizing: border-box;
+            min-height:100px;
+            padding:10px;
+        }
         .border_1 {
             border: 1px solid #ccc;
             height: 96vh;
@@ -474,7 +685,8 @@
             display: none;
             width: 100%;
             border: none;
-            height: 96vh;
+            height: 96vh !important;
+          
         }
 
         .layui-tab-content {
@@ -558,49 +770,37 @@
             height: 0px;
             background-color: #F5F5F5;
         }
-        .rate{
-            margin:5px;
+
+        .rate {
+            margin: 5px;
+        }
+        .layui-form-label {
+            width: calc(100% - 48px);
+            float:none;
+        }
+        .mustInput{
+            float:right;
         }
     </style>
 </head>
 
-<body id="content" style="overflow:hidden">
-    <!--startprint1-->
-    <div class="layui-row">
-        <div class="layui-col-sm3 layui-col-md3 layui-col-xs3">
-            <div class="layui-tab layui-tab-brief" lay-filter="docTabBrief">
-                <!-- <div class="layui-tab-title">
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" id="View">预览</button>
-    <button class="layui-btn layui-btn-primary layui-btn-sm" id="Exp">导出</button>
-            </div>-->
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <div id="test1" class="demo-tree demo-tree-box" style="height: calc(100vh - 70px); overflow-x: auto "></div>
-                    </div>
-                </div>
+<body id="content" style="overflow:scroll;display:flex;justify-content:center;width:100%">
 
-            </div>
-        </div>
-        <div class="layui-col-sm9 layui-col-md9 layui-col-xs9" style="overflow-y:hidden">
-            <div class="layui-card">
-                <div class="layui-card-header">
-                    <div class="labelTitle" id="Title"></div>
-                    <!--<div class="layui-right" id="template">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm">审阅&版本</button>
-                    </div>-->
-                </div>
-                <div class="layui-card-body">
-                    <div class="layui-form" id="textRea">
-                        <div id="docs"></div>
-                    </div>
-                    <div class="layui-form">
-                        <iframe id="toIframe" frameborder="0" style="width: 100%; height: calc(100vh - 40px); " scroll=no></iframe>
+
+    <!--startprint1-->
+    <form class="layui-form">
+        <div class="layui-row" style="width: 100%">
+            <div class="layui-col-sm9 layui-col-md9 layui-col-xs9" style=" width: 100%">
+                <div class="layui-card">
+                    <div class="layui-card-body" id="wholeForm">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+    
     <!--endprint1-->
+
 </body>
 
 </html>

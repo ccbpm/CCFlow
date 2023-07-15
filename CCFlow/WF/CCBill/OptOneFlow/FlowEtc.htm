@@ -290,6 +290,11 @@
     </script>
     <script>
         $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                var html = "\n .layui-btn{\n background-color:'#5053f1';\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:'#5053f1';\n}";
+                html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:'#5053f1' !important\n}";
+                html += "\n .layui-form-select dl dd.layui-this{\n background-color:#5053f1' !important;\n}";
+            }
             var theme = DealText(localStorage.getItem("themeColorInfo"));
             theme = JSON.parse(theme);
             var styleScope = document.getElementById("theme-data");

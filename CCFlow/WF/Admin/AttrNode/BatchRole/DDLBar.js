@@ -41,6 +41,7 @@ function GetDBDtl() {
         { "No": 0, "Name": "不处理", "GroupNo": "A", "Url": "0.None.htm" },
         { "No": 1, "Name": "审核组件模式", "GroupNo": "A", "Url": "1.WorkCheck.htm" },
         { "No": 2, "Name": "审核字段分组模式", "GroupNo": "A", "Url": "2.GroupFieldCheck.htm" },
+    { "No": 3, "Name": "自定义", "GroupNo": "A", "Url": "3.Self.htm" },
     ];
     return json;
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>驰骋工作流程管理系统</title>
+    <title>驰骋BPM</title>
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="../Comm/fonts/font-awesome.css" rel="stylesheet">
     <link href="../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -117,14 +117,15 @@
         $(function () {
 
             var webUser = new WebUser();
-
+            //var en = new Entity("BP.Sys.UserRegedit");
+            //en.MyPK = webUser.UserID;
+            //if (en.Retrieve())
+            var userNo = webUser.No;
             if (webUser.CCBPMRunModel == 2)
-            {
-                SetHref( "../../App/Setting/Default.htm");
-                return;
-            }
-
-
+                userNo = webUser.OrgNo + "_" + userNo;
+            var url = "/WF/Comm/En.htm?EnName=BP.Port.Emp&No=" + userNo;
+            window.location.href = url;
+            return;
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
             var data = handler.DoMethodReturnString("Default_Init");
@@ -134,7 +135,6 @@
             }
 
             data = JSON.parse(data);
-
             //调用公共类库的方法:执行批量主表赋值
             GenerFullAllCtrlsVal(data);
 

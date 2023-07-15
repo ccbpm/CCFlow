@@ -102,7 +102,7 @@ function ActiveUploadFile(upfileNo, upfileName) {
 
 function downLoadFileM(OID) {
     if (plant == "CCFlow")
-        SetHref('../../CCForm/DownFile.aspx?DoType=EntityMutliFile_Load&OID=' + OID);
+        SetHref(basePath + '/WF/Comm/ProcessRequest?DoType=HttpHandler&HttpHandlerName=BP.WF.HttpHandler.WF_CommEntity&DoMethod=EntityMutliFile_Load&OID=' + OID);
     else {
         SetHref(basePath + '/WF/Ath/EntityMutliFile_Load.do?OID=' + OID);
     }

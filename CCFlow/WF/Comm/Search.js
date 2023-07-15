@@ -682,6 +682,9 @@ function GetColoums(data, thrMultiTitle, secMultiTitle, colorSet, sortColumns, f
            		templet: function (row) {
                     var formatter = "";
                     var val = row[this.field];
+                    if (typeof val == 'undefined') {
+                        val = row[this.field.substring(0, this.field.length-4)];
+                    }
                     var field = this.field.substring(0, this.field.length - 4);
                     if (foramtFunc != "" && foramtFunc.indexOf(field + "@") != -1) {
                         formatter = foramtFunc.substring(foramtFunc.indexOf(field + "@"));
@@ -798,6 +801,8 @@ function GetColoums(data, thrMultiTitle, secMultiTitle, colorSet, sortColumns, f
                     return "<i  class='" + row[this.field] + "'></i>";
                 }
                 var val = row[this.field];
+                if (val == null)
+                    val = "";
                 var formatter = "";
 
                 if (foramtFunc != "" && foramtFunc.indexOf(this.field + "@") != -1) {
@@ -1402,7 +1407,7 @@ function htmlDecodeByRegExp(str) {
 }
 
 
-function OpenEn(pk, paras, flag, row,obj) {
+function OpenEn(pk, paras, flag, row, obj, openType) {
     if (row != null && row != undefined && row != "")
         row = JSON.parse(decodeURIComponent(row));
 
@@ -1469,12 +1474,24 @@ function OpenEn(pk, paras, flag, row,obj) {
     var openModel = cfg.OpenModel;
 
     if (openModel == 0) {
-        if (cfg.IsRefreshParentPage == 1) 
-            OpenLayuiDialog(url, mapBase.EnDesc + ' : 详细', windowW, 100, "r", false, false, false, null, function () {
-                ChangeTableData(pk,enName,obj);
+		var tName = "详细";
+        if(openType == 'New'){
+            tName = "新建";
+        }
+        if(openType == 'Edit'){
+            tName = "编辑";
+        }
+        var isRefresh = cfg.IsRefreshParentPage == 1 ? true : false;
+        if (isRefresh) 
+            OpenLayuiDialog(url, mapBase.EnDesc + ' : ' + tName, windowW, 100, "r", false, false, false, null, function () {
+                if(pk== null || pk == undefined || pk=="" ){
+                    SearchData();
+                    return;
+                }
+				ChangeTableData(pk,enName,obj);
             });
         else
-            OpenLayuiDialog(url, mapBase.EnDesc + ' : 详细', windowW, 100, "r", false);
+            OpenLayuiDialog(url, mapBase.EnDesc + ' : ' + tName, windowW, 100, "r", false);
     } else {
         var windowObj = window.open(url);
         if (flag == 0 || cfg.IsRefreshParentPage == 1) {
@@ -1531,7 +1548,7 @@ function ChangeTableData(pkVal, enName, obj) {
 }
 
 function New() {
-    OpenEn("", "", 0, null);
+    OpenEn("", "", 0, null, "New");
 }
 
 function Exp(type, pageType) {
@@ -1623,7 +1640,7 @@ function openFun(warning, url, title) {
 
 function downLoadFile(PKVal) {
     if (plant == "CCFlow")
-        SetHref('../CCForm/DownFile.aspx?DoType=EntityFile_Load&DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnsName"));
+        SetHref(basePath + '/WF/Comm/ProcessRequest?DoType=HttpHandler&HttpHandlerName=BP.WF.HttpHandler.WF_CommEntity&DoMethod=EntityFile_Load&DelPKVal=' + PKVal + '&EnsName=' + GetQueryString("EnsName"));
     else {
         var currentPath = GetHrefUrl();
         var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);

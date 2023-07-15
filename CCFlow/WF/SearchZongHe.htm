@@ -16,7 +16,6 @@
     <script src="Scripts/config.js" type="text/javascript"></script>
     <script type="text/javascript" src="Comm/Gener.js"></script>
     <script type="text/javascript" src="Scripts/dayjs.min.js"></script>
-    <script type="text/javascript" src="Scripts/dayjs/duration.js"></script>
     <style>
         body {
             padding: 0;
@@ -102,8 +101,8 @@
             </el-table-column>
             <el-table-column prop="lastDate" label="最后日期" />
             </el-table-column>
-            <el-table-column prop="time" label="耗时" />
-            </el-table-column>
+            <!--<el-table-column prop="time" label="耗时" />
+            </el-table-column>-->
             <el-table-column prop="status" label="状态" />
             </el-table-column>
         </el-table>
@@ -121,7 +120,7 @@
                         StarterName: '发起人',
                         initiateDate: '发起日期',
                         lastDate: '最后日期',
-                        time: '耗时',
+                        //time: '耗时',
                         status: '状态'
                     }
                 ],
@@ -184,7 +183,7 @@
                     } else {
                         //diffm = dayjs.duration(dayjs().diff(dayjs(item.RDT)))
                     }
-                    //const dayObj = dayjs.duration(diffm).$d.$ds;
+                   // const dayObj = dayjs.duration(diffm).$d.$ds;
                     //item.time = `${dayObj.days}天${dayObj.hours}时${dayObj.minutes}分`
                     /*
                         dayjs diff
@@ -207,7 +206,7 @@
             }
         },
         created() {
-            dayjs.extend(dayjs_plugin_duration);
+           // dayjs.extend(dayjs_plugin_duration);
         },
         mounted() {
             this.search();

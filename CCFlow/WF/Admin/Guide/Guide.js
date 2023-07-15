@@ -4,6 +4,7 @@ var token = null;
 var userNo = null;
 $(function () {
 
+    return;
     //if (window.screenLeft == 0 && window.document.body.clientWidth == window.screen.width) {
     //    alert("full");
     //}
@@ -182,13 +183,13 @@ function Frm() {
 
         var nodeID = parseInt(flowNo + "01");
         var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?1=1";
-        url += "&FlowNo=" + flowNo;
-        url += "&FK_Flow=" + flowNo;
-        url += "&FK_MapData=ND" + nodeID;
-        url += "&FrmID=ND" + nodeID;
-        url += "&FK_Node=" + nodeID;
-        url += "&UserNo=" + userNo;
-        url += "&Token=" + token;
+        url += "&FlowNo=" + GetFlowNo();
+        url += "&FK_Flow=" + GetFlowNo();
+        url += "&FK_Node=" + GetQueryString("NodeID");
+        url += "&UserNo=" + GetQueryString("UserNo");
+        url += "&Token=" + GetQueryString("Token");
+        url += "&FK_MapData=ND" + nodeID; 
+
         url += "&IsShowHideGuide=1";
         //window.location.href = filterXSS(url);
         OpenLayuiDialog(filterXSS(url), "设计表单ND" + nodeID, window.innerWidth * 0.9);
@@ -233,24 +234,33 @@ function Frm() {
     return;
 }
 
+function GetFlowNo() {
+
+    var no = GetQueryString("FlowNo");
+    if (no == undefined || no == null)
+        no = GetQueryString("FK_Flow");
+    return no;
+}
+
 function Flow() {
+
     var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?1=1";
-    url += "&FlowNo=" + flowNo;
-    url += "&FK_Flow=" + flowNo;
-    url += "&FK_Node=" + nodeID;
-    url += "&UserNo=" + userNo;
-    url += "&Token=" + token;
+    url += "&FlowNo=" + GetFlowNo();
+    url += "&FK_Flow=" + GetFlowNo();
+    url += "&FK_Node=" + GetQueryString("NodeID");
+    url += "&UserNo=" + GetQueryString("UserNo");
+    url += "&Token=" + GetQueryString("Token");
     window.location.href = filterXSS(url);
 }
 
 function Accepter() {
 
     var url = basePath + "/WF/Admin/BatchSetting/GuideAccepter.htm?1=1";
-    url += "&FlowNo=" + flowNo;
-    url += "&FK_Flow=" + flowNo;
-    url += "&FK_Node=" + nodeID;
-    url += "&UserNo=" + userNo;
-    url += "&Token=" + token;
+    url += "&FlowNo=" + GetFlowNo();
+    url += "&FK_Flow=" + GetFlowNo();
+    url += "&FK_Node=" + GetQueryString("nodeID");
+    url += "&UserNo=" + GetQueryString("UserNo");
+    url += "&Token=" + GetQueryString("Token");
     window.location.href = filterXSS(url);
 }
 
@@ -261,12 +271,15 @@ function TestingContainer() {
 
     var flowNo = GetQueryString("FK_Flow");
     var url = basePath + "/WF/Admin/TestingContainer/TestFlow2020.htm?1=1";
-    url += "&FlowNo=" + flowNo;
-    url += "&FK_Flow=" + flowNo;
+    url += "&FlowNo=" + GetFlowNo();
+    url += "&FK_Flow=" + GetFlowNo();
+    url += "&FK_Node=" + GetQueryString("nodeID");
     url += "&UserNo=" + GetQueryString("UserNo");
-    //url += "&Token=" + GetQueryString("Token");
-    url += "&FK_Node=" + GetNodeID();
-    window.location.href = filterXSS(url);
+    url += "&Token=" + GetQueryString("Token");
+    /*    window.location.href = filterXSS(url);*/
+    var W = window.innerWidth / 2;
+    OpenLayuiDialog(url, "", W, 70, "auto");
+
 }
 
 

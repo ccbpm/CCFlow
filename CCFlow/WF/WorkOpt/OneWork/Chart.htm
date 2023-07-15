@@ -365,7 +365,7 @@
             var isExist;
             var currNode = parseInt(GetQueryString("FK_Node"));
             var flowInfo = datas.FlowInfo[0];
-            var gwls = jdata.WF_GenerWorkerList;
+            var gwls = jdata.WF_GenerWorkerlist;
             var subFlows = datas.WF_NodeSubFlow ||[];
             var gwfs = datas.WF_GenerWorkFlow || [];
 
@@ -517,7 +517,7 @@
                         var tablehtml = "";
 
                         //增加到达时间,应完成时间.
-                        var generWorkerLists = jdata.WF_GenerWorkerList;
+                        var generWorkerLists = jdata.WF_GenerWorkerlist;
 
                         if (generWorkerLists != null) {
 

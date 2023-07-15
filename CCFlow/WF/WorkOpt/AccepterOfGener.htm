@@ -14,7 +14,11 @@
      <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
 
      <link href="../Scripts/layui/layui/css/modules/layer/default/layer.css" rel="stylesheet" />-->
+    <link href="../Portal/icons/font-icons.min.css" rel="stylesheet" />
+    <link href="../Portal/icons/icons.css" rel="stylesheet" />
     <link href="../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <!--<link href="../Portal/layui/css/layui.css" rel="stylesheet" />
+    <link href="../Portal/layui/css/customer.css" rel="stylesheet" />-->
     <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -78,11 +82,12 @@
             padding: 4px 15px;
         }
 
-        button:hover {
-            background: #f5f5f5 !important;
-            color: #000;
-            border: 1px solid #ccc !important;
-        }
+            button:hover {
+                background: #f5f5f5 !important;
+                color: #000;
+                border: 1px solid #ccc !important;
+            }
+
         .form-unit {
             font-size: 17px;
             /* font-style: oblique; */
@@ -165,7 +170,8 @@
 
 
             $('#Btn_SelectEmps').bind('click', function () {
-                $('#iframeSelectEmpsForm').attr('src', url);
+                var iframeUrl = url + "&SelectedEmps=" + selectEmpNo;
+                $('#iframeSelectEmpsForm').attr('src', iframeUrl);
                 $('#SelectEmpsModal').modal().show();
 
             });
@@ -200,11 +206,11 @@
                 //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
-                row += "<td style='width:40px;'><a href=\"javascript:Up('" + sa.MyPK + "');\" >上移</a></td>";
-                row += "<td style='width:40px;'><a href=\"javascript:Down('" + sa.MyPK + "');\" >下移</a></td>";
+                row += "<td style='width:40px;'><a href=\"javascript:Up('" + sa.MyPK + "');\" ><i class=icon-arrow-up-circle></i>上移</a></td>";
+                row += "<td style='width:40px;'><a href=\"javascript:Down('" + sa.MyPK + "');\" ><i class=icon-arrow-down-circle></i> 下移</a></td>";
 
                 if (isDel == true)
-                    row += "<td style='width:40px;'><a href=\"javascript:DeleteIt('" + sa.MyPK + "');\" >移除</a></td>";
+                    row += "<td style='width:40px;'><a href=\"javascript:DeleteIt('" + sa.MyPK + "');\" ><i class=icon-close></i> 移除</a></td>";
                 else
                     row += "<td style='width:40px;'> <a href=\"javascript:alert('当前节点是单选节点，当前处理人是默认自动计算的处理人，请选择一个处理人，系统就会自动替换掉。');\">帮助</a></td>";
 
@@ -333,6 +339,10 @@
         }
 
         function SendIt() {
+            if (pageFrom != null && pageFrom != undefined && pageFrom == "WorkCheckModel") {
+                window.parent.returnWorkWindowClose(selectEmpNo);
+                return;
+            }
 
             var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             httphandler.AddUrlData(); //FK_Flow,FK_Node,WorkID,FID,ToNode 等参数.
@@ -676,16 +686,17 @@
         <tbody>
         </tbody>
     </table>
-    <div style="margin-left:20px">
-        <div style="float:left;margin-top:4px">
+    <div style="margin-left:20px;display:flex;justify-content:space-between;">
+        <div style="display:flex;margin-top:4px">
+            <div>
+                <input type="text" id="TB_Emps" name="TB_Emps"
+                       title="输入: zs或zhangs或zhangsan"
+                       placeholder="查张三,您可输入: zs或zhangs或zhangsan"
+                       value='' style="width: 350px; height: 25px;" />
 
-            <input type="text" id="TB_Emps" name="TB_Emps"
-                    title="输入: zs或zhangs或zhangsan"
-                    placeholder="查张三,您可输入: zs或zhangs或zhangsan"
-                    value='' style="width:350px;" />
-
-            <div id="SelectEmp"></div>
-            <div style="float:right;padding-bottom:5px;">
+                <div id="SelectEmp"></div>
+            </div>
+            <div style="margin-top:-4px;" >
                 <button id="Btn_SelectEmps">
                     <img src="../Img/Btn/AddLeader.png" /> 选人
                 </button>

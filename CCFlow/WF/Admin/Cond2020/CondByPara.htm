@@ -74,7 +74,9 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_Cond");
             handler.AddUrlData();
-            handler.AddFormData();
+            //handler.AddFormData();
+            handler.AddPara("TB_Docs", encodeURI(sqlVal));
+            handler.AddPara("TB_Note", encodeURI(note));
             var data = handler.DoMethodReturnString("CondByPara_Save");
 
             if (data.indexOf('err@') == 0) {

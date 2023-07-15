@@ -32,7 +32,6 @@ function InitBar(optionKey) {
         html = "<div>发起人范围限定规则: ";
 
     html += "<select id='changBar' onchange='changeOption()'>";
-
     html += "<option value=null  disabled='disabled'>+按组织结构绑定</option>";
 
     var webUser = new WebUser();
@@ -42,12 +41,14 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算</option>";
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
+        //不常用的放入到下面.
+        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
+        html += "<option value=" + DeliveryWay.ByDeptAndEmpField + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门人员选择器计算</option>";
 
-        if (webUser.CCBPMRunModel == 1) {
-            html += "<option value=" + DeliveryWay.ByTeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
-            html += "<option value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
-            html += "<option value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
-            html += "<option value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+        if (webUser.CCBPMRunModel == 1 || webUser.CCBPMRunModel == 2) {
+
+            html += "<option value=null  disabled='disabled'>+按用户组计算</option>";
+            html += "<option value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组</option>";
         }
 
 
@@ -55,17 +56,11 @@ function InitBar(optionKey) {
 
         html += "<option value=" + DeliveryWay.ByStation + ">&nbsp;&nbsp;&nbsp;&nbsp;按岗位智能计算</option>";
         html += "<option value=" + DeliveryWay.ByStationOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;仅按绑定的岗位计算</option>";
-        if (webUser.CCBPMRunModel == 1) {
-            html += "<option value=" + DeliveryWay.ByTeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
-            html += "<option value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
-            html += "<option value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
-            html += "<option value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
-         
-        }
+      
 
         html += "<option value=" + DeliveryWay.ByBindEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的人员计算</option>";
         html += "<option value=" + DeliveryWay.ByDeptAndStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位与部门交集计算</option>";
-       // html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
+        // html += "<option value=" + DeliveryWay.ByStationAndEmpDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位计算并且以绑定的部门集合为纬度</option>";
         html += "<option value=" + DeliveryWay.BySpecNodeEmpStation + " >&nbsp;&nbsp;&nbsp;&nbsp;按指定节点的人员岗位计算</option>";
         html += "<option value=" + DeliveryWay.BySetDeptAsSubthread + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定部门计算，该部门一人处理标识该工作结束(子线程)</option>";
 
@@ -74,11 +69,23 @@ function InitBar(optionKey) {
         html += "<option value=" + DeliveryWay.ByEmpLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找指定节点的人员直属领导.</option>";
         //  html += "<option value=" + DeliveryWay.ByDeptShipLeader + ">&nbsp;&nbsp;&nbsp;&nbsp;找本部门的分管领导.</option>";
         // 与按照岗位智能计算不同的是，仅仅找本部门的人员.
+
+        //不常用的放入到下面.
+        html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
+        html += "<option value=" + DeliveryWay.ByDeptAndEmpField + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门人员选择器计算</option>";
+
+        if (webUser.CCBPMRunModel == 1 || webUser.CCBPMRunModel == 2) {
+            html += "<option value=null  disabled='disabled'>+按用户组计算</option>";
+            if (webUser.CCBPMRunModel == 1)
+                html += "<option value=" + DeliveryWay.ByTeamOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(全集团)</option>";
+
+            html += "<option value=" + DeliveryWay.ByTeamOrgOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本组织人员)</option>";
+            html += "<option value=" + DeliveryWay.ByTeamDeptOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的用户组(本部门人员)</option>";
+         //   html += "<option value=" + DeliveryWay.ByBindTeamEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的岗位用户组的人员计算</option>";
+        }
     }
 
-    //不常用的放入到下面.
-    html += "<option value=" + DeliveryWay.ByDept + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门计算</option>";
-    html += "<option value=" + DeliveryWay.ByDeptAndEmpField + " >&nbsp;&nbsp;&nbsp;&nbsp;按绑定的部门人员选择器计算</option>";
+
 
     if (isSatrtNode == false) {
         html += "<option value=null disabled='disabled' >+按上一个节点的处理人身份</option>";
@@ -89,8 +96,8 @@ function InitBar(optionKey) {
     if (isSatrtNode == false) {
         html += "<option value=null disabled='disabled' >+按指定节点处理人</option>";
         html += "<option value=" + DeliveryWay.ByStarter + " >&nbsp;&nbsp;&nbsp;&nbsp;与开始节点处理人相同</option>";
+        html += "<option value=" + DeliveryWay.BySpecNodeEmp + " >&nbsp;&nbsp;&nbsp;&nbsp;指定的节点相同</option>"; //@by zhoupeng  add 为啥去掉了？
         html += "<option value=" + DeliveryWay.ByPreviousNodeEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;与上一节点处理人相同</option>";
-       
     }
 
 
@@ -146,23 +153,18 @@ function InitBar(optionKey) {
 
         html += "<option value=" + DeliveryWay.BySelfUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;自定义人员选择器</option>";
         html += "<option value=" + DeliveryWay.ByAPIUrl + " >&nbsp;&nbsp;&nbsp;&nbsp;按照设置的WebAPI接口获取的数据计算</option>";
-     
+
         html += "<option value=" + DeliveryWay.ByFEE + " >&nbsp;&nbsp;&nbsp;&nbsp;由FEE来决定</option>";
         html += "<option value=" + DeliveryWay.ByFromEmpToEmp + ">&nbsp;&nbsp;&nbsp;&nbsp;按照配置的人员路由列表计算</option>";
         html += "<option value=" + DeliveryWay.ByCCFlowBPM + " >&nbsp;&nbsp;&nbsp;&nbsp;按ccBPM的BPM模式处理</option>";
-
     }
-
-
 
     html += "</select >";
     html += "<button  id='Btn_Save'type=button  onclick='SaveRole()' value='保存' />保存</button>";
     if (GetQueryString("FK_Node").substr(GetQueryString("FK_Node").length - 2) != "01")
         html += "<button id='Btn_Advanced' type=button onclick='AdvSetting()' />更多设置</button>";
-
     html += "<button id='Btn_Batch' type=button onclick='Batch()' value='批处理设置' />批处理设置</button>";
     html += "</div>";
-
     document.getElementById("bar").innerHTML = html;
 
     $("#changBar option[value='" + optionKey + "']").attr("selected", "selected");
@@ -551,7 +553,7 @@ function changeOption() {
         case DeliveryWay.ByGuest:
             roleName = "51.ByGuest.htm";
             break;
-       
+
         default:
             roleName = "0.ByStation.htm";
             break;
@@ -559,7 +561,7 @@ function changeOption() {
 
     // alert(roleName);
 
-    SetHref( roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo);
+    SetHref(roleName + "?FK_Node=" + nodeID + "&FK_Flow=" + flowNo);
 }
 function SaveAndClose() {
     Save();

@@ -385,12 +385,14 @@ var uploadTools = {
                     data: formData,
                     processData: false,
                     contentType: false,
+                    dataType: 'html',
                     success: function (data) {
                         if (typeof AfterAthUploadOver === 'function')
                             AfterAthUploadOver(AthParams.FK_MapData, AthParams.PKVal, data);
                         setTimeout(function () { opt.onUpload(opt, data) }, 500);
                     },
                     error: function (e) {
+                        console.log(e);
 
                     }
                 });

@@ -97,7 +97,64 @@
             SetHref(url);
         }
         function Imp_DoneBPM() {
-            alert("已经取消了支持.");
+            $("#Btn_ImpBPMN").val("正在导入...");
+            var fk_flowSort = GetQueryString("FK_FlowSort");
+            var fk_flow = GetQueryString("FK_Flow");
+            var impWay = GetRadioValue("RB_ImpType");
+            var spenFlowNo = document.getElementById("TB_SpecFlowNo").value;
+            var fileValue = $("#File_UploadBPMN").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择流程模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".xml") {
+                $.messager.alert("提示", "所选不是流程模板文件，请重新选择。");
+                return;
+            }
+            //如果为指定流程编号导入，则编号不可以为空
+            if (impWay == "3" && spenFlowNo == "") {
+                $.messager.alert("提示", "导入模式为指定流程编号模式，编号不可以为空。", "icon-info", function () {
+                    $("#TB_SpecFlowNo").focus();
+                });
+                return;
+            }
+
+            layer.load();
+            //提交数据
+            var httpHandlerName = "BP.WF.HttpHandler.WF_Admin_AttrFlow";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_DoneBPMN&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    layer.closeAll('loading');
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var json = cceval('(' + data + ')');
+
+                    $.messager.alert("提示", json.Msg, "icon-info", function () {
+                        //打开新建的流程
+                        if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+                            window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+                        }
+                        //关闭导入界面
+                        if (typeof window.parent.TabCloseByTitle != "undefined") {
+                            //需要延时关闭，不可立即关闭。
+                            setTimeout("window.parent.TabCloseByTitle('导入流程模版')", 1000);
+                        }
+                    });
+                }
+            });
             return;
         }
         function Exp() {
@@ -150,7 +207,7 @@
                     <li>导入符合bpmn2.0格式的文件 </li>
                     <li>
                         请选择文件:
-                        <input style="background-color:white;color:#000000" type="file" id="File_UploadBPMN" name="File_Upload" />
+                        <input style="background-color:white;color:#000000" type="file" id="File_UploadBPMN" name="File_UploadBPMN" />
                     </li>
                     <li>
                         <input type="button" id="Btn_ImpBPMN" value="执行导入" onclick="Imp_DoneBPM();" class="cc-btn-tab" />

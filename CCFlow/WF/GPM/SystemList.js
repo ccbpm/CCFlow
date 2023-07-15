@@ -782,6 +782,8 @@ new Vue({
                 menu.MenuModel = "统计分析";
                 if (menu.Icon === "") menu.Icon = "icon-energy";
 
+                if (menu.Tag1 == null) menu.Tag1 = '';
+
                 if (menu.Tag1 == "" || menu.Tag1.length == 0)
                     menu.Tag1 = "RptWhite";
 

@@ -1,6 +1,6 @@
 ﻿window.lang = {
     "chicheng": "驰骋",
-    "chichengwfsystem": "驰骋工作流程管理系统",
+    "chichengwfsystem": "驰骋BPM",
     "fqr": "发起人",
     "fqbm":"发起部门",
     "jcgn": "基础功能",

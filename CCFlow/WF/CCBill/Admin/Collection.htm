@@ -111,7 +111,7 @@
         function ToMenu() {
             var moduleNo = GetQueryString("ModuleNo");
             var module = new Entity("BP.CCFast.CCMenu.Module", moduleNo);
-            var url = "../../GPM/Menus.htm?SystemNo=" + module.SystemNo;
+            var url = "../../WF/GPM/Menus.htm?SystemNo=" + module.SystemNo;
             window.top.vm.openTab(name, url);
         }
 

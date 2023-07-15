@@ -19,7 +19,6 @@
         $(function () {
 
 
-
             $("#Msg").html("正在加载,请稍后......");
 
             var mytb = document.getElementById("TB_Name");
@@ -59,33 +58,36 @@
 
         //装载  模版.
         function Save() {
-
             var en = new Entity("BP.Sys.SFTable");
             var webUser = new WebUser();
             var No = $("#TB_No").val();
-            if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
-                en.CopyForm();
-                if (en.IsExits() == true) {
-                    alert("编号已经存在[" + en.No + "]请使用其他的编号.");
-                    return;
-                }
-                var sfType = GetQueryString("SFType");
-                en.SrcType = sfType; //自定义数据表.
-                en.No = No;
-                //if (webUser.OrgNo != null && webUser.OrgNo != "" && webUser.OrgNo != undefined) {
-                //    en.No = webUser.OrgNo + "_" + No;
-                //} else {
-                //    en.No = No;
-                //}
-                en.Insert();
-                //alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
-            } else {
-                alert("不支持的运行模式");
+            //  if (webUser.CCBPMRunModel == 0 || webUser.CCBPMRunModel == 1) {
+            en.CopyForm();
+            if (en.IsExits() == true) {
+                alert("编号已经存在[" + en.No + "]请使用其他的编号.");
                 return;
             }
+            var sfType = GetQueryString("SFType");
+            en.DBSrcType = sfType; //自定义数据表.
+            en.No = No;
+            //if (webUser.OrgNo != null && webUser.OrgNo != "" && webUser.OrgNo != undefined) {
+            //    en.No = webUser.OrgNo + "_" + No;
+            //} else {
+            //    en.No = No;
+            //}
+            en.Insert();
 
-            SetHref( "Default.htm");
-            SetHref( "../SFTableEditData.htm?FK_SFTable=" + en.No+"&QueryType=Dict");
+            //alert("系统里已经有了名称为[" + en.No + "]的表或者视图,请手工的维护或者使用ccform提供的表单工具维护.");
+            //} else {
+            //    alert("不支持的运行模式");
+            //    return;
+            //}
+            var data = en.DoMethodReturnString("GenerDataOfJson");
+            SetHref("Default.htm");
+            if (en.CodeStruct === 1)
+                SetHref("../SFTableEditDataTree.htm?FK_SFTable=" + en.No + "&QueryType=Dict");
+            else
+                SetHref("../SFTableEditData.htm?FK_SFTable=" + en.No + "&QueryType=Dict");
 
         }
     </script>
@@ -129,7 +131,7 @@
                 </label>
             </td>
         </tr>
-       
+
         <tr>
             <td>
                 数据格式

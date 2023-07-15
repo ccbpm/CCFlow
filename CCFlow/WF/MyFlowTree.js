@@ -403,6 +403,8 @@ function Save(saveType) {
         handler.AddPara("SaveType", saveType);
         handler.DoMethodReturnString("SaveFlow_ToDraftRole");
     }
+    if (saveType == 0)
+        layer.msg('保存成功', { icon: 1 });
     layer.close(index);
     setToobarEnable();
     return true;

@@ -108,6 +108,7 @@
                    
                     
                     url += '&NodeID=' + nodeID + '&ShowWay=None&M=' + Math.random();
+                    url += url + '&BackBtn=' + 0;
                      OpenEasyUiDialogExtCloseFunc(url, '设置岗位', 800, 500,function () {
                         Baseinfo.stas = getStas();
                     });

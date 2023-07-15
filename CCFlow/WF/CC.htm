@@ -9,6 +9,7 @@
     <link href="Style/skin/css/style.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
     <link href="Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <style id="theme-data"></style>
     <style type="text/css">
         .pagination {
             margin: 8px 0;
@@ -50,6 +51,16 @@
             -moz-text-overflow: ellipsis;
             -webkit-text-overflow: ellipsis;
         }
+        .btn-sm {
+            padding: 0 10px;
+            height: 26px;
+            line-height: 26px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .position {
+            margin-left: 3px;
+        }
     </style>
 </head>
 <body class="gray-bg">
@@ -62,10 +73,10 @@
                             <tr>
                                 <td><input type='text' placeholder="请输入流程名称,标题..." id='TB_Key' class="form-control" style="width:300px;" /> </td>
                                 <td>
-                                    <button class="btn btn-success" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
+                                    <button class="btn btn-success btn-sm position" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
                                 </td>
                                 <td style="padding-left:22px;">
-                                    <button class="btn btn-success" style="padding-left:22px;" type="button" onclick="javascript:More();"><i class="fa fa-adjust"></i>更多...</button>
+                                    <button class="btn btn-success btn-sm" style="padding-left:22px;" type="button" onclick="javascript:More();"><i class="fa fa-adjust"></i>更多...</button>
                                 </td>
                             </tr>
                         </table>
@@ -101,6 +112,7 @@
     <script src="./Scripts/config.js" type="text/javascript"></script>
     <script src="Comm/Gener.js" type="text/javascript"></script>
     <script src="Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
+    <link href="Scripts/jquery/themes/default/menu.css" rel="stylesheet" />
     <!-- 处理多语言 -->
     <script src="Data/lang/load.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
@@ -209,25 +221,25 @@
         //页面启动函数.
         $(function () {
             var _html = `<tr>
-                            <th style="width:30px;">
-                                #
-                            </th>
-                            <th>
-                                ${window.lang.jiedian}
-                            </th>
-                            <th>
-                                ${window.lang.zhuangtai}
-                            </th>
-                            <th>
-                                ${window.lang.chaosongren}
-                            </th>
-                            <th style="width:60%;">
-                                 ${window.lang.biaoti}
-                            </th>
-                            <th>
-                                 ${window.lang.rq}
-                            </th>
-                        </tr>`;
+                                <th style="width:30px;">
+                                    #
+                                </th>
+                                <th>
+                                    ${window.lang.jiedian}
+                                </th>
+                                <th>
+                                    ${window.lang.zhuangtai}
+                                </th>
+                                <th>
+                                    ${window.lang.chaosongren}
+                                </th>
+                                <th style="width:60%;">
+                                     ${window.lang.biaoti}
+                                </th>
+                                <th>
+                                     ${window.lang.rq}
+                                </th>
+                            </tr>`;
             $("#theadDiv").html(_html);
             InitPage();
             Paginator(pageCount, pageIdx);
@@ -451,6 +463,21 @@
                 "页,总共" + total + "条记录。</li>");
 
         }
+    </script>
+    <script>
+        $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .btn{\n background-color:#5053f1'; \n}\n .btn-success:hover{\n background-color:'#5053f1'; \n}\n.btn-success:focus{\n background-color:'#5053f1';\n}\n.btn-success:active{\n background-color'#5053f1';\n}\n.btn-success:active:focus{\n background-color:'#1a60ff';border-color:'#5053f1'; \n}";
+                styleScope.innerHTML = filterXSS(html);
+            }
+            var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+            if (theme == "" || theme == "undefined" || theme == null) return;
+            var data = JSON.parse(theme);
+            var styleScope = document.getElementById('theme-data');
+            var html = styleScope.innerHTML;
+            html += "\n .btn{\n background-color:" + data.selectedMenu + "; \n}\n .btn-success:hover{\n background-color:" + data.selectedMenu + "; \n}\n.btn-success:focus{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active:focus{\n background-color:" + data.selectedMenu + ";border-color:" + data.selectedMenu + "; \n}";
+            styleScope.innerHTML = filterXSS(html);
+        })
     </script>
 </body>
 

@@ -6,8 +6,12 @@
     <title>测试容器</title>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../Portal/icons/font-icons.min.css" rel="stylesheet" />
+    <link href="../../Portal/icons/icons.css" rel="stylesheet" />
     <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery/jquery.min.js"></script>
+
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
@@ -55,14 +59,16 @@
                 SelectOneUser();
             }
 
+
         });
+        
 
 
         function GenerUrlEnd() {
             var adminerToken = GetQueryString("AdminToken") || localStorage.getItem("AdminToken");
 
             //定义变量.
-            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No+ "&OrgNo=" + webUser.OrgNo;
+            var urlEnd = "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + workID + "&UserNo=" + webUser.No + "&OrgNo=" + webUser.OrgNo;
             urlEnd += "&Adminer=" + GetQueryString("Adminer");
             urlEnd += "&AdminToken=" + adminerToken;
             urlEnd += "&Token=" + webUser.Token;
@@ -75,33 +81,25 @@
 
         //如果关闭的时候，就让admin登录.
         function LetAdminerLogin() {
-            var token = GetQueryString("AdminToken") || localStorage.getItem("AdminToken") ; //管理员SID.
+            var token = GetQueryString("AdminToken") || localStorage.getItem("AdminToken"); //管理员SID.
             var userNo = GetQueryString("UserNo"); //管理员SID.
+            var orgNo = GetQueryString("OrgNo"); //管理员SID.
 
-            if (token == null || token == "null") {
-                alert("系统错误，丢失了登录信息 token ,请重新登录。");
-                return;
-            }
+            //if (token == null || token == "null") {
+            //    alert("系统错误，丢失了登录信息 token ,请重新登录。");
+            //    return;
+            //}
 
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("Token", token);
-            handler.AddPara("UserNo", userNo);
-
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }
-            var userNo = "";
-            try {
-                data = JSON.parse(data);
-                userNo = data.EmpNo;
-            } catch (e) {
-                userNo = data;
-            }
             localStorage.setItem("Token", token);
-            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&UserNo=" + userNo;
+            var url = basePath + "/WF/Admin/CCBPMDesigner/Designer.htm?FK_Flow=" + GetQueryString("FK_Flow") + "&UserNo=" + data + "&Token=" + token;
             SetHref(url);
             return;
 
@@ -117,10 +115,10 @@
         // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Token=" + sid;
         function InitPageUserInfo(token) {
             token = token || "";
-          
+
             //先设置缓存为空.
             webUserJsonString = null;
-            if (token !="") {
+            if (token != "") {
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
                 handler.AddPara("Token", token);
                 var data = handler.DoMethodReturnString("WebUser_Init");
@@ -133,7 +131,7 @@
             var webUser = new WebUser();
 
             var html = "<table style='width:100%;'>";
-            html += "<caption><a href='javascript:LetAdminerLogin();' >返回流程设计器 </a></caption>";
+            html += "<caption class='top_tiitle'><a class='title_content' href='javascript:LetAdminerLogin();' ><i class='icon-arrow-left' style='font-size:14px;margin-right: 5px;'></i>返回流程设计器 </a></caption>";
             html += "<tr>";
             html += "<td colspan=2 style='text-align:center'>";
             html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
@@ -141,18 +139,18 @@
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>帐号</td>";
-            html += "<td>" + webUser.No + "</td>";
+            html += "<td class='left-user-end'>帐号</td>";
+            html += "<td class='left-user-left'>" + webUser.No + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>用户</td>";
-            html += "<td>" + webUser.Name + "</td>";
+            html += "<td class='left-user-end' >用户</td>";
+            html += "<td class='left-user-left'>" + webUser.Name + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>部门</td>";
-            html += "<td>" + webUser.FK_DeptName + "</td>";
+            html += "<td class='left-user-end' >部门</td>";
+            html += "<td class='left-user-left'>" + webUser.FK_DeptName + "</td>";
             html += "</tr>";
             html += "</table>";
 
@@ -161,12 +159,12 @@
             var html = "<ul class='nav' id='side-menu'>";
 
             html += "<li>"
-            html = "<ul style='border:solid 1px #C2D5E3;'>";
-            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2' class='J_menuItem' >切换用户</a></li>";
-            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2' class='J_menuItem' >数据库信息</a></li>";
+            html = "<ul style='border:solid 1px #C2D5E3;' id='choose-parent' >";
+            html += "<li style='padding:5px;' ><a href='javaScript:void(0)' onclick='chageFramPage(this)' data-info='SelectOneUser.html?1=2' class='J_menuItem' ><i class='icon-user-following'></i>&nbsp;&nbsp;切换用户</a></li>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='DBInfo.html?1=2' class='J_menuItem' ><i class='icon-disc'></i>&nbsp;&nbsp;数据库信息</a></li>";
             //      html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='../../WFRpt.htm?1=2' class='J_menuItem' >轨迹图</a></li>";
-            html += "<li style='padding:5px;'><a href='javascript:Restart();' >重新启动 </a></li>";
-            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectGWF.html?1=2' class='J_menuItem' >切换测试实例</a></li>";
+            html += "<li style='padding:5px;'><a href='javascript:Restart();' ><i class='icon-power'></i>&nbsp;&nbsp;重新启动 </a></li>";
+            html += "<li style='padding:5px;'><a href='javaScript:void(0)'  onclick='chageFramPage(this)' data-info='SelectGWF.html?1=2' class='J_menuItem' ><i class='icon-refresh'></i>&nbsp;&nbsp;切换测试实例</a></li>";
             //   html += "<li style='padding:5px;'><a href='javascript:LetAdminerLogin();' >安全退出 </a></li>";
 
             //var runModel = GetQueryString("RunModel");
@@ -179,10 +177,13 @@
             html += "</ul>";
             $("#Info").html(html);
 
+            
+            //$('#choose-parent li').on("click", function () {
+            //    $("#choose-parent li.choose-active").removeClass("choose-active")
+            //    $(this).addClass("choose-active");
+            //})
             // $("#BaseInfo").html();
-
         }
-
         function ToLogin() {
 
             if (window.confirm('您确定要退出吗？') == false)
@@ -195,18 +196,20 @@
         function chageFramPage(obj) {
             var url = $(obj).attr('data-info');
 
-        
+            var orgNo = GetQueryString("OrgNo");
+
             // var adminer = GetQueryString("Adminer"); //管理员.
             var token = GetQueryString("AdminToken") || localStorage.getItem("AdminToken"); //管理员SID.
             var userNo = GetQueryString("UserNo"); //管理员SID.
-            if (token == null || token == "null") {
-                alert("系统错误，丢失了登录信息 token ,请重新登录。");
-                return;
-            }
+            //if (token == null || token == "null") {
+            //    alert("系统错误，丢失了登录信息 token ,请重新登录。");
+            //    return;
+            //}
             //访问后台，获得一个工作ID.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddPara("Token", token);
             handler.AddPara("UserNo", userNo);
+            handler.AddPara("OrgNo", orgNo);
             var data = handler.DoMethodReturnString("Default_LetAdminerLogin");
 
             //先设置缓存为空.
@@ -214,7 +217,7 @@
             var webUser = new WebUser();
 
             var html = "<table style='width:100%;'>";
-            html += "<caption><a href='javascript:LetAdminerLogin();' >返回流程设计器 </a></caption>";
+            html += "<caption class='top_tiitle'><a class='title_content' href='javascript:LetAdminerLogin();' ><i class='icon-arrow-left' style='font-size:14px;margin-right: 5px;'></i>返回流程设计器 </a></caption>";
             html += "<tr>";
             html += "<td colspan=2 style='text-align:center'>";
             html += "<img style='width:50%;' src='../../../DataUser/UserIcon/" + webUser.No + ".png' onerror=\"this.src='../../../DataUser/UserIcon/Default.png'\" />";
@@ -222,18 +225,18 @@
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>帐号</td>";
-            html += "<td>" + webUser.No + "</td>";
+            html += "<td class='left-user-end'>帐号</td>";
+            html += "<td class='left-user-left'>" + webUser.No + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>用户</td>";
-            html += "<td>" + webUser.Name + "</td>";
+            html += "<td class='left-user-end'>用户</td>";
+            html += "<td class='left-user-left'>" + webUser.Name + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<td>部门</td>";
-            html += "<td>" + webUser.FK_DeptName + "</td>";
+            html += "<td class='left-user-end'>部门</td>";
+            html += "<td class='left-user-left'>" + webUser.FK_DeptName + "</td>";
             html += "</tr>";
             html += "</table>";
 
@@ -297,8 +300,21 @@
             LetAdminerLogin();
         });
 
+
     </script>
     <style type="text/css">
+        .top_tiitle {
+            font-size: 18px;
+        }
+
+        .left-user-end {
+            text-align: right;
+        }
+
+        .left-user-left {
+            text-align: left;
+        }
+
         .navbar-default {
             background-color: white !important;
         }
@@ -317,19 +333,26 @@
         }
 
         #userInfo caption {
-            background-color: #fff !important;
-            text-align: center;
-            border: none !important;
+            padding-right: 10px;
             height: 25px;
+            text-align: center;
             text-indent: 0 !important;
             color: #000;
-            border-bottom: solid 1px #ccc !important;
-        }
-
-        .navbar-default table {
-            margin: 0 !important;
             border: none !important;
+            border-bottom: solid 1px #ccc !important;
+            background-color: #0237a1 !important;
         }
+        .title_content{
+            color:#fff;
+        }
+            .title_content:hover{
+                color:#fff;
+            }
+
+            .navbar-default table {
+                margin: 0 !important;
+                border: none !important;
+            }
 
             .navbar-default table td {
                 padding: 5px 15px;
@@ -338,8 +361,17 @@
 
         #Info ul {
             border: none !important;
-            padding: 10px;
+            padding: 10px 10px 10px 35px;
             box-sizing: border-box;
+        }
+
+        .choose-active {
+            background: #e1e1e1;
+            color: #fff !important;
+            border-radius: 5px;
+        }
+        #choose-parent li a {
+            color: #0237a1;
         }
     </style>
 </head>
@@ -347,11 +379,11 @@
     <!--<div id="Guide"></div>-->
     <div id="wrapper">
         <!--左侧导航开始-->
-        <nav class="navbar-default navbar-static-side" role="navigation" style="background-color:#f5f5f5!important;border-right:solid 1px #ccc;">
+        <nav class="navbar-default navbar-static-side" role="navigation" style="background-color:#fff!important;border-right:solid 1px #ccc;">
             <div class="sidebar-collapse">
                 <div id="userInfo" style="box-sizing:border-box;"></div>
-                <div style="background-color:#fff!important;text-align:center;padding:10px;border-top:solid 1px #ccc;border-bottom:solid 1px #ccc;color:#000;font-weight:bold;">
-                    操作功能
+                <div style="background-color: #dee6f3 !important; padding: 10px 35px; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; color: #000; font-weight: bold; ">
+                   <i class="icon-cloud-upload" style="margin-right:5px;"></i> 操作功能
                 </div>
                 <div class="sidebar-collapse" id="Info">
                 </div>
@@ -365,7 +397,7 @@
         <!--左侧导航结束-->
         <!--右侧部分开始-->
         <div id="page-wrapper" class="gray-bg dashbard-1" style="overflow:hidden">
-            <div class="row J_mainContent" id="content-main">
+            <div class="row J_mainContent" id="content-main" style="background:#fff;">
                 <iframe id="J_iframe" width="100%" height="100%" frameborder="0" seamless></iframe>
             </div>
         </div>

@@ -25,9 +25,9 @@ $(function () {
                         var handler = new HttpHandler("BP.WF.HttpHandler.WF");
                         handler.AddPara("Token", SID);
                         handler.AddPara("DoWhat", "PortLogin");
-
                         var data = handler.DoMethodReturnString("Port_Init");
-                        localStorage.setItem('Token', SID);
+                        localStorage.setItem("Token", SID);
+                       
                     }
                 }
                 

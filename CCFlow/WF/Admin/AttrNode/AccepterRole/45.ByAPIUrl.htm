@@ -38,8 +38,11 @@
                 <li>接口返回值类型为json类型,且必须有No,Name,具体返回值格式如下：</li>
                 <li>[{"No","zhangsan","Name","张三"},{"No","lisi","Name","李四"}]</li>
                 <li>接口返回值中，请注意<span style="color:red">Key的大小写区分</span></li>
-                <li>WebAPI的输入格式：@WebApiHost/DataUser/GetEmps?id=51184</li>
-                <li>接口地址支持固定参数，或者ccbpm内置参数，或者流程表单参数，比如:http://demo.ccflow.org/DataUser/GetEmps?id=@FK_Node</li>
+                <li>WebAPI的输入格式：@WebApiHost/DataUser/GetEmps?WorkID=@WorkID&Tel=@Tel&UserNo=@WebUser.No&UserNo=@WebUser.Token </li>
+                <li>@WebApiHost 是一个配置全局的变量,配置到全局文件里面. </li>
+                <li>表单参数：@+字段名 </li>
+                <li>内置参数：支持ccbpm表达式, @WebUer.*  获取当前登陆人员信息. </li>
+                <li>@WorkID 是一个固定的参数，就是当前实例的ID, 可以根据此参数了解ccbpm的数据库结构，获得其他的数据. </li>
             </ul>
         </fieldset>
     </div>

@@ -27,7 +27,7 @@
             var frmID = GetQueryString("FK_MapData");
             var refPK = GetQueryString("RefPK");
 
-           
+
 
             var thisPK = refPK + "_FullData";
             if (extType == "PageLoadFull")
@@ -52,13 +52,16 @@
 
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < mapDtls.length; i++) {
-
+                var dtl = mapDtls[i];
                 var sql = "";
                 if (tag1 != "" && tag1 != null) {
-                    sql = tag1.split("$")[1].split(":")[1]; //分割字符串，获取sql语句
+                    //第二批创建从表No是否在第一批创建从表的填充SQL里
+                    if (tag1.indexOf(dtl.No) != -1)
+                        sql = tag1.split("$")[i + 1].replace(dtl.No+":",""); //分割字符串，获取sql语句
+                    else
+                        sql = "";
                 }
 
-                var dtl = mapDtls[i];
                 html += "<tr>";
                 html += "<td>" + dtl.No + " - " + dtl.Name + "</td>";
                 html += "</tr>";
@@ -97,7 +100,7 @@
                 en.AttrOfOper = GetQueryString("KeyOfEn");
                 en.ExtType = "FullData";
                 en.DoWay = "1";
-                en.DBType = "1";
+                //en.DBType = "1";
             }
 
             //生成SQL, 执行保存.
@@ -117,7 +120,7 @@
                 tag1 += "$" + dtl.No + ":" + sql;
             }
             en.Tag1 = tag1;
-           
+
 
             if (n == 0)
                 en.Insert();

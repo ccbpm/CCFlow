@@ -8,6 +8,9 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+    <script src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Scripts/layui/layui/layui.js"></script>
     <script type="text/javascript" language="javascript">
 
         var entityType = 0;
@@ -357,7 +360,6 @@
                                 $("#Msg").html("<font color=red>" + data + "</font>");
                                 return;
                             }
-
                             $("#Msg").html("<font color=green>" + data + "</font>");
                             data = data.replace('url@', '');
 
@@ -376,16 +378,22 @@
                                     //需要延时关闭，不可立即关闭。
                                     setTimeout("window.parent.TabCloseByTitle('新建表单')", 1000);
                                 }
-
                             } catch (e) {
 
                             }
 
                             //切换页面
-                            //SetHref(data);
+                            SetHref(data);
                             if (window.parent && window.parent.layer)
                                 window.parent.layer.close(window.parent.layer.index);
                             WinOpenFull(data);
+                            //debugger;
+                            //var W = document.body.clientWidth - 80;
+                            ////var url = basePath + data;
+                            //var url = basePath + "/WF/Admin" + data.slice(2);
+
+                            //window.location.href = url
+                            ////OpenLayuiDialog(url, '', W, 100, "r", false);
                             return;
                         }
                     </script>

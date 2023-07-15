@@ -30,8 +30,13 @@
         var isFrameCross = GetQueryString("isFrameCross");
         if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross == "null")
             isFrameCross = 0;
-        //页面启动函数.
+        var IsSend = GetQueryString("IsSend"); //是否发送？该参数是ToNodes.htm 带回来的.
         $(function () {
+            //页面启动函数.
+            if (IsSend == null || IsSend == undefined || IsSend == "")
+                IsSend = "1";
+            if (IsSend == "0")
+                $("#Btn_Send").hide();
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
             var data = handler.DoMethodReturnString("AccepterOfOfficer_Init");
             if (data.indexOf("err@") != -1) {

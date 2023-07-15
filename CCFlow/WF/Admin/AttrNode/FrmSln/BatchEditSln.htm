@@ -107,12 +107,17 @@
 
             //求出枚举值，然后绑定上.
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode_FrmSln");
-            handler.AddPara("FrmID", frmNode.FK_Frm);
+            var frmID1 = frmNode == null ? frmID : frmNode.FK_Frm;
+            handler.AddPara("FrmID", frmID1);
             var data = handler.DoMethodReturnJSON("BatchEditSln_InitDDLData");
 
             var frmSln = data["FrmSln"];
             var fwcSta = data["FWCSta"];
             var cfs = data["CheckFields"];
+            $.each(cfs, function (idx, item) {
+                if (item.No == null || item.No == undefined)
+                    item.No = "";
+            });
 
             var SigantureEnabel = data["SigantureEnabel"];
 

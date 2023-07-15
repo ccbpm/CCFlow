@@ -354,7 +354,7 @@ namespace CCFlow.WF.CCForm
         [WebMethod]
         public void WordFileGenerSiganture(string userNo, ref byte[] bytes)
         {
-            if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
+            if (DBAccess.RunSQLReturnValInt("select count(*) from Port_Emp where no='" + userNo + "'") == 0)
                 throw new Exception("用户或密码错误.");
 
             string filePath = BP.Difference.SystemConfig.PathOfDataUser + "Siganture\\" + userNo + ".jpg";
@@ -1061,7 +1061,7 @@ namespace CCFlow.WF.CCForm
         public string WordDoc_GetWordFile(string flowNo, int nodeId, string userNo, long workId)
         {
             MethodReturnMessage<byte[]> msg = null;
-            if (DBAccess.RunSQLReturnValInt("select count(*) from port_emp where no='" + userNo + "'") == 0)
+            if (DBAccess.RunSQLReturnValInt("select count(*) from Port_Emp where no='" + userNo + "'") == 0)
             {
                 msg = new MethodReturnMessage<byte[]>
                 {

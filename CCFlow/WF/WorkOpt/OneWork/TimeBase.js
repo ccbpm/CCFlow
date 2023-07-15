@@ -34,7 +34,7 @@ function InitPage() {
     var fwc = data["FrmWorkCheck"][0];
 
     //获得工作人员列表.
-    var gwls = data["WF_GenerWorkerList"];
+    var gwls = data["WF_GenerWorkerlist"];
 
     //该流程启动的子流程数据
     subFlows = data["WF_SubFlow"];
@@ -348,7 +348,7 @@ function InitPage() {
 //子线程，子流程的时间轴轨迹
 function OpenSubThreadTime(workID, mypks) {
 
-    OpenBootStrapModal("./TimeSubThread.htm?MyPks=" + mypks + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"), "SubThread", "子线程", 500, 600);
+    OpenBootStrapModal("./TimeSubThread.htm?MyPKs=" + mypks + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"), "SubThread", "子线程", 500, 600);
 }
 
 /**

@@ -414,7 +414,6 @@
 
         //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
-
             //生成选择的人员.
             var checked = $('input:checked');
             var selectedEmps = [];
@@ -429,7 +428,10 @@
                 layer.alert('请选择人员.');
                 return;
             }
-
+            if (pageFrom != null && pageFrom != undefined && pageFrom == "WorkCheckModel") {
+                window.parent.returnWorkWindowClose(selectedEmps);
+                return;
+            }
 
             $("#Msg").html("<font color=green><center>正在发送请稍候...</center></font>");
 
@@ -609,7 +611,7 @@
     <div style="margin-bottom:45px;">
         <div id="selected">
         </div>
-        <div style="margin:10px" id="Div_DelayedSend">
+        <div style="margin:10px;display:none" id="Div_DelayedSend">
             <div class="form-unit">设置延期时间</div>
             <div class="layui-form" style="margin-top:10px">
                 <div class="layui-form-item">

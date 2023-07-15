@@ -44,7 +44,7 @@
 			    return;
 			}
 
-			en.SrcType = 6; //自定义数据表.
+            en.DBSrcType = GetQueryString("SFType"); //自定义数据表.
 			en.FK_Val = en.No;
 			en.Insert();
 

@@ -646,6 +646,13 @@
     </script>
     <script>
         $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .layui-btn{\n background-color:#5053f1';\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:'#5053f1';\n}";
+                html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:'#5053f1' !important\n}";
+                html += "\n .layui-form-select dl dd.layui-this{\n background-color:'#5053f1' !important;\n}";
+                html += "\n .layui-tab-title .layui-this{\n background-color:'#5053f1' !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid '#5053f1';}";
+                html += "\n .layui-a-this{\n background-color:'#5053f1';\n color: #fff;\n}";
+            }
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
             if (theme == null || theme == undefined || theme == "")
                 return;

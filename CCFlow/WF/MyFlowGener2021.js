@@ -63,6 +63,14 @@ function GenerWorkNode() {
     }
 
     if (data.indexOf("url@") == 0) {
+        handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+        handler.AddUrlData(urlParam);
+        var result = handler.DoMethodReturnString("GetFlowAlertMsg");
+        if (result.indexOf('err@') != 0) {
+            flowData = JSON.parse(result);
+            //增加提示信息
+            ShowWorkReturnTip();
+        }
         isChartFrm = true;
          flow = new Entity("BP.WF.Data.FlowSimple", pageData.FK_Flow);
         document.title = flow.Name;
@@ -441,7 +449,7 @@ function Save(saveType) {
         if (flow.Draft != 0) {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
             handler.AddUrlData();
-            var data = handler.DoMethodReturnString("Save");
+            var data = handler.DoMethodReturnString("SaveFlow_ToDraftRole");
             if (data.indexOf("err@") != -1) {
                 layer.alert(data);
                 isSaveOnly = false;

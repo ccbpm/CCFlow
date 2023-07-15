@@ -24,6 +24,7 @@ function CommPop(popType, mapAttr, mapExt, frmData, mapExts, targetID) {
     var data = [];
     //获取实体信息
     var ens = [];
+    var valTexts = "";
     if (popType == "PopBranches") {
         $("#TB_" + targetID).hide();
         $("#TB_" + targetID).after("<div id='mapExt_" + targetID + "' style='width:99%'></div>")
@@ -210,6 +211,7 @@ function OpenPopFunction(mapExt, mapExts, mtagsId, target, targetID, pkval, popt
             break;
         case "PopBranches": //树干简单模式.
             url = baseUrl + "Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
+            url += url + '&BackBtn=' + 0;
             break;
         case "PopTableSearch": //表格查询.
             url = baseUrl + "Pop/TableSearch.htm?MyPK=" + mapExt.MyPK + "&oid=" + pkval + "&m=" + Math.random();
@@ -395,6 +397,7 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
                 return data;
             }
         });
+        var valText = "";
         if (frmEleDBs && frmEleDBs.length > 0) {
             var vals = [];
             $.each(frmEleDBs, function (i, item) {
@@ -402,8 +405,10 @@ function xmSelectTree(eleID, mapExt, frmEleDBs, type, selectType) {
                     Name: item.Tag2,
                     No: item.Tag1
                 })
+                valText += item.Tag2 + ",";
             })
             tree.setValue(vals);
+            $("#TB_" + eleID.replace("mapExt_", "")).val(valText);
         }
     });
 }

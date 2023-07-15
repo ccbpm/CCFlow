@@ -7,7 +7,9 @@
     2，需要 FK_Flow, FK_Node,WorkID, FID.
     3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
-    
+    <link href="../Portal/icons/font-icons.min.css" rel="stylesheet" />
+    <link href="../Portal/icons/icons.css" rel="stylesheet" />
+
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
@@ -28,6 +30,12 @@
         #TB_Doc {
             height: 132px;
             width: 433px;
+        }
+        .btn_type {
+            padding: 0 10px;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 5px
         }
     </style>
     <script type="text/javascript">
@@ -59,7 +67,12 @@
             }
         }
 
-        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore') == "1" ? true : false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
+        var pageData = {
+            IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore') == "1" ? true : false,
+            FK_Dept: GetQueryString('FK_Dept') || '',
+            ParentDept: '',
+            selectedEmps: GetQueryString("SelectedEmps") || ""
+        };
         var returnVal = {};
         var isFirst = true;
 
@@ -133,9 +146,11 @@
                         }
                         if (emps.length > 0) {
                             $.each(emps, function (i, emp) {
+                                var empNo = emp.No.replace("Emp_", "");
                                 var empNode = {
                                     "text": emp.Name,
                                     "id": emp.No,
+                                    "state": { selected: pageData.selectedEmps.indexOf(empNo + ",") != -1 ? true : false },
                                     "children": false,
                                     "data": emp,
                                     "icon": "jstree-file"
@@ -222,7 +237,7 @@
                 //if (isFirst == true)
                 //    isFirst = false;
                 //else
-                    $('#OrgJSTree').jstree("toggle_node", data.node);
+                $('#OrgJSTree').jstree("toggle_node", data.node);
 
             }).on("loaded.jstree", function (event, data) {
                 if (typeof data.instance.clear_state === "function")
@@ -331,19 +346,20 @@
 <body>
     <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default" style="position:absolute;bottom:60px;left:0;right:0;top:0; overflow-y:auto;"></div>
     <div style="position: fixed; bottom: 0; right: 0;">
-        <button type="button" id="toPrevDept" class="layui-btn">
-            <!--<img src="../Img/Btn/JumpWay.png" />--> 上一级
+        <button type="button" id="toPrevDept" class="layui-btn layui-btn-normal btn_type">
+            <i class="icon-arrow-up-circle" style="vertical-align:-1px;"></i>上一级
         </button>
-        <button type="button"  onclick="Close()" class="layui-btn layui-btn-primary">
-            <!--<img src="../Img/Btn/Return.png" />--> 取消
+        <!--layui-btn-primary-->
+        <button type="button" onclick="Close()" class="layui-btn layui-btn-normal btn_type">
+            <i class="icon-close" style="vertical-align:-1px;"></i> 取消
         </button>
-        <button type="button" onclick="SelectEmps()" class="layui-btn layui-btn-normal">
-            <!--<img src="../Img/Btn/Confirm.png" />--> 确定
+        <button type="button" onclick="SelectEmps()" class="layui-btn layui-btn-normal btn_type">
+            <i class=""></i>确定
         </button>
 
         <!--<input type="button" value="上一级" id="toPrevDept" />
-        <input type="button" onclick="Close()" value="取消" />
-        <input type="button" onclick="SelectEmps()" value="确定" />-->
+    <input type="button" onclick="Close()" value="取消" />
+    <input type="button" onclick="SelectEmps()" value="确定" />-->
     </div>
     <!--<input type="button" onclick="Close()" value="取消" /><input type="button" onclick="SelectEmps()"
                                                                value="确定" />-->

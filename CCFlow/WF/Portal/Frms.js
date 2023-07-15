@@ -1,4 +1,4 @@
-var baseInfo = new Vue({
+﻿var baseInfo = new Vue({
     el: '#flow',
     data: {
         flowNodes: [],
@@ -99,7 +99,11 @@ var baseInfo = new Vue({
             var sid = GetQueryString("Token");
             var webUser = new WebUser();
             var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
-            window.top.vm.openTab(name, url);
+            try {
+                window.top.vm.openTab(name, url);
+            } catch (e) {
+                WinOpenFull(url);
+            }
         },
         EditSort: function(no, name) {
 
@@ -115,7 +119,6 @@ var baseInfo = new Vue({
             Reload();
             return;
 
-
             // var url = "../Comm/EnOnly.htm?EnName=BP.WF.Template.FlowSort&No=" + no;
             // this.openLayer(url, "目录:" + name);
         },
@@ -124,7 +127,7 @@ var baseInfo = new Vue({
             var webUser = new WebUser();
             var en = new Entity("BP.Sys.MapData", no);
             if (en.EntityType == 0) {
-                layer.alert(en.Name + "是独立表单不能运行");
+                layer.alert("表单:[" + en.Name + "]是独立表单不能运行,如果要调用表单，请参考/WF/CCBill/Demo/index.htm");
                 return;
             }
             var url = "";
@@ -137,20 +140,28 @@ var baseInfo = new Vue({
             
             //var url = basePath + "/WF/Admin/FoolFormDesigner/GoToRunFrm.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
-            window.top.vm.openTab(name, url);
+            try {
+                window.top.vm.openTab(name, url);
+            } catch (e) {
+                WinOpenFull(url);
+            }
+           
 
             // var url = "../Admin/TestingContainer/TestFlow2020.htm?FK_Flow=" + no;
             //  window.top.vm.fullScreenOpen(url, name);
             // this.openLayer(url, name);
         },
         flowAttr: function (no, name) {
-            debugger
             var sid = GetQueryString("Token");
             var webUser = new WebUser();
             //var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmAttr.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
             //var url = "../Comm/En.htm?EnName=BP.WF.Template.FlowExt&No=" + no;
             var url = "/WF/Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&PKVal=" + no + "&s=" + Math.random();
-            window.top.vm.openTab(name, url);
+            try {
+                window.top.vm.openTab(name, url);
+            } catch (e) {
+                WinOpenFull(url);
+            }
             //this.openLayer(url, name,900);
         },
 
@@ -406,10 +417,16 @@ var baseInfo = new Vue({
                 event.stopPropagation();
             }
             var webUser = new WebUser();
-           
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
-            var fss = handler.DoMethodReturnJSON("Frms_InitSort");
+            window.location.href = "FrmTree.htm";
+            return; 
+            
+            //var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+            //var fss = handler.DoMethodReturnJSON("Frms_InitSort");
 
+            //查询全部.
+            var fss = new Entities("BP.WF.Template.SysFormTrees");
+            fss.RetrieveAll();
+         
             var nodes = fss;
             nodes = nodes.filter(function (item) {
                 console.log(item)

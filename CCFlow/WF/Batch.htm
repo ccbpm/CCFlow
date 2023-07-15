@@ -71,14 +71,14 @@
                 //自定义url模式.
                 if (en.BatchRole == 3)
                     url = "javascript:ToSelfUrl('" + en.NodeID + "');";
-                 listbox += `<div class="col-sm-2">
-                                   <div class="panel panel-info">
-                                  <div class="panel-heading">${en.FlowName}</div>
-                                  <div class="panel-body">
-                                   <a href='${url}'>${en.Name}</a> &nbsp;<span class="badge label label-danger">${en.NUM}</span>
-                                  </div>
-                                </div>
-                                </div>`
+                listbox += `<div class="col-sm-2">
+                                       <div class="panel panel-info">
+                                      <div class="panel-heading">${en.FlowName}</div>
+                                      <div class="panel-body">
+                                       <a href=\"${url}\">${en.Name}</a> &nbsp;<span class="badge label label-danger">${en.NUM}</span>
+                                      </div>
+                                    </div>
+                                    </div>`
                 //listbox += "<li class='col-3' style='list-style-type:square; color:#959595;'><a href='" + url + "'  style=\"text-decoration:none; font-size:14px; font-weight:normal;\">" + en.FlowName + " --> " + en.Name + "(" + en.NUM + ")" + "</a></li><br/>";
             }
             listbox += '</div>';
@@ -86,8 +86,8 @@
         });
 
         function ToSelfUrl(nodeID) {
-            var node = Entity("BP.WF.Node", nodeID);
-            var url = node.BatchSelfUrl;
+            var node =new Entity("BP.WF.Node", nodeID);
+            var url = node.GetPara("BatchSelfUrl");
             SetHref(url);
         }
     </script>
@@ -102,7 +102,8 @@
             border-radius: .25rem;
             background: #fff;
         }
-        .bd-callout-info{
+
+        .bd-callout-info {
             border-left-color: #5bc0de;
         }
     </style>
@@ -111,8 +112,8 @@
     <div class="wrapper wrapper-content animated fadeInRight">
 
         <fieldset>
-<!--            <legend> 请选择要批处理的节点 </legend>-->
-            <div class="bd-callout bd-callout-info" >
+            <!--            <legend> 请选择要批处理的节点 </legend>-->
+            <div class="bd-callout bd-callout-info">
                 请选择要批处理的节点
             </div>
             <div class="row c" id="lists" style="padding-left:40px;"></div>

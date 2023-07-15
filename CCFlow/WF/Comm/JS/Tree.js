@@ -136,6 +136,8 @@ function EditNode(type) {
 
         url = cfg.Url;
         var urlOpenType = cfg.GetPara("SearchUrlOpenType");
+        //if (urlOpenType == 1)
+        //    urlOpenType = 0;
 
         if (urlOpenType == 0 || urlOpenType == undefined)
             url = "./RefFunc/En.htm?EnName=" + enName + "&PKVal=" + pk;

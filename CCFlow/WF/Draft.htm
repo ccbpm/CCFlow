@@ -79,6 +79,7 @@
         function InitPage() {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddUrlData();
             var data = handler.DoMethodReturnString("Draft_Init");
 
 

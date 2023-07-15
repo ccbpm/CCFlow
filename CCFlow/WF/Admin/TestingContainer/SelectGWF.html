@@ -9,6 +9,49 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <style>
+        .bg_color {
+            background: #f6f6f6;
+        }
+        #gwls {
+            margin: 40px 35px;
+            background: #fff;
+            padding-bottom: 30px;
+            border-radius: 10px;
+        }
+        .add_line::before {
+            content: '';
+            margin-left: -10px;
+            margin-right: 5px;
+            border-left: 5px solid #0237a1;
+        }
+        .title-center {
+            text-align: center;
+            color: #393939;
+            background: #fff;
+            font-weight: bold;
+        }
+
+        .title-center-nobold {
+            text-align: center;
+            color: #393939;
+            background: #fff;
+            font-weight: 500;
+        }
+        th{
+            background:#fff;
+        }
+        tr{
+            height:45px;
+        }
+        .content_color {
+            color: #666;
+            background: #f6f6f6;
+            border: 1px solid #fff;
+        }
+
+
+    </style>
     <script language="javascript" type="text/javascript">
 
         var flowNo = GetQueryString("FK_Flow");
@@ -25,16 +68,16 @@
             gwfs.Retrieve("Starter", GetQueryString("UserNo"), "WFState", 2, "FK_Flow", GetQueryString("FK_Flow"), "WorkID DESC");
 
           //  var html = "<table style='width:900px;' >";
-            var html = "<table class='table table-bordered table - hover' style='width:900px;' >";
-            html += "<caption>切换测试实例</caption>";
+            var html = "<table class='table table-bordered table - hover' style='width:93%;margin:40px 15px 25px 15px;' >";
+            html += "<caption style='color:#000; margin-top: 20px;' class='add_line'>切换测试实例</caption>";
             html += "<tr>";
-            html += "<th>Idx</th>";
-            html += "<th>WorkID</th>";
+            html += "<th class='title-center'>Idx</th>";
+            html += "<th class='title-center'>WorkID</th>";
             html += "<th>标题</th>";
-            html += "<th>停留节点</th>";
+            html += "<th class='title-center'>停留节点</th>";
             html += "<th>当前人员</th>";
-            html += "<th>发起日期</th>";
-            html += "<th>最后处理日期</th>";
+            html += "<th class='title-center'>发起日期</th>";
+            html += "<th class='title-center'>最后处理日期</th>";
             html += "</tr>";
 
             for (var i = 0; i < gwfs.length; i++) {
@@ -42,17 +85,18 @@
                 if (en.FID != 0) continue;
 
                 html += "<tr>";
-                html += "<td>" + i + "</td>";
-                html += "<td>" + en.WorkID + "</td>";
+                html += "<td class='title-center-nobold'>" + i + "</td>";
+                html += "<td class='title-center-nobold'>" + en.WorkID + "</td>";
                 html += "<td><a href=\"javascript:GoTo('" + en.WorkID + "')\" >" + en.Title + "</a></td>";
-                html += "<td>" + en.FK_Node + " - " + en.NodeName + "</td>";
+                html += "<td class='title-center-nobold'>" + en.FK_Node + " - " + en.NodeName + "</td>";
                 html += "<td>" + en.TodoEmps + "</td>";
-                html += "<td>" + en.RDT + "</td>";
-                html += "<td>" + en.SendDT + "</td>";
+                html += "<td class='title-center-nobold'>" + en.RDT + "</td>";
+                html += "<td class='title-center-nobold'>" + en.SendDT + "</td>";
                 html += "</tr>";
             }
             html += "</table>";
             $("#gwls").html(html);
+            $("tr:odd td").addClass("content_color"); //隔行换色
         });
         function GoTo(workID)
         {
@@ -69,17 +113,10 @@
         }
     </script>
 </head>
-<body>
+<body class="bg_color">
     <div id="userInfo"></div>
-
     <center>
-
         <div id="gwls"></div>
-
     </center>
-
-
-
-
 </body>
 </html>

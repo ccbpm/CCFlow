@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>驰骋中间件</title>
+    <title>驰骋BPM</title>
     <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
     <link href="../../WF/Style/skin/css/style.css" rel="stylesheet" type="text/css" />
@@ -26,8 +26,8 @@
         }
 
         .nav > li.active {
-            border-left: 4px solid #3ad999;
-            background: #1972c4;
+            border-left: 4px solid #5053f1;
+            background: #5053f1;
             color: rgba(255, 255, 255, 0.65);
             background: #0015
         }
@@ -35,10 +35,14 @@
         .navbar-default .nav > li > a:focus, .navbar-default .nav > li > a:hover {
             background: #001529;
         }
-
+        .navbar-left{
+            height:57px;
+            line-height:28px;
+        }
         .nav.navbar-left > li > a {
             color: #999c9e;
         }
+
     </style>
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -55,13 +59,13 @@
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
-                                        <strong class="font-bold"><img style="width:40px;height:40px" src="../../DataUser/ICON/cclogo.png" /><div class="ml-2 truncate md:opacity-200 xs:opacity-0"  style="padding-top: 5px; font-size: 18px;display:inline"> 驰骋中间件</div></strong>
+                                        <strong class="font-bold"><img style="width:40px;height:40px" src="/DataUser/ICON/cclogo.png" /><div class="ml-2 truncate md:opacity-200 xs:opacity-0" style="padding-top: 5px; font-size: 18px;display:inline"> 驰骋BPM</div></strong>
                                     </span>
                                 </span>
                             </a>
                         </div>
                         <!-- 驰骋 -->
-                        <div class="logo-element lang" ><img style="width:40px;height:40px" src="../../DataUser/ICON/cclogo.png" /></div>
+                        <div class="logo-element lang"><img style="width:40px;height:40px" src="../../DataUser/ICON/BKDSmall.png" /></div>
                     </li>
 
                     <li>
@@ -76,12 +80,13 @@
                             <li><a href="../../WF/Start.htm" class="J_menuItem"><i class="icon-paper-plane"></i><span class="lang" data-key="lcfq1">发起</span></a></li>
                             <li><a href="../../WF/Todolist.htm" class="J_menuItem"><i class="icon-clock"></i><span class="lang" data-key="daiban">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
                             <li><a href="../../WF/RuningDataGrid.htm?IsContainFuture=1" class="J_menuItem"><i class="icon-hourglass"></i><span class="lang" data-key="zaitu">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
-                            <!--<li><a href="../../WF/Complete.htm" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="ywc">已完成</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>-->
                             <li><a href="../../WF/Batch.htm" class="J_menuItem"><i class="icon-layers"></i><span class="lang" data-key="pcl">批处理</span></a></li>
                             <li><a href="../../WF/CC.htm" class="J_menuItem"><i class="icon-arrow-right-circle"></i><span class="lang" data-key="chaosong">抄送</span></a></li>
                             <li><a href="../../WF/Draft.htm" class="J_menuItem"><i class="icon-note"></i><span class="lang" data-key="">草稿</span></a></li>
                             <li><a href="../../WF/RecentWork.htm" class="J_menuItem"><i class="icon-envelope"></i><span class="lang" data-key="jq">近期工作</span></a></li>
                             <li><a href="../../WF/Timeout.htm" class="J_menuItem"><i class="icon-bell"></i><span class="lang" data-key="jq">超时工作</span></a></li>
+                            <li><a href="../../WF/AppClassic/API.htm" class="J_menuItem"><i class="icon-bell"></i><span class="lang" data-key="jq">API接口</span></a></li>
+                            <li><a href="../../WF/AppClassic/APIOfUrl.htm" class="J_menuItem"><i class="icon-bell"></i><span class="lang" data-key="jq">Url接口</span></a></li>
                         </ul>
                     </li>
 
@@ -89,7 +94,7 @@
                     <li>
                         <a href="#"><i class="icon-chart ant-menu-item-icon"></i> <span class="nav-label lang" data-key="search">流程查询</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="../../WF/SearchZongHe.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wf3qd">综合查询</span></a></li>
+                            <!--<li><a href="../../WF/SearchZongHe.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wf3qd">综合查询</span></a></li>-->
 
                             <li><a href="../../WF/Watchdog.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wf3qd">监控</span></a></li>
                             <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" class="J_menuItem"><i class="icon iconfont icon-faqiliucheng"></i><span class="lang" data-key="wfqd">我发起的</span></a></li>
@@ -97,10 +102,9 @@
                             <li><a href="../../WF/RptSearch/DistributedOfMy.htm" class="J_menuItem"><i class="icon iconfont icon-huaban"></i><span class="lang" data-key="wdlcfb">我的流程分布</span></a></li>
                             <li><a href="../../WF/SearchDataGrid.htm" class="J_menuItem"><i class="icon iconfont icon-liuchengdingyi"></i><span class="lang" data-key="wdlc">我的流程</span></a></li>
                             <!--<li><a href="../../WF/RptDfine/Flowlist.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang" data-key="dlccx">单流程查询</span></a></li>-->
-                            <li><a href="../../WF/SearchZongHe.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" >综合查询2022</span></a></li>
-
-                            <li><a href="../../WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" data-key="zhcx">综合查询</span></a></li>
-                            <li><a href="../../WF/Watchdog.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang">流程监控</span></a></li>
+                            <!--<li><a href="../../WF/SearchZongHe.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang">综合查询2022</span></a></li>-->
+                            <!--<li><a href="../../WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" data-key="zhcx">综合查询</span></a></li>-->
+                            <!--<li><a href="../../WF/Watchdog.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang">流程监控</span></a></li>-->
                             <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Delays" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="yqlc">逾期流程</span><label class="label label-warning pull-right" id="OutTime"><font color=red>0</font></label></a></li>
                         </ul>
                     </li>
@@ -123,20 +127,36 @@
                     <li>
                         <a href="#">
                             <i class="icon-grid ant-menu-item-icon"></i>
-                            <span class="nav-label"><span class="lang" data-key="gjgn">流程高级功能</span><span class="fa arrow"></span></span>
+                            <span class="nav-label"><span class="lang" data-key="gjgn">高级功能</span><span class="fa arrow"></span></span>
                         </a>
-
                         <ul class="nav nav-second-level">
                             <li><a href="../../WF/StartEarlyer.htm" class="J_menuItem"><i class="icon iconfont icon-faqi"></i><span class="lang" data-key="lcfq3">最近发起</span></a></li>
                             <!--<li><a href="../../WF/TaskPoolSharing.htm" class="J_menuItem"><i class="icon iconfont icon-fenbu"></i><span class="lang" data-key="gxrw">共享任务</span><label id="Todolist_Sharing" class="label label-danger pull-right"></label></a></li>
-    <li><a href="../../WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>-->
+                            <li><a href="../../WF/TaskPoolApply.htm" class="J_menuItem"><i class="icon iconfont icon-guanxi-"></i><span class="lang" data-key="sqrw">申请下来的任务</span><label id="Todolist_Apply" class="label label-default pull-right"></label></a></li>-->
 
                             <li><a href="../../WF/Focus.htm" class="J_menuItem"><i class="icon iconfont icon-wodeguanzhu"></i><span class="lang" data-key="wdgz">我的关注</span></a></li>
-                            <li><a href="../../WF/GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i><span class="lang" data-key="qhsp">取回审批</span></a></li>
+                            <!--<li><a href="../../WF/GetTask.htm" class="J_menuItem"><i class="icon iconfont icon-buliangquhui"></i><span class="lang" data-key="qhsp">取回审批</span></a></li>-->
                             <li><a href="../../WF/Setting/Default.htm" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i><span class="lang" data-key="wdsz">我的设置</span></a></li>
-                            <li><a href="../../DataUser/LocalWS.asmx" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i><span class="lang" data-key="wdsz">开发接口</span></a></li>
+                            <!--<li><a href="../../DataUser/LocalWS.asmx" class="J_menuItem"><i class="icon iconfont icon-wode-shezhi"></i><span class="lang" data-key="wdsz">开发接口</span></a></li>-->
                         </ul>
                     </li>
+
+                    <!--<li class="treeview">
+                        <a href="#" onclick="changeShow('API')" class="cg_color">
+                            <i class="fa fa-fw icon-grid"></i>
+                            <span class="nav-label lang" data-key="jcgn"><b>API接口</b></span>-->
+                    <!--<span class="icon-arrow-down"></span>-->
+                    <!--<span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul id="API" class="nav nav-second-level treeview-menu">
+                            <li class="treeview"><a title="接口测试" href="javascript:" data-href="./Dev2InterfaceDemo.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口测试</span></a></li>
+
+                        </ul>
+                    </li>-->
+
+
 
                 </ul>
             </div>
@@ -158,14 +178,14 @@
                         <li id="LI_Bill_Start"><a href="../../WF/RecentWork.htm" class="J_menuItem"><i class="icon-envelope"></i><span class="lang" data-key="danju1">近期</span></a></li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
-                        <li><a href="Welcome.htm" class="J_menuItem"><i class="icon iconfont icon-home"></i><span class="lang">主页</span></a></li>
+                        <li><a href="Welcome.htm" class="J_menuItem"><i class="icon-home"></i><span class="lang">主页</span></a></li>
                         <li id="Flow"><a href="../../WF/Portal/Flows.htm" class="J_menuItem"><i class="icon-organization"></i><span class="lang" data-key="Flow">流程</span></a></li>
                         <li id="Frm"><a href="../../WF/Portal/Frms.htm" class="J_menuItem"><i class="icon-diamond"></i><span class="lang" data-key="Frm">表单</span></a></li>
                         <li id="Org"><a href="../../GPM/Organization.htm" class="J_menuItem"><i class="icon-people"></i><span class="lang" data-key="Org">组织</span></a></li>
 
                         <li><a href='../../WF/Setting/Default.htm' class="J_menuItem lang-setting"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>
                         <li>
-                            <a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i><span class="lang" data-key="tuichu">退出</span></a>
+                            <a href="javascript:DoExit();"><i class="icon iconfont icon-tuichu fred fz18"></i><span class="lang" data-key="tuichu">退出</span></a>
                         </li>
                     </ul>
                 </nav>
@@ -176,8 +196,6 @@
         </div>
         <!--右侧部分结束-->
     </div>
-
-
 
     <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -197,10 +215,20 @@
     <script src="../../WF/Data/lang/js/zh-cn.js" type="text/javascript"></script>
     <script src="../../WF/Data/lang/lang.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
+
+        function DoExit() {
+            var url = '';
+            var webUser = new WebUser();
+            if (webUser.CCBPMRunModel == 2)
+                url = "/Portal/SaaS/Login.htm?OrgNo=" + webUser.OrgNo + "&LoginType=Exit";
+            else
+                url = "/Portal/Standard/Login.htm?OrgNo=" + webUser.OrgNo + "&LoginType=Exit";
+            SetHref(url);
+        }
         //页面启动函数.
         $(function () {
             var webUser = new WebUser();
-            if (webUser.IsAdmin=='0') {
+            if (webUser.IsAdmin == '0') {
                 $("#Flow").hide();
                 $("#Frm").hide();
                 $("#Org").hide();

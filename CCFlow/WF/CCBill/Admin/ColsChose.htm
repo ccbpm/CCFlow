@@ -140,13 +140,15 @@
             var frmID = GetQueryString("FrmID");
             var mapAttrs = new Entities("BP.Sys.MapAttrs");
             mapAttrs.Retrieve("FK_MapData", frmID, "Idx");
-
+            var cutAttrs = "OID,AtPara,RDT,Starter,StarterName,BillState,";
             for (var i = 0; i < mapAttrs.length; i++) {
 
                 var mapAttr = mapAttrs[i];
                 if (mapAttr.KeyOfEn == 'OID') {
                     continue;
                 }
+                if (cutAttrs.indexOf(mapAttr.KeyOfEn + ",") != -1)
+                    continue; //排除不让其显示的字段.
 
                 var mypk = mapAttr.MyPK;
                 var mapAttrEn = new Entity("BP.Sys.MapAttr", mapAttr);

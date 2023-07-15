@@ -220,21 +220,24 @@ var vm = new Vue({
                         var el = document.querySelector('div[data-cid="' + item.No + '"]')
                         switch (item.WinDocModel) {
                             case "Html": //html的.
-
+                                el.innerHTML = item.Docs;
+                                break;
                             case "System": //内置的.
                                 el.innerHTML = item.Docs;
                                 break;
                             case "Table": //列表的时候的显示.
                                 var data = JSON.parse(item.Docs);
                                 // console.log(data);
-                                var table = '<table class="layui-table">';
-                                var startnum = data[0];
+                                var table = '<table class="layui-table">'; //标题.
+                                var startnum = data[0]; 
                                 table += '<thead><tr>';
                                 $.each(startnum, function (i) {
                                     table += '<th>' + i + '</th>';
 
                                 });
                                 table += '</tr></thead>';
+
+                                //内容.
                                 table += '<tbody>';
                                 for (var j = 0; j < data.length; j++) {
                                     var col = data[j]
@@ -308,7 +311,6 @@ var vm = new Vue({
 
                                 $('#' + iteminfo.isNo).css("width", width).css("height", height);
 
-
                                 if (iteminfo.isName == '折线图') {
                                     _this.initLineChart(els, iteminfo);
 
@@ -323,10 +325,7 @@ var vm = new Vue({
                                     _this.initHistogram(els, iteminfo);
                                 }
                             }
-
-
                         }
-
 
                     })(i)
 

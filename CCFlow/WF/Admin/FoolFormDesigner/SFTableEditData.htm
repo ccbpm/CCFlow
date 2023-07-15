@@ -179,17 +179,18 @@
         function Delete() {
             if (window.confirm('您确定要删除吗？') == false)
                 return;
-            var SFTable = new Entity("BP.Sys.SFTable", fk_sftable);
+            var sftable = new Entity("BP.Sys.SFTable", fk_sftable);
             //获得选中的所有.
             var cbs = $("input[type='checkbox']:checked");
             var str = "";
-
-            cbs.each(function() {
+            cbs.each(function () {
                 if (this.id.indexOf('IDX_') == -1)
                     return true;
                 str = this.id.substring(4);
-                SFTable.DoMethodReturnString("DeleteData", str, fk_sftable);
-
+                var en = new Entity("BP.Sys.SFTableDtl");
+                en.SetValByKey("FK_SFTable", fk_sftable);
+                en.SetPKVal(fk_sftable + "_" + str);
+                en.Delete();
             });
             InitPage(); //刷新.
         }

@@ -51,11 +51,9 @@ function TestFrmAPI() {
     //创建一个新纪录. 返回一个oid 类型的数据.
     var oid = CCForm_CreateBlankOID(frmID);
 
-
     //打开这个表单
     var url = CCFrom_FrmViewUrl(frmID, oid); //获得url.
     window.open(url); //打开这个url.
-
 
     //删除实体记录.
     CCFrom_DeleteFrmEntityByOID(frmID, oid);

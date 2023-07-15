@@ -36,10 +36,14 @@ TodoEmps,
 TodoEmpsNum,
 TodoSta,
 TaskSta,
+FlowNote,
 ListType,
 Sender,
 AtPara,
-Domain,OrgNo
+Domain,
+OrgNo,
+FlowIdx,
+FlowSortIdx
 )
 AS
 
@@ -57,13 +61,15 @@ A.TodoEmps,
 A.TodoEmpsNum,
 A.TodoSta,
 A.TaskSta,
+A.FlowNote,
 0 as ListType,
 A.Sender,
 A.AtPara,
-A.Domain,A.OrgNo
-FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B
+A.Domain,A.OrgNo,
+C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
+FROM  WF_GenerWorkFlow A, WF_GenerWorkerlist B,WF_Flow C,WF_FlowSort D
 WHERE     (B.IsEnable = 1) AND (B.IsPass = 0)
- AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState!=0 AND WhoExeIt!=1
+ AND A.WorkID = B.WorkID AND A.FK_Node = B.FK_Node AND A.WFState!=0 AND WhoExeIt!=1 AND A.FK_Flow=C.No AND A.FK_FlowSort=D.No AND C.FK_FlowSort=D.No
  UNION
 SELECT A.PRI,A.WorkID,B.Sta AS IsRead, A.Starter,
 A.StarterName,
@@ -79,11 +85,13 @@ A.TodoEmps,
 A.TodoEmpsNum,
 0 as TodoSta,
 0 AS TaskSta,
+A.FlowNote,
 1 as ListType,
 B.Rec as Sender,
 '@IsCC=1'||A.AtPara as AtPara,
-A.Domain,A.OrgNo
-  FROM WF_GenerWorkFlow A, WF_CCList B WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0;
+A.Domain,A.OrgNo,
+C.Idx AS FlowIdx, D.Idx AS FlowSortIdx
+  FROM WF_GenerWorkFlow A, WF_CCList B,WF_Flow C,WF_FlowSort D WHERE A.WorkID=B.WorkID AND  B.Sta <=1 AND B.InEmpWorks = 1 AND A.WFState!=0 AND A.FK_Flow=C.No AND A.FK_FlowSort=D.No AND C.FK_FlowSort=D.No;
   
    
 

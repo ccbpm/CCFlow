@@ -1,6 +1,7 @@
 ﻿/// <reference path="frmdevelop2021.js" />
 
 var athDesc = {}
+var editImg = "";
 $(function () {
     Skip.addJs(basePath + "/WF/Scripts/xss.js");
     var theme = filterXSS(localStorage.getItem("themeColorInfo"));
@@ -36,12 +37,15 @@ $(function () {
 
 var frmMapAttrs;
 var mapData = "";
-function LoadFrmDataAndChangeEleStyle(frmData) {
+var fullDataAttrs;
+function LoadFrmDataAndChangeEleStyle(frmData, attrs) {
     mapData = frmData.Sys_MapData[0];
     //加入隐藏控件.
     var mapAttrs = frmData.Sys_MapAttr;
     frmMapAttrs = mapAttrs;
+    fullDataAttrs = attrs;
     var checkData = null;
+    // 主要是这里开始，这个mapAttrs就是定义的字段属性。根据不同类型的字段处理，看是数字还是金额还是xxx
     $.each(mapAttrs, function (i, mapAttr) {
         if (mapAttr.UIContralType == 18)
             return true;
@@ -50,9 +54,12 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             $('#CCForm').append($("<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' value='" + val + "' />"));
             return true;
         }
-
+        // 这里大致分为了三类
+        // TB_前缀是文本框
         $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
+        // DDL => 下拉框
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
+        // CB => 单选多选
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
 
@@ -104,9 +111,10 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             }
             $('#TB_' + mapAttr.KeyOfEn).val(val);
 
-            if (mapAttr.Tip != "" && mapAttr.UIIsEnable == "1" && pageData.IsReadonly != "1") {
+            if (!!mapAttr.Tip && mapAttr.UIIsEnable == "1" && pageData.IsReadonly != "1") {
                 $('#TB_' + mapAttr.KeyOfEn).attr("placeholder", mapAttr.Tip);
                 $('#TB_' + mapAttr.KeyOfEn).on("focus", function () {
+                    debugger
                     var elementId = this.id;
                     layer.tips("<span style='color:black;'>" + $(this).attr("placeholder") + "</span>", '#' + elementId, { tips: [3, "#fff"] });
                     $(".layui-layer-tips").css("box-shadow", "1px 1px 50px rgb(0 0 0 / 30%)");
@@ -259,10 +267,10 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
             if (mapAttr.MyDataType == "8")
                 $('#TB_' + mapAttr.KeyOfEn).css("text-align", "");
         }
-        $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
-        $('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
-        $('#RB_' + mapAttr.KeyOfEn).removeClass("form-control");
-        $('#DDL_' + mapAttr.KeyOfEn).removeClass("form-control");
+        // $('#TB_' + mapAttr.KeyOfEn).removeClass("form-control");
+        //$('#CB_' + mapAttr.KeyOfEn).removeClass("form-control");
+        // $('#RB_' + mapAttr.KeyOfEn).removeClass("form-control");
+        //$('#DDL_' + mapAttr.KeyOfEn).removeClass("form-control");
         var layVerify = "";
         var expression = $.grep(expressions, function (mapExt) {
             return mapExt.AttrOfOper == mapAttr.KeyOfEn && mapExt.FK_MapData == mapAttr.FK_MapData;
@@ -300,7 +308,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
     layui.form.verify(verifys);
 
     //是否存在图标附件
-    if ($("#editimg").length > 0) {
+    if ($(".editimg").length > 0) {
         layui.config({
             base: laybase + 'Scripts/layui/ext/'
         }).use(['form', 'croppers'], function () {
@@ -308,23 +316,24 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
                 , layer = layui.layer;
 
             //创建一个头像上传组件
-            croppers.render({
-                elem: '#editimg'
-                , saveW: 150     //保存宽度
-                , saveH: 150   //保存高度
-                , mark: 1 / 1    //选取比例
-                , area: '900px'  //弹窗宽度
-                , url: $("#editimg").data("info") //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样
-                , done: function (data) { //上传完毕回调
-                    if (data.SourceImage != undefined) {
-                        $('#Img' + $("#editimg").data("ref")).attr('src', basePath + "/" + data.SourceImage + "?M=" + Math.random());
-                    } else {
-                        return layer.msg('上传失败');
+            $.each($(".editimg"), function (idex, item) {
+                croppers.render({
+                    elem: '#' + item.id
+                    , saveW: 150     //保存宽度
+                    , saveH: 150   //保存高度
+                    , mark: 1 / 1    //选取比例
+                    , area: '900px'  //弹窗宽度
+                    , url: $(item).data("info") //图片上传接口返回和（layui 的upload 模块）返回的JOSN一样
+                    , done: function (data) { //上传完毕回调
+                        if (data.SourceImage != undefined) {
+                            $('#Img' + $(item).data("ref")).attr('src', basePath + "/" + data.SourceImage + "?M=" + Math.random());
+                        } else {
+                            return layer.msg('上传失败');
+                        }
+
                     }
-
-                }
+                });
             });
-
         });
 
     }
@@ -332,6 +341,7 @@ function LoadFrmDataAndChangeEleStyle(frmData) {
     //设置是否隐藏分组、获取字段分组所有的tr
     var trs = $("#CCForm .FoolFrmGroupBar");
     var isHidden = false;
+    // 这部分应该是在处理分组和隐藏字段
     $.each(trs, function (i, obj) {
         //获取所有跟随的同胞元素，其中有不隐藏的tr,就跳出循环
         var sibles = $(obj).nextAll();
@@ -419,6 +429,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
     var isHaveLoadMapExt = false;
     var isHaveEnableJs = false;
+    // 这里是处理栅格，计算宽度百分比
     $.each(mapAttrs, function (idx, mapAttr) {
         //字段不可见
         if (mapAttr.UIVisible == 0)
@@ -584,6 +595,8 @@ function AfterBindEn_DealMapExt(frmData) {
             //处理文本自动填充
             var TBModel = GetPara(mapAttr.AtPara, "TBFullCtrl");
             if (TBModel != undefined && TBModel != "" && TBModel != "None" && (mapExt.ExtType == "FullData")) {
+                if (mapExt.MyPK.indexOf("Pop") == 0)
+                    return true;
                 if (mapAttr.UIIsEnable == 0 || isReadonly == true || $("#TB_" + mapExt.AttrOfOper).length == 0)
                     return true;
                 if (TBModel == "Simple") {
@@ -758,7 +771,7 @@ function AfterBindEn_DealMapExt(frmData) {
                                 //选中的值
                                 var selects = new Entities("BP.Sys.FrmEleDBs");
                                 selects.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", pageData.WorkID);
-                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val,mapExt,"Doc");
+                                var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val, mapExt, "Doc");
                                 var data = [];
                                 dt.forEach(function (item) {
                                     data.push({
@@ -995,7 +1008,6 @@ function GetMapExtsGroup(mapExts) {
             data: map[key],
         })
     });
-    console.log(res);
     return map;
 }
 
@@ -1453,11 +1465,11 @@ function SetNumberMapExt(mapExts, mapAttr) {
                     break;
                 if (isReadonly == true)
                     break;
-                if ($('#TB_' + mapExt.AttrOfOper).val() == "" || $('#TB_' + mapExt.AttrOfOper).val() ==="0" )
+                if ($('#TB_' + mapExt.AttrOfOper).val() == "" || $('#TB_' + mapExt.AttrOfOper).val() === "0")
                     ReqDays(mapExt);
-                    $('#TB_' + mapExt.Tag1).data({ "ReqDay": mapExt })
-                    $('#TB_' + mapExt.Tag2).data({ "ReqDay": mapExt });
-               
+                $('#TB_' + mapExt.Tag1).data({ "ReqDay": mapExt })
+                $('#TB_' + mapExt.Tag2).data({ "ReqDay": mapExt });
+
 
                 break;
             case "FieldNameLink":
@@ -1566,9 +1578,9 @@ function ReqDays(mapExt) {
     var EndRDT = $('#TB_' + endField).val();
     if (StarRDT == "" || EndRDT == "") {
         $('#TB_' + ResRDT).val(0);
-        return ;
+        return;
     }
-  
+
     StarRDT = new Date(StarRDT);
     EndRDT = new Date(EndRDT);
     var countH = parseInt((EndRDT - StarRDT) / 1000 / 60 / 60);//总共的小时数
@@ -1916,6 +1928,7 @@ function testExpression(exp) {
     }
     return true;
 }
+
 /**
  * 表单文本字段中自动计算
  * @param {any} mapExt
@@ -1974,6 +1987,7 @@ function Stringcalculator(mapExt) {
     })(targets, mapExt.AttrOfOper, mapExt.Doc);
     $(":input[name=TB_" + mapExt.AttrOfOper + "]").attr("disabled", true);
 }
+
 /**
  * 初始化获取下拉框字段的选项
  * @param {any} frmData
@@ -2444,7 +2458,7 @@ function ReqAthFileName(athID) {
  * @param {any} mapAttr
  */
 var FiledFJ = [];
-function getFieldAth(mapAttr,aths) {
+function getFieldAth(mapAttr, aths) {
     var Obj = {};
     //获取上传附件列表的信息及权限信息
     var nodeID = pageData.FK_Node;
@@ -2457,7 +2471,7 @@ function getFieldAth(mapAttr,aths) {
     var mypk = mapAttr.MyPK;
 
     //获取附件显示的格式
-    var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel")||"0";
+    var athShowModel = GetPara(mapAttr.AtPara, "AthShowModel") || "0";
 
     let ath = $.grep(aths, function (ath) { return ath.MyPK == mypk });
     ath = ath.length > 0 ? ath[0] : null;
@@ -2523,7 +2537,7 @@ function getFieldAth(mapAttr,aths) {
             return "<div " + css + "  id='athModel_" + mapAttr.KeyOfEn + "' class='athModel'><label>附件(0)</label></div>";
     }
     var eleHtml = "";
-   
+
     if (athShowModel == "" || athShowModel == 0)
         return "<div " + css + "  id='athModel_" + mapAttr.KeyOfEn + "' data-type='0'><label >" + clickEvent + "附件(" + dbs.length + ")</label></div>";
 
@@ -2704,7 +2718,7 @@ function OpenAth(title, keyOfEn, athMyPK, atPara, FK_MapData, frmType, isRead) {
     }
     OpenLayuiDialog(url, title, W, H, "auto", false, false, false, null, function () {
         //获取附件显示的格式
-        var athShowModel = GetPara(atPara, "AthShowModel")||"0";
+        var athShowModel = GetPara(atPara, "AthShowModel") || "0";
 
         var ath = new Entity("BP.Sys.FrmAttachment");
         ath.MyPK = athMyPK;

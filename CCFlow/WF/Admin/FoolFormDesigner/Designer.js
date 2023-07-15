@@ -321,7 +321,7 @@ function InitPage() {
 
     //分组的解析
     for (var k = 0; k < groupFields.length; k++) {
-
+        
         var groupObj = groupFields[k];
         //附件类的控件.
         if (groupObj.CtrlType == 'Ath') {
@@ -345,7 +345,17 @@ function InitPage() {
         _html += GenerGroupContext(groupObj, data, tableCol);
 
         //过滤attrs
-        var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+        var mapAttrs = [];
+        //如果分组是目录形式，即：groupObj.CtrlType = "Dir"时，不显示分组里的字段属性
+        if (groupObj.CtrlType == "Dir")
+            continue;
+        else if (groupObj.CtrlType == "Chapter") {
+        //如果分组是章节形式，即：groupObj.CtrlType = "Chapter"时，只显示分组里MaxLen>2000的字段
+            mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID && val.MaxLen > 2000; });
+        }
+        else
+            mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+
         if (tableCol == 4 || tableCol == 6)
             _html += InitMapAttr(mapAttrs, tableCol,data.Sys_MapExt);
 
@@ -610,7 +620,7 @@ function GroupFieldDoDown(refoid) {
 }
 
 /**
- * 生成附件，父子流程，框架，审核组件，从表的内容
+ * 生成附件，父子流程，框架，审核组件，从表,目录的内容
  * @param {any} groupEn
  * @param {any} data
  * @param {any} tableCol
@@ -952,6 +962,7 @@ function InitMapAttrOfCtrlFool(mapAttr) {
                         }
                         break;
                     case 16: //系统定位
+                        debugger
                         eleHtml = "<div style='text-align:left;padding-left:0px' >";
                         eleHtml += "<input type='button' " + ccsCtrl + " name='select' value='系统定位' />";
                         eleHtml += "</div>";
@@ -2150,7 +2161,7 @@ function AddFixed() {
     var mapAttr = new Entity("BP.Sys.FrmUI.MapAttrFixed");
     mapAttr.SetPKVal(frmID + "_Fixed");
     if (mapAttr.RetrieveFromDBSources() == 0) {
-        mapAttr.frmID = frmID;
+        mapAttr.FK_MapData = frmID;
         mapAttr.KeyOfEn = "Fixed";
         mapAttr.Name = "系统定位";
         mapAttr.GroupID = groupID;

@@ -15,39 +15,53 @@
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/layui/LayuiDialog.js"></script>
     <script type="text/javascript" src="./js/vue/vue.js"></script>
     <style>
-        .flow {
-            width: 75%;
-        }
-
-        .flow .row {
-            display: flex;
-            justify-content: flex-start;
-            flex: 0.2;
-            height: 40px;
-            line-height: 40px;
-            background-color: #FAFAFA;
-        }
-
-        .flow .row .item {
+        /* 全局 */
+        .layui-row {
             box-sizing: border-box;
-            flex-shrink: 0;
-            text-align: center;
-            border-right: 1px solid #eee;
-            border-bottom: 1px solid #eee;
+        }
+
+        .flow {
+            /*width: 75%;*/
+            width: 78.5%;
+            margin: 10px 10px 10px 5px;
+        }
+
+            .flow .row {
+                display: flex;
+                justify-content: flex-start;
+                flex: 0.2;
+                height: 40px;
+                line-height: 40px;
+                background-color: #FAFAFA;
+            }
+
+                .flow .row .item {
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    /*text-align: center;*/
+                    border-right: 1px solid #eee;
+                    border-bottom: 1px solid #eee;
+                    padding:0 20px;
+                }
+
+        .item-title {
+            color: #666666;
+            font-weight: 700
         }
 
         .item-name {
-            width: 40%;
+            width: 25%;
             text-overflow: ellipsis;
             white-space: nowrap;
-            cursor: pointer;
+            /*cursor: pointer;*/
             padding-left: 30px;
         }
 
         .item-other {
-            width: 12%;
+            width: 15%;
         }
 
         .item-index {
@@ -69,48 +83,171 @@
 
         #s-main {
             transition: all ease .4s;
-            margin-top: 40px;
+            height: 20px;
+            font-size: 13px;
+        }
+        /*.fixed {
+            position: fixed;
+            top: 50px;*/
+        /*left: 25%;*/
+        /*width: 75%;
+        }*/
+        /* 左侧菜单栏布局 */
+        .flow_layout {
+            border: 1px solid #1010ce;
+            margin: 10px 10px 0 15px;
+            width: 225px;
+            border-radius: 5px;
+            background: #fff;
         }
 
-        .fixed {
-            position: fixed;
-            top: 0;
-            left: 25%;
-            width: 75%;
+        .menu-treetitle {
+            height: 50px;
+            line-height: 30px;
+            font-size: 16px;
+            padding: 10px 10px 10px 15px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .layui-tree {
+            background: #fff;
+            padding: 15px;
+        }
+        /* 右侧内容区域 */
+
+        .top-choose {
+            /*margin-bottom: 15px;*/
+            /*border-radius: 5px;*/
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: #fff;
+            border-bottom: 1px solid #f0f2f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flow-main {
+            /*border-radius: 5px;*/
+            background-color: #fff;
+            padding: 10px;
+            height: 87%;
+        }
+
+        .top-newfrm {
+            display: flex;
+            height: 50px;
+            align-items: center;
+            justify-content: flex-end;
+            margin-right: 5px;
+        }
+
+        .flow-menu {
+            cursor: pointer;
+            margin: 0 5px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 2px;
+            padding: 0 10px;
+            font-size:12px;
+            background-color: #316ee6;
+            color: #fff;
+            border-color: #316ee6;
+        }
+
+            .flow-menu:hover {
+                background: #316ee6;
+            }
+        .layui-tree-set-active > .layui-tree-entry .layui-tree-main {
+            color:#000;
+            font-weight:700;
+            font-size:15px;
+        }
+        .item-omit{
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .item-finger{
+            cursor:pointer;
+        }
+
+        .search-inp {
+            margin-left: 10px;
+            margin-right: 10px;
+            display: flex;
+        }
+        .cc-btn-tab {
+            height: 30px !important;
+            padding: 0 10px;
+            margin-right: auto;
+            margin-left: 10px;
+            line-height: 30px !important;
+            font-size: 12px !important;
+            background: #316ee6 !important;
+            border-color: #316ee6 !important;
+            border-radius: 2px;
+            color: #fff !important;
+        }
+
+            .cc-btn-tab:hover {
+                background: #316ee6 !important;
+            }
+
+        .left-search {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-font {
+            display: flex;
         }
     </style>
     <script type="text/javascript">
         var frms;
+        var frmSortNo;
+        var nameTitle;
         $(function () {
-            //获取流程类别
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
-            var data = handler.DoMethodReturnString("Frms_InitSort");
-            if (data.indexOf("err@") != -1) {
-                layer.alert(data.indexOf("err@", ""));
+
+            var webUser = new WebUser();
+            if (webUser.IsAdmin == false) {
+                alert("非管理员用户.");
                 return;
             }
-            data = JSON.parse(data);
-            webUserJsonString = null;
-            var webUser = new WebUser();
-            var emp = new Entity("BP.Port.Emp", webUser.No);
-            var rootNo = webUser.OrgNo;
-            if (emp.FK_Dept != webUser.FK_Dept)
-                rootNo = webUser.FK_Dept;
 
-            data = CoverDataToTree(data, rootNo)
-            layui.tree.render({
+            var sorts = new Entities("BP.WF.Template.SysFormTrees");
+            sorts.RetrieveAll();
+            var rootNo = "0";
+            if (webUser.CCBPMRunModel == 1 || webUser.CCBPMRunModel == 2)
+                rootNo = webUser.OrgNo;
+            if (webUser.No == "admin")
+                rootNo = "0";
+
+            var data = CoverDataToTree(sorts, rootNo)
+            tree = layui.tree.render({
                 elem: '#frmSort'
                 , data: data
                 , id: "frmSort"
                 //, edit: ['add', 'update', 'del'] //操作节点的图标
                 , click: function (obj) {
-                    //根据id获取流程集合
+
+                    // 点击高亮
+                    $(".layui-tree-set").removeClass('layui-tree-set-active');
+                    obj.elem.addClass('layui-tree-set-active');
+
+                    //根据id获取表单集合
+                    frmSortNo = obj.data.id;
+                    $('#EditSort').text("属性：" + obj.data.title)
+                    nameTitle = obj.data.title;
+                    //点击时产生节点产生flowSortNo显示
+                    $('#NewSortOne').show();
                     frms = new Entities("BP.Sys.MapDatas");
                     frms.Retrieve("FK_FormTree", obj.data.id);
                     baseInfo.frms = frms.GetEns().data;
                     for (var j = 0; j < baseInfo.frms.length; j++) {
                         var frm = baseInfo.frms[j];
-                       
+
                         if (frm.FrmType == 1) frm.FrmType = "傻瓜表单";
                         if (frm.FrmType == 0) frm.FrmType = "傻瓜表单";
                         if (frm.FrmType == 2) frm.FrmType = "自由表单";
@@ -140,15 +277,22 @@
                         baseInfo.bindMenu();
                         //baseInfo.initSortArea();
                     }, 800);
-
                 }
             });
+
+
+            //默认选中父节点
+            tree.setChecked('frmSort', data[0].id);
+            var parentNodeElem = $('.layui-tree-set[data-id="' + data[0].id + '"]>.layui-tree-entry>.layui-tree-main>.layui-tree-txt');
+            parentNodeElem.dblclick();
+
+
 
             var dropdown = layui.dropdown
             var topNodeItems = [
                 { title: '<i class=icon-plus></i> 新建表单', id: "NewFrm", Icon: "icon-plus" },
                 { title: '<i class=icon-star></i> 重命名', id: "EditSort", Icon: "icon-options" },
-                { title: '<i class=icon-folder></i> 新建目录', id: "NewSort", Icon: "icon-magnifier-add" },
+                { title: '<i class=icon-folder></i> 新建子级', id: "NewSort", Icon: "icon-magnifier-add" },
                 //{ title: '<i class=icon-share-alt ></i> 导入表单模版', id: "ImpFlowTemplate", Icon: "icon-plus" },
                 //{ title: '<i class=icon-share-alt ></i> 批量导出表单模版', id: "BatchExpFrmTemplate", Icon: "icon-plus" },
                 { title: '<i class=icon-close></i> 删除目录', id: "DeleteSort", Icon: "icon-close" }
@@ -161,9 +305,48 @@
                     topNodeOption(data.id, $(this.elem).parent().parent().parent().data().id, $(this.elem)[0].innerHTML)
                 }
             });
+            var html = "";
+            html += "<div class='left-search'>"
+            html += "<li class='search-font'><span style='margin-left: 15px;line-height:25px;'>关键字：</span><div style='width: 190px; border-width: 1px; border-style: solid; background-color: #fff; border-color: #eee; '><input id='searchKey' name='searchKey' type='text' style='margin-left: 5px; height: 30px;border:none;outline:none;' /></div></li>";
+            html += "<li class='cc-btn-tab' id='SearchBtn' onclick=\"SearchEmp(frms)\">搜索</li>";
+            html += "</div>"
+            html += "<ul class='top-newfrm'>";
+            html += "<li id='EditSort' class='flow-menu' onclick=\"topNodeOption(id,frmSortNo,nameTitle)\">属性名称</li>";
+            html += "<li id='NewFrm' class='flow-menu' onclick=\"topNodeOption(id,frmSortNo,nameTitle)\">新建表单</li>";
+            html += "<li id='NewSortOne' class='flow-menu'>更多操作</li>";
+            html += "</ul>";
+            $("#top-choose").html(html);
+
+            //一开始隐藏
+            $('#NewSortOne').hide();
+
+
+            //新建目录   新建子集，新建同级
+            dropdown.render({
+                elem: '#NewSortOne', // 绑定元素选择器，此处指向 class 可同时绑定多个元素
+                trigger: 'hover',
+                data: [
+                    { title: '<i class=icon-folder></i> 新建同级', id: "NewSame", Icon: "icon-magnifier-add" },
+                    { title: '<i class=icon-folder></i> 新建子级', id: "NewSort", Icon: "icon-magnifier-add" },
+                    { title: '<i class=icon-folder></i> 删除目录', id: "DeleteSort", Icon: "icon-magnifier-add" },
+                ],
+                click: function (data) {
+                    topNodeOption(data.id, frmSortNo, nameTitle)
+                }
+            });
 
         })
+        function SearchEmp(frms) {
+            var searchKey = $("#searchKey").val();
+            var frms = frms.data.filter(function (item) {
+                return item.No.includes(searchKey)
+            })
+            baseInfo.frms = frms
+            return frms;
+        }
         function topNodeOption(key, frmSortNo, name, idx) {
+            //获取屏幕的宽
+            var W = document.body.clientWidth - 250;
             switch (key) {
                 case "EditSort":
                     var val = prompt("请输入名称", name);
@@ -191,6 +374,24 @@
                         }, 800);
                     });
                     break;
+                case "NewSame":
+                    layer.prompt({
+                        value: '',
+                        title: '新建同级流程类别',
+                    }, function (value, index, elem) {
+                        layer.close(index);
+                        var en = new Entity("BP.WF.Template.SysFormTree", frmSortNo);
+                        var data = en.DoMethodReturnString("DoCreateSameLevelFormNodeMy", value);
+                        if (data == undefined || data == '') {
+                            return;
+                        } else {
+                            layer.msg("创建成功" + value);
+                        }
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 800);
+                    });
+                    break;
                 case "DeleteSort":
                     if (window.confirm("确定要删除吗?") == false)
                         return;
@@ -208,10 +409,18 @@
                     }, 2000)
                     break;
                 case "NewFrm":
-                     url = basePath + "/WF/Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + frmSortNo + "&From=Frms.htm&RunModel=1&s=" + Math.random();
+                    url = basePath + "/WF/Admin/FoolFormDesigner/NewFrmGuide.htm?SortNo=" + frmSortNo + "&From=Frms.htm&RunModel=1&s=" + Math.random();
                     url += "&UserNo=" + GetQueryString("UserNo");
                     url += "&Token=" + GetQueryString("Token");
-                    window.open(url); break;
+                    /*window.open(url); break;*/
+                    OpenLayuiDialog(url, name, W, 100, "r", false, false, null, null, function () {
+                        // alert(frmSortNo); 
+                        //关闭窗口执行选中并点击节点
+                        tree.setChecked('frmSort', frmSortNo); //设置对应 id 的节点选中
+                        var nodeElem = $('.layui-tree-set[data-id="' + frmSortNo + '"]>.layui-tree-entry>.layui-tree-main>.layui-tree-txt');
+                        console.log(nodeElem);
+                        nodeElem.click();
+                    });
                     break;
                 default:
                     layer.alert("没有判断的命令" + key);
@@ -240,7 +449,7 @@
             var jsonchildTree = [];
             if (treeJson.length > 0 && typeof rootNo !== "undefined") {
                 $.each(treeJson, function (i, o) {
-                    if (o.No == rootNo) {
+                    if (o.ParentNo == rootNo) {
                         jsonchildTree.push(o);
                         jsonTree.push({
                             "id": o.No,
@@ -273,42 +482,56 @@
         }
     </script>
 
+
 </head>
 
-<body style="background-color:white">
+<body style="background-color: #f0f2f5; overflow-y: hidden; ">
     <div class="layui-row">
         <!--流程类别-->
-        <div class="layui-col-sm3 layui-col-md3 layui-col-xs3" style="border:1px solid #f5f5ff ">
-            <div id="frmSort" class="" style="width: 100%; height: calc(100%); ">
-            </div>
+        <div class="layui-col-sm3 layui-col-md3 layui-col-xs3 flow_layout" style="border:1px solid #f5f5ff ">
+            <div class="menu-treetitle"><i class="icon-diamond" style="vertical-align: -1px; margin-right: 2px;"></i>表单</div>
+            <div id="frmSort" class="" style="width: 100%; height: calc(90%); "></div>
         </div>
+
         <!--流程信息-->
         <div class="layui-col-sm8 layui-col-md8 layui-col-xs4 flow" id="flow" v-cloak>
-            <div class="row fixed">
-                <div class="item item-name">表单名称</div>
-                <div class="item item-other">表单类型</div>
-                <div class="item item-other">应用模式</div>
-                <div class="item item-other">存储表</div>
-                <div class="item item-other">操作</div>
-            </div>
-            <div ref="child-row" id="s-main">
-                <div class="row" v-for="(flow,idx) in frms" :key="idx" :data-pid="SortNo" :data-id="flow.No">
+            <!-- top -->
+            <div class="top-choose" id="top-choose"></div>
+            <div class="flow-main">
+                <div class="row fixed">
+                    <!--<div class="item item-name">表单名称</div>
+    <div class="item item-other">表单类型</div>
+    <div class="item item-other">应用模式</div>
+    <div class="item item-other">存储表</div>
+    <div class="item item-other">操作</div>-->
+                    <div class="item item-name item-title">编号</div>
+                    <div class="item item-other item-title">名称</div>
+                    <div class="item item-other item-title">存储表</div>
+                    <div class="item item-other item-title">设计类型</div>
+                    <div class="item item-other item-title">创建日期</div>  <!--当前版本-->
+                    <div class="item item-other item-title">创建人</div>    <!--设计人-->
+                </div>
+                <div ref="child-row" id="s-main">
+                    <div class="row" v-for="(frms,idx) in frms" :key="idx" :data-pid="SortNo" :data-id="frms.No" @dblclick.stop="Designer(frms.No,frms.Name)">
 
-                    <div class="item item-name item-name-dp" @click.stop="Designer(flow.No,flow.Name)" style="text-align: left" :data-no="flow.No" :data-name="flow.Name" :data-idx="idx">
-                        <i class="icon-heart" style="margin-right: 8px"></i>
-                        <span>{{flow.No}}.{{flow.Name}}</span>
-                    </div>
-                    <div class="item item-other">{{flow.FrmType}}</div>
-                    <div class="item item-other">{{flow.EntityType}}</div>
-                    <div class="item item-other">{{flow.PTable}}</div>
-                    <div class="item item-other">
-                        <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn" :data-name="flow.Name" :data-no="flow.No" :data-idx="idx">
-                            <i class="layui-icon layui-icon-down layui-font-12"></i>表单
-                        </button>
+                        <div class="item item-name item-name-dp item-omit" :data-no="frms.No" :data-name="frms.Name" :data-idx="idx">
+                            <i class="icon-heart" style="margin-right: 8px"></i>
+                            <span class="item-omit" >{{frms.No}}</span>
+                        </div>
+                        <div class="item item-other item-omit  item-finger"  @click.stop="Designer(frms.No,frms.Name)">{{frms.Name}}</div>
+                        <div class="item item-other item-omit">{{frms.PTable}}</div>
+                        <div class="item item-other item-omit">{{frms.FrmTypeText}}</div>
+                        <div class="item item-other item-omit">{{frms.Ver}}</div>
+                        <div class="item item-other item-omit">{{frms.Name}}</div>
+                        <!--<div class="item item-other">
+        <button class="layui-btn layui-btn-primary layui-border-blue layui-btn-xs c-btn" :data-name="flow.Name" :data-no="flow.No" :data-idx="idx">
+            <i class="layui-icon layui-icon-down layui-font-12"></i>表单
+        </button>
+    </div>-->
                     </div>
                 </div>
+                </div>
             </div>
-           </div>
         </div>
     <script type="text/javascript">
         var baseInfo = new Vue({
@@ -377,21 +600,36 @@
                     var sid = GetQueryString("Token");
                     var webUser = new WebUser();
                     var url = basePath + "/WF/Admin/FoolFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + no + "&FrmID=" + no + "&UserNo=" + webUser.No + "&Token=" + sid + "&OrgNo=" + webUser.OrgNo + "&From=Ver2021";
-                    window.top.vm.openTab(name, url);
+                    //window.top.vm.openTab(name, url);
+                    var self = WinOpenFull(url, "xx");
+                    var loop = setInterval(function () {
+                        if (self.closed) {
+                            //管理员登录
+                            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
+                            handler.AddPara("Token", GetQueryString("Token"));
+                            handler.AddPara("UserNo", GetQueryString("UserNo"));
+                            handler.DoMethodReturnString("Default_LetAdminerLogin");
+                            clearInterval(loop)
+                        }
+                    }, 1);
+                    ////获取屏幕的宽
+                    //var W = document.body.clientWidth - 250;
+                    //OpenLayuiDialog(url, name, W, 100, "r", false);
                 },
                
                
                 flowAttr: function (no, name) {
                     var url = "/WF/Comm/RefFunc/En.htm?EnName=BP.WF.Template.Frm.MapFrmFool&PKVal=" + no + "&s=" + Math.random();
-                    window.top.vm.openTab(name, url);
+                    //window.top.vm.openTab(name, url);
                     //this.openLayer(url, name,900);
+                    OpenLayuiDialog(url, name, W, 100, "r", false);
                 },
                 StartFrm: function (no, name) {
                     var sid = GetQueryString("Token");
                     var webUser = new WebUser();
                     var en = new Entity("BP.Sys.MapData", no);
                     if (en.EntityType == 0) {
-                        layer.alert(en.Name + "是独立表单不能运行");
+                        layer.alert("表单:[" + en.Name + "]是独立表单不能运行,如果要调用表单，请参考/WF/CCBill/Demo/index.htm");
                         return;
                     }
                     var url = "";

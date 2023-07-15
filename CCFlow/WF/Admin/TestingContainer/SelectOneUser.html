@@ -9,6 +9,44 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <style>
+        .bg_color{
+            background:#f6f6f6;
+        }
+        .title-center {
+            text-align: center;
+            color: #393939;
+            background:#fff;
+            font-weight:bold;
+        }
+        .title-center-nobold {
+            text-align: center;
+            color: #393939;
+            background: #fff;
+            font-weight:500;
+        }
+        .title-content {
+            padding: 8px 25px;
+        }
+        /* 第一个表格布局 */
+        #gwf, #gwls {
+            margin: 10px 35px;
+            background: #fff;
+            padding-bottom: 30px;
+            border-radius: 10px;
+        }
+        .add_line::before {
+            content: '';
+            margin-left: -10px;
+            margin-right: 5px;
+            border-left: 5px solid #0237a1;
+        }
+        .content_color {
+            color: #666;
+            background:#f6f6f6;
+            border:1px solid #fff;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
 
         var flowNo = GetQueryString("FK_Flow");
@@ -47,22 +85,22 @@
             //   var webUser = new WebUser();
             //    $("#userInfo").html("<h3>用户信息：<font color=green>" + webUser.No + "," + webUser.Name + " </font> 部门编号:<font color=green>" + webUser.FK_Dept + "</font> 部门名称: <font color=green>" + webUser.FK_DeptName + "</font></h3>");
 
-            var html = "<table style='width:900px;'>";
-            html += "<caption>工作人员列表</caption>";
+            var html = "<table style='width:93%;margin:15px;'>";
+            html += "<caption style='color:#000;margin-top: 20px;' class='add_line'>工作人员列表</caption>";
             html += "<tr>";
-            html += "<th>Idx</th>";
-            html += "<th>人员编号</th>";
-            html += "<th>名称</th>";
-            html += "<th>节点ID</th>";
-            html += "<th>节点名称</th>";
-            html += "<th>下达时间</th>";
-            html += "<th>处理时间</th>";
+            html += "<th class='title-center'>Idx</th>";
+            html += "<th class='title-center' >人员编号</th>";
+            html += "<th class='title-center' >名称</th>";
+            html += "<th class='title-center' >节点ID</th>";
+            html += "<th class='title-center' >节点名称</th>";
+            html += "<th class='title-center' >下达时间</th>";
+            html += "<th class='title-center' >处理时间</th>";
 
-            html += "<th>是否读取？</th>";
+            html += "<th class='title-center' >是否读取？</th>";
 
-            html += "<th>状态</th>";
-            html += "<th>IsPass</th>";
-            html += "<th>节点类型</th>";
+            html += "<th class='title-center' >状态</th>";
+            html += "<th class='title-center' >IsPass</th>";
+            html += "<th class='title-center' >节点类型</th>";
 
            // html += "<th>操作</th>";
             html += "</tr>";
@@ -76,73 +114,74 @@
                     html += "<tr >";
                 }
 
-                html += "<td>" + i + "</td>";
-                html += "<td>" + en.FK_Emp + "</td>";
-                html += "<td>" + en.FK_EmpText + "</td>";
-                html += "<td>" + en.FK_Node + "</td>";
-                html += "<td>" + en.FK_NodeText + "</td>";
+                html += "<td class='title-center-nobold ' >" + i + "</td>";
+                html += "<td class='title-center-nobold '>" + en.FK_Emp + "</td>";
+                html += "<td class='title-center-nobold '>" + en.FK_EmpText + "</td>";
+                html += "<td class='title-center-nobold '>" + en.FK_Node + "</td>";
+                html += "<td class='title-center-nobold '>" + en.FK_NodeText + "</td>";
 
-                html += "<td>" + en.RDT + "</td>";
+                html += "<td class='title-center-nobold '>" + en.RDT + "</td>";
 
                 if (en.IsPass == 0) {
-                    html += "<td> - </td>";
+                    html += "<td class='title-center-nobold '> - </td>";
                 } else {
-                    html += "<td>" + en.CDT + "</td>";
+                    html += "<td class='title-center-nobold '>" + en.CDT + "</td>";
                 }
-                html += "<td>" + en.IsRead + "</td>";
-                html += "<td>" + en.IsPass + "</td>";
+                html += "<td class='title-center-nobold '>" + en.IsRead + "</td>";
+                html += "<td class='title-center-nobold '>" + en.IsPass + "</td>";
 
                 if (en.IsPass == 0 && en.FK_Node == gwf.FK_Node) {
-                    html += "<td><b><font color=green>待办</font></b></td>";
-                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
+                    html += "<td class='title-center-nobold'><b><font color=green>待办</font></b></td>";
+                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
                 } else if (en.IsPass == 0 && en.FID != 0) {
-                    html += "<td><b><font color=green>待办</font></b></td>";
-                    html += "<td><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
+                    html += "<td class='title-center-nobold '><b><font color=green>待办</font></b></td>";
+                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
 
                 } else if (en.IsPass == -2) {
-                    html += "<td>分流</td>";
-                    html += "<td> - </td>";
+                    html += "<td class='title-center-nobold '>分流</td>";
+                    html += "<td class='title-center-nobold'> - </td>";
                 }
                 else if (en.IsPass == 3) {
-                    html += "<td><font color=red>未到达</font></td>";
-                    html += "<td> - </td>";
+                    html += "<td class='title-center-nobold '><font color=red>未到达</font></td>";
+                    html += "<td class='title-center-nobold '> - </td>";
                 } else {
-                    html += "<td>已处理</td>";
-                    html += "<td> - </td>";
+                    html += "<td class='title-center-nobold '>已处理</td>";
+                    html += "<td class='title-center-nobold '> - </td>";
                 }
-
                 html += "</tr>";
             }
+
             html += "</table>";
             $("#gwls").html(html);
+            $("tr:odd td").addClass("content_color");  //隔行换色
 
 
 
             //******************************** 绑定流程信息 **/
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-            var html = "<table style='width:900px;'>";
-            html += "<caption>流程信息</caption>";
+            var html = "<table table table-bordered  style='width:93%;margin: 40px 15px 25px 15px;'>";   //style = 'width:900px;'
+            html += "<caption style='color:#000;margin-top: 20px;' class='add_line'>流程信息</caption>";
             html += "<tr>";
-            html += "<th>标题</th>";
-            html += "<td colspan=6>" + gwf.Title + "</td>";
+            html += "<th class='title-center'>标题</th>";
+            html += "<td colspan=6 class='title-content' >" + gwf.Title + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<th>工作ID</th>";
-            html += "<td>" + gwf.WorkID + "</td>";
-            html += "<th>状态</th>";
-            html += "<td>" + GetWFState(gwf.WFState) + "</td>";
-            html += "<th>发起人</th>";
-            html += "<td>" + gwf.Starter + "," + gwf.StarterName + "</td>";
+            html += "<th class='title-center'>工作ID</th>";
+            html += "<td class='title-content'>" + gwf.WorkID + "</td>";
+            html += "<th class='title-center'>状态</th>";
+            html += "<td class='title-content'>" + GetWFState(gwf.WFState) + "</td>";
+            html += "<th class='title-center'>发起人</th>";
+            html += "<td class='title-content'>" + gwf.Starter + "," + gwf.StarterName + "</td>";
             html += "</tr>";
 
             html += "<tr>";
-            html += "<th>停留节点ID</th>";
-            html += "<td>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
-            html += "<th>当前待办人员</th>";
-            html += "<td>" + gwf.TodoEmps + "</td>";
+            html += "<th class='title-center'>停留节点ID</th>";
+            html += "<td class='title-content'>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
+            html += "<th class='title-center'>当前待办人员</th>";
+            html += "<td class='title-content'>" + gwf.TodoEmps + "</td>";
 
-            html += "<td colspan=2> <b>";
+            html += "<td colspan=2 class='title-content'> <b>";
             html += "<a href='javascript:Skip();' >实例运维：跳转-调整-删除-移交-强制结束</a></b>";
             html += "</td>";
 
@@ -219,7 +258,7 @@
         }
     </script>
 </head>
-<body>
+<body class="bg_color">
 
     <h4 style="text-align:center">
 

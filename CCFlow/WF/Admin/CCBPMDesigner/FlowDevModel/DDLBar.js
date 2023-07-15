@@ -1,4 +1,4 @@
-var webUser = new WebUser();
+﻿var webUser = new WebUser();
 
 function InitBar(optionKey) {
 
@@ -55,7 +55,11 @@ function InitBar(optionKey) {
 
 //创建流程.
 function Save() {
-
+    var flowName = $("#TB_Name").val();
+    if (flowName == '') {
+        alert("请输入流程名称。");
+        return;
+    }
     var newFlowInfo = getNewFlowInfo();
     if ((newFlowInfo.FlowFrmModel == FlowDevModel.RefOneFrmTree
         || newFlowInfo.FlowFrmModel == FlowDevModel.FrmTree)&& newFlowInfo.FrmID == "") {
@@ -83,11 +87,11 @@ function Save() {
         }
         var webUser = new WebUser();
         var url = "../Designer.htm?FK_Flow=" + data + "&OrgNo=" + webUser.OrgNo + "&Token=" + webUser.Token + "&UserNo=" + webUser.No + "&From=Ver2021";
-        if (window.parent && window.parent.layer)
+        if (window.parent && window.parent.layer) {
             window.parent.layer.close(window.parent.layer.index);
+        }
         WinOpenFull(url, data);
     }, 1000);
-
 }
 
 function GenerName() {

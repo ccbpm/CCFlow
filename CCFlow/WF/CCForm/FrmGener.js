@@ -18,8 +18,6 @@ $(function () {
 
     //初始化参数.
     initPageParam();
-
-
     //构造表单.
     GenerFrm(); //表单数据.
 
@@ -48,7 +46,7 @@ function initPageParam() {
     pageData.OID = oid;
     pageData.WorkID = oid;
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadonly = GetQueryString("IsReadonly");
+    pageData.IsReadonly = GetQueryString("IsReadonly") ||"0";
     pageData.IsStartFlow = GetQueryString("IsStartFlow");
     pageData.FK_MapData = GetQueryString("FK_MapData");
     isReadonly = pageData.IsReadonly == null || pageData.IsReadonly == undefined || pageData.IsReadonly == "" || pageData.IsReadonly == "0" ? false : true;
@@ -173,8 +171,8 @@ function GenerFrm() {
 
         var frmType = GetQueryString("FrmType");
         if (frmType == 'Develop') {
-            $('head').append('<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
-            $('head').append('<link href="../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+            $('head').append('<link href="' + basePath +'/DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+            $('head').append('<link href="' + basePath +'/DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             if (currentUrl.indexOf("/CCBill/") != -1)
                 Skip.addJs("../CCForm/FrmDevelop2021.js?ver=1");
             else
@@ -207,8 +205,8 @@ function GenerFrm() {
         // alert(mapData.FrmType);
 
         if (mapData.FrmType == 8) {
-            $('head').append('<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
-            $('head').append('<link href="../../DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
+            $('head').append('<link href="' + basePath + '/DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />');
+            $('head').append('<link href="' + basePath + '/DataUser/Style/MyFlowGenerDevelop.css" rel="Stylesheet" />');
             if (currentUrl.indexOf("/CCBill/") != -1)
                 Skip.addJs("../CCForm/FrmDevelop2021.js?ver=1");
             else
@@ -498,6 +496,7 @@ function Save(isSend) {
     handler.AddPara("OID", pageData.OID);
     var params = getTreeFormData(true, true);
     handler.AddUrlData();
+    
     handler.AddJson(params);
     var data = handler.DoMethodReturnString("FrmGener_Save");
 
@@ -552,7 +551,7 @@ function getTreeFormData(isCotainTextArea, isCotainUrlParam) {
         $(".rich").each(function (i, item) {
             var edit = layui.tinymce.get('#' + item.id)
             var val = edit.getContent();
-            formArrResult[item.id] = val;
+            formArrResult[item.id] = encodeURIComponent(val);
             haseExistStr += item.id + ","
         })
     }

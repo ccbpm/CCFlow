@@ -92,10 +92,12 @@
         }
 
         function IconImgErr(obj) {
+            //防止陷入死循环
+            obj.onerror = null;
             if (plant == "CCFlow")
                 obj.src = '../../DataUser/Siganture/UnName.jpg';
             else
-                obj.src = basePath + "DataUser/Siganture/UnName.jpg";
+                obj.src = basePath + "/DataUser/Siganture/UnName.jpg";
         }
     </script>
 
@@ -105,7 +107,7 @@
         <h3>&nbsp;电子签名设置&nbsp;</h3>
         <hr />
         <p align="center">
-            <img id="sigimg"  width="120" height="30"   border="1" onerror="" />
+            <img id="sigimg"  width="120" height="30"   border="1" onerror="IconImgErr(this)" />
         </p>
         上传<input type="file" name="File_Upload" id="File_Upload" />
             <input id="btn" type="button" value="确定" onclick="Upload()" /></br></br>

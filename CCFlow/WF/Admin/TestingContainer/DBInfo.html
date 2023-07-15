@@ -9,6 +9,31 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <style>
+        .bg_color {
+            background: #f6f6f6;
+        }
+        .top_title {
+            margin: 25px 0 0 40px;
+        }
+        #GenerWorkFlow, #GenerWorkerList, #Track, #NDxxRpt {
+            margin: 20px 35px;
+            background: #fff;
+            padding-bottom: 30px;
+            border-radius: 10px;
+        }
+        .add_line::before {
+            content: '';
+            margin-left: -10px;
+            margin-right: 5px;
+            border-left: 5px solid #0237a1;
+        }
+        .content_color {
+            color: #666;
+            background: #f6f6f6;
+            border: 1px solid #fff;
+        }
+    </style>
     <script language="javascript" type="text/javascript">
 
         //参数.
@@ -35,15 +60,15 @@
 
             var data = ToJson(data);
             var gwf = data["WF_GenerWorkFlow"][0]; //流程引擎控制表.
-            var gwls = data["WF_GenerWorkerList"]; //工作人员列表.
+            var gwls = data["WF_GenerWorkerlist"]; //工作人员列表.
             var track = data["Track"]; //日志表..
             var ndrpt = data["NDRpt"][0]; //流程数据表..
 
             // **************************************** gwf 流程引擎控制表 ************************
 
             //。
-            var html = "<table width='980px'>";
-            html += "<caption>流程引擎控制表</caption>";
+            var html = "<table class='table table-bordered table - hover' style='width:93%;margin:10px 40px 25px 40px;'>";
+            html += "<caption style='color:#000; margin-top: 20px;' class='add_line'>流程引擎控制表</caption>";
             html += "<tr>";
 
             // 输出列名
@@ -62,8 +87,8 @@
             $("#GenerWorkFlow").html(html);
 
             // **************************************** gwls 输出工作人员列表 ************************
-            var html = "<table width='1300px'>";
-            html += "<caption>工作人员列表</caption>";
+            var html = "<table class='table table-bordered table - hover' style='width:93%;margin:10px 40px 25px 40px;'>";
+            html += "<caption style='color:#000; margin-top: 20px;' class='add_line'>工作人员列表</caption>";
             html += "<tr>";
             // 输出列名
             for (var m in gwls[0]) {
@@ -75,17 +100,18 @@
             var arr = Object.keys(gwls);
 
             for (var n = 0; n < arr.length; n++) {
-                html += "<tr>";
+                html += "<tr class='work_from'>";
                 for (var m in gwls[n]) { html += "<td>" + gwls[n][m] + "</td>"; }
                 html += "</tr>";
             }
             $("#GenerWorkerList").html(html);
+            $(".work_from:odd td").addClass("content_color"); //隔行换色
 
 
 
             // **************************************** Track列表 ************************
-            var html = "<table  width='980px'>";
-            html += "<caption>Track列表</caption>";
+            var html = "<table  class='table table-bordered table - hover' style='width:93%;margin:10px 40px 25px 40px;'>";
+            html += "<caption style='color:#000; margin-top: 20px;' class='add_line'>Track列表</caption>";
             html += "<tr>";
 
             // 输出列名
@@ -97,7 +123,7 @@
             // 输出列值
             var arr = Object.keys(track);
 
-            html += "<tr>";
+            html += "<tr class='track_from'>";
             for (var m in track[0]) {
                 if (m == "FrmDB") {
                     track[0][m] = "...";
@@ -108,11 +134,12 @@
             html += "</tr>";
 
             $("#Track").html(html);
+            $(".track_from:odd td").addClass("content_color"); //隔行换色
 
 
             // **************************************** NDxxxRpt 流程数据表  ************************
-            var html = "<table width='980px'>";
-            html += "<caption>流程数据表</caption>";
+            var html = "<table class='table table-bordered table - hover' style='width:93%;margin:10px 40px 25px 40px;'>";
+            html += "<caption style='color:#000; margin-top: 20px;' class='add_line'>流程数据表</caption>";
             html += "<tr>";
 
             // 输出列名
@@ -134,29 +161,29 @@
 
     </script>
 </head>
-<body>
+<body class="bg_color">
 
-    <h2>数据库信息 </h2>
+    <h2 class="top_title">数据库信息 </h2>
 
     <fieldset>
-        <legend>流程引擎控制表</legend>
-        <div id="GenerWorkFlow"></div>
+        <!--<legend>流程引擎控制表</legend>-->
+        <div id="GenerWorkFlow" style="overflow-x: auto; width: 95%;"></div>
     </fieldset>
 
     <fieldset>
-        <legend> 工作人员列表</legend>
+        <!--<legend> 工作人员列表</legend>-->
         <div id="GenerWorkerList"></div>
     </fieldset>
 
     <fieldset>
-        <legend> 日志表</legend>
+        <!--<legend> 日志表</legend>-->
         <div id="Track"></div>
     </fieldset>
 
 
     <fieldset>
-        <legend> 流程数据表</legend>
-        <div id="NDxxRpt"></div>
+        <!--<legend> 流程数据表</legend>-->
+        <div id="NDxxRpt" style="overflow-x: auto; width: 95%;"></div>
     </fieldset>
 
 

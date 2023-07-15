@@ -49,21 +49,21 @@
             var enDtl = new Entity("BP.CCFast.Portal.WindowExt.HtmlVarDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "待办";
-            enDtl.Exp0 = "SELECT COUNT(*) FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=0";
+            enDtl.Exp0 = "SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=0";
             enDtl.FontColor = "Yellow";
             enDtl.Insert();
 
             enDtl = new Entity("BP.CCFast.Portal.WindowExt.HtmlVarDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "在途";
-            enDtl.Exp0 = "SELECT COUNT(*) FROM WF_GenerWorkerList WHERE FK_Emp='@WebUser.No' AND IsPass=1";
+            enDtl.Exp0 = "SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=1";
             enDtl.FontColor = "Blue";
             enDtl.Insert();
 
             enDtl = new Entity("BP.CCFast.Portal.WindowExt.HtmlVarDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "退回";
-            enDtl.Exp0 = "SELECT COUNT(A.WorkID) FROM  WF_GenerWorkFlow A,  WF_GenerWorkerList B WHERE B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.WorkID=B.WorkID AND A.WFState=5 ";
+            enDtl.Exp0 = "SELECT COUNT(A.WorkID) FROM  WF_GenerWorkFlow A,  WF_GenerWorkerlist B WHERE B.FK_Emp='@WebUser.No' AND B.IsPass=0 AND A.WorkID=B.WorkID AND A.WFState=5 ";
             enDtl.FontColor = "Red";
             enDtl.Insert();
 

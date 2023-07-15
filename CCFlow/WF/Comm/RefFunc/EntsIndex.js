@@ -151,6 +151,7 @@ window.onload = function () {
                         _this.selectedTabsIndex = index - 1
                     }
                 }, 100)
+                this.$refs['iframe-home'].contentWindow.location.reload();
             },
             // 关闭所有
             closeAllTabs: function () {
@@ -166,6 +167,38 @@ window.onload = function () {
                 var tab = this.tabsList[this.selectedTabsIndex]
                 this.tabsList = [tab]
                 this.selectedTabsIndex = 0
+                this.$refs['iframe-home'].contentWindow.location.reload();
+            },
+            closeTabByName: function (name) {
+                if (name == null || name == undefined || name == "")
+                    return;
+                if (this.tabsList.length == 0)
+                    return;
+                //获取当前标签所在的位置
+                var index = -1;
+                $.each(this.tabsList, function (i, item) {
+                    if (item.name == name) {
+                        index = i;
+                        return false;
+                    }
+                })
+                if (index == -1)
+                    return;
+                this.tabsList.splice(index, 1)
+                var _this = this
+                setTimeout(function () {
+                    if (_this.tabsList.length > index) {
+                        _this.selectedTabsIndex = index
+                    } else {
+                        _this.selectedTabsIndex = index - 1
+                    }
+                    if (_this.selectedTabsIndex == -1)
+                        _this.selectedId = "";
+                    else
+                        _this.selectedId = _this.tabsList[_this.selectedTabsIndex].no;
+                  
+                }, 100)
+                this.$refs['iframe-home'].contentWindow.location.reload();
             },
             // 处理tab滚动
             handleTabScroll: function () {

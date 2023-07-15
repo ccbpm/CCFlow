@@ -4,21 +4,27 @@
     <title></title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-
-
     <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/element/element.css" rel="stylesheet" />
+
     <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
 
     <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
     <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/element/element.js"></script>
 
     <style type="text/css">
         .row-margin-top {
@@ -46,521 +52,402 @@
             border: 1px solid transparent;
             border-radius: 4px;
         }
+
+        .main_content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .Right_table {
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            width: 57.333%;
+            height: 80vh;
+            margin: 0px 5%;
+        }
+        .el-input {
+            width: 75%;
+            margin: 10px 0 10px 15px;
+        }
+        .el-input__inner {
+
+            width: 100%;
+        }
+        .search_content {
+            padding: 0 20px;
+            height: 30px;
+            line-height: 30px;
+            margin-left: 15px;
+            font-size: 13px;
+        }
+
+        .top_text {
+            width: 25%;
+        }
+
+        .choose_content {
+            text-align: right;
+        }
+
+        .el-tree {
+            width: 33.33%
+        }
+        .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+            color: #FFFFFF;
+            background-color: #428bca;
+            font-weight:700;
+        }
+        .el-table .el-table__cell{
+            padding:5px 0;
+        }
+        .el-button--text {
+            font-size: 16px;
+        }
     </style>
-
-    <script type="text/javascript">
-        var selectedRows = null;
-        var hander;
-        var global = window;
-        var deptNo = "";
-        global.selectedNodes = [];
-        global.selectedRows = [];
-        var rootNo = "0";
-        var IsEnsOfMExitParentNo = 1;
-        var showCols = "@No=编号@Name=名称";
-
-        var saveType = GetQueryString("SaveType");
-        if (saveType == null || saveType == undefined || saveType == "" || saveType == "0")
-            saveType = 0;
-        else
-            saveType = 1;
-
-        $(function () {
-
-            $("#Msg").html("正在加载,请稍后......");
-
-            rootNo = GetQueryString("RootNo");
-            if (rootNo == null || rootNo == undefined || rootNo == "")
-                rootNo = "0";
-
-            //获得数据.
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            hander.AddUrlData();
-            var data = hander.DoMethodReturnJSON("BranchesAndLeaf_Init");
-
-            var dbTrees = data["DBTrees"]; //左边的树.
-            selectedRows = data["DBMMs"]; //选择的数据.
-            if (data["Base_Info"] != undefined) {
-                IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
-                if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols != "")
-                    showCols = data["Base_Info"][0].ExtShowCols;
-            }
-
-            // AtPara
-            var title = "请选择"; // mapExt.GetPara("Title");
-            $("#title").text(title); //设置标题.
-
-            var tip = "输入关键字."; // mapExt.GetPara("SearchTip");
-            $("#TB_Key").attr("placeholder", tip); //设置查询提示.
-
-            var searchTableColumns = [{
-                field: "_checkbox",
-                checkbox: true,
-                formatter: function (value, row, index) {
-                    if (row.checked) {
-                        return {
-                            "checked": true
-                        };
-                    }
-                }
-            }];
-
-            //显示列的中文名称.
-            $.each(showCols.split("@"), function (i, o) {
-                var exp = o.split("=");
-                var field;
-                var title;
-                if (exp.length == 1) {
-                    field = title = exp[0];
-                } else if (exp.length == 2) {
-                    field = exp[0];
-                    title = exp[1];
-                }
-                if (!isLegalName(field)) {
-                    return true;
-                }
-                if (field == GetQueryString("DefaultGroupAttrKey"))
-                    field = field + "Text";
-                searchTableColumns.push({
-                    field: field,
-                    title: title,
-                    formatter: function (value, row, index) {
-                        if (row.TYPE != null && row.TYPE != undefined && row.TYPE == -1)
-                            return "<font style='color:blue'>" + value + "</font>";
-                        else
-                            return value;
-                    }
-                });
-            });
-
-
-            // search
-            $("#TB_Key").on("keyup", function () {
-                loadSelectGridByKey($(this).val());
-            });
-
-            // tree
-            loadTree(dbTrees, rootNo);
-
-            // grid1
-            $('#selectGrid').bootstrapTable({
-                striped: true,
-                cache: false,
-                sortOrder: "asc",
-                strictSearch: true,
-                minimumCountColumns: 2,
-                clickToSelect: true,
-                sortable: false,
-                cardView: false,
-                detailView: false,
-                height: $(document).height() / 3,
-                uniqueId: "No",
-                columns: searchTableColumns,
-                "onCheck": function (row, element) {
-                    addSelectedData(selectedRows, [row]);
-                    loadViewGrid(selectedRows);
-                },
-                "onUncheck": function (row, element) {
-                    removeSelectedData(selectedRows, [row]);
-                    loadViewGrid(selectedRows);
-                },
-                "onCheckAll": function (rows) {
-                    addSelectedData(selectedRows, rows);
-                    loadViewGrid(selectedRows);
-                },
-                "onUncheckAll": function (rows) {
-                    removeSelectedData(selectedRows, rows);
-                    loadViewGrid(selectedRows);
-                }
-            });
-
-            searchTableColumns.push({
-                title: '操作', formatter: function (value, row, index) {
-                    return '<a class="newBtn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
-                }
-            });
-            // grid2
-            $('#viewGrid').bootstrapTable({
-                striped: true,
-                cache: false,
-                sortOrder: "asc",
-                strictSearch: true,
-                minimumCountColumns: 2,
-                clickToSelect: true,
-                sortable: false,
-                cardView: false,
-                detailView: false,
-                height: $(document).height() / 3,
-                uniqueId: "No",
-                columns: searchTableColumns
-
-            });
-
-
-            loadViewGrid(selectedRows);
-        });
-
-        function loadViewGrid(json) {
-            if ($.isArray(json)) {
-                $('#viewGrid').bootstrapTable("load", json);
-            }
-        }
-        function addSelectedData(globalSelectedRows, selectedRows) {
-            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
-                return;
-            }
-            $.each(selectedRows, function (i, o) {
-                var sel = $.grep(globalSelectedRows, function (obj) {
-                    return obj.No == o.No;
-                });
-                if (sel.length == 0) {
-
-                    Savcceval(o.No);
-                    globalSelectedRows.push(o);
-                }
-            });
-        }
-        function removeSelectedData(globalSelectedRows, selectedRows) {
-            if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
-                return;
-            }
-            $.each(selectedRows, function (i, o) {
-                for (var index = 0; index < globalSelectedRows.length; index++) {
-                    if (o.No == globalSelectedRows[index].No) {
-                        Delete(o.No);
-                        globalSelectedRows.splice(index, 1);
-                        break;
-                    }
-                }
-            });
-        }
-
-        //按照关键字加载数据.
-        function loadSelectGridByKey(key) {
-
-            if (key == "")
-                return;
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            hander.AddUrlData();
-
-            hander.AddPara("Key", key.replace(/'/g, ''));
-            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByKey");
-
-            loadSelectGrid(json);
-        }
-
-        //按照节点加载数据.
-        function loadSelectGridByNodeID(nodeID) {
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            hander.AddUrlData();
-            hander.AddPara("Key", nodeID);
-            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
-
-
-            //alert(json);
-            loadSelectGrid(json);
-        }
-
-        function loadSelectGrid(json) {
-
-            if (!$.isArray(json)) {
-                return;
-            }
-
-            // 绑定内容列表.
-            $('#selectGrid').bootstrapTable("hideAllColumns");
-            $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
-
-            $.each(showCols.split("@"), function (i, o) {
-                var exp = o.split("=");
-                var field;
-                var title;
-                if (exp.length == 1) {
-                    field = title = exp[0];
-                } else if (exp.length == 2) {
-                    field = exp[0];
-                    title = exp[1];
-                }
-                if (!isLegalName(field)) {
-                    return true;
-                }
-                if (field == GetQueryString("DefaultGroupAttrKey"))
-                    field = field + "Text";
-                $('#selectGrid').bootstrapTable("showColumn", field);
-            });
-
-
-            //  $('#selectGrid').bootstrapTable("showColumn", "No");
-            //  $('#selectGrid').bootstrapTable("showColumn", "Name");
-
-
-
-            if ($.isArray(selectedRows)) {
-                $.each(json, function (i, o) {
-
-                    var sel = $.grep(selectedRows, function (obj) {
-                        return o.No == obj.No;
-                    });
-
-                    if (sel.length > 0) {
-                        o.checked = true;
-                    }
-                });
-            }
-            $('#selectGrid').bootstrapTable("load", json);
-        }
-
-        var nodeId = "";
-
-        function loadTree(dbTrees, rootNo, global) {
-            var jsonTree = findChildren(dbTrees, rootNo);
-            $('#tree').treeview({
-                data: jsonTree,         // 数据源
-                showCheckbox: false,   //是否显示复选框
-                highlightSelected: true,    //是否高亮选中
-                nodeIcon: 'glyphicon',
-                emptyIcon: '',    //没有子节点的节点图标
-                multiSelect: false,    //多选
-                onNodeChecked: function (event, data) {
-                    //alert(data.id);
-                },
-                onNodeSelected: function (event, data) {
-                    nodeId = data.nodeId;
-                    deptNo = data.id;
-                    runModel = 0; //查询模式.
-                    loadSelectGridByNodeID(data.id); //, selectedRows);
-                    deptNo = $('#tree').treeview('getNode', data.nodeId).id;
-                    var tree = $('#tree');
-                    if (data.state.expanded) {
-                        //处于展开状态则折叠
-                        tree.treeview('collapseNode', data.nodeId);
-                    } else {
-                        //展开
-                        tree.treeview('expandNode', data.nodeId);
-                    }
-
-                },
-                onNodeExpanded: function (event, data) {
-                    if (IsEnsOfMExitParentNo == 1) {
-                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
-                        handler.AddPara("RootNo", data.id);
-                        handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
-                        handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
-                        var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
-                        var jsonTree = findChildren(json, data.id);
-                        $("#tree").treeview("deleteChildrenNode", data.nodeId);	//删除当前节点下的所有子节点
-
-                        $("#tree").treeview("addNode", [data.nodeId, { node: jsonTree, silent: true }]);
-
-                    }
-
-                }
-            });
-        }
-
-
-        //树形结构转换
-        function findChildren(jsonArray, parentNo) {
-            var appendToTree = function (treeToAppend, child) {
-                $.each(treeToAppend, function (i, o) {
-                    if (o.id == child.ParentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
-
-                        var sel = $.grep(selectedNodes, function (obj) {
-                            return child.No == obj.No;
-                        });
-                        if (sel.length > 0) {
-                            checked = true;
-                        }
-                        o.nodes.push({
-                            "id": child.No,
-                            "text": child.Name,
-                            "nodes": [],
-                            "state": { checked: checked, disabled: checked }
-                        });
-                    } else {
-                        appendToTree(o.nodes, child);
-                    }
-                });
-            };
-
-            var jsonTree = [];
-            if (jsonArray.length > 0 && typeof parentNo !== "undefined") {
-                //如果parentNo不为0，则增加parentNo的部门数据
-                if (parentNo != 0 && parentNo == rootNo) {
-                    $.each(jsonArray, function (i, item) {
-                        if (item.No == parentNo) {
-                            jsonTree.push({
-                                "id": parentNo,
-                                "text": item.Name,
-                                "nodes": []
-                            });
-                            return;
-                        }
-                    });
-                }
-                $.each(jsonArray, function (i, o) {
-                    if (o.ParentNo.trim() == parentNo) {
-                        var checked = false;
-                        var selectedNodes = window.selectedNodes;
-                        var sel = $.grep(selectedNodes, function (obj) {
-                            return o.No == obj.No;
-                        });
-                        if (sel.length > 0) {
-                            checked = true;
-                        }
-                        jsonTree.push({
-                            "id": o.No,
-                            "text": o.Name,
-                            "nodes": [],
-                            "state": { checked: checked, disabled: checked }
-                        });
-                    } else {
-                        appendToTree(jsonTree, o);
-                    }
-                });
-            }
-
-            function _(treeArray) {
-                $.each(treeArray, function (i, o) {
-                    if ($.isArray(o.nodes)) {
-                        if (o.nodes.length == 0) {
-                            //o.nodes = undefined;
-                        } else {
-                            _(o.nodes);
-                        }
-                    }
-                });
-            }
-            _(jsonTree);
-            return jsonTree;
-        }
-
-
-        function creatTreeChildern(jsonArray, parentNo) {
-            var childList = []
-            for (var i = 0; i < jsonArray.length; i++) {
-                var data = jsonArray[i];
-                if (data.ParentNo == parentNo) {
-                    var checked = false;
-
-                    childList.push({
-                        "id": data.No,
-                        "text": data.Name,
-                        "nodes": creatTreeChildern(jsonArray, data.No),
-                        "state": { checked: checked, disabled: false }
-                    });
-                }
-            }
-
-            return childList;
-        }
-
-
-        function getChildNodeIdArr(node, checked) {
-            var ts = [];
-            if (node.nodes) {
-                for (x in node.nodes) {
-                    ts.push(node.nodes[x].nodeId);
-                    if (node.nodes[x].nodes) {
-                        var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
-                        for (j in getNodeDieDai) {
-                            ts.push(getNodeDieDai[j]);
-                        }
-                    }
-                }
-            } else {
-                ts.push(node.nodeId);
-            }
-            return ts;
-        }
-
-
-        function isLegalName(name) {
-            if (!name) {
-                return false;
-            }
-            return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
-        }
-
-        function removeRecord(No) {
-
-            // if (window.confirm('您确认要删除吗？') == false)
-            //   return;
-
-            $("#selectGrid").bootstrapTable("uncheckBy", {
-                field: "No",
-                values: [No]
-            });
-            //
-            Delete(No);
-            $('#viewGrid').bootstrapTable("remove", {
-                field: "No",
-                values: [No]
-            });
-        }
-
-        //删除数据.
-        function Delete(no) {
-
-            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
-            hander.AddUrlData();
-            hander.AddPara("Key", no);
-            var msg = hander.DoMethodReturnString("BranchesAndLeaf_Delete");
-            if (msg.indexOf('err@') == 0)
-                alert(msg);
-        }
-        //设置值.
-        function Savcceval(val) {
-
-            var dot2DotEnName = GetQueryString("Dot2DotEnName");
-            var attrOfOneInMM = GetQueryString("AttrOfOneInMM");
-            var attrOfMInMM = GetQueryString("AttrOfMInMM");
-            var mm = new Entity(dot2DotEnName);
-            mm[attrOfOneInMM] = GetPKVal();
-            mm[attrOfMInMM] = val;
-            if (mm.Update() == 0) {
-                mm.Insert();
-            }
-        }
-    </script>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-3 col-sm-3">
-                        <h4 class="text-right" id="title"></h4>
-                    </div>
-                    <div class="col-md-9 col-sm-9">
-                        <div class="pull-center search search-margin">
-                            <input class="form-control" type="text" placeholder="" id="TB_Key">
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div id="app">
+        <div style="display: flex; align-items: center;">
+            <el-input v-model="searchValue" placeholder="请输入内容"></el-input>
+            <el-button type="primary" size="mini" @click="doFilter" class="search_content" >搜索</el-button>
         </div>
-        <div class="row row-margin-top">
-            <div class="col-md-4 col-sm-4">
-                <div id="tree" class="pre-scrollable"></div>
-            </div>
-            <div class="col-md-7 col-sm-7">
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="selectGrid"></table>
-                    </div>
-                </div>
-                <div class="row row-margin-top">
-                    <div class="col-md-12">
-                        <table id="viewGrid"></table>
-                    </div>
-                </div>
+        <div class="main_content">
+            <el-tree :props="defaultProps"
+                     :load="loadNode"
+                     :data="jsonTree"
+                     lazy
+                     node-key="id"
+                     ref="tree"
+                     highlight-current
+                     @node-click="handleNodeClick">
+            </el-tree>
+            <div class="Right_table">
+                <el-table :data="tableData"
+                          height="250"
+                          border
+                          style="width: 100%"
+                          @select="handleSelectionChange">
+                    <el-table-column type="selection"
+                                     style="width:3%">
+                    </el-table-column>
+                    <el-table-column v-for="(head,index) in searchTableColumns"
+                                     :key="head.field"
+                                     :label="head.title"
+                                     :prop="head.field"
+                                      style="width:32%">
+                    </el-table-column>
+
+
+                </el-table>
+                <el-table :data="selectedRows"
+                          height="250"
+                          border
+                          style="width: 100%;margin-top:20px;">
+                    <el-table-column v-for="(head,index) in chooseTableColumns"
+                                     :key="head.field"
+                                     :label="head.title"
+                                     :prop="head.field"
+                                     style="width:25%">
+                    </el-table-column>
+                    <el-table-column :render-header="(h, obj) => renderHeader(h, obj, '你的参数')" style="width:25%">
+                        <template slot-scope="scope">
+                            <el-button @click.native.prevent="deleteRow(scope.$index, scope.row)"
+                                       type="text"
+                                       size="small">
+                                <i class="el-icon-delete"></i>
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    searchValue: "",
+                    checkAll: false,
+                    mapExt: null,
+                    defaultProps: {
+                        children: 'children',
+                        label: 'name',
+                        isLeaf: 'leaf'
+                    },
+                    jsonTree: [],
+                    rootNo: null,
+                    child: [],
+                    searchTableColumns: [],
+                    chooseTableColumns: [],
+                    isBackBtn: '',
+                    IsEnsOfMExitParentNo: 1,
+                    tags: [],
+                    tableData: [],
+                    selectedRows: []
+                };
+            },
+            methods: {
+                //获取当前节点再次进行渲染
+                handleNodeClick(data) {
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                    hander.AddUrlData();
+                    hander.AddPara("Key", data.id);
+                    var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
+                    this.tableData = json;
+                },
+                //搜索
+                doFilter() {
+                    this.tableData = this.tableData.filter(item => {
+                        return item.No.includes(this.searchValue)
+                    })
+                },
+                //删除行数据
+                deleteRow(index, rows) {
+                    console.log(index);
+                    console.log(rows);
+                    var tmp = $.grep(this.selectedRows, function (value) {
+                        return value.No != rows.No;
+                    });
+                    this.selectedRows = tmp;
+                    this.Delete(rows.No);
+                },
+                //删除
+                Delete(no) {
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                    hander.AddUrlData();
+                    hander.AddPara("Key", no);
+                    var msg = hander.DoMethodReturnString("BranchesAndLeaf_Delete");
+                    if (msg.indexOf('err@') == 0)
+                        alert(msg);
+                },
+                //保存
+                Savcceval(val) {
+
+                    var dot2DotEnName = GetQueryString("Dot2DotEnName");
+                    var attrOfOneInMM = GetQueryString("AttrOfOneInMM");
+                    var attrOfMInMM = GetQueryString("AttrOfMInMM");
+                    var mm = new Entity(dot2DotEnName);
+                    mm[attrOfOneInMM] = GetPKVal();
+                    mm[attrOfMInMM] = val;
+                    if (mm.Update() == 0) {
+                        mm.Insert();
+                    }
+                },
+                //多选框操作
+                handleSelectionChange(val, row) {
+                    console.log(val);
+                    console.log(row);
+                    if (val.length > 0) {
+                        this.selectedRows.push(row)
+                        this.Savcceval(row.No);
+                    } else {
+                        var tmp = $.grep(this.selectedRows, function (value) {
+                            return value.No != row.No;
+                        });
+                        this.selectedRows = tmp;
+                        this.Delete(row.No);
+                    }
+
+                },
+                // 自定义表头
+                renderHeader(h, { column, $index }, type) {
+                    console.log('列表加载就会触发', h, { column, $index }, type)
+                    let that = this
+                    // 逻辑是 h() 括号里包裹标签 第一个参数是标签名 第二个是属性  第三个是标签内容  如果是多个标签需要包裹数组
+                    return h(
+                        'div', [
+                        // 列名称
+                        h('span', column.label),
+                        // 名称
+                        h('div', '操作')
+                    ],
+                    )
+                },
+                //懒加载
+                loadNode(node, resolve) {
+                    if (node.level === 0) {
+                        var roootData = [];
+                        roootData = this.jsonTree.map(key => {
+                            return {
+                                name: key.label,
+                                id: key.id,
+                                children: key.children,
+                            }
+                        })
+                        return resolve(roootData);
+                    }
+                    if (node.level > 3) {
+                        return resolve([]);
+                    }
+                    if (node.level > 0 && this.IsEnsOfMExitParentNo == 1) {
+                        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity")
+                        handler.AddPara("RootNo", node.data.id);
+                        handler.AddPara("DefaultGroupAttrKey", GetQueryString("DefaultGroupAttrKey"));
+                        handler.AddPara("EnsOfM", GetQueryString("EnsOfM"));
+                        var json = handler.DoMethodReturnJSON("BranchesAndLeaf_GetTreesByParentNo");
+                        console.log(json);
+                        if (json.length > 0) {
+                            this.child = this.creatTreeChildern(json, node.data.id);
+                            var data = [];
+                            data = this.child.map(item => {
+                                return {
+                                    name: item.label,
+                                    id: item.id,
+                                    children: item.children,
+                                }
+                            })
+                            setTimeout(() => {
+                                resolve(data);
+                            }, 500);
+                            console.log(json.length);
+                            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                            hander.AddUrlData();
+                            hander.AddPara("Key", node.data.id);
+                            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
+                            this.tableData = json;
+
+                        } else {
+                            //查询人员
+                            var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                            hander.AddUrlData();
+                            hander.AddPara("Key", node.data.id);
+                            var json = hander.DoMethodReturnJSON("BranchesAndLeaf_SearchByNodeID");
+                            this.tableData = json;
+                            console.log(this.tableData);
+                            resolve([]);
+                        }
+                    }
+                },
+                createJsonToTree(jsonArray, parentNo) {
+                    //获取ParentNo的数据
+                    var items = $.grep(jsonArray, function (obj) {
+                        return obj.No == parentNo;
+                    });
+                    if (items.length != 0) {
+                        this.jsonTree.push({
+                            "id": items[0].No,
+                            "label": items[0].Name,
+                            "children": this.creatTreeChildern(jsonArray, items[0].No),
+                            "state": { checked: checked, disabled: false }
+                        });
+                    } else {
+                        for (var i = 0; i < jsonArray.length; i++) {
+                            var data = jsonArray[i];
+                            if (data.ParentNo.trim() == parentNo) {
+                                var checked = false;
+                                this.jsonTree.push({
+                                    "id": data.No,
+                                    "label": data.Name,
+                                    "children": this.creatTreeChildern(jsonArray, data.No),
+                                    "state": { checked: checked, disabled: false }
+                                });
+                            }
+                        }
+                        this._(this.jsonTree);
+                    }
+                },
+                _(treeArray) {
+                    for (var i = 0; i < treeArray.length; i++) {
+                        var o = treeArray[i];
+                        if ($.isArray(o.children)) {
+                            if (o.children.length == 0) {
+                                o.children = [];
+                            } else {
+                                this._(o.children);
+                            }
+                        }
+                    }
+                },
+                creatTreeChildern(jsonArray, parentNo) {
+                    var childList = []
+                    for (var i = 0; i < jsonArray.length; i++) {
+                        var data = jsonArray[i];
+                        if (data.ParentNo == parentNo) {
+                            var checked = false;
+                            this.jsonTree.filter((ID) => {
+                                if (ID.id === parentNo) ID.children.push({
+                                    "id": data.No,
+                                    "label": data.Name,
+                                    "children": this.creatTreeChildern(jsonArray, data.No),
+                                    "state": { checked: checked, disabled: false }
+                                })
+                            })
+                            childList.push({
+                                "id": data.No,
+                                "label": data.Name,
+                                "children": this.creatTreeChildern(jsonArray, data.No),
+                                "state": { checked: checked, disabled: false }
+                            });
+                        }
+                    }
+                    return childList;
+                },
+                isLegalName(name) {
+                    if (!name) {
+                        return false;
+                    }
+                    return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+                },
+                //获取父节点数据
+                loadTree() {
+                    this.rootNo = GetQueryString("RootNo");
+                    if (this.rootNo == null || this.rootNo == undefined || this.rootNo == "")
+                        this.rootNo = "0";
+
+                    //获得数据.
+                    var hander = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                    hander.AddUrlData();
+                    var data = hander.DoMethodReturnJSON("BranchesAndLeaf_Init");
+
+                    var dbTrees = data["DBTrees"]; //左边的树.
+                    this.selectedRows = data["DBMMs"]; //选择的数据.
+                    if (data["Base_Info"] != undefined) {
+                        IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
+                        if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols != "")
+                            showCols = data["Base_Info"][0].ExtShowCols;
+                    }
+                    this.createJsonToTree(dbTrees, this.rootNo);
+                    //显示列的中文名称.
+                    var tmp = showCols.split("@");
+                    for (var i = 0; i < tmp.length; i++) {
+                        var o = tmp[i];
+                        if (o == '')
+                            continue;
+                        var exp = o.split("=");
+                        var field;
+                        var title;
+                        if (exp.length == 1) {
+                            field = title = exp[0];
+                        } else if (exp.length == 2) {
+                            field = exp[0];
+                            title = exp[1];
+                        }
+                        if (!this.isLegalName(field)) {
+                            return true;
+                        }
+                        if (field == GetQueryString("DefaultGroupAttrKey"))
+                            field = field + "Text";
+                        this.searchTableColumns.push({
+                            field: field,
+                            title: title
+                        });
+                        this.chooseTableColumns.push({
+                            field: field,
+                            title: title
+                        });
+                    }
+                    console.log(this.searchTableColumns);
+                },
+            },
+            created() {
+                this.loadTree();
+            },
+
+
+        })
+    </script>
 </body>
+
 </html>

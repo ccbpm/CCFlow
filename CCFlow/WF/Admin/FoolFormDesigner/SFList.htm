@@ -40,7 +40,7 @@
 
             var ens = new Entities("BP.Sys.SFTables");
             ens.RetrieveAll();
-
+            console.log("获得的数据：",ens);
             var frmID = GetQueryString("FK_MapData");
 
             //增加处理.
@@ -55,7 +55,7 @@
                     if (GetQueryString('From') != null)
                         nameLink = "<label for='RB" + en.No + "'> <input type=radio id='RB" + en.No + "' name='RB' value='" + en.No + "@" + en.Name + "@" + en.FK_Val + "' /> " + en.No + " </label>";
                     else
-                        nameLink = "<a href=\"javascript:Adden('" + en.No + "','" + en.SrcType + "')\" class='cc-btn-tab btn-edit'> " + en.No + "</a>";
+                        nameLink = "<a href=\"javascript:Adden('" + en.FK_Val + "','" + en.SrcType + "','" + en.No + "')\" class='cc-btn-tab btn-edit'> " + en.No + "</a>";
                 }
                 else
                     nameLink = en.No;
@@ -75,7 +75,7 @@
 
                 newRow += "<a href=\"javascript:Edit('" + en.No + "','" + en.SrcType + "')\"  class='cc-btn-tab btn-edit'>编辑</a>";
 
-                newRow += " - <a href=\"javascript:Del('" + en.No + "','" + en.Name + "','" + en.SrcType + "')\"  class='cc-btn-tab btn-del'>删除</a>";
+                newRow += " - <a href=\"javascript:Del('" + en.No + "','" + en.Name + "','" + en.DBSrcType + "')\"  class='cc-btn-tab btn-del'>删除</a>";
                 newRow += "</td>";
                 newRow += "</tr>";
                 
@@ -132,7 +132,7 @@
                 SetHref("../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=" + attr.MyPK);
         }
 
-        function Adden(en,srcType) {
+        function Adden(en,srcType,pkVal) {
 
             var fk_mapData = GetQueryString("FK_MapData");
 
@@ -167,7 +167,7 @@
             handler.AddPara("KeyOfEn", str);
             handler.AddPara("FK_MapData", fk_mapData);
             handler.AddPara("GroupField", groupID);
-            handler.AddPara("SFTable", en);
+            handler.AddPara("SFTable", pkVal);
             var data = handler.DoMethodReturnString("SFList_SaveSFField");
 
             if (data.indexOf("err@") >= 0) {
@@ -187,7 +187,7 @@
         }
 
         //删除.
-        function Del(no, name, SrcType) {
+        function Del(no, name, DBSrcType) {
 
             if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
                 return;
@@ -198,12 +198,12 @@
             if (data.indexOf('err@') >= 0) {
                 alert(data);
                 return;
-            }
+            } 
             //删除系统字典表
-            if (SrcType == 7) {
-
+            if (DBSrcType == "SysDict") {
+                
                 var ens = new Entities("BP.Sys.SFTableDtls");
-                ens.Delete("FK_en", no);
+                ens.Delete("FK_SFTable", no);
 
             }
 
@@ -240,6 +240,7 @@
         }
 
         function New() {
+
             var url = './SFTable/Default.htm?DoType=New&FromApp=SL&s=' + Math.random();
 
             var w = window.innerWidth * 2 / 3;

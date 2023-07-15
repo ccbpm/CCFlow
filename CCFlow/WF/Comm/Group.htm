@@ -757,6 +757,7 @@
                     x: 'left',
                     // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
                     y: 'center',
+					type: 'scroll',  // 设置图例的类型。可选值：'plain' ¦ 'scroll'。（'plain'：普通图例。缺省就是普通图例，'scroll'：可滚动翻页的图例。当图例数量较多时可以使用。）
                     itemWidth: 24,   // 设置图例图形的宽
                     itemHeight: 18,  // 设置图例图形的高
                     textStyle: {
@@ -926,6 +927,13 @@
     </script>
     <script type="text/javascript">
         $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                var html = "\n .layui-btn{\n background-color:'#5053f1';\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:'#5053f1';\n}";
+                html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:'#5053f1' !important\n}";
+                html += "\n .layui-form-select dl dd.layui-this{\n background-color:'#5053f1' !important;\n}";
+                //html += "\n .layui-tab-title .layui-this{\n background-color:" + data.selectedMenu + " !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid " + data.selectedMenu + ";}";
+                html += "\n .layui-a-this{\n background-color:'#5053f1';\n color: #fff;\n}";
+            }
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
             if (theme == null || theme == undefined || theme == "")
                 return;

@@ -36,10 +36,16 @@
 
         .layui-form-label {
             margin-bottom: 0px;
+            font-weight: 700;
+            margin-right: 10px;
         }
 
         .layui-table th {
             font-weight: bold;
+        }
+        .layui-input{
+            margin-top:5px;
+            height:27px;
         }
 
         .layui-table-col {
@@ -90,12 +96,32 @@
         xm-select > .xm-body .xm-toolbar {
             padding: 0 5px;
         }
+        /* 按钮风格统一 */
+        .layui-btn {
+            background-color: #316ee6;
+            border-radius: 2px;
+            font-size: 12px;
+            padding: 0 10px;
+            height:28px;
+            line-height:28px;
+        }
+        .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            background-color: #316ee6;
+        }
+        thead tr th div {
+            text-align: center;
+        }
+        tbody tr td{
+            text-align:center;
+        }
+        .layui-form-select dl dd.layui-this{
+            background:#fff;
+            color:#000;
+        }
     </style>
     <script language="javascript" type="text/javascript">
         var ensName = GetQueryString("EnsName");
-
         var isClearSearchCond = getConfigByKey("IsClearSearchCond", false);
-
         //定义公共个变量.
         var webUser = new WebUser();
 
@@ -121,7 +147,6 @@
         var cfield = new Entity("BP.Sys.CField");
         cfield.SetPKVal(urMyPK);
         cfield.RetrieveFromDBSources();
-
         //页面分页信息显示
         var count = ur.GetPara("RecCount");//查询总条数
         var mapBase;
@@ -279,11 +304,11 @@
                 var data = SearchData("search");
                 //获取列
                 var cols = GetColoums(data, thrMultiTitle, secMultiTitle, cfg.ColorSet, cfg.OrderBy, focusField);
-
                 var tableData = transferHtmlData(data["DT"]);
 
                 //渲染table
                 var tableName = mapBase.EnDesc;
+           
                 //防止出现跨域
                 try {
                     if (typeof window.top.vm != "undefined" && window.top.vm.tabsList.length > window.top.vm.selectedTabsIndex)
@@ -315,7 +340,7 @@
 
                         var rowstr = JSON.stringify(row);
                         rowstr = encodeURIComponent(rowstr);
-                        OpenEn(pkval, "", 0, rowstr, obj);
+                        OpenEn(pkval, "", 0, rowstr, obj, "Edit");
                     });
                 }
                 if (cfg.DoubleOrClickModel == 1) {
@@ -430,6 +455,7 @@
                         var tableData = SearchData("search");
                         layui.table.reload('tableSearch', { data: transferHtmlData(tableData["DT"]) });
                         dropDownLayuiCols(tableData.Attrs);
+                      
                     }
 
                 }
@@ -445,7 +471,7 @@
     <div class="layui-fluid">
         <div class="layui-row layui-col-space30">
             <!-- 内容主体区域 -->
-            <div class="layui-col-md12" style="padding:10px">
+            <div class="layui-col-md12" style="padding:10px 15px">
                 <div class="layui-card">
                     <div class="layui-card-body">
                         <!--查询条件-->
@@ -473,6 +499,13 @@
 
     <script>
         $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .layui-btn{\n background-color:#5053f1';\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:'#5053f1';\n}";
+                html += "\n .layui-laypage input:focus,.layui-laypage select:focus{\n border-color:'#5053f1' !important\n}";
+                html += "\n .layui-form-select dl dd.layui-this{\n background-color:#5053f1' !important;\n}";
+                html += "\n .layui-tab-title .layui-this{\n background-color:'#5053f1' !important;\n} \n .layui-tab-title>.layui-this{\n color:#fff;\n} \n .layui-tab-title li {border: 1px solid '#5053f1';}";
+                html += "\n .layui-a-this{\n background-color:'#5053f1';\n color: #fff;\n}";
+            }
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
             if (theme == null || theme == undefined || theme == "")
                 return;

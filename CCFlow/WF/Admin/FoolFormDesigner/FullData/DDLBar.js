@@ -1,4 +1,4 @@
-﻿
+﻿var refPK = GetQueryString("RefPK") || "";
 function InitBar(optionKey) {
 
     var html = "<b>数据填充</b>:";
@@ -13,7 +13,8 @@ function InitBar(optionKey) {
 
 
     html += "<input  id='Btn_Save' type=button onclick='Save()' value='保存' />";
-    html += "<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />";
+    if (extType !="AutoFull")
+        html += "<input type='button' value='返回' onclick='Back()' id='Btn_Back' title='' />";
     html += "<input  id='Btn_Help' type=button onclick='EtcDBFull()' value='多数据源填充(列/字段)' />";
 
     document.getElementById("bar").innerHTML = html;

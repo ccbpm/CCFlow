@@ -28,7 +28,7 @@ function AthTable_Init(athchment, athDivID, refPKVal) {
     var uploadUrl = "";
     //2.上传的URL的设置
     if (plant == 'CCFlow')
-        uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + athchment.MyPK + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
+        uploadUrl = basePath + '/WF/Comm/ProcessRequest?DoType=HttpHandler&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&AttachPK=' + athchment.MyPK + '&DoMethod=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
     else {
         uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + athchment.MyPK + '&FK_Flow=' + pageData.FK_Flow + "&PKVal=" + athRefPKVal;
     }
@@ -178,7 +178,6 @@ function InitAthPage(athDivID, uploadUrl) {
             imgShow(this, src);
         });
         $(".athImg").on("mousemove", function () {
-            debugger
             var _this = $(this);
             $(_this.children()[0]).show();
         })
@@ -555,7 +554,7 @@ function GetSortLenth_FromDB(sort, dbs) {
 function GetFileStream(mypk, FK_FrmAttachment) {
     var Url = "";
     if (plant == "CCFlow") {
-        Url = basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&MyPK=" + mypk;
+        Url = basePath + "/WF/Comm/ProcessRequest?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&MyPK=" + mypk;
     } else {
         //按照数据流模式下载。
         Url = basePath + "/WF/Ath/downLoad.do?MyPK=" + mypk + "&FK_FrmAttachment=" + FK_FrmAttachment;
@@ -576,7 +575,7 @@ function Down2018(mypk) {
 
     var url = "";
     if (plant == "CCFlow") {
-        SetHref(basePath + "/WF/Comm/Handler.ashx?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + workID + "&FK_Node=" + nodeID + "&MyPK=" + mypk);
+        SetHref(basePath + "/WF/Comm/ProcessRequest?DoType=HttpHandler&DoMethod=AttachmentUpload_Down&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&WorkID=" + workID + "&FK_Node=" + nodeID + "&MyPK=" + mypk);
         return;
     }
 
@@ -674,7 +673,6 @@ function Del(delPKVal, fk_framAttachment, name) {
 
 //在线预览，如果需要连接其他的文件预览查看器，就需要在这里重写该方法.
 function AthView(mypk, filePath) {
-    debugger;
     if (typeof AthViewOverWrite === 'function') {
         AthViewOverWrite(mypk);
         return;
@@ -821,7 +819,7 @@ function UploadChangeAth(uploadUrl, fk_frmAttachment) {
     }
     var uploadUrl = "";
     if (plant == 'CCFlow')
-        uploadUrl = basePath + '/WF/CCForm/Handler.ashx?AttachPK=' + fk_frmAttachment + '&DoType=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
+        uploadUrl = basePath + '/WF/Comm/ProcessRequest?DoType=HttpHandler&HttpHandlerName=BP.WF.HttpHandler.WF_CCForm&AttachPK=' + fk_frmAttachment + '&DoMethod=MoreAttach&FK_Flow=' + pageData.FK_Flow + '&PKVal=' + athRefPKVal;
     else {
         uploadUrl = basePath + "/WF/Ath/AttachmentUploadS.do?FK_FrmAttachment=" + fk_frmAttachment + '&FK_Flow=' + pageData.FK_Flow + "&PKVal=" + athRefPKVal;
     }

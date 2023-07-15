@@ -22,22 +22,22 @@
         }
         $(function () {
 
-            alert("该文件将去掉了，所有的功能需要自己移动到其他地方实现. 打开工作的功能使用DoOpenWork.htm实现。");
-            return;
+            //alert("该文件将去掉了，所有的功能需要自己移动到其他地方实现. 打开工作的功能使用DoOpenWork.htm实现。");
+            //return;
 
             var params = document.location.search.substr(1);
             params = params.replace("DoType", "ActionType");
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
-            var data = handler.DoMethodReturnJSON("PCAndMobileUrl")
+            var data = handler.DoMethodReturnJSON("Do_PCAndMobileUrl");
 
+            var mUrl = data["MobileUrl"];
             if (IsPC() == false) {
-                SetHref(data["MobileUrl"].substring(0, data["MobileUrl"].length - 1) + window.document.location.pathname.replace("WF", "CCMobile") + "?" + params);
+                SetHref(mUrl.substring(0, mUrl.length - 1) + window.document.location.pathname.replace("WF", "CCMobile") + "?" + params);
                 return;
             }
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF");
             handler.AddUrlData(params);
-
             var data = handler.DoMethodReturnString("Do_Init");
             $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
 

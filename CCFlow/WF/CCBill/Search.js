@@ -423,6 +423,8 @@ function GetColoums(thrMultiTitle, secMultiTitle, colorSet, sortColumns, openMod
             rowspan: keyRowSpan,
             templet: function (row) {
                 var val = row[this.field];
+                if (val == null)
+                    val = "";
 
                 if (foramtFunc.indexOf(this.field + "@") != -1) {
                     formatter = foramtFunc.substring(foramtFunc.indexOf(this.field + "@"));
@@ -1123,7 +1125,8 @@ function OpenFlow(no, source) {
             layer.alert(data);
             return;
         }
-        window.top.vm.openTab(flowM.Name, data);
+        data = data.replace("../", "/WF/");
+        window.top.vm.openTab(flowM.Name, basePath+data);
 
     });
 }

@@ -10,7 +10,7 @@
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单  
   -->
-  <!--<Group No="LW" Name="低代码"  Icon="icon-folder"  />
+  <!--<Group No="LW" Name="低代码"  Icon="icon-folder" />
   <Item No="LW01" GroupNo="LW" Name="菜单体系" For="admin" Url="../../WF/GPM/SystemList.htm" Icon="icon-menu" />
   <Item No="LW02" GroupNo="LW" Name="新建系统" For="admin" Url="../../WF/GPM/NewSystem.htm" Icon="icon-plane" />
 
@@ -36,8 +36,8 @@
 
   <Group No="System" Name="系统管理" Icon="icon-settings" />
   <Item No="670" GroupNo="System" Name="系统枚举" For="admin" Url="../../WF/Admin/FoolFormDesigner/SysEnumList.htm?DoType=AddEnum" Icon="icon-note" />
-  <Item No="621" GroupNo="System" Name="系统字典1" For="admin" Url="../../WF/Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  Icon="icon-note"/>
-  <Item No="671" GroupNo="System" Name="系统字典2" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-book-open" />
+  <Item No="621" GroupNo="System" Name="系统字典Adv" For="admin" Url="../../WF/Admin/FoolFormDesigner/SFList.htm?DoType=AddEnum"  Icon="icon-note"/>
+  <Item No="671" GroupNo="System" Name="系统字典" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-book-open" />
   <Item No="002" GroupNo="System" Name="节假日设置" For="admin" Url="../../WF/Comm/Sys/Holiday.htm" Icon="icon-notebook" />
   <Item No="003" GroupNo="System" Name="系统日志"    For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.UserLogs" Icon="icon-note" />
   <Item No="004" GroupNo="System" Name="表结构"    For="admin" Url="../../WF/Comm/Sys/SystemClass.htm" Icon="icon-organization" />

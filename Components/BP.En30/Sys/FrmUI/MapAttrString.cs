@@ -216,8 +216,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(MapAttrAttr.TextModel, 0, "文本类型", true, true, "TextModel",
                  "@0=普通文本@1=密码框@2=大文本@3=富文本");
 
-                map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
-                map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
+                //map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true, true);
+                //map.SetHelperAlert(MapAttrAttr.IsSupperText, "大块文本存储字节比较长，超过4000个字符.");
                 #endregion 基本字段信息.
 
                 #region 傻瓜表单
@@ -330,6 +330,14 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "字符拼接";
+                rm.ClassMethodName = this.ToString() + ".StringJoint()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Icon = "icon-settings";
+                map.AddRefMethod(rm);
+                
                 //rm = new RefMethod();
                 //rm.Title = "常用字段";
                 //rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
@@ -618,7 +626,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRenameField(string newField)
         {
-            //Hongyan
+            
             if (this.KeyOfEn.Equals(newField) == true)
                 return "err@与现在的名字相同.";
 
@@ -746,6 +754,14 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行 Pop自动完成.
+        /// <summary>
+        /// 自动计算
+        /// </summary>
+        /// <returns></returns>
+        public string StringJoint()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/StringJoint.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
         /// <summary>
         /// 简单列表模式
         /// </summary>
@@ -906,7 +922,7 @@ namespace BP.Sys.FrmUI
 
             if (this.TextModel == 2 || this.TextModel == 3)
             {
-                attr.setMaxLen(4000);
+                //attr.setMaxLen(4000);
                 this.SetValByKey(MapAttrAttr.MaxLen, 4000);
             }
 
@@ -933,7 +949,7 @@ namespace BP.Sys.FrmUI
                                 break;
                             case DBType.Oracle:
                             case DBType.DM:
-                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " NVARCHAR2(" + attr.MaxLen + ")";
+                                sql = "ALTER table " + md.PTable + " modify " + attr.Field + " VARCHAR2(" + attr.MaxLen + ")";
                                 break;
                             case DBType.KingBaseR3:
                             case DBType.KingBaseR6:

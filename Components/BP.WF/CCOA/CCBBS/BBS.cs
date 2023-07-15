@@ -125,7 +125,7 @@ namespace BP.CCOA.CCBBS
                 map.AddTBStringPK(BBSAttr.No, null, "编号", false, true, 1, 59, 59);
                 map.AddTBString(BBSAttr.Name, null, "标题", true, false, 0, 100, 10, true);
 
-                map.AddTBStringDoc(BBSAttr.Docs, "Docs", null, "内容", true, false, 0, 5000, 20, true, true);
+                map.AddTBStringDoc(BBSAttr.Docs, "Docs", null, "内容", true, false, 0, 4000, 20, true, true);
 
 
                 map.AddDDLSysEnum(BBSAttr.BBSPRI, 0, "重要性", true, true, "BBSPRI", "@0=普通@1=紧急@2=火急");

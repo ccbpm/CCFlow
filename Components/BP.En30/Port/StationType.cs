@@ -109,7 +109,7 @@ namespace BP.Port
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
                     map.AddTBString(StationAttr.OrgNo, null, "隶属组织", false, false, 0, 50, 250);
-                    map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo); //加隐藏条件.
+                    map.AddHidden(StationAttr.OrgNo, "=", "@WebUser.OrgNo"); //加隐藏条件.
                 }
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
@@ -117,11 +117,11 @@ namespace BP.Port
                     map.AddTBString(StationAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 250);
 
                     if (BP.Difference.SystemConfig.GroupStationModel == 0)
-                        map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
-                    if(BP.Difference.SystemConfig.GroupStationModel == 2)
+                        map.AddHidden(StationAttr.OrgNo, "=", "@WebUser.OrgNo");//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                    if (BP.Difference.SystemConfig.GroupStationModel == 2)
                     {
                         map.AddTBString(StationAttr.FK_Dept, null, "隶属部门", false, false, 0, 50, 250);
-                        map.AddHidden(StationAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept);
+                        map.AddHidden(StationAttr.FK_Dept, "=", "@WebUser.FK_Dept");
 
                     }
                 }
@@ -133,12 +133,14 @@ namespace BP.Port
         protected override bool beforeUpdateInsertAction()
         {
             if (DataType.IsNullOrEmpty(this.Name) == true)
-                throw new Exception("请输入名称"); //@hongyan.
+                throw new Exception("请输入名称");
 
-            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (DataType.IsNullOrEmpty(this.OrgNo) == true && BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
+
             if (BP.Difference.SystemConfig.GroupStationModel == 2)
                 this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+
             return base.beforeUpdateInsertAction();
         }
 
@@ -169,29 +171,6 @@ namespace BP.Port
         /// <summary>
         /// 查询全部
         /// </summary>
-        /// <param name="orderBy">排序</param>
-        /// <returns></returns>
-        public override int RetrieveAll(string orderBy)
-        {
-            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                return base.RetrieveAll(orderBy);
-
-            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
-            if (BP.Difference.SystemConfig.GroupStationModel == 0)
-                return base.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
-
-            if (BP.Difference.SystemConfig.GroupStationModel == 1)
-                return base.RetrieveAll();
-
-            //if (BP.Difference.SystemConfig.GroupStationModel == 2)
-            //    return base.Retrieve("FK_Dept", BP.Web.WebUser.FK_Dept, orderBy);
-
-            //按照orgNo查询.
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, orderBy);
-        }
-        /// <summary>
-        /// 查询全部
-        /// </summary>
         /// <returns></returns>
         public override int RetrieveAll()
         {
@@ -203,7 +182,7 @@ namespace BP.Port
                 return base.RetrieveAll("Idx");
 
             //按照orgNo查询.
-            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo,"Idx");
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");
         }
         #endregion 查询..
 

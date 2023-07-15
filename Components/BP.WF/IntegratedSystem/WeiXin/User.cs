@@ -148,6 +148,8 @@ namespace BP.GPM.WeiXin
     /// </summary>
     public class User
     {
+        public int ErrCode { get; set; }
+        public string ErrMsg { get; set; }
         public string UserId { get; set; }
         public string DeviceId { get; set; }
     }

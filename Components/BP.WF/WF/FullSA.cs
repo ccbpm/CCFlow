@@ -56,7 +56,7 @@ namespace BP.WF
                 DBAccess.RunSQL("Delete From WF_SelectAccper Where WorkID=" + workid);
 
             //求出已经路过的节点.
-            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
+            DataTable dt = DBAccess.RunSQLReturnTable("SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID", "WorkID", workid);
             string passedNodeIDs = "";
             foreach (DataRow item in dt.Rows)
             {

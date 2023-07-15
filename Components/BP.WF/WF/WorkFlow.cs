@@ -176,7 +176,7 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
                 //删除他的工作者，不让其有待办.
-                sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID;
+                sql = "DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID;
                 DBAccess.RunSQL(sql);
 
                 //设置产生的工作流程为.
@@ -281,7 +281,7 @@ namespace BP.WF
 
                 //删除它的工作.
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workID + " OR FID=" + workID + " ) AND FK_Flow='" + flowNo + "'");
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workID + " OR FID=" + workID + " ) AND FK_Flow='" + flowNo + "'");
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE (WorkID=" + workID + " OR FID=" + workID + " ) AND FK_Flow='" + flowNo + "'");
 
                 //删除所有节点上的数据.
                 Nodes nds = fl.HisNodes;
@@ -399,7 +399,7 @@ namespace BP.WF
 
                 //删除它的工作.
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE (WorkID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
 
                 if (msg != "")
                     BP.DA.Log.DebugWriteInfo(msg);
@@ -421,7 +421,7 @@ namespace BP.WF
                 /* 
                  * 取出来获取停留点,没有获取到说明没有任何子线程到达合流点的位置.
                  */
-                sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND IsPass=3";
+                sql = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.FID + " AND IsPass=3";
                 int fk_node = DBAccess.RunSQLReturnValInt(sql, 0);
                 if (fk_node != 0)
                 {
@@ -437,9 +437,9 @@ namespace BP.WF
                         Node priNode = (Node)priNodes[0];
 
                         #region 处理完成率
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID + " AND IsPass=1";
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID + " AND IsPass=1";
                         decimal ok = (decimal)DBAccess.RunSQLReturnValInt(sql);
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID;
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID;
                         decimal all = (decimal)DBAccess.RunSQLReturnValInt(sql);
                         if (all == 0)
                         {
@@ -454,7 +454,7 @@ namespace BP.WF
                         if (nextNode.PassRate <= passRate)
                         {
                             /*说明全部的人员都完成了，就让合流点显示它。*/
-                            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0  WHERE IsPass=3  AND WorkID=" + this.FID + " AND FK_Node=" + fk_node);
+                            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE IsPass=3  AND WorkID=" + this.FID + " AND FK_Node=" + fk_node);
                         }
                         #endregion 处理完成率
                     }
@@ -471,7 +471,7 @@ namespace BP.WF
                             break;
                         default:
                             ///* 解决删除最后一个子流程时要把干流程也要删除。*/
-                            //sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" +this.HisGenerWorkFlow +" AND FID=" + this.FID;
+                            //sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" +this.HisGenerWorkFlow +" AND FID=" + this.FID;
                             //int num = DBAccess.RunSQLReturnValInt(sql);
                             //if (num == 0)
                             //{
@@ -587,7 +587,7 @@ namespace BP.WF
 
             //删除它的工作.
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE (WorkID=" + workid + " OR FID=" + workid + " ) AND FK_Flow='" + gwf.FK_Flow + "'");
 
             //删除所有节点上的数据.
             Nodes nodes = new Nodes(gwf.FK_Flow); // this.HisFlow.HisNodes;
@@ -673,7 +673,7 @@ namespace BP.WF
 
                 //删除它的工作.
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID);
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID);
 
                 if (msg != "")
                     BP.DA.Log.DebugWriteInfo(msg);
@@ -705,7 +705,7 @@ namespace BP.WF
                  * 取出来获取停留点,没有获取到说明没有任何子线程到达合流点的位置.
                  */
 
-                sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND IsPass=3";
+                sql = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.FID + " AND IsPass=3";
                 int fk_node = DBAccess.RunSQLReturnValInt(sql, 0);
                 if (fk_node != 0)
                 {
@@ -721,9 +721,9 @@ namespace BP.WF
                         Node priNode = (Node)priNodes[0];
 
                         #region 处理完成率
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID + " AND IsPass=1";
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID + " AND IsPass=1";
                         decimal ok = (decimal)DBAccess.RunSQLReturnValInt(sql);
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID;
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + this.FID;
                         decimal all = (decimal)DBAccess.RunSQLReturnValInt(sql);
                         if (all == 0)
                         {
@@ -738,7 +738,7 @@ namespace BP.WF
                         if (nextNode.PassRate <= passRate)
                         {
                             /* 说明: 全部的人员都完成了，就让合流点显示它。*/
-                            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0  WHERE IsPass=3  AND WorkID=" + this.FID + " AND FK_Node=" + fk_node);
+                            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE IsPass=3  AND WorkID=" + this.FID + " AND FK_Node=" + fk_node);
                         }
                         #endregion 处理完成率
                     }
@@ -755,7 +755,7 @@ namespace BP.WF
                             break;
                         default:
                             ///* 解决删除最后一个子流程时要把干流程也要删除。*/
-                            //sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" +this.HisGenerWorkFlow +" AND FID=" + this.FID;
+                            //sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" +this.HisGenerWorkFlow +" AND FID=" + this.FID;
                             //int num = DBAccess.RunSQLReturnValInt(sql);
                             //if (num == 0)
                             //{
@@ -781,8 +781,8 @@ namespace BP.WF
              * 1.首先要找到.
              * 2.xxxx.
              */
-            //  string sql = "SELECT COUNT(*) FROM WF_GenerWorkerList WHERE FK_Node=";
-            string mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FID=" + this.FID;
+            //  string sql = "SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE FK_Node=";
+            string mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerlist WHERE IsPass=0 AND FID=" + this.FID;
             int num = DBAccess.RunSQLReturnValInt(mysql);
             if (num == 0)
             {
@@ -802,7 +802,7 @@ namespace BP.WF
                          * 
                          * 就要检查他是否有代办.
                          */
-                        mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + gwfMain.FK_Node;
+                        mysql = "SELECT COUNT(*)  as Num FROM WF_GenerWorkerlist WHERE IsPass=0 AND FK_Node=" + gwfMain.FK_Node;
                         num = DBAccess.RunSQLReturnValInt(mysql);
                         if (num == 0)
                         {
@@ -810,7 +810,7 @@ namespace BP.WF
                              * 这种情况，就需要让当前分流节点产生待办.
                              */
 
-                            mysql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FID=0 AND WorkID=" + gwfMain.WorkID + " ORDER BY RDT DESC ";
+                            mysql = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE FID=0 AND WorkID=" + gwfMain.WorkID + " ORDER BY RDT DESC ";
                             int fenLiuNodeID = DBAccess.RunSQLReturnValInt(mysql);
 
                             Node nd = new Node(fenLiuNodeID);
@@ -911,7 +911,7 @@ namespace BP.WF
 
                 //删除它的工作.
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE (WorkID=" + this.WorkID + " OR FID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + this.WorkID + " OR FID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE (WorkID=" + this.WorkID + " OR FID=" + this.WorkID + " ) AND FK_Flow='" + this.HisFlow.No + "'");
 
                 //删除所有节点上的数据.
                 Nodes nds = this.HisFlow.HisNodes;
@@ -963,7 +963,7 @@ namespace BP.WF
                 /* 
                  * 取出来获取停留点,没有获取到说明没有任何子线程到达合流点的位置.
                  */
-                sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + wn.HisWork.FID + " AND IsPass=3";
+                sql = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + wn.HisWork.FID + " AND IsPass=3";
                 int fk_node = DBAccess.RunSQLReturnValInt(sql, 0);
                 if (fk_node != 0)
                 {
@@ -979,9 +979,9 @@ namespace BP.WF
                         Node priNode = (Node)priNodes[0];
 
                         #region 处理完成率
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + wn.HisWork.FID + " AND IsPass=1";
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + wn.HisWork.FID + " AND IsPass=1";
                         decimal ok = (decimal)DBAccess.RunSQLReturnValInt(sql);
-                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + priNode.NodeID + " AND FID=" + wn.HisWork.FID;
+                        sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + priNode.NodeID + " AND FID=" + wn.HisWork.FID;
                         decimal all = (decimal)DBAccess.RunSQLReturnValInt(sql);
                         if (all == 0)
                         {
@@ -996,7 +996,7 @@ namespace BP.WF
                         if (nextNode.PassRate <= passRate)
                         {
                             /*说明全部的人员都完成了，就让合流点显示它。*/
-                            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0  WHERE IsPass=3  AND WorkID=" + wn.HisWork.FID + " AND FK_Node=" + fk_node);
+                            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE IsPass=3  AND WorkID=" + wn.HisWork.FID + " AND FK_Node=" + fk_node);
                         }
                         #endregion 处理完成率
                     }
@@ -1013,7 +1013,7 @@ namespace BP.WF
                             break;
                         default:
                             /* 解决删除最后一个子流程时要把干流程也要删除。*/
-                            sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerList WHERE FK_Node=" + wn.HisNode.NodeID + " AND FID=" + wn.HisWork.FID;
+                            sql = "SELECT COUNT(*) AS Num FROM WF_GenerWorkerlist WHERE FK_Node=" + wn.HisNode.NodeID + " AND FID=" + wn.HisWork.FID;
                             int num = DBAccess.RunSQLReturnValInt(sql);
                             if (num == 0)
                             {
@@ -1317,8 +1317,9 @@ namespace BP.WF
 
             //生成关键字.
             this.GenerSKeyWords(gwf, wn.rptGe);
-
-
+            //流程发送成功事件
+            string sendSuccess = ExecEvent.DoNode(EventListNode.SendSuccess, wn);
+               
             //调用结束后事件.
             stopMsg += ExecEvent.DoFlow(EventListFlow.FlowOverAfter, wn, null);
             #endregion 处理后续的业务.
@@ -1353,6 +1354,9 @@ namespace BP.WF
                 if (rpt.EnMap.PhysicsTable.Equals(ptable) == false && DBAccess.IsExitsTableCol(rpt.EnMap.PhysicsTable, "BillState") == true)
                     DBAccess.RunSQL("UPDATE " + rpt.EnMap.PhysicsTable + " SET BillState=100 WHERE OID=" + this.WorkID);
             }
+            if (sendSuccess != null)
+                return "@"+sendSuccess+stopMsg;
+
             return stopMsg;
         }
         /// <summary>
@@ -1452,7 +1456,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=" + dbstr + "IsPass WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + this.HisGenerWorkFlow.FK_Node;
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=" + dbstr + "IsPass WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + this.HisGenerWorkFlow.FK_Node;
             ps.Add(GenerWorkerListAttr.IsPass, 9);
             ps.Add(GenerWorkerListAttr.WorkID, this.WorkID);
             DBAccess.RunSQL(ps);
@@ -1863,7 +1867,7 @@ namespace BP.WF
             string checker = this.HisGenerWorkFlow.GetParaString("HungupChecker");
 
             //删除领导审核的数据.
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND FK_Emp='" + checker + "' AND WorkID=" + this.HisGenerWorkFlow.WorkID);
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND FK_Emp='" + checker + "' AND WorkID=" + this.HisGenerWorkFlow.WorkID);
 
             this.HisGenerWorkFlow.HungupTime = DataType.CurrentDateTime;
             this.HisGenerWorkFlow.WFState = WFState.Runing;
@@ -1996,7 +2000,7 @@ namespace BP.WF
             if (way == 1)
             {
                 string relDT = this.HisGenerWorkFlow.GetParaString("HungupRelDate");
-                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET SDT='" + relDT + "' WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.HisGenerWorkFlow.FK_Node);
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET SDT='" + relDT + "' WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.HisGenerWorkFlow.FK_Node);
             }
             //删除当前的待办.
             GenerWorkerList gwl = new GenerWorkerList();

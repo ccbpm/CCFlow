@@ -915,6 +915,43 @@ namespace BP.WF.HttpHandler
             }
 
         }
+        public void EntityFile_Load()
+        {
+            //根据EnsName获取Entity
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            en.PKVal = this.GetRequestVal("DelPKVal");
+            int i = en.RetrieveFromDBSources();
+            if (i == 0)
+                return;
+            string filePath = en.GetValStringByKey("MyFilePath");
+            string fileName = en.GetValStringByKey("MyFileName");
+            string fileExt = en.GetValStringByKey("MyFileExt");
+            //获取使用的客存在FTP服务器上
+            if ( BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            {
+               
+                //临时存储位置
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
+
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
+
+                //连接FTP服务器
+                FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
+                conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
+                conn.Close();
+
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempFile, fileName + "." + fileExt);
+                //删除临时文件
+                System.IO.File.Delete(tempFile);
+            }
+            else
+            {
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(filePath, fileName + "." + fileExt);
+            }
+        }
 
         /// <summary>
         /// 实体多附件上传
@@ -1046,6 +1083,41 @@ namespace BP.WF.HttpHandler
             fileManager.WebPath = filepath;
             fileManager.Insert();
             return fileManager.ToJson();
+        }
+
+        public void EntityMutliFile_Load()
+        {
+            string oid = this.GetRequestVal("OID");
+            //根据SysFileManager的OID获取对应的实体
+            SysFileManager fileManager = new SysFileManager();
+            fileManager.PKVal = oid;
+            int i = fileManager.RetrieveFromDBSources();
+            if (i == 0)
+                throw new Exception("没有找到OID=" + oid + "的文件管理数据，请联系管理员");
+
+            //获取使用的客户保存在FTP服务器上
+            if (BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            {
+                string filePath = fileManager.MyFilePath;
+                string fileName = fileManager.MyFileName;
+                //临时存储位置
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + fileManager.MyFileExt;
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
+                //连接FTP服务器
+                FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
+                    BP.Difference.SystemConfig.FTPUserNo, BP.Difference.SystemConfig.FTPUserPassword);
+                conn.GetFile(filePath, tempFile, false, System.IO.FileAttributes.Archive);
+                conn.Close();
+
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(tempFile, fileName);
+                //删除临时文件
+                System.IO.File.Delete(tempFile);
+            }
+            else
+            {
+                BP.WF.HttpHandler.HttpHandlerGlo.DownloadFile(fileManager.MyFilePath, fileManager.MyFileName+"."+ fileManager.MyFileExt);
+            }
         }
         /// <summary>
         /// 删除实体多附件上传的信息
@@ -1390,15 +1462,15 @@ namespace BP.WF.HttpHandler
                 string emps = "";
                 foreach (DataRow drr in dtt.Rows)
                 {
-                    if (emps.Contains(drr["No"].ToString() + ",") == true)
+                    if (emps.Contains(drr[0].ToString() + ",") == true)
                         continue;
-                    emps += drr["No"].ToString() + ",";
+                    emps += drr[0].ToString() + ",";
 
                     DataRow dr = dt.NewRow();
-                    dr["No"] = drr["No"];
-                    dr["Name"] = drr["Name"];
-                    dr["FK_DeptText"] = drr["FK_DeptText"];
-                    dr["type"] = drr["TYPE"];
+                    dr["No"] = drr[0];
+                    dr["Name"] = drr[1];
+                    dr["FK_DeptText"] = drr[2];
+                    dr["type"] = drr[3];
                     dt.Rows.Add(dr);
                 }
                 foreach (DataColumn col in dt.Columns)
@@ -1460,8 +1532,8 @@ namespace BP.WF.HttpHandler
             DataTable dt = ensMen.ToDataTableField();
             Entity en = ensMen.GetNewEntity;
             string tableName = en.EnMap.PhysicsTable;
-            if (tableName.Equals("Port_Emp") == true
-                && DBAccess.IsExitsTableCol(tableName,"UserID")==true)
+            if (tableName.Equals("Port_Emp") == true 
+                && dt.Columns.Contains("UserID")==true)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1659,26 +1731,26 @@ namespace BP.WF.HttpHandler
             bool isHaveSAASEmp = BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && dot2Dot.EnMap.Attrs.Contains("FK_Emp") == true ? true : false;
             if (isHaveSAASEmp == true)
             {
-                string sql = "Select A.*,B.Name AS FK_EmpText From " + dot2Dot.EnMap.PhysicsTable + " A,Port_Emp B Where A.FK_Emp=B.UserID AND B.OrgNo='" + WebUser.OrgNo + "'";
+                string sql = "SELECT A.*,B.Name AS FK_EmpText FROM " + dot2Dot.EnMap.PhysicsTable + " A,Port_Emp B WHERE A.FK_Emp=B.UserID AND B.OrgNo='" + WebUser.OrgNo + "'";
                 if (saveType == true)
                 {
                     if (DataType.IsNullOrEmpty(para) == true)
-                        sql += " AND " + vsM.AttrOfOneInMM + "='" + this.PKVal + "'";
+                        sql += " AND A." + vsM.AttrOfOneInMM + "='" + pkval + "'";
                     if (DataType.IsNullOrEmpty(para1) == true)
                     {
                         pkval = pkval.Replace("_" + paraVal, "");
-                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "'";
+                        sql += " AND A." + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "'";
                     }
 
                     else if (DataType.IsNullOrEmpty(para) == false && DataType.IsNullOrEmpty(para1) == false)
                     {
                         pkval = pkval.Replace("_" + paraVal, "");
-                        sql += " AND " + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "' AND " + para1 + "='" + paraVal1 + "'";
+                        sql += " AND A." + vsM.AttrOfOneInMM + "='" + pkval + "' AND " + para + "='" + paraVal + "' AND " + para1 + "='" + paraVal1 + "'";
                     }
                 }
                 else
                 {
-                    sql += " AND " + vsM.AttrOfOneInMM + "='" + this.PKVal + "'";
+                    sql += " AND A." + vsM.AttrOfOneInMM + "='" + pkval + "'";
                 }
                 dtSelected = DBAccess.RunSQLReturnTable(sql);
                 dtSelected.TableName = "DBMMs";

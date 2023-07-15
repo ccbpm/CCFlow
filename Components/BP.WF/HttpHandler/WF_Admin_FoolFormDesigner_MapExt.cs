@@ -390,8 +390,7 @@ namespace BP.WF.HttpHandler
                     if (s.Contains(attr.KeyOfEn + ":") == false)
                         continue;
 
-                    string[] ss = s.Split(':');
-                    attr.DefVal = ss[1]; //使用这个字段作为对应设置的sql.
+                    attr.DefVal = s.Replace(attr.KeyOfEn+":",""); //使用这个字段作为对应设置的sql.
                 }
             }
 
@@ -415,7 +414,7 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs(me.FK_MapData);
             attrs.Retrieve(MapAttrAttr.FK_MapData, me.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
-
+            MapAttr mapAttr = new MapAttr(this.FK_MapData + "_" + me.AttrOfOper);
             string str = "";
             foreach (MapAttr attr in attrs)
             {
@@ -425,7 +424,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 sql = sql.Trim();
 
-                if (sql.Contains("@Key") == false)
+                if (sql.Contains("@Key") == false && (int)mapAttr.UIContralType != 18)
                     return "err@在配置从表:" + attr.KeyOfEn + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
 
                 str += "$" + attr.KeyOfEn + ":" + sql;
@@ -712,23 +711,15 @@ namespace BP.WF.HttpHandler
             string FK_MapData = GetRequestVal("FK_MapData");
             string KeyOfEn = GetRequestVal("KeyOfEn");
             string sql = "";
-            //if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
-            //{
-            //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
-            //}
-            //else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
-            //{
-            //    sql = "SELECT  Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
-            //}
-            //else
-            //{
-            //    sql = "SELECT Name FROM Sys_MapAttr WHERE (MyDataType=6 OR MyDataType=7) AND FK_MapData='" + FK_MapData + "'";
-            //}
 
             sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE (MyDataType='6' OR MyDataType='7') AND FK_MapData='" + FK_MapData + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+            }
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -797,18 +788,26 @@ namespace BP.WF.HttpHandler
 
             //获取外键值
             DataTable dt = BP.Pub.PubClass.GetDataTableByUIBineKey(attr.UIBindKey);
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
+                string columnName = "";
+               foreach (DataColumn col in dt.Columns)
+                {
+                    columnName = col.ColumnName.ToUpper();
+                    switch (columnName)
+                    {
+                        case "NO":
+                            col.ColumnName = "No";
+                            break;
+                        case "NAME":
+                            col.ColumnName = "Name";
+                            break;
+                        default:break;
+                    }
+                }
             }
 
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-            {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-            }
-
+         
             //字段值.
             FrmRBs rbs = new FrmRBs();
             rbs.Retrieve(FrmRBAttr.FK_MapData, this.FK_MapData, FrmRBAttr.KeyOfEn, this.KeyOfEn);
@@ -921,7 +920,17 @@ namespace BP.WF.HttpHandler
             //string json = context.Request.Form["data"];
             //if (DataType.IsNullOrEmpty(json))
             string json = GetRequestVal("data");
-            DataTable dt = BP.Tools.Json.ToDataTable(json);
+            DataTable dt = null;
+
+            try
+            {
+                dt = BP.Tools.Json.ToDataTable(json);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+                //  return json;
+            }
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -951,13 +960,9 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
 
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM Sys_MapExt WHERE AttrOfOper=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "AttrOfOper AND FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-            ps.Add("AttrOfOper", this.KeyOfEn);
-            ps.Add("FK_MapData", this.FK_MapData);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
-            dt.TableName = "Sys_MapExt";
-            ds.Tables.Add(dt);
+            MapExts mapExts = new MapExts();
+            mapExts.Retrieve(MapExtAttr.AttrOfOper, this.KeyOfEn, MapExtAttr.FK_MapData, this.FK_MapData);
+            ds.Tables.Add(mapExts.ToDataTableField("Sys_MapExt"));
 
             BP.Sys.XML.RegularExpressions res = new BP.Sys.XML.RegularExpressions();
             res.Retrieve("ForCtrl", "TB");
@@ -1476,54 +1481,54 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        public string NRCMaterielDtlSave()
-        {
-            string fk_Template = this.GetRequestVal("FK_Template");
-            string workid = this.GetRequestVal("WorkId");
-            string sql = "SELECT * FROM STARCO_TemplateNRCMaterielDtl WHERE FK_Template='" + fk_Template + "'";
-            DataTable dt = new DataTable();
-            dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt != null && dt.Rows.Count > 0)
-            {
-                //string sql1 = "SELECT * FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
-                //DataTable dt1 = new DataTable();
-                //dt1 = DBAccess.RunSQLReturnTable(sql1);
-                //if (dt1 != null && dt1.Rows.Count > 0)
-                //{
+        //public string NRCMaterielDtlSave()
+        //{
+        //    string fk_Template = this.GetRequestVal("FK_Template");
+        //    string workid = this.GetRequestVal("WorkId");
+        //    string sql = "SELECT * FROM STARCO_TemplateNRCMaterielDtl WHERE FK_Template='" + fk_Template + "'";
+        //    DataTable dt = new DataTable();
+        //    dt = DBAccess.RunSQLReturnTable(sql);
+        //    if (dt != null && dt.Rows.Count > 0)
+        //    {
+        //        //string sql1 = "SELECT * FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
+        //        //DataTable dt1 = new DataTable();
+        //        //dt1 = DBAccess.RunSQLReturnTable(sql1);
+        //        //if (dt1 != null && dt1.Rows.Count > 0)
+        //        //{
 
-                //}
+        //        //}
 
-                string delSql = "DELETE FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
-                DBAccess.RunSQLReturnString(delSql);
+        //        string delSql = "DELETE FROM ND105Dtl1 WHERE RefPK='" + workid + "'";
+        //        DBAccess.RunSQLReturnString(delSql);
 
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    GEDtl dtl = new GEDtl("ND105Dtl1");
+        //        for (int i = 0; i < dt.Rows.Count; i++)
+        //        {
+        //            GEDtl dtl = new GEDtl("ND105Dtl1");
 
-                    dtl.SetValByKey("MingChen", dt.Rows[i]["Name"].ToString());
-                    dtl.SetValByKey("JianHao", dt.Rows[i]["PartNumber"].ToString());
-                    dtl.SetValByKey("RefPK", dt.Rows[i]["Qty"].ToString());
-                    dtl.SetValByKey("ShuLiang", dt.Rows[i]["PCH"].ToString());
-                    dtl.SetValByKey("PiCiHao", dt.Rows[i]["Name"].ToString());
-                    dtl.SetValByKey("RDT", dt.Rows[i]["Name"].ToString());
-                    dtl.SetValByKey("Rec", dt.Rows[i]["Name"].ToString());
+        //            dtl.SetValByKey("MingChen", dt.Rows[i]["Name"].ToString());
+        //            dtl.SetValByKey("JianHao", dt.Rows[i]["PartNumber"].ToString());
+        //            dtl.SetValByKey("RefPK", dt.Rows[i]["Qty"].ToString());
+        //            dtl.SetValByKey("ShuLiang", dt.Rows[i]["PCH"].ToString());
+        //            dtl.SetValByKey("PiCiHao", dt.Rows[i]["Name"].ToString());
+        //            dtl.SetValByKey("RDT", dt.Rows[i]["Name"].ToString());
+        //            dtl.SetValByKey("Rec", dt.Rows[i]["Name"].ToString());
 
-                    string name = dt.Rows[i]["Name"].ToString();
-                    string jianHao = dt.Rows[i]["PartNumber"].ToString();
-                    string workId = workid;
-                    string shuLiang = dt.Rows[i]["Qty"].ToString();
-                    string piCiHao = dt.Rows[i]["PCH"].ToString();
-                    string rdt = DateTime.Now.ToString();
-                    string userNo = WebUser.No;
+        //            string name = dt.Rows[i]["Name"].ToString();
+        //            string jianHao = dt.Rows[i]["PartNumber"].ToString();
+        //            string workId = workid;
+        //            string shuLiang = dt.Rows[i]["Qty"].ToString();
+        //            string piCiHao = dt.Rows[i]["PCH"].ToString();
+        //            string rdt = DateTime.Now.ToString();
+        //            string userNo = WebUser.No;
 
-                    string sql2 = "INSERT INTO ND105Dtl1(MingChen,JianHao,RefPK,ShuLiang,PiCiHao,RDT,Rec) VALUES('" + name + "','" + jianHao + "','" + workId + "','" + shuLiang + "','" + piCiHao + "','" + rdt + "','" + userNo + "')";
-                    string result = DBAccess.RunSQLReturnString(sql2);
-                }
+        //            string sql2 = "INSERT INTO ND105Dtl1(MingChen,JianHao,RefPK,ShuLiang,PiCiHao,RDT,Rec) VALUES('" + name + "','" + jianHao + "','" + workId + "','" + shuLiang + "','" + piCiHao + "','" + rdt + "','" + userNo + "')";
+        //            string result = DBAccess.RunSQLReturnString(sql2);
+        //        }
 
-            }
+        //    }
 
-            return "ok";
-        }
+        //    return "ok";
+        //}
 
     }
 }

@@ -5,6 +5,7 @@ using BP.Sys;
 using BP.En;
 using BP.WF.Template;
 using BP.Difference;
+using System.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -830,7 +831,7 @@ namespace BP.WF.HttpHandler
 
             string toNodeID = this.GetRequestVal("ToNodeID");
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
-            string sql = this.GetRequestVal("TB_Docs");
+            string sql = HttpUtility.UrlDecode(this.GetRequestVal("TB_Docs"), System.Text.Encoding.UTF8);
 
             Cond cond = new Cond();
 
@@ -841,7 +842,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Flow = this.FK_Flow;
             cond.OperatorValue = sql;
-            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+            cond.Note = HttpUtility.UrlDecode(this.GetRequestVal("TB_Note"), System.Text.Encoding.UTF8); //备注.
 
             cond.FK_Flow = this.FK_Flow;
             cond.CondType = condTypeEnum;

@@ -270,7 +270,7 @@ namespace BP.WF.HttpHandler
 
 
                         /*撤销发送*/
-                        sql = "SELECT WorkID,FK_Emp,FK_Node,WhoExeIt From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND ((IsPass=0 AND WhoExeIt=1) OR IsPass=1) AND IsEnable=1 AND WorkID=" + this.WorkID;
+                        sql = "SELECT WorkID,FK_Emp,FK_Node,WhoExeIt From WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND ((IsPass=0 AND WhoExeIt=1) OR IsPass=1) AND IsEnable=1 AND WorkID=" + this.WorkID;
                         DataTable dtt = DBAccess.RunSQLReturnTable(sql);
 
                         if (dtt.Rows.Count > 0 || powers.Contains("FlowDataUnSend") == true)
@@ -704,7 +704,7 @@ namespace BP.WF.HttpHandler
             #endregion 按照部门控制.
             if (viewEn.PSpecSta == true && DataType.IsNullOrEmpty(viewEn.PSpecStaExt) == false)
             {
-                string sql = "Select FK_Station From Port_DeptEmpStation Where FK_Emp='" + WebUser.No + "'";
+                string sql = "Select FK_Station From Port_DeptEmpStation Where FK_Emp='" + WebUser.UserID + "'";
                 string stas = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 if (DataType.IsNullOrEmpty(stas) == false)
                 {
@@ -862,7 +862,8 @@ namespace BP.WF.HttpHandler
             }
 
             if (this.currND.HisFormType == NodeFormType.SDKForm
-                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrm)
+                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrmSelfPK
+                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrmWorkID)
             {
                 string url = currND.FormUrl;
                 if (DataType.IsNullOrEmpty(url))
@@ -1161,7 +1162,7 @@ namespace BP.WF.HttpHandler
 
                     case FrmEnableRole.ByStation:
                         string exp = frmNode.FrmEnableExp.Clone() as string;
-                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
+                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.UserID + "'";
                         string station = DBAccess.RunSQLReturnString(Sql);
                         if (DataType.IsNullOrEmpty(station) == true)
                             continue;

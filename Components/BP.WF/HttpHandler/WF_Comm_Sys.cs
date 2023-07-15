@@ -776,7 +776,11 @@ namespace BP.WF.HttpHandler
                     en = obj as Entity;
                     if (en == null)
                         continue;
+                  
                     string className = en.ToString();
+                    if (DataType.IsNullOrEmpty(className) == true)
+                        continue;
+
                     switch (className.ToUpper())
                     {
                         case "BP.WF.STARTWORK":

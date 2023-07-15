@@ -110,8 +110,7 @@ namespace BP.WF.DTS
                                 Node jumpToNode = new Node(jumpNode);
 
                                 //设置默认同意.
-                                BP.WF.Dev2Interface.WriteTrackWorkCheck(jumpToNode.FK_Flow, node.NodeID, workid, 0,
-                                    "同意（预期自动审批）",null, null);
+                                BP.WF.Dev2Interface.Node_WriteWorkCheck( workid,"同意（预期自动审批）",null, null);
 
                                 //执行发送.
                                 info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, jumpToNode.NodeID, null).ToMsgOfText();

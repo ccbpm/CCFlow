@@ -258,7 +258,7 @@ namespace BP.Sys.FrmUI
         public string DoRenameField(string newField)
         {
             MapAttrString en = new MapAttrString(this.MyPK);
-            return en.DoRenameField(newField); //@hongyan.
+            return en.DoRenameField(newField);
         }
 
         #region 重载.

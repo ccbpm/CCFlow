@@ -508,6 +508,10 @@ namespace BP.WF
         /// </summary>
         Adjust = 31,
         /// <summary>
+        /// 路由节点
+        /// </summary>
+        Route = 32,
+        /// <summary>
         /// 信息
         /// </summary>
         Info = 100
@@ -1103,6 +1107,11 @@ namespace BP.WF
         /// </summary>
         BySelectEmpByOfficer = 55,
         /// <summary>
+        /// 绑定字典表
+        /// </summary>
+        BySFTable = 52,
+
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100
@@ -1252,6 +1261,18 @@ namespace BP.WF
         /// 异表单子线程
         /// </summary>
         SubThreadUnSameWorkID = 5
+    }
+
+    public enum NodeType
+    {
+        /// <summary>
+        /// 用户节点
+        /// </summary>
+        UserNode=0,
+        /// <summary>
+        /// 路由节点
+        /// </summary>
+        RouteNode=1
     }
     /// <summary>
     /// 流程状态(详)

@@ -171,7 +171,7 @@ namespace BP.CCOA.CCInfo
                 map.AddTBStringPK(InfoAttr.No, null, "编号", false, true, 1, 59, 59);
                 map.AddTBString(InfoAttr.Name, null, "标题", true, false, 0, 300, 10, true);
 
-                map.AddTBStringDoc("Docs", "Docs", null, "内容", true, false, 0, 5000, 20, true, true);
+                map.AddTBStringDoc("Docs", "Docs", null, "内容", true, false, 0, 4000, 20, true, true);
 
                 map.AddDDLSysEnum(InfoAttr.InfoPRI, 0, "重要性", true, true, "InfoPRI", "@0=普通@1=紧急@2=火急");
                 map.AddDDLEntities(InfoAttr.InfoType, null, "类型", new InfoTypes(), true);

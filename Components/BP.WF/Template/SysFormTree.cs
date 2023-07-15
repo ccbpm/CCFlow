@@ -160,8 +160,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                this.OrgNo = BP.Web.WebUser.OrgNo;
+            if (DataType.IsNullOrEmpty(this.OrgNo)==true && Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
            
             if (DataType.IsNullOrEmpty(this.No) == true)
                 this.No = DBAccess.GenerOID(this.ToString()).ToString();
@@ -272,30 +272,86 @@ namespace BP.WF.Template
                 return new SysFormTree();
             }
         }
-        public override int RetrieveAll()
+        /// <summary>
+        /// 初始化数据.
+        /// </summary>
+        private void InitData()
         {
-            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS
-                || BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                return this.Retrieve(SysFormTreeAttr.OrgNo, BP.Web.WebUser.OrgNo);
-
-
-            int i = base.RetrieveAll();
-            if (i == 0)
+            SysFormTree fs = new SysFormTree();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
-                SysFormTree fs = new SysFormTree();
-                fs.Name = "公文类";
-                fs.No = "01";
+                fs.setName("流程树");
+                fs.setNo(BP.Web.WebUser.OrgNo);
+                fs.setParentNo("100");
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+                fs.Save(); 
+
+                fs = new SysFormTree();
+                fs.setName("公文类");
+                fs.setNo(DBAccess.GenerGUID());
+                fs.setParentNo(BP.Web.WebUser.OrgNo);
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
                 fs.Insert();
 
                 fs = new SysFormTree();
-                fs.Name = "办公类";
-                fs.No = "02";
+                fs.setName("办公类");
+                fs.setNo(DBAccess.GenerGUID());
+                fs.setParentNo(BP.Web.WebUser.OrgNo);
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
                 fs.Insert();
-                i = base.RetrieveAll();
+                return;
             }
 
-            return i;
+            fs = new SysFormTree();
+            fs.Name = "流程树";
+            fs.No = "100";
+            fs.ParentNo = "0";
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+
+            fs = new SysFormTree();
+            fs.setName("办公类");
+            fs.setNo("01");
+            fs.setParentNo("100");
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+
+            fs = new SysFormTree();
+            fs.setName("公文类");
+            fs.setNo("01");
+            fs.setParentNo("100");
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+
         }
+        /// <summary>
+        /// 查询全部.
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll()
+        {
+            if (BP.Web.WebUser.No.Equals("admin") == true)
+                return this.RetrieveAll(FlowSortAttr.Idx);
+
+            var num = 0;
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                num = this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                num = this.Retrieve(FlowSortAttr.Idx);
+
+            if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                num = this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+
+            if (num == 0)
+            {
+                InitData();
+                return this.RetrieveAll();
+            }
+
+            return num;
+        }
+
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>

@@ -96,6 +96,10 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("SysNo", BP.Difference.SystemConfig.SysNo);
             ht.Add("SysName", BP.Difference.SystemConfig.SysName);
+            ht.Add("OSModel", (int)SystemConfig.CCBPMRunModel);
+
+            // 0=内网模式, 1=运营模式.
+            ht.Add("SaaSModel", SystemConfig.GetValByKey("SaaSModel", "0"));
 
             return BP.Tools.Json.ToJson(ht);
         }
@@ -111,11 +115,23 @@ namespace BP.WF.HttpHandler
             if (CheckIsDBInstall() == true)
                 return "url@/WF/Admin/DBInstall.htm";
 
+            #region 如果是saas模式.
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                if (DataType.IsNullOrEmpty(this.GetRequestVal("OrgNo")) == true)
+                    return "url@/Portal/SaaS/SelectOneOrg.htm";
+                else
+                    return "url@/Portal/SaaS/Login.htm?OrgNo=" + this.OrgNo;
+            }
+            #endregion 如果是saas模式.
+
+
             string doType = GetRequestVal("LoginType");
             if (DataType.IsNullOrEmpty(doType) == false && doType.Equals("Out") == true)
             {
                 //清空cookie
                 WebUser.Exit();
+                return "成功退出.";
             }
 
             //是否需要自动登录。 这里都把cookeis的数据获取来了.
@@ -232,8 +248,6 @@ namespace BP.WF.HttpHandler
             }
         }
 
-
-
         public string Login_Submit()
         {
             try
@@ -269,7 +283,7 @@ namespace BP.WF.HttpHandler
                 BP.Port.Emp emp = new BP.Port.Emp();
                 emp.UserID = userNo;
                 //是否存在用户
-                bool isExist = emp.RetrieveFromDBSources() == 0?false:true;
+                bool isExist = emp.RetrieveFromDBSources() == 0 ? false : true;
                 if (isExist == false && DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
                 {
                     /*如果包含昵称列,就检查昵称是否存在.*/
@@ -312,12 +326,12 @@ namespace BP.WF.HttpHandler
                             isExist = true;
                     }
                 }
-                if (isExist==false)
+                if (isExist == false)
                 {
                     this.handleLoginFail(userNo);
                     return "err@用户名不存在.";
                 }
-               
+
                 #region 校验验证码.
                 //WFEmp wfEmp = new WFEmp();
                 //wfEmp.No = emp.UserID;
@@ -407,7 +421,7 @@ namespace BP.WF.HttpHandler
                     if (DBAccess.IsExitsTableCol("Port_Emp", "EmpSta") == true)
                     {
                         string sql = "SELECT EmpSta FROM Port_Emp WHERE No='" + emp.No + "'";
-                        if (DBAccess.RunSQLReturnValInt(sql,0) == 1)
+                        if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
                             return "err@该用户已经被禁用.";
                     }
 
@@ -417,33 +431,6 @@ namespace BP.WF.HttpHandler
                         return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID;
                 }
 
-                //获得当前管理员管理的组织数量.
-                OrgAdminers adminers = null;
-
-                //查询他管理多少组织.
-                adminers = new OrgAdminers();
-                adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
-                if (adminers.Count == 0)
-                {
-                    BP.WF.Port.Admin2Group.Orgs orgs = new Orgs();
-                    int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
-                    if (i == 0)
-                    {
-                        //调用登录方法.
-                        BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
-                        return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
-                    }
-
-                    foreach (BP.WF.Port.Admin2Group.Org org in orgs)
-                    {
-                        OrgAdminer oa = new OrgAdminer();
-                        oa.FK_Emp = WebUser.No;
-                        oa.OrgNo = org.No;
-                        oa.Save();
-                    }
-                    adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
-                }
-
                 //设置他的组织，信息.
                 WebUser.No = emp.UserID; //登录帐号.
                 WebUser.FK_Dept = emp.FK_Dept;
@@ -451,27 +438,11 @@ namespace BP.WF.HttpHandler
 
                 //执行登录.
                 BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
-
                 string token = BP.WF.Dev2Interface.Port_GenerToken("PC");
 
-                //判断是否是多个组织的情况.
-                if (adminers.Count == 1)
-                {
-                    //如果当前管理员的orgNo与 管理的组织不是一致，就修改.
-                    OrgAdminer oa = adminers[0] as OrgAdminer;
-                    if (oa.OrgNo.Equals(emp.OrgNo) == false)
-                    {
-                        emp.OrgNo = oa.OrgNo;
-                        emp.Update();
-                    }
 
-                    return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
-                }
-
-                //return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
-
-
-                return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
+                //return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
             }
             catch (Exception ex)
             {
@@ -712,6 +683,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Frms_InitSort()
         {
+
             //获得数量.
             string sqlWhere = "";
             string sql = "";
@@ -760,6 +732,16 @@ namespace BP.WF.HttpHandler
 
             //求内容.
             sql = "SELECT No as \"No\",Name as \"Name\" FROM Sys_FormTree WHERE  " + sqlWhere + " ORDER BY Idx ";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                GloVar gloVar = new GloVar();
+                gloVar.No = WebUser.FK_Dept + "_" + WebUser.No + "_Adminer";
+                if (gloVar.RetrieveFromDBSources() != 0)
+                {
+                    sql = "SELECT No as \"No\",Name as \"Name\" FROM Sys_FormTree WHERE  No='" + WebUser.FK_Dept + "' OR ParentNo='" + WebUser.FK_Dept + "' ORDER BY Idx ";
+
+                }
+            }
             DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
             if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -855,110 +837,20 @@ namespace BP.WF.HttpHandler
 
         #endregion Frm.htm 表单.
 
-        #region Flows.htm 流程.
+        #region 流程树.
         /// <summary>
-        /// 初始化类别.
+        /// 初始化
         /// </summary>
         /// <returns></returns>
-        public string Flows_InitSort()
+        public string FlowTree_InitSort()
         {
-            string sql = "";
-            string dbStr = SystemConfig.AppCenterDBVarStr;
-            DataTable dt = null;
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
-            {
-                Paras ps = new Paras();
-                sql = "SELECT No,Name,ParentNo From WF_FlowSort  WHERE OrgNo='" + WebUser.OrgNo + "' or ParentNo='" + WebUser.FK_Dept + "'";
-                ps.SQL = sql;
-                dt = DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count == 1)
-                {
-                    //根据这个部门编号生成一个流程类别
-                    BP.WF.Template.FlowSort fs = new Template.FlowSort();
-                    fs.No = WebUser.OrgNo;
-                    if (fs.RetrieveFromDBSources() == 0)
-                    {
-                        BP.Port.Dept dept = new BP.Port.Dept(WebUser.OrgNo);
-                        fs.ParentNo = dept.ParentNo;
-
-                        var org = new BP.WF.Port.AdminGroup.Org(WebUser.OrgNo);
-                        fs.Name = org.Name; // WebUser.FK_DeptName;
-                        fs.OrgNo = WebUser.OrgNo;
-                        fs.DirectInsert();
-                    }
-                    var subFS1 = fs.DoCreateSubNode("办公类");
-                    subFS1.SetValByKey("OrgNo", fs.No);
-                    subFS1.Update();
-
-                    var subFS2 = fs.DoCreateSubNode("财务类");
-                    subFS2.SetValByKey("OrgNo", fs.No);
-                    subFS2.Update();
-
-                    //dt = DBAccess.RunSQLReturnTable(ps);
-                }
-
-                dt.Columns[0].ColumnName = "No";
-                dt.Columns[1].ColumnName = "Name";
-                dt.Columns[2].ColumnName = "ParentNo";
-                return BP.Tools.Json.ToJson(dt);
-            }
-            //求数量.
-            string sqlWhere = "";
-            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-                sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND WFState>0 ";
-            else
-                sqlWhere = " WFState>0 ";
-
-
-            sql = "SELECT  FK_FlowSort, WFState, COUNT(*) AS Num FROM WF_GenerWorkFlow WHERE " + sqlWhere + " GROUP BY FK_FlowSort, WFState ";
-            dt = DBAccess.RunSQLReturnTable(sql);
-            //求内容. 
-            if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-            {
-                sqlWhere = "   OrgNo='" + BP.Web.WebUser.OrgNo + "' AND No!='" + WebUser.OrgNo + "'";
-                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
-                {
-                    BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(WebUser.OrgNo);
-                    if (WebUser.No.Equals(org.Adminer) == false)
-                        sqlWhere += " AND No IN(SELECT FlowSortNo From Port_OrgAdminerFlowSort Where OrgNo='" + BP.Web.WebUser.OrgNo + "' AND FK_Emp='" + WebUser.No + "')";
-                }
-            }
-            else
-                sqlWhere = "   ParentNo!='0' ";
-            sql = "SELECT No as \"No\",Name as \"Name\", 0 as WFSta2, 0 as WFSta3, 0 as WFSta5 FROM WF_FlowSort WHERE  " + sqlWhere + " ORDER BY Idx ";
-            DataTable dtSort = DBAccess.RunSQLReturnTable(sql);
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
-            {
-                dtSort.Columns[0].ColumnName = "No";
-                dtSort.Columns[1].ColumnName = "Name";
-                dtSort.Columns[2].ColumnName = "WFSta2";
-                dtSort.Columns[3].ColumnName = "WFSta3";
-                dtSort.Columns[4].ColumnName = "WFSta5";
-            }
-
-            // 给状态赋值.
-            foreach (DataRow dr in dtSort.Rows)
-            {
-                string flowNo = dr[0] as string;
-                foreach (DataRow mydr in dt.Rows)
-                {
-                    string fk_flow = mydr[0].ToString();
-                    if (fk_flow.Equals(flowNo) == false)
-                        continue;
-
-                    int wfstate = int.Parse(mydr[1].ToString());
-                    int Num = int.Parse(mydr[2].ToString());
-                    if (wfstate == 2)
-                        dr["WFSta2"] = Num;
-                    if (wfstate == 3)
-                        dr["WFSta3"] = Num;
-                    if (wfstate == 5)
-                        dr["WFSta5"] = Num;
-                    break;
-                }
-            }
-            return BP.Tools.Json.ToJson(dtSort);
+            //   if (SystemConfig.CCBPMRunModel==)
+            return "";
         }
+        #endregion 流程树.
+
+
+        #region Flows.htm 流程.
         public string Flows_Init()
         {
             //获得流程实例的数量.
@@ -1148,7 +1040,7 @@ namespace BP.WF.HttpHandler
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
             string mystas = ""; //我的角色.
 
-            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
             {
                 mydepts += dr[0].ToString() + ",";
@@ -1463,10 +1355,14 @@ namespace BP.WF.HttpHandler
         }
         public string Default_LogOut()
         {
+
+            string orgNo = WebUser.OrgNo;
             BP.Web.WebUser.Exit();
 
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                return "http://passport.citydo.com.cn/";
+            {
+                return "/Portal/SaaS/Login.htm?OrgNo=" + orgNo;
+            }
 
             return "./Login.htm?DoType=Logout&SystemNo=CCFast";
         }
@@ -1515,7 +1411,7 @@ namespace BP.WF.HttpHandler
             #endregion 把数据加入里面去.
 
             #region 如果是admin.
-            if (BP.Web.WebUser.IsAdmin == true && this.IsMobile == false)
+            if (BP.Web.WebUser.IsAdmin == true && this.IsMobile == false && SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
             {
                 #region 增加默认的系统.
                 DataRow dr = dtSys.NewRow();
@@ -1576,17 +1472,23 @@ namespace BP.WF.HttpHandler
 
             //   myds.WriteXml("c:/11.xml");
 
-            #region 让第一个系统的第1个模块的默认打开的.
-            //让第一个打开.
-            myds.Tables["System"].Rows[0]["IsOpen"] = "true";
-            string systemNo = myds.Tables["System"].Rows[0]["No"].ToString();
-            foreach (DataRow dr in myds.Tables["Module"].Rows)
+            #region 让第一个系统的第1个模块的默认打开的. @hongyan.
+            if (myds.Tables["System"].Rows.Count != 0)
             {
-                if (dr["SystemNo"].ToString().Equals(systemNo) == false)
-                    continue;
+                //让第一个打开.
+                myds.Tables["System"].Rows[0]["IsOpen"] = "true";
+                string systemNo = myds.Tables["System"].Rows[0]["No"].ToString();
+                foreach (DataRow dr in myds.Tables["Module"].Rows)
+                {
+                    if (dr["SystemNo"].ToString().Equals(systemNo) == false)
+                        continue;
 
-                dr["IsOpen"] = "true";
-                break;
+                    dr["IsOpen"] = "true";
+                    break;
+                }
+            }
+            else
+            {
             }
             #endregion 让第一个系统的第1个模块的第一个菜单打开.
 

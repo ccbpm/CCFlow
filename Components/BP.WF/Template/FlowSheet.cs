@@ -479,7 +479,7 @@ namespace BP.WF.Template
 
                     Emp emp = new Emp(gwl.FK_Emp);
                     gwl.FK_Dept = emp.FK_Dept;
-                    gwl.FK_DeptT = emp.FK_DeptText;
+                    gwl.DeptName = emp.FK_DeptText;
 
 
                     todoEmps += emp.UserID + "," + emp.Name + ";";

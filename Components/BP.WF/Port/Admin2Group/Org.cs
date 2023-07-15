@@ -1,4 +1,5 @@
 ﻿using BP.DA;
+using BP.Difference;
 using BP.En;
 using BP.Web;
 using BP.WF.Template;
@@ -108,11 +109,12 @@ namespace BP.WF.Port.Admin2Group
                 Map map = new Map("Port_Org", "独立组织");
                 // map.EnType = EnType.View; //独立组织是一个视图.
 
-                map.AddTBStringPK(OrgAttr.No, null, "编号(与部门编号相同)", true, false, 1, 30, 40);
+                #region 基本属性.
+                map.AddTBStringPK(OrgAttr.No, null, "编号", true, false, 1, 30, 40);
                 map.AddTBString(OrgAttr.Name, null, "组织名称", true, false, 0, 60, 200, true);
 
-                map.AddTBString(OrgAttr.Adminer, null, "主要管理员(创始人)", true, true, 0, 60, 200, true);
-                map.AddTBString(OrgAttr.AdminerName, null, "管理员名称", true, true, 0, 60, 200, true);
+                map.AddTBString(OrgAttr.Adminer, null, "创始人", true, true, 0, 60, 200, false);
+                map.AddTBString(OrgAttr.AdminerName, null, "名称", true, true, 0, 60, 200, false);
 
                 map.AddTBInt("FlowNums", 0, "流程数", true, true);
                 map.AddTBInt("FrmNums", 0, "表单数", true, true);
@@ -121,8 +123,20 @@ namespace BP.WF.Port.Admin2Group
 
                 map.AddTBInt("GWFS", 0, "运行中流程", true, true);
                 map.AddTBInt("GWFSOver", 0, "结束的流程", true, true);
-                map.AddTBInt(OrgAttr.Idx, 0, "排序", false, false);
 
+                map.AddTBString("PrivateKey", null, "PrivateKey", true, false, 0, 100, 200, true);
+                map.SetHelperAlert("PrivateKey", "接口调用密钥.");
+
+                map.AddTBString("SSOUrl", null, "SSOUrl", true, false, 0, 100, 200, true);
+                map.SetHelperAlert("SSOUrl", "单点登陆的Url:配置格式: http://xxxx.xxx.xxx.xx:9090/XX.do?Token={$Token}");
+
+                map.AddDDLStringEnum("JieMi", "None", "解密方式", "@None=不解密@AES=AES解密", true, null, false);
+                map.AddTBString("KeyOfJieMi", null, "盐值", true, false, 0, 100, 200, false);
+
+                #endregion 基本属性.
+
+
+                #region 方法执行.
                 RefMethod rm = new RefMethod();
 
                 //rm = new RefMethod();
@@ -173,6 +187,9 @@ namespace BP.WF.Port.Admin2Group
                 //管理员.
                 map.AddDtl(new OrgAdminers(), OrgAdminerAttr.OrgNo, null, DtlEditerModel.DtlSearch, "icon-people");
 
+                #endregion 方法执行.
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -221,42 +238,42 @@ namespace BP.WF.Port.Admin2Group
 
         public string AddAdminer(string adminer)
         {
-
             BP.Port.Emp emp = new BP.Port.Emp();
-            emp.No = adminer;
+            if (SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                emp.No = this.No + "_" + adminer;
+            else
+                emp.No = adminer;
+
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@管理员编号错误.";
 
             //检查超级管理员是否存在？
             OrgAdminer oa = new OrgAdminer();
-            oa.FK_Emp = adminer;
+            oa.FK_Emp = emp.No;
+            oa.EmpName = emp.Name;
             oa.OrgNo = this.No;
             oa.MyPK = this.No + "_" + oa.FK_Emp;
             if (oa.RetrieveFromDBSources() == 1)
                 return "err@管理员已经存在.";
-
-            oa.Delete(OrgAdminerAttr.FK_Emp, adminer, OrgAdminerAttr.OrgNo, this.No);
-
             //插入到管理员.
-            oa.FK_Emp = emp.UserID;
-            oa.Save();
+            oa.FK_Emp = emp.No;
+            oa.DirectInsert();
 
             //如果不在同一个组织.就给他一个兼职部门.
             BP.Port.DeptEmps depts = new BP.Port.DeptEmps();
-            depts.Retrieve("OrgNo", this.No, "FK_Emp", adminer);
+            depts.Retrieve("OrgNo", this.No, "FK_Emp", emp.No);
             if (depts.Count == 0)
             {
                 BP.Port.DeptEmp de = new BP.Port.DeptEmp();
                 de.FK_Dept = this.No;
-                de.FK_Emp = adminer;
-                de.MyPK = this.No + "_" + adminer;
+                de.FK_Emp = emp.No;
+                de.MyPK = this.No + "_" + emp.No;
                 de.OrgNo = this.No;
                 de.Save();
             }
-            
 
             //检查超级管理员是否存在？
-            return "管理员增加成功,请关闭当前记录重新打开,请给管理员[" + emp.No + "," + emp.Name + "]分配权限";
+            return "管理员增加成功,请关闭当前记录重新打开,请给管理员[ " + emp.Name + "]分配权限";
         }
         private void SetOrgNo(string deptNo)
         {
@@ -290,6 +307,9 @@ namespace BP.WF.Port.Admin2Group
 
         public string DoCheck()
         {
+            if (SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                return "err@saas版的检查在开发中..";
+
             string err = "";
 
             #region 组织结构信息检查.
@@ -441,19 +461,19 @@ namespace BP.WF.Port.Admin2Group
             if (DBAccess.IsView("Port_DeptEmp") == false)
             {
                 sqls += "@DELETE FROM Port_DeptEmp WHERE FK_Dept not in (select no from port_dept)";
-                sqls += "@DELETE FROM Port_DeptEmp WHERE FK_Emp not in (select no from port_Emp)";
+                sqls += "@DELETE FROM Port_DeptEmp WHERE FK_Emp not in (select no from Port_Emp)";
             }
             if (DBAccess.IsView("Port_DeptEmpStation") == false)
             {
                 sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Dept not in (select no from port_dept)";
-                sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Emp not in (select no from port_Emp)";
+                sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Emp not in (select no from Port_Emp)";
                 sqls += "@DELETE FROM Port_DeptEmpStation WHERE FK_Station not in (select no from port_Station)";
             }
             //删除无效的管理员,
             if (DBAccess.IsView("Port_OrgAdminer") == false)
             {
                 sqls += "@DELETE from Port_OrgAdminer where OrgNo not in (select No from port_dept)";
-                sqls += "@DELETE from Port_OrgAdminer where FK_Emp not in (select No from port_emp)";
+                sqls += "@DELETE from Port_OrgAdminer where FK_Emp not in (select No from Port_Emp)";
             }
             //删除无效的组织.
             if (DBAccess.IsView("Port_Org") == false)

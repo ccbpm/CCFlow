@@ -6,6 +6,10 @@ using BP.Web;
 using BP.En;
 using BP.Port;
 using BP.Sys;
+using System.Threading;
+using System.Collections.Generic;
+using BP.Difference;
+using System.Web;
 
 namespace BP.WF.Template
 {
@@ -821,6 +825,10 @@ namespace BP.WF.Template
 
             return msg;
         }
+
+        #region 多线程信号量
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(100); //限制最大并发数为100
+        #endregion 
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -863,17 +871,26 @@ namespace BP.WF.Template
             if (smsDoc.Contains("@") == true)
                 smsDoc = BP.WF.Glo.DealExp(smsDoc, en, null);
 
+            #region 初始化线程池
+            HttpContext ctx = HttpContextHelper.Current;
+            // 设置最大线程
+            //ThreadPool.SetMaxThreads(100,100);
+            // 设置最小线程
+            //ThreadPool.SetMinThreads(8, 8);
+            #endregion 初始化线程池
+
             if (this.FK_Event == BP.Sys.EventListNode.ReturnAfter)
             {
                 //获取退回原因
                 Paras ps = new Paras();
-                ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                //ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                ps.SQL = "SELECT Msg,EmpFrom FROM ND"+Int32.Parse(this.FK_Flow)+"Track WHERE (ActionType=2 OR ActionType=201) AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
                 ps.Add(ReturnWorkAttr.WorkID, Int64.Parse(en.PKVal.ToString()));
                 DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                 if (retunWdt.Rows.Count != 0)
                 {
-                    string returnMsg = retunWdt.Rows[0]["BeiZhu"].ToString();
-                    string returner = retunWdt.Rows[0]["ReturnerName"].ToString();
+                    string returnMsg = retunWdt.Rows[0][0].ToString();
+                    string returner = retunWdt.Rows[0][1].ToString();
                     smsDoc = smsDoc.Replace("ReturnMsg", returnMsg);
                 }
             }
@@ -913,24 +930,43 @@ namespace BP.WF.Template
                     if (dt.Rows.Count == 0)
                         continue;
 
+                    CountdownEvent cdEvent = new CountdownEvent(dt.Rows.Count);
                     foreach (DataRow dr in dt.Rows)
                     {
-                        string empName = dr["Name"].ToString();
-                        string empNo = dr["No"].ToString();
+                        ThreadPool.QueueUserWorkItem(obj =>
+                        {
+                            try
+                            {
+                                _semaphore.Wait();
+                                HttpContext.Current = ctx;
+                                string empName = dr["Name"].ToString();
+                                string empNo = dr["No"].ToString();
 
 
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string smsDocReal = smsDoc.Clone() as string;
-                        smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
-                        openUrl = openUrl.Replace("{EmpStr}", empNo);
+                                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                                string smsDocReal = smsDoc.Clone() as string;
+                                smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
+                                openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                        string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
+                                string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
 
-                        //发送消息.
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
-                        //处理短消息.
-                        toEmpIDs += empName + ",";
+                                //发送消息.
+                                BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                                //处理短消息.
+                                toEmpIDs += empName + ",";
+                            }
+                            catch (Exception ex)
+                            {
+                                BP.DA.Log.DebugWriteError("写入失败, 用户id [" + dr["No"].ToString() + "], " + ex.Message);
+                            }
+                            finally
+                            {
+                                cdEvent.Signal();
+                                _semaphore.Release();
+                            }
+                        });
                     }
+                    cdEvent.Wait(); 
                 }
                 return "@已向:{" + toEmpIDs + "}发送了短消息提醒.";
             }
@@ -954,24 +990,45 @@ namespace BP.WF.Template
                 if (bySQL.Contains("@") == true)
                     bySQL = BP.WF.Glo.DealExp(bySQL, en, null);
                 DataTable dt = DBAccess.RunSQLReturnTable(bySQL);
+                if (dt.Rows.Count == 0) return "没有要发送的对象";
+                CountdownEvent cdEvent = new CountdownEvent(dt.Rows.Count);
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string empName = dr["Name"].ToString();
-                    string empNo = dr["No"].ToString();
+                    ThreadPool.QueueUserWorkItem(o =>
+                    {
+                        _semaphore.Wait();
+                        try
+                        {
+                            HttpContext.Current = ctx;
+                            string empName = dr["Name"].ToString();
+                            string empNo = dr["No"].ToString();
 
-                    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                    string smsDocReal = smsDoc.Clone() as string;
-                    smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
-                    openUrl = openUrl.Replace("{EmpStr}", empNo);
+                            // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                            string smsDocReal = smsDoc.Clone() as string;
+                            smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
+                            openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                    string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
+                            string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
 
-                    //发送消息
-                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                            //发送消息
+                            BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
 
-                    //处理短消息.
-                    toEmpIDs += empName + ",";
+                            //处理短消息.
+                            toEmpIDs += empName + ",";
+                        }
+                        catch (Exception ex)
+                        {
+                            BP.DA.Log.DebugWriteError("写入失败, 用户id [" + dr["No"].ToString() + "], " + ex.Message);
+                        }
+                        finally
+                        {
+                            cdEvent.Signal();
+                            _semaphore.Release();
+                        }
+                    });
                 }
+                cdEvent.Wait();
+                return "@已向:{" + toEmpIDs + "}发送了短消息提醒.";
             }
             #endregion 按照SQL计算
 
@@ -983,20 +1040,48 @@ namespace BP.WF.Template
 
                 //以逗号分割开
                 string[] toEmps = this.ByEmps.Split(',');
+                List<string> empList = new List<string>();
+
                 foreach (string empNo in toEmps)
                 {
                     if (DataType.IsNullOrEmpty(empNo) == true)
                         continue;
-                    BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(empNo);
-                    // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                    string smsDocReal = smsDoc.Clone() as string;
-                    smsDocReal = smsDocReal.Replace("{EmpStr}", emp.Name);
-                    openUrl = openUrl.Replace("{EmpStr}", emp.No);
-                    //发送消息
-                    BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
-                    //处理短消息.
-                    toEmpIDs += emp.Name + ",";
+                    empList.Add(empNo);
                 }
+                if (empList.Count == 0) return "没有要发送的对象";
+                CountdownEvent cdEvent = new CountdownEvent(empList.Count);
+                empList.ForEach(empStr =>
+                {
+                    string empNo = empStr;
+                    ThreadPool.QueueUserWorkItem(o =>
+                    {
+                        _semaphore.Wait();
+                        try
+                        {
+                            HttpContext.Current = ctx;
+                            BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(empNo);
+                            // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                            string smsDocReal = smsDoc.Clone() as string;
+                            smsDocReal = smsDocReal.Replace("{EmpStr}", emp.Name);
+                            openUrl = openUrl.Replace("{EmpStr}", emp.No);
+                            //发送消息
+                            BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                            //处理短消息.
+                            toEmpIDs += emp.Name + ",";
+                        }
+                        catch (Exception ex)
+                        {
+                            BP.DA.Log.DebugWriteError("发送给指定的人员[" + empNo + "]失败，" + ex.Message);
+                        }
+                        finally
+                        {
+                            cdEvent.Signal();
+                            _semaphore.Release();
+                        }
+                    });
+                });
+                cdEvent.Wait();
+                return "@已向:{" + toEmpIDs + "}发送了短消息提醒.";
             }
             #endregion 发送给指定的接收人
 
@@ -1011,6 +1096,7 @@ namespace BP.WF.Template
                 BP.WF.Dev2Interface.Port_SendMessage(gwf.Starter, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
                 //处理短消息.
                 toEmpIDs += gwf.StarterName + ",";
+                return "@已向:{" + toEmpIDs + "}发送了短消息提醒.";
             }
             #endregion 发送给流程发起人
 
@@ -1027,18 +1113,44 @@ namespace BP.WF.Template
                     /*当前节点的处理人.*/
                     toEmpIDs = jumpToEmps;
                     string[] myEmpStrs = toEmpIDs.Split(',');
+                    List<string> empList = new List<string>();
                     foreach (string empNo in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(empNo))
                             continue;
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string smsDocReal = smsDoc.Clone() as string;
-                        smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
-                        openUrl = openUrl.Replace("{EmpStr}", empNo);
-
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                        empList.Add(empNo);
+                       
                     }
+                    if (empList.Count == 0) return "没有要发送的对象";
+                    CountdownEvent cdEvent = new CountdownEvent(empList.Count);
+                    empList.ForEach(empStr =>
+                    {
+                        string empNo = empStr;
+                        ThreadPool.QueueUserWorkItem(obj =>
+                        {
+                            _semaphore.Wait();
+                            try
+                            {
+                                HttpContext.Current = ctx;
+                                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                                string smsDocReal = smsDoc.Clone() as string;
+                                smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
+                                openUrl = openUrl.Replace("{EmpStr}", empNo);
+
+                                BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                            }
+                            catch (Exception ex)
+                            {
+                                BP.DA.Log.DebugWriteError("发送消息给[" + empNo + "]失败" + ", 原因：" + ex.Message);
+                            }
+                            finally
+                            {
+                                cdEvent.Signal();
+                                _semaphore.Release();
+                            }
+                        });
+                    });
+                    cdEvent.Wait();
                     return "@已向:{" + toEmpIDs + "}发送提醒信息.";
                 }
                 #endregion 工作到达、退回、移交、撤销
@@ -1050,18 +1162,45 @@ namespace BP.WF.Template
                     toEmpIDs = objs.VarAcceptersID;
                     string toEmpNames = objs.VarAcceptersName;
                     string[] myEmpStrs = toEmpIDs.Split(',');
+                    List<string> empList = new List<string>();
                     foreach (string empNo in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(empNo))
                             continue;
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string smsDocReal = smsDoc.Clone() as string;
-                        smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
-                        openUrl = openUrl.Replace("{EmpStr}", empNo);
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                        empList.Add(empNo);
+                        
 
                     }
+                    if (empList.Count == 0) return "没有要发送的对象";
+                    CountdownEvent cdEvent = new CountdownEvent(empList.Count);
+                    empList.ForEach(emp =>
+                    {
+                        string empNo = emp;
+                        ThreadPool.QueueUserWorkItem(o =>
+                        {
+                            _semaphore.Wait();
+                            try
+                            {
+                                HttpContext.Current = ctx;
+                                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                                string smsDocReal = smsDoc.Clone() as string;
+                                smsDocReal = smsDocReal.Replace("{EmpStr}", empNo);
+                                openUrl = openUrl.Replace("{EmpStr}", empNo);
+                                BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + objs.VarToNodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                BP.DA.Log.DebugWriteError("发送消息给[" + empNo + "]失败" + ", 原因：" + ex.Message);
+                            }
+                            finally
+                            {
+                                cdEvent.Signal();
+                                _semaphore.Release();
+                            }
+                        });
+                    });
+                    cdEvent.Wait();
                     return "@已向:{" + toEmpNames + "}发送提醒信息.";
                 }
                 #endregion 节点发送成功后
@@ -1093,22 +1232,48 @@ namespace BP.WF.Template
                     }
                     string[] myEmpStrs = empsStrs.Split('@');
                     string empNo = "";
+                    List<string> empList = new List<string>();
                     foreach (string str in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(str))
                             continue;
-
-                        empNo = str;
-                        if (str.IndexOf(",") != -1)
-                            empNo = str.Split(',')[0];
-
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string smsDoccReal = smsDoc.Clone() as string;
-                        smsDoccReal = smsDoccReal.Replace("{EmpStr}", empNo);
-                        openUrl = openUrl.Replace("{EmpStr}", empNo);
-                        //发送消息
-                        BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoccReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                        empList.Add(str);
                     }
+                    if (empList.Count == 0) return "没有要发送消息的对象";
+                    CountdownEvent cdEvent = new CountdownEvent(empList.Count);
+                    empList.ForEach(emp =>
+                    {
+                        string str = emp;
+                        ThreadPool.QueueUserWorkItem(o =>
+                        {
+                            _semaphore.Wait();
+
+                            try
+                            {
+                                HttpContext.Current = ctx;
+                                empNo = str;
+                                if (str.IndexOf(",") != -1)
+                                    empNo = str.Split(',')[0];
+
+                                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                                string smsDoccReal = smsDoc.Clone() as string;
+                                smsDoccReal = smsDoccReal.Replace("{EmpStr}", empNo);
+                                openUrl = openUrl.Replace("{EmpStr}", empNo);
+                                //发送消息
+                                BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDoccReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                            }
+                            catch (Exception ex)
+                            {
+                                BP.DA.Log.DebugWriteError("发送消息给[" + empNo + "]失败" + ", 原因：" + ex.Message);
+                            }
+                            finally
+                            {
+                                cdEvent.Signal();
+                                _semaphore.Release();
+                            }
+                        });
+                    });
+                    cdEvent.Wait();
                     return "@已向:{" + empsStrs + "}发送提醒信息.";
                 }
                 #endregion 流程结束后、流程删除后
@@ -1120,6 +1285,7 @@ namespace BP.WF.Template
                     //获取当前节点的接收人
                     GenerWorkFlow gwf = new GenerWorkFlow(workid);
                     string[] myEmpStrs = gwf.TodoEmps.Split(';');
+                    List<string[]> empList = new List<string[]>();
                     foreach (string emp in myEmpStrs)
                     {
                         if (DataType.IsNullOrEmpty(emp))
@@ -1127,12 +1293,39 @@ namespace BP.WF.Template
                         string[] empA = emp.Split(',');
                         if (DataType.IsNullOrEmpty(empA[0]) == true || empA[0] == WebUser.No)
                             continue;
-                        // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
-                        string smsDocReal = smsDoc.Clone() as string;
-                        smsDocReal = smsDocReal.Replace("{EmpStr}", empA[0]);
-                        openUrl = openUrl.Replace("{EmpStr}", empA[0]);
-                        BP.WF.Dev2Interface.Port_SendMessage(empA[0], smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                        empList.Add(empA);
                     }
+
+                    if (empList.Count == 0) return "没有需要发送的对象";
+                    CountdownEvent cdEvent = new CountdownEvent(empList.Count);
+                    empList.ForEach(empNo =>
+                    {
+                        string[] empA = empNo;
+                        ThreadPool.QueueUserWorkItem(o =>
+                        {
+                            _semaphore.Wait();
+                            try
+                            {
+                                HttpContext.Current = ctx;
+                                // 因为要发给不同的人，所有需要clone 一下，然后替换发送.
+                                string smsDocReal = smsDoc.Clone() as string;
+                                smsDocReal = smsDocReal.Replace("{EmpStr}", empA[0]);
+                                openUrl = openUrl.Replace("{EmpStr}", empA[0]);
+                                BP.WF.Dev2Interface.Port_SendMessage(empA[0], smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
+                            }
+                            catch (Exception ex)
+                            {
+                                BP.DA.Log.DebugWriteError("发送消息给[" + empA[0] + "]失败" + ", 原因：" + ex.Message);
+                            }
+                            finally
+                            {
+                                cdEvent.Signal();
+                                _semaphore.Release();
+                            }
+                        });
+                    });
+                    cdEvent.Wait();
+                    return "@已向:{" + toEmpIDs + "}发送提醒信息.";
                 }
                 #endregion 节点预警、逾期
 

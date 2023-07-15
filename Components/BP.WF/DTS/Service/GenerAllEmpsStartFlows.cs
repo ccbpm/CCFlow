@@ -49,7 +49,7 @@ namespace BP.WF.DTS
             foreach (BP.Port.Emp en in ens)
             {
                 BP.WF.Dev2Interface.Port_Login(en.No);
-                DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(en.No);
+                DataTable dt = BP.WF.Dev2Interface.DB_Start(en.No);
             }
 
             return "调度完成..";

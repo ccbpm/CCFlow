@@ -256,28 +256,17 @@ namespace BP.WF.HttpHandler
 
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttr"));
 
-            GroupFields gfs = new GroupFields(this.FK_MapData);
-            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
-
             MapDtls dtls = new MapDtls();
             dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData, MapDtlAttr.FK_Node, 0);
             ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
-            MapFrames frms = new MapFrames(this.FK_MapData);
-            ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
-
-            //附件表.
-            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
-            ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
-
-            //加入扩展属性.
-            MapExts MapExts = new MapExts(this.FK_MapData);
-            ds.Tables.Add(MapExts.ToDataTableField("Sys_MapExt"));
-
+            GroupFields gfs = new GroupFields(this.FK_MapData);
             // 检查组件的分组是否完整?
             foreach (GroupField item in gfs)
             {
                 bool isHave = false;
+                if (item.CtrlType == null)
+                    item.CtrlType = "";
                 if (item.CtrlType == "Dtl")
                 {
                     foreach (MapDtl dtl in dtls)
@@ -293,6 +282,22 @@ namespace BP.WF.HttpHandler
                         item.Delete();
                 }
             }
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
+
+           
+
+            MapFrames frms = new MapFrames(this.FK_MapData);
+            ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
+
+            //附件表.
+            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+            ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
+
+            //加入扩展属性.
+            MapExts MapExts = new MapExts(this.FK_MapData);
+            ds.Tables.Add(MapExts.ToDataTableField("Sys_MapExt"));
+
+            
 
             if (this.FK_MapData.IndexOf("ND") == 0)
             {
@@ -917,7 +922,7 @@ namespace BP.WF.HttpHandler
 
             if (this.MyPK == null)
             {
-                mf.URL = "http://citydo.com.cn";
+                mf.URL = "http://ccbpm.cn";
                 mf.W = 400;
                 mf.H = 300;
                 mf.setName("我的框架.");
@@ -1045,7 +1050,7 @@ namespace BP.WF.HttpHandler
 
             SFTable sf = new SFTable(attr.UIBindKey);
 
-            if (sf.SrcType == SrcType.TableOrView || sf.SrcType == SrcType.BPClass || sf.SrcType == SrcType.CreateTable)
+            if (sf.SrcType == DictSrcType.TableOrView || sf.SrcType == DictSrcType.BPClass || sf.SrcType == DictSrcType.CreateTable)
                 return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&PKVal=" + attr.MyPK;
             else
                 return "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFSQL&PKVal=" + attr.MyPK;
@@ -1186,7 +1191,8 @@ namespace BP.WF.HttpHandler
 
             string name = this.GetRequestVal("name");
             string newNo = DataType.ParseStringForNo(no, 0);
-            string newName = DataType.ParseStringForName(name, 0);
+            //string newName = DataType.ParseStringForName(name, 0);
+            string newName = name;
             int fType = int.Parse(this.GetRequestVal("FType"));
             bool isSupperText = this.GetRequestValBoolen("IsSupperText");
 
@@ -2071,7 +2077,7 @@ namespace BP.WF.HttpHandler
             string sfno = this.GetRequestVal("No");
             string myname = this.GetRequestVal("Name");
 
-            int srctype = this.GetRequestValInt("SrcType");
+            string srctype = this.GetRequestVal("SrcType");
             int codestruct = this.GetRequestValInt("CodeStruct");
 
             string defval = this.GetRequestVal("DefVal");
@@ -2092,7 +2098,7 @@ namespace BP.WF.HttpHandler
                 return "err@字典编号" + sfno + "已经存在，不允许重复。";
 
             sftable.Name = myname;
-            sftable.SrcType = (SrcType)srctype;
+            sftable.SrcType = srctype;
             sftable.CodeStruct = (CodeStruct)codestruct;
             sftable.DefVal = defval;
             sftable.FK_SFDBSrc = sfdbsrc;
@@ -2105,7 +2111,7 @@ namespace BP.WF.HttpHandler
 
             switch (sftable.SrcType)
             {
-                case SrcType.BPClass:
+                case DictSrcType.BPClass:
                     string[] nos = sftable.No.Split('.');
                     sftable.FK_Val = "FK_" + nos[nos.Length - 1].TrimEnd('s');
                     sftable.FK_SFDBSrc = "local";
@@ -2198,7 +2204,7 @@ namespace BP.WF.HttpHandler
             SFTables sfs = new SFTables();
             Entities ens = null;
             SFTable sf = null;
-            sfs.Retrieve(SFTableAttr.SrcType, (int)SrcType.BPClass);
+            sfs.Retrieve(SFTableAttr.DictSrcType, DictSrcType.BPClass);
 
             switch (st)
             {
@@ -2413,6 +2419,23 @@ namespace BP.WF.HttpHandler
                     fullSQL = fullSQL.Replace("~", ",");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
                     dt = DBAccess.RunSQLReturnTable(fullSQL);
+                    if(SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                    {
+                        string columnName = "";
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            columnName = col.ColumnName.ToUpper();
+                            switch (columnName)
+                            {
+                                case "NO":
+                                    col.ColumnName = "No";
+                                    break;
+                                case "NAME":
+                                    col.ColumnName = "Name";
+                                    break;
+                            }
+                        }
+                    }
                     //重构新表
                     DataTable dt_FK_Dll = new DataTable();
                     dt_FK_Dll.TableName = keyOfEn;//可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
@@ -2582,11 +2605,19 @@ namespace BP.WF.HttpHandler
             string sql = "";
             string EnumName = this.GetRequestVal("EnumName");
 		   if (EnumName == "")
-			   sql = "SELECT * FROM Sys_EnumMain";
+			   sql = "SELECT EnumKey,No,Name,CfgVal,Lang FROM Sys_EnumMain";
 		   else
-			   sql = "SELECT * FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
+			   sql = "SELECT EnumKey,No,Name,CfgVal,Lang FROM Sys_EnumMain WHERE (No like '%" + EnumName + "%') OR (Name like '%" + EnumName + "%')";
 		   DataTable dt = DBAccess.RunSQLReturnTable(sql);
-		   return BP.Tools.Json.ToJson(dt);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "EnumKey";
+                dt.Columns[1].ColumnName = "No";
+                dt.Columns[2].ColumnName = "Name";
+                dt.Columns[3].ColumnName = "CfgVal";
+                dt.Columns[4].ColumnName = "Lang";
+            }
+            return BP.Tools.Json.ToJson(dt);
 	   }
 
         public string SysEnumList_MapAttrs()
@@ -2595,7 +2626,13 @@ namespace BP.WF.HttpHandler
 				       "AND A.UIBindKey='" + this.GetRequestVal("UIBindKey") + "' AND B.OrgNo='" + this.GetRequestVal("OrgNo") + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-		    return BP.Tools.Json.ToJson(dt);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "FK_MapData";
+                dt.Columns[1].ColumnName = "KeyOfEn";
+                dt.Columns[2].ColumnName = "Name";
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
 
 }

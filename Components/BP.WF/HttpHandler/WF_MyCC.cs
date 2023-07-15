@@ -370,7 +370,9 @@ namespace BP.WF.HttpHandler
                 return "url@" + toUrl;
             }
 
-            if (this.currND.HisFormType == NodeFormType.SDKForm || this.currFlow.FlowDevModel == FlowDevModel.SDKFrm)
+            if (this.currND.HisFormType == NodeFormType.SDKForm
+                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrmWorkID
+                || this.currFlow.FlowDevModel == FlowDevModel.SDKFrmSelfPK)
             {
                 if (this.WorkID == 0)
                 {
@@ -866,7 +868,7 @@ namespace BP.WF.HttpHandler
                    
                     case FrmEnableRole.ByStation:
                         string exp = frmNode.FrmEnableExp.Clone() as string;
-                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.No + "'";
+                        string Sql = "SELECT FK_Station FROM Port_DeptEmpStation where FK_Emp='" + WebUser.UserID + "'";
                         string station = DBAccess.RunSQLReturnString(Sql);
                         if (DataType.IsNullOrEmpty(station) == true)
                             continue;

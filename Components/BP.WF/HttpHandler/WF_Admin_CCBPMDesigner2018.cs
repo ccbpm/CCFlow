@@ -57,6 +57,38 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+        public string CreateCond()
+        {
+            try
+            {
+                string x = this.GetRequestVal("X");
+                string y = this.GetRequestVal("Y");
+                string icon = this.GetRequestVal("icon");
+                int nodeModel = this.GetRequestValInt("NodeModel");
+
+                int iX = 20;
+                int iY = 20;
+
+                if (DataType.IsNullOrEmpty(x) == false)
+                    iX = (int)double.Parse(x);
+
+                if (DataType.IsNullOrEmpty(y) == false)
+                    iY = (int)double.Parse(y);
+
+                Node node = BP.WF.Template.TemplateGlo.NewCond(this.FK_Flow, iX, iY);
+
+                Hashtable ht = new Hashtable();
+                ht.Add("NodeID", node.NodeID);
+                ht.Add("Name", node.Name);
+                ht.Add("NodeType", 1);
+
+                return BP.Tools.Json.ToJsonEntityModel(ht);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 根据节点编号删除流程节点
         /// </summary>

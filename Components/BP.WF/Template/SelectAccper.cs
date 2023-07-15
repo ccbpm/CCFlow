@@ -28,6 +28,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string EmpName = "EmpName";
         /// <summary>
+        /// 部门编号
+        /// </summary>
+        public const string FK_Dept = "FK_Dept";
+        /// <summary>
         /// 部门名称
         /// </summary>
         public const string DeptName = "DeptName";
@@ -294,6 +298,20 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectAccperAttr.PlanSDT, value);
             }
         }
+        /// <summary>
+        /// 工作应完成日期(计划)
+        /// </summary>
+        public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStringByKey(SelectAccperAttr.FK_Dept);
+            }
+            set
+            {
+                this.SetValByKey(SelectAccperAttr.FK_Dept, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -326,7 +344,8 @@ namespace BP.WF.Template
                 
                 map.AddTBInt(SelectAccperAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBString(SelectAccperAttr.FK_Emp, null, "FK_Emp", true, false, 0, 100, 10);
-                map.AddTBString(SelectAccperAttr.EmpName, null, "EmpName", true, false, 0, 20, 10);
+                map.AddTBString(SelectAccperAttr.EmpName, null, "EmpName", true, false, 0, 60, 10);
+                map.AddTBString(SelectAccperAttr.FK_Dept, null, "部门编号", true, false, 0, 400, 10);
                 map.AddTBString(SelectAccperAttr.DeptName, null, "部门名称", true, false, 0, 400, 10);
                 map.AddTBInt(SelectAccperAttr.AccType, 0, "类型(@0=接受人@1=抄送人)", true, false);
                 map.AddTBString(SelectAccperAttr.Rec, null, "记录人", true, false, 0, 100, 10);
@@ -387,23 +406,18 @@ namespace BP.WF.Template
                 bool isHavePathName = DBAccess.IsExitsTableCol("Port_Dept", "NameOfpath");
                 if (isHavePathName == true)
                 {
-                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.NameOfPath from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.NameOfPath from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
                     if (this.DeptName == "无")
-                        this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                        this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
                 }
                 else
-                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
             }
 
             this.ResetPK();
             this.Rec = BP.Web.WebUser.No;
             return base.beforeUpdateInsertAction();
         }
-        //protected override bool beforeUpdateInsertAction()
-        //{
-        //    this.Rec = BP.Web.WebUser.No;
-        //    return base.beforeUpdateInsertAction();
-        //}
     }
 	/// <summary>
 	/// 选择接受人

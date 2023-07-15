@@ -131,7 +131,7 @@ namespace BP.WF.Admin
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+            if (DataType.IsNullOrEmpty(this.OrgNo) == true && Glo.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             return base.beforeInsert();

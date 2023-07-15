@@ -227,7 +227,11 @@ namespace BP.Sys
                 map.AddTBString(GroupFieldAttr.Lab, null, "标签", true, false, 0, 500, 20, true);
                 map.AddTBString(GroupFieldAttr.FrmID, null, "表单ID", true, true, 0, 200, 20);
 
-                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, true, 0, 50, 20);
+                map.AddTBString(GroupFieldAttr.CtrlType, null, "控件类型", true, false, 0, 50, 20);
+                map.SetHelperUrl("CtrlType", "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=8108065&doc_id=31094");
+
+                //  map.SetHelperAlert(GroupFieldAttr.CtrlType, "对章节表单有效,类型有:ChapterFrmLinkFrm,Dtl,Ath,FWC");
+
                 map.AddTBString(GroupFieldAttr.CtrlID, null, "控件ID", true, false, 0, 500, 20);
 
                 //map.AddBoolean(GroupFieldAttr.IsZDPC, false, "是否折叠(PC)", true, true);
@@ -235,9 +239,15 @@ namespace BP.Sys
                 map.AddDDLSysEnum(GroupFieldAttr.ShowType, 0, "分组显示模式", true, true,
                     GroupFieldAttr.ShowType, "@0=显示@1=PC折叠@2=隐藏");
 
+                map.AddTBString("ParentOID", null, "父级", true, false, 0, 128, 20, false);
+                map.SetHelperAlert("ParentOID", "对章节表单有效:章节表单的目录父子关系,默认为0,就是跟目录.");
+
+
                 map.AddTBInt(GroupFieldAttr.Idx, 99, "顺序号", true, false);
                 map.AddTBString(MapAttrAttr.GUID, null, "GUID", true, true, 0, 128, 20, true);
                 map.AddTBAtParas(3000);
+
+                map.AddLang(); //增加多语言.
                 #endregion 字段.
 
                 #region 方法.
@@ -253,7 +263,7 @@ namespace BP.Sys
                 rm = new RefMethod();
                 rm.Title = "章节表单分组扩展";
                 rm.ClassMethodName = this.ToString() + ".DoSetGFType";
-                // rm.HisAttrs.AddDDLSysEnum("Type", 0, "设置类型", true, true, "GFType", "@0=链接到其它表单@1=自定义URL");
+                //   rm.HisAttrs.AddDDLSysEnum("Type", 0, "设置类型", true, true, "MyGFType", "@0=链接到其它表单@1=自定义URL");
 
                 rm.HisAttrs.AddTBInt("Type", 0, "设置类型：0链接到其它表单，1自定义URL", true, false);
                 rm.HisAttrs.AddTBString("val", null, "输入对应的值", true, false, 0, 1000, 1000);
@@ -360,18 +370,18 @@ namespace BP.Sys
             string str = "";
             foreach (DataRow dr in dt.Rows)
             {
-                str += " \t\n" + dr[0].ToString() +" - " +dr[1].ToString();
+                str += " \t\n" + dr[0].ToString() + " - " + dr[1].ToString();
             }
 
             if (DataType.IsNullOrEmpty(str) == false)
             {
-                str = "err@分组ID:"+this.OID+"删除分组错误:如下字段存在，您不能删除:"+ str;
+                str = "err@分组ID:" + this.OID + "删除分组错误:如下字段存在，您不能删除:" + str;
                 str += "\t\n 您要删除这个分组，请按照如下操作。";
                 str += "\t\n 1. 移除字段到其他分组里面去. ";
                 str += "\t\n 2. 删除字段. ";
                 str += "\t\n 3. 如果是隐藏字段，您可以在表单设计器中，表单属性点开隐藏字段,打开隐藏字段，并编辑所在分组. ";
                 str += "\t\n +++++++++ 容器存在的字段 +++++++++++ ";
-                str += "\t\n  "+ str;
+                str += "\t\n  " + str;
 
                 throw new Exception(str);
             }
@@ -390,6 +400,19 @@ namespace BP.Sys
                 this.Idx = 1;
             }
             return base.beforeInsert();
+        }
+        protected override void afterInsertUpdateAction()
+        {
+            if (this.CtrlType.Equals("Frame") == true)
+            {
+                MapFrame frame = new MapFrame(this.CtrlID);
+                if (this.Lab.Equals(frame.Name) == false)
+                {
+                    frame.setName(this.Lab);
+                    frame.DirectUpdate();
+                }
+            }
+            base.afterInsertUpdateAction();
         }
         #endregion 方法.
     }

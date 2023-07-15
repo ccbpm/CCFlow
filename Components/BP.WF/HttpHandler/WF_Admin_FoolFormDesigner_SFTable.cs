@@ -143,7 +143,7 @@ namespace BP.WF.HttpHandler
                 sf.DefVal = this.GetValFromFrmByKey("RootValue");
             }
             sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
-            sf.SrcType = SrcType.TableOrView;
+            sf.SrcType = DictSrcType.TableOrView;
             sf.FK_Val = "FK_" + sf.No;
             sf.Save();
 

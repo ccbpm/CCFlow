@@ -25,7 +25,7 @@ namespace BP.Port
         public static string Port_Org_Save(string orgNo, string name, string adminer, string adminerName, string keyVals)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@["+ BP.Web.WebUser.Name+"]不是管理员不能维护组织信息";
 
             int msg = 0;
             if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
@@ -66,7 +66,7 @@ namespace BP.Port
         public static string Port_Emp_Save(string orgNo, string userNo, string userName, string deptNo, string kvs, string stats)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护人员信息";
 
             if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
             {
@@ -168,7 +168,7 @@ namespace BP.Port
                 }
 
                 DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + orgNo + "' WHERE No='" + emp.No + "'");
-                return "1";
+                return "人员信息保存成功";
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace BP.Port
         public static string Port_Emp_Delete(string orgNo, string userNo)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除人员信息";
             try
             {
                 //增加人员信息.
@@ -198,7 +198,7 @@ namespace BP.Port
                 BP.DA.DBAccess.RunSQL("delete from port_deptemp where fk_emp='" + userNo + "' AND OrgNo='" + orgNo + "'");
                 BP.DA.DBAccess.RunSQL("delete from port_deptempStation where fk_emp='" + userNo + "' AND OrgNo='" + orgNo + "'");
                 emp.Delete();
-                return "1";
+                return "人员信息删除成功";
             }
             catch (Exception ex)
             {
@@ -217,7 +217,7 @@ namespace BP.Port
         public static string Port_Dept_Save(string orgNo, string no, string name, string parntNo, string keyVals)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护部门信息";
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
             {
@@ -270,7 +270,7 @@ namespace BP.Port
 
                 DBAccess.RunSQL("UPDATE Port_Dept SET OrgNo='" + orgNo + "' WHERE No='" + dept.No + "'");
 
-                return "1";
+                return "部门信息保存成功";
             }
             catch (Exception ex)
             {
@@ -286,7 +286,7 @@ namespace BP.Port
         public static string Port_Dept_Delete(string no)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除部门信息";
 
             try
             {
@@ -294,7 +294,7 @@ namespace BP.Port
                 BP.Port.Dept dept = new BP.Port.Dept(no);
                 dept.Delete();
 
-                return "1";
+                return "删除成功";
             }
             catch (Exception ex)
             {
@@ -311,7 +311,7 @@ namespace BP.Port
         public static string Port_Station_Save(string orgNo, string no, string name, string keyVals)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "0";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护岗位信息";
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
             {
@@ -348,7 +348,7 @@ namespace BP.Port
                 en.Update();
 
                 DBAccess.RunSQL("UPDATE Port_Station SET OrgNo='" + orgNo + "' WHERE No='" + no + "'");
-                return "1";
+                return "["+name+"]保存成功";
             }
             catch (Exception ex)
             {
@@ -365,12 +365,12 @@ namespace BP.Port
             try
             {
                 if (BP.Web.WebUser.IsAdmin == false)
-                    return "0";
+                    return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除岗位信息";
                 //删除部门.
                 BP.Port.Station dept = new BP.Port.Station(no);
                 dept.Delete();
 
-                return "1";
+                return "删除成功";
             }
             catch (Exception ex)
             {
@@ -378,6 +378,203 @@ namespace BP.Port
             }
         }
 
+        public static string Port_Team_Delete(string no)
+        {
+            try
+            {
+                if (BP.Web.WebUser.IsAdmin == false)
+                    return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除岗位信息";
+                //删除部门.
+                BP.Port.Team dept = new BP.Port.Team(no);
+                dept.Delete();
+
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public static string Port_Team_Save(string orgNo, string no, string name, string keyVals)
+        {
+            if (BP.Web.WebUser.IsAdmin == false)
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护岗位信息";
+
+            if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
+            {
+                if (DataType.IsNullOrEmpty(orgNo) == true)
+                    return "err@组织编号不能为空.";
+
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                org.No = orgNo;
+                if (org.RetrieveFromDBSources() == 0)
+                    return "err@组织编号错误:" + orgNo;
+            }
+
+            try
+            {
+                AtPara ap = new AtPara(keyVals);
+
+                //增加部门.
+                BP.Port.Team en = new BP.Port.Team();
+                en.No = no;
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.Name = name;
+                    en.SetValByKey("OrgNo",orgNo);
+                    en.Insert();
+                }
+                foreach (string item in ap.HisHT.Keys)
+                {
+                    if (DataType.IsNullOrEmpty(item) == true)
+                        continue;
+                    en.SetValByKey(item, ap.GetValStrByKey(item));
+                }
+                en.Name = name;
+                en.SetValByKey("OrgNo", orgNo);
+                en.Update();
+
+                DBAccess.RunSQL("UPDATE Port_Team SET OrgNo='" + orgNo + "' WHERE No='" + no + "'");
+                return "[" + name + "]保存成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public static string Port_TeamType_Delete(string no)
+        {
+            try
+            {
+                if (BP.Web.WebUser.IsAdmin == false)
+                    return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除岗位信息";
+                //删除部门.
+                BP.Port.TeamType dept = new BP.Port.TeamType(no);
+                dept.Delete();
+
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public static string Port_TeamType_Save(string orgNo, string no, string name, string keyVals)
+        {
+            if (BP.Web.WebUser.IsAdmin == false)
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护岗位信息";
+
+            if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
+            {
+                if (DataType.IsNullOrEmpty(orgNo) == true)
+                    return "err@组织编号不能为空.";
+
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org(orgNo);
+                if (org.RetrieveFromDBSources() == 0)
+                    return "err@组织编号错误:" + orgNo;
+            }
+
+            try
+            {
+                AtPara ap = new AtPara(keyVals);
+
+                //增加部门.
+                BP.Port.TeamType en = new BP.Port.TeamType();
+                en.No = no;
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.Name = name;
+                    en.SetValByKey("OrgNo", orgNo);
+                    en.Insert();
+                }
+                foreach (string item in ap.HisHT.Keys)
+                {
+                    if (DataType.IsNullOrEmpty(item) == true)
+                        continue;
+                    en.SetValByKey(item, ap.GetValStrByKey(item));
+                }
+                en.Name = name;
+                en.SetValByKey("OrgNo", orgNo);
+                en.Update();
+
+                DBAccess.RunSQL("UPDATE Port_TeamType SET OrgNo='" + orgNo + "' WHERE No='" + no + "'");
+                return "[" + name + "]保存成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         #endregion 关于组织的接口.
+
+        #region 岗位类型
+        public static string Port_StationType_Delete(string no)
+        {
+            try
+            {
+                if (BP.Web.WebUser.IsAdmin == false)
+                    return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能删除岗位信息";
+                //删除部门.
+                BP.Port.StationType dept = new BP.Port.StationType(no);
+                dept.Delete();
+
+                return "删除成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public static string Port_StationType_Save(string orgNo, string no, string name, string keyVals)
+        {
+            if (BP.Web.WebUser.IsAdmin == false)
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护岗位信息";
+
+            if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
+            {
+                if (DataType.IsNullOrEmpty(orgNo) == true)
+                    return "err@组织编号不能为空.";
+
+                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                org.No = orgNo;
+                if (org.RetrieveFromDBSources() == 0)
+                    return "err@组织编号错误:" + orgNo;
+            }
+
+            try
+            {
+                AtPara ap = new AtPara(keyVals);
+
+                //增加部门.
+                BP.Port.StationType en = new BP.Port.StationType();
+                en.No = no;
+                if (en.RetrieveFromDBSources() == 0)
+                {
+                    en.Name = name;
+                    en.SetValByKey("OrgNo", orgNo);
+                    en.Insert();
+                }
+                foreach (string item in ap.HisHT.Keys)
+                {
+                    if (DataType.IsNullOrEmpty(item) == true)
+                        continue;
+                    en.SetValByKey(item, ap.GetValStrByKey(item));
+                }
+                en.Name = name;
+                en.SetValByKey("OrgNo", orgNo);
+                en.Update();
+
+                DBAccess.RunSQL("UPDATE Port_StationType SET OrgNo='" + orgNo + "' WHERE No='" + no + "'");
+                return "[" + name + "]保存成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion
     }
 }

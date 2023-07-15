@@ -102,7 +102,7 @@ namespace BP.WF.DTS
                     ds.WriteXml(pathDir + "/" + md.No + "." + md.Name + ".Frm.xml");
                 }
             }
-            return "生成成功，请打开" + path + "。<br>如果您想共享出来请压缩后发送到template＠citydo.com.cn";
+            return "生成成功，请打开" + path + "。<br>如果您想共享出来请压缩后发送到template＠ccbpm.cn";
         }
     }
 }

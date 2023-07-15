@@ -32,6 +32,8 @@ namespace BP.WF.Port.AdminGroup
         /// 序号
         /// </summary>
         public const string Idx = "Idx";
+
+        public const string OrgSta = "OrgSta";
     }
     /// <summary>
     /// 独立组织
@@ -150,7 +152,8 @@ namespace BP.WF.Port.AdminGroup
 
                 map.AddTBString(OrgAttr.Adminer, null, "主要管理员(创始人)", true, true, 0, 60, 200, true);
                 map.AddTBString(OrgAttr.AdminerName, null, "管理员名称", true, true, 0, 60, 200, true);
-
+                map.AddTBString("SSOUrl", null, "SSOUrl", true, false, 0, 200, 200, true);
+                map.AddTBInt(OrgAttr.OrgSta, 0, "组织状态", true, false);
                 map.AddTBInt("FlowNums", 0, "流程数", true, true);
                 map.AddTBInt("FrmNums", 0, "表单数", true, true);
                 map.AddTBInt("Users", 0, "用户数", true, true);
@@ -213,6 +216,9 @@ namespace BP.WF.Port.AdminGroup
         {
             if (WebUser.No.Equals("admin") == false)
                 return "err@只有admin帐号才可以执行。";
+
+            if (this.No.Equals("100") == true)
+                return "err@admin组织不能取消.";
 
             //流程类别.
             BP.WF.Template.FlowSorts fss = new Template.FlowSorts();

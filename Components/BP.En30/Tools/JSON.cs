@@ -14,6 +14,37 @@ namespace BP.Tools
 
     public class Json
     {
+   
+
+        public static DataTable ConvertToDataTable(JArray dataArr)
+        {
+            if (dataArr == null || dataArr.Count <= 0)
+                return null;
+            DataTable result = new DataTable();
+            foreach (var row in dataArr)
+            {
+                foreach (var jToken in row)
+                {
+                    var jproperty = jToken as JProperty;
+                    if (jproperty == null) continue;
+                    if (result.Columns[jproperty.Name] == null)
+                        result.Columns.Add(jproperty.Name, typeof(string));
+                }
+            }
+            foreach (var row in dataArr)
+            {
+                var datarow = result.NewRow();
+                foreach (var jToken in row)
+                {
+                    var jProperty = jToken as JProperty;
+                    if (jProperty == null)
+                        continue;
+                    datarow[jProperty.Name] = jProperty.Value.ToString();
+                }
+                result.Rows.Add(datarow);
+            }
+            return result;
+        }
         /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>

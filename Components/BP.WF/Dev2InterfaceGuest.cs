@@ -152,7 +152,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "DELETE FROM WF_GenerWorkerList  WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2";
+            ps.SQL = "DELETE FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2";
             ps.Add("WorkID1", wk.OID);
             ps.Add("WorkID2", wk.OID);
             DBAccess.RunSQL(ps);
@@ -205,7 +205,7 @@ namespace BP.WF
             gwl.FID = 0;
             gwl.FK_Flow = fl.No;
             gwl.FK_Dept = WebUser.FK_Dept;
-            gwl.FK_DeptT = WebUser.FK_DeptName;
+            gwl.DeptName = WebUser.FK_DeptName;
 
             gwl.SDT = "无";
             gwl.DTOfWarning = DataType.CurrentDateTime;
@@ -267,7 +267,7 @@ namespace BP.WF
         /// 获得可以发起的流程列表
         /// </summary>
         /// <returns>返回一个No,Name数据源，用于生成一个列表.</returns>
-        public static DataTable DB_GenerCanStartFlowsOfDataTable()
+        public static DataTable DB_Start()
         {
             return DBAccess.RunSQLReturnTable("SELECT FK_Flow as No, FlowName AS Name  FROM WF_Node  WHERE IsGuestNode=1 AND NodePosType=0");
         }
@@ -360,7 +360,7 @@ namespace BP.WF
 
             string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID AND IsPass=0";
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID AND IsPass=0";
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("WorkID", workID);

@@ -9,6 +9,7 @@ using BP.Pub;
 using System.Collections.Generic;
 using BP.Difference;
 using System.Web;
+using System.Collections;
 
 namespace BP.Web
 {
@@ -102,7 +103,6 @@ namespace BP.Web
             WebUser.No = em.UserID;
             WebUser.Name = em.Name;
 
-
             if (DataType.IsNullOrEmpty(authNo) == false)
             {
                 WebUser.Auth = authNo; //被授权人，实际工作的执行者.
@@ -193,12 +193,7 @@ namespace BP.Web
                 //设置组织编号.
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     cookieValues.Add("OrgNo", em.OrgNo);
-
-                //if (HttpContextHelper.Current.Session != null)
-                //{
-                //    cookieValues.Add("Token", HttpContextHelper.SessionID);
-                //    cookieValues.Add("Token", HttpContextHelper.SessionID);
-                //}
+             
 
                 cookieValues.Add("Tel", em.Tel);
                 cookieValues.Add("Lang", lang);
@@ -284,7 +279,7 @@ namespace BP.Web
         /// </summary>
         public static void Exit()
         {
-            
+
             string guid = DBAccess.GenerGUID();
 
             //Token信息存储在WF_Emp的AtPara表中了，清空Token
@@ -404,7 +399,7 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("token", value);
-                HttpContextHelper.AddCookie("CCS", "Token", WebUser.Token);
+                HttpContextHelper.AddCookie("CCS", "Token", value);
 
             }
         }
@@ -557,7 +552,7 @@ namespace BP.Web
                 string v = HttpContextHelper.SessionGet<string>(valKey);
                 if (DataType.IsNullOrEmpty(v) == false)
                     return v;
-                else if (SystemConfig.IsDebug==false && valKey == "No"  && DataType.IsNullOrEmpty(v))
+                else if (SystemConfig.IsDebug == false && valKey == "No" && DataType.IsNullOrEmpty(v))
                     return null;
             }
             catch
@@ -603,7 +598,7 @@ namespace BP.Web
             AtPara ap = new AtPara(keyVals);
             foreach (string key in ap.HisHT.Keys)
                 cookieValues.Add(key, ap.GetValStrByKey(key));
-            cookieValues.Add("Token",WebUser.Token);
+            cookieValues.Add("Token", WebUser.Token);
             HttpContextHelper.ResponseCookieAdd(cookieValues,
                 DateTime.Now.AddMinutes(BP.Difference.SystemConfig.SessionLostMinute),
                 "CCS");
@@ -623,17 +618,18 @@ namespace BP.Web
                     return true;
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                    return false; //单机版.
-
-                //SAAS版本. 集团版
-                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 {
-                    string sql = "SELECT FK_Emp FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
-                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
-                        return false;
+                    GloVar gloVar = new GloVar();
+                    gloVar.No = WebUser.FK_Dept + "_" + WebUser.No + "_Adminer";
+                    if (gloVar.RetrieveFromDBSources() == 0)
+                        return false; //单机版.
                     return true;
                 }
-                return false;
+
+                string sql = "SELECT FK_Emp FROM Port_OrgAdminer WHERE FK_Emp='" + WebUser.UserID + "' AND OrgNo='" + WebUser.OrgNo + "'";
+                if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 0)
+                    return false;
+                return true;
             }
         }
         /// <summary>
@@ -643,7 +639,7 @@ namespace BP.Web
         {
             get
             {
-                return  GetValFromCookie("No", null, true);
+                return GetValFromCookie("No", null, true);
             }
             set
             {
@@ -724,7 +720,29 @@ namespace BP.Web
             sql = sql.Replace("@No", WebUser.No);
             DBAccess.RunSQL(sql);
         }
-
+        /// <summary>
+        /// 直属领导.
+        /// </summary>
+        public static string EmpLeader
+        {
+            get
+            {
+                string  str= DBAccess.RunSQLReturnString("SELECT Leader FROM Port_Emp WHERE No='" + WebUser.No + "'");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    return DeptLeader;
+                return str;
+            }
+        }
+        /// <summary>
+        /// 部门领导
+        /// </summary>
+        public static string DeptLeader
+        {
+            get
+            {
+                return DBAccess.RunSQLReturnString("SELECT Leader FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'");
+            }
+        }
         /// <summary>
         /// 所在的组织
         /// </summary>
@@ -748,7 +766,7 @@ namespace BP.Web
                     {
                         string no = DBAccess.RunSQLReturnString("SELECT OrgNo FROM Port_Emp WHERE UserID='" + WebUser.No + "'");
                         if (DataType.IsNullOrEmpty(no) == true)
-                            throw new Exception("err@SAAS模式下,人员["+BP.Web.WebUser.No+"]的组织编号不能为空.");
+                            throw new Exception("err@SAAS模式下,人员[" + BP.Web.WebUser.No + "]的组织编号不能为空.");
                         SetSessionByKey("OrgNo", no);
                         return no;
                     }
@@ -794,6 +812,18 @@ namespace BP.Web
             {
                 SetSessionByKey("OrgName", value);
             }
+        }
+        public static string ToJson()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("No", WebUser.No);
+            ht.Add("Name", WebUser.Name);
+            ht.Add("Token", WebUser.Token);
+            ht.Add("FK_Dept", WebUser.FK_Dept);
+            ht.Add("FK_DeptName", WebUser.FK_DeptName);
+            ht.Add("OrgNo", WebUser.OrgNo);
+            ht.Add("OrgName", WebUser.OrgName);
+            return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>
         /// 手机号
@@ -844,7 +874,10 @@ namespace BP.Web
             {
                 Stations sts = new Stations();
                 QueryObject qo = new QueryObject(sts);
-                qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.OrgNo + "_" + WebUser.No + "'");
+                else
+                    qo.AddWhereInSQL("No", "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
                 qo.DoQuery();
 
                 return sts;

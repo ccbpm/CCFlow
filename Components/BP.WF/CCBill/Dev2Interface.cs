@@ -238,7 +238,7 @@ namespace BP.CCBill
             if (htParas != null)
                 rpt.Copy(htParas);
 
-            FrmBill fb = new FrmBill(frmID);
+            FrmDict fb = new FrmDict(frmID);
 
 
             //更新基础的数据到表单表.
@@ -254,6 +254,7 @@ namespace BP.CCBill
             //rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
             rpt.OID = DBAccess.GenerOID("WorkID");
+            rpt.ResetDefaultVal();
             rpt.InsertAsOID(rpt.OID);
 
 

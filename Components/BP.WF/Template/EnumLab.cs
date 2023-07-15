@@ -32,9 +32,13 @@ namespace BP.WF.Template
         /// </summary>
         FrmTree = 4,
         /// <summary>
-        /// SDK表单
+        /// SDK表单-WorkID模式
         /// </summary>
-        SDKFrm = 5,
+        SDKFrmWorkID = 5,
+        /// <summary>
+        /// SDK表单-自定义主键模式.
+        /// </summary>
+        SDKFrmSelfPK = 7,
         /// <summary>
         /// 嵌入式表单
         /// </summary>
@@ -42,6 +46,6 @@ namespace BP.WF.Template
         /// <summary>
         /// 物联网流程
         /// </summary>
-        InternetOfThings = 7
+        InternetOfThings = 10
     }
 }

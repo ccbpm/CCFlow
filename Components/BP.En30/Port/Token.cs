@@ -198,6 +198,7 @@ namespace BP.Port
 
                 map.AddTBDateTime(TokenAttr.RDT, null, "记录日期", true, false);
 
+
                 map.AddTBInt(TokenAttr.SheBei, 0, "0=PC,1=移动", true, false);
 
                 this._enMap = map;

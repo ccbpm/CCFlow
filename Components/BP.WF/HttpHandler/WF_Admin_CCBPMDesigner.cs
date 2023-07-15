@@ -253,8 +253,12 @@ namespace BP.WF.HttpHandler
                     case DBType.MSSQL:
                     case DBType.KingBaseR3:
                     case DBType.KingBaseR6:
+                    case DBType.PostgreSQL:
                         sql = " UPDATE WF_Direction SET ToNodeName = WF_Node.Name FROM WF_Node  ";
                         sql += " WHERE WF_Direction.ToNode = WF_Node.NodeID AND WF_Direction.FK_Flow='" + this.FK_Flow + "'";
+                        break;
+                     case DBType.Oracle:
+                        sql = "UPDATE WF_Direction E SET ToNodeName=(SELECT U.Name FROM WF_Node U WHERE E.ToNode=U.NodeID AND U.FK_Flow='" + this.FK_Flow + "') WHERE EXISTS (SELECT 1 FROM WF_Node U WHERE E.ToNode=U.NodeID  AND U.FK_Flow='" + this.FK_Flow + "')";
                         break;
                     default:
                         sql = "UPDATE WF_Direction A, WF_Node B SET A.ToNodeName=B.Name WHERE A.ToNode=B.NodeID AND A.FK_Flow='" + this.FK_Flow + "' ";
@@ -582,29 +586,37 @@ namespace BP.WF.HttpHandler
         /// 获取流程所有元素
         /// </summary>
         /// <returns>json data</returns>
-        public string Flow_AllElements_ResponseJson()
-        {
-            BP.WF.Flow flow = new BP.WF.Flow();
-            flow.No = this.FK_Flow;
-            flow.RetrieveFromDBSources();
+        //public string Flow_AllElements_ResponseJson()
+        //{
+        //    BP.WF.Flow flow = new BP.WF.Flow();
+        //    flow.No = this.FK_Flow;
+        //    flow.RetrieveFromDBSources();
 
-            DataSet ds = new DataSet();
-            DataTable dtNodes = DBAccess.RunSQLReturnTable("SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "'");
-            dtNodes.TableName = "Nodes";
-            ds.Tables.Add(dtNodes);
+        //    DataSet ds = new DataSet();
+        //    DataTable dtNodes = DBAccess.RunSQLReturnTable("SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "'");
+        //    dtNodes.TableName = "Nodes";
+        //    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+        //    {
+        //        dtNodes.Columns[0].ColumnName = "NodeID";
+        //        dtNodes.Columns[1].ColumnName = "Name";
+        //        dtNodes.Columns[2].ColumnName = "X";
+        //        dtNodes.Columns[3].ColumnName = "Y";
+        //        dtNodes.Columns[4].ColumnName = "RunModel";
+        //    }
+        //    ds.Tables.Add(dtNodes);
 
-            DataTable dtDirection = DBAccess.RunSQLReturnTable("SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "'");
-            dtDirection.TableName = "Direction";
-            ds.Tables.Add(dtDirection);
+        //    DataTable dtDirection = DBAccess.RunSQLReturnTable("SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "'");
+        //    dtDirection.TableName = "Direction";
+        //    ds.Tables.Add(dtDirection);
 
-            DataTable dtLabNote = DBAccess.RunSQLReturnTable("SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "'");
-            dtLabNote.TableName = "LabNote";
-            ds.Tables.Add(dtLabNote);
+        //    DataTable dtLabNote = DBAccess.RunSQLReturnTable("SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "'");
+        //    dtLabNote.TableName = "LabNote";
+        //    ds.Tables.Add(dtLabNote);
 
 
-            // return BP.Tools.Json.DataSetToJson(ds, false);
-            return BP.Tools.Json.ToJson(ds);
-        }
+        //    // return BP.Tools.Json.DataSetToJson(ds, false);
+        //    return BP.Tools.Json.ToJson(ds);
+        //}
         #endregion end Flow
 
         #region 节点相关 Nodes
@@ -701,141 +713,141 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        public string GetBindingFormsTable()
-        {
-            string fk_flow = GetValFromFrmByKey("fk_flow");
-            if (string.IsNullOrWhiteSpace(fk_flow))
-                return "[]";
+        //public string GetBindingFormsTable()
+        //{
+        //    string fk_flow = GetValFromFrmByKey("fk_flow");
+        //    if (string.IsNullOrWhiteSpace(fk_flow))
+        //        return "[]";
 
-            StringBuilder sql = new StringBuilder();
-            sql.AppendLine("SELECT wfn.FK_Frm NO,");
-            sql.AppendLine("       smd.NAME,");
-            sql.AppendLine("       NULL PARENTNO,");
-            sql.AppendLine("       'FORM' TTYPE,");
-            sql.AppendLine("       -1 DTYPE,");
-            sql.AppendLine("       0 ISPARENT");
-            sql.AppendLine("FROM   WF_FrmNode wfn");
-            sql.AppendLine("       INNER JOIN Sys_MapData smd");
-            sql.AppendLine("            ON  smd.No=wfn.FK_Frm");
-            sql.AppendLine("WHERE  wfn.FK_Flow = '{0}'");
-            sql.AppendLine("       AND wfn.FK_Node = (");
-            sql.AppendLine("               SELECT wn.NodeID");
-            sql.AppendLine("               FROM   WF_Node wn");
-            sql.AppendLine("               WHERE  wn.FK_Flow = '{0}' AND wn.NodePosType = 0");
-            sql.AppendLine("           )");
+        //    StringBuilder sql = new StringBuilder();
+        //    sql.AppendLine("SELECT wfn.FK_Frm NO,");
+        //    sql.AppendLine("       smd.NAME,");
+        //    sql.AppendLine("       NULL PARENTNO,");
+        //    sql.AppendLine("       'FORM' TTYPE,");
+        //    sql.AppendLine("       -1 DTYPE,");
+        //    sql.AppendLine("       0 ISPARENT");
+        //    sql.AppendLine("FROM   WF_FrmNode wfn");
+        //    sql.AppendLine("       INNER JOIN Sys_MapData smd");
+        //    sql.AppendLine("            ON  smd.No=wfn.FK_Frm");
+        //    sql.AppendLine("WHERE  wfn.FK_Flow = '{0}'");
+        //    sql.AppendLine("       AND wfn.FK_Node = (");
+        //    sql.AppendLine("               SELECT wn.NodeID");
+        //    sql.AppendLine("               FROM   WF_Node wn");
+        //    sql.AppendLine("               WHERE  wn.FK_Flow = '{0}' AND wn.NodePosType = 0");
+        //    sql.AppendLine("           )");
 
-            DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
-            return BP.Tools.Json.ToJson(dt);
-        }
+        //    DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
+        //    return BP.Tools.Json.ToJson(dt);
+        //}
         /// <summary>
         /// 获取设计器 - 系统维护菜单数据
         /// 系统维护管理员菜单 需要翻译
         /// </summary>
         /// <returns></returns>
-        public string GetTreeJson_AdminMenu()
-        {
-            string treeJson = string.Empty;
-            //查询全部.
-            AdminMenus groups = new AdminMenus();
-            groups.RetrieveAll();
+        //public string GetTreeJson_AdminMenu()
+        //{
+        //    string treeJson = string.Empty;
+        //    //查询全部.
+        //    AdminMenus groups = new AdminMenus();
+        //    groups.RetrieveAll();
 
-            return BP.Tools.Json.ToJson(groups.ToDataTable());
-            return treeJson;
-        }
+        //    return BP.Tools.Json.ToJson(groups.ToDataTable());
+        //    return treeJson;
+        //}
 
         /// <summary>
         /// 根据DataTable生成Json树结构
         /// </summary>
-        public string GetTreeJsonByTable(DataTable tabel, object pId, string rela = "ParentNo", string idCol = "No", string txtCol = "Name", string IsParent = "IsParent", string sChecked = "", string[] attrFields = null)
-        {
-            string treeJson = string.Empty;
+        //public string GetTreeJsonByTable(DataTable tabel, object pId, string rela = "ParentNo", string idCol = "No", string txtCol = "Name", string IsParent = "IsParent", string sChecked = "", string[] attrFields = null)
+        //{
+        //    string treeJson = string.Empty;
 
-            if (tabel.Rows.Count > 0)
-            {
-                sbJson.Append("[");
-                string filer = string.Empty;
-                if (pId.ToString() == "")
-                {
-                    filer = string.Format("{0} is null or {0}='-1' or {0}='0' or {0}='F0'", rela);
-                }
-                else
-                {
-                    filer = string.Format("{0}='{1}'", rela, pId);
-                }
+        //    if (tabel.Rows.Count > 0)
+        //    {
+        //        sbJson.Append("[");
+        //        string filer = string.Empty;
+        //        if (pId.ToString() == "")
+        //        {
+        //            filer = string.Format("{0} is null or {0}='-1' or {0}='0' or {0}='F0'", rela);
+        //        }
+        //        else
+        //        {
+        //            filer = string.Format("{0}='{1}'", rela, pId);
+        //        }
 
-                DataRow[] rows = tabel.Select(filer, idCol);
-                if (rows.Length > 0)
-                {
-                    for (int i = 0; i < rows.Length; i++)
-                    {
-                        DataRow row = rows[i];
+        //        DataRow[] rows = tabel.Select(filer, idCol);
+        //        if (rows.Length > 0)
+        //        {
+        //            for (int i = 0; i < rows.Length; i++)
+        //            {
+        //                DataRow row = rows[i];
 
-                        string jNo = row[idCol] as string;
-                        string jText = row[txtCol] as string;
-                        if (jText.Length > 25)
-                            jText = jText.Substring(0, 25) + "<img src='../Scripts/easyUI/themes/icons/add2.png' onclick='moreText(" + jNo + ")'/>";
+        //                string jNo = row[idCol] as string;
+        //                string jText = row[txtCol] as string;
+        //                if (jText.Length > 25)
+        //                    jText = jText.Substring(0, 25) + "<img src='../Scripts/easyUI/themes/icons/add2.png' onclick='moreText(" + jNo + ")'/>";
 
-                        string jIsParent = row[IsParent].ToString();
-                        string jState = "1".Equals(jIsParent) ? "open" : "closed";
-                        jState = "open".Equals(jState) && i == 0 ? "open" : "closed";
+        //                string jIsParent = row[IsParent].ToString();
+        //                string jState = "1".Equals(jIsParent) ? "open" : "closed";
+        //                jState = "open".Equals(jState) && i == 0 ? "open" : "closed";
 
-                        DataRow[] rowChild = tabel.Select(string.Format("{0}='{1}'", rela, jNo));
-                        string tmp = "{\"id\":\"" + jNo + "\",\"text\":\"" + jText;
+        //                DataRow[] rowChild = tabel.Select(string.Format("{0}='{1}'", rela, jNo));
+        //                string tmp = "{\"id\":\"" + jNo + "\",\"text\":\"" + jText;
 
-                        //增加自定义attributes列，added by liuxc,2015-10-6
-                        var attrs = string.Empty;
-                        if (attrFields != null && attrFields.Length > 0)
-                        {
-                            foreach (var field in attrFields)
-                            {
-                                if (!tabel.Columns.Contains(field)) continue;
-                                if (DataType.IsNullOrEmpty(row[field].ToString()))
-                                {
-                                    attrs += ",\"" + field + "\":\"\"";
-                                    continue;
-                                }
-                                attrs += ",\"" + field + "\":" +
-                                         (tabel.Columns[field].DataType == typeof(string)
-                                              ? string.Format("\"{0}\"", row[field])
-                                              : row[field]);
-                            }
-                        }
+        //                //增加自定义attributes列，added by liuxc,2015-10-6
+        //                var attrs = string.Empty;
+        //                if (attrFields != null && attrFields.Length > 0)
+        //                {
+        //                    foreach (var field in attrFields)
+        //                    {
+        //                        if (!tabel.Columns.Contains(field)) continue;
+        //                        if (DataType.IsNullOrEmpty(row[field].ToString()))
+        //                        {
+        //                            attrs += ",\"" + field + "\":\"\"";
+        //                            continue;
+        //                        }
+        //                        attrs += ",\"" + field + "\":" +
+        //                                 (tabel.Columns[field].DataType == typeof(string)
+        //                                      ? string.Format("\"{0}\"", row[field])
+        //                                      : row[field]);
+        //                    }
+        //                }
 
-                        if ("0".Equals(pId.ToString()) || row[rela].ToString() == "F0")
-                        {
-                            tmp += "\",\"attributes\":{\"IsParent\":\"" + jIsParent + "\",\"IsRoot\":\"1\"" + attrs + "}";
-                        }
-                        else
-                        {
-                            tmp += "\",\"attributes\":{\"IsParent\":\"" + jIsParent + "\"" + attrs + "}";
-                        }
+        //                if ("0".Equals(pId.ToString()) || row[rela].ToString() == "F0")
+        //                {
+        //                    tmp += "\",\"attributes\":{\"IsParent\":\"" + jIsParent + "\",\"IsRoot\":\"1\"" + attrs + "}";
+        //                }
+        //                else
+        //                {
+        //                    tmp += "\",\"attributes\":{\"IsParent\":\"" + jIsParent + "\"" + attrs + "}";
+        //                }
 
-                        if (rowChild.Length > 0)
-                        {
-                            tmp += ",\"checked\":" + sChecked.Contains("," + jNo + ",").ToString().ToLower()
-                                + ",\"state\":\"" + jState + "\"";
-                        }
-                        else
-                        {
-                            tmp += ",\"checked\":" + sChecked.Contains("," + jNo + ",").ToString().ToLower();
-                        }
+        //                if (rowChild.Length > 0)
+        //                {
+        //                    tmp += ",\"checked\":" + sChecked.Contains("," + jNo + ",").ToString().ToLower()
+        //                        + ",\"state\":\"" + jState + "\"";
+        //                }
+        //                else
+        //                {
+        //                    tmp += ",\"checked\":" + sChecked.Contains("," + jNo + ",").ToString().ToLower();
+        //                }
 
-                        sbJson.Append(tmp);
-                        if (rowChild.Length > 0)
-                        {
-                            sbJson.Append(",\"children\":");
-                            GetTreeJsonByTable(tabel, jNo, rela, idCol, txtCol, IsParent, sChecked, attrFields);
-                        }
+        //                sbJson.Append(tmp);
+        //                if (rowChild.Length > 0)
+        //                {
+        //                    sbJson.Append(",\"children\":");
+        //                    GetTreeJsonByTable(tabel, jNo, rela, idCol, txtCol, IsParent, sChecked, attrFields);
+        //                }
 
-                        sbJson.Append("},");
-                    }
-                    sbJson = sbJson.Remove(sbJson.Length - 1, 1);
-                }
-                sbJson.Append("]");
-                treeJson = sbJson.ToString();
-            }
-            return treeJson;
-        }
+        //                sbJson.Append("},");
+        //            }
+        //            sbJson = sbJson.Remove(sbJson.Length - 1, 1);
+        //        }
+        //        sbJson.Append("]");
+        //        treeJson = sbJson.ToString();
+        //    }
+        //    return treeJson;
+        //}
         /// <summary>
         /// 上移流程类别
         /// </summary>

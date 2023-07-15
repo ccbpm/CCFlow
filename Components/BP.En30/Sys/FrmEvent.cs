@@ -8,6 +8,7 @@ using BP.En;
 using BP.Port;
 using BP.Web;
 using BP.Difference;
+using BP.Tools;
 
 
 namespace BP.Sys
@@ -21,11 +22,11 @@ namespace BP.Sys
         /// <summary>
         /// 事件类型
         /// </summary>
-        public const string FK_Event = "FK_Event";
+        public const string FK_Event = "EventID";
         /// <summary>
         /// 表单ID
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FrmID";
         /// <summary>
         /// 流程编号
         /// </summary>
@@ -247,20 +248,20 @@ namespace BP.Sys
         /// <summary>
         /// 节点
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStringByKey(FrmEventAttr.FK_MapData);
+                return this.GetValStringByKey(FrmEventAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmEventAttr.FK_MapData, value);
+                this.SetValByKey(FrmEventAttr.FrmID, value);
             }
         }
-        public void setFK_MapData(string val)
+        public void setFrmID(string val)
         {
-            this.SetValByKey(FrmEventAttr.FK_MapData, val);
+            this.SetValByKey("FrmID", val);
         }
         public string DoDoc
         {
@@ -628,8 +629,8 @@ namespace BP.Sys
         public FrmEvent(string fk_mapdata, string fk_Event)
         {
             this.FK_Event = fk_Event;
-            this.setFK_MapData(fk_mapdata);
-            this.setMyPK(this.FK_MapData + "_" + this.FK_Event);
+            this.setFrmID(fk_mapdata);
+            this.setMyPK(this.FrmID + "_" + this.FK_Event);
             this.RetrieveFromDBSources();
         }
         /// <summary>
@@ -644,7 +645,7 @@ namespace BP.Sys
 
                 Map map = new Map("Sys_FrmEvent", "外部自定义事件(表单,从表,流程,节点)");
 
-                map.IndexField = FrmEventAttr.FK_MapData;
+                map.IndexField = FrmEventAttr.FrmID;
                 map.AddMyPK();
 
                 //0=表单事件,1=流程，2=节点事件.
@@ -653,7 +654,7 @@ namespace BP.Sys
                 map.AddTBString(FrmEventAttr.RefFlowNo, null, "关联的流程编号", true, true, 0, 10, 10);
 
                 //事件类型的主键.
-                map.AddTBString(FrmEventAttr.FK_MapData, null, "表单ID(包含Dtl表)", true, true, 0, 100, 10);
+                map.AddTBString(FrmEventAttr.FrmID, null, "表单ID", true, true, 0, 100, 10);
                 map.AddTBString(FrmEventAttr.FK_Flow, null, "流程编号", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
@@ -678,6 +679,15 @@ namespace BP.Sys
                 map.AddBoolean(FrmEventAttr.MobilePushEnable, true, "是否推送到手机、pad端。", true, true, true);
                 #endregion 消息设置.
 
+
+                #region webApi设置.
+                //@Get=Get模式@POST=Post模式
+                map.AddTBString("PostModel", "Get", "请求模式", true, true, 0, 100, 10);
+                map.AddTBInt("ParaMoel", 0, "参数模式", true, true);//@0=自定义模式@1=全量模式
+                map.AddTBString("ParaDocs", "0", "自定义数据内容", true, true, 0, 100, 10);//@0=自定义模式@1=全量模式
+                map.AddTBString("ParaDTModel", "0", "数据格式", true, true, 0, 100, 10);//@0=From@1=JSON
+                #endregion 消息设置.
+
                 //参数属性
                 map.AddTBAtParas(4000);
 
@@ -696,15 +706,14 @@ namespace BP.Sys
             if (this.FK_Node != 0)
                 this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + this.FK_Node);
 
-            if (this.FK_MapData.StartsWith("ND") == true)
+            if (this.FrmID.StartsWith("ND") == true)
             {
-                string nodeStr = this.FK_MapData.Replace("ND", "");
+                string nodeStr = this.FrmID.Replace("ND", "");
                 if (DataType.IsNumStr(nodeStr) == true)
                 {
                     int nodeid = int.Parse(nodeStr);
                     this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + nodeid);
                 }
-               
             }
 
             return base.beforeUpdateInsertAction();
@@ -713,8 +722,8 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            if (DataType.IsNullOrEmpty(this.FK_MapData) == false)
-                BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            if (DataType.IsNullOrEmpty(this.FrmID) == false)
+                BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
 
             return base.beforeInsert();
@@ -807,12 +816,24 @@ namespace BP.Sys
             string MsgOK = "";
             string MsgErr = "";
 
+            if (nev.FK_Node != 0)
+            {
+                doc = doc.Replace("@FK_Node",  ""+nev.FK_Node);
+                doc = doc.Replace("@NodeID", "" + nev.FK_Node);
+            }
+            if (DataType.IsNullOrEmpty(nev.FK_Flow) == false)
+            {
+                doc = doc.Replace("@FlowNo", "" + nev.FK_Flow);
+                doc = doc.Replace("@FK_Flow", "" + nev.FK_Flow);
+            }
             doc = doc.Replace("~", "'");
             doc = doc.Replace("@WebUser.No", BP.Web.WebUser.No);
             doc = doc.Replace("@WebUser.Name", BP.Web.WebUser.Name);
             doc = doc.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-            doc = doc.Replace("@FK_Node", nev.FK_MapData.Replace("ND", ""));
-            doc = doc.Replace("@FK_MapData", nev.FK_MapData);
+            doc = doc.Replace("@FK_Node", nev.FrmID.Replace("ND", ""));
+            doc = doc.Replace("@FrmID", nev.FrmID);
+            doc = doc.Replace("@FK_MapData", nev.FrmID);
+
             doc = doc.Replace("@WorkID", en.GetValStrByKey("OID", "@WorkID"));
             doc = doc.Replace("@WebUser.OrgNo", BP.Web.WebUser.OrgNo);
 
@@ -825,13 +846,18 @@ namespace BP.Sys
                     doc = doc.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
                 }
             }
-
-
-
+            //替换。
+            if (DataType.IsNullOrEmpty(atPara) == false && doc.Contains("@")==true)
+            {
+                AtPara ap = new AtPara(atPara);
+                foreach (string key in ap.HisHT.Keys)
+                {
+                    doc = doc.Replace("@" + key, ap.GetValStrByKey(key));
+                }
+            }
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
             doc = doc.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
-
             if (doc.Contains("@") == true)
             {
                 if (HttpContextHelper.Current != null)
@@ -941,7 +967,6 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(frmType) == true || frmType.Equals("DBList") == false)
                     en.Retrieve(); /*如果不执行，就会造成实体的数据与查询的数据不一致.*/
             }
-               
 
             switch (nev.HisDoType)
             {
@@ -1015,10 +1040,19 @@ namespace BP.Sys
                         myURL = myURL + "&FK_Flow=" + str;
                     }
 
-                    if (myURL.Contains("&WorkID=") == false && en.Row.ContainsKey("WorkID") == true)
+                    if (myURL.Contains("&WorkID=") == false)
                     {
-                        string str = en.Row["WorkID"].ToString();
-                        myURL = myURL + "&WorkID=" + str;
+                        String str = "";
+                        if (en.Row.ContainsKey("WorkID") == true)
+                        {
+                            str = en.Row["WorkID"].ToString();
+                            myURL = myURL + "&WorkID=" + str;
+                        }
+                        else if (en.Row.ContainsKey("OID") == true)
+                        {
+                            str = en.Row["OID"].ToString();
+                            myURL = myURL + "&WorkID=" + str;
+                        }
                     }
 
                     try
@@ -1167,7 +1201,7 @@ namespace BP.Sys
                     return null;
                     //开始执行webserives.
                     break;
-                case EventDoType.WebApi:
+                /*case EventDoType.WebApi:
                     try
                     {
                         //接收返回值
@@ -1191,6 +1225,54 @@ namespace BP.Sys
                         //执行POST
                         postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
                         return postData;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("@" + nev.MsgError(en) + " Error:" + ex.Message);
+                    }
+                    break;*/
+                case EventDoType.WebApi:
+                    try
+                    {
+                        string urlExt = doc; //url. 
+                        urlExt = BP.Tools.PubGlo.DealExp(urlExt, en);
+
+                        string urlUodel = nev.GetValStringByKey("PostModel"); //模式. Post,Get
+                        int paraMode = nev.GetValIntByKey("ParaModel"); //参数模式. 0=自定义模式， 1=全量模式.
+                        string pdocs = nev.GetValStringByKey("ParaDocs"); //参数内容.  对自定义模式有效.
+                        string paraDTModel = nev.GetValStringByKey("ParaDTModel"); //参数内容.  对自定义模式有效.
+                        bool isJson = false;
+                        if (paraDTModel.Equals("1"))
+                            isJson = true;
+
+                        //全量参数模式. 
+                        if (paraMode == 1)
+                        {
+                            pdocs = en.ToJson(false);
+                        }
+                        else
+                        {
+                            pdocs = pdocs.Replace("~", "\"");
+                            pdocs = BP.Tools.PubGlo.DealExp(pdocs, en);
+                            if (pdocs.Contains("@") == true)
+                                throw new Exception("@_DoEvent参数不完整:" + pdocs);
+                        }
+
+                        //判断提交模式.
+                        string result = "";
+                        if (urlUodel.ToLower().Equals("get") == true)
+                            result = DataType.ReadURLContext(urlExt, 9000); //返回字符串.
+                        else
+                            result = BP.Tools.PubGlo.HttpPostConnect(urlExt, pdocs, "POST", isJson);
+                        if (DataType.IsNullOrEmpty(result) == true)
+                            throw new Exception("@执行WebAPI[" + urlExt + "]没有返回结果值");
+                        //数据序列化
+                        var jsonData = result.ToJObject();
+                        //code=200，表示请求成功，否则失败
+                        string msg = jsonData["msg"] != null ? jsonData["msg"].ToString() : "";
+                        if (!jsonData["code"].ToString().Equals("200"))
+                            throw new Exception("@执行WebAPI[" + urlExt + "]失败:" + msg);
+                        return msg;
                     }
                     catch (Exception ex)
                     {
@@ -1378,6 +1460,34 @@ namespace BP.Sys
                     //非静态方法
                     return (md.Invoke(abl.CreateInstance(evclass), pvs) ?? string.Empty).ToString();
                 #endregion
+                case EventDoType.SFProcedure:
+                    #region 自定义存储过程
+                    SFProcedure procedure = new SFProcedure(doc);
+                    string requestMethod = procedure.GetValStringByKey("RequestMethod");
+                    string expDoc = procedure.GetValStringByKey("ExpDoc");
+                    if (DataType.IsNullOrEmpty(expDoc) == true)
+                        throw new Exception("err@表达式");
+                    SFDBSrc sfdbsrc = new SFDBSrc(procedure.FK_SFDBSrc);
+                    string dbsrcType = sfdbsrc.DBSrcType;
+                    if (dbsrcType.Equals(DBSrcType.WebApi) == true)
+                    {
+                        expDoc = BP.Tools.PubGlo.DealExp(expDoc, en);
+                        if (expDoc.StartsWith("htt") == false)
+                            expDoc = sfdbsrc.ConnString + expDoc;
+                        if (requestMethod.Equals("Get") == true)
+                            return BP.Tools.PubGlo.HttpPostConnect(expDoc, "");
+                        if (requestMethod.Equals("POST") == true)
+                        {
+                            int paraModel = procedure.GetValIntByKey("ParaModel");
+                            if (paraModel == 0)//主表参数
+                            {
+
+                            }
+                        }
+                    }
+                    return null;
+                    #endregion 自定义存储过程
+                    break;
                 default:
                     throw new Exception("@no such way." + nev.HisDoType.ToString());
             }
@@ -1395,7 +1505,7 @@ namespace BP.Sys
         public FrmEvents(string fk_MapData)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(FrmEventAttr.FK_MapData, fk_MapData);
+            qo.AddWhere(FrmEventAttr.FrmID, fk_MapData);
             qo.DoQuery();
         }
         /// <summary>

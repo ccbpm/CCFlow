@@ -1,5 +1,6 @@
 ﻿using BP.En;
 using BP.Sys;
+using BP.WF.Template;
 
 namespace BP.WF.Port
 {
@@ -120,11 +121,17 @@ namespace BP.WF.Port
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, true, 0, 30, 40);
                 map.AddTBString(DeptAttr.OrgNo, null, "隶属组织", true, true, 0, 50, 250);
 
-                map.AddTBString(DeptAttr.Leader, null, "Leader", true, false, 0, 50, 250);
-                map.AddTBInt(DeptAttr.Idx, 0, "Leader", true, false);
+                map.AddDDLEntities(DeptAttr.Leader, null, "部门领导", new BP.Port.Emps(), true);
+                map.AddTBInt(DeptAttr.Idx, 0, "序号", true, false);
 
                 //map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
-
+                //设置二级管理员
+                RefMethod rm = new RefMethod();
+                rm.Title = "设置二级管理员";
+                rm.ClassMethodName = this.ToString() + ".ToSetAdminer";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.IsCanBatch = false; //是否可以批处理？
+                map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -139,6 +146,97 @@ namespace BP.WF.Port
             dept.CheckIsCanDelete();
 
             return base.beforeDelete();
+        }
+        /// <summary>
+        /// 跳转到单机版二级管理员设置
+        /// </summary>
+        /// <returns></returns>
+        public string ToSetAdminer()
+        {
+            return "../../../GPM/SetAdminer.htm?FK_Dept=" + this.No;
+        }
+        /// <summary>
+        /// 设置单机版二级管理员
+        /// </summary>
+        /// <param name="adminer"></param>
+        /// <returns></returns>
+        public string DoSetAdminer(string adminer, string userName)
+        {
+            GloVar gloVar = new GloVar();
+            gloVar.No = this.No + "_" + adminer + "_Adminer";
+            if (gloVar.RetrieveFromDBSources() == 1)
+                return userName + "已经设置成部门[" + this.Name + "]的二级管理员";
+            gloVar.Name = userName;
+            gloVar.Val = adminer;
+            gloVar.Note = this.No;
+            gloVar.GroupKey = "Adminer";
+            gloVar.Insert();
+
+            //设置流程目录、表单目录
+            #region 检查流程树.
+            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            fs.No = this.No;
+            if (fs.RetrieveFromDBSources() == 0)
+            {
+                //获得根目录节点.
+                BP.WF.Template.FlowSort root = new Template.FlowSort();
+                int i = root.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+
+                //设置流程树权限.
+                fs.No = this.No;
+                fs.Name = "流程树";
+                fs.ParentNo = root.No;
+                fs.Idx = 999;
+                fs.DirectInsert();
+
+                //创建下一级目录.
+                BP.WF.Template.FlowSort en = fs.DoCreateSubNode() as BP.WF.Template.FlowSort;
+                en.Name = "日常办公类";
+                en.Domain = "";
+                en.DirectUpdate();
+            }
+            #endregion 检查流程树.
+
+            #region 检查表单树.
+            //表单根目录.
+            SysFormTree ftRoot = new SysFormTree();
+            int val = ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, "0");
+            if (val == 0)
+            {
+                val = ftRoot.Retrieve(BP.WF.Template.FlowSortAttr.No, "100");
+                if (val == 0)
+                {
+                    ftRoot.No = "100";
+                    ftRoot.Name = "表单库";
+                    ftRoot.ParentNo = "0";
+                    ftRoot.Insert();
+                }
+                else
+                {
+                    ftRoot.ParentNo = "0";
+                    ftRoot.Name = "表单库";
+                    ftRoot.Update();
+                }
+            }
+
+            //设置表单树权限.
+            SysFormTree ft = new SysFormTree();
+            ft.No = this.No;
+            if (ft.RetrieveFromDBSources() == 0)
+            {
+                ft.Name = "表单树";
+                ft.ParentNo = ftRoot.No;
+                ft.Idx = 999;
+                ft.DirectInsert();
+
+                //创建两个目录.
+                SysFormTree mySubFT = ft.DoCreateSubNode() as SysFormTree;
+                mySubFT.Name = "日常办公类";
+                mySubFT.DirectUpdate();
+            }
+           
+            #endregion 检查表单树.
+            return "设置成功";
         }
     }
     /// <summary>

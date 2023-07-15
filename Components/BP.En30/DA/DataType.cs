@@ -12,6 +12,7 @@ using System.ServiceModel.Channels;
 using System.Xml;
 using BP.Web;
 using BP.Difference;
+using System.Linq;
 
 namespace BP.DA
 {
@@ -1584,6 +1585,13 @@ namespace BP.DA
                 return DateTime.Now.ToString("yyyy-MM");
             }
         }
+        public static string Keys
+        {
+            get
+            {
+                return "Rels,DESC,TABLE,ALERT,";
+            }
+        }
         /// <summary>
         /// 当前的会计期间
         /// </summary>
@@ -2339,10 +2347,31 @@ namespace BP.DA
             }
             else
                 throw new Exception("@要转换的[" + str + "]不是bool 类型");
+        }
 
+        internal static Hashtable ParseParasToHT(string paras)
+        {
+            Hashtable ht = new Hashtable();
+            if (paras != null)
+            {
+                paras = paras.Replace("；", ";");
+                paras = paras.Replace(" ", "");
+                paras = paras.Replace("@", ";");
 
-
-
+                string[] args = paras.Split(';');
+                foreach (string arg in args)
+                {
+                    string[] kv = arg.Split('=');
+                    if (kv.Length > 1)
+                    {
+                        string key = kv[0];
+                        if (ht.Contains(key) == true)
+                            continue;
+                        ht.Add(key, kv[1]);
+                    }
+                }
+            }
+            return ht;
         }
         #endregion 其他方法.
 

@@ -47,7 +47,7 @@ namespace BP.CCBill
             string sql = "";
             string userNo = GetRequestVal("UserNo");
             if (DataType.IsNullOrEmpty(userNo) == true)
-                userNo = WebUser.No;
+                userNo = WebUser.UserID;
 
             string powerSQL = "";
 
@@ -262,7 +262,7 @@ namespace BP.CCBill
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
             string mystas = ""; //我的角色.
 
-            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
             {
                 mydepts += dr[0].ToString() + ",";

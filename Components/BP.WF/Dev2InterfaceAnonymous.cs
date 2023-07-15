@@ -148,7 +148,7 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "DELETE FROM WF_GenerWorkerList  WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2";
+            ps.SQL = "DELETE FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2";
             ps.Add("WorkID1", wk.OID);
             ps.Add("WorkID2", wk.OID);
             DBAccess.RunSQL(ps);
@@ -284,7 +284,7 @@ namespace BP.WF
 
             string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID AND IsPass=0";
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET GuestNo=" + dbstr + "GuestNo, GuestName=" + dbstr + "GuestName WHERE WorkID=" + dbstr + "WorkID AND IsPass=0";
             ps.Add("GuestNo", guestNo);
             ps.Add("GuestName", guestName);
             ps.Add("WorkID", workID);

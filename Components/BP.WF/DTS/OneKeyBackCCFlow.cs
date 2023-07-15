@@ -118,7 +118,7 @@ namespace BP.WF.DTS
                 if (item.No.Contains("."))
                     continue;
 
-                if (item.SrcType != SrcType.CreateTable)
+                if (item.SrcType != DictSrcType.CreateTable)
                     continue;
 
                 try

@@ -63,6 +63,8 @@ namespace BP.WF.HttpHandler
             string url = GetRequestVal("Url");
             string frmURL = GetRequestVal("FrmUrl");
             string frmID = GetRequestVal("FrmID");
+            string frmPK = GetRequestVal("FrmPK"); //自定义表单主键.
+
             if (DataType.IsNullOrEmpty(frmURL) == true)
                 frmURL = frmID;
             //执行创建流程模版.
@@ -72,6 +74,7 @@ namespace BP.WF.HttpHandler
             if (this.FlowDevModel == FlowDevModel.JiJian)
                 frmURL = "ND" + int.Parse(flowNo + "01");
 
+            fl.SetPara("FrmPK", frmPK); //自定义主键模式的表单.
             fl.FrmUrl = frmURL;
             fl.Update();
             //发起测试人为当前登录人No
@@ -185,7 +188,7 @@ namespace BP.WF.HttpHandler
                             continue;
 
                         fn.FK_Frm = str;
-                        fn.FrmNameShow =DBAccess.RunSQLReturnString("SELECT Name FROM Sys_MapData WHERE No='"+str+"'");
+                        fn.FrmNameShow = DBAccess.RunSQLReturnString("SELECT Name FROM Sys_MapData WHERE No='" + str + "'");
                         if (nd.IsStartNode == true)
                         {
                             fn.IsEnableFWC = FrmWorkCheckSta.Disable;
@@ -205,7 +208,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
             }
-            if (this.FlowDevModel == FlowDevModel.SDKFrm)
+            if (this.FlowDevModel == FlowDevModel.SDKFrmSelfPK || this.FlowDevModel == FlowDevModel.SDKFrmWorkID)
             {
                 Nodes nds = new Nodes();
                 nds.Retrieve(NodeAttr.FK_Flow, fl.No);

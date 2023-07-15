@@ -580,7 +580,7 @@ namespace BP.WF.HttpHandler
 
                 //消息&事件Count
                 BP.Sys.FrmEvents fes = new BP.Sys.FrmEvents();
-                dr["HisFrmEventsCount"] = fes.Retrieve(BP.Sys.FrmEventAttr.FK_MapData, "ND" + node.NodeID);
+                dr["HisFrmEventsCount"] = fes.Retrieve(BP.Sys.FrmEventAttr.FrmID, "ND" + node.NodeID);
 
                 //流程完成条件Count
                 BP.WF.Template.Conds conds = new BP.WF.Template.Conds(BP.WF.Template.CondType.Flow, node.NodeID);
@@ -829,60 +829,62 @@ namespace BP.WF.HttpHandler
         #endregion
 
      
-    public  string NodeStationGroup_Init() 
-    {
-        string sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in " +
-			"(select Fk_StationType from Port_Station where OrgNo ='" + this.GetRequestVal("orgNo") + "') group by No,Name";
+        public  string NodeStationGroup_Init() 
+        {
+            string sql = "select No as \"No\", Name as \"Name\" FROM port_StationType where No in " +
+			    "(select Fk_StationType from Port_Station where OrgNo ='" + this.GetRequestVal("orgNo") + "') group by No,Name";
 
-		DataTable dt = DBAccess.RunSQLReturnTable(sql);
-		return BP.Tools.Json.ToJson(dt);
-	}
-    /**
-	 删除,该组织下已经保存的岗位.
-	 @return
-	 */
-    public  void NodeStationGroup_Dele()
-    {
-        string sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + this.GetRequestVal("orgNo") + "') AND FK_Node=" + this.GetRequestVal("nodeID");
-        DBAccess.RunSQL(sql);
-    }
-    /**
-	 删除,该组织下已经保存的岗位.
-	 @return
-	 */
-    public void NodeDept_Dele()
-    {
-        string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID");
-        DBAccess.RunSQL(sql);
-    }
-    /**
-	 删除,该组织下已经保存的岗位.
-	 @return
-	 */
-    public void NodeDeptGroup_Dele() 
-    {
-        string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID") + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + this.GetRequestVal("orgNo") + "')";
-        DBAccess.RunSQL(sql);
-    }
+		    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+		    return BP.Tools.Json.ToJson(dt);
+	    }
+        /**
+	     删除,该组织下已经保存的岗位.
+	     @return
+	     */
+        public  void NodeStationGroup_Dele()
+        {
+            string sql = "DELETE FROM WF_NodeStation WHERE FK_Station IN (SELECT No FROM Port_Station WHERE OrgNo='" + this.GetRequestVal("orgNo") + "') AND FK_Node=" + this.GetRequestVal("nodeID");
+            DBAccess.RunSQL(sql);
+        }
+        /**
+	     删除,该组织下已经保存的岗位.
+	     @return
+	     */
+        public void NodeDept_Dele()
+        {
+            string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID");
+            DBAccess.RunSQL(sql);
+        }
+        /**
+	     删除,该组织下已经保存的岗位.
+	     @return
+	     */
+        public void NodeDeptGroup_Dele() 
+        {
+            string sql = "DELETE FROM WF_NodeDept WHERE FK_Node=" + this.GetRequestVal("nodeID") + " AND FK_Dept IN (SELECT No FROM Port_Dept WHERE OrgNo='" + this.GetRequestVal("orgNo") + "')";
+            DBAccess.RunSQL(sql);
+        }
 
-    /**
-	 WF_Node_Up
-	 @return
-	 */
-    public  void WF_Node_Up() 
-    {
-        string sql = "UPDATE WF_Node SET NodeAppType=" + this.GetRequestVal("appType") + " WHERE NodeID=" + this.GetRequestVal("nodeID");
-        DBAccess.RunSQL(sql);
+        /**
+	     WF_Node_Up
+	     @return
+	     */
+        public  void WF_Node_Up() 
+        {
+            string sql = "UPDATE WF_Node SET NodeAppType=" + this.GetRequestVal("appType") + " WHERE NodeID=" + this.GetRequestVal("nodeID");
+            DBAccess.RunSQL(sql);
+        }
+        /**
+	     NodeStationGroup_init
+	     @return
+	     */
+        public  String NodeAppType() 
+        {
+            string sql = "SELECT NodeAppType FROM WF_Node WHERE NodeID=" + this.GetRequestVal("FK_Node");
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                dt.Columns[0].ColumnName = "NodeAppType";
+            return BP.Tools.Json.ToJson(dt);
+        }
     }
-    /**
-	 NodeStationGroup_init
-	 @return
-	 */
-    public  String NodeAppType() 
-    {
-        string sql = "SELECT NodeAppType FROM WF_Node WHERE NodeID=" + this.GetRequestVal("FK_Node");
-        DataTable dt = DBAccess.RunSQLReturnTable(sql);
-		return BP.Tools.Json.ToJson(dt);
-    }
-}
 }

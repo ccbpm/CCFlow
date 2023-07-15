@@ -109,6 +109,12 @@ namespace BP.Port
                 map.AddDDLEntities(DeptEmpAttr.FK_Emp, null, "操作员", new BP.Port.Emps(), false);
                 map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", false, false, 0, 50, 50);
 
+                //For Vue3版本.
+                map.AddTBString("DeptName", null, "部门名称(Vue3)", false, false, 0, 500, 36);
+                map.AddTBString("StationNo", null, "岗位编号(Vue3)", false, false, 0, 500, 36);
+                map.AddTBString("StationNoT", null, "岗位名称(Vue3)", false, false, 0, 500, 36);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -126,13 +132,34 @@ namespace BP.Port
             return base.beforeInsert();
         }
 
+        protected override void afterDelete()
+        {
+            DeptEmpStations des = new DeptEmpStations();
+            des.Delete("FK_Dept", this.GetValByKey("FK_Dept"), "FK_Emp", this.GetValByKey("FK_Emp"));
+            base.afterDelete();
+        }
+
         /// <summary>
         /// 更新前做的事情
         /// </summary>
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
+			if (BP.Difference.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single &&  DataType.IsNullOrEmpty(this.OrgNo))
+                this.OrgNo = BP.Web.WebUser.OrgNo;            
+			if (DataType.IsNullOrEmpty(this.MyPK) == true)
+            {
+                if (BP.Difference.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                {
+                    this.setMyPK(this.FK_Dept + "_" + this.FK_Emp.Replace(this.OrgNo+"_",""));
+                }
+                else
+                {
+                    this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
+                }
+                    
+            }
+            
             return base.beforeUpdateInsertAction();
         }
     }

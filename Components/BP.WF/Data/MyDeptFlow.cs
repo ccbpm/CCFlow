@@ -748,10 +748,11 @@ namespace BP.WF.Data
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
 
                 //增加隐藏的查询条件.
-                SearchNormal search = new SearchNormal(MyDeptFlowAttr.FK_Dept, "部门",
-                    MyDeptFlowAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept, 0, true);
+                //SearchNormal search = new SearchNormal(MyDeptFlowAttr.FK_Dept, "部门",
+                //    MyDeptFlowAttr.FK_Dept, "=", "@WebUser.FK_Dept", 0, true);
+                //map.SearchNormals.Add(search);
 
-                map.SearchNormals.Add(search);
+                map.AddHidden("FK_Dept", "=", "@WebUser.FK_Dept");
                 #endregion 查询条件.
 
                 #region 方法.

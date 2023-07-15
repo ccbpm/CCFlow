@@ -127,7 +127,7 @@ namespace BP.WF.Port.Admin2Group
                 //不能注释掉.
                 map.AddMyPK(false);
 
-                map.AddTBString(OrgAdminerAttr.OrgNo, null, "组织", true, true, 0, 100, 20);
+                map.AddTBString(OrgAdminerAttr.OrgNo, null, "组织", false, false, 0, 100, 20);
                 map.AddTBString(OrgAdminerAttr.FK_Emp, null, "管理员账号", true, true, 0, 100, 20);
                 map.AddTBString(OrgAdminerAttr.EmpName, null, "管理员名称", true, true, 0, 50, 20);
 

@@ -47,7 +47,7 @@ namespace BP.WF.HttpHandler
 
             //事件实体.
             FrmEvents ndevs = new FrmEvents();
-            ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
+            ndevs.Retrieve(FrmEventAttr.FrmID, this.FK_MapData);
 
             DataTable dt = ndevs.ToDataTableField("FrmEvents");
             ds.Tables.Add(dt);

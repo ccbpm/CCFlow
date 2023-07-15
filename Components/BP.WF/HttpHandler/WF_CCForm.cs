@@ -9,7 +9,6 @@ using BP.Sys;
 using BP.Tools;
 using BP.Web;
 using BP.WF.Template;
-using BP.WF.XML;
 using BP.En;
 using ICSharpCode.SharpZipLib.Zip;
 using BP.Difference;
@@ -207,8 +206,8 @@ namespace BP.WF.HttpHandler
         public string HandlerMapExt()
         {
             string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
-            if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
-                return "";
+            //if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
+            //    return "";
 
             string oid = this.GetRequestVal("OID");
 
@@ -274,34 +273,57 @@ namespace BP.WF.HttpHandler
 
                                 string[] ss = str.Split(':');
                                 string fk_dtl = ss[0];
-                                if (ss[1] == "" || ss[1] == null)
+                                MapDtl dtl = new MapDtl(fk_dtl);
+                                string mysql = str.Replace(dtl.No + ":", "");
+                                if (mysql == "" || mysql == null)
                                     continue;
                                 string dtlKey = this.GetRequestVal("DtlKey");
                                 if (dtlKey == null)
                                     dtlKey = key;
                                 if (dtlKey.IndexOf(",") != -1)
                                     dtlKey = "'" + dtlKey.Replace(",", "','") + "'";
-                                string mysql = DealSQL(ss[1], dtlKey);
+                                mysql = DealSQL(mysql, dtlKey);
                                 if (mysql.Length <= 10)
                                     continue;
+                                if (mysql.Contains("@"))
+                                    return "请求的语句" + mysql + "还有未替换的@符号";
 
                                 GEDtls dtls = new GEDtls(fk_dtl);
-                                MapDtl dtl = new MapDtl(fk_dtl);
+                               
                                 DataTable dtDtlFull = null;
+                                if (me.DBType.Equals("0"))
+                                {
+                                    try
+                                    {
+                                        if (sfdb != null)
+                                            dtDtlFull = sfdb.RunSQLReturnTable(mysql);
+                                        else
+                                            dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
+                                    }
+                                }
+                                if (me.DBType.Equals("1"))
+                                {
+                                    System.Text.Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
+                                    string json = DataType.ReadURLContext(mysql, 8000, encode);
+                                    if (DataType.IsNullOrEmpty(json) == true)
+                                        return "err@执行URL没有返回结果值";
+
+                                    dtDtlFull = BP.Tools.Json.ToDataTable(json);
+                                }
 
                                 try
                                 {
-                                    if (sfdb != null)
-                                        dtDtlFull = sfdb.RunSQLReturnTable(mysql);
-                                    else
-                                        dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
-                                }
-                                catch (Exception ex)
+                                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
+                                }catch(Exception ex)
                                 {
-                                    throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
+                                    BP.Sys.GEDtl mydtl = new GEDtl(fk_dtl);
+                                    mydtl.CheckPhysicsTable();
                                 }
-
-                                DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
+                               
                                 foreach (DataRow dr in dtDtlFull.Rows)
                                 {
                                     BP.Sys.GEDtl mydtl = new GEDtl(fk_dtl);
@@ -327,7 +349,7 @@ namespace BP.WF.HttpHandler
                                 drRe[0] = fk_dtl;
                                 dtDtl.Rows.Add(drRe);
                             }
-                            return JSONTODT(dtDtl);
+                            return BP.Tools.Json.ToJson(dtDtl);
                             break;
                         case "ReqDDLFullList":
                             /* 获取要个性化填充的下拉框. */
@@ -591,7 +613,7 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == FrmType.Url)
             {
                 string no = this.GetRequestVal("NO");
-                string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&Token=" + this.SID;
+                string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&Token=" + this.SID+"&FID="+this.FID+"&PWorkID="+this.WorkID;
 
                 string url = "";
                 /*如果是URL.*/
@@ -761,13 +783,13 @@ namespace BP.WF.HttpHandler
 
                     if (md.HisFrmType == FrmType.ChapterFrm)
                     {
-                        if (this.GetRequestValBoolen("Readonly")==true || this.GetRequestValBoolen("IsEdit") == false)
+                        if (this.GetRequestValBoolen("Readonly")==true )
                             return "url@ChapterFrmView.htm?1=2" + paras;
                         else
                             return "url@ChapterFrm.htm?1=2" + paras;
                     }
 
-                    if (this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+                    if (this.GetRequestValBoolen("Readonly") == true )
                         return "url@FrmGener.htm?1=2" + paras;
                     else
                         return "url@FrmGener.htm?1=2" + paras;
@@ -781,9 +803,10 @@ namespace BP.WF.HttpHandler
                 if (paras.Contains("FrmID=") == false)
                     paras = paras.Replace("FK_MapData=", "FrmID=");
 
+              //  || this.GetRequestValBoolen("IsEdit") == false @yln 这个值判断吗？
                 if (IsMobile == true)
                     return "url@../FrmView.htm?1=2" + paras;
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true )
                     return "url@ChapterFrmView.htm?1=2" + paras;
                 else
                 {
@@ -795,7 +818,7 @@ namespace BP.WF.HttpHandler
             {
                 if (IsMobile == true)
                     return "url@../FrmView.htm?1=2" + paras;
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true)
                     return "url@FrmGener.htm?1=2" + paras;
                 else
                     return "url@FrmGener.htm?1=2" + paras;
@@ -804,7 +827,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.WordFrm)
             {
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true )
                     return "url@FrmWord.htm?1=2" + paras;
                 else
                     return "url@FrmWord.htm?1=2" + paras;
@@ -812,7 +835,7 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm)
             {
-                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+                if ((fn != null && fn.FrmSln == FrmSln.Readonly) || this.GetRequestValBoolen("Readonly") == true )
                     return "url@FrmVSTO.htm?1=2" + paras;
                 else
                     return "url@FrmVSTO.htm?1=2" + paras;
@@ -821,7 +844,7 @@ namespace BP.WF.HttpHandler
             if (IsMobile == true)
                 return "url@../FrmView.htm?1=2" + paras;
 
-            if (this.GetRequestValBoolen("Readonly") == true || this.GetRequestValBoolen("IsEdit") == false)
+            if (this.GetRequestValBoolen("Readonly") == true )
                 return "url@FrmGener.htm?1=2" + paras;
             else
                 return "url@FrmGener.htm?1=2" + paras;
@@ -973,8 +996,8 @@ namespace BP.WF.HttpHandler
             else
                 newName = fk_mapData + "_" + CtrlID + "_" + this.RefPKVal;
             //string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
-            string savePath = BP.Difference.SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+            string webPath = BP.Difference.SystemConfig.PathOfWebApp + BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+            string savePath = BP.Difference.SystemConfig.PathOfWebApp + BP.Difference.SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
             //获取上传的大图片
             //string strImgPath = this.context.Server.MapPath(BP.Difference.SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png");
             string strImgPath = BP.Difference.SystemConfig.PathOfWebApp + BP.Difference.SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + newName + ".png";
@@ -1964,6 +1987,7 @@ namespace BP.WF.HttpHandler
                                 dr[MapAttrAttr.UIIsEnable] = ff.UIIsEnable;//是否只读?
                                 dr[MapAttrAttr.UIVisible] = ff.UIVisible; //是否可见?
                                 dr[MapAttrAttr.UIIsInput] = ff.IsNotNull; //是否必填?
+                                dr[MapAttrAttr.IsSigan] = ff.IsSigan;
 
 
                                 dr[MapAttrAttr.DefVal] = ff.DefVal; //默认值.
@@ -2690,8 +2714,8 @@ namespace BP.WF.HttpHandler
                 case DBType.Oracle:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
-                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,0,INSERT(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
-                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTRING(RefPKVal,0,INSERT(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
+                    athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTR(RefPKVal,0,INSTR(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
+                    eleSQL = "UPDATE Sys_FrmEleDB SET RefPKVal=SUBSTR(RefPKVal,0,INSTR(RefPKVal,'_',1,2))  WHERE RefPKVal LIKE " + dbstr + "RefPKVal||'\\_%\\_%'  ESCAPE '\\' AND FK_MapData=" + dbstr + "FK_MapData";
                     break;
                 case DBType.MySQL:
                     athSQL = "UPDATE Sys_FrmAttachmentDB SET RefPKVal=SUBSTRING(RefPKVal,1,LOCATE('_', RefPKVal, LOCATE('_', RefPKVal)+1)-1)  WHERE RefPKVal LIKE CONCAT(" + dbstr + "RefPKVal,'\\\\_%\\\\_%') AND FK_MapData=" + dbstr + "FK_MapData";
@@ -3702,22 +3726,6 @@ namespace BP.WF.HttpHandler
                         string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
                         sql = "SELECT IntKey AS No, Lab as Name FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE EnumKey='" + enumKey + "'";
                     }
-
-                    //处理日期的默认值
-                    //DefVal=@Now-30
-                    //if (cond.Contains("@Now"))
-                    //{
-                    //    int nowIndex = cond.IndexOf(cond);
-                    //    if (cond.Trim().Length - nowIndex > 5)
-                    //    {
-                    //        char optStr = cond.Trim()[nowIndex + 5];
-                    //        int day = 0;
-                    //        if (int.TryParse(cond.Trim().Substring(nowIndex + 6), out day)) {
-                    //            cond = cond.Substring(0, nowIndex) + DateTime.Now.AddDays(-1 * day).ToString("yyyy-MM-dd HH:mm");
-                    //        }
-                    //    }
-                    //}
-
                     if (sql == null)
                         continue;
 
@@ -5890,18 +5898,101 @@ namespace BP.WF.HttpHandler
         #region 章节表单.
         public string ChapterFrm_Init()
         {
-
+            MapData md = new MapData(this.FrmID);
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(this.FrmID);
             var en = new GEEntity(this.FrmID);
             en.OID = this.OID;
+            if (en.OID == 0)
+                en.ResetDefaultVal();
             if (en.RetrieveFromDBSources() == 0)
                 en.InsertAsOID(this.OID);
 
-            GroupFields gfs = new GroupFields();
-            gfs.Retrieve(GroupFieldAttr.FrmID, this.FrmID, "Idx");
+            GroupFields gfs =md.GroupFields;
 
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.MyDataType, 1, MapAttrAttr.UIVisible, 1, "Idx");
+            MapAttrs attrs = md.MapAttrs;
+          
+            
+            //获取外键下拉
+            DataTable ddlTable = new DataTable();
+            ddlTable.Columns.Add("No");
+            MapExts mes = md.MapExts;
+            MapExt me = null;
+            foreach (MapAttr attr in attrs)
+            {
+                FieldTypeS lgType = attr.LGType;
+                string uiBindKey = attr.UIBindKey;
 
+                if (DataType.IsNullOrEmpty(uiBindKey) == true)
+                    continue; //为空就continue.
+
+                if (lgType == FieldTypeS.Enum)
+                    continue; //枚举值就continue;
+                if (attr.UIVisible == false)
+                    continue;
+
+                bool uiIsEnable = attr.UIIsEnable;
+                if (uiIsEnable == false && lgType == FieldTypeS.Enum)
+                    continue; //如果是外键，并且是不可以编辑的状态.
+
+                if (uiIsEnable == false && lgType == FieldTypeS.Normal)
+                    continue; //如果是外部数据源，并且是不可以编辑的状态.
+
+                // 检查是否有下拉框自动填充。
+                string keyOfEn = attr.KeyOfEn;
+                string fk_mapData = attr.FK_MapData;
+
+                #region 处理下拉框数据范围. for 小杨.
+                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                if (me != null)
+                {
+                    string fullSQL = me.Doc.Clone() as string;
+                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+                    DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                    {
+                        string columnName = "";
+                        foreach(DataColumn col in dt.Columns)
+                        {
+                            columnName = col.ColumnName.ToUpper();
+                            switch (columnName)
+                            {
+                                case "NO":
+                                    col.ColumnName = "No";
+                                    break;
+                                case "NAME":
+                                    col.ColumnName = "Name";
+                                    break;
+                                case "PARENTNO":
+                                    col.ColumnName = "ParentNo";
+                                    break;
+                            }
+                        }
+                    }
+
+                    dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                    ds.Tables.Add(dt);
+                    continue;
+                }
+                #endregion 处理下拉框数据范围.
+
+                // 判断是否存在.
+                if (ds.Tables.Contains(uiBindKey) == true)
+                    continue;
+
+                DataTable dataTable = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey);
+
+                if (dataTable != null)
+                    ds.Tables.Add(dataTable);
+                else
+                {
+                    DataRow ddldr = ddlTable.NewRow();
+                    ddldr["No"] = uiBindKey;
+                    ddlTable.Rows.Add(ddldr);
+                }
+            }
+            ddlTable.TableName = "UIBindKey";
+            ds.Tables.Add(ddlTable);
             #region 获得数据，是否打勾？
             //获得已经有数据的字段.
             string ptable = en.EnMap.PhysicsTable;
@@ -5922,15 +6013,50 @@ namespace BP.WF.HttpHandler
                 //为分组字段设置 IsStar 标记.  标记该分组下，是否所有的字段都已经填写完毕?
                 foreach (GroupField gf in gfs)
                 {
+                    //章节表单Attr
+                    if(gf.CtrlType.Equals("Attr") == true)
+                    {
+                        MapAttrs newAttrs = attrs.GetEntitiesByKey("GroupID", gf.OID.ToString()) as MapAttrs;
+                        int blankNum = 0;
+                        if (newAttrs != null)
+                        {
+                            foreach (MapAttr item in newAttrs)
+                            {
+                                if (item.UIIsInput == true)
+                                {
+                                    string val = en.GetValStrByKey(item.KeyOfEn);
+                                    if (DataType.IsNullOrEmpty(val) == true)
+                                    {
+                                        blankNum++;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if (blankNum == 0)
+                        {
+                            gf.SetPara("IsStar", "1");
+                            continue;
+                        }
+                    }
 
                     //判断是否是从表? 取从表的数量.
                     if (gf.CtrlType.Equals("Dtl") == true)
                     {
                         GEEntity geen = new GEEntity(gf.CtrlID);
-                        string sql = "SELECT count(*) as num FROM " + geen.EnMap.PhysicsTable + " WHERE refpk='" + this.WorkID + "'";
-                        if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                        try
                         {
-                            gf.SetPara("IsStar", "1");
+                            string sql = "SELECT count(*) as num FROM " + geen.EnMap.PhysicsTable + " WHERE refpk='" + this.WorkID + "'";
+                            if (DBAccess.RunSQLReturnValInt(sql) > 0)
+                            {
+                                gf.SetPara("IsStar", "1");
+                                continue;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            geen.CheckPhysicsTable();
+                            gf.SetPara("IsStar", "0");
                             continue;
                         }
                     }
@@ -6002,14 +6128,27 @@ namespace BP.WF.HttpHandler
             #endregion 获得数据，是否打勾？
 
             //组装数据，返回出去.
-            DataSet ds = new DataSet();
+
+            //ds.Tables.Add(gfs.ToDataTableField("GroupFields"));
+            DataTable mainTable = en.ToDataTableField("MainTable");
+            ds.Tables.Add(mainTable);
+            ds.Tables.Remove("Sys_GroupField");
+            ds.Tables.Remove("Sys_MapAttr");
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
             ds.Tables.Add(gfs.ToDataTableField("GroupFields"));
-            ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
             GenerWorkFlow gwf = new GenerWorkFlow(this.OID);
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
             // ds.WriteXml("d:\\xxx.xml");
 
             return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string ChapterFrm_AttrInit()
+        {
+            var en = new GEEntity(this.FrmID);
+            en.OID = this.OID;
+            en.Retrieve();
+            return en.ToJson();
         }
         /// <summary>
         /// 检查目录是否可以加星.
@@ -6061,6 +6200,30 @@ namespace BP.WF.HttpHandler
                 }
                 return "0";
             }
+            //章节表单Attr
+            if (gf.CtrlType.Equals("Attr") == true)
+            {
+                GEEntity ge = new GEEntity(gf.CtrlID);
+                ge.OID = this.WorkID;
+                if (ge.RetrieveFromDBSources() == 1)
+                {
+                    int blankNum = 0;
+                    MapAttrs attr1s = new MapAttrs();
+                    attr1s.Retrieve(MapAttrAttr.FK_MapData, gf.CtrlID, MapAttrAttr.GroupID, gf.OID);
+                    foreach (MapAttr item in attr1s)
+                    {
+                        if (item.UIIsInput == true)
+                        {
+                            string val = ge.GetValStrByKey(item.KeyOfEn);
+                            if (DataType.IsNullOrEmpty(val) == true)
+                                blankNum++;
+                        }
+                    }
+                    if (blankNum == 0)
+                        return "1";
+                }
+                return "0";
+            }
             return "err@没有判断." + gf.ToJson();
         }
 
@@ -6071,6 +6234,9 @@ namespace BP.WF.HttpHandler
                 return "err@没有传来字段KeyOfEn的值.";
 
             string ptable = DBAccess.RunSQLReturnString("SELECT PTable FROM Sys_MapData WHERE No='" + this.FrmID + "'", null);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                return BP.DA.DBAccess.RunSQLReturnStringIsNull("SELECT " + this.KeyOfEn + " From " + ptable + " WHERE OID=" + this.OID, "");
+                
             return BP.DA.DBAccess.GetBigTextFromDB(ptable, "OID", this.OID.ToString(), this.KeyOfEn);
         }
         public string ChapterFrm_SaveOneField()
@@ -6082,8 +6248,32 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                BP.DA.DBAccess.SaveBigTextToDB(vals, ptable, "OID", this.OID.ToString(), this.KeyOfEn);
-
+                if(SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    try
+                    {
+                        Paras ps = new Paras();
+                        ps.SQL = "UPDATE " + ptable + " SET " + this.KeyOfEn + "=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn WHERE OID=" + this.OID;
+                        ps.Add("KeyOfEn", vals);
+                        BP.DA.DBAccess.RunSQL(ps);
+                    }catch(Exception ex)
+                    {
+                        if (ex.Message.Contains("的值太大") == true)
+                        {
+                            //更改当前字段的长度
+                            DBAccess.RunSQL("ALTER table " + ptable + " modify " + this.KeyOfEn + " VARCHAR2(4000)");
+                            Paras ps = new Paras();
+                            ps.SQL = "UPDATE " + ptable + " SET " + this.KeyOfEn + "=" + SystemConfig.AppCenterDBVarStr + "KeyOfEn WHERE OID=" + this.OID;
+                            ps.Add("KeyOfEn", vals);
+                            BP.DA.DBAccess.RunSQL(ps);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    BP.DA.DBAccess.SaveBigTextToDB(vals, ptable, "OID", this.OID.ToString(), this.KeyOfEn);
+                }
                 string atparas = DBAccess.RunSQLReturnStringIsNull("SELECT AtPara FROM " + ptable + " WHERE OID=" + this.OID.ToString(), "");
 
                 //标记该字段已经完成.
@@ -6132,6 +6322,23 @@ namespace BP.WF.HttpHandler
                 }
                 return ex.Message;
             }
+        }
+
+        public string ChapterFrm_SaveAttr()
+        {
+            //获取表单数据
+            Hashtable ht = BP.Pub.PubClass.GetMainTableHT();
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.GroupID, this.GetRequestValInt("GroupID"));
+          
+            GEEntity ge = new GEEntity(this.FrmID, this.PKVal);
+            foreach(MapAttr attr in attrs)
+            {
+                string val = ht[attr.KeyOfEn]==null?"": ht[attr.KeyOfEn].ToString();
+                ge.SetValByKey(attr.KeyOfEn, val);
+            }
+            ge.Update();
+            return "保存成功";
         }
         /// <summary>
         /// 根据版本号获取表单的历史数据

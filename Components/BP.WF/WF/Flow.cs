@@ -186,7 +186,7 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 流程设计模式 @hongyan.
+        /// 流程设计模式 
         /// </summary>
         public FlowDevModel FlowDevModel
         {
@@ -863,8 +863,16 @@ namespace BP.WF
 
                 MapDtls dtls = wk.HisMapDtls;
                 foreach (MapDtl dtl in dtls)
-                    DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + wk.OID + "'");
-
+                {
+                    try
+                    {
+                        DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK='" + wk.OID + "'");
+                    }catch(Exception ex)
+                    {
+                        
+                    }
+                    
+                }
                 //删除附件数据。
                 DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='ND" + wk.NodeID + "' AND RefPKVal='" + wk.OID + "'");
             }
@@ -993,7 +1001,7 @@ namespace BP.WF
                 wkFrom.OID = PWorkID;
                 if (wkFrom.RetrieveFromDBSources() == 0)
                     throw new Exception("@父流程的工作ID不正确，没有查询到数据" + PWorkID);
-
+                wk.Copy(wkFrom);
                 SubFlows subFlows = new SubFlows();
                 subFlows.Retrieve(SubFlowAttr.SubFlowNo, this.No, SubFlowAttr.FK_Node, int.Parse(PNodeIDStr));
                 if (subFlows.Count != 0)
@@ -1098,8 +1106,13 @@ namespace BP.WF
                     {
                         foreach (MapDtl dtl in dtls)
                         {
+                            
                             if (dtl.IsCopyNDData == false)
+                            {
+                                idx++;
                                 continue;
+                            }
+                              
 
                             //new 一个实例.
                             GEDtl dtlData = new GEDtl(dtl.No);
@@ -1112,6 +1125,7 @@ namespace BP.WF
                             }
                             catch (Exception ex)
                             {
+                                dtlData.CheckPhysicsTable();
                             }
 
                             MapDtl dtlFrom = dtlsFrom[idx] as MapDtl;
@@ -1154,6 +1168,7 @@ namespace BP.WF
                                     }
                                 }
                             }
+                            idx++;
                         }
                     }
                 }
@@ -1588,6 +1603,7 @@ namespace BP.WF
         /// <returns></returns>
         public string DoCheck()
         {
+            DBAccess.RunSQL("DELETE FROM Sys_MapExt WHERE DoWay='0' or DoWay='None'");
             Cash.ClearCash();
 
             //删除缓存数据.
@@ -1675,123 +1691,126 @@ namespace BP.WF
 
                     #region 对节点的访问规则进行检查
                     msg += "@信息:开始对节点的访问规则进行检查.";
-
-                    switch (nd.HisDeliveryWay)
+                    if (nd.HisNodeType == 0)
                     {
-                        case DeliveryWay.ByStation:
-                        case DeliveryWay.FindSpecDeptEmpsInStationlist:
-                            if (nd.NodeStations.Count == 0)
-                                msg += "@错误:您设置了该节点的访问规则是按角色，但是您没有为节点绑定角色。";
-                            break;
-                        case DeliveryWay.ByDept:
-                            if (nd.NodeDepts.Count == 0)
-                                msg += "@错误:您设置了该节点的访问规则是按部门，但是您没有为节点绑定部门。";
-                            break;
-                        case DeliveryWay.ByBindEmp:
-                            if (nd.NodeEmps.Count == 0)
-                                msg += "@错误:您设置了该节点的访问规则是按人员，但是您没有为节点绑定人员。";
-                            break;
-                        case DeliveryWay.BySpecNodeEmp: /*按指定的角色计算.*/
-                        case DeliveryWay.BySpecNodeEmpStation: /*按指定的角色计算.*/
-                            if (nd.DeliveryParas.Trim().Length == 0)
-                                msg += "@错误:您设置了该节点的访问规则是按指定的角色计算，但是您没有设置节点编号.";
-                            break;
-                        case DeliveryWay.ByDeptAndStation: /*按部门与角色的交集计算.*/
-                            string mysql = string.Empty;
-                            //added by liuxc,2015.6.30.
+                        switch (nd.HisDeliveryWay)
+                        {
+                            case DeliveryWay.ByStation:
+                            case DeliveryWay.FindSpecDeptEmpsInStationlist:
+                                if (nd.NodeStations.Count == 0)
+                                    msg += "@错误:您设置了该节点的访问规则是按角色，但是您没有为节点绑定角色。";
+                                break;
+                            case DeliveryWay.ByDept:
+                                if (nd.NodeDepts.Count == 0)
+                                    msg += "@错误:您设置了该节点的访问规则是按部门，但是您没有为节点绑定部门。";
+                                break;
+                            case DeliveryWay.ByBindEmp:
+                                if (nd.NodeEmps.Count == 0)
+                                    msg += "@错误:您设置了该节点的访问规则是按人员，但是您没有为节点绑定人员。";
+                                break;
+                            case DeliveryWay.BySpecNodeEmp: /*按指定的角色计算.*/
+                            case DeliveryWay.BySpecNodeEmpStation: /*按指定的角色计算.*/
+                                if (nd.DeliveryParas.Trim().Length == 0)
+                                    msg += "@错误:您设置了该节点的访问规则是按指定的角色计算，但是您没有设置节点编号.";
+                                break;
+                            case DeliveryWay.ByDeptAndStation: /*按部门与角色的交集计算.*/
+                                string mysql = string.Empty;
+                                //added by liuxc,2015.6.30.
 
-                            mysql = "SELECT pdes.FK_Emp AS No"
-                                    + " FROM   Port_DeptEmpStation pdes"
-                                    + "        INNER JOIN WF_NodeDept wnd"
-                                    + "             ON  wnd.FK_Dept = pdes.FK_Dept"
-                                    + "             AND wnd.FK_Node = " + nd.NodeID
-                                    + "        INNER JOIN WF_NodeStation wns"
-                                    + "             ON  wns.FK_Station = pdes.FK_Station"
-                                    + "             AND wnd.FK_Node =" + nd.NodeID
-                                    + " ORDER BY"
-                                    + "        pdes.FK_Emp";
+                                mysql = "SELECT pdes.FK_Emp AS No"
+                                        + " FROM   Port_DeptEmpStation pdes"
+                                        + "        INNER JOIN WF_NodeDept wnd"
+                                        + "             ON  wnd.FK_Dept = pdes.FK_Dept"
+                                        + "             AND wnd.FK_Node = " + nd.NodeID
+                                        + "        INNER JOIN WF_NodeStation wns"
+                                        + "             ON  wns.FK_Station = pdes.FK_Station"
+                                        + "             AND wnd.FK_Node =" + nd.NodeID
+                                        + " ORDER BY"
+                                        + "        pdes.FK_Emp";
 
 
-                            DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
-                            if (mydt.Rows.Count == 0)
-                                msg += "@错误:按照角色与部门的交集计算错误，没有人员集合{" + mysql + "}";
-                            break;
-                        case DeliveryWay.BySQL:
-                        case DeliveryWay.BySQLAsSubThreadEmpsAndData:
-                            if (nd.DeliveryParas.Trim().Length == 0)
-                            {
-                                msg += "@错误:您设置了该节点的访问规则是按SQL查询，但是您没有在节点属性里设置查询sql，此sql的要求是查询必须包含No,Name两个列，sql表达式里支持@+字段变量，详细参考开发手册.";
-                            }
-                            else
-                            {
-                                try
+                                DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+                                if (mydt.Rows.Count == 0)
+                                    msg += "@错误:按照角色与部门的交集计算错误，没有人员集合{" + mysql + "}";
+                                break;
+                            case DeliveryWay.BySQL:
+                            case DeliveryWay.BySQLAsSubThreadEmpsAndData:
+                                if (nd.DeliveryParas.Trim().Length == 0)
                                 {
-                                    sql = nd.DeliveryParas;
-                                    sql = Glo.DealExp(sql, this.HisGERpt, null);
-
-                                    sql = sql.Replace("''''", "''"); //出现双引号的问题.
-                                    if (sql.Contains("@"))
-                                        throw new Exception("您编写的sql变量填写不正确，实际执行中，没有被完全替换下来" + sql);
-
-                                    DataTable testDB = null;
+                                    msg += "@错误:您设置了该节点的访问规则是按SQL查询，但是您没有在节点属性里设置查询sql，此sql的要求是查询必须包含No,Name两个列，sql表达式里支持@+字段变量，详细参考开发手册.";
+                                }
+                                else
+                                {
                                     try
                                     {
-                                        testDB = DBAccess.RunSQLReturnTable(sql);
+                                        sql = nd.DeliveryParas;
+                                        sql = Glo.DealExp(sql, this.HisGERpt, null);
+
+                                        sql = sql.Replace("''''", "''"); //出现双引号的问题.
+                                        if (sql.Contains("@"))
+                                            throw new Exception("您编写的sql变量填写不正确，实际执行中，没有被完全替换下来" + sql);
+
+                                        DataTable testDB = null;
+                                        try
+                                        {
+                                            testDB = DBAccess.RunSQLReturnTable(sql);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            msg += "@错误:您设置了该节点的访问规则是按SQL查询,执行此语句错误." + ex.Message;
+                                        }
+
+                                        if (testDB.Columns.Contains("no") == false
+                                            || testDB.Columns.Contains("name") == false)
+                                        {
+                                            msg += "@错误:您设置了该节点的访问规则是按SQL查询，设置的sql不符合规则，此sql的要求是查询必须包含No,Name两个列，sql表达式里支持@+字段变量，详细参考开发手册.";
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
-                                        msg += "@错误:您设置了该节点的访问规则是按SQL查询,执行此语句错误." + ex.Message;
-                                    }
-
-                                    if (testDB.Columns.Contains("no") == false
-                                        || testDB.Columns.Contains("name") == false)
-                                    {
-                                        msg += "@错误:您设置了该节点的访问规则是按SQL查询，设置的sql不符合规则，此sql的要求是查询必须包含No,Name两个列，sql表达式里支持@+字段变量，详细参考开发手册.";
+                                        msg += ex.Message;
                                     }
                                 }
-                                catch (Exception ex)
+                                break;
+                            case DeliveryWay.ByPreviousNodeFormEmpsField:
+                            case DeliveryWay.ByPreviousNodeFormStationsAI:
+                            case DeliveryWay.ByPreviousNodeFormStationsOnly:
+                            case DeliveryWay.ByPreviousNodeFormDepts:
+                                //去rpt表中，查询是否有这个字段.
+                                string str1 = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
+                                MapAttrs rptAttrs = new BP.Sys.MapAttrs();
+                                rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str1 + "Rpt", MapAttrAttr.KeyOfEn);
+
+                                if (rptAttrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, nd.DeliveryParas) == false)
                                 {
-                                    msg += ex.Message;
+                                    /*检查节点字段是否有FK_Emp字段*/
+                                    msg += "@错误:您设置了该节点的访问规则是[06.按上一节点表单指定的字段值作为本步骤的接受人]，但是您没有在节点属性的[访问规则设置内容]里设置指定的表单字段，详细参考开发手册.";
                                 }
-                            }
-                            break;
-                        case DeliveryWay.ByPreviousNodeFormEmpsField:
-                        case DeliveryWay.ByPreviousNodeFormStationsAI:
-                        case DeliveryWay.ByPreviousNodeFormStationsOnly:
-                        case DeliveryWay.ByPreviousNodeFormDepts:
-                            //去rpt表中，查询是否有这个字段.
-                            string str1 = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
-                            MapAttrs rptAttrs = new BP.Sys.MapAttrs();
-                            rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str1 + "Rpt", MapAttrAttr.KeyOfEn);
-
-                            if (rptAttrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, nd.DeliveryParas) == false)
-                            {
-                                /*检查节点字段是否有FK_Emp字段*/
-                                msg += "@错误:您设置了该节点的访问规则是[06.按上一节点表单指定的字段值作为本步骤的接受人]，但是您没有在节点属性的[访问规则设置内容]里设置指定的表单字段，详细参考开发手册.";
-                            }
-                            //if (mattrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, "FK_Emp") == false)
-                            //{
-                            //    /*检查节点字段是否有FK_Emp字段*/
-                            //    msg += "@错误:您设置了该节点的访问规则是按指定节点表单人员，但是您没有在节点表单中增加FK_Emp字段，详细参考开发手册 .";
-                            //}
-                            break;
-                        case DeliveryWay.BySelected: /* 由上一步发送人员选择 */
-                            if (nd.IsStartNode)
-                            {
-                                //msg += "@错误:开始节点不能设置指定的选择人员访问规则。";
+                                //if (mattrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, "FK_Emp") == false)
+                                //{
+                                //    /*检查节点字段是否有FK_Emp字段*/
+                                //    msg += "@错误:您设置了该节点的访问规则是按指定节点表单人员，但是您没有在节点表单中增加FK_Emp字段，详细参考开发手册 .";
+                                //}
                                 break;
-                            }
-                            break;
-                        case DeliveryWay.ByPreviousNodeEmp: /* 由上一步发送人员选择 */
-                            if (nd.IsStartNode)
-                            {
-                                msg += "@错误:节点访问规则设置错误:开始节点，不允许设置与上一节点的工作人员相同.";
+                            case DeliveryWay.BySelected: /* 由上一步发送人员选择 */
+                                if (nd.IsStartNode)
+                                {
+                                    //msg += "@错误:开始节点不能设置指定的选择人员访问规则。";
+                                    break;
+                                }
                                 break;
-                            }
-                            break;
-                        default:
-                            break;
+                            case DeliveryWay.ByPreviousNodeEmp: /* 由上一步发送人员选择 */
+                                if (nd.IsStartNode)
+                                {
+                                    msg += "@错误:节点访问规则设置错误:开始节点，不允许设置与上一节点的工作人员相同.";
+                                    break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                     }
+                    
                     msg += "@对节点的访问规则进行检查完成....";
                     #endregion
 
@@ -3857,7 +3876,7 @@ namespace BP.WF
 
                 map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10);
 
-                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true); //@hongyan.
+                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true);
                 map.AddTBString(FlowAttr.Creater, null, "创建人", true, true, 0, 100, 10, true);
 
                 // 改造参数类型.
@@ -3877,6 +3896,7 @@ namespace BP.WF
 
                 map.AddTBInt(FlowAttr.DTSTime, (int)FlowDTSTime.AllNodeSend, "执行同步时间点", true, true);
                 map.AddTBString(FlowAttr.DTSFields, null, "要同步的字段s,中间用逗号分开.", false, false, 0, 900, 100, false);
+                map.AddTBString("Icon", null, "Icon", true, true, 0, 50, 10);
                 #endregion 数据同步方案
 
 
@@ -4092,7 +4112,7 @@ namespace BP.WF
 
 
             //检查节点下是否有可以删除.
-            string sql = "SELECT COUNT(*) AS A FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Flow='" + this.No + "' ";
+            string sql = "SELECT COUNT(*) AS A FROM WF_GenerWorkerlist WHERE IsPass=0 AND FK_Flow='" + this.No + "' ";
             int num = DBAccess.RunSQLReturnValInt(sql);
             if (num != 0)
                 return "err@该流程下有未完成的流程【" + num + "】个您不能删除，可以通过如下SQL查询:" + sql;

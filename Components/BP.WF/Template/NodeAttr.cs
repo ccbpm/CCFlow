@@ -137,6 +137,7 @@ namespace BP.WF.Template
         /// OID
         /// </summary>
         public const string NodeID = "NodeID";
+        public const string Mark = "Mark";
         /// <summary>
         /// 节点的流程
         /// </summary>
@@ -233,6 +234,10 @@ namespace BP.WF.Template
         /// 运行模式
         /// </summary>
         public const string RunModel = "RunModel";
+        /// <summary>
+        /// 节点类型
+        /// </summary>
+        public const string NodeType = "NodeType";
         /// <summary>
         /// 谁执行它？
         /// </summary>

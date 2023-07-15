@@ -417,7 +417,7 @@ namespace BP.CCFast.CCMenu
 
                 map.AddTBString(MenuAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 20);
                 map.AddTBInt(MenuAttr.Idx, 0, "顺序号", true, false);
-
+                map.AddTBAtParas(500);
                 this._enMap = map;
                 return this._enMap;
             }
@@ -448,6 +448,8 @@ namespace BP.CCFast.CCMenu
             if (this.MenuModel.Equals("Dict") == true || this.MenuModel.Equals("DBList") == true || this.MenuModel.Equals("Bill") == true)
             {
                 string frmID = this.UrlExt;
+                if (frmID.Contains("?") || frmID.Contains("="))
+                    frmID = this.GetParaString("EnPKVal");
                 //删除实体.
                 MapData md = new MapData(frmID);
                 md.Delete();

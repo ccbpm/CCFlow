@@ -7,6 +7,7 @@ using BP.En;
 using System.Collections.Generic;
 using System.IO;
 using BP.Pub;
+using BP.Web;
 
 namespace BP.Sys
 {
@@ -396,7 +397,7 @@ namespace BP.Sys
             get
             {
                 var ens = this.GetEntitiesAttrFromAutoNumCash(new FrmEvents(),
-                  FrmEventAttr.FK_MapData, this.No);
+                  FrmEventAttr.FrmID, this.No);
                 return ens as FrmEvents;
             }
         }
@@ -597,12 +598,13 @@ namespace BP.Sys
         /// <summary>
         /// 清空缓存
         /// </summary>
-        public void ClearCash()
+        public string ClearCash()
         {
             CashFrmTemplate.Remove(this.No);
             Cash.SetMap(this.No, null);
             CleanObject();
             Cash.SQL_Cash.Remove(this.No);
+            return "执行成功.";
         }
         #endregion 缓存方法.
 
@@ -1173,8 +1175,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
-
-                map.AddTBString(MapDataAttr.Icon, null, "Icon", true, false, 0, 500, 20, true);
+                map.AddTBString(MapDataAttr.Icon, null, "Icon", true, false, 0, 100, 20, true);
 
                 //流程控件.
                 map.AddTBString(MapDataAttr.FlowCtrls, null, "流程控件", true, true, 0, 200, 20);
@@ -1357,8 +1358,8 @@ namespace BP.Sys
             if (md.IsExits)
                 throw new Exception("err@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
-            //执行删除操作.
-            md.Delete();
+            //执行删除操作. 导入时为什么要执行删除？本来就没有这个表单，删除肯定报错，先注释了
+            //md.Delete();
 
             //导入.
             return ImpMapData(fk_mapData, ds);
@@ -1754,11 +1755,17 @@ namespace BP.Sys
                         {
                             idx++;
                             MapExt en = new MapExt();
+                            string text = "";
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 object val = dr[dc.ColumnName] as object;
                                 if (val == null)
                                     continue;
+                                if (dc.ColumnName.Equals("HtmlText") == true)
+                                {
+                                    text = dr[dc.ColumnName] as string;
+                                    continue;
+                                }
                                 if (DataType.IsNullOrEmpty(val.ToString()) == true)
                                     continue;
                                 en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, specFrmID));
@@ -1767,6 +1774,8 @@ namespace BP.Sys
                             //执行保存，并统一生成PK的规则.
                             en.InitPK();
                             en.DirectSave();
+                            if (en.ExtType.Equals("HtmlText") == true && DataType.IsNullOrEmpty(text) == false)
+                                en.SaveBigNoteHtmlText(text);
                         }
                         break;
                     case "Sys_MapAttr":
@@ -1841,7 +1850,7 @@ namespace BP.Sys
                             SysEnum se = new Sys.SysEnum();
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                string val = dr[dc.ColumnName] as string;
+                                string val = dr[dc.ColumnName].ToString();// as string;
                                 se.SetValByKey(dc.ColumnName, val);
                             }
                             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
@@ -1867,7 +1876,7 @@ namespace BP.Sys
                             SysEnumMain sem = new Sys.SysEnumMain();
                             foreach (DataColumn dc in dt.Columns)
                             {
-                                string val = dr[dc.ColumnName] as string;
+                                string val = dr[dc.ColumnName].ToString();// as string;
                                 if (val == null)
                                     continue;
                                 sem.SetValByKey(dc.ColumnName, val);

@@ -2208,6 +2208,12 @@ namespace BP.En
         {
             this.AddTBIntPKOID("OID", "OID");
         }
+        public void AddLang()
+        {
+            this.AddTBString("NameFT", null, "繁体", true, false, 0, 200, 150, false);
+            this.AddTBString("NameEn", null, "英文", true, false, 0, 200, 150, false);
+            this.AddTBString("NameJP", null, "日文", true, false, 0, 200, 150, false);
+        }
         /// <summary>
         /// 增加  AtParas字段.
         /// </summary>
@@ -2230,7 +2236,7 @@ namespace BP.En
         public void AddMyPK(bool uiVisable = true)
         {
             this.PKs = "MyPK";
-            this.AddTBStringPK("MyPK", null, "主键MyPK", uiVisable, true, 1, 100, 10);
+            this.AddTBStringPK("MyPK", null, "主键MyPK", uiVisable, true, 1, 150, 10);
             //Attr attr = new Attr();
             //attr.Key = "MyPK";
             //attr.Field = "MyPK";

@@ -1,4 +1,7 @@
-﻿using BP.En;
+﻿using BP.DA;
+using BP.En;
+using BP.Sys;
+using BP.Tools;
 /// <summary>
 /// 先阶段主要用于流程属性中的时限规则
 /// </summary>
@@ -7,7 +10,7 @@ namespace BP.WF.Template
     /// <summary>
     /// 配件类型
     /// </summary>
-    public class PartType 
+    public class PartType
     {
         /// <summary>
         /// 前置导航的父子流程关系
@@ -21,17 +24,17 @@ namespace BP.WF.Template
     /// <summary>
     /// 配件属性
     /// </summary>
-    public class PartAttr:BP.En.EntityMyPKAttr
+    public class PartAttr : BP.En.EntityMyPKAttr
     {
         #region 基本属性
         /// <summary>
         /// 流程编号
         /// </summary>
-        public const string FK_Flow = "FK_Flow";
+        public const string FlowNo = "FlowNo";
         /// <summary>
         /// 节点ID
         /// </summary>
-        public const string FK_Node = "FK_Node";
+        public const string NodeID = "NodeID";
         /// <summary>
         /// 前置导航的父子流程关系
         /// </summary>
@@ -99,15 +102,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 配件的事务编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
-                return this.GetValStringByKey(PartAttr.FK_Flow);
+                return this.GetValStringByKey(PartAttr.FlowNo);
             }
             set
             {
-                SetValByKey(PartAttr.FK_Flow, value);
+                SetValByKey(PartAttr.FlowNo, value);
             }
         }
         /// <summary>
@@ -127,15 +130,15 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
-                return this.GetValIntByKey(PartAttr.FK_Node);
+                return this.GetValIntByKey(PartAttr.NodeID);
             }
             set
             {
-                SetValByKey(PartAttr.FK_Node, value);
+                SetValByKey(PartAttr.NodeID, value);
             }
         }
         /// <summary>
@@ -308,8 +311,8 @@ namespace BP.WF.Template
 
                 map.AddMyPK();
 
-                map.AddTBString(PartAttr.FK_Flow, null, "流程编号", false, true, 0, 5, 10);
-                map.AddTBInt(PartAttr.FK_Node, 0, "节点ID", false, false);
+                map.AddTBString(PartAttr.FlowNo, null, "流程编号", false, true, 0, 5, 10);
+                map.AddTBInt(PartAttr.NodeID, 0, "节点ID", false, false);
                 map.AddTBString(PartAttr.PartType, null, "类型", false, true, 0, 100, 10);
 
                 map.AddTBString(PartAttr.Tag0, null, "Tag0", false, true, 0, 2000, 10);
@@ -328,6 +331,106 @@ namespace BP.WF.Template
             }
         }
         #endregion
+
+        /// <summary>
+        /// 执行测试.
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public string DoTestARWebApi(string paras)
+        {
+            if (paras.Contains("@WorkID") == false || paras.Contains("@OID") == false)
+                return "err@参数模式是表单全量模式，您没有传入workid参数.";
+
+            //获得参数.
+            AtPara ap = new AtPara(paras);
+            int workID = 0;
+            if (ap.HisHT.ContainsKey("OID") == true)
+                workID = ap.GetValIntByKey("OID");
+            else
+                workID = ap.GetValIntByKey("WorkID");
+
+            string url = this.Tag0; //url. 
+            string urlUodel = this.Tag1; //模式. Post,Get
+            string paraMode = this.Tag2; //参数模式. 0=自定义模式， 1=全量模式.
+            string pdocs = this.Tag3; //参数内容.  对自定义模式有效.
+
+            //处理url里的参数.
+            foreach (string item in ap.HisHT.Keys)
+                url = url.Replace("@" + item, ap.GetValStrByKey(item));
+
+            //全量参数模式. 
+            if (paraMode.Equals("1") == true)
+            {
+                var geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
+                pdocs = geEntity.ToJson(false);
+            }
+            else
+            {
+                pdocs = pdocs.Replace("`", "\"");
+                //自定义参数模式.
+                pdocs = Glo.DealExp(pdocs, null);
+                foreach (string item in ap.HisHT.Keys)
+                    pdocs = pdocs.Replace("@" + item, ap.GetValStrByKey(item));
+
+                if (pdocs.Contains("@") == true)
+                    return "err@TestAPI参数不完整:" + pdocs;
+            }
+
+            //判断提交模式.
+            if (urlUodel.ToLower().Equals("get") == true)
+                return DataType.ReadURLContext(url, 9000); //返回字符串.
+
+            string doc = PubGlo.HttpPostConnect(url, pdocs);
+            return doc;
+        }
+        public string ARWebApi(string paras)
+        {
+            if (paras.Contains("@WorkID") == false || paras.Contains("@OID") == false)
+                return "err@参数模式是表单全量模式，您没有传入workid参数.";
+
+            //获得参数.
+            AtPara ap = new AtPara(paras);
+            int workID = 0;
+            if (ap.HisHT.ContainsKey("OID") == true)
+                workID = ap.GetValIntByKey("OID");
+            else
+                workID = ap.GetValIntByKey("WorkID");
+
+            var geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
+
+            string url = this.Tag0; //url. 
+            url = Glo.DealExp(url, geEntity);
+
+            string urlUodel = this.Tag1; //模式. Post,Get
+            string paraMode = this.Tag2; //参数模式. 0=自定义模式， 1=全量模式.
+            string pdocs = this.Tag3; //参数内容.  对自定义模式有效.
+
+            //全量参数模式. 
+            if (paraMode.Equals("1") == true)
+            {
+                pdocs = geEntity.ToJson(false);
+            }
+            else
+            {
+                pdocs = pdocs.Replace("~", "\"");
+                pdocs = Glo.DealExp(pdocs, geEntity);
+                if (pdocs.Contains("@") == true)
+                    return "err@参数不完整:" + pdocs;
+                pdocs = pdocs.Replace("'", "\"");
+            }
+
+            //判断提交模式.
+            if (urlUodel.ToLower().Equals("get") == true)
+                return DataType.ReadURLContext(url, 9000); //返回字符串.
+
+            bool isJson = false;
+            if (this.Tag4.Trim().Equals("1") == true)
+                isJson = true;
+
+            string doc = PubGlo.HttpPostConnect(url, pdocs,"POST", isJson);
+            return doc;
+        }
     }
     /// <summary>
     /// 配件s
@@ -360,7 +463,7 @@ namespace BP.WF.Template
         /// <param name="FlowNo"></param>
         public Parts(string fk_flow)
         {
-            this.Retrieve(PartAttr.FK_Flow, fk_flow);
+            this.Retrieve(PartAttr.FlowNo, fk_flow);
         }
         #endregion
 

@@ -505,7 +505,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
             string html = "";
 
             //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
-            string sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + this.HisGEEntity.PKVal;
+            string sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerlist WHERE IsPass!=1 AND WorkID=" + this.HisGEEntity.PKVal;
             DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
 
             foreach (DataRow dr in dtTrack.Rows)
@@ -693,6 +693,24 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);
 
+                if(strs[1].Trim() == "Checkboxs")
+                {
+                    //获取复选框多选的值
+                    string content = this.HisGEEntity.GetValStringByKey(strs[0]);
+                    //转换成文本
+                    Attr attr = this.HisGEEntity.EnMap.Attrs.GetAttrByKeyOfEn(strs[0]);
+                    if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
+                        return content;
+                    SysEnums enums = new SysEnums(attr.UIBindKey);
+                    string str = "";
+                    foreach(SysEnum en in enums)
+                    {
+                        if ((content + ",").Contains(en.IntKey + ",") == true)
+                            str += en.Lab + ",";
+                    }
+                    if (str != "") str = str.Substring(0, str.Length - 1);
+                    return str;
+                }
                 if (strs[1].Trim() == "Editor")
                 {
                     //获取富文本的内容
@@ -1121,6 +1139,8 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if (para.Contains("-EnumYes") == true)
                             str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
+                        else if (para.Contains(".Checkboxs") == true)
+                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para)));
                         else if ((para.Contains("WorkCheck.RDT") == true && para.Contains("WorkCheck.RDT.") == false)
                             || (para.Contains("WorkCheck.Rec") == true && para.Contains("WorkCheck.Rec.") == false)
                             || (para.Contains("WorkCheck.RecName") == true && para.Contains("WorkCheck.RecName.") == false)
@@ -1164,9 +1184,12 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     int row_start = -1, row_end = -1;
                     if (pos_rowKey != -1)
                     {
-                        row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
-
-                        row_end = str.Substring(pos_rowKey).IndexOf("\\row");
+                        row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\nestrow");
+                        if(row_start == -1)
+                            row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
+                        row_end = str.Substring(pos_rowKey).IndexOf("\\nestrow");
+                        if (row_end == -1)
+                            row_end = str.Substring(pos_rowKey).IndexOf("\\row");
                     }
 
                     if (row_start == -1 || row_end == -1)
@@ -1647,13 +1670,56 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     FrmAttachmentDBs athDbs = this.EnsDataAths[athObjEnsName] as FrmAttachmentDBs;
                     if (athDbs == null)
                         continue;
-                    foreach (FrmAttachmentDB athDb in athDbs)
-                    {
-                        if (athFilesName.Length > 0)
-                            athFilesName += " ， ";
 
-                        athFilesName += athDb.FileName;
+                    if (str.IndexOf("Ath." + athObjEnsName + ".ImgAth") != -1)
+                    {
+                        string wkKey = "<Ath." + athObjEnsName + ".ImgAth>";
+                        string athImgs = "";
+                        // 定义rtf中图片字符串
+                        StringBuilder mypict = new StringBuilder();
+                        System.Drawing.Image imgAth;
+                        foreach (FrmAttachmentDB athDb in athDbs)
+                        {
+                            if (athFilesName.Length > 0)
+                            {
+                                athFilesName += " ， ";
+                            }
+                            int i = athDb.FileFullName.LastIndexOf("UploadFile/");
+                            athDb.FileFullName = athDb.FileFullName.Substring(i);
+                            //String filePath = SystemConfig.PathOfDataUser + "UploadFile/" + athDb.FK_MapData + "/" + this.HisGEEntity.PKVal + "/" + athDb.FileName;
+                            String filePath = SystemConfig.PathOfDataUser + athDb.FileFullName;
+
+                            imgAth = System.Drawing.Image.FromFile(filePath);
+                            System.Drawing.Image bmp = new System.Drawing.Bitmap(imgAth);
+                            //imgAth.Dispose();
+                            //将要插入的图片转换为16进制字符串
+                            string imgHexStringImgAth = GetImgHexString(bmp, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            //生成rtf中图片字符串
+                            mypict.AppendLine();
+                            mypict.Append(@"{\pict");
+                            mypict.Append(@"\jpegblip");
+                            mypict.Append(@"\picscalex100");
+                            mypict.Append(@"\picscaley100");
+                            mypict.Append(@"\picwgoal" + bmp.Width * 3);
+                            mypict.Append(@"\pichgoal" + bmp.Height * 3);
+                            mypict.Append(imgHexStringImgAth + "}");
+                            mypict.Append("\n");
+                            athImgs = mypict.ToString();
+
+                        }
+                        str = str.Replace(wkKey, athImgs);
                     }
+                    else
+                    {
+                        foreach (FrmAttachmentDB athDb in athDbs)
+                        {
+                            if (athFilesName.Length > 0)
+                                athFilesName += " ， ";
+
+                            athFilesName += athDb.FileName;
+                        }
+                    }
+
                     str = str.Replace("<" + athName + ">", this.GetCode(athFilesName));
                 }
                 #endregion

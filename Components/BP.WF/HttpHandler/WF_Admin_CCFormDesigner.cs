@@ -252,8 +252,12 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(sort) == true)
                     sort = this.GetRequestVal("DDL_FrmTree");
 
+                if (DataType.IsNullOrEmpty(sort) == true)
+                    return "err@没有采集到表单存放目录.";
+
                 //    md.FK_FrmSort = sort;
                 md.FK_FormTree = sort;
+                md.SetValByKey("Ver", DataType.CurrentDateTime);  //创建日期.
 
                 md.AppType = "0";//独立表单
                 md.DBSrc = this.GetRequestVal("DDL_DBSrc");

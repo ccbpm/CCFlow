@@ -1019,6 +1019,16 @@ namespace BP.WF.Template.Frm
                 rm.Warning = "生成英文字段列，方便字段数据copy使用.";
                 rm.Icon = "icon-heart";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Icon = "icon-credit-card";
+                rm.Title = "分组属性"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoGroup";
+                // rm.Icon = "../Img/AttachmentM.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
                 #endregion 相关方法.
 
                 #region 实验中的功能.
@@ -1130,6 +1140,26 @@ namespace BP.WF.Template.Frm
             }
 
             return "导入成功.";
+        }
+        /// <summary>
+        /// 编辑分组属性
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroup()
+        {
+            GroupField gf = new GroupField();
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.No);
+            if (i == 0)
+            {
+                gf.Lab = this.Name;
+                gf.FrmID = this.FK_MapData;
+                gf.CtrlType = "Dtl";
+                gf.CtrlID = this.No;
+                gf.Idx = 10;
+                gf.Insert();
+            }
+            string url = "../../Comm/EnOnly.htm?EnName=BP.Sys.GroupField&PKVal=" + gf.OID + "&Token=" + Web.WebUser.Token + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Difference.SystemConfig.CustomerNo;
+            return url;
         }
         /// <summary>
         /// 打开从表附件属性.
@@ -1448,6 +1478,8 @@ namespace BP.WF.Template.Frm
         {
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
+            dtl.SetValByKey(MapDtlAttr.FK_MapData,this.FK_MapData);
+            dtl.SetValByKey(MapDtlAttr.PTable, this.PTable);
             dtl.Delete();
 
             //删除分组

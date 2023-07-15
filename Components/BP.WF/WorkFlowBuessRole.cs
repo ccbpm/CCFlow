@@ -714,7 +714,7 @@ namespace BP.WF
                     /*找开始节点的处理人员. */
                     strs = int.Parse(fl.No) + "01";
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ORDER BY CDT "; 
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ORDER BY CDT "; 
                     ps.Add("FK_Node", int.Parse(strs));
                     ps.Add("OID", workid);
                     dt = DBAccess.RunSQLReturnTable(ps);
@@ -742,7 +742,7 @@ namespace BP.WF
                         throw new Exception("流程设计错误:您设置的节点(" + toNode.Name + ")的接收方式为按指定的节点角色投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                     ps.Add("FK_Node", int.Parse(nd));
                     if (currNode.IsSubThread == true)
                         ps.Add("OID", workid);
@@ -800,7 +800,7 @@ namespace BP.WF
                             continue; // 如果不是父流程的节点，就不执行.
 
                         ps = new Paras();
-                        ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
+                        ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
                         ps.Add("FK_Node", nd.NodeID);
                         if (currNode.IsSubThread == true)
                             ps.Add("OID", gwf.PFID);
@@ -1063,15 +1063,12 @@ namespace BP.WF
             #region 仅按用户组计算 
             if (toNode.HisDeliveryWay == DeliveryWay.ByTeamOnly)
             {
-                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node=" + dbStr + "FK_Node ORDER BY A.FK_Emp";
-                ps = new Paras();
-                ps.Add("FK_Node", toNode.NodeID);
-                ps.SQL = sql;
-                dt = DBAccess.RunSQLReturnTable(ps);
+                sql = "SELECT DISTINCT A.FK_Emp FROM Port_TeamEmp A, WF_NodeTeam B WHERE A.FK_Team=B.FK_Team AND B.FK_Node="+toNode.NodeID;
+                dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count > 0)
                     return dt;
                 else
-                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按用户组计算，没有找到人员:SQL=" + ps.SQLNoPara);
+                    throw new Exception("@节点访问规则错误:节点(" + toNode.NodeID + "," + toNode.Name + "), 仅按用户组计算，没有找到人员:SQL=" + sql);
             }
             #endregion
 
@@ -1174,7 +1171,7 @@ namespace BP.WF
                 if (DataType.IsNumStr(para) == true)
                 {
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
+                    ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
                     ps.Add("OID", workid);
                     ps.Add("FK_Node", int.Parse(para));
 
@@ -1463,7 +1460,10 @@ namespace BP.WF
             ps.SQL = sql;
             ps.Add("FK_Node", toNode.NodeID);
             ps.Add("FK_Dept", deptNo);
-            ps.Add("FK_Emp", empNo);
+            if(BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && empNo.StartsWith(WebUser.OrgNo)==false)
+                ps.Add("FK_Emp", WebUser.OrgNo+"_"+empNo);
+            else
+                ps.Add("FK_Emp", empNo);
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             if (dt.Rows.Count == 0)
@@ -1472,7 +1472,7 @@ namespace BP.WF
                 if (nextStations.Count == 0)
                     throw new Exception("@节点没有角色:" + toNode.NodeID + "  " + toNode.Name);
 
-                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE " + BP.Sys.Base.Glo.UserNoWhitOutAS + " IN ";
+                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + " FROM Port_Emp WHERE No IN ";
                 sql += "(SELECT  FK_Emp  FROM Port_DeptEmpStation  WHERE FK_Station IN (SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + dbStr + "FK_Node ) )";
                 sql += " AND " + BP.Sys.Base.Glo.UserNoWhitOutAS + " IN ";
 

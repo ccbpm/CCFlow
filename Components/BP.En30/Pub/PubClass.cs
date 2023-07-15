@@ -46,17 +46,15 @@ namespace BP.Pub
 
             return fd;
         }
-        private static string _KeyFields = null;
         public static string KeyFields
         {
             get
             {
-                if (_KeyFields == null)
-                    _KeyFields = DataType.ReadTextFile(BP.Difference.SystemConfig.PathOfWebApp + BP.Difference.SystemConfig.CCFlowWebPath + "WF/Data/Sys/FieldKeys.txt");
-                return _KeyFields;
+
+                return ",release,declare,key,select,from,delete,update,insert,into,go,to,goto,where,order,by,use,user,function,produce,talbe,colmen,rows,";
             }
         }
-     
+
         /// <summary>
         /// 产生临时文件名称
         /// </summary>
@@ -73,7 +71,7 @@ namespace BP.Pub
         /// <returns></returns>
         public static DataTable GetDataTableByUIBineKey(string uiBindKey, Hashtable ht = null)
         {
-           
+
             DataTable dt = new DataTable();
             if (uiBindKey.Contains("."))
             {
@@ -95,7 +93,7 @@ namespace BP.Pub
             sf.No = uiBindKey;
             if (sf.RetrieveFromDBSources() != 0)
             {
-                if (sf.SrcType == SrcType.Handler || sf.SrcType == SrcType.JQuery)
+                if (sf.SrcType == DictSrcType.Handler || sf.SrcType == DictSrcType.JQuery)
                     return null;
                 dt = sf.GenerHisDataTable(ht);
             }
@@ -268,11 +266,8 @@ namespace BP.Pub
             {
                 try
                 {
-                    
-                    ens = (Entities)obj;
-                    if (ens == null)
-                        continue;
 
+                    ens = (Entities)obj;
                     string className = ens.ToString();
                     if (className == null)
                         continue;
@@ -697,13 +692,14 @@ namespace BP.Pub
             Hashtable htMain = new Hashtable();
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(key) )
+                if (DataType.IsNullOrEmpty(key))
                     continue;
+                string mykey = key;
                 string val = HttpContextHelper.RequestParams(key);
-                string mykey = key.Replace("TB_", "");
-                mykey = key.Replace("DDL_", "");
-                mykey = key.Replace("CB_", "");
-                mykey = key.Replace("RB_", "");
+                mykey = mykey.Replace("TB_", "");
+                mykey = mykey.Replace("DDL_", "");
+                mykey = mykey.Replace("CB_", "");
+                mykey = mykey.Replace("RB_", "");
                 val = HttpUtility.UrlDecode(val, Encoding.UTF8);
 
                 if (htMain.ContainsKey(mykey) == true)
@@ -722,7 +718,7 @@ namespace BP.Pub
                 string[] strs = checkBoxIDs.Split(',');
                 foreach (string str in strs)
                 {
-                    if (DataType.IsNullOrEmpty(str) )
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
 
                     string key = str.Replace("CB_", "");
@@ -738,7 +734,7 @@ namespace BP.Pub
             /*说明已经找到了这个字段信息。*/
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(key) )
+                if (DataType.IsNullOrEmpty(key))
                     continue;
 
                 //获得实际的值, 具有特殊标记的，系统才赋值.
@@ -780,7 +776,7 @@ namespace BP.Pub
                 string[] strs = checkBoxIDs.Split(',');
                 foreach (string str in strs)
                 {
-                    if (DataType.IsNullOrEmpty(str) )
+                    if (DataType.IsNullOrEmpty(str))
                         continue;
 
                     if (str.Contains("CBPara"))
@@ -802,7 +798,7 @@ namespace BP.Pub
             /*说明已经找到了这个字段信息。*/
             foreach (string key in HttpContextHelper.RequestParamKeys)
             {
-                if (DataType.IsNullOrEmpty(key) )
+                if (DataType.IsNullOrEmpty(key))
                     continue;
 
                 //获得实际的值, 具有特殊标记的，系统才赋值.
@@ -852,7 +848,7 @@ namespace BP.Pub
         public static Entity CopyDtlFromRequests11(Entity en, string pk, Map map)
         {
             string allKeys = ";";
-            if (DataType.IsNullOrEmpty(pk) )
+            if (DataType.IsNullOrEmpty(pk))
                 pk = "";
             else
                 pk = "_" + pk;
@@ -893,7 +889,7 @@ namespace BP.Pub
                     /*说明已经找到了这个字段信息。*/
                     foreach (string myK in HttpContextHelper.RequestParamKeys)
                     {
-                        if (DataType.IsNullOrEmpty(myK) )
+                        if (DataType.IsNullOrEmpty(myK))
                             continue;
 
                         if (myK.EndsWith(relKey))

@@ -89,6 +89,8 @@ namespace BP.LIMS
                 {
                     /* 部门审核完毕后，就执行更新样本状态 */
                     DBAccess.RunSQL("UPDATE YB_Pool SET YBSta=1 WHERE RefPK=" + this.WorkID);
+
+
                 }
 
                 //返回.

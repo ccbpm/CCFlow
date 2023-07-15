@@ -588,6 +588,17 @@ namespace BP.Sys.FrmUI
                 rm.HisAttrs.AddTBString("F", null, "命名后的标记", true, false, 0, 100, 50);
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Icon = "icon-note";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Icon = "icon-credit-card";
+                rm.Title = "分组属性"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoGroup";
+                // rm.Icon = "../Img/AttachmentM.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
 
                 string msg = "说明：";
                 msg += "\t\n 1. 每个附件都有一个标记比如，Ath1,Ath2, FJ. ";
@@ -657,6 +668,28 @@ namespace BP.Sys.FrmUI
         public string DtlOfAth()
         {
             string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=" + this.MyPK + "&For=" + this.MyPK;
+            return url;
+        }
+
+
+        /// <summary>
+        /// 编辑分组属性
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroup()
+        {
+            GroupField gf = new GroupField();
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            if (i == 0)
+            {
+                gf.Lab = this.Name;
+                gf.FrmID = this.FK_MapData;
+                gf.CtrlType = "Dtl";
+                gf.CtrlID = this.MyPK;
+                gf.Idx = 10;
+                gf.Insert();
+            }
+            string url = "../../Comm/EnOnly.htm?EnName=BP.Sys.GroupField&PKVal=" + gf.OID + "&Token=" + Web.WebUser.Token + "&AppCenterDBType=" + DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Difference.SystemConfig.CustomerNo;
             return url;
         }
 

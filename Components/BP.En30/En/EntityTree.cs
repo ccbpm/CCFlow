@@ -72,6 +72,10 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.No, value);
             }
         }
+        public void setNo(string val)
+        {
+            this.SetValByKey(EntityTreeAttr.No, val);
+        }
         /// <summary>
         /// 名称
         /// </summary>
@@ -85,6 +89,10 @@ namespace BP.En
             {
                 this.SetValByKey(EntityTreeAttr.Name, value);
             }
+        }
+        public void setName(string val)
+        {
+            this.SetValByKey(EntityTreeAttr.Name, val);
         }
         /// <summary>
         /// 父节点编号
@@ -100,6 +108,10 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.ParentNo, value);
             }
         }
+        public void setParentNo(string val)
+        {
+            this.SetValByKey(EntityTreeAttr.ParentNo, val);
+        }
         /// <summary>
         /// 图标
         /// </summary>
@@ -114,7 +126,7 @@ namespace BP.En
                 this.SetValByKey(EntityTreeAttr.ICON, value);
             }
         }
-        
+
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -212,7 +224,7 @@ namespace BP.En
         /// <returns></returns>
         public EntityTree DoCreateSameLevelNode(string name = null)
         {
-            
+
             EntityTree en = this.CreateInstance() as EntityTree;
             if (this.ClassID.Contains("FlowSort") || this.ClassID.Contains("SysFormTree"))
                 en.No = DBAccess.GenerGUID();
@@ -232,7 +244,7 @@ namespace BP.En
         /// 新建子节点
         /// </summary>
         /// <returns></returns>
-        public EntityTree DoCreateSubNode(string name=null)
+        public EntityTree DoCreateSubNode(string name = null)
         {
             EntityTree en = this.CreateInstance() as EntityTree;
             en.Copy(this);

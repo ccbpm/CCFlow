@@ -56,7 +56,7 @@ namespace BP.WF.HttpHandler
             //流程引擎人员列表.
             GenerWorkerLists gwls = new GenerWorkerLists(this.WorkID);
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.RDT);
-            ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
+            ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerlist"));
 
 
             //获得Track数据.
@@ -107,8 +107,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SelectOneUser_Init()
         {
-            //Default_LetAdminerLogin();
-
             BP.WF.GenerWorkerLists ens = new GenerWorkerLists();
             QueryObject qo = new QueryObject(ens);
             qo.AddWhere("WorkID", this.WorkID);
@@ -130,7 +128,8 @@ namespace BP.WF.HttpHandler
             {
                 string token = this.GetRequestVal("Token");
                 string userNo = BP.WF.Dev2Interface.Port_LoginByToken(token);
-                Dev2Interface.Port_GenerToken();
+                //@lyc
+               // Dev2Interface.Port_GenerToken();
                 return userNo;
             }
             catch (Exception ex)
@@ -138,8 +137,9 @@ namespace BP.WF.HttpHandler
                 //@ 多人用同一个账号登录，就需要加上如下代码.
                 if (DataType.IsNullOrEmpty(this.UserNo) == false)
                 {
-                    BP.WF.Dev2Interface.Port_Login(this.UserNo);
-                    Dev2Interface.Port_GenerToken();
+                    BP.WF.Dev2Interface.Port_Login(this.UserNo,this.OrgNo);
+                    //
+                    //Dev2Interface.Port_GenerToken();
                     return this.UserNo;
                 }
                 return ex.Message;
@@ -190,16 +190,21 @@ namespace BP.WF.HttpHandler
         {
             //此SID是管理员的SID.
             string testerNo = this.GetRequestVal("TesterNo");
+            string orgNo = this.GetRequestVal("OrgNo");//@lyc
+
             FlowExt fl = new FlowExt(this.FK_Flow);
             fl.Tester = testerNo;
             fl.Update();
 
-            //选择的人员登录
-            BP.WF.Dev2Interface.Port_Login(testerNo);
+            //选择的人员登录 @lyc
+            BP.WF.Dev2Interface.Port_Login(testerNo, orgNo);
             string token = BP.WF.Dev2Interface.Port_GenerToken();
 
+            //@lyc
+            int model = (int)SystemConfig.CCBPMRunModel;
+
             //组织url发起该流程.
-            string url = "Default.html?RunModel=1&FK_Flow=" + this.FK_Flow + "&TesterNo=" + testerNo;
+            string url = "Default.html?RunModel="+ model + "&FK_Flow=" + this.FK_Flow + "&TesterNo=" + testerNo;
             url += "&OrgNo=" + WebUser.OrgNo;
             url += "&UserNo=" + this.GetRequestVal("UserNo");
             url += "&Token=" + token;
@@ -310,26 +315,22 @@ namespace BP.WF.HttpHandler
                         sql += "  pdes.FK_Emp AS No,A.Name AS Name,B.Name AS FK_DeptText  FROM  Port_DeptEmpStation pdes, WF_NodeDept wnd,WF_NodeStation wns,Port_Emp A,Port_Dept B WHERE pdes.FK_Emp=A.No AND pdes.FK_Dept=B.No AND A.FK_Dept=B.NO AND  wnd.FK_Dept = pdes.FK_Dept  AND wnd.FK_Node = " + nodeid + " AND  wns.FK_Station = pdes.FK_Station  AND wnd.FK_Node =" + nodeid + " ORDER BY" + "  pdes.FK_Emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
-
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                         {
                             sql += "  A.No, A.Name, B.Name as FK_DeptText FROM  Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No";
                         }
                         else
                         {
-                            sql += "  c." +BP.Sys.Base.Glo.UserNo + ", c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No  AND A.FK_Emp=C." + BP.Sys.Base.Glo.UserNoWhitOutAS + " ";
+                            sql += "  c." +BP.Sys.Base.Glo.UserNo + ", c.Name, B.Name as FK_DeptText FROM Port_DeptEmp A, Port_Dept B, Port_Emp C WHERE A.FK_Dept=B.No  AND A.FK_Emp=C.No ";
                             sql += " AND A.OrgNo='" + WebUser.OrgNo + "' ";
                             sql += " AND B.OrgNo='" + WebUser.OrgNo + "' ";
                             sql += " AND C.OrgNo='" + WebUser.OrgNo + "' ";
                         }
-
                         break;
                     case DeliveryWay.BySelectedOrgs: //按照设置的组织计算: 20202年3月开始约定此规则.
-
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             return "err@非集团版本，不能设置启用此模式.";
-
-                        sql += "  A." +BP.Sys.Base.Glo.UserNo + ",A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, port_dept C ";
+                        sql += "  A." +BP.Sys.Base.Glo.UserNo + ",A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, Port_Dept C ";
                         sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '" + this.FK_Flow + "' AND A.FK_Dept = c.No ";
                         break;
                     case DeliveryWay.BySQL:

@@ -224,7 +224,7 @@ namespace BP.Sys
 
              //   var typeVal = BP.Sys.Base.Glo.GenerRealType( ensDtl.GetNewEntity.EnMap.Attrs, GEDtlAttr.RefPK, this.OID);
 
-                ensDtl.Retrieve(GEDtlAttr.RefPK, this.OID.ToString() );
+                ensDtl.Retrieve(GEDtlAttr.RefPK, oidOID.ToString() );
 
                 foreach (GEDtl enDtl in ensDtl)
                 {

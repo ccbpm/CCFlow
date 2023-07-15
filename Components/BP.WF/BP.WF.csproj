@@ -188,6 +188,7 @@
     <Compile Include="CCFast\CCMenu\SearchAttr.cs" />
     <Compile Include="CCFast\Portal\WindowExt\ChartZZT.cs" />
     <Compile Include="CCFast\Portal\WindowExt\Info.cs" />
+    <Compile Include="OverrideEvent.cs" />
     <Compile Include="CCOA\CCBBS\BBSExt.cs" />
     <Compile Include="CCOA\CCBBS\BBS.cs" />
     <Compile Include="CCOA\CCBBS\BBSType.cs" />
@@ -230,6 +231,14 @@
     <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
+    <Compile Include="Cloud\Admin.cs" />
+    <Compile Include="Cloud\Dept.cs" />
+    <Compile Include="Cloud\Dev2Interface.cs" />
+    <Compile Include="Cloud\Emp.cs" />
+    <Compile Include="Cloud\Glo.cs" />
+    <Compile Include="Cloud\HttpHandler\Portal_SaaSOption.cs" />
+    <Compile Include="Cloud\Org.cs" />
+    <Compile Include="Cloud\HttpHandler\Portal_SaaS.cs" />
     <Compile Include="Data\Admin2Group\CHExt.cs" />
     <Compile Include="Data\Admin2Group\GenerWorkFlowView.cs" />
     <Compile Include="Data\AdminGroup\CHExt.cs" />
@@ -245,30 +254,30 @@
     <Compile Include="Difference\WF.cs" />
     <Compile Include="Difference\WF_DynamicWebService.cs" />
     <Compile Include="Difference\WF_File.cs" />
-    <Compile Include="DINGTalk\DDSDK\AccessToken.cs" />
-    <Compile Include="DINGTalk\DDSDK\Analyze.cs" />
-    <Compile Include="DINGTalk\DDSDK\CacheItem.cs" />
-    <Compile Include="DINGTalk\DDSDK\ConstVars.cs" />
-    <Compile Include="DINGTalk\DDSDK\ErrCodeEnum.cs" />
-    <Compile Include="DINGTalk\DDSDK\ICacheProvider.cs" />
-    <Compile Include="DINGTalk\DDSDK\JSTicket.cs" />
-    <Compile Include="DINGTalk\DDSDK\Keys.cs" />
-    <Compile Include="DINGTalk\DDSDK\RequestHelper.cs" />
-    <Compile Include="DINGTalk\DDSDK\ResultPackage.cs" />
-    <Compile Include="DINGTalk\DDSDK\SignPackage.cs" />
-    <Compile Include="DINGTalk\DDSDK\SignPackageHelper.cs" />
-    <Compile Include="DINGTalk\DDSDK\SimpleCacheProvider.cs" />
-    <Compile Include="DINGTalk\DDSDK\TimeStamp.cs" />
-    <Compile Include="DINGTalk\DDSDK\TokenResult.cs" />
-    <Compile Include="DINGTalk\DDSDK\Urls.cs" />
-    <Compile Include="DINGTalk\DingDing.cs" />
-    <Compile Include="DINGTalk\DingFlowMessage.cs" />
-    <Compile Include="DINGTalk\DingModel.cs" />
-    <Compile Include="DINGTalk\DingTalk_Message.cs" />
-    <Compile Include="DINGTalk\DTS\OrgInit_Ding.cs" />
-    <Compile Include="DINGTalk\DTS\OrgInit_DingIcreMent.cs" />
-    <Compile Include="DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
-    <Compile Include="DINGTalk\Utility\HttpWebResponseUtility.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\AccessToken.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Analyze.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\CacheItem.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ConstVars.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ErrCodeEnum.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ICacheProvider.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\JSTicket.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Keys.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\RequestHelper.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ResultPackage.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SignPackage.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SignPackageHelper.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\TimeStamp.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\TokenResult.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Urls.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DingDing.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DingFlowMessage.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DingModel.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DingTalk_Message.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_Ding.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_DingIcreMent.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
+    <Compile Include="IntegratedSystem\DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
@@ -370,6 +379,7 @@
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HttpHandler\Portal_SaaS.cs" />
     <Compile Include="HttpHandler\WF_Admin_DataVer.cs" />
     <Compile Include="HttpHandler\CCMobile_MyFlow.cs" />
     <Compile Include="HttpHandler\HttpHandlerGlo.cs">
@@ -383,7 +393,9 @@
     <Compile Include="HttpHandler\WF_Admin_DeveloperDesigner.cs" />
     <Compile Include="CCFast\CCMenu\WF_GPM.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Batch.cs" />
+    <Compile Include="HttpHandler\WF_AppGuest.cs" />
     <Compile Include="HttpHandler\WF_CCForm_ChapterFrmDB.cs" />
+    <Compile Include="HttpHandler\WF_MyOA.cs" />
     <Compile Include="HttpHandler\WF_Portal.cs" />
     <Compile Include="HttpHandler\WF_CCForm_Components.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_Components.cs.cs" />
@@ -409,6 +421,7 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_PrintTemplate.cs" />
     <Compile Include="HttpHandler\WF_CCForm_JS.cs" />
     <Compile Include="HttpHandler\WF_CommTS.cs" />
+    <Compile Include="HttpHandler\CCMobilePortal_SaaS.cs" />
     <Compile Include="HttpHandler\WF_TSDev2Interface.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_FlowOperation.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_QRCode.cs" />
@@ -455,6 +468,7 @@
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
     <Compile Include="Admin\Org.cs" />
+    <Compile Include="Port\EmpSetting.cs" />
     <Compile Include="Port\OrganizationAPI.cs" />
     <Compile Include="Port\User.cs" />
     <Compile Include="Rpt\MapRpt.cs">
@@ -488,9 +502,6 @@
     <Compile Include="Template\DocTemplate.cs" />
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\ExtJobSchedule.cs" />
-    <Compile Include="Template\FindWorkerRole.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\FlowFormTree.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
@@ -509,6 +520,7 @@
     <Compile Include="Template\Frm\MapFrmReferencePanel.cs" />
     <Compile Include="Template\Frm\MapFrmWord.cs" />
     <Compile Include="Template\Frm\MapFrmWps.cs" />
+    <Compile Include="Template\NodeCond.cs" />
     <Compile Include="Template\NodeExt.cs" />
     <Compile Include="Template\FrmTrack.cs" />
     <Compile Include="Template\FrmNodeComponent.cs" />
@@ -533,23 +545,24 @@
     <Compile Include="Template\SFlow\SubFlow.cs" />
     <Compile Include="Template\SyncData.cs" />
     <Compile Include="Template\SyncDataField.cs" />
+    <Compile Include="Template\SubSystem.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
-    <Compile Include="WeiXin\Dept.cs" />
-    <Compile Include="WeiXin\DTS\DTSOrganization.cs" />
-    <Compile Include="WeiXin\DTS\DTSUserIcon.cs" />
-    <Compile Include="WeiXin\Emp.cs" />
-    <Compile Include="WeiXin\Glo.cs" />
-    <Compile Include="WeiXin\Msg\MsgBase.cs" />
-    <Compile Include="WeiXin\Msg\WeiXinGZHModel.cs" />
-    <Compile Include="WeiXin\User.cs" />
-    <Compile Include="WeiXin\Msg\WeinXinModel.cs" />
-    <Compile Include="WeiXin\WeiXinEntity.cs" />
-    <Compile Include="WeiXin\WeiXinGZHEntity.cs" />
-    <Compile Include="WeiXin\WXBizMsgCrypt.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Dept.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\DTS\DTSOrganization.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\DTS\DTSUserIcon.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Emp.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Glo.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Msg\MsgBase.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Msg\WeiXinGZHModel.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\User.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\Msg\WeinXinModel.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\WeiXinEntity.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\WeiXinGZHEntity.cs" />
+    <Compile Include="IntegratedSystem\WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\CCBill_FlowEvent.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\UpTrack.cs" />
@@ -709,6 +722,11 @@
       <Project>{f9d27bab-758d-4205-bfc8-76b49a4c87f1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cloud\OrgSetting\" />
+    <Folder Include="Cloud\Port\" />
+    <Folder Include="Cloud\SaaSOption\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

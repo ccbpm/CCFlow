@@ -645,7 +645,7 @@ namespace BP.Sys
                 if (count == -1)
                 {
                     objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+                    objs.Retrieve(FrmEventAttr.FrmID, this.No);
 
                     this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
                     this.DirectUpdate();
@@ -662,7 +662,7 @@ namespace BP.Sys
                 else
                 {
                     objs = new FrmEvents();
-                    objs.Retrieve(FrmEventAttr.FK_MapData, this.No);
+                    objs.Retrieve(FrmEventAttr.FrmID, this.No);
                     this.SetPara("FrmEventsNum", objs.Count); //设置他的数量.
                     this.SetRefObject("FrmEvents", objs);
                 }
@@ -1307,7 +1307,7 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ShowCols, "默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2");
 
-
+                map.AddTBString("Btns", null, "头部按钮", true, false, 0, 200, 20, true);
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
                 map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);

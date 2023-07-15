@@ -351,7 +351,7 @@ namespace BP.WF
 
                 Cash.SQL_Cash.Remove("ND" + this.NodeID);
                 return wk;
-               
+
             }
         }
         /// <summary>
@@ -739,8 +739,10 @@ namespace BP.WF
             #region 如果是数据合并模式，就要检查节点中是否有子线程，如果有子线程就需要单独的表.
             if (this.IsSubThread == true)
             {
-                MapData md = new MapData("ND" + this.NodeID);
-                if (md.PTable != "ND" + this.NodeID)
+                MapData md = new MapData();
+                md.No = "ND" + this.NodeID;
+
+                if (md.RetrieveFromDBSources() != 0 && md.PTable.Equals("ND" + this.NodeID) == false)
                 {
                     md.PTable = "ND" + this.NodeID;
                     md.Update();
@@ -1051,7 +1053,7 @@ namespace BP.WF
                     return "开发者表单";
 
                 if (this.HisFormType == NodeFormType.RefNodeFrm)
-                    return "引用"+this.NodeFrmID;
+                    return "引用" + this.NodeFrmID;
 
                 if (this.HisFormType == NodeFormType.SDKForm)
                     return "SDK表单";
@@ -1434,6 +1436,17 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.RunModel, (int)value);
             }
         }
+        public NodeType HisNodeType
+        {
+            get
+            {
+                return (NodeType)this.GetValIntByKey(NodeAttr.NodeType);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.NodeType, (int)value);
+            }
+        }
         /// <summary>
         /// 是不是子线程?
         /// </summary>
@@ -1604,6 +1617,13 @@ namespace BP.WF
         {
             get
             {
+               
+                if (this.HisFlow.FlowDevModel != FlowDevModel.JiJian && this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.ChapterFrm
+                    || this.HisFormType == NodeFormType.FoolTruck
+                    || this.HisFormType == NodeFormType.Develop)
+                    return "ND" + this.NodeID; //@hongyan.
+
+
                 string str = this.GetValStrByKey(NodeAttr.NodeFrmID);
                 if (DataType.IsNullOrEmpty(str) == true)
                     return "ND" + this.NodeID;
@@ -2192,6 +2212,17 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsRM, value);
             }
         }
+        public string Mark
+        {
+            get
+            {
+                return this.GetValStrByKey(NodeAttr.Mark);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.Mark, value);
+            }
+        }
         /// <summary>
         /// 是否打开即审批
         /// </summary>
@@ -2658,21 +2689,26 @@ namespace BP.WF
             //    //    throw new Exception("Node Retrieve 错误没有ID=" + _oid);
             //}
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ndName">表单ID,或者是Mark标记.</param>
+        /// <exception cref="Exception"></exception>
         public Node(string ndName)
         {
-            ndName = ndName.Replace("ND", "");
-            this.NodeID = int.Parse(ndName);
-
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (ndName.IndexOf("ND") == 0)
             {
-                if (this.RetrieveFromDBSources() <= 0)
-                    throw new Exception("Node Retrieve 错误没有ID=" + ndName);
-            }
-            else
-            {
+                ndName = ndName.Replace("ND", "");
+                this.NodeID = int.Parse(ndName);
                 if (this.Retrieve() <= 0)
                     throw new Exception("Node Retrieve 错误没有ID=" + ndName);
+                return;
             }
+
+            if (this.Retrieve("Mark", ndName) == 0)
+                throw new Exception("err@标记:" + ndName + "不存在.");
+
+
         }
         public string EnName
         {
@@ -2760,13 +2796,15 @@ namespace BP.WF
                 map.AddTBIntPK(NodeAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(NodeAttr.Name, null, "名称", true, false, 0, 150, 10);
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, true, 0, 100, 10, false);
+                map.AddTBString(NodeAttr.Mark, null, "标记", true, true, 0, 100, 10, false);
+
 
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
 
                 map.AddTBString(NodeAttr.Icon, null, "节点ICON图片路径", true, false, 0, 70, 10);
 
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);
-               // map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);
+                // map.AddTBInt(NodeAttr.SubThreadType, 0, "子线程ID", false, false);
 
                 map.AddTBString(NodeAttr.FK_Flow, null, "FK_Flow", false, false, 0, 3, 10);
                 map.AddTBInt(NodeAttr.IsGuestNode, 0, "是否是客户执行节点", false, false);
@@ -2879,6 +2917,7 @@ namespace BP.WF
                 map.AddBoolean(NodeAttr.IsHandOver, false, "是否可以移交", true, true);
                 map.AddTBDecimal(NodeAttr.PassRate, 100, "通过率", true, true);
                 map.AddTBInt(NodeAttr.RunModel, 0, "运行模式(对普通节点有效)", true, true);
+                map.AddTBInt(NodeAttr.NodeType, 0, "节点类型", true, true); //2023.06.
                 map.AddTBInt(NodeAttr.BlockModel, 0, "阻塞模式", true, true);
                 map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 200, 10);
                 map.AddTBString(NodeAttr.BlockAlert, null, "被阻塞提示信息", true, false, 0, 100, 10);
@@ -3080,7 +3119,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (this.IsSubThread==false)
+            if (this.IsSubThread == false)
                 return "修复成功.";
 
 

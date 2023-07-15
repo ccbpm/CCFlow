@@ -106,7 +106,6 @@ namespace BP.Port
                     else
                         this.SetValByKey(EmpAttr.No, BP.Web.WebUser.OrgNo + "_" + value);
                 }
-
                 else
                     this.SetValByKey(EmpAttr.No, value);
             }
@@ -156,10 +155,6 @@ namespace BP.Port
         {
             get
             {
-                if (DBAccess.IsExitsTableCol("Port_Emp", "Pass") == false)
-                {
-                    //@qfl补充上增加密码列 长度 50.
-                }
                 return DBAccess.RunSQLReturnStringIsNull("SELECT Pass FROM Port_Emp WHERE No='" + this.No + "'", "123");
             }
             set
@@ -355,11 +350,14 @@ namespace BP.Port
                 map.AddTBInt(EmpAttr.Idx, 0, "Idx", false, false);
                 #endregion 字段
 
+                #region 查询条件.
                 map.AddSearchAttr(EmpAttr.FK_Dept);
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                     map.AddHidden("OrgNo", "=", "@WebUser.OrgNo");
+                #endregion 查询条件.
 
+                #region 方法.
                 RefMethod rm = new RefMethod();
                 rm.Title = "设置图片签名";
                 rm.ClassMethodName = this.ToString() + ".DoSinger";
@@ -404,31 +402,37 @@ namespace BP.Port
                     BP.Port.TeamEmpAttr.FK_Emp,
                     BP.Port.TeamEmpAttr.FK_Team, "标签", TeamAttr.FK_TeamType);
 
+                #endregion 方法.
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
 
+        #region 方法执行.
         public string DoEditMainDept()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return  "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
 
         public string DoEditLeader()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return "../../../GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
         }
 
         public string DoEmpDepts()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/EmpDepts.htm?FK_Emp=" + this.No;
+            return "../../../GPM/EmpDepts.htm?FK_Emp=" + this.No;
         }
 
         public string DoSinger()
         {
             //路径
-            return BP.Difference.SystemConfig.CCFlowWebPath + "GPM/Siganture.htm?EmpNo=" + this.No;
+            return "../../../GPM/Siganture.htm?EmpNo=" + this.No;
         }
+        #endregion 方法执行.
+
         protected override bool beforeInsert()
         {
             if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
@@ -627,15 +631,27 @@ namespace BP.Port
 
         public string DoResetpassword(string pass1, string pass2)
         {
+
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
+            if (pass1.ToLower().Contains("or") == true || pass1.ToLower().Contains(" ") == true)
+                return "密码格式错误.";
 
-            this.Pass = pass1;
+            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
+                pass1 = BP.Tools.Cryptography.EncryptString(pass1);
+
+            if (BP.Web.WebUser.IsAdmin == false)
+            {
+                if (this.UserID.Equals(BP.Web.WebUser.No) == false)
+                    return "err@您不能修改别人的密码.";
+            }
+
+            if (this.OrgNo.Equals(BP.Web.WebUser.OrgNo) == false)
+                return "err@您不能修改别的组织密码.";
 
             if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
                 this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
 
-            this.Update();
             return "密码设置成功";
         }
 

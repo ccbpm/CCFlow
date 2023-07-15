@@ -7,6 +7,7 @@ using BP.Port;
 using BP.Sys;
 using BP.Difference;
 using BP.WF.Port.Admin2Group;
+using BP.Web;
 
 namespace BP.WF.Template
 {
@@ -123,9 +124,12 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCreateSameLevelNodeMy(string name)
         {
-            EntityTree en = this.DoCreateSameLevelNode(name);
-            en.Name = name;
-            en.Update();
+            //EntityTree en = this.DoCreateSameLevelNode(name);
+            FlowSort en = new FlowSort();
+            en.Copy(this);
+            en.SetValByKey(FlowSortAttr.No, DBAccess.GenerGUID(10));
+            en.SetValByKey(FlowSortAttr.Name, name);
+            en.Insert();
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
@@ -149,9 +153,13 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCreateSubNodeMy(string name)
         {
-            EntityTree en = this.DoCreateSubNode(name);
-            en.Name = name;
-            en.Update();
+            //EntityTree en = this.DoCreateSubNode(name);
+            FlowSort en = new FlowSort();
+            en.Copy(this);
+            en.SetValByKey(FlowSortAttr.No, DBAccess.GenerGUID(10));
+            en.SetValByKey(FlowSortAttr.ParentNo, this.No);
+            en.SetValByKey(FlowSortAttr.Name, name);
+            en.Insert();
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
@@ -177,8 +185,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                this.OrgNo = BP.Web.WebUser.OrgNo;
+            if (DataType.IsNullOrEmpty(this.OrgNo) == true && Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
 
             return base.beforeInsert();
         }
@@ -211,7 +219,7 @@ namespace BP.WF.Template
             ps.Add("fk_flowSort", this.No);
             //string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
-                throw new Exception( "err@该目录下有流程，您不能删除。");
+                throw new Exception("err@该目录下有流程，您不能删除。");
 
             //检查是否有子目录？
             ps = new Paras();
@@ -219,7 +227,7 @@ namespace BP.WF.Template
             ps.Add("ParentNo", this.No);
             //sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
             if (DBAccess.RunSQLReturnValInt(ps) != 0)
-                throw new Exception ("err@该目录下有子目录，您不能删除...");
+                throw new Exception("err@该目录下有子目录，您不能删除...");
 
             return base.beforeDelete();
         }
@@ -244,37 +252,93 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 
+        /// 初始化数据.
+        /// </summary>
+        private void InitData()
+        {
+            FlowSort fs = new FlowSort();
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                fs.setName("流程树");
+                fs.setNo(BP.Web.WebUser.OrgNo);
+                fs.setParentNo("100");
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+                fs.Save(); //@hongyan.
+
+                fs = new FlowSort();
+                fs.setName("公文类");
+                fs.setNo(DBAccess.GenerGUID());
+                fs.setParentNo(BP.Web.WebUser.OrgNo);
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+                fs.Insert();
+
+                fs = new FlowSort();
+                fs.setName("办公类");
+                fs.setNo(DBAccess.GenerGUID());
+                fs.setParentNo(BP.Web.WebUser.OrgNo);
+                fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+                fs.Insert();
+                return;
+            }
+
+            fs = new FlowSort();
+            fs.Name = "流程树";
+            fs.No = "100";
+            fs.ParentNo = "0";
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+
+            fs = new FlowSort();
+            fs.setName("办公类");
+            fs.setNo("01");
+            fs.setParentNo("100");
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+
+            fs = new FlowSort();
+            fs.setName("公文类");
+            fs.setNo("01");
+            fs.setParentNo("100");
+            fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+            fs.Insert();
+        }
+        /// <summary>
+        /// 查询全部.
         /// </summary>
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                return this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+            if (BP.Web.WebUser.No.Equals("admin") == true)
+                return this.RetrieveAll(FlowSortAttr.Idx);
 
-            int i = base.RetrieveAll(FlowSortAttr.Idx);
-            if (i == 0)
+            if (BP.Web.WebUser.IsAdmin == false)
+                throw new Exception("err@您不是管理员.");
+
+            //if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
+            //{
+            //    OrgAdminer oa = new OrgAdminer();
+            //    oa.MyPK = WebUser.OrgNo + "_" + WebUser.UserID;
+            // //   oa.ret
+            //}
+
+
+            var num = 0;
+            if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
+                num = this.Retrieve(FlowSortAttr.Idx);
+
+            if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                num = this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+
+            if (Glo.CCBPMRunModel == CCBPMRunModel.SAAS)
+                num = this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
+
+            if (num == 0)
             {
-                FlowSort fs = new FlowSort();
-                fs.Name = "流程树";
-                fs.No = "100";
-                fs.ParentNo = "0";
-                fs.Insert();
-
-                fs = new FlowSort();
-                fs.Name = "公文类";
-                fs.No = "01";
-                fs.ParentNo = "100";
-                fs.Insert();
-
-                fs = new FlowSort();
-                fs.Name = "办公类";
-                fs.No = "02";
-                fs.ParentNo = "100";
-                fs.Insert();
-                i = base.RetrieveAll(FlowSortAttr.Idx);
+                InitData();
+                return this.RetrieveAll();
             }
-            return i;
+
+            return num;
         }
 
 

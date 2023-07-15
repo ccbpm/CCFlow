@@ -51,8 +51,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
-                map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, true, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices");
+                map.AddDDLStringEnum(SFTableAttr.DictSrcType, "BPClass", "数据表类型", SFTableAttr.DictSrcType, false);
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
 
@@ -90,7 +89,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEdit()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+            return "../../Comm/Ens.htm?EnsName=" + this.No;
         }
         /// <summary>
         /// 执行删除.

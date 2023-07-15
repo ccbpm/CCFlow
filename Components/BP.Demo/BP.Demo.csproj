@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIDemo\APITester.cs" />
+    <Compile Include="APIDemo\ClientAPISAAS.cs" />
     <Compile Include="BPFramework\DemoBuessUnit.cs" />
     <Compile Include="BPFramework\BanJi.cs" />
     <Compile Include="BPFramework\BPUser.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="BPFramework\School.cs" />
     <Compile Include="BPFramework\Student.cs" />
     <Compile Include="BPFramework\StudentKeMu.cs" />
+    <Compile Include="CallCenter\F001.cs" />
     <Compile Include="DemoCRM\Customer.cs" />
     <Compile Include="DemoCRM\Product.cs" />
     <Compile Include="F069.cs" />

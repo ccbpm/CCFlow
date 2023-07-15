@@ -56,9 +56,9 @@ namespace BP.WF.HttpHandler
             string tmpPath = "";
 
             if (BP.WF.Glo.Platform == Platform.CCFlow)
-                tmpPath =  BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.CCFlow";
+                tmpPath = BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.CCFlow";
             else
-                tmpPath =  BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.JFlow";
+                tmpPath = BP.Difference.SystemConfig.PathOfWebApp + @"WF/Admin/AttrFlow/APICodeFEE.txt.JFlow";
 
             if (System.IO.File.Exists(tmpPath) == false)
                 return string.Format(@"未找到事件编写模板文件“{0}”，请联系管理员！", tmpPath);
@@ -207,7 +207,7 @@ namespace BP.WF.HttpHandler
 
                 //消息&事件Count
                 BP.Sys.FrmEvents fes = new BP.Sys.FrmEvents();
-                dr["HisFrmEventsCount"] = fes.Retrieve(BP.Sys.FrmEventAttr.FK_MapData, "ND" + node.NodeID);
+                dr["HisFrmEventsCount"] = fes.Retrieve(BP.Sys.FrmEventAttr.FrmID, "ND" + node.NodeID);
 
                 //流程完成条件Count
                 BP.WF.Template.Conds conds = new BP.WF.Template.Conds(BP.WF.Template.CondType.Flow, node.NodeID);
@@ -504,7 +504,7 @@ namespace BP.WF.HttpHandler
                 //en.StartGuideLink = this.GetRequestVal("TB_GuideLink");
                 //en.StartGuideLab = this.GetRequestVal("TB_GuideLab");
 
-               // en.Update();
+                // en.Update();
                 return "保存成功";
             }
             catch (Exception ex)
@@ -540,6 +540,54 @@ namespace BP.WF.HttpHandler
 
         #region 数据导入.
         /// <summary>
+        /// 导入bpmn2.0 @hongyan. 这个方法翻译过去.
+        /// </summary>
+        /// <returns></returns>
+        public string Imp_DoneBPMN()
+        {
+            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的流程模版。";
+
+            //设置文件名
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[1].FileName);
+
+            //文件存放路径
+            string filePath = BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
+            files[1].SaveAs(filePath);
+            HttpContextHelper.UploadFile(files[1], filePath);
+
+            string flowNo = this.FK_Flow;
+            string FK_FlowSort = this.GetRequestVal("FK_Sort");
+
+            //检查流程编号
+            if (DataType.IsNullOrEmpty(flowNo) == false)
+            {
+                Flow fl = new Flow(flowNo);
+                FK_FlowSort = fl.FK_FlowSort;
+            }
+
+            //检查流程类别编号
+            if (DataType.IsNullOrEmpty(FK_FlowSort) == true)
+            {
+                if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+                    FK_FlowSort = BP.Web.WebUser.OrgNo;
+                else
+                    return "err@所选流程类别编号不存在。";
+            }
+
+            //执行导入
+            Flow flow = BP.WF.Template.TemplateGlo.NewFlowByBPMN(FK_FlowSort, filePath);
+            flow.DoCheck(); //要执行一次检查.
+
+            Hashtable ht = new Hashtable();
+            ht.Add("FK_Flow", flow.No);
+            ht.Add("FlowName", flow.Name);
+            ht.Add("FK_FlowSort", flow.FK_FlowSort);
+            ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
+            return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
         /// 流程模版导入.
         /// </summary>
         /// <returns></returns>
@@ -553,7 +601,7 @@ namespace BP.WF.HttpHandler
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
-            string filePath =  BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
+            string filePath = BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
             //files[0].SaveAs(filePath);
             HttpContextHelper.UploadFile(files[0], filePath);
 
@@ -607,7 +655,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //把文件放入ds.
-            string path =  BP.Difference.SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
+            string path = BP.Difference.SystemConfig.PathOfWebApp + "WF/Admin/ClientBin/NodeIcon/";
             string[] strs = System.IO.Directory.GetFiles(path);
             DataTable dtIcon = new DataTable();
             dtIcon.Columns.Add("No");
@@ -748,6 +796,10 @@ namespace BP.WF.HttpHandler
 
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
             }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "'"));
+            }
             else
             {
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "'"));
@@ -768,12 +820,22 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT FK_NY, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY FK_NY";
             DataTable FlowsByNY = DBAccess.RunSQLReturnTable(sql);
             FlowsByNY.TableName = "FlowsByNY";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                FlowsByNY.Columns[0].ColumnName = "FK_NY";
+                FlowsByNY.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(FlowsByNY);
 
             //部门分组.
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_GenerWorkFlow WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
             DataTable FlowsByDept = DBAccess.RunSQLReturnTable(sql);
             FlowsByDept.TableName = "FlowsByDept";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                FlowsByDept.Columns[0].ColumnName = "DeptName";
+                FlowsByDept.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(FlowsByDept);
             #endregion 实例分析。
 
@@ -783,6 +845,11 @@ namespace BP.WF.HttpHandler
             sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
             DataTable TodolistByDept = DBAccess.RunSQLReturnTable(sql);
             TodolistByDept.TableName = "TodolistByDept";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                TodolistByDept.Columns[0].ColumnName = "DeptName";
+                TodolistByDept.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(TodolistByDept);
 
             //逾期的 - 人员分组.
@@ -796,12 +863,21 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp ";
                 sql += "UNION SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
             }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
+            }
             else
             {
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
             }
             DataTable OverTimeByEmp = DBAccess.RunSQLReturnTable(sql);
             OverTimeByEmp.TableName = "OverTimeByEmp";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                OverTimeByEmp.Columns[0].ColumnName = "Name";
+                OverTimeByEmp.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(OverTimeByEmp);
             //逾期的 - 部门分组.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -814,12 +890,21 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
                 sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
             }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW(), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
+            }
             else
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
             }
             DataTable OverTimeByDept = DBAccess.RunSQLReturnTable(sql);
             OverTimeByDept.TableName = "OverTimeByDept";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                OverTimeByDept.Columns[0].ColumnName = "DeptName";
+                OverTimeByDept.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(OverTimeByDept);
             //逾期的 - 节点分组.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
@@ -832,12 +917,21 @@ namespace BP.WF.HttpHandler
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName ";
                 sql += "UNION Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
             }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
+            }
             else
             {
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
             }
             DataTable OverTimeByNode = DBAccess.RunSQLReturnTable(sql);
             OverTimeByNode.TableName = "OverTimeByNode";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                OverTimeByNode.Columns[0].ColumnName = "NodeName";
+                OverTimeByNode.Columns[1].ColumnName = "Num";
+            }
             ds.Tables.Add(OverTimeByNode);
             #endregion 逾期。
 
@@ -845,7 +939,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         #endregion 欢迎页面初始化.
-       
+
 
     }
 }

@@ -298,8 +298,6 @@ namespace BP.WF.HttpHandler
                 if (DBAccess.TestIsConnection() == false)
                     return "err@数据库连接配置错误,请参考手册查看数据库配置连接.";
 
-                //   DBAccess.IsCaseSensitive
-
                 //判断是否可以安装,不能安装就抛出异常.
                 BP.WF.Glo.IsCanInstall();
 
@@ -308,7 +306,7 @@ namespace BP.WF.HttpHandler
                     return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='/Portal/Standard/Login.htm' >这里直接登录流程设计器</a>";
 
                 Hashtable ht = new Hashtable();
-                ht.Add("OSModel", 1); //组织结构类型.
+                ht.Add("CCBPMRunModel", (int)SystemConfig.CCBPMRunModel); //组织结构类型.
                 ht.Add("DBType", BP.Difference.SystemConfig.AppCenterDBType.ToString()); //数据库类型.
                 ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
 
@@ -332,7 +330,6 @@ namespace BP.WF.HttpHandler
 
             //执行ccflow的升级。
             //  BP.WF.Glo.UpdataCCFlowVer();
-
             //加注释.
             BP.Pub.PubClass.AddComment();
 
@@ -344,7 +341,14 @@ namespace BP.WF.HttpHandler
                 //    return "err@该用户已经被禁用.";
             }*/
 
-            return "info@系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return "info@单组织版本,系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
+
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                return "info@集团版本,系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
+
+            return "info@SAAS版本安装成功 点击:<a href='/Portal/SaaS/Admin/Login.htm' >登陆后台, 超级管理员账号:admin,123  演示公司账号:ccs,123 </a>";
+
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
         #endregion
@@ -377,7 +381,6 @@ namespace BP.WF.HttpHandler
             string condType = this.GetRequestVal("CondType");
 
             BP.WF.Template.SQLTemplates sqls = new SQLTemplates();
-            //sqls.Retrieve(BP.WF.Template.SQLTemplateAttr.SQLType, sqlType);
 
             DataTable dt = null;
             string sql = "";

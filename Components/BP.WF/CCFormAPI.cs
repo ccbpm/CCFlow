@@ -22,6 +22,68 @@ namespace BP.WF
     public class CCFormAPI : Dev2Interface
     {
         /// <summary>
+        /// 获得Pop的字段的值
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="pk"></param>
+        /// <returns>返回data, No=编号,Name=名称两个列. </returns>
+        /// <exception cref="Exception"></exception>
+        public static DataTable GenerPopData2022(string pk, string fieldName)
+        {
+            //判断该字段是否启用了pop返回值？
+           string  sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + pk + " AND EleID='" + fieldName + "'";
+            string emps = "";
+            DataTable dtVals = DBAccess.RunSQLReturnTable(sql);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+
+            //获取接受人并格式化接受人, 
+            if (dtVals.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dtVals.Rows)
+                    emps += dr[0].ToString() + ",";
+            }
+
+            if (emps.Contains(",") && emps.Contains(";"))
+            {
+                /*如果包含,; 例如 zhangsan,张三;lisi,李四;*/
+                string[] myemps1 = emps.Split(';');
+                foreach (string str in myemps1)
+                {
+                    if (DataType.IsNullOrEmpty(str))
+                        continue;
+
+                    string[] ss = str.Split(',');
+                    DataRow dr = dt.NewRow();
+                    dr[0] = ss[0];
+                    dt.Rows.Add(dr);
+                }
+                return dt;
+            }
+
+            emps = emps.Replace(";", ",");
+            emps = emps.Replace("；", ",");
+            emps = emps.Replace("，", ",");
+            emps = emps.Replace("、", ",");
+            emps = emps.Replace("@", ",");
+             
+            // 把它加入接受人员列表中.
+            string[] myemps = emps.Split(',');
+            foreach (string s in myemps)
+            {
+                if (DataType.IsNullOrEmpty(s))
+                    continue;
+
+                DataRow dr = dt.NewRow();
+                dr[0] = s;
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+        /// <summary>
         /// 生成报表
         /// </summary>
         /// <param name="templeteFilePath">模版路径</param>
@@ -892,7 +954,7 @@ namespace BP.WF
                 }
                 //2.从表装载填充
                 me = mes.GetEntityByKey("ExtModel", MapExtXmlList.PageLoadFullDtl) as MapExt;
-                if (me != null && me.DoWay==1 && DataType.IsNullOrEmpty(me.Doc) ==false)
+                if (me != null && me.DoWay.Equals("1") && DataType.IsNullOrEmpty(me.Doc) ==false)
                 {
                     string sql = Glo.DealSQLExp(me.Doc, en, null);
                     int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;

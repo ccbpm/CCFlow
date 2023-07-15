@@ -401,7 +401,7 @@ namespace BP.WF.Template.Frm
         }
         public string DoTabIdx()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
+            return "../../Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BP.Difference;
+using System.Collections;
 
 namespace BP.Tools
 {
@@ -136,6 +137,39 @@ namespace BP.Tools
                 return ex.Message;
             }
         }
+        public static string HttpPostConnect_Data(string dbSrNo, string exp, Hashtable ht, string requestMethod)
+        {  //返回值
+            //用户输入的webAPI地址
+            string apiUrl = exp;
+            if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
+
+            var mysrc = new SFDBSrc(dbSrNo);
+            //拼接路径.
+            apiUrl = mysrc.ConnString + apiUrl;
+
+            #region 解析路径变量 /{xxx}/{yyy} ? xxx=xxx
+            if (apiUrl.Contains("{") == true)
+            {
+                if (ht != null)
+                {
+                    foreach (string key in ht.Keys)
+                    {
+                        apiUrl = apiUrl.Replace("{" + key + "}", ht[key].ToString());
+                    }
+                }
+            }
+            #endregion
+
+            string[] strs = apiUrl.Split('?');
+            //api接口地址
+            string apiHost = strs[0];
+            //api参数
+            string apiParams = "";
+            if (strs.Length == 2)
+                apiParams = strs[1];
+            return BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams, requestMethod);
+        }
         /// <summary>
         /// httppost方式发送数据
         /// </summary>
@@ -144,33 +178,45 @@ namespace BP.Tools
         /// <param name="timeOut">超时时间</param>
         /// <param name="encode">text code.</param>
         /// <returns>成功：返回读取内容；失败：0</returns>
-        public static string HttpPostConnect(string serverUrl, string postData)
+        public static string HttpPostConnect(string serverUrl, string postData, string requestMethod = "POST", bool isJsonModel = false)
         {
+            //serverUrl = serverUrl.Replace("//", "/");
+            //serverUrl = serverUrl.Replace("//", "/");
+
             var dataArray = Encoding.UTF8.GetBytes(postData);
             //创建请求
             var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
-            request.Method = "POST";
+            request.Method = requestMethod;
             request.ContentLength = dataArray.Length;
             //设置上传服务的数据格式  设置之后不好使
             //request.ContentType = "application/x-www-form-urlencoded";
             //请求的身份验证信息为默认
             request.Credentials = CredentialCache.DefaultCredentials;
-            request.ContentType = "application/x-www-form-urlencoded";
+
+            if (isJsonModel == true)
+                request.ContentType = "application/json";
+            else
+                request.ContentType = "application/x-www-form-urlencoded";
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             //请求超时时间
             request.Timeout = 10000;
             //创建输入流
             Stream dataStream;
-            try
+            if (requestMethod.ToLower().Equals("get")==false )
             {
-                dataStream = request.GetRequestStream();
+                try
+                {
+                    dataStream = request.GetRequestStream();
+                    //发送请求
+                    dataStream.Write(dataArray, 0, dataArray.Length);
+                    dataStream.Close();
+                }
+                catch (Exception)
+                {
+                    return "0";//连接服务器失败
+                }
             }
-            catch (Exception)
-            {
-                return "0";//连接服务器失败
-            }
-            //发送请求
-            dataStream.Write(dataArray, 0, dataArray.Length);
-            dataStream.Close();
 
             HttpWebResponse res;
             try

@@ -309,7 +309,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string ChapterFrmDBVers(string frmID, string workID)
         {
-            string sql = " SELECT DISTINCT Ver,RDT,RecName FROM Sys_FrmDBVer WHERE FrmID = '" + frmID + "' AND RefPKVal='" + workID + "' Group BY Ver ORDER BY RDT";
+            string sql = " SELECT DISTINCT Ver,RDT,RecName FROM Sys_FrmDBVer WHERE FrmID = '" + frmID + "' AND RefPKVal='" + workID + "' Group BY Ver,RDT,RecName ORDER BY RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             // dt.Columns.Add("MaxVer"); //最大版本.

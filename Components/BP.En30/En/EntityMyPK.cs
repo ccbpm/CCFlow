@@ -72,7 +72,7 @@ namespace BP.En
         #endregion
 
         /// <summary>
-        /// 赋值:@hongyan.
+        /// 赋值
         /// </summary>
         /// <returns></returns>
         protected override bool beforeInsert()

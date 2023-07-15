@@ -2468,8 +2468,8 @@ namespace BP.En
                             string str = en.GetValStrByKey(attr.Key) as string;
                             if (DataType.IsNullOrEmpty(str))
                             {
-                                if (IsEnableNull)
-                                    ps.Add(attr.Key, DBNull.Value);
+                                if (IsEnableNull) //2023-06-06修改，类型不匹配执行SQL报错
+                                    ps.Add(attr.Key, null);
                                 else
                                     ps.Add(attr.Key, 0);
                             }

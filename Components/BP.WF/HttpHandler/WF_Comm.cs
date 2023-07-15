@@ -14,6 +14,8 @@ using System.Text;
 using BP.Tools;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Org.BouncyCastle.Tsp;
+using System.Runtime.CompilerServices;
 
 namespace BP.WF.HttpHandler
 {
@@ -445,17 +447,24 @@ namespace BP.WF.HttpHandler
 
                 string key2 = this.GetRequestVal("Key2");
                 string val2 = this.GetRequestVal("Val2");
+                Attrs attrs = en.EnMap.Attrs;
 
                 if (DataType.IsNullOrEmpty(key1) == false && key1.Equals("undefined") == false)
                 {
                     int num = 0;
                     if (DataType.IsNullOrEmpty(key2) == false && key2.Equals("undefined") == false)
                     {
-                        num = en.Delete(key1, val1, key2, val2);
+                        if(SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            num = en.Delete(key1, BP.Sys.Base.Glo.GenerRealType(attrs, key1, val1), key2, BP.Sys.Base.Glo.GenerRealType(attrs, key2, val2));
+                        else
+                            num = en.Delete(key1, val1, key2, val2);
                     }
                     else
                     {
-                        num = en.Delete(key1, val1);
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                            num = en.Delete(key1, BP.Sys.Base.Glo.GenerRealType(attrs, key1, val1));
+                        else
+                            num = en.Delete(key1, val1);
                     }
                     return num.ToString();
                 }
@@ -513,6 +522,7 @@ namespace BP.WF.HttpHandler
 
                 //返回数据.
                 //return en.ToJson(false);
+                en.PKVal = this.PKVal;
 
                 return en.Update().ToString(); //返回影响行数.
             }
@@ -771,7 +781,7 @@ namespace BP.WF.HttpHandler
                     ParameterInfo[] paramInfos = mp.GetParameters();
                     foreach (ParameterInfo paramInfo in paramInfos)
                     {
-                        myparas[idx] = str[idx];
+                        myparas[idx] = str[idx].Contains("`")==true? str[idx].Replace("`","~"): str[idx];
                         try
                         {
                             if (paramInfo.ParameterType.Name.Equals("Single"))
@@ -1385,7 +1395,12 @@ namespace BP.WF.HttpHandler
                 dr["Width"] = item.Width; //下拉框显示的宽度.
                 dr["UIContralType"] = (int)item.HisAttr.UIContralType;
                 if (attr.IsFK && attr.HisFKEn.IsTreeEntity == true)
-                    dr["IsTree"] = 1;
+                {
+                    if (attr.Key.Equals("FK_Dept") && WebUser.IsAdmin == false)
+                        dr["IsTree"] = 0;
+                    else
+                        dr["IsTree"] = 1;
+                }
                 else
                     dr["IsTree"] = 0;
                 dt.Rows.Add(dr);
@@ -1469,7 +1484,8 @@ namespace BP.WF.HttpHandler
         {
             //取出来查询条件.
             BP.Sys.UserRegedit ur = new UserRegedit();
-            ur.setMyPK(WebUser.UserID + "_" + this.EnsName + "_SearchAttrs");
+            ur.Row = null;
+            ur.setMyPK(WebUser.No + "_" + this.EnsName + "_SearchAttrs");
             ur.RetrieveFromDBSources();
 
             DataSet ds = new DataSet();
@@ -1626,8 +1642,6 @@ namespace BP.WF.HttpHandler
                     encfg.SetValByKey("OrderBy", orderBy);
                 }
             }
-
-
 
             //if (GetRequestVal("DoWhat") != null && GetRequestVal("DoWhat").Equals("Batch"))
             //    qo.DoQuery(en.PK, 500, 1);
@@ -2065,7 +2079,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //获得真实的数据类型.
-                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true)
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true &&(attr.DefaultSymbol.Equals("=")|| attr.DefaultSymbol.Equals("!=")))
                     {
                         var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                             attr.RefAttrKey, attr.DefaultValRun);
@@ -2152,7 +2166,7 @@ namespace BP.WF.HttpHandler
                 qo.addLeftBracket();
                 Attr attr = attrs.GetAttrByKeyOfEn(str);
                 if (attr != null && attr.IsFK && attr.UIBindKey.Contains(",TS.")==false 
-                    && attr.HisFKEn.IsTreeEntity == true)
+                    && attr.HisFKEn.IsTreeEntity == true && !(attr.Key.Equals("FK_Dept")&&WebUser.IsAdmin==false))
                 {
                     //需要获取当前数据选中的数据和子级(先阶段只处理部门信息)
                     DataTable dt = null;
@@ -2196,13 +2210,17 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr attr in map.Attrs)
             {
+                if (1 == 1)
+                    continue;
+
                 string val = HttpContextHelper.RequestParams(attr.Field);
                 if (DataType.IsNullOrEmpty(val))
                     continue;
-
                 if (keys.Contains(attr.Field))
                     continue;
                 if (attr.Field.Equals("Token"))
+                    continue;
+                if (attr.Field.Equals("No"))
                     continue;
 
                 switch (attr.MyDataType)
@@ -2252,9 +2270,6 @@ namespace BP.WF.HttpHandler
                     default:
                         break;
                 }
-
-
-
                 if (keys.Contains(attr.Field) == false)
                     keys.Add(attr.Field);
             }
@@ -3647,10 +3662,7 @@ namespace BP.WF.HttpHandler
                 {
                     BP.WF.Dev2Interface.Port_LoginByToken(token);
                 }
-                    
             }
-               
-
             if (DataType.IsNullOrEmpty(token) == true)
             {
                 string userNo = Web.WebUser.No;
@@ -4150,7 +4162,7 @@ namespace BP.WF.HttpHandler
                             throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag + "");
 
                         Sys.SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                        selectSQL += ses.GenerCaseWhenForOracle(en.EnMap.PhysicsTable + ".", attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString())) + ",";
+                        selectSQL += ses.GenerCaseWhenForOracle(en.EnMap.PhysicsTable + ".", attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString().Equals("") == true ? 0 : int.Parse(attr.DefaultVal.ToString())) + ",";
                         continue;
                     }
 
@@ -4489,6 +4501,44 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        // 您的应用ID
+        private static string APP_KEY = "447d8b671ee948b8";
+        // 您的应用密钥
+        private static string APP_SECRET = "rF1HBr3QjtPD1gXVFfIAGKtDRF6Q2HuB";
+
+        public string ToLang()
+        {
+            // 添加请求参数
+            Dictionary<String, String[]> paramsMap = createRequestParams();
+            // 添加鉴权相关参数
+            BP.Tools.AuthV3Util.addAuthParams(APP_KEY, APP_SECRET, paramsMap);
+            Dictionary<String, String[]> header = new Dictionary<string, string[]>() { { "Content-Type", new String[] { "application/x-www-form-urlencoded" } } };
+            // 请求api服务
+            byte[] result = HttpUtil.doPost("https://openapi.youdao.com/api", header, paramsMap, "application/json");
+            // 打印返回结果
+            if (result != null)
+            {
+                string resStr = System.Text.Encoding.UTF8.GetString(result);
+                return resStr;
+            }
+            return "";
+        }
+
+        private Dictionary<String, String[]> createRequestParams()
+        {
+            // note: 将下列变量替换为需要请求的参数
+            string q = this.GetRequestVal("Txt");//待翻译文本
+            string from = "zh-CHS";//源语言语种
+            string to = this.GetRequestVal("ToLang");//目标语言语种
+            string vocabId = "";//非必填项，用户指定的词典 out_id，目前支持英译中
+
+            return new Dictionary<string, string[]>() {
+                { "q", new string[]{q}},
+                {"from", new string[]{from}},
+                {"to", new string[]{to}},
+                {"vocabId", new string[]{vocabId}}
+            };
+        }
     }
 
 }

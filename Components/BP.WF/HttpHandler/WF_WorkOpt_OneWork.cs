@@ -259,7 +259,7 @@ namespace BP.WF.HttpHandler
                         gwls.AddEntity(gwl);
                     }
                 }
-                ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
+                ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerlist"));
             }
 
             //把节点审核配置信息.
@@ -542,7 +542,7 @@ namespace BP.WF.HttpHandler
 
 
                     //是否可以调整工时
-                    sql = "SELECT CHRole \"CHRole\" From WF_GenerWorkerList G,WF_Node N Where G.FK_Node=N.NodeID AND N.CHRole!=0 AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";
+                    sql = "SELECT CHRole \"CHRole\" From WF_GenerWorkerlist G,WF_Node N Where G.FK_Node=N.NodeID AND N.CHRole!=0 AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count > 0)
                     {
@@ -860,7 +860,7 @@ namespace BP.WF.HttpHandler
                     qo.AddWhere(GenerWorkerListAttr.WorkID, id);
                     qo.DoQuery();
 
-                    DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
+                    DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerlist");
                     ds.Tables.Add(dtGwls);
                 }
                 #endregion 如果流程没有完成,就把工作人员列表返回过去.
@@ -1078,7 +1078,7 @@ namespace BP.WF.HttpHandler
                         qo.DoQuery();
                         
                        
-                        DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerList");
+                        DataTable dtGwls = gwls.ToDataTableField("WF_GenerWorkerlist");
                         ds.Tables.Add(dtGwls);
                     }
 

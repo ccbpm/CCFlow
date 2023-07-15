@@ -38,6 +38,7 @@ namespace BP.WF
         public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, Int64 realWorkID, string fromWorkOpt = "0",
             bool isView = false)
         {
+            DBAccess.RunSQL("DELETE FROM Sys_MapExt WHERE DoWay='0' or DoWay='None'");
             
             try
             {
@@ -68,7 +69,6 @@ namespace BP.WF
                 //定义变量，为绑定独立表单设置单据编号.
                 string billNo = null; //定义单据编号.
                 string billNoField = null; //定义单据编号字段.
-
 
                 // 第1.2: 调用,处理用户定义的业务逻辑.
                 string sendWhen = ExecEvent.DoNode(EventListNode.FrmLoadBefore, nd,
@@ -669,6 +669,7 @@ namespace BP.WF
                     if (frmNode.IsEnableLoadData == true && md.IsPageLoadFull == true)
                     {
                         me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
+                        
                         //执行通用的装载方法.
                         MapAttrs attrs = md.MapAttrs;
                         MapDtls dtls = md.MapDtls;
@@ -779,223 +780,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    DataTable dtAlert = new DataTable();
-                    dtAlert.TableName = "AlertMsg";
-                    dtAlert.Columns.Add("Title", typeof(string));
-                    dtAlert.Columns.Add("Msg", typeof(string));
-                    dtAlert.Columns.Add("URL", typeof(string));
-                    DataRow drMsg = null;
-                    int sta = gwf.GetParaInt("HungupSta");
-                    switch (gwf.WFState)
-                    {
-                        case WFState.Runing:
-                            drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = "挂起信息";
-                            if (sta == 2 && gwf.FK_Node == gwf.GetParaInt("HungupNodeID"))
-                            {
-                                drMsg["Msg"] = "您的工作挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
-                                dtAlert.Rows.Add(drMsg);
-                            }
-                            break;
-                        case WFState.Hungup:
-                            if (sta == -1)
-                                break;
-                            drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = "挂起信息";
-                            if (sta == 0)
-                            {
-                                string msg1 = "您的工单在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
-                                if (gwf.GetParaInt("HungupWay") == 1)
-                                    msg1 += "指定时间解除:" + gwf.GetParaString("1@HungupRelDate");
-                                else
-                                    msg1 += "无解除时间.";
-                                drMsg["Msg"] = msg1;
-
-                                drMsg["Msg"] = msg1;//  "您的工作在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
-                            }
-
-                            if (sta == 1)
-                                drMsg["Msg"] = "您的工作在挂起获得同意.";
-
-                            if (sta == 2)
-                                drMsg["Msg"] = "您的工作在挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
-
-                            dtAlert.Rows.Add(drMsg);
-                            break;
-                        case WFState.AskForReplay: // 返回加签的信息.
-                            string mysql = "SELECT Msg,EmpFrom,EmpFromT,RDT FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + realWorkID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
-                            DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
-
-                            foreach (DataRow dr in mydt.Rows)
-                            {
-                                string msgAskFor = dr[0].ToString();
-                                string worker = dr[1].ToString();
-                                string workerName = dr[2].ToString();
-                                string rdt = dr[3].ToString();
-
-                                drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = worker + "," + workerName + "回复信息:";
-                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt;
-                                dtAlert.Rows.Add(drMsg);
-                            }
-                            break;
-                        case WFState.Askfor: //加签.
-
-                            sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + realWorkID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
-                            dt = DBAccess.RunSQLReturnTable(sql);
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                string msgAskFor = dr[TrackAttr.Msg].ToString();
-                                string worker = dr[TrackAttr.EmpFrom].ToString();
-                                string workerName = dr[TrackAttr.EmpFromT].ToString();
-                                string rdt = dr[TrackAttr.RDT].ToString();
-
-                                drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = worker + "," + workerName + "请求加签:";
-                                drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + realWorkID + "&FID=" + fid + "' >回复加签意见</a> --";
-                                dtAlert.Rows.Add(drMsg);
-
-                            }
-                            // isAskFor = true;
-                            break;
-                        case WFState.ReturnSta:
-                            /* 如果工作节点退回了*/
-
-                            ReturnWorks ens = new ReturnWorks();
-                            if (nd.HisRunModel == RunModel.FL || nd.HisRunModel == RunModel.FHL)
-                            {
-                                QueryObject qo = new QueryObject(ens);
-                                qo.addLeftBracket();
-                                qo.AddWhere(ReturnWorkAttr.WorkID, realWorkID);
-                                qo.addOr();
-                                qo.AddWhere(ReturnWorkAttr.FID, realWorkID);
-                                qo.addRightBracket();
-                                qo.addAnd();
-                                qo.AddWhere(ReturnWorkAttr.ReturnToNode,nd.NodeID);
-                                qo.addOrderBy("RDT");
-                                qo.DoQuery();
-                            }
-                            else
-                            {
-                                ens.Retrieve(ReturnWorkAttr.WorkID, realWorkID, ReturnWorkAttr.ReturnToNode, nd.NodeID, "RDT");
-                            }
-
-
-                            string msgInfo = "";
-                            foreach (ReturnWork rw in ens)
-                            {
-                                if (rw.ReturnToEmp.Contains(WebUser.No) == true)
-                                {
-                                    msgInfo += "来自节点：" + rw.ReturnNodeName + "@退回人：" + rw.ReturnerName + "@退回日期：" + rw.RDT;
-                                    msgInfo += "@退回原因：" + rw.BeiZhu;
-                                    msgInfo += "<hr/>";
-                                }
-                            }
-
-                            msgInfo = msgInfo.Replace("@", "<br>");
-                            if (string.IsNullOrEmpty(msgInfo) == false)
-                            {
-                                string str = nd.ReturnAlert;
-                                if (str != "")
-                                {
-                                    str = str.Replace("~", "'");
-                                    str = str.Replace("@PWorkID", realWorkID.ToString());
-                                    str = str.Replace("@PNodeID", nd.NodeID.ToString());
-                                    str = str.Replace("@FK_Node", nd.NodeID.ToString());
-
-                                    str = str.Replace("@PFlowNo", fk_flow);
-                                    str = str.Replace("@FK_Flow", fk_flow);
-                                    str = str.Replace("@PWorkID", workID.ToString());
-
-                                    str = str.Replace("@WorkID", workID.ToString());
-                                    str = str.Replace("@OID", workID.ToString());
-
-                                    drMsg = dtAlert.NewRow();
-                                    drMsg["Title"] = "退回信息";
-                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                    dtAlert.Rows.Add(drMsg);
-                                }
-                                else
-                                {
-                                    drMsg = dtAlert.NewRow();
-                                    drMsg["Title"] = "退回信息";
-                                    drMsg["Msg"] = msgInfo + "\t\n" + str;
-                                    dtAlert.Rows.Add(drMsg);
-                                }
-                            }
-                            break;
-                        case WFState.Shift:
-                            /* 判断移交过来的。 */
-                            string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + realWorkID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
-                            DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
-
-                            if (dtshift.Rows.Count >= 1)
-                            {
-                                msg = "";
-                                drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "移交信息";
-                                //  msg = "<h3>移交信息 </h3><hr/>";
-                                foreach (DataRow dr in dtshift.Rows)
-                                {
-                                    if (WebUser.No == dr[TrackAttr.EmpTo].ToString())
-                                    {
-                                        string empFromT = dr[TrackAttr.EmpFromT].ToString();
-                                        string empToT = dr[TrackAttr.EmpToT].ToString();
-                                        string msgShift = dr[TrackAttr.Msg].ToString();
-                                        string rdt = dr[TrackAttr.RDT].ToString();
-                                        if (msgShift == "undefined")
-                                            msgShift = "无";
-
-                                        msg += "移交人：" + empFromT + "@接受人：" + empToT + "@移交日期：" + rdt;
-                                        msg += "@移交原因：" + msgShift;
-                                        msg += "<hr/>";
-                                    }
-                                }
-
-                                msg = msg.Replace("@", "<br>");
-
-                                drMsg["Msg"] = msg;
-                                if (!string.IsNullOrEmpty(msg))
-                                {
-                                    dtAlert.Rows.Add(drMsg);
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                    //获取催办信息
-                    PushMsgs pms = new PushMsgs();
-                    if (pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node,
-                        PushMsgAttr.FK_Event, EventListNode.PressAfter) > 0)
-                    {
-                        string sqlPress = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0 Order By RDT DESC";
-                        DataTable dtPress = DBAccess.RunSQLReturnTable(sqlPress);
-                        if (dtPress.Rows.Count > 0)
-                        {
-                            drMsg = dtAlert.NewRow();
-                            drMsg["Title"] = "催办信息";
-                            drMsg["Msg"] = dtPress.Rows[0][0].ToString();
-                            dtAlert.Rows.Add(drMsg);
-                        }
-                        DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
-                    }
-                    //拒绝挂起
-                    string sqlRejectHungup = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='RejectHungup' and WorkID=" + gwf.WorkID + "  AND IsAlert=0";
-                    DataTable dtRejectHungup = DBAccess.RunSQLReturnTable(sqlRejectHungup);
-                    if (dtRejectHungup.Rows.Count > 0)
-                    {
-                        drMsg = dtAlert.NewRow();
-                        drMsg["Title"] = "拒绝挂起信息";
-                        foreach (DataRow item in dtRejectHungup.Rows)
-                        {
-                            drMsg["Msg"] = drMsg["Msg"] + "<hr/> " + item[0].ToString();
-                        }
-                        dtAlert.Rows.Add(drMsg);
-                    }
-                    DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='RejectHungup' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
-
-                    myds.Tables.Add(dtAlert);
+                    myds.Tables.Add(GetFlowAlertMsg(gwf, nd, fk_flow, realWorkID, fid));
                 }
                 #endregion
 
@@ -1033,6 +818,234 @@ namespace BP.WF
                 BP.DA.Log.DebugWriteError(ex.StackTrace);
                 throw new Exception("generoWorkNode@" + ex.Message);
             }
+        }
+
+        public static DataTable GetFlowAlertMsg(GenerWorkFlow gwf,Node nd,string fk_flow, Int64 workID, Int64 fid)
+        {
+            string sql = "";
+            DataTable dt = null;
+            DataTable dtAlert = new DataTable();
+            dtAlert.TableName = "AlertMsg";
+            dtAlert.Columns.Add("Title", typeof(string));
+            dtAlert.Columns.Add("Msg", typeof(string));
+            dtAlert.Columns.Add("URL", typeof(string));
+            DataRow drMsg = null;
+            int sta = gwf.GetParaInt("HungupSta");
+            switch (gwf.WFState)
+            {
+                case WFState.Runing:
+                    drMsg = dtAlert.NewRow();
+                    drMsg["Title"] = "挂起信息";
+                    if (sta == 2 && gwf.FK_Node == gwf.GetParaInt("HungupNodeID"))
+                    {
+                        drMsg["Msg"] = "您的工作挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
+                        dtAlert.Rows.Add(drMsg);
+                    }
+                    break;
+                case WFState.Hungup:
+                    if (sta == -1)
+                        break;
+                    drMsg = dtAlert.NewRow();
+                    drMsg["Title"] = "挂起信息";
+                    if (sta == 0)
+                    {
+                        string msg1 = "您的工单在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                        if (gwf.GetParaInt("HungupWay") == 1)
+                            msg1 += "指定时间解除:" + gwf.GetParaString("1@HungupRelDate");
+                        else
+                            msg1 += "无解除时间.";
+                        drMsg["Msg"] = msg1;
+
+                        drMsg["Msg"] = msg1;//  "您的工作在挂起状态，等待审批，挂起原因：" + gwf.GetParaString("HungupNote");
+                    }
+
+                    if (sta == 1)
+                        drMsg["Msg"] = "您的工作在挂起获得同意.";
+
+                    if (sta == 2)
+                        drMsg["Msg"] = "您的工作在挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
+
+                    dtAlert.Rows.Add(drMsg);
+                    break;
+                case WFState.AskForReplay: // 返回加签的信息.
+                    string mysql = "SELECT Msg,EmpFrom,EmpFromT,RDT FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
+                    DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
+
+                    foreach (DataRow dr in mydt.Rows)
+                    {
+                        string msgAskFor = dr[0].ToString();
+                        string worker = dr[1].ToString();
+                        string workerName = dr[2].ToString();
+                        string rdt = dr[3].ToString();
+
+                        drMsg = dtAlert.NewRow();
+                        drMsg["Title"] = worker + "," + workerName + "回复信息:";
+                        drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt;
+                        dtAlert.Rows.Add(drMsg);
+                    }
+                    break;
+                case WFState.Askfor: //加签.
+
+                    sql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.AskforHelp;
+                    dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        string msgAskFor = dr[TrackAttr.Msg].ToString();
+                        string worker = dr[TrackAttr.EmpFrom].ToString();
+                        string workerName = dr[TrackAttr.EmpFromT].ToString();
+                        string rdt = dr[TrackAttr.RDT].ToString();
+
+                        drMsg = dtAlert.NewRow();
+                        drMsg["Title"] = worker + "," + workerName + "请求加签:";
+                        drMsg["Msg"] = DataType.ParseText2Html(msgAskFor) + "<br>" + rdt + "<a href='./WorkOpt/AskForRe.htm?FK_Flow=" + fk_flow + "&FK_Node=" + nd.NodeID + "&WorkID=" + workID + "&FID=" + fid + "' >回复加签意见</a> --";
+                        dtAlert.Rows.Add(drMsg);
+
+                    }
+                    // isAskFor = true;
+                    break;
+                case WFState.ReturnSta:
+                    /* 如果工作节点退回了*/
+
+                    string trackTable = "ND" + int.Parse(nd.FK_Flow) + "Track";
+                    sql = "SELECT NDFrom,NDFromT,EmpFrom,EmpFromT,EmpTo,Msg,RDT FROM " + trackTable + " WHERE ActionType IN(2,201) ";
+
+                    //ReturnWorks ens = new ReturnWorks();
+                    if (nd.HisRunModel == RunModel.FL || nd.HisRunModel == RunModel.FHL)
+                    {
+                        sql += " AND (WorkID=" + workID + " OR FID=" + workID + ") AND NDTo=" + nd.NodeID + "  ORDER BY RDT ";
+                        /*QueryObject qo = new QueryObject(ens);
+                        qo.addLeftBracket();
+                        qo.AddWhere(ReturnWorkAttr.WorkID, realWorkID);
+                        qo.addOr();
+                        qo.AddWhere(ReturnWorkAttr.FID, realWorkID);
+                        qo.addRightBracket();
+                        qo.addAnd();
+                        qo.AddWhere(ReturnWorkAttr.ReturnToNode,nd.NodeID);
+                        qo.addOrderBy("RDT");
+                        qo.DoQuery();*/
+                    }
+                    else
+                    {
+                        sql += " AND WorkID=" + workID + "  AND NDTo=" + nd.NodeID + "  ORDER BY RDT ";
+                        //ens.Retrieve(ReturnWorkAttr.WorkID, realWorkID, ReturnWorkAttr.ReturnToNode, nd.NodeID, "RDT");
+                    }
+                    DataTable dtt = DBAccess.RunSQLReturnTable(sql);
+
+                    string msgInfo = "";
+                    foreach (DataRow dr in dtt.Rows)
+                    {
+                        if (dr[4].ToString().Contains(WebUser.No) == true)
+                        {
+                            msgInfo += "来自节点：" + dr[1].ToString() + "@退回人：" + dr[3].ToString() + "@退回日期：" + dr[6].ToString();
+                            msgInfo += "@退回原因：" + dr[5].ToString();
+                            msgInfo += "<hr/>";
+                        }
+                    }
+
+                    msgInfo = msgInfo.Replace("@", "<br>");
+                    if (string.IsNullOrEmpty(msgInfo) == false)
+                    {
+                        string str = nd.ReturnAlert;
+                        if (str != "")
+                        {
+                            str = str.Replace("~", "'");
+                            str = str.Replace("@PWorkID", workID.ToString());
+                            str = str.Replace("@PNodeID", nd.NodeID.ToString());
+                            str = str.Replace("@FK_Node", nd.NodeID.ToString());
+
+                            str = str.Replace("@PFlowNo", fk_flow);
+                            str = str.Replace("@FK_Flow", fk_flow);
+                            str = str.Replace("@PWorkID", workID.ToString());
+
+                            str = str.Replace("@WorkID", workID.ToString());
+                            str = str.Replace("@OID", workID.ToString());
+
+                            drMsg = dtAlert.NewRow();
+                            drMsg["Title"] = "退回信息";
+                            drMsg["Msg"] = msgInfo + "\t\n" + str;
+                            dtAlert.Rows.Add(drMsg);
+                        }
+                        else
+                        {
+                            drMsg = dtAlert.NewRow();
+                            drMsg["Title"] = "退回信息";
+                            drMsg["Msg"] = msgInfo + "\t\n" + str;
+                            dtAlert.Rows.Add(drMsg);
+                        }
+                    }
+                    break;
+                case WFState.Shift:
+                    /* 判断移交过来的。 */
+                    string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
+                    DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
+                    string msg = "";
+                    if (dtshift.Rows.Count >= 1)
+                    {
+                        msg = "";
+                        drMsg = dtAlert.NewRow();
+                        drMsg["Title"] = "移交信息";
+                        //  msg = "<h3>移交信息 </h3><hr/>";
+                        foreach (DataRow dr in dtshift.Rows)
+                        {
+                            if (WebUser.No == dr[TrackAttr.EmpTo].ToString())
+                            {
+                                string empFromT = dr[TrackAttr.EmpFromT].ToString();
+                                string empToT = dr[TrackAttr.EmpToT].ToString();
+                                string msgShift = dr[TrackAttr.Msg].ToString();
+                                string rdt = dr[TrackAttr.RDT].ToString();
+                                if (msgShift == "undefined")
+                                    msgShift = "无";
+
+                                msg += "移交人：" + empFromT + "@接受人：" + empToT + "@移交日期：" + rdt;
+                                msg += "@移交原因：" + msgShift;
+                                msg += "<hr/>";
+                            }
+                        }
+
+                        msg = msg.Replace("@", "<br>");
+
+                        drMsg["Msg"] = msg;
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            dtAlert.Rows.Add(drMsg);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //获取催办信息
+            PushMsgs pms = new PushMsgs();
+            if (pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node,
+                PushMsgAttr.FK_Event, EventListNode.PressAfter) > 0)
+            {
+                string sqlPress = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0 Order By RDT DESC";
+                DataTable dtPress = DBAccess.RunSQLReturnTable(sqlPress);
+                if (dtPress.Rows.Count > 0)
+                {
+                    drMsg = dtAlert.NewRow();
+                    drMsg["Title"] = "催办信息";
+                    drMsg["Msg"] = dtPress.Rows[0][0].ToString();
+                    dtAlert.Rows.Add(drMsg);
+                }
+                DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
+            }
+            //拒绝挂起
+            string sqlRejectHungup = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='RejectHungup' and WorkID=" + gwf.WorkID + "  AND IsAlert=0";
+            DataTable dtRejectHungup = DBAccess.RunSQLReturnTable(sqlRejectHungup);
+            if (dtRejectHungup.Rows.Count > 0)
+            {
+                drMsg = dtAlert.NewRow();
+                drMsg["Title"] = "拒绝挂起信息";
+                foreach (DataRow item in dtRejectHungup.Rows)
+                {
+                    drMsg["Msg"] = drMsg["Msg"] + "<hr/> " + item[0].ToString();
+                }
+                dtAlert.Rows.Add(drMsg);
+            }
+            DBAccess.RunSQL("UPDATE Sys_SMS SET IsAlert=1  WHERE MsgType='RejectHungup' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0");
+
+            return dtAlert;
         }
     }
 }

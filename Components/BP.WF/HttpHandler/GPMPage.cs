@@ -177,91 +177,91 @@ namespace BP.WF.HttpHandler
 
         }
 
-        /// <summary>
-        /// 获取该部门的所有人员
-        /// </summary>
-        /// <returns></returns>        
-        public string LoadDatagridDeptEmp_Init()
-        {
-            string deptNo = this.GetRequestVal("deptNo");
-            if (string.IsNullOrEmpty(deptNo))
-            {
-                return "{ total: 0, rows: [] }";
-            }
-            string orderBy = this.GetRequestVal("orderBy");
+        ///// <summary>
+        ///// 获取该部门的所有人员
+        ///// </summary>
+        ///// <returns></returns>        
+        //public string LoadDatagridDeptEmp_Init()
+        //{
+        //    string deptNo = this.GetRequestVal("deptNo");
+        //    if (string.IsNullOrEmpty(deptNo))
+        //    {
+        //        return "{ total: 0, rows: [] }";
+        //    }
+        //    string orderBy = this.GetRequestVal("orderBy");
 
 
-            string searchText = this.GetRequestVal("searchText");
-            if (!DataType.IsNullOrEmpty(searchText))
-            {
-                searchText.Trim();
-            }
-            string addQue = "";
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                addQue = "  AND (pe.No like '%" + searchText + "%' or pe.Name like '%" + searchText + "%') ";
-            }
+        //    string searchText = this.GetRequestVal("searchText");
+        //    if (!DataType.IsNullOrEmpty(searchText))
+        //    {
+        //        searchText.Trim();
+        //    }
+        //    string addQue = "";
+        //    if (!string.IsNullOrEmpty(searchText))
+        //    {
+        //        addQue = "  AND (pe.No like '%" + searchText + "%' or pe.Name like '%" + searchText + "%') ";
+        //    }
 
-            string pageNumber = this.GetRequestVal("pageNumber");
-            int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
-            //每页多少行
-            string pageSize = this.GetRequestVal("pageSize");
-            int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+        //    string pageNumber = this.GetRequestVal("pageNumber");
+        //    int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
+        //    //每页多少行
+        //    string pageSize = this.GetRequestVal("pageSize");
+        //    int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
 
-            string sql = "(select pe.*,pd.name FK_DutyText from port_emp pe left join port_duty pd on pd.no = pe.fk_duty where pe.no in (select fk_emp from Port_DeptEmp where fk_dept='" + deptNo + "') "
-                + addQue + " ) dbSo ";
+        //    string sql = "(select pe.*,pd.name FK_DutyText from Port_Emp pe left join port_duty pd on pd.no = pe.fk_duty where pe.no in (select fk_emp from Port_DeptEmp where fk_dept='" + deptNo + "') "
+        //        + addQue + " ) dbSo ";
 
 
-            return DBPaging(sql, iPageNumber, iPageSize, "No", orderBy);
+        //    return DBPaging(sql, iPageNumber, iPageSize, "No", orderBy);
 
-        }
+        //}
 
-        /// <summary>
-        /// 以下算法只包含 oracle mysql sqlserver 三种类型的数据库 qin
-        /// </summary>
-        /// <param name="dataSource">表名</param>
-        /// <param name="pageNumber">当前页</param>
-        /// <param name="pageSize">当前页数据条数</param>
-        /// <param name="key">计算总行数需要</param>
-        /// <param name="orderKey">排序字段</param>
-        /// <returns></returns>
-        public string DBPaging(string dataSource, int pageNumber, int pageSize, string key, string orderKey)
-        {
-            string sql = "";
-            string orderByStr = "";
+        ///// <summary>
+        ///// 以下算法只包含 oracle mysql sqlserver 三种类型的数据库 qin
+        ///// </summary>
+        ///// <param name="dataSource">表名</param>
+        ///// <param name="pageNumber">当前页</param>
+        ///// <param name="pageSize">当前页数据条数</param>
+        ///// <param name="key">计算总行数需要</param>
+        ///// <param name="orderKey">排序字段</param>
+        ///// <returns></returns>
+        //public string DBPaging(string dataSource, int pageNumber, int pageSize, string key, string orderKey)
+        //{
+        //    string sql = "";
+        //    string orderByStr = "";
 
-            if (!string.IsNullOrEmpty(orderKey))
-                orderByStr = " ORDER BY " + orderKey;
+        //    if (!string.IsNullOrEmpty(orderKey))
+        //        orderByStr = " ORDER BY " + orderKey;
 
-            switch (DBAccess.AppCenterDBType)
-            {
-                case DBType.Oracle:
-                case DBType.KingBaseR3:
-                case DBType.KingBaseR6:
-                    int beginIndex = (pageNumber - 1) * pageSize + 1;
-                    int endIndex = pageNumber * pageSize;
+        //    switch (DBAccess.AppCenterDBType)
+        //    {
+        //        case DBType.Oracle:
+        //        case DBType.KingBaseR3:
+        //        case DBType.KingBaseR6:
+        //            int beginIndex = (pageNumber - 1) * pageSize + 1;
+        //            int endIndex = pageNumber * pageSize;
 
-                    sql = "SELECT * FROM ( SELECT A.*, ROWNUM RN " +
-                        "FROM (SELECT * FROM  " + dataSource + orderByStr + ") A WHERE ROWNUM <= " + endIndex + " ) WHERE RN >=" + beginIndex;
-                    break;
-                case DBType.MSSQL:
-                    sql = "SELECT TOP " + pageSize + " * FROM " + dataSource + " WHERE " + key + " NOT IN  ("
-                    + "SELECT TOP (" + pageSize + "*(" + pageNumber + "-1)) " + key + " FROM " + dataSource + " )" + orderByStr;
-                    break;
-                case DBType.MySQL:
-                    pageNumber -= 1;
-                    sql = "select * from  " + dataSource + orderByStr + " limit " + pageNumber + "," + pageSize;
-                    break;
-                default:
-                    throw new Exception("暂不支持您的数据库类型.");
-            }
+        //            sql = "SELECT * FROM ( SELECT A.*, ROWNUM RN " +
+        //                "FROM (SELECT * FROM  " + dataSource + orderByStr + ") A WHERE ROWNUM <= " + endIndex + " ) WHERE RN >=" + beginIndex;
+        //            break;
+        //        case DBType.MSSQL:
+        //            sql = "SELECT TOP " + pageSize + " * FROM " + dataSource + " WHERE " + key + " NOT IN  ("
+        //            + "SELECT TOP (" + pageSize + "*(" + pageNumber + "-1)) " + key + " FROM " + dataSource + " )" + orderByStr;
+        //            break;
+        //        case DBType.MySQL:
+        //            pageNumber -= 1;
+        //            sql = "select * from  " + dataSource + orderByStr + " limit " + pageNumber + "," + pageSize;
+        //            break;
+        //        default:
+        //            throw new Exception("暂不支持您的数据库类型.");
+        //    }
 
-            DataTable DTable = DBAccess.RunSQLReturnTable(sql);
+        //    DataTable DTable = DBAccess.RunSQLReturnTable(sql);
 
-            int totalCount = DBAccess.RunSQLReturnCOUNT("select " + key + " from " + dataSource);
+        //    int totalCount = DBAccess.RunSQLReturnCOUNT("select " + key + " from " + dataSource);
 
-            return DataTableConvertJson.DataTable2Json(DTable, totalCount);
-        }
+        //    return DataTableConvertJson.DataTable2Json(DTable, totalCount);
+        //}
         #endregion
 
         #region 获取菜单权限.
@@ -301,7 +301,16 @@ namespace BP.WF.HttpHandler
 
             var menus = DBAccess.RunSQLReturnTable(sql2);
             menus.TableName = "Menus"; //获得菜单.
-
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                menus.Columns[0].ColumnName = "No";
+                menus.Columns[1].ColumnName = "Name";
+                menus.Columns[2].ColumnName = "FK_Menu";
+                menus.Columns[3].ColumnName = "ParentNo";
+                menus.Columns[4].ColumnName = "UrlExt";
+                menus.Columns[5].ColumnName = "Icon";
+                menus.Columns[6].ColumnName = "Idx";
+            }
             //组装数据.
             DataSet ds = new DataSet();
             ds.Tables.Add(dirs);
@@ -416,7 +425,12 @@ namespace BP.WF.HttpHandler
         public string GPM_Search()
         {
             var searchKey = this.GetRequestVal("searchKey");
-            var sql = "SELECT e.no AS \"No\",e.name AS \"Name\",d.No AS FK_Dept,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
+            string cloum = "";
+            if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            {
+                cloum = "e.userid AS UserID,";
+            }
+            var sql = "SELECT e.no AS \"No\"," + cloum + "e.name AS \"Name\",d.No AS FK_Dept,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
                 "where d.No=e.FK_Dept AND (e.No LIKE '%" + searchKey + "%' or e.NAME LIKE '%" + searchKey + "%' or d.Name LIKE '%" + searchKey + "%' or e.Tel LIKE '%" + searchKey + "%')";
             if (DataType.IsNullOrEmpty(WebUser.OrgNo) == false)
                 sql += " AND e.OrgNo='" + WebUser.OrgNo + "'";
@@ -886,28 +900,61 @@ namespace BP.WF.HttpHandler
             return "执行完成.";
         }
 
-        public string EnpDepts_Init()
+        public string EmpDepts_Init()
         {
-            String empNo = this.FK_Emp;
+            string empNo = this.FK_Emp;
             if (DataType.IsNullOrEmpty(empNo) == true)
                 return "err@参数FK_Emp不能为空";
-            Emp emp = new Emp(empNo);
+            //if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+            //    empNo = BP.Web.WebUser.OrgNo + "_" + empNo;
+
+            Emp emp = new Emp();
+            emp.No = empNo;
+            emp.Retrieve();
+
             DataSet ds = new DataSet();
             string dbstr = SystemConfig.AppCenterDBVarStr;
-            //获取当前人员所在的部门及兼职部门
-            string sql = "SELECT B.No AS \'FK_Dept\',B.Name AS \'FK_DeptText\',A.MyPK AS \'MyPK\' From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp=" + dbstr + "FK_Emp";
+
+            string sql = "";
+
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                sql += " B.OrgNo='" + WebUser.OrgNo + "'";
-            Paras ps = new Paras();
-            ps.SQL = sql;
-            ps.Add("FK_Emp", empNo);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            {
+                //获取当前人员所在的部门及兼职部门
+                sql = "SELECT B.No AS FK_Dept,B.Name AS  FK_DeptText,A.MyPK  From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT B.No AS FK_Dept,B.Name AS FK_DeptText,A.MyPK AS MyPK From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    sql += " AND B.OrgNo='" + emp.OrgNo + "'";
+            }
+            else
+            {
+                //获取当前人员所在的部门及兼职部门
+                sql = "SELECT B.No AS FK_Dept,B.Name AS  FK_DeptText,A.MyPK  From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
+                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT B.No AS FK_Dept,B.Name AS FK_DeptText,A.MyPK AS MyPK From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    sql += " AND B.OrgNo='" + emp.OrgNo + "'";
+            }
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "FK_Dept";
+                dt.Columns[1].ColumnName = "FK_DeptText";
+                dt.Columns[2].ColumnName = "MyPK";
+            }
+
             if (dt.Rows.Count == 0)
             {
                 DeptEmp deptEmp = new DeptEmp();
                 deptEmp.FK_Dept = emp.FK_Dept;
                 deptEmp.FK_Emp = emp.No;
-                deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
+                if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                    deptEmp.MyPK = emp.FK_Dept + "_" + emp.UserID;
+                else
+                    deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
+
+                deptEmp.OrgNo = emp.OrgNo;
                 deptEmp.Insert();
                 DataRow dr = dt.NewRow();
                 dr[0] = emp.FK_Dept;
@@ -917,15 +964,21 @@ namespace BP.WF.HttpHandler
             }
             dt.TableName = "Port_DeptEmp";
             ds.Tables.Add(dt);
-            ps.Clear();
             //获取岗位
-            sql = "SELECT B.No AS \'FK_Station\',B.Name AS \'FK_StationText\' ,A.FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp=" + dbstr + "FK_Emp";
+            sql = "SELECT B.No AS FK_Station,B.Name AS FK_StationText ,A.FK_Dept AS FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp='" + empNo + "'";
+            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
+                sql = "SELECT B.No AS FK_Station,B.Name AS FK_StationText,A.FK_Dept AS FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp='" + empNo + "'";
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                sql += " B.OrgNo='" + WebUser.OrgNo + "'";
+                sql += " AND B.OrgNo='" + WebUser.OrgNo + "'";
 
-            ps.SQL = sql;
-            ps.Add("FK_Emp", empNo);
-            dt = DBAccess.RunSQLReturnTable(ps);
+            dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "FK_Station";
+                dt.Columns[1].ColumnName = "FK_StationText";
+                dt.Columns[2].ColumnName = "FK_Dept";
+            }
+
             dt.TableName = "Port_DeptEmpStation";
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);
@@ -950,11 +1003,11 @@ namespace BP.WF.HttpHandler
             string deptNo = this.GetRequestVal("DeptNo");
 
             Emps emps = new Emps();
-            emps.Retrieve("FK_Dept", deptNo,"Idx");
+            emps.Retrieve("FK_Dept", deptNo, "Idx");
             DataTable dt = emps.ToDataTableField();
             dt.Columns.Add("State");
 
-            string sql = "SELECT No,Name,Tel,Email FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='"+deptNo+"' AND A.FK_Dept!='"+deptNo+"'";
+            string sql = "SELECT No,Name,Tel,Email FROM Port_Emp A, Port_DeptEmp B WHERE A.No=B.FK_Emp AND B.FK_Dept='" + deptNo + "' AND A.FK_Dept!='" + deptNo + "'";
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow mydr in mydt.Rows)
             {
@@ -963,7 +1016,7 @@ namespace BP.WF.HttpHandler
                 dr["Name"] = mydr[1];
                 dr["Tel"] = mydr[2];
                 dr["Email"] = mydr[3];
-                dr["State"] =1; //兼职人员.
+                dr["State"] = 1; //兼职人员.
                 //加入里面.
                 dt.Rows.Add(dr);
             }

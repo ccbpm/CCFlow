@@ -1116,7 +1116,7 @@ namespace BP.Difference
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static NameValueCollection GetConfig(string key)
+        private static NameValueCollection GetConfig(string key)
         {
             Hashtable ht = (Hashtable)System.Configuration.ConfigurationManager.GetSection("NestedNamesSection");
             return (NameValueCollection)ht[key];
@@ -1478,6 +1478,7 @@ namespace BP.Difference
                     case "MySQL":
                         return DBType.MySQL;
                     case "PostgreSQL":
+                    case "PGSQL":
                         return DBType.PostgreSQL;
                     case "DM":
                         return DBType.DM;

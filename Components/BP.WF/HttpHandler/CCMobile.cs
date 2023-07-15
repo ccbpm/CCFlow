@@ -18,6 +18,8 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class CCMobile : DirectoryPageBase
     {
+      
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -69,7 +71,7 @@ namespace BP.WF.HttpHandler
                     string empNo = this.OrgNo + "_" + userNo;
                     saemp.No = empNo;
                     if (saemp.RetrieveFromDBSources() == 0)
-                        return "err@账号" + userNo + "在组织" + this.OrgNo + "还未注册";
+                        return "err@账号" + userNo + "在组织" + this.OrgNo + "还未注册.";
                 }
                 else
                 {
@@ -77,7 +79,7 @@ namespace BP.WF.HttpHandler
                     Emps emps = new Emps();
                     emps.Retrieve(EmpAttr.UserID, userNo, EmpAttr.EmpSta, 1);
                     if (emps.Count == 0)
-                        return "err@还未注册该账号或该账号已经禁用";
+                        return "err@还未注册该账号或该账号已经禁用.";
                     saemp = emps[0] as Emp;
                 }
                 if (saemp.CheckPass(pass) == false)
@@ -330,7 +332,7 @@ namespace BP.WF.HttpHandler
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
-                    sql = " SELECT DISTINCT FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + top;
+                    sql = "SELECT DISTINCT * From (SELECT  FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + (top*2)+ ") A limit " + top;
                     break;
                 case DBType.Oracle:
                 case DBType.DM:
@@ -353,7 +355,7 @@ namespace BP.WF.HttpHandler
             pcs.RetrieveAll();
             string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
             string mystas = ""; //我的角色.
-            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'");
+            DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
             {
                 mydepts += dr[0].ToString() + ",";

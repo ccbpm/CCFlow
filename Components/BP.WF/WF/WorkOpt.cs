@@ -399,7 +399,7 @@ namespace BP.WF
             //抄送到岗位
             if (DataType.IsNullOrEmpty(this.CCStations) == false)
             {
-                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B  WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "= B.FK_Emp AND B.FK_Station IN("+ BP.Port.Glo.GenerWhereInSQL(this.CCStations) + ")";
+                sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B  WHERE A.No= B.FK_Emp AND B.FK_Station IN("+ BP.Port.Glo.GenerWhereInSQL(this.CCStations) + ")";
                 mydt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow mydr in mydt.Rows)
                 {

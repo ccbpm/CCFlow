@@ -410,11 +410,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示退回信息？
         /// </summary>
-        public bool FWCIsShowReturnMsg
+        public int FWCIsShowReturnMsg
         {
             get
             {
-                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg);
             }
             set
             {
@@ -746,12 +746,15 @@ namespace BP.WF.Template
                   NodeWorkCheckAttr.FWCMsgShow, "@0=都显示@1=仅显示自己的意见");
                 map.AddTBFloat(NodeWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
 
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCIsShowReturnMsg, 0, "退回信息显示规则", true, true,
+                  NodeWorkCheckAttr.FWCIsShowReturnMsg, "@0=不显示@1=退回到的节点显示@2=显示全部退回信息");
+
                 map.AddBoolean(NodeWorkCheckAttr.FWCTrackEnable, true, "轨迹图是否显示？", true, true, false);
                 map.AddBoolean(NodeWorkCheckAttr.FWCListEnable, true, "历史审核信息是否显示？(否,仅出现意见框)", true, true, true);
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsShowAllStep, false, "在轨迹表里是否显示所有的步骤？", true, true);
 
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
-                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
+                //map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
                 #endregion 外观
 
                 this._enMap = map;

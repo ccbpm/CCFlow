@@ -158,7 +158,10 @@ namespace BP.Port
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
+            if(BP.Difference.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp.Replace(this.OrgNo+"_","") + "_" + this.FK_Station);
+            else
+                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
             return base.beforeUpdateInsertAction();
         }
     }

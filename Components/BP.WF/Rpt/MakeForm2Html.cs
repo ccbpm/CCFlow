@@ -690,7 +690,7 @@ namespace BP.WF
 
 
                     //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
-                    sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + workid;
+                    sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerlist WHERE IsPass!=1 AND WorkID=" + workid;
                     DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
 
                     foreach (DataRow dr in dt.Rows)

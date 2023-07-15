@@ -339,7 +339,7 @@ namespace BP.WF.Template.Frm
 
         public string DoMapWord()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmWord&No=" + this.No;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapFrmWord&No=" + this.No;
         }
 		public string DoDesignerFool()
 		{

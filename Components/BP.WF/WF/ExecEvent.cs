@@ -88,6 +88,26 @@ namespace BP.WF
             if (doType.Equals(EventListNode.SendSuccess) == true)
                 WorkNodePlus.SendDraftSubFlow(wn); //执行自动发送子流程草稿.
 
+            #region 增加系统变量.
+            if (DataType.IsNullOrEmpty(atPara) == true)
+                atPara = "";
+            if (atPara.Contains("@WorkID") == false)
+                atPara += "@WorkID=" + wn.WorkID;
+            if (atPara.Contains("@NodeID") == false)
+                atPara += "@NodeID=" + wn.HisNode.NodeID;
+            if (atPara.Contains("@FK_Node") == false)
+                atPara += "@FK_Node=" + wn.HisNode.NodeID;
+            if (atPara.Contains("@FlowNo") == false)
+                atPara += "@FlowNo=" + wn.HisNode.FK_Flow;
+            if (atPara.Contains("@FK_Flow") == false)
+                atPara += "@FK_Flow=" + wn.HisNode.FK_Flow;
+            #endregion 增加系统变量.
+
+            //执行:全局的重写的方法事件.
+            string mymsg1 = BP.WF.OverrideEvent.DoIt(doType, wn, atPara, null,0,null,null);
+            if (mymsg1 != null)
+                return mymsg1;
+
             #region 2021.5.30 gaoxin. 更新授权角色:为中科软
             //更新授权角色:为中科软. 如果是当前节点的处理人员是按照角色绑定的，就需要吧授权岗，写入到 Emps里面去.
             if (doType.Equals(EventListNode.SendSuccess) == true && BP.Difference.SystemConfig.GetValByKeyBoolen("IsEnableAuthDeptStation", false) == true)
@@ -264,7 +284,7 @@ namespace BP.WF
             #endregion 写入消息之前,删除消息,不让其在提醒.
 
             string msg = null;
-            
+
             if (wn.HisFlow.FEventEntity != null)
             {
                 wn.HisFlow.FEventEntity.SendReturnObjs = wn.HisMsgObjs;

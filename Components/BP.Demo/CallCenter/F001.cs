@@ -4,7 +4,6 @@ using System.Collections;
 
 using System.Data;
 using BP.DA;
-using BP.DTS;
 using BP.En;
 using BP.Web;
 using BP.Sys;
@@ -24,7 +23,7 @@ namespace BP.CallCenter
         /// </summary>
         public override string FlowMark
         {
-            get { return ",001,"; }
+            get { return ",001,015,"; }
         }
         #endregion 属性.
 
@@ -45,6 +44,16 @@ namespace BP.CallCenter
         public override string SendWhen()
         {
             //相关的变量,
+
+            //this.JumpToEmps = "zhangsan,lisi";
+            //this.JumpToNodeID = 109;
+
+            //this.WorkID;
+            //this.HisNode.NodeID;
+
+            //this.HisEn;
+            //this.HisNode;
+            //this.
 
             // 当前的节点, 其他的变量请从 this.HisNode .
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
@@ -86,9 +95,12 @@ namespace BP.CallCenter
                  * 在这里需要编写你的业务逻辑，根据上面组织的变量.
                  */
 
-                if (this.HisNode.NodeID == 102)
+                if (this.HisNode.NodeID == 1503)
                 {
                     /* 根据不同的节点，执行不同的业务逻辑 */
+                  //  string sql = "xxxxx  xxxx,xxxx ,";
+                  //  DBAccess.RunSQL(sql);
+
                 }
 
                 //返回.

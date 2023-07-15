@@ -13,7 +13,9 @@ using BP.Difference;
 using BP.WF.Template.SFlow;
 using BP.WF.Template.CCEn;
 using BP.WF.Template.Frm;
-
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Web;
 
 namespace BP.WF.Template
 {
@@ -466,40 +468,6 @@ namespace BP.WF.Template
                             // 开始插入。
                             fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node);
                             fn.Insert();
-                        }
-                        break;
-                    case "WF_FindWorkerRole": //找人规则
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            FindWorkerRole en = new FindWorkerRole();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "fk_node":
-                                    case "nodeid":
-                                        if (val.Length < iOldFlowLength)
-                                        {
-                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_FindWorkerRole下FK_Node值错误:" + val);
-                                        }
-                                        val = flowID + val.Substring(iOldFlowLength);
-                                        break;
-                                    case "fk_flow":
-                                        val = fl.No;
-                                        break;
-                                    default:
-                                        val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                                        break;
-                                }
-                                en.SetValByKey(dc.ColumnName, val);
-                            }
-
-                            //插入.
-                            en.DirectInsert();
                         }
                         break;
                     case "WF_Cond": //Conds.xml。
@@ -1419,12 +1387,45 @@ namespace BP.WF.Template
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
         }
-
-        public static Node NewNode(string flowNo, int x, int y, string icon = null, int runModel = 0)
+        public static Node NewCond(string flowNo, int x, int y)
         {
             Flow flow = new Flow(flowNo);
 
             Node nd = new Node();
+            int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHERE FK_Flow='" + flowNo + "'", 0);
+            if (idx == 0)
+                idx++;
+
+            var nodeID = 0;
+            //设置节点ID.
+            while (true)
+            {
+                string strID = flowNo + idx.ToString().PadLeft(2, '0');
+                nd.NodeID = int.Parse(strID);
+                if (nd.IsExits == false)
+                    break;
+                idx++;
+            }
+
+            if (nd.NodeID > int.Parse(flowNo + "99"))
+                throw new Exception("流程最大节点编号不可以超过100");
+
+            nd.Name = "条件" + nd.NodeID;
+            nd.FK_Flow = flowNo;
+            nd.HisNodeType = NodeType.RouteNode; //路由节点.
+            nd.X = x;
+            nd.Y = y; //@hongyan
+            nd.Insert();
+            return nd;
+
+        }
+
+        public static Node NewNode(string flowNo, int x, int y, string icon = null, int runModel = 0, int nodeType = 0)
+        {
+            Flow flow = new Flow(flowNo);
+
+            Node nd = new Node();
+            nd.FK_Flow = flowNo;
             int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHERE FK_Flow='" + flowNo + "'", 0);
             if (idx == 0)
                 idx++;
@@ -1466,9 +1467,10 @@ namespace BP.WF.Template
                 fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
                 //执行保存.
                 fn.Save();
-                MapData md = new MapData(nd.NodeFrmID);
-                md.HisFrmType = FrmType.FoolForm;
-                md.Update();
+                //MapData md = new MapData();
+                //nd.No = nd.NodeFrmID;
+                //md.HisFrmType = FrmType.FoolForm;
+                //md.Update();
             }
 
             //如果是累加.
@@ -1499,13 +1501,13 @@ namespace BP.WF.Template
 
             }
             //如果是Self类型的表单的类型
-            if (flow.FlowDevModel == FlowDevModel.SDKFrm)
+            if (flow.FlowDevModel == FlowDevModel.SDKFrmSelfPK || flow.FlowDevModel == FlowDevModel.SDKFrmWorkID)
             {
                 nd.HisFormType = NodeFormType.SDKForm;
                 nd.FormUrl = flow.FrmUrl;
                 nd.DirectUpdate();
-
             }
+
             //如果是Self类型的表单的类型
             if (flow.FlowDevModel == FlowDevModel.SelfFrm)
             {
@@ -1541,7 +1543,7 @@ namespace BP.WF.Template
             }
             nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
             nd.NodeID = nodeID;
-            nd.HisDeliveryWay = DeliveryWay.BySelected; 
+            nd.HisDeliveryWay = DeliveryWay.BySelected;
             nd.X = x;
             nd.Y = y;
             nd.Icon = icon;
@@ -1558,8 +1560,10 @@ namespace BP.WF.Template
             nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,
                 BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
 
-            //设置节点类型.
+            //设置节点运行模式.
             nd.HisRunModel = (RunModel)runModel;
+            //设置节点类型
+            nd.HisNodeType = (NodeType)nodeType;
 
 
             nd.Update(); //执行更新. 
@@ -1644,6 +1648,306 @@ namespace BP.WF.Template
 
             return true;
         }
+        /// <summary>
+        /// 创建流程.
+        /// </summary>
+        /// <param name="flowSort"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static SemaphoreSlim _semaphore = new SemaphoreSlim(20); // 信号量
+        public static Flow NewFlowByBPMN(string flowSort, string filePath)
+        {
+            #region 0. 读取文件.
+            DataSet ds = new DataSet();
+            ds.ReadXml(filePath);
+            // 读取流程属性
+            DataTable dtFlow = ds.Tables["process"];
+            // 读取节点
+            DataTable dtNode = ds.Tables["userTask"];
+            // 读取结束节点
+            DataTable dtEndNode = ds.Tables["endEvent"];
+            //将结束节点放入节点中
+            dtNode.ImportRow(dtEndNode.Rows[0]);
+            //读取网关节点
+            DataTable dtGateway = ds.Tables["exclusiveGateway"];
+            // 读取方法条件
+            DataTable dtDirs = ds.Tables["sequenceFlow"];
+            // 图形数据
+            DataTable dtShapes = ds.Tables["BPMNShape"];
+            // 图形坐标
+            DataTable dtPositions = ds.Tables["Bounds"];
+
+            HttpContext ctx = HttpContextHelper.Current;
+
+            //只支持单个流程的导入
+            DataRow drFlow = dtFlow.Rows[0];
+
+            string flowName = drFlow["name"].ToString(); //获得流程名称
+            string flowMark = drFlow["id"].ToString(); //获得流程标记.
+            Flow fl = new Flow();
+            fl.FlowMark = flowMark;
+            if (fl.RetrieveFromDBSources() == 1)
+                throw new Exception("err@该流程[" + flowMark + "]已经导入,如果您要导入，请您修改模板的流程标记.");
+            #endregion 检查完整性.
+
+            #region 1. 创建空白的模板做准备..
+            string sortNo = "001"; //放入的流程目录.
+            string flowNo = BP.WF.Template.TemplateGlo.NewFlowTemplate(sortNo, flowName, DataStoreModel.ByCCFlow, null, null);
+
+            fl.No = flowNo;
+            fl.RetrieveFromDBSources();
+            fl.FlowMark = flowMark; //更新标记.
+            fl.FK_FlowSort = flowSort; //更新流程目录
+            fl.Update();
+
+            //删除第2个节点信息.
+            Node nd = new Node();
+            nd.NodeID = int.Parse(flowNo + "02");
+            nd.Delete(); //删除节点.
+            BP.WF.Template.Directions dir = new Directions();
+            dir.Delete(DirectionAttr.FK_Flow, flowNo);
+            //Node nd = new Node();
+            //string flowNo = "028";
+            #endregion 0. 检查完整性.
+
+            #region 2. 生成节点.
+            // Step1: 遍历节点, 并生成节点.
+            // ccflow 节点是以01开头的
+            ConcurrentDictionary<string, int> relations = new ConcurrentDictionary<string, int>(); // 保存节点id 对应 关系
+            ConcurrentDictionary<int, string> nodeUserTaskID = new ConcurrentDictionary<int, string>(); // 保存节点id与userTaskID 对应 关系
+            ConcurrentBag<Node> flowNodes = new ConcurrentBag<Node>();
+            CountdownEvent cdEvent = new CountdownEvent(dtNode.Rows.Count);
+            for (int i = 0; i < dtNode.Rows.Count; i++)
+            {
+                int temp = i + 1;
+                string nodeSuffix = "";
+                if (temp < 10)
+                {
+                    nodeSuffix = "0" + temp;
+                }
+                else
+                {
+                    nodeSuffix = temp.ToString();
+                }
+                DataRow dr = dtNode.Rows[i];
+                //ThreadPool.QueueUserWorkItem(_ =>
+                //{
+                //    _semaphore.Wait();
+                //    try
+                //    {
+                HttpContext.Current = ctx;
+                #region 获得节点信息.
+                string userTaskID = dr["id"] as string;
+                if (i == 0)
+                    nd = new Node(int.Parse(flowNo + "01")); //开始节点.
+                else
+                    nd = TemplateGlo.NewNode(flowNo, 100, 100);
+                //nd = new Node(int.Parse(flowNo + nodeSuffix));
+                // 找到图形信息
+                int shapeID = -1;
+                foreach (DataRow row in dtShapes.Rows)
+                {
+                    string bpmnElement = (string)row["bpmnElement"];
+                    if (bpmnElement == userTaskID)
+                    {
+                        shapeID = (int)row["BPMNShape_Id"];
+                        break;
+                    }
+                }
+                if (shapeID == -1)
+                {
+                    BP.DA.Log.DebugWriteError("解析BPMN出现异常数据, 存在多个节点为[" + userTaskID + "]的数据");
+                    continue;
+                }
+                bool hasPostion = false;
+                // 找到坐标
+                foreach (DataRow row in dtPositions.Rows)
+                {
+                    int bpmnShapeId = (int)row["BPMNShape_Id"];
+                    if (bpmnShapeId == shapeID)
+                    {
+                        nd.X = (int)float.Parse(row["x"] as string);
+                        nd.Y = (int)float.Parse(row["y"] as string);
+                        hasPostion = true;
+                        break;
+                    }
+                }
+                if (!hasPostion)
+                {
+                    nd.X = 100;
+                    nd.Y = 100;
+                }
+                List<string> lines = new List<string>();
+                // 找到所有以他为起点的连接线
+                foreach (DataRow row in dtDirs.Rows)
+                {
+                    string sourceRef = (string)row["sourceRef"];
+                    if (sourceRef == userTaskID)
+                    {
+                        lines.Add(row["targetRef"] as string);
+                    }
+                }
+                nd.Name = dr["name"] as string;
+                nd.Mark = String.Join(",", lines.ToArray());
+                nd.Update(); //更新节点信息.
+
+                relations.TryAdd(userTaskID, nd.NodeID);  // 保存关系
+                nodeUserTaskID.TryAdd(nd.NodeID, userTaskID);  // 保存关系
+                flowNodes.Add(nd);  // 保存节点
+                #endregion 获得节点信息.
+                //    }
+                //    finally
+                //    {
+                //        cdEvent.Signal();
+                //        _semaphore.Release();
+                //    }
+                //});
+            }
+            //cdEvent.Wait();
+            #endregion 2. 生成节点.
+
+            #region 3. 生成网关节点
+            for (int i = 0; i < dtGateway.Rows.Count; i++)
+            {
+                DataRow dr = dtGateway.Rows[i];
+                string gatewayID = dr["id"] as string;
+                //创建网关节点
+                nd = TemplateGlo.NewNode(flowNo, 100, 100, null, 0, 1);
+                // 找到图形信息
+                int shapeID = -1;
+                foreach (DataRow row in dtShapes.Rows)
+                {
+                    string bpmnElement = (string)row["bpmnElement"];
+                    if (bpmnElement == gatewayID)
+                    {
+                        shapeID = (int)row["BPMNShape_Id"];
+                        break;
+                    }
+                }
+                if (shapeID == -1)
+                {
+                    BP.DA.Log.DebugWriteError("解析BPMN出现异常数据, 存在多个节点为[" + gatewayID + "]的数据");
+                    continue;
+                }
+                bool hasPostion = false;
+                // 找到坐标
+                foreach (DataRow row in dtPositions.Rows)
+                {
+                    int bpmnShapeId = (int)row["BPMNShape_Id"];
+                    if (bpmnShapeId == shapeID)
+                    {
+                        nd.X = (int)float.Parse(row["x"] as string);
+                        nd.Y = (int)float.Parse(row["y"] as string);
+                        hasPostion = true;
+                        break;
+                    }
+                }
+                if (!hasPostion)
+                {
+                    nd.X = 100;
+                    nd.Y = 100;
+                }
+                //保存连接线
+                List<string> lines = new List<string>();
+                //保存连接线的描述
+                List<string> docs = new List<string>();
+                // 找到所有以他为起点的连接线
+                foreach (DataRow row in dtDirs.Rows)
+                {
+                    string sourceRef = (string)row["sourceRef"];
+                    if (sourceRef == gatewayID)
+                    {
+                        lines.Add(row["targetRef"] as string);
+                        docs.Add(row["name"] == null ? "" : row["name"] as string);
+                    }
+                }
+                nd.Name = dr["name"] as string;
+                nd.Mark = String.Join(",", lines.ToArray());
+                nd.Doc = String.Join(",", docs.ToArray());
+                nd.Update(); //更新节点信息.
+
+                relations.TryAdd(gatewayID, nd.NodeID);  // 保存关系
+                nodeUserTaskID.TryAdd(nd.NodeID, gatewayID);  // 保存关系
+                flowNodes.Add(nd);  // 保存节点
+            }
+            #endregion 3. 生成网关节点
+
+            #region 4. 生成链接线.
+            // 插入连接线，经过上面的流程后才知道对应关系
+            foreach (Node node in flowNodes)
+            {
+                try
+                {
+                    string[] toUserTasks = node.Mark.Split(',');
+                    node.Mark = nodeUserTaskID[node.NodeID];
+                    string[] doc = new string[0];
+                    //判断如果是路由节点
+                    if (node.HisNodeType == NodeType.RouteNode)
+                    {
+                        doc = node.Doc.Split(',');
+                        node.Doc = "";//清空临时保存的描述
+                    }
+                    node.Update();
+                    for (int i = 0; i < toUserTasks.Length; i++)
+                    {
+                        string toUserTask = toUserTasks[i];
+                        int toNodeId = relations[toUserTask];
+                        //生成方向.
+                        Direction mydir = new Direction();
+                        mydir.FK_Flow = flowNo;
+                        mydir.Node = node.NodeID;
+                        mydir.ToNode = toNodeId;
+                        //判断如果有描述就添加
+                        if (doc.Length > 0)
+                        {
+                            mydir.Des = doc[i];
+                        }
+                        mydir.Insert(); //自动生成主键.
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    BP.DA.Log.DebugWriteError("解析BPMN-创建连接线失败：nodeId=" + node.NodeID + ", Mark = " + node.Mark);
+                    continue;
+                }
+
+            }
+            // Step2: 遍历节点, 生成连接线.
+            //Nodes nds = new Nodes();
+            //nds.RetrieveAll();
+            //foreach (Node node in nds)
+            //{
+            //    string userTaskID = node.Mark; //当前节点,
+
+            //    //获得到达节点的ID.
+            //    string[] toTaskIDs = "ssss".Split();
+            //    foreach (string taskID in toTaskIDs)
+            //    {
+            //        //查询出来，到达的节点ID.
+            //        Node tond = new Node();
+            //        tond.Retrieve(NodeAttr.Mark, taskID);
+
+            //        //生成方向.
+            //        Direction mydir = new Direction();
+            //        mydir.FK_Flow = flowNo;
+            //        mydir.Node = node.NodeID;
+            //        mydir.ToNode = nd.NodeID;
+            //        mydir.Insert(); //自动生成主键.
+            //    }
+
+            //    //检查方向条件.
+            //    string[] conds = "ssss".Split();
+            //    foreach (string cond in conds)
+            //    {
+            //        Cond mycond = new Cond();
+            //    }
+            //}
+            #endregion 4. 生成链接线.
+
+            return fl;
+        }
 
         /// <summary>
         /// 创建一个流程模版
@@ -1655,7 +1959,7 @@ namespace BP.WF.Template
         /// <param name="flowMark">标记</param>
         /// <returns>创建的流程编号</returns>
         public static string NewFlowTemplate(string flowSort, string flowName, BP.WF.Template.DataStoreModel dsm,
-            string ptable, string flowMark)
+        string ptable, string flowMark)
         {
             //定义一个变量.
             Flow flow = new Flow();
@@ -1699,7 +2003,8 @@ namespace BP.WF.Template
                 // 设置创建人，创建日期.
                 flow.SetValByKey(FlowAttr.CreateDate, DataType.CurrentDateTime);
                 flow.SetValByKey(FlowAttr.Creater, BP.Web.WebUser.No);
-                flow.SetValByKey("Icon", "icon-people");
+                // flow.SetValByKey("Icon", "icon-people");
+                flow.SetValByKey("ICON", "icon-people"); //图标.
 
                 //flow.TitleRole
                 flow.Insert();
@@ -1771,7 +2076,7 @@ namespace BP.WF.Template
                 string fileNewNode = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
                 if (System.IO.File.Exists(fileNewNode) == true && 1 == 2)
                 {
-                    DataSet myds = new DataSet();  
+                    DataSet myds = new DataSet();
                     myds.ReadXml(fileNewNode);
                     DataTable dt = myds.Tables[0];
                     foreach (DataColumn dc in dt.Columns)
@@ -1914,14 +2219,11 @@ namespace BP.WF.Template
                     continue;
 
                 string val = BP.Difference.SystemConfig.AppSettings[key];
-
                 //设置值.
                 flow.SetValByKey(key.Replace("NewFlowDefVal_", ""), val);
             }
-
             //执行一次流程检查, 为了节省效率，把检查去掉了.
             flow.DoCheck();
-
 
             //写入日志.
             BP.Sys.Base.Glo.WriteUserLog("创建流程：" + flow.Name + " - " + flow.No);

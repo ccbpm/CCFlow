@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Data;
 using System.IO;
+using BP.Tools;
 
 
 namespace BP.WF.HttpHandler
@@ -218,15 +219,15 @@ namespace BP.WF.HttpHandler
             myds.Tables.Add(ddlTable);
             #endregion End把外键表加入DataSet
 
-           /* #region 图片附件
-            nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
-            FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, this.WorkID.ToString());
-            if (imgAthDBs != null && imgAthDBs.Count > 0)
-            {
-                DataTable dt_ImgAth = imgAthDBs.ToDataTableField("Sys_FrmImgAthDB");
-                myds.Tables.Add(dt_ImgAth);
-            }
-            #endregion*/
+            /* #region 图片附件
+             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
+             FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, this.WorkID.ToString());
+             if (imgAthDBs != null && imgAthDBs.Count > 0)
+             {
+                 DataTable dt_ImgAth = imgAthDBs.ToDataTableField("Sys_FrmImgAthDB");
+                 myds.Tables.Add(dt_ImgAth);
+             }
+             #endregion*/
 
             return BP.Tools.Json.ToJson(myds);
         }
@@ -306,6 +307,18 @@ namespace BP.WF.HttpHandler
                 ps.SQL += " AND  WFState >1 ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "WorkID";
+                dt.Columns[1].ColumnName = "FlowName";
+                dt.Columns[2].ColumnName = "NodeName";
+                dt.Columns[3].ColumnName = "StarterName";
+                dt.Columns[4].ColumnName = "RDT";
+                dt.Columns[5].ColumnName = "SendDT";
+                dt.Columns[6].ColumnName = "WFState";
+                dt.Columns[7].ColumnName = "Title";
+                dt.Columns[8].ColumnName = "SDTOfNode";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
@@ -320,6 +333,12 @@ namespace BP.WF.HttpHandler
             sql += " GROUP BY  FK_Flow,FlowName ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Group";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "FK_Flow";
+                dt.Columns[1].ColumnName = "FlowName";
+                dt.Columns[2].ColumnName = "Num";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -331,6 +350,94 @@ namespace BP.WF.HttpHandler
             string sql = " SELECT *  FROM V_MyFlowData WHERE MyEmpNo='" + WebUser.No + "' AND FK_Flow='" + this.FK_Flow + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                string columnName = "";
+                foreach (DataColumn col in dt.Columns)
+                {
+                    columnName = col.ColumnName.ToUpper();
+                    switch (columnName)
+                    {
+                        case "WORKID":
+                            col.ColumnName = "WorkID";
+                            break;
+                        case "FID":
+                            col.ColumnName = "FID";
+                            break;
+                        case "FK_FLOWSORT":
+                            col.ColumnName = "FK_FlowSort";
+                            break;
+                        case "SYSTYPE":
+                            col.ColumnName = "SysType";
+                            break;
+                        case "FK_FLOW":
+                            col.ColumnName = "FK_Flow";
+                            break;
+                        case "FLOWNAME":
+                            col.ColumnName = "FlowName";
+                            break;
+                        case "TITLE":
+                            col.ColumnName = "Title";
+                            break;
+                        case "WFSTA":
+                            col.ColumnName = "WFSta";
+                            break;
+                        case "WFSTATE":
+                            col.ColumnName = "WFState";
+                            break;
+                        case "STARTER":
+                            col.ColumnName = "Starter";
+                            break;
+                        case "STARTERNAME":
+                            col.ColumnName = "StarterName";
+                            break;
+                        case "RDT":
+                            col.ColumnName = "RDT";
+                            break;
+                        case "PFLOWNO":
+                            col.ColumnName = "PFlowNo";
+                            break;
+                        case "PWORKID":
+                            col.ColumnName = "PWorkID";
+                            break;
+                        case "PNODEID":
+                            col.ColumnName = "PNodeID";
+                            break;
+                        case "TODOEMPS":
+                            col.ColumnName = "TodoEmps";
+                            break;
+                        case "EMPS":
+                            col.ColumnName = "Emps";
+                            break;
+                        case "BILLNO":
+                            col.ColumnName = "BillNo";
+                            break;
+                        case "SENDDT":
+                            col.ColumnName = "SendDT";
+                            break;
+                        case "FK_NODE":
+                            col.ColumnName = "FK_Node";
+                            break;
+                        case "NODENAME":
+                            col.ColumnName = "NodeName";
+                            break;
+                        case "FK_DEPT":
+                            col.ColumnName = "FK_Dept";
+                            break;
+                        case "DEPTNAME":
+                            col.ColumnName = "DeptName";
+                            break;
+                        case "PRI":
+                            col.ColumnName = "PRI";
+                            break;
+                        case "SDTOFNODE":
+                            col.ColumnName = "SDTOfNode";
+                            break;
+
+                    }
+
+                }
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -591,9 +698,10 @@ namespace BP.WF.HttpHandler
 
         /// <summary>
         /// 获取设置的PC端和移动端URL
+        /// @hongyan
         /// </summary>
         /// <returns></returns>
-        public string PCAndMobileUrl()
+        public string Do_PCAndMobileUrl()
         {
             Hashtable ht = new Hashtable();
             ht.Add("PCUrl", BP.Difference.SystemConfig.HostURL);
@@ -614,13 +722,9 @@ namespace BP.WF.HttpHandler
             //RegexOptions.IgnoreCase | RegexOptions.Compiled);
             //移动端打开
             if (HttpContextHelper.RequestIsFromMobile)
-            {
                 return BP.Difference.SystemConfig.MobileURL + baseUrl;
-            }
             else
-            {
                 return BP.Difference.SystemConfig.HostURL + baseUrl;
-            }
         }
 
         #region 我的关注流程.
@@ -705,6 +809,15 @@ namespace BP.WF.HttpHandler
 
             DataTable dtStart = DBAccess.RunSQLReturnTable(sql);
             dtStart.TableName = "Start";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dtStart.Columns[0].ColumnName = "No";
+                dtStart.Columns[1].ColumnName = "Name";
+                dtStart.Columns[2].ColumnName = "FK_FlowSort";
+                dtStart.Columns[3].ColumnName = "FK_FlowSortText";
+                dtStart.Columns[4].ColumnName = "Domain";
+                dtStart.Columns[5].ColumnName = "Num";
+            }
             ds.Tables.Add(dtStart);
 
             DataTable dtSort = new DataTable("Sort");
@@ -741,7 +854,6 @@ namespace BP.WF.HttpHandler
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, this.WorkID);
             return workid.ToString();
         }
-
         /// <summary>
         /// 获得发起列表 
         /// </summary>
@@ -762,8 +874,10 @@ namespace BP.WF.HttpHandler
                 //  em.OrgNo = Web.WebUser.OrgNo;
                 em.Insert();
             }
-
-            json = DBAccess.GetBigTextFromDB("WF_Emp", "No", WebUser.No, "StartFlows");
+            string userNo = WebUser.No;
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                userNo = WebUser.OrgNo + "_" + WebUser.No;
+            json = DBAccess.GetBigTextFromDB("WF_Emp", "No", userNo, "StartFlows");
             if (DataType.IsNullOrEmpty(json) == false)
                 return json;
 
@@ -771,8 +885,33 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获得能否发起的流程.
-            DataTable dtStart = Dev2Interface.DB_StarFlows(WebUser.No);
+            DataTable dtStart = Dev2Interface.DB_StarFlows(userNo);
             dtStart.TableName = "Start";
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dtStart.Columns["No"].ColumnName = "No";
+                dtStart.Columns["NAME"].ColumnName = "Name";
+                dtStart.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
+                dtStart.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dtStart.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
+                dtStart.Columns["DOMAIN"].ColumnName = "Domain";
+                dtStart.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
+                dtStart.Columns["IDX"].ColumnName = "Idx";
+                dtStart.Columns["WORKMODEL"].ColumnName = "WorkModel";
+
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dtStart.Columns["No"].ColumnName = "No";
+                dtStart.Columns["NAME"].ColumnName = "Name";
+                dtStart.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
+                dtStart.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dtStart.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
+                dtStart.Columns["DOMAIN"].ColumnName = "Domain";
+                dtStart.Columns["ISSTARTINMOBILE"].ColumnName = "IsStartInMobile";
+                dtStart.Columns["IDX"].ColumnName = "Idx";
+                dtStart.Columns["WORKMODEL"].ColumnName = "WorkModel";
+            }
             ds.Tables.Add(dtStart);
 
             #region 动态构造 流程类别.
@@ -809,7 +948,7 @@ namespace BP.WF.HttpHandler
 
             //把json存入数据表，避免下一次再取.
             if (dtStart.Rows.Count > 0)
-                DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", WebUser.No, "StartFlows");
+                DBAccess.SaveBigTextToDB(json, "WF_Emp", "No", userNo, "StartFlows");
 
             //返回组合
             return json;
@@ -1638,13 +1777,6 @@ namespace BP.WF.HttpHandler
                 BP.WF.Dev2Interface.Port_LoginByToken(token);
                 return "url@Home.htm?Token=" + token;
             }
-
-            string sid = this.GetRequestVal("Token");
-            if (DataType.IsNullOrEmpty(sid) == false)
-            {
-                BP.WF.Dev2Interface.Port_LoginByToken(sid);
-                return "url@Home.htm?Token=" + sid;
-            }
             #endregion 检查一下是否有token ?
 
             Hashtable ht = new Hashtable();
@@ -1707,6 +1839,14 @@ namespace BP.WF.HttpHandler
             //sql += " AND b.WFState NOT IN (7) AND a.BatchRole!=0 GROUP BY A.NodeID, a.Name,a.FlowName,a.BatchRole ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "NodeID";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "FlowName";
+                dt.Columns[3].ColumnName = "BatchRole";
+                dt.Columns[4].ColumnName = "NUM";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -2154,21 +2294,6 @@ namespace BP.WF.HttpHandler
             }
             int i = rpt.Retrieve(entityPK, entityPKVal);
 
-            ////如果是开始节点.
-            //if (DataType.IsNullOrEmpty(rpt.PrjNo) == true && i > 0)
-            //{
-            //    rpt.PrjNo = entityPK;
-            //    rpt.PrjName = entityPKVal;
-            //    rpt.Update();
-
-            //    GenerWorkFlow gwf = new GenerWorkFlow(rpt.OID);
-            //    gwf.PrjNo = entityPK;
-            //    gwf.PrjName = entityPKVal;
-            //    gwf.SetPara("EntityPK", entityPK);
-            //    gwf.SetPara(entityPK, entityPKVal);
-            //    gwf.Update();
-            //}
-
             if (rpt.OID == 0)
             {
                 rpt.OID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, BP.Web.WebUser.No);
@@ -2206,6 +2331,305 @@ namespace BP.WF.HttpHandler
             string token = this.GetRequestVal("Token");
             return BP.WF.Dev2Interface.Port_LoginByToken(token);
         }
+        public string DevType
+        {
+            get
+            {
+                string val = this.GetRequestVal("DevType");
+                if (DataType.IsNullOrEmpty(val) == true || val == "PC")
+                    return "WF";
+                else
+                    return "CCMobile";
+            }
+        }
+        public string PortSaaS_Init()
+        {
+            if (this.DoWhat == null)
+                return "err@必要的参数没有传入，请参考接口规则。DoWhat";
+
+            string token = "";
+
+            #region 根据用户的token, 调用配置的ssoURL ，获得用户名，并登录.
+            string userNo = "ccs";
+            BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
+            org.No = this.OrgNo;
+            if (org.RetrieveFromDBSources() == 0)
+                return "err@组织编号为" + this.OrgNo + "在数据库中不存在";
+            string url = org.GetValStringByKey("SSOUrl", "");  // 格式: https:/xxxx.xxx.xxx.xx/xx.do?xxxxx={$Token}
+            if (DataType.IsNullOrEmpty(url) == true || url.Contains("{$Token}") == false)
+                return "err@组织信息配置错误,没有配置回调访问验证的token的服务地址，请让组织管理员登陆系统在=》组织管理=》组织属性=》SSOUrl进行设置。";
+            string ticket = this.GetRequestVal("ticket");
+            //根据配置的地址，获得token.
+            url = url.Replace("{$ticket}", ticket).Replace("{$Token}", ticket);
+            string result = DataType.ReadURLContext(url);  //执行回调：url返回用户编号.
+            if (DataType.IsNullOrEmpty(result) == true)
+                return "err@执行URL没有返回结果值";
+            //数据序列化
+            var jsonData = result.ToJObject();
+            //code=200，表示请求成功，否则失败
+            if (!jsonData["code"].ToString().Equals("0000"))
+                return "err@执行SSOUrl回调URL返回结果失败";
+
+            //获取返回的数据
+            var data = jsonData["result"].ToString().ToJObject();
+            //
+            userNo = data["mobilePhone"] != null ? data["mobilePhone"].ToString() : "";
+            if (DataType.IsNullOrEmpty(userNo) == true)
+                return "err@读取url错误:" + userNo;
+
+            string empID = this.OrgNo + "_" + userNo;
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = empID;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@用户错误:" + emp.No;
+
+            //执行登陆.
+            BP.WF.Dev2Interface.Port_Login(userNo, this.OrgNo);
+            #endregion 获得token.
+
+            if (this.DoWhat.Equals("PortLogin") == true)
+                return "登陆成功";
+
+            #region 生成参数串.
+            string paras = "";
+            foreach (string str in HttpContextHelper.RequestParamKeys)
+            {
+                string val = this.GetRequestVal(str);
+                if (val.IndexOf('@') != -1)
+                    return "err@您没有能参数: [ " + str + " ," + val + " ] 给值 ，URL 将不能被执行。";
+                switch (str)
+                {
+                    case DoWhatList.DoNode:
+                    case DoWhatList.Emps:
+                    case DoWhatList.EmpWorks:
+                    case DoWhatList.FlowSearch:
+                    case DoWhatList.Login:
+                    case DoWhatList.MyFlow:
+                    case DoWhatList.MyWork:
+                    case DoWhatList.Start:
+                    case DoWhatList.Start5:
+                    case DoWhatList.StartSimple:
+                    case DoWhatList.FlowFX:
+                    case DoWhatList.DealWork:
+                    case "StartFlow":
+                    case "FK_Flow":
+                    case "WorkID":
+                    case "FK_Node":
+                    case "Token":
+                    case "DoType":
+                    case "DoMethod":
+                    case "HttpHandlerName":
+                    case "t":
+                    case "FrmID":
+                    case "FK_MapData":
+                    case "MyFrm":
+                    case "MyView":
+                    case "DoWhat":
+                    case "EntityPK":
+                        break;
+                    default:
+                        paras += "&" + str + "=" + val;
+                        break;
+                }
+            }
+            paras += "&Token=" + token;
+            string nodeID = int.Parse(this.FK_Flow + "01").ToString();
+            #endregion 生成参数串.
+
+            //发起流程.
+            if (this.DoWhat.Equals("StartClassic") == true)
+            {
+                if (this.FK_Flow == null)
+                {
+                    return "url@./AppClassic/Home.htm";
+                }
+                else
+                {
+                    return "url@./AppClassic/Home.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
+                }
+            }
+
+            //打开工作轨迹。
+            if (this.DoWhat.Equals(DoWhatList.OneWork) == true)
+            {
+                if (this.FK_Flow == null || this.WorkID == null)
+                    throw new Exception("@参数 FK_Flow 或者 WorkID 为 Null 。");
+                return "url@/" + this.DevType + "/MyView.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
+            }
+
+            //查看表单不需要FK_Node参数。
+            if (this.DoWhat.Equals("MyView") == true)
+            {
+                //if (this.NodeID != 0)
+                //    return "err@执行MyView不需要NodeID/FK_Node参数.";
+                Int64 workID = this.GenerWorkIDByEntityPK();
+                if (workID == 0)
+                    return "err@执行MyView不需要NodeID/FK_Node参数.";
+
+                if (this.NodeID == 0)
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(workID);
+                    paras += "&FK_Node=" + gwf.FK_Node;
+                }
+
+                return "url@/" + this.DevType + "/MyView.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + workID + "&o2=1" + paras;
+            }
+
+            //查看指定的节点表单需要FK_Node参数。
+            if (this.DoWhat.Equals("MyFrm") == true)
+            {
+                if (this.NodeID == 0)
+                    return "err@执行 MyFrm 需要NodeID/FK_Node参数.";
+
+                Int64 workID = this.GenerWorkIDByEntityPK();
+                if (workID == 0)
+                    return "err@执行MyView不需要NodeID/FK_Node参数.";
+
+                return "url@/" + this.DevType + "/MyFrm.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&WorkID=" + workID + "&o2=1" + paras;
+            }
+
+            //发起页面,或者调用发起流程.
+            if (this.DoWhat.Equals(DoWhatList.Start) == true || this.DoWhat.Equals("StartFlow"))
+            {
+                if (this.FK_Flow == null)
+                    return "url@Start.htm";
+
+                //实体编号,启动指定实体编号隶属的工作流程ID.
+                Int64 workID = this.GenerWorkIDByEntityPK();
+                if (workID == 0)
+                    return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
+
+                // 是否可以执行当前的工作.
+                if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(workID, WebUser.No) == true)
+                {
+                    return "url@/" + this.DevType + "/MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&WorkID=" + workID;
+                }
+
+                return "url@/" + this.DevType + "/MyView.htm?FK_Flow=" + this.FK_Flow + paras + "&WorkID=" + workID;
+            }
+
+            //发起表单.
+            if (this.DoWhat.Equals("StartFrm"))
+            {
+                int oid = this.OID;
+                if (oid == 0)
+                {
+                    GEEntity gn = new GEEntity(this.FrmID);
+                    oid = DBAccess.GenerOIDByGUID();
+                    try
+                    {
+                        gn.SaveAsOID(oid);
+                    }
+                    catch (Exception ex)
+                    {
+                        gn.CheckPhysicsTable();
+                        gn.SaveAsOID(oid);
+                    }
+                }
+                return "url@/" + this.DevType + "/CCForm/Frm.htm?FrmID=" + this.FrmID + "&OID=" + oid + "" + paras;
+            }
+
+
+            //处理工作.
+            if (this.DoWhat.Equals(DoWhatList.DealWork) == true)
+            {
+                if (DataType.IsNullOrEmpty(this.FK_Flow) || this.WorkID == 0)
+                    return "err@参数 FK_Flow 或者 WorkID 为Null 。";
+                return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
+            }
+            //流程设计器
+            if (this.DoWhat.Equals(DoWhatList.Flows) == true)
+                return "url@Portal/Flows.htm";
+            //表单设计器
+            if (this.DoWhat.Equals(DoWhatList.Frms) == true)
+                return "url@Portal/Frms.htm";
+
+            //请求在途.
+            if (this.DoWhat.Equals(DoWhatList.Runing) == true)
+                return "url@/" + this.DevType + "/Runing.htm?FK_Flow=" + this.FK_Flow;
+
+            //请求首页.
+            if (this.DoWhat.Equals("Home") == true)
+            {
+                if (this.DevType.Equals("CCMobile"))
+                    return "url@/CCMobilePortal/SaaS/Home.htm?FK_Flow=" + this.FK_Flow;
+                return "url@/Portal/Standard/Default.htm?FK_Flow=" + this.FK_Flow;
+            }
+
+            //请求待办。
+            if (this.DoWhat.Equals(DoWhatList.EmpWorks) == true || this.DoWhat.Equals("Todolist") == true)
+            {
+                if (DataType.IsNullOrEmpty(this.FK_Flow))
+                {
+                    return "url@/" + this.DevType + "/Todolist.htm";
+                }
+                else
+                {
+                    return "url@/" + this.DevType + "/Todolist.htm?FK_Flow=" + this.FK_Flow;
+                }
+            }
+            //草稿
+            if (this.DoWhat.Equals(DoWhatList.Draft) == true)
+                return "url@Draft.htm?FK_Flow=" + this.FK_Flow;
+            //请求流程查询。
+            if (this.DoWhat.Equals(DoWhatList.FlowSearch) == true)
+            {
+                if (DataType.IsNullOrEmpty(this.FK_Flow))
+                {
+                    return "url@./RptSearch/Default.htm";
+                }
+                else
+                {
+                    return "url@./RptDfine/Search.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                }
+            }
+
+            //流程查询小页面.
+            if (this.DoWhat.Equals(DoWhatList.FlowSearchSmall) == true)
+            {
+                if (this.FK_Flow == null)
+                    return "url@./RptSearch/Default.htm";
+                else
+                    return "url./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+            }
+
+            //打开消息.
+            if (this.DoWhat.Equals(DoWhatList.DealMsg) == true)
+            {
+                string guid = this.GetRequestVal("GUID");
+                BP.WF.SMS sms = new SMS();
+                sms.setMyPK(guid);
+                sms.Retrieve();
+
+                //判断当前的登录人员.
+                if (BP.Web.WebUser.No != sms.SendToEmpNo)
+                {
+                    BP.WF.Dev2Interface.Port_Login(sms.SendToEmpNo);
+                }
+
+                AtPara ap = new AtPara(sms.AtPara);
+                switch (sms.MsgType)
+                {
+                    case SMSMsgType.SendSuccess: // 发送成功的提示.
+
+                        if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
+                        {
+                            return "url@/" + this.DevType + "/MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                        }
+                        else
+                        {
+                            return "url@/" + this.DevType + "/MyView.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                        }
+
+                    default: //其他的情况都是查看工作报告.
+                        return "url@/" + this.DevType + "/MyView.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                }
+            }
+            return "url@/" + this.DevType + "/AppClassic/Home.htm?Token=" + paras;
+            //  return "err@没有判断的标记.";
+            //  return "warning@没有约定的标记:DoWhat=" + this.DoWhat;
+        }
+
         /// <summary>
         /// 调用页面入口
         /// @hongyan, 这里等待需要在翻译吧，还会有变动.
@@ -2214,28 +2638,20 @@ namespace BP.WF.HttpHandler
         public string Port_Init()
         {
             if (this.DoWhat == null)
-                return "err@必要的参数没有传入，请参考接口规则。DoWhat";
+                return "err@必要的参数没有传入，请参考接口规则, DoWhat";
 
-            #region 安全性校验. Token 模式.
-            #endregion 安全性校验. Token 模式.
 
             #region 安全性校验. SID 模式.
-            //if (this.SID == null)
-            //    return "err@必要的参数没有传入，请参考接口规则SID";
-
-            //if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
-            //    return "err@非法的访问，请与管理员联系,SID=" + this.SID;
-            string token = this.SID;
-            if (BP.DA.DataType.IsNullOrEmpty(this.UserNo) == false)
+            string token = this.GetRequestVal("Token");
+            if (DataType.IsNullOrEmpty(token) == false)
             {
-                BP.WF.Dev2Interface.Port_Login(this.UserNo);
-                token = BP.WF.Dev2Interface.Port_GenerToken("PC");
-
+                Dev2Interface.Port_LoginByToken(token);
             }
-
-            //if (BP.DA.DataType.IsNullOrEmpty(this.SID) == false)
-            //    BP.WF.Dev2Interface.Port_LoginByToken(this.SID);
-
+            else if (DataType.IsNullOrEmpty(this.UserNo) == false)
+            {
+                Dev2Interface.Port_Login(this.UserNo);
+                //token = Dev2Interface.Port_GenerToken("PC");
+            }
             #endregion 安全性校验. SID 模式.
 
             if (this.DoWhat.Equals("PortLogin") == true)
@@ -2377,9 +2793,8 @@ namespace BP.WF.HttpHandler
                         gn.SaveAsOID(oid);
                     }
                 }
-                return "url@/WF/CCForm/Frm.htm?FrmID=" + this.FrmID + "&OID=" + oid + "" + paras;
+                return "url@/WF/CCForm/Frm.htm?FrmID=" + this.FrmID + "&OID=" + oid + "" + paras + "&Token=" + token + "&UserNo=" + UserNo;
             }
-
 
             //处理工作.
             if (this.DoWhat.Equals(DoWhatList.DealWork) == true)
@@ -2390,10 +2805,10 @@ namespace BP.WF.HttpHandler
             }
             //流程设计器
             if (this.DoWhat.Equals(DoWhatList.Flows) == true)
-                return "url@Portal/Flows.htm";
+                return "url@Portal/FlowTree.htm?Token=" + token + "&UserNo=" + BP.Web.WebUser.No;
             //表单设计器
             if (this.DoWhat.Equals(DoWhatList.Frms) == true)
-                return "url@Portal/Frms.htm";
+                return "url@Portal/FrmTree.htm?Token=" + token + "&UserNo=" + BP.Web.WebUser.No;
 
             //请求在途.
             if (this.DoWhat.Equals(DoWhatList.Runing) == true)
@@ -2427,7 +2842,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    return "url@./RptDfine/Search.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                    return "url@./RptDfine/Search.htm?2=1&FK_Flow=" + this.FK_Flow + "&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
                 }
             }
 
@@ -2437,7 +2852,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Flow == null)
                     return "url@./RptSearch/Default.htm";
                 else
-                    return "url./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                    return "url@./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
             }
 
             //打开消息.
@@ -2488,6 +2903,14 @@ namespace BP.WF.HttpHandler
             sql += "     GROUP BY Auther, AuthName, FK_Flow, FlowName  ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "Auther";
+                dt.Columns[1].ColumnName = "AuthName";
+                dt.Columns[2].ColumnName = "FK_Flow";
+                dt.Columns[3].ColumnName = "FlowName";
+                dt.Columns[4].ColumnName = "Num";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /**
@@ -2502,6 +2925,50 @@ namespace BP.WF.HttpHandler
             sql += "  AND TakeBackDT >= '" + this.GetRequestVal("nowDate") + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                string columnName = "";
+                foreach (DataColumn col in dt.Columns)
+                {
+                    columnName = col.ColumnName.ToUpper();
+                    switch (columnName)
+                    {
+                        case "AUTHER":
+                            col.ColumnName = "Auther";
+                            break;
+                        case "AUTHNAME":
+                            col.ColumnName = "AutherName";
+                            break;
+                        case "PWORKID":
+                            col.ColumnName = "PWorkID";
+                            break;
+                        case "FK_NODE":
+                            col.ColumnName = "FK_Node";
+                            break;
+                        case "FID":
+                            col.ColumnName = "FID";
+                            break;
+                        case "WORKID":
+                            col.ColumnName = "WorkID";
+                            break;
+                        case "AUTHERTOEMPNO":
+                            col.ColumnName = "AutherToEmpNo";
+                            break;
+                        case "TAKEBACKDT":
+                            col.ColumnName = "TakeBackDT";
+                            break;
+                        case "FK_FLOW":
+                            col.ColumnName = "FK_Flow";
+                            break;
+                        case "FLOWNAME":
+                            col.ColumnName = "FlowName";
+                            break;
+                        case "TITLE":
+                            col.ColumnName = "Title";
+                            break;
+                    }
+                }
+            }
             return BP.Tools.Json.ToJson(dt);
         }
     }

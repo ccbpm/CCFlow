@@ -155,7 +155,6 @@ namespace BP.Sys
 
                 map.AddTBString(SFTableDtlAttr.FK_SFTable, null, "外键表ID", true, false, 0, 200, 20);
                 //map.AddTBString(SFTableDtlAttr.TableID, null, "TableID", true, false, 0, 200, 20);
-
                 map.AddTBString(SFTableDtlAttr.BH, null, "BH", true, false, 0, 200, 20);
                 map.AddTBString(SFTableDtlAttr.Name, null, "名称", true, false, 0, 200, 20);
                 map.AddTBString(SFTableDtlAttr.ParentNo, null, "父节点ID", true, false, 0, 200, 20);
@@ -169,27 +168,19 @@ namespace BP.Sys
         }
         #endregion
 
-        /// <summary>
-        /// 更新的操作
-        /// </summary>
-        /// <returns></returns>
-        protected override bool beforeUpdate()
+        protected override bool beforeInsert()
         {
-            return base.beforeUpdate();
+            //@hongyan 加标记的翻译.
+            if (DataType.IsNullOrEmpty(this.GetValStringByKey("OrgNo")) == true)
+                this.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
+
+            if (DataType.IsNullOrEmpty(this.GetValStringByKey("BH")) == true)
+                this.SetValByKey("BH",  DBAccess.GenerGUID());
+
+            this.setMyPK(this.GetValStringByKey("FK_SFTable") + "_" + this.GetValStringByKey("BH"));
+
+            return base.beforeInsert();
         }
-
-        protected override void afterInsertUpdateAction()
-        {
-            base.afterInsertUpdateAction();
-        }
-
-        //protected override bool beforeInsert()
-        //{
-        //    if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
-        //        this.OrgNo = BP.Web.WebUser.OrgNo;
-
-        //    return base.beforeInsert();
-        //}
     }
     /// <summary>
     /// 系统字典表s

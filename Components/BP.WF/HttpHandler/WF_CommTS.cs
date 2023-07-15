@@ -666,7 +666,7 @@ namespace BP.WF.HttpHandler
             throw new Exception("err@没有判断的entity类型. Entity_Update ");
         }
         /// <summary>
-        /// 查询
+        /// 查询 
         /// </summary>
         /// <returns></returns>
         public string Entity_Retrieve()

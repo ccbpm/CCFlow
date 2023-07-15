@@ -92,45 +92,60 @@ namespace BP.TA
             prj.TemplateName = template.Name;
             prj.Insert();
 
-            //获得节点.
-            Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.TemplateNo, templateNo);
-
-            //为节点的人员创建工作.
-            foreach (Node nd in nds)
+            if (template.TaskModel.Equals("Daily") == true)
             {
-                Task ta = new Task();
-
-                ta.NodeNo = nd.No;
-                ta.NodeName = nd.Name;
-
-
-                ta.Title = nd.Name;
-                ta.TaskSta = 0;
-                ta.IsRead = 0;
-
-                //发送人= 任务的下达人.
-                ta.SenderNo = BP.Web.WebUser.No;
-                ta.SenderName = BP.Web.WebUser.Name;
-
-                //生成负责人.
-                Emp fzr = new Emp(nd.GenerFZR());
-                ta.EmpNo = fzr.No;
-                ta.EmpName = fzr.Name;
-
-                //Todo: 生成协助人.暂不实现.
-                //赋值项目信息.
-                ta.PrjNo = prj.No;
-                ta.PrjName = prj.Name;
-                ta.WCL = 0;
-                ta.PRI = 0;
-                ta.TaskSta = 0;
-                ta.StarterNo = BP.Web.WebUser.No;
-                ta.StarterName = BP.Web.WebUser.Name;
-                ta.InsertAsOID(DBAccess.GenerOID("Task"));
-                //ta.EmpNo = item.
+                prj.PrjSta = 2; //运行状态.
+                prj.Update();
+                return prj.No;
             }
-            return prj.No;
+
+            if (template.TaskModel.Equals("Section") == true)
+            {
+                //获得节点.
+                Nodes nds = new Nodes();
+                nds.Retrieve(NodeAttr.TemplateNo, templateNo, "Idx");
+
+                //为节点的人员创建工作.
+                foreach (Node nd in nds)
+                {
+                    Task ta = new Task();
+
+                    ta.NodeNo = nd.No;
+                    ta.NodeName = nd.Name;
+
+
+                    ta.Title = nd.Name;
+                    ta.TaskSta = 0;
+                    ta.IsRead = 0;
+
+                    //发送人= 任务的下达人.
+                    ta.SenderNo = BP.Web.WebUser.No;
+                    ta.SenderName = BP.Web.WebUser.Name;
+
+                    //生成负责人.
+                    string fzrEmpNo = nd.GenerFZR();
+                    if (DataType.IsNullOrEmpty(fzrEmpNo) == false)
+                    {
+                        Emp fzr = new Emp();
+                        ta.EmpNo = fzr.No;
+                        ta.EmpName = fzr.Name;
+                    }
+
+                    //Todo: 生成协助人.暂不实现.
+                    //赋值项目信息.
+                    ta.PrjNo = prj.No;
+                    ta.PrjName = prj.Name;
+                    ta.WCL = 0;
+                    ta.PRI = 0;
+                    ta.TaskSta = 0;
+                    ta.StarterNo = BP.Web.WebUser.No;
+                    ta.StarterName = BP.Web.WebUser.Name;
+                    ta.InsertAsOID(DBAccess.GenerOID("Task"));
+                    //ta.EmpNo = item.
+                }
+                return prj.No;
+            }
+            return "err@没有判断的类型:" + template.TaskModel;
         }
         public static string Prj_Start(string prjNo)
         {

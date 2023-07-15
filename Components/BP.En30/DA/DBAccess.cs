@@ -63,6 +63,12 @@ namespace BP.DA
                     else
                         sql = "ALTER TABLE " + table + " ALTER COLUMN " + colName + " SET DEFAULT '" + defaultVal.ToString() + "'";
                     break;
+                case DBType.Oracle:
+                    if (defaultVal.GetType() == typeof(int) || defaultVal.GetType() == typeof(float) || defaultVal.GetType() == typeof(decimal))
+                        sql = "ALTER TABLE " + table + " MODIFY " + colName + " DEFAULT " + defaultVal.ToString();
+                    else
+                        sql ="ALTER TABLE "+table+ " MODIFY "+colName+ " DEFAULT '" + defaultVal.ToString() + "'";
+                    break;
                 case DBType.MSSQL:
                     sql = "SELECT  b.name FROM sysobjects b join syscolumns a on b.id = a.cdefault WHERE a.id = object_id('" + table + "') AND a.name = '" + colName + "'";
                     string yueShu = DBAccess.RunSQLReturnStringIsNull(sql, null);
@@ -448,7 +454,7 @@ namespace BP.DA
                 || BP.Difference.SystemConfig.AppCenterDBType==DBType.KingBaseR3
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
-                // System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+
                 byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(docs);
                 //执行保存.
                 SaveBytesToDB(inputBytes, tableName, tablePK, pkVal, saveToFileField);
@@ -501,7 +507,7 @@ namespace BP.DA
             byte[] bytes = new byte[fs.Length];
             fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
 
-            // bug 的提示者 http://bbs.citydo.com.cn/showtopic-3958.aspx
+            // bug 的提示者 http://bbs.ccbpm.cn/showtopic-3958.aspx
             fs.Close();
             fs.Dispose();
 
@@ -594,7 +600,7 @@ namespace BP.DA
         /// <param name="tablePK">表主键</param>
         /// <param name="pkVal">主键值</param>
         /// <param name="fileSaveField">字段</param>
-        public static byte[] GetByteFromDB(string tableName, string tablePK, string pkVal, string fileSaveField)
+        public static byte[] GetByteFromDB(string tableName, string tablePK, string pkVal, string fileSaveField,bool isFirst = true)
         {
 
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
@@ -687,13 +693,27 @@ namespace BP.DA
                         /*如果没有此列，就自动创建此列.*/
                         string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ";
                         DBAccess.RunSQL(sql);
+                        return null;
+                    }
+                    else 
+                    {
+                        //改变类型
+                        DBAccess.RunSQL("ALTER TABLE "+tableName+" RENAME COLUMN "+ fileSaveField+" TO "+ fileSaveField+"_bak");
+
+                        //添加 remark 字段，类型为 clob
+                        DBAccess.RunSQL("ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ");
+                        //把XX_bar 字段赋值给XX字段
+                        DBAccess.RunSQL("UPDATE " + tableName + " SET " + fileSaveField + " = " + fileSaveField + "_bak");
+                        DBAccess.RunSQL("ALTER TABLE " + tableName + " DROP COLUMN "+ fileSaveField+"_bak");
+                        if(isFirst == true)
+                            return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField,false);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message + "， 请检查该表[" + tableName + "]字段[" + fileSaveField + "]是否是  blob 类型.");
 
                 }
                 finally
                 {
-                    dr.Close();
+                    if(dr!= null) { dr.Close(); };
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -745,7 +765,7 @@ namespace BP.DA
                 }
                 finally
                 {
-                    dr.Close();
+                    if (dr != null) { dr.Close(); };
                     cm.Dispose();
                     conn.Dispose();
                 }
@@ -796,7 +816,7 @@ namespace BP.DA
                 }
                 finally
                 {
-                    dr.Close();
+                    if (dr != null) { dr.Close(); };
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -847,7 +867,7 @@ namespace BP.DA
                 }
                 finally
                 {
-                    dr.Close();
+                    if (dr != null) { dr.Close(); };
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -896,7 +916,7 @@ namespace BP.DA
                 }
                 finally
                 {
-                    dr.Close();
+                    if (dr != null) { dr.Close(); };
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -1522,7 +1542,7 @@ namespace BP.DA
                     sql = "ALTER TABLE " + tab.ToUpper() + " ADD CONSTRAINT  PRIMARY KEY(" + pk + ") CONSTRAINT " + tab + "pk ";
                     break;
                 case DBType.MySQL:
-                    //   ALTER TABLE Port_emp ADD CONSTRAINT Port_emppk PRIMARY KEY (NO)
+                    //   ALTER TABLE Port_Emp ADD CONSTRAINT Port_Emppk PRIMARY KEY (NO)
                     sql = "ALTER TABLE " + tab + " ADD CONSTRAINT  " + tab + "px PRIMARY KEY(" + pk + ")";
                     //sql = "ALTER TABLE " + tab + " ADD CONSTRAINT  PRIMARY KEY(" + pk + ") CONSTRAINT " + tab + "pk ";
                     break;

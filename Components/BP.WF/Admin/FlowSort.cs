@@ -130,8 +130,8 @@ namespace BP.WF.Admin
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
-                this.OrgNo = BP.Web.WebUser.OrgNo;
+            if (DataType.IsNullOrEmpty(this.OrgNo) == true && Glo.CCBPMRunModel != CCBPMRunModel.Single)
+                this.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
 
             return base.beforeInsert();
         }
@@ -144,7 +144,7 @@ namespace BP.WF.Admin
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 sql = "UPDATE WF_Emp SET StartFlows='' ";
             else
-                sql = "UPDATE WF_Emp SET StartFlows='' ";
+                sql = "UPDATE WF_Emp SET StartFlows='' WHERE OrgNo='"+BP.Web.WebUser.OrgNo+"' ";
 
             DBAccess.RunSQL(sql);
             return base.beforeUpdate();

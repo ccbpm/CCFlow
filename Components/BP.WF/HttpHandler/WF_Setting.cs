@@ -20,7 +20,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_ClearCash()
         {
-            DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE FK_Emp='" + BP.Web.WebUser.No + "' AND OrgNo='"+BP.Web.WebUser.OrgNo+"'");
+            DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE FK_Emp='" + BP.Web.WebUser.No + "' AND OrgNo='" + BP.Web.WebUser.OrgNo + "'");
             return "执行成功，请刷新菜单或者重新进入看看菜单权限是否有变化。";
         }
         public string UpdateEmpNo()
@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
 
 
             BP.Port.DeptEmpStations des = new BP.Port.DeptEmpStations();
-            des.Retrieve(BP.Port.DeptEmpStationAttr.FK_Emp, WebUser.No);
+            des.Retrieve(BP.Port.DeptEmpStationAttr.FK_Emp, emp.UserID);
 
             string depts = "";
             string stas = "";
@@ -112,8 +112,7 @@ namespace BP.WF.HttpHandler
             ht.Add("Depts", depts);
             ht.Add("Stations", stas);
 
-
-            BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(WebUser.No);
+            BP.WF.Port.WFEmp wfemp = new BP.WF.Port.WFEmp(WebUser.UserID);
             ht.Add("Tel", emp.Tel);
             ht.Add("Email", emp.Email);
 
@@ -156,7 +155,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + empNo + ".jpg";
+                string tempFile = BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + empNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -197,7 +196,7 @@ namespace BP.WF.HttpHandler
                 empNo = WebUser.No;
             try
             {
-                string tempFile =  BP.Difference.SystemConfig.PathOfWebApp + "DataUser/UserIcon/" + empNo + ".png";
+                string tempFile = BP.Difference.SystemConfig.PathOfWebApp + "DataUser/UserIcon/" + empNo + ".png";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -222,43 +221,52 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ChangeDept_Init()
         {
-            Paras ps = new Paras();
-            ps.SQL = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Emp";
-            ps.Add("FK_Emp", BP.Web.WebUser.No);
-            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
+            string sql = "";
+            //如果是集团版.
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept, A.OrgNo, '' as OrgName FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + WebUser.No + "'";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept  FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + WebUser.No + "'";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept, A.OrgNo, '' as OrgName  FROM Port_Dept A, Port_DeptEmp B,Port_Emp C WHERE A.No=B.FK_Dept AND C.FK_Dept=A.No AND C.No=B.FK_Emp AND C.UserID='" + WebUser.No + "'";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             if (dt.Rows.Count == 0)
             {
-                string sql = "SELECT a.No,a.Name,B.NameOfPath, '1' as CurrentDept FROM ";
-                sql += " Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No  AND A.No='"+BP.Web.WebUser.No+"'";
+                sql = "SELECT a.No,a.Name,B.NameOfPath, '1' as CurrentDept ,  B.OrgNo, '' as OrgName FROM ";
+                sql += " Port_Emp A, Port_Dept B WHERE A.FK_Dept=B.No  AND A.No='" + BP.Web.WebUser.No + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
             }
 
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+            dt.Columns[2].ColumnName = "NameOfPath";
+            dt.Columns[3].ColumnName = "CurrentDept";
+
+            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["CURRENTDEPT"].ColumnName = "CurrentDept";
-                dt.Columns["NAMEOFPATH"].ColumnName = "NameOfPath";
-            }
-            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-            {
-                dt.Columns["no"].ColumnName = "No";
-                dt.Columns["name"].ColumnName = "Name";
-                dt.Columns["currentdept"].ColumnName = "CurrentDept";
-                dt.Columns["nameofpath"].ColumnName = "NameOfPath";
+                dt.Columns[4].ColumnName = "OrgNo";
+                dt.Columns[5].ColumnName = "OrgName";
+
+                //设置组织名字.
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string orgNo = dr[4].ToString();
+                    dr[5] = DBAccess.RunSQLReturnVal("SELECT Name FROM Port_Org WHERE No='" + orgNo + "'", null);
+                }
             }
 
             //设置当前的部门.
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["No"].ToString() == WebUser.FK_Dept)
+                if (dr["No"].ToString().Equals(WebUser.FK_Dept) == true)
                     dr["CurrentDept"] = "1";
 
-                if (dr["NameOfPath"].ToString() != "")
-                    dr["Name"] = dr["NameOfPath"];
+                if (DataType.IsNullOrEmpty(dr["NameOfPath"].ToString()) == true)
+                    dr["NameOfPath"] = dr["Name"];
             }
-
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -268,32 +276,36 @@ namespace BP.WF.HttpHandler
         public string ChangeDept_Submit()
         {
             string deptNo = this.GetRequestVal("DeptNo");
-           
+
             BP.Port.Dept dept = new BP.Port.Dept(deptNo);
+
+            // @honygan.
+            DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + dept.OrgNo + "', FK_Dept='" + dept.No + "' WHERE No='" + WebUser.No + "'");
 
             BP.Web.WebUser.FK_Dept = dept.No;
             BP.Web.WebUser.FK_DeptName = dept.Name;
             BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
+            BP.Web.WebUser.OrgNo = dept.OrgNo;
 
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
             emp.StartFlows = "";
             emp.Update();
             //去掉切换主部门
-           /* try
-            {
-                string sql = "";
+            /* try
+             {
+                 string sql = "";
 
-                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE UserID='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
-                else
-                    sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE No='" + WebUser.No + "'";
-                DBAccess.RunSQL(sql);
-                BP.WF.Dev2Interface.Port_Login(WebUser.No);
-            }
-            catch (Exception ex)
-            {
+                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE UserID='" + WebUser.No + "' AND OrgNo='" + WebUser.OrgNo + "'";
+                 else
+                     sql = "UPDATE Port_Emp SET fk_dept='" + deptNo + "' WHERE No='" + WebUser.No + "'";
+                 DBAccess.RunSQL(sql);
+                 BP.WF.Dev2Interface.Port_Login(WebUser.No);
+             }
+             catch (Exception ex)
+             {
 
-            }*/
+             }*/
 
             return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
         }

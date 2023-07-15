@@ -75,23 +75,27 @@ namespace BP.WF.HttpHandler
             //退回数.
             ht.Add("ReturnNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE WFState=5 " + whereStrPuls));
 
-            //说有逾期的数量. 应该根据 WF_GenerWorkerList的 SDT 字段来求.
+            //说有逾期的数量. 应该根据 WF_GenerWorkerlist的 SDT 字段来求.
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerList WHERE IsPass=0 AND STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now()"));
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE IsPass=0 AND STR_TO_DATE(SDT,'%Y-%m-%d %H:%i') < now()"));
 
             }
             else if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 
-                string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_GenerWorkerList WHERE IsPass=0 AND   REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 ";
-                sql += "UNION SELECT * FROM WF_GenerWorkerList WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 )";
+                string sql = "SELECT COUNT(*) from (SELECT *  FROM WF_GenerWorkerlist WHERE IsPass=0 AND   REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 ";
+                sql += "UNION SELECT * FROM WF_GenerWorkerlist WHERE  REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 )";
 
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
             }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE IsPass=0 AND to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW()"));
+            }
             else
             {
-                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerList WHERE IsPass=0 AND convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120)"));
+                ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_GenerWorkerlist WHERE IsPass=0 AND convert(varchar(100),SDT,120) < CONVERT(varchar(100), GETDATE(), 120)"));
             }
             return BP.Tools.Json.ToJson(ht);
         }
@@ -129,18 +133,18 @@ namespace BP.WF.HttpHandler
             #region 待办 分析
             //待办 - 部门分组.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                sql = "SELECT B.Name, count(a.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B WHERE A.FK_Dept=B.No GROUP BY B.Name";
+                sql = "SELECT B.Name, count(a.WorkID) as Num FROM WF_GenerWorkerlist A,Port_Dept B WHERE A.FK_Dept=B.No GROUP BY B.Name";
             else
-                sql = "SELECT B.Name, count(a.WorkID) as Num FROM WF_GenerWorkerList A,Port_Dept B WHERE A.FK_Dept=B.No AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.Name";
+                sql = "SELECT B.Name, count(a.WorkID) as Num FROM WF_GenerWorkerlist A,Port_Dept B WHERE A.FK_Dept=B.No AND B.OrgNo='" + WebUser.OrgNo + "' GROUP BY B.Name";
             DataTable TodolistByDept = DBAccess.RunSQLReturnTable(sql);
             TodolistByDept.TableName = "TodolistByDept";
             ds.Tables.Add(TodolistByDept);
 
             //待办的 - 流程分组.
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
-                sql = "SELECT c.FlowName as name, count(a.WorkID) as value FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 GROUP BY C.FlowName";
+                sql = "SELECT c.FlowName as name, count(a.WorkID) as value FROM WF_GenerWorkerlist A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 GROUP BY C.FlowName";
             else
-                sql = "SELECT c.FlowName as name, count(a.WorkID) as value  FROM WF_GenerWorkerList A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 AND C.OrgNo='" + WebUser.OrgNo+"' GROUP BY C.FlowName";
+                sql = "SELECT c.FlowName as name, count(a.WorkID) as value  FROM WF_GenerWorkerlist A,Port_Dept B, WF_GenerWorkFlow C WHERE A.FK_Dept=B.No AND A.WorkID=C.WorkID AND A.IsPass=0 AND C.OrgNo='" + WebUser.OrgNo+"' GROUP BY C.FlowName";
 
             //sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 GROUP BY FlowName";
             DataTable TodolistByFlow = DBAccess.RunSQLReturnTable(sql);
@@ -159,6 +163,10 @@ namespace BP.WF.HttpHandler
             {
                 sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY FlowName ";
                 sql += "UNION SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY FlowName";
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = "SELECT FlowName as name, count(WorkID) as value FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() GROUP BY FlowName";
             }
             else
             {
@@ -180,6 +188,10 @@ namespace BP.WF.HttpHandler
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 GROUP BY DeptName ";
                 sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 GROUP BY DeptName";
+            }
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            {
+                sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 " + whereStrPuls + "  and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() GROUP BY DeptName";
             }
             else
             {

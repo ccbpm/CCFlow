@@ -47,6 +47,13 @@ namespace BP.WF.HttpHandler
         {
             string sql = "SELECT No,Name,ParentNo,Idx FROM Port_Dept";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if(SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+                dt.Columns[2].ColumnName = "ParentNo";
+                dt.Columns[3].ColumnName = "Idx";
+            }
             return "";
         }
         #endregion xxx 界面方法.

@@ -108,7 +108,7 @@ namespace BP.WF.Template.CCEn
                 if (this.CCStaWay == WF.CCStaWay.StationOnly)
                 {
                   
-                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo+",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "= B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
+                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo+",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C  WHERE A.No= B.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Node=" + this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -130,7 +130,7 @@ namespace BP.WF.Template.CCEn
                         deptNo = DBAccess.RunSQLReturnStringIsNull("SELECT FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + workid + " AND IsEnable=1 AND IsPass=0", BP.Web.WebUser.FK_Dept);
 
                  
-                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
+                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID + " AND B.FK_Dept='" + deptNo + "'";
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -145,7 +145,7 @@ namespace BP.WF.Template.CCEn
                 if (this.CCStaWay == WF.CCStaWay.StationAndDept)
                 {
                   
-                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node=" + this.NodeID+" AND D.FK_Node="+this.NodeID;
+                        sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C, WF_CCDept D WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station AND A.FK_Dept=D.FK_Dept AND B.FK_Dept=D.FK_Dept AND C.FK_Node=" + this.NodeID+" AND D.FK_Node="+this.NodeID;
 
                     mydt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow mydr in mydt.Rows)
@@ -174,7 +174,7 @@ namespace BP.WF.Template.CCEn
                         BP.Port.Dept dept = new Dept(deptNo);
 
                       
-                            sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
+                            sql = "SELECT " + BP.Sys.Base.Glo.UserNo + ",Name FROM Port_Emp A, Port_DeptEmpStation B, WF_CCStation C WHERE A.No=B.FK_Emp AND B.FK_Station=C.FK_Station  AND C.FK_Node=" + this.NodeID+" AND B.FK_Dept='"+deptNo+"'";
 
                         mydt = DBAccess.RunSQLReturnTable(sql);
                         foreach (DataRow mydr in mydt.Rows)

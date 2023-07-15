@@ -46,10 +46,10 @@ namespace BP.WF.DTS
         public override object Do()
         {
             if (DBAccess.IsView("Port_Emp", BP.Difference.SystemConfig.AppCenterDBType) == true)
-                return "port_emp 是一个视图无法生成拼音.";
+                return "Port_Emp 是一个视图无法生成拼音.";
 
             if (DBAccess.IsExitsTableCol("Port_Emp", BP.Port.EmpAttr.PinYin) == false)
-                return "port_emp 不包含PinYin 这一列,无法生成拼音.";
+                return "Port_Emp 不包含PinYin 这一列,无法生成拼音.";
 
             BP.Port.Emps emps = new BP.Port.Emps();
             emps.RetrieveAll();

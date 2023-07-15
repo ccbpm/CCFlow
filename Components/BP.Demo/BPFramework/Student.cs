@@ -349,13 +349,10 @@ namespace BP.Demo
                 ////多对多的映射.
                 //map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
                 //  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "选修的科目");
-
                 //查询模式.
                 map.AddDtl(new Resumes(), ResumeAttr.StudentNo, null, DtlEditerModel.DtlSearch, "icon-drop");
-
                 //批量编辑模式
                 map.AddDtl(new Resumes(), ResumeAttr.StudentNo, null, DtlEditerModel.DtlBatch, "icon-drop");
-
                 //带有参数的方法.
                 RefMethod rm = new RefMethod();
                 rm.Title = "缴纳班费";
@@ -374,7 +371,6 @@ namespace BP.Demo
                 rm.IsCanBatch = true; //是否可以批处理？
                 map.AddRefMethod(rm);
                 #endregion 基本操作 - 分组.
-
 
                 #region 高级操作 - 分组.
                 map.AddGroupMethod("高级操作");
@@ -401,7 +397,6 @@ namespace BP.Demo
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
                 #endregion 高级操作 - 分组.
-
 
                 ////不带有参数的方法.
                 //rm = new RefMethod();

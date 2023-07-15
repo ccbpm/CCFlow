@@ -142,7 +142,7 @@ namespace BP.Port
                 //map.AddRefMethod(rm);
 
                 #region 增加点对多属性
-                rm.Title = "重置该部门一下的部门路径";
+                rm.Title = "重置该部门以下的部门路径";
                 rm.ClassMethodName = this.ToString() + ".DoResetPathName";
                 rm.RefMethodType = RefMethodType.Func;
 
@@ -300,7 +300,6 @@ namespace BP.Port
                 {
                     dept.GenerNameOfPath();
                     GenerChildNameOfPath(dept.No);
-
 
                     //更新人员路径信息.
                     BP.Port.Emps emps = new BP.Port.Emps();

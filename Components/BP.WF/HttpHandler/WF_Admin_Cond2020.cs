@@ -125,6 +125,11 @@ namespace BP.WF.HttpHandler
             string sql = "select No,Name FROM port_StationType WHERE No in (SELECT Fk_StationType from Port_Station WHERE OrgNo ='" + this.GetRequestVal("OrgNo") + "')";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if(BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+            }
             return BP.Tools.Json.ToJson(dt);
         }
 	}

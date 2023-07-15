@@ -130,7 +130,7 @@ namespace BP.Sys
             {
                 string s= this.GetValStrByKey(MapFrameAttr.FrameURL);
                 if (DataType.IsNullOrEmpty(s))
-                    return "http://citydo.com.cn";
+                    return "http://ccbpm.cn";
                 return s;
             }
             set

@@ -829,10 +829,25 @@ namespace BP.Sys
         public SFDBSrc()
         {
         }
-        public SFDBSrc(string mypk)
+        public SFDBSrc(string no)
         {
-            this.No = mypk;
-            this.Retrieve();
+            this.No = no;
+            try
+            {
+                this.Retrieve();
+            }
+            catch (Exception ex)
+            {
+                if (no.Equals("local")==true)
+                {
+                    this.Name = no;
+                    this.DBSrcType = no;
+                    this.DBName = no;
+                    this.Insert();
+                    return;
+                }
+                throw ex;
+            }
         }
         /// <summary>
         /// EnMap
@@ -852,24 +867,12 @@ namespace BP.Sys
                 //map.AddDDLSysEnum(SFDBSrcAttr.DBSrcType, 0, "数据源类型", true, true,
                 //  SFDBSrcAttr.DBSrcType,cfg);
 
-                string cfg1 = "@local=应用系统数据库(默认)@MSSQL=SQLServer数据库@Oracle=Oracle数据库@MySQL=MySQL数据库@Informix=Informix数据库@KindingBase3=人大金仓库R3@KindingBase6=人大金仓库R6@UX=优漩@Dubbo=Dubbo服务@WS=WebService数据源@URL=url模式@CCFromRef.js";
+                string cfg1 = "@local=应用系统数据库(默认)@MSSQL=SQLServer数据库@Oracle=Oracle数据库@MySQL=MySQL数据库@Informix=Informix数据库@KindingBase3=人大金仓库R3@KindingBase6=人大金仓库R6@UX=优漩@Dubbo=Dubbo服务@WS=WebService数据源@WebApi=WebApi@CCFromRef.js";
 
                 map.AddDDLStringEnum(SFDBSrcAttr.DBSrcType, "local", "类型", cfg1, true, null, false);
                 map.AddTBString(SFDBSrcAttr.DBName, null, "数据库名称/Oracle保持为空", true, false, 0, 30, 20);
                 map.AddTBString(SFDBSrcAttr.ConnString, null, "连接串/URL", true, false, 0, 200, 20,true);
-
                 map.AddTBAtParas(200);
-
-                //string runPlant = BP.Difference.SystemConfig.RunOnPlant;
-                //if (runPlant.Equals("CCFlow") == false && runPlant.Equals("bp") == false)
-                //{
-                //    map.AddTBString(SFDBSrcAttr.UserID, null, "数据库登录用户ID", true, false, 0, 30, 20);
-                //    map.AddTBString(SFDBSrcAttr.Password, null, "密码", true, false, 0, 30, 20);
-                //    map.AddTBString(SFDBSrcAttr.IP, null, "IP地址/数据库实例名", true, false, 0, 500, 20);
-                //}
-
-                //map.AddDDLSysEnum(SFDBSrcAttr.DBSrcType, 0, "数据源类型", true, true,
-                //    SFDBSrcAttr.DBSrcType, "@0=应用系统主数据库@1=SQLServer@2=Oracle@3=MySQL@4=Infomix");
 
                 RefMethod rm = new RefMethod();
 
@@ -899,18 +902,6 @@ namespace BP.Sys
                         return BP.Difference.SystemConfig.AppCenterDSN;
                     default:
                         return this.GetValStringByKey(SFDBSrcAttr.ConnString);
-                        //case Sys.DBSrcType.SQLServer:
-                        //    return "password=" + this.Password + ";persist security info=true;user id=" + this.UserID + ";initial catalog=" + this.DBName + ";data source=" + this.IP + ";timeout=999;multipleactiveresultsets=true";
-                        //case Sys.DBSrcType.Oracle:
-                        //    return "user id=" + this.UserID + ";data source=" + this.IP + ";password=" + this.Password + ";Max Pool Size=200";
-                        //case Sys.DBSrcType.MySQL:
-                        //    return "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
-                        //case Sys.DBSrcType.Informix:
-                        //    return "Host=" + this.IP + "; Service=; Server=; Database=" + this.DBName + "; User id=" + this.UserID + "; Password=" + this.Password + "; ";  //Service为监听客户端连接的服务名，Server为数据库实例名，这两项没提供
-                        //case Sys.DBSrcType.PostgreSQL:
-                        //    return "Server=" + this.IP + ";Port=5432;Database=" + this.DBName + ";UserId=" + this.UserID + ";Password=" + this.Password + ";;Pooling=False;";
-                        //default:
-                        //    throw new Exception("@没有判断的类型.");
                 }
             }
         }
@@ -947,9 +938,6 @@ namespace BP.Sys
             {
                 try
                 {
-                    //  dsn = "user id=" + this.UserID + ";data source=" + this.DBName + ";password=" + this.Password + ";Max Pool Size=200";
-                    //System.Data.OracleClient.OracleConnection conn = new System.Data.OracleClient.OracleConnection();
-                    //zyt改造OracleConnection,Core And Fram4编译正常
                     OracleConnection conn = new OracleConnection();
                     conn.ConnectionString = this.ConnString;
                     conn.Open();
@@ -966,7 +954,6 @@ namespace BP.Sys
             {
                 try
                 {
-                    //   dsn = "Data Source=" + this.IP + ";Persist Security info=True;Initial Catalog=" + this.DBName + ";User ID=" + this.UserID + ";Password=" + this.Password + ";";
                     MySql.Data.MySqlClient.MySqlConnection conn = new MySql.Data.MySqlClient.MySqlConnection();
                     conn.ConnectionString = this.ConnString;
                     conn.Open();
@@ -990,6 +977,20 @@ namespace BP.Sys
                     myRequest.AllowAutoRedirect = false;//是否允许自动重定向
                     HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
                     return myResponse.StatusCode == HttpStatusCode.OK ? "连接配置成功。" : "连接配置失败。";//返回响应的状态
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+            if (this.DBSrcType == BP.Sys.DBSrcType.WebApi)
+            {
+                string url = this.ConnString;
+
+                try
+                {
+                    string data = DataType.ReadURLContext(url, 10000);
+                    return "链接信息:"+data;
                 }
                 catch (Exception ex)
                 {

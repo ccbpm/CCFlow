@@ -26,7 +26,7 @@ namespace BP.WF.HttpHandler
         public string RefOneFrmTree_SetAllNodeFrmUseThisSln()
         {
             string nodeID = GetRequestVal("FK_Node");
-            Node currNode = new Node(nodeID);
+            Node currNode = new Node(this.FK_Node);
             string flowNo = currNode.FK_Flow;
             Nodes nds = new Nodes();
             nds.Retrieve("FK_Flow", flowNo);
@@ -131,6 +131,12 @@ namespace BP.WF.HttpHandler
 
             string sql = Glo.SQLOfCheckField.Replace("@FK_Frm", this.FrmID);
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+            }
+                
             dt.TableName = "CheckFields";
             ds.Tables.Add(dt);
             return BP.Tools.Json.ToJson(ds);

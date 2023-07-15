@@ -173,7 +173,7 @@ namespace BP.En
             string str = this.ClassMethodName.Trim(' ', ';', '.');
             int pos = str.LastIndexOf(".");
 
-            //@hongyan.
+            
             string clas = this.HisEn.ToString();
             string meth = str;
             if (pos > 0)

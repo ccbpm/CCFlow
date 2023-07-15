@@ -111,7 +111,7 @@ namespace BP.CCBill
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
-                    sql = " SELECT DISTINCT FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + top;
+                    sql = " SELECT DISTINCT A.FK_Flow,A.FlowName,B.Icon,A.SendDT  FROM WF_GenerWorkFlow A ,WF_Flow B WHERE B.IsCanStart=1 AND B.No=A.FK_Flow AND A.Starter='"+WebUser.No+"'  Order By A.SendDT  limit " + top;
                     break;
                 case DBType.Oracle:
                 case DBType.DM:

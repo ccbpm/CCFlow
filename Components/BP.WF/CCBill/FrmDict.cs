@@ -1049,7 +1049,7 @@ namespace BP.CCBill
             if (sf.RetrieveFromDBSources() == 0)
             {
                 sf.Name = this.Name;
-                sf.SrcType = SrcType.SQL;
+                sf.SrcType = DictSrcType.SQL;
                 sf.SrcTable = this.PTable;
                 sf.ColumnValue = "BillNo";
                 sf.ColumnText = "Title";

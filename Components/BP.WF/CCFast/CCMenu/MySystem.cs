@@ -668,6 +668,19 @@ namespace BP.CCFast.CCMenu
         }
         private void ImpSystem_Imp_DictTable(Menu en, string path)
         {
+            string frmID = en.UrlExt;
+
+            //导入表单.
+            string file = path + "/" + frmID + ".xml";
+            DataSet ds = new DataSet();
+            ds.ReadXml(file);
+
+            //创建用户自定义表
+            DataTable dt = ds.Tables["SFTable"];
+            SFTable sFTable = new SFTable();
+            Row row = sFTable.Row;
+            row.LoadDataTable(dt, dt.Rows[0]);
+            sFTable.DirectInsert();
 
         }
         /// <summary>

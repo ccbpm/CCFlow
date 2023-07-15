@@ -94,9 +94,7 @@ namespace BP.En
                 // 设置默认值.
                 if (v.Equals("@WebUser.No"))
                 {
-
                     this.SetValByKey(attr.Key, WebUser.No);
-
                     continue;
                 }
                 else if (v.Equals("@WebUser.Name"))
@@ -107,6 +105,16 @@ namespace BP.En
                 else if (v.Equals("@WebUser.FK_Dept"))
                 {
                     this.SetValByKey(attr.Key, WebUser.FK_Dept);
+                    continue;
+                }
+                else if (v.Equals("@WebUser.DeptLeader"))
+                {
+                    this.SetValByKey(attr.Key, WebUser.DeptLeader);
+                    continue;
+                }
+                else if (v.Equals("@WebUser.EmpLeader"))
+                {
+                    this.SetValByKey(attr.Key, WebUser.EmpLeader);
                     continue;
                 }
                 else if (v.Equals("@WebUser.FK_DeptName"))

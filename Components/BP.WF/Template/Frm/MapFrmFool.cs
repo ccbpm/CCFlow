@@ -440,6 +440,7 @@ namespace BP.WF.Template.Frm
 
                 #endregion 实验中的功能
 
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -527,7 +528,7 @@ namespace BP.WF.Template.Frm
         /// <returns></returns>
         public string DoMapDataVer()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapDataVer.htm?FK_MapData=" + this.No + "&FrmID=" + this.No;
+            return  "../../Admin/FoolFormDesigner/MapDataVer.htm?FK_MapData=" + this.No + "&FrmID=" + this.No;
         }
         /// <summary>
         /// 顺序
@@ -535,7 +536,7 @@ namespace BP.WF.Template.Frm
         /// <returns></returns>
         public string DoTabIdx()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
+            return  "../../Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
         }
         /// <summary>
         /// 单据打印
@@ -601,9 +602,12 @@ namespace BP.WF.Template.Frm
                 case DBType.MySQL:
                     sql = "UPDATE Sys_MapDtl, Sys_GroupField B SET Sys_MapDtl.GroupField=B.OID WHERE Sys_MapDtl.No=B.CtrlID AND Sys_MapDtl.GroupField=''";
                     break;
+                case DBType.Oracle:
+                    sql = "UPDATE Sys_MapDtl E SET GroupField=(SELECT U.OID FROM Sys_GroupField U WHERE E.No=U.CtrlID) WHERE EXISTS (SELECT 1 FROM Sys_GroupField U WHERE E.No=U.CtrlID AND E.GroupField='')";
+                    break;
                 case DBType.MSSQL:
                 default:
-                    sql = "UPDATE Sys_MapDtl SET Sys_MapDtl.GroupField=Sys_GroupField.OID FROM Sys_GroupField WHERE Sys_MapDtl.No=Sys_GroupField.CtrlID AND Sys_MapDtl.GroupField=''";
+                    sql = "UPDATE Sys_MapDtl SET GroupField=Sys_GroupField.OID FROM Sys_GroupField WHERE Sys_MapDtl.No=Sys_GroupField.CtrlID AND Sys_MapDtl.GroupField=''";
                     break;
             }
             DBAccess.RunSQL(sql);

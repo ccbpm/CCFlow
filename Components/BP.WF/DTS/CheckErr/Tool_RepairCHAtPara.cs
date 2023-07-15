@@ -69,7 +69,7 @@ namespace BP.WF.DTS
 
         public string ssdd()
         {
-            string sql = "SELECT WORKID FROM WF_GenerWorkFlow A WHERE WFSta <>1 AND WFState =2  AND WorkID Not IN (Select WorkID From WF_GENERWORKERLIST) ORDER BY RDT desc";
+            string sql = "SELECT WORKID FROM WF_GenerWorkFlow A WHERE WFSta <>1 AND WFState =2  AND WorkID Not IN (Select WorkID From WF_GenerWorkerlist) ORDER BY RDT desc";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             string msg = "";
@@ -79,7 +79,7 @@ namespace BP.WF.DTS
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
                 string todoEmps = gwf.TodoEmps;
                 // 如果不存在待办，则增加待办
-                sql = "SELECT *  From WF_GENERWORKERLIST WHERE WORKID=" + workid + " AND instr('" + todoEmps + "',FK_Emp)>0  AND IsPass=0";
+                sql = "SELECT *  From WF_GenerWorkerlist WHERE WORKID=" + workid + " AND instr('" + todoEmps + "',FK_Emp)>0  AND IsPass=0";
                 if (DBAccess.RunSQLReturnCOUNT(sql) > 0)
                     continue;
                 if (DataType.IsNullOrEmpty(todoEmps) == true)

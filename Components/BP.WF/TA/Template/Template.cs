@@ -37,6 +37,7 @@ namespace BP.TA
         /// </summary>
         public const string RDT = "RDT";
         public const string PrjDesc = "PrjDesc";
+        public const string TaskModel = "TaskModel";
         #endregion
     }
     /// <summary>
@@ -45,6 +46,17 @@ namespace BP.TA
     public class Template : EntityNoName
     {
         #region 属性.
+        public string TaskModel
+        {
+            get
+            {
+                return this.GetValStringByKey(TemplateAttr.TaskModel);
+            }
+            set
+            {
+                this.SetValByKey(TemplateAttr.TaskModel, value);
+            }
+        }
         public string PrjDesc
         {
             get
@@ -154,8 +166,9 @@ namespace BP.TA
 
                 map.AddTBStringPK(TemplateAttr.No, null, "编号", true, true, 5, 5, 5);
                 map.AddTBString(TemplateAttr.Name, null, "名称", true, true, 0, 100, 10);
+                map.AddTBString(TemplateAttr.TaskModel, null, "模式", true, true, 0, 100, 10);
+                
                 map.AddTBStringDoc(TemplateAttr.PrjDesc, null, "项目描述", true, false, true);
-
 
                 map.AddTBInt(TemplateAttr.PrjSta, 0, "状态", true, true);
                 map.AddTBInt(TemplateAttr.PRI, 0, "优先级", true, true);

@@ -12,6 +12,7 @@ using BP.WF;
 using BP.WF.Template;
 using BP.Difference;
 using System.IO;
+using System.Collections;
 
 namespace BP.WF.HttpHandler
 {
@@ -34,6 +35,11 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public WF_TSDev2Interface()
         {
+        }
+        public string Flow_Start()
+        {
+            BP.WF.HttpHandler.WF_MyFlow hand = new WF_MyFlow();
+            return hand.MyFlow_Init();
         }
         /// <summary>
         /// 创建空白的WorkID.

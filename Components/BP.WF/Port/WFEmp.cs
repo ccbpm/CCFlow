@@ -216,7 +216,6 @@ namespace BP.WF.Port
         /// <param name="userID"></param>
         public WFEmp(string userID)
         {
-
             if (userID == null || userID.Length == 0)
                 throw new Exception("@要查询的操作员编号为空。");
 
@@ -277,6 +276,7 @@ namespace BP.WF.Port
 
                 map.AddTBString(WFEmpAttr.Author, null, "授权人", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.AuthorDate, null, "授权日期", true, true, 0, 20, 20);
+                map.AddTBString(WFEmpAttr.Token, null, "Token", true, true, 0, 50, 20);
                 map.AddTBAtParas(3500); //增加字段.
 
                 this._enMap = map;

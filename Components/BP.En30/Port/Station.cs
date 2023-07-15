@@ -117,21 +117,21 @@ namespace BP.Port
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "类型", new StationTypes(), true);
                 map.AddTBString(StationAttr.OrgNo, null, "隶属组织", false, false, 0, 50, 250);
 
-                #region 根据组织结构类型不同.
+                #region 根据组织结构类型不同. 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 {
-                    map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo); //加隐藏条件.
+                    map.AddHidden(StationAttr.OrgNo, "=", "@WebUser.OrgNo"); //加隐藏条件.
                 }
 
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 {
                     if (BP.Difference.SystemConfig.GroupStationModel == 0)
-                        map.AddHidden(StationAttr.OrgNo, "=", BP.Web.WebUser.OrgNo);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                        map.AddHidden(StationAttr.OrgNo, "=", "@WebUser.OrgNo");//每个组织都有自己的岗责体系的时候. 加隐藏条件.
                     //每个部门都有自己的角色体系.
                     if (BP.Difference.SystemConfig.GroupStationModel == 2)
                     {
                         map.AddTBString(StationAttr.FK_Dept, null, "部门编号", true, false, 0, 100, 200);
-                        map.AddHidden(StationAttr.FK_Dept, "=", BP.Web.WebUser.FK_Dept);//每个组织都有自己的岗责体系的时候. 加隐藏条件.
+                        map.AddHidden(StationAttr.FK_Dept, "=", "@WebUser.FK_Dept");//每个组织都有自己的岗责体系的时候. 加隐藏条件.
                     }
                 }
 
@@ -162,7 +162,7 @@ namespace BP.Port
             if (DataType.IsNullOrEmpty(this.Name) == true)
                 throw new Exception("请输入名称");
             if (DataType.IsNullOrEmpty(this.FK_StationType) == true)
-                throw new Exception("请选择类型"); //@hongyan.
+                throw new Exception("请选择类型"); 
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.OrgNo = BP.Web.WebUser.OrgNo;

@@ -49,7 +49,7 @@ namespace BP.Sys
                     mapFrame.setEleType("iFrame");
                     mapFrame.setName(name);
                     mapFrame.setFrmID(no);
-                    mapFrame.URL = "http://citydo.com.cn";
+                    mapFrame.URL = "http://ccbpm.cn";
                  
                     mapFrame.W = 400;
                     mapFrame.H = 600;
@@ -229,12 +229,12 @@ namespace BP.Sys
             //根据外键表的类型不同，设置它的LGType.
             switch (sf.SrcType)
             {
-                case SrcType.CreateTable:
-                case SrcType.TableOrView:
-                case SrcType.BPClass:
+                case DictSrcType.CreateTable:
+                case DictSrcType.TableOrView:
+                case DictSrcType.BPClass:
                     attr.setLGType(FieldTypeS.FK);
                     break;
-                case SrcType.SQL: //是sql模式.
+                case DictSrcType.SQL: //是sql模式.
                 default:
                     attr.setLGType(FieldTypeS.Normal);
                     break;
@@ -750,6 +750,10 @@ namespace BP.Sys
             mapdata.No = frmID;
             mapdata.RetrieveFromDBSources();
             Cash2019.UpdateRow(mapdata.ToString(), frmID, mapdata.Row);
+            GEEntity en = new GEEntity(frmID);
+            en.Row = null;
+            en.SQLCash = null;
+            BP.DA.Cash.SetRow(frmID,null);
             mapdata.CleanObject();
             return;
         }
@@ -881,6 +885,19 @@ namespace BP.Sys
             MapExts exts = new MapExts();
             exts.RetrieveIn(MapAttrAttr.FK_MapData, frmIDs);
             DataTable Sys_MapExt = exts.ToDataTableField("Sys_MapExt");
+            if (exts.IsExits("ExtType", "HtmlText") == true)
+            {
+                Sys_MapExt.Columns.Add("HtmlText", typeof(string));
+                foreach (DataRow dr in Sys_MapExt.Rows)
+                {
+                    if (dr["ExtType"].Equals("HtmlText") == true)
+                    {
+                        string text = DBAccess.GetBigTextFromDB("Sys_MapExt", "MyPK", dr["MyPK"].ToString(), "HtmlText");
+                        dr["HtmlText"] = text;
+                    }
+                }
+
+            }
             ds.Tables.Add(Sys_MapExt);
  
             //img.
@@ -898,7 +915,7 @@ namespace BP.Sys
             DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
             ds.Tables.Add(Sys_MapFrame);
 
-            //Sys_FrmAttachment.@hongyan
+            //Sys_FrmAttachment.
             FrmAttachments aths = md.FrmAttachments;
             //获取从表中的附件字段
             foreach (MapDtl dtl in md.OrigMapDtls)

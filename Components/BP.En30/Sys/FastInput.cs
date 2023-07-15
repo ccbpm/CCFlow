@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using BP.DA;
+using BP.Difference;
 using BP.En;
 using BP.Web;
 
@@ -36,9 +38,9 @@ namespace BP.Sys
         /// </summary>
         public const string Idx = "Idx";
     }
-	/// <summary>
-	/// 常用语
-	/// </summary>
+    /// <summary>
+    /// 常用语
+    /// </summary>
     public class FastInput : EntityMyPK
     {
         #region 基本属性
@@ -77,7 +79,7 @@ namespace BP.Sys
         {
             get
             {
-                return "CYY"; 
+                return "CYY";
             }
             set
             {
@@ -129,7 +131,7 @@ namespace BP.Sys
         /// 更新前做的事情
         /// </summary>
         /// <returns></returns>
-       
+
         protected override bool beforeUpdateInsertAction()
         {
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
@@ -185,10 +187,10 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoUp()
         {
-              this.DoOrderUp(FastInputAttr.CfgKey, "CYY", 
-                  FastInputAttr.EnsName,this.EnsName, 
-                  FastInputAttr.AttrKey, this.AttrKey,
-                FastInputAttr.FK_Emp, WebUser.No, "Idx") ;
+            this.DoOrderUp(FastInputAttr.CfgKey, "CYY",
+                FastInputAttr.EnsName, this.EnsName,
+                FastInputAttr.AttrKey, this.AttrKey,
+              FastInputAttr.FK_Emp, WebUser.No, "Idx");
 
             return "移动成功.";
         }
@@ -205,9 +207,9 @@ namespace BP.Sys
             return "移动成功.";
         }
     }
-	/// <summary>
+    /// <summary>
     /// 常用语s
-	/// </summary>
+    /// </summary>
     public class FastInputs : EntitiesMyPK
     {
         /// <summary>
@@ -226,7 +228,68 @@ namespace BP.Sys
                 return new FastInput();
             }
         }
-        
+        /// <summary>
+        /// 获得已经有的数据.
+        /// </summary>
+        /// <returns></returns>
+        public string InitData_Flow()
+        {
+            string userNo = WebUser.No;
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
+                userNo = WebUser.OrgNo + "_" + userNo;
+
+            int i = this.Retrieve("CfgKey", "Flow", "FK_Emp", userNo);
+            if (i == 0)
+            {
+                FastInput en = new FastInput();
+                en.setMyPK("Flow" + userNo + "_1");
+                en.SetValByKey("CfgKey", "Flow");
+
+                en.SetValByKey("FK_Emp", userNo);
+                en.SetValByKey("Vals", "同意");
+                en.Insert();
+
+                en = new FastInput();
+                en.setMyPK("Flow" + userNo + "_2");
+                en.SetValByKey("CfgKey", "Flow");
+
+                en.SetValByKey("FK_Emp", userNo);
+                en.SetValByKey("Vals", "不同意");
+                en.Insert();
+
+                en = new FastInput();
+                en.setMyPK("Flow" + userNo + "_3");
+                en.SetValByKey("CfgKey", "Flow");
+
+                en.SetValByKey("FK_Emp", userNo);
+                en.SetValByKey("Vals", "请领导斟酌");
+                en.Insert();
+
+                this.Retrieve("CfgKey", "Flow", "FK_Emp", userNo);
+            }
+
+            if (i < 6)
+            {
+                int count = 6 - this.Count;
+                for (int idx = 0; idx < count; idx++)
+                {
+                    int index = idx + 1 + count;
+                    string mypk = "Flow" + userNo + "_" + index;
+                    FastInput en = new FastInput();
+                    if (en.IsExit("MyPK", mypk))
+                        continue;
+                    en.setMyPK(mypk);
+                    en.SetValByKey("CfgKey", "Flow");
+                    en.SetValByKey("FK_Emp", userNo);
+                    en.SetValByKey("Vals", "");
+                    en.Insert();
+                }
+            }
+
+            this.Retrieve("CfgKey", "Flow", "FK_Emp", userNo);
+            return this.ToJson();
+        }
+
         /// <summary>
         /// 查询全部
         /// </summary>
@@ -234,10 +297,10 @@ namespace BP.Sys
         public override int RetrieveAll()
         {
 
-            int val= this.Retrieve(FastInputAttr.CfgKey, "CYY",
+            int val = this.Retrieve(FastInputAttr.CfgKey, "CYY",
                 FastInputAttr.FK_Emp, BP.Web.WebUser.No);
 
-            if (val==0)
+            if (val == 0)
             {
                 FastInput en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
@@ -274,7 +337,7 @@ namespace BP.Sys
             }
             return val;
         }
-        
+
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
         /// 转化成 java list,C#不能调用.

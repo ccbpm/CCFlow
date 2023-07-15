@@ -588,39 +588,12 @@ namespace BP.WF
         }
         public string ToJson()
         {
-            if (this.OutMessageText != null)
-                return this.OutMessageText;
-
-            string msg = "";
+            Hashtable ht = new Hashtable();
             foreach (SendReturnObj item in this)
             {
-                if (item.HisSendReturnMsgType == SendReturnMsgType.SystemMsg)
-                    continue;
-
-                //特殊判断.
-                if (item.MsgFlag == SendReturnMsgFlag.IsStopFlow)
-                {
-                    msg += "@" + item.MsgOfHtml;
-                    continue;
-                }
-
-
-                if (item.MsgOfText != null)
-                {
-                    if (item.MsgOfText.Contains("<"))
-                    {
-#warning 不应该出现.
-                        //  Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
-                        continue;
-                    }
-                    msg += "@" + item.MsgOfText;
-                    continue;
-                }
-
+                ht.Add(item.MsgFlag, item.MsgOfText);
             }
-            msg.Replace("@@", "@");
-            return msg;
-             
+            return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>
         /// 转化成html方式的消息，以方便html的信息输出.

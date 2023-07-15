@@ -77,7 +77,7 @@ namespace BP.WF
             //如果退回的节点为0,就求出可以退回的唯一节点.
             if (returnToNodeID == 0)
             {
-                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(currNodeID, workID, fid);
+                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes( workID);
                 if (dt.Rows.Count == 0)
                     throw new Exception("err@当前节点不允许退回，系统根据退回规则没有找到可以退回的到的节点。");
 
@@ -127,7 +127,7 @@ namespace BP.WF
             // 删除FH, 不管是否有这笔数据.
             ps.Clear();
 
-            /*如果不是退回并原路返回，就需要清除 两个节点之间的数据, 包括WF_GenerWorkerList的数据.*/
+            /*如果不是退回并原路返回，就需要清除 两个节点之间的数据, 包括WF_GenerWorkerlist的数据.*/
             if (this.ReturnToNode.IsStartNode == true)
             {
                 // 删除其子线程流程.
@@ -138,7 +138,7 @@ namespace BP.WF
 
                 /*如果退回到了开始的节点，就删除出开始节点以外的数据，不要删除节点表单数据，这样会导致流程轨迹打不开.*/
                 ps.Clear();
-                ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node!=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2)";
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node!=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2)";
                 ps.Add(GenerWorkerListAttr.FK_Node, this.ReturnToNode.NodeID);
                 ps.Add("WorkID1", this.WorkID);
                 ps.Add("WorkID2", this.WorkID);
@@ -174,7 +174,7 @@ namespace BP.WF
 
                     //删除中间的节点.
                     ps.Clear();
-                    ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+                    ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
                     ps.Add("FK_Node", nodeid);
                     ps.Add("WorkID1", this.WorkID);
                     ps.Add("WorkID2", this.WorkID);
@@ -193,7 +193,7 @@ namespace BP.WF
 
             //删除当前节点的数据.
             ps.Clear();
-            ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+            ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
             ps.Add("FK_Node", this.HisNode.NodeID);
             ps.Add("WorkID1", this.WorkID);
             ps.Add("WorkID2", this.WorkID);
@@ -258,14 +258,14 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=0,IsRead=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp ";
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=0,IsRead=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp ";
             ps.Add("FK_Node", this.ReturnToNode.NodeID);
             ps.Add("WorkID", this.WorkID);
             ps.Add("FK_Emp", this.ReturnToEmp);
             DBAccess.RunSQL(ps);
 
             ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=1000,IsRead=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp ";
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=1000,IsRead=0 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID AND FK_Emp=" + dbStr + "FK_Emp ";
             ps.Add("FK_Node", this.HisNode.NodeID);
             ps.Add("WorkID", this.WorkID);
             ps.Add("FK_Emp", WebUser.No);
@@ -311,7 +311,7 @@ namespace BP.WF
             this.AddToTrack(ActionType.Return, returnToEmp.UserID, returnToEmp.Name,
                 this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
 
-            try
+            /*try
             {
                 // 记录退回日志.
                 ReorderLog(this.HisNode, this.ReturnToNode, rw);
@@ -319,7 +319,7 @@ namespace BP.WF
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError(ex.Message);
-            }
+            }*/
 
             // 以退回到的节点向前数据用递归删除它。
             if (IsBackTrack == false)
@@ -397,11 +397,12 @@ namespace BP.WF
             }
 
             gwfP.TodoEmps = toEmps;
+            gwfP.SetPara("IsBackTracking", this.IsBackTrack);
             gwfP.Update();
 
             #region 写入退回提示.
             // 记录退回轨迹。
-            ReturnWork rw = new ReturnWork();
+           /* ReturnWork rw = new ReturnWork();
             rw.WorkID = gwfP.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = gwfP.NodeName;
@@ -410,7 +411,6 @@ namespace BP.WF
             rw.ReturnToEmp = gwl.FK_Emp; //退回给。
             rw.BeiZhu = Msg;
 
-            // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
             rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
 
@@ -424,7 +424,7 @@ namespace BP.WF
                         rw.SetValByKey(param[0].Replace("TB_", "").Replace("DDL_", "").Replace("CB_", ""), param[1]);
                 }
             }
-            rw.Insert();
+            rw.Insert();*/
 
 
             // 加入track.
@@ -505,13 +505,14 @@ namespace BP.WF
             gwf.SetPara("ThreadCount", 0);
             gwf.TodoEmps = todoEmps;
             gwf.TodoEmpsNum = gwls.Count;
+            gwf.SetPara("IsBackTracking", this.IsBackTrack);
             gwf.Update();
 
             //删除子线程的工作.
             DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + gwf.WorkID);
 
             //记录退回轨迹. 
-            ReturnWork rw = new ReturnWork();
+            /*ReturnWork rw = new ReturnWork();
             rw.WorkID = gwf.WorkID;
 
             rw.ReturnNode = this.HisNode.NodeID;
@@ -526,7 +527,7 @@ namespace BP.WF
 
             //主键.
             rw.setMyPK(BP.DA.DBAccess.GenerGUID());
-            rw.Insert();
+            rw.Insert();*/
 
             //设置return记录. 加入track.
             this.AddToTrack(ActionType.Return, WebUser.No, WebUser.Name, this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
@@ -593,7 +594,7 @@ namespace BP.WF
             if (isNeedDeleteSpanNodes)
             {
                 //获得可以退回的节点，这个节点是有顺序的.
-                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.HisNode.NodeID, this.WorkID, this.FID);
+                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes( this.WorkID);
                 bool isDelBegin = false;
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -616,7 +617,7 @@ namespace BP.WF
 
             //删除.
             Template.NodeWorkCheck fwc = new NodeWorkCheck(this.HisNode.NodeID);
-            if (fwc.FWCIsShowReturnMsg == false)
+            if (fwc.FWCIsShowReturnMsg == 0)
                 BP.WF.Dev2Interface.DeleteCheckInfo(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID);
 
             //删除审核组件设置“协作模式下操作员显示顺序”为“按照接受人员列表先后顺序(官职大小)”，而生成的待审核轨迹信息
@@ -747,6 +748,7 @@ namespace BP.WF
             //增加参与的人员
             if (gwf.Emps.Contains("@" + WebUser.No + ",") == false)
                 gwf.Emps += WebUser.No + "," + WebUser.Name + "@";
+            gwf.SetPara("IsBackTracking", this.IsBackTrack);
             gwf.Update();
 
             //更新退回到的人员信息可见.
@@ -781,7 +783,7 @@ namespace BP.WF
             }
 
             // 记录退回轨迹。
-            ReturnWork rw = new ReturnWork();
+            /*ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = this.HisNode.Name;
@@ -803,7 +805,7 @@ namespace BP.WF
             rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
-            rw.Insert();
+            rw.Insert();*/
 
             // 加入track.
             this.AddToTrack(ActionType.Return, returnEmp, ReturnToEmp,
@@ -873,7 +875,7 @@ namespace BP.WF
             }
 
             // 记录退回轨迹。
-            ReturnWork rw = new ReturnWork();
+            /*ReturnWork rw = new ReturnWork();
 
             //rw.WorkID = this.FID;
             rw.WorkID = this.WorkID;
@@ -899,7 +901,7 @@ namespace BP.WF
             rw.setMyPK(DBAccess.GenerOIDByGUID().ToString());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
-            rw.Insert();
+            rw.Insert();*/
 
             // 加入track.
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
@@ -920,6 +922,7 @@ namespace BP.WF
                 emps += WebUser.No + "," + WebUser.Name + "@";
             }
             gwf.Emps = emps;
+            gwf.SetPara("IsBackTracking",this.IsBackTrack);
             gwf.Update();
 
             //更新主流程的状态
@@ -1002,7 +1005,7 @@ namespace BP.WF
             }
 
             // 记录退回轨迹。
-            ReturnWork rw = new ReturnWork();
+            /*ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = this.HisNode.Name;
@@ -1024,7 +1027,7 @@ namespace BP.WF
             rw.setMyPK(DBAccess.GenerGUID());
             rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
-            rw.Insert();
+            rw.Insert();*/
 
             // 加入track.
             this.AddToTrack(ActionType.Return, toEmp, toEmpName,
@@ -1041,7 +1044,7 @@ namespace BP.WF
                 emps += WebUser.No + "," + WebUser.Name + "@";
             }
             gwf.Emps = emps;
-
+            gwf.SetPara("IsBackTracking", this.IsBackTrack);
             gwf.Update();
 
             //退回消息事件
@@ -1092,7 +1095,7 @@ namespace BP.WF
                     if (DBAccess.IsExitsObject("ND" + item.FK_Node) == true)
                         DBAccess.RunSQL("DELETE FROM ND" + item.FK_Node + " WHERE OID=" + item.WorkID);
 
-                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + item.FK_Node);
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + this.WorkID + " AND FK_Node=" + item.FK_Node);
                 }
 
                 //删除流程控制数据。
@@ -1182,6 +1185,7 @@ namespace BP.WF
             Emp empReturn = new Emp(this.ReturnToEmp);
             gwf.TodoEmps = empReturn.UserID + "," + empReturn.Name + ";";
             gwf.TodoEmpsNum = 1;
+            gwf.SetPara("IsBackTracking", this.IsBackTrack);
             gwf.Update();
 
             //更新待办状态. 
@@ -1209,7 +1213,7 @@ namespace BP.WF
             if (isHave == false)
             {
                 mygwl.FK_Dept = WebUser.FK_Dept;
-                mygwl.FK_DeptT = WebUser.FK_DeptName;
+                mygwl.DeptName = WebUser.FK_DeptName;
 
                 mygwl.FK_Emp = WebUser.No;
                 mygwl.FK_EmpText = WebUser.Name;
@@ -1232,14 +1236,14 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             // 记录退回轨迹。
-            ReturnWork rw = new ReturnWork();
+            /*ReturnWork rw = new ReturnWork();
             rw.WorkID = this.WorkID;
             rw.ReturnToNode = this.ReturnToNode.NodeID;
             rw.ReturnNodeName = this.HisNode.Name;
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = this.ReturnToEmp; //退回给。
-            rw.BeiZhu = Msg;
+            rw.BeiZhu = Msg;*/
             //杨玉慧 
 
             if (this.HisNode.TodolistModel == TodolistModel.Order
@@ -1262,12 +1266,12 @@ namespace BP.WF
             }
 
             // 去掉了 else .
-            rw.IsBackTracking = this.IsBackTrack;
+            //rw.IsBackTracking = this.IsBackTrack;
 
             //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
             this.DeleteSpanNodesGenerWorkerListData();
 
-            if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
+            /*if (DataType.IsNullOrEmpty(this.ReturnCHDatas) == false)
             {
                 string[] strs = this.ReturnCHDatas.Split('&');
                 foreach (string str in strs)
@@ -1278,7 +1282,7 @@ namespace BP.WF
                 }
             }
             rw.setMyPK(DBAccess.GenerGUID());
-            rw.Insert();
+            rw.Insert();*/
 
             // 为电建增加一个退回并原路返回的日志类型.
             if (IsBackTrack == true)
@@ -1294,7 +1298,7 @@ namespace BP.WF
                     this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
             }
 
-            try
+            /*try
             {
                 // 记录退回日志. this.HisNode, this.ReturnToNode
                 ReorderLog(this.ReturnToNode, this.HisNode, rw);
@@ -1302,7 +1306,7 @@ namespace BP.WF
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError(ex.Message);
-            }
+            }*/
 
             // 退回后发送的消息事件
             PushMsgs pms = new PushMsgs();
@@ -1510,7 +1514,7 @@ namespace BP.WF
 
 
                 /*说明:已经删除该节点数据。*/
-                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2 ) AND FK_Node=" + dbStr + "FK_Node",
+                DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2 ) AND FK_Node=" + dbStr + "FK_Node",
                     "WorkID1", this.WorkID, "WorkID2", this.WorkID, "FK_Node", nd.NodeID);
 
                 if (nd.IsFL)
@@ -1548,7 +1552,7 @@ namespace BP.WF
 
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE FID=" + dbStr + "WorkID",
                         "WorkID", this.WorkID);
-                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + dbStr + "WorkID",
+                    DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + dbStr + "WorkID",
                         "WorkID", this.WorkID);
                 }
                 DeleteToNodesData(nd.HisToNodes);
@@ -1558,7 +1562,7 @@ namespace BP.WF
         {
             Node nd = new Node(backtoNodeID);
             ps = new Paras();
-            ps.SQL = "DELETE  FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID  AND FID=" + dbStr + "FID";
+            ps.SQL = "DELETE  FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID  AND FID=" + dbStr + "FID";
             ps.Add("FK_Node", backtoNodeID);
             ps.Add("WorkID", this.HisWork.OID);
             ps.Add("FID", this.HisWork.FID);
@@ -1566,7 +1570,7 @@ namespace BP.WF
 
             // 找出分合流点处理的人员.
             ps = new Paras();
-            ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "FID";
+            ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "FID";
             ps.Add("FID", this.HisWork.FID);
             ps.Add("FK_Node", backtoNodeID);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
@@ -1589,7 +1593,7 @@ namespace BP.WF
             wl.FK_NodeText = nd.Name;
             // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
-            wl.FK_DeptT = emp.FK_DeptText;
+            wl.DeptName = emp.FK_DeptText;
 
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);
@@ -1606,7 +1610,7 @@ namespace BP.WF
             ps = new Paras();
             ps.Add("FK_Node", backtoNodeID);
             ps.Add("WorkID", this.HisWork.OID);
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsPass=3 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkerlist SET IsPass=3 WHERE FK_Node=" + dbStr + "FK_Node AND WorkID=" + dbStr + "WorkID";
             DBAccess.RunSQL(ps);
 
             /* 如果是隐性退回。*/

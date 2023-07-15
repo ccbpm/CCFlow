@@ -183,7 +183,7 @@ namespace BP.CCOA.KnowledgeManagement
                 map.AddTBStringPK(KMDtlAttr.No, null, "编号", false, false, 0, 50, 10);
 
                 map.AddTBString(KMDtlAttr.Name, null, "名称", true, false, 0, 500, 10,true);
-                map.AddTBStringDoc(KMDtlAttr.Docs, "Docs", null, "内容", true, false, 0, 5000, 20, true, true);
+                map.AddTBStringDoc(KMDtlAttr.Docs, "Docs", null, "内容", true, false, 0, 4000, 20, true, true);
 
 
                 map.AddTBString(KMDtlAttr.RefTreeNo, null, "关联树编号", false, false, 0, 50, 10);

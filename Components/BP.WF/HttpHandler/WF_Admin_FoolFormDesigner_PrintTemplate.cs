@@ -67,6 +67,9 @@ namespace BP.WF.HttpHandler
 
             bt.SaveFileToDB("DBFile", filepath); //把文件保存到数据库里. 
 
+            Cash.ClearCash(fileName);
+            Cash.ClearCash(fileName+ "Para");
+
             return "保存成功.";
         }
         /// <summary>

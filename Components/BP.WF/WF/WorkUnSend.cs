@@ -299,7 +299,7 @@ namespace BP.WF
                 WorkNode ppPri = wnOfCancelTo.GetPreviousWorkNode();
                 GenerWorkerList wl = new GenerWorkerList();
                 wl.Retrieve(GenerWorkerListAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
-                // DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
+                // DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
@@ -318,7 +318,7 @@ namespace BP.WF
                    BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
-                    wlN.FK_DeptT = myEmp.FK_DeptText;
+                    wlN.DeptName = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -477,12 +477,12 @@ namespace BP.WF
             if (nd.CancelDisWhenRead == true)
             {
                 //撤销到的节点是干流程节点/子线程撤销到子线程
-                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node, 0);
+                int i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
                     return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能撤销.";
 
                 //干流节点撤销到子线程
-                i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerList WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
+                i = DBAccess.RunSQLReturnValInt("SELECT SUM(IsRead) AS Num FROM WF_GenerWorkerlist WHERE WorkID=" + this.FID + " AND FK_Node=" + gwf.FK_Node, 0);
                 if (i >= 1)
                     return "err@当前待办已经有[" + i + "]个工作人员打开了该工作,您不能撤销.";
             }
@@ -564,7 +564,7 @@ namespace BP.WF
 
             #region 求的撤销的节点.
             /* 查询出来. */
-            sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + this.WorkID + " ORDER BY CDT DESC ";
+            sql = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND IsPass=1 AND IsEnable=1 AND WorkID=" + this.WorkID + " ORDER BY CDT DESC ";
             int cancelToNodeID = DBAccess.RunSQLReturnValInt(sql, 0); //计算要撤销到的节点.
             if (cancelToNodeID == 0)
                 return "err@您没有权限操作该工作.";
@@ -676,7 +676,7 @@ namespace BP.WF
                  && nd.HisRunModel == RunModel.FL)
             {
                 /* 检查一下是否还有没有完成的子线程，如果有就抛出不允许撤销的异常。 */
-                sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND IsPass=0";
+                sql = "SELECT COUNT(*) as NUM FROM WF_GenerWorkerlist WHERE FID=" + this.WorkID + " AND IsPass=0";
                 if (DBAccess.RunSQLReturnValInt(sql) != 0)
                     return "err@不允许撤销，因为有未完成的子线程.";
 
@@ -814,7 +814,7 @@ namespace BP.WF
                 WorkNode ppPri = wnOfCancelTo.GetPreviousWorkNode();
                 GenerWorkerList wl = new GenerWorkerList();
                 wl.Retrieve(GenerWorkerListAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, GenerWorkerListAttr.WorkID, this.WorkID);
-                // DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
+                // DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE FK_Node=" + backtoNodeID + " AND WorkID=" + this.WorkID);
                 RememberMe rm = new RememberMe();
                 rm.Retrieve(RememberMeAttr.FK_Node, wnOfCancelTo.HisNode.NodeID, RememberMeAttr.FK_Emp, ppPri.HisWork.Rec);
 
@@ -833,7 +833,7 @@ namespace BP.WF
                     BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
-                    wlN.FK_DeptT = myEmp.FK_DeptText;
+                    wlN.DeptName = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -922,7 +922,7 @@ namespace BP.WF
             //删除上一个节点的数据。
             foreach (Node ndNext in nd.HisToNodes)
             {
-                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
                 if (i == 0)
                     continue;
 
@@ -998,7 +998,7 @@ namespace BP.WF
             //删除上一个节点的数据。
             foreach (Node ndNext in nd.HisToNodes)
             {
-                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
                 if (i == 0)
                     continue;
 
@@ -1074,7 +1074,7 @@ namespace BP.WF
             //删除子线程的功能
             foreach (Node ndNext in wnPri.HisNode.HisToNodes)
             {
-                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
+                i = DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE FID=" + this.WorkID + " AND FK_Node=" + ndNext.NodeID);
                 if (i == 0)
                     continue;
 
@@ -1167,13 +1167,13 @@ namespace BP.WF
             #region 判断撤消的百分比条件的临界点条件
             if (wn.HisNode.PassRate != 0)
             {
-                decimal all = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND FK_Node=" + wnPri.HisNode.NodeID);
-                decimal ok = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerList WHERE FID=" + this.FID + " AND IsPass=1 AND FK_Node=" + wnPri.HisNode.NodeID);
+                decimal all = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerlist WHERE FID=" + this.FID + " AND FK_Node=" + wnPri.HisNode.NodeID);
+                decimal ok = (decimal)DBAccess.RunSQLReturnValInt("SELECT COUNT(*) NUM FROM WF_GenerWorkerlist WHERE FID=" + this.FID + " AND IsPass=1 AND FK_Node=" + wnPri.HisNode.NodeID);
                 decimal rate = ok / all * 100;
                 if (wn.HisNode.PassRate <= rate)
-                    DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.FID);
+                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.FID);
                 else
-                    DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=3 WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.FID);
+                    DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=3 WHERE FK_Node=" + wn.HisNode.NodeID + " AND WorkID=" + this.FID);
             }
             #endregion
 
@@ -1205,7 +1205,7 @@ namespace BP.WF
             // 删除FH, 不管是否有这笔数据.
             ps.Clear();
 
-            /*撤销到某个节点，就需要清除 两个节点之间的数据, 包括WF_GenerWorkerList的数据.*/
+            /*撤销到某个节点，就需要清除 两个节点之间的数据, 包括WF_GenerWorkerlist的数据.*/
             if (unSendNode.IsStartNode == true)
             {
                 // 删除其子线程流程.
@@ -1216,7 +1216,7 @@ namespace BP.WF
 
                 /*如果撤销到了开始的节点，就删除出开始节点以外的数据，不要删除节点表单数据，这样会导致流程轨迹打不开.*/
                 ps.Clear();
-                ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node!=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2)";
+                ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node!=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2)";
                 ps.Add(GenerWorkerListAttr.FK_Node, unSendNode.NodeID);
                 ps.Add("WorkID1", this.WorkID);
                 ps.Add("WorkID2", this.WorkID);
@@ -1249,7 +1249,7 @@ namespace BP.WF
 
                     //删除中间的节点.
                     ps.Clear();
-                    ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+                    ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
                     ps.Add("FK_Node", nodeid);
                     ps.Add("WorkID1", this.WorkID);
                     ps.Add("WorkID2", this.WorkID);
@@ -1268,7 +1268,7 @@ namespace BP.WF
 
             //删除当前节点的数据.
             ps.Clear();
-            ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+            ps.SQL = "DELETE FROM WF_GenerWorkerlist WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
             ps.Add("FK_Node", gwf.FK_Node);
             ps.Add("WorkID1", this.WorkID);
             ps.Add("WorkID2", this.WorkID);

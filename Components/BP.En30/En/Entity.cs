@@ -37,7 +37,7 @@ namespace BP.En
                 return objs; //如果缓存有值，就直接返回.
 
             int count = this.GetParaInt(clsName + "_AutoNum", -1);
-            if (count == -1)
+            /*if (count == -1)
             {
                 if (refKey2 == null)
                 {
@@ -65,7 +65,7 @@ namespace BP.En
                 ens.Clear();
                 this.SetRefObject(clsName, ens);
                 return ens;
-            }
+            }*/
 
             if (refKey2 == null)
             {
@@ -319,12 +319,12 @@ namespace BP.En
                     var obj = this.GetValByKey(attr.Key);
                     if (obj == null && attr.IsNum)
                     {
-                        dr[attr.Key] = 0;
+                        dr[attr.Key] = DBNull.Value;
                         continue;
                     }
 
                     if (attr.IsNum == true && DataType.IsNumStr(obj.ToString()) == false)
-                        dr[attr.Key] = 0;
+                        dr[attr.Key] = DBNull.Value;
                     else
                         dr[attr.Key] = obj;
                 }
@@ -1230,7 +1230,7 @@ namespace BP.En
             catch (Exception ex)
             {
                 if (ex.Message.Contains("does not exist")
-                    || ex.Message.Contains("不存在")
+                    || (ex.Message.Contains("不存在") && ex.Message.Contains("记录[枚举注册  Sys_EnumMain,")==false)
                     || ex.Message.Contains("doesn't exist") //@wwh.
                     || ex.Message.Contains("无效")
                     || ex.Message.Contains("field list"))
@@ -2081,7 +2081,7 @@ namespace BP.En
                 if (this.beforeUpdateInsertAction() == false)
                     return 0;
 
-                //@hongyan. 判断是否有参数字段.
+                // 判断是否有参数字段.
                 if (this.EnMap.ParaFields != null)
                 {
                     string[] strs = this.EnMap.ParaFields.Split(',');
@@ -2424,15 +2424,19 @@ namespace BP.En
                             }
                             continue;
                         case DataType.AppInt:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
-                            continue;
                         case DataType.AppBoolean:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            if(attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal)==true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL  NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
                         case DataType.AppFloat:
                         case DataType.AppMoney:
                         case DataType.AppDouble:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT NULL  NULL");
+                           else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
                         default:
                             throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
@@ -2712,11 +2716,11 @@ namespace BP.En
                 bool isHave = false;
                 foreach (DataRow dr in dtAttr.Rows)
                 {
-                    if (dr["FName"].ToString().ToLower().Equals(attr.Field.ToLower()))
+                    if (dr["fname"].ToString().ToLower().Equals(attr.Field.ToLower()))
                     {
                         isHave = true;
-                        FType = dr["FType"] as string;
-                        Flen = dr["FLen"].ToString();
+                        FType = dr["ftype"] as string;
+                        Flen = dr["flen"].ToString();
                         break;
                     }
                 }
@@ -2752,15 +2756,19 @@ namespace BP.En
                             }
                             continue;
                         case DataType.AppInt:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
-                            continue;
                         case DataType.AppBoolean:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
                         case DataType.AppFloat:
                         case DataType.AppMoney:
                         case DataType.AppDouble:
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT NULL NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
                         default:
                             throw new Exception("err@MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
@@ -2826,7 +2834,8 @@ namespace BP.En
                             //}
 
                             //DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " drop column " + attr.Field);
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " VARCHAR(" + attr.MaxLength + ") DEFAULT '" + attr.DefaultVal + "' NULL");
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER   COLUMN " + attr.Field + " type character varying(" + attr.MaxLength + ")");
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ALTER   COLUMN " + attr.Field + " SET DEFAULT '" + attr.DefaultVal + "' NULL");
                             continue;
                         }
                         break;
@@ -3084,67 +3093,76 @@ namespace BP.En
         /// </summary>
         public void CheckPhysicsTable()
         {
-            this._enMap = this.EnMap;
-            //  string msg = "";
-            if (this._enMap.EnType == EnType.View
-                || this._enMap.EnType == EnType.XML
-                || this._enMap.EnType == EnType.ThirdPartApp
-                || this._enMap.EnType == EnType.Ext)
-                return;
-
-            if (DBAccess.IsExitsObject(this._enMap.EnDBUrl, this._enMap.PhysicsTable) == false)
+            try
             {
-                /* 如果物理表不存在就新建立一个物理表。*/
-                this.CreatePhysicsTable();
-                return;
-            }
-            if (this._enMap.IsView)
-                return;
+                this._enMap = this.EnMap;
+                //  string msg = "";
+                if (this._enMap.EnType == EnType.View
+                    || this._enMap.EnType == EnType.XML
+                    || this._enMap.EnType == EnType.ThirdPartApp
+                    || this._enMap.EnType == EnType.Ext)
+                    return;
 
-            //检查是否有对应的主键.
-            string pk = this.PK;
-            if (pk.Contains(",") == false)
-            {
-                if (this.EnMap.Attrs.Contains(pk) == false)
+                if (DBAccess.IsExitsObject(this._enMap.EnDBUrl, this._enMap.PhysicsTable) == false)
                 {
-                    if (this.ToString().Contains(".") == true)
-                        throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查Map。");
-                    else
-                        throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查:  SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "'");
+                    /* 如果物理表不存在就新建立一个物理表。*/
+                    this.CreatePhysicsTable();
+                    return;
+                }
+                if (this._enMap.IsView)
+                    return;
+
+                //检查是否有对应的主键.
+                string pk = this.PK;
+                if (pk.Contains(",") == false)
+                {
+                    if (this.EnMap.Attrs.Contains(pk) == false)
+                    {
+                        if (this.ToString().Contains(".") == true)
+                            throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查Map。");
+                        else
+                            throw new Exception("err@Entity " + this.ToString() + "," + this.EnMap.EnDesc + "的Map设置错误主键为【" + pk + "】但是没有这个字段，请检查:  SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + this.ToString() + "'");
+                    }
+                }
+
+                DBType dbtype = this._enMap.EnDBUrl.DBType;
+
+                // 如果不是主应用程序的数据库就不让执行检查. 考虑第三方的系统的安全问题.
+                if (this._enMap.EnDBUrl.DBUrlType
+                    != DBUrlType.AppCenterDSN)
+                    return;
+
+
+                switch (BP.Difference.SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        this.CheckPhysicsTable_SQL();
+                        break;
+                    case DBType.Oracle:
+                    case DBType.DM:
+                        this.CheckPhysicsTable_Ora();
+                        break;
+                    case DBType.MySQL:
+                        this.CheckPhysicsTable_MySQL();
+                        break;
+                    case DBType.Informix:
+                        this.CheckPhysicsTable_Informix();
+                        break;
+                    case DBType.PostgreSQL:
+                    case DBType.UX:
+                        this.CheckPhysicsTable_PostgreSQL();
+                        break;
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
+                        this.CheckPhysicsTable_KingBase();
+                        break;
+                    default:
+                        throw new Exception("@没有涉及到的数据库类型");
                 }
             }
-
-            DBType dbtype = this._enMap.EnDBUrl.DBType;
-
-            // 如果不是主应用程序的数据库就不让执行检查. 考虑第三方的系统的安全问题.
-            if (this._enMap.EnDBUrl.DBUrlType
-                != DBUrlType.AppCenterDSN)
-                return;
-            switch (BP.Difference.SystemConfig.AppCenterDBType)
+            catch (Exception ex)
             {
-                case DBType.MSSQL:
-                    this.CheckPhysicsTable_SQL();
-                    break;
-                case DBType.Oracle:
-                case DBType.DM:
-                    this.CheckPhysicsTable_Ora();
-                    break;
-                case DBType.MySQL:
-                    this.CheckPhysicsTable_MySQL();
-                    break;
-                case DBType.Informix:
-                    this.CheckPhysicsTable_Informix();
-                    break;
-                case DBType.PostgreSQL:
-                case DBType.UX:
-                    this.CheckPhysicsTable_PostgreSQL();
-                    break;
-                case DBType.KingBaseR3:
-                case DBType.KingBaseR6:
-                    this.CheckPhysicsTable_KingBase();
-                    break;
-                default:
-                    throw new Exception("@没有涉及到的数据库类型");
+                throw new Exception("err@系统错误,ccbpm有智能修复功能,请关闭后重试,也许可以自动解决,没有解决请反馈给管理员:" + ex.Message);
             }
         }
         private void CheckPhysicsTable_Informix()
@@ -3347,16 +3365,29 @@ namespace BP.En
                         break;
                     case DataType.AppInt:
                     case DataType.AppBoolean:
-                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        if(DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) ==true)
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL  NULL COMMENT '" + attr.Desc + "'");
+                        else
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
                     case DataType.AppFloat:
-                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " FLOAT (11,2) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        if (DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " FLOAT (11,2) DEFAULT NULL  NULL COMMENT '" + attr.Desc + "'");
+                        else
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " FLOAT (11,2) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+
                         break;
                     case DataType.AppMoney:
-                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DECIMAL (20,4) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        if (DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DECIMAL (20,4) DEFAULT NULL  NULL COMMENT '" + attr.Desc + "'");
+                        else
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DECIMAL (20,4) DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
                     case DataType.AppDouble:
-                        DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DOUBLE DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
+                        if (DataType.IsNullOrEmpty(attr.DefaultVal.ToString()) == true)
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DOUBLE DEFAULT NULL NULL COMMENT '" + attr.Desc + "'");
+                       else
+                            DBAccess.RunSQL("ALTER TABLE " + this._enMap.PhysicsTable + " ADD " + attr.Field + " DOUBLE DEFAULT '" + attr.DefaultVal + "' NULL COMMENT '" + attr.Desc + "'");
                         break;
                     default:
                         throw new Exception("error MyFieldType= " + attr.MyFieldType + " key=" + attr.Key);
@@ -3518,14 +3549,27 @@ namespace BP.En
                     case DataType.AppInt:
                     case DataType.AppBoolean:
                         if (attr.IsPK == true)
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NOT NULL");
+                        {
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL  NOT NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NOT NULL");
+                        }
                         else
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "'   NULL");
+                        {
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL   NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "'   NULL");
+                        } 
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case DataType.AppDouble:
-                        DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
+                        if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT NULL NULL");
+                        else
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:
                         throw new Exception("error MyFieldType= " + attr.MyFieldType + " Key=" + attr.Key);
@@ -3677,14 +3721,29 @@ namespace BP.En
                     case DataType.AppInt:
                     case DataType.AppBoolean:
                         if (attr.IsPK == true)
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NOT NULL");
+                        {
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL NOT NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "' NOT NULL");
+
+                        }
                         else
-                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "'   NULL");
+                        {
+                            if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT NULL  NULL");
+                            else
+                                DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " INT DEFAULT '" + attr.DefaultVal + "'  NULL");
+                        }
+                        
                         break;
                     case DataType.AppFloat:
                     case DataType.AppMoney:
                     case DataType.AppDouble:
-                        DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
+                        if (attr.DefaultVal.ToString().Equals(MapAttrAttr.DefaultVal) == true)
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT NULL NULL");
+                        else
+                            DBAccess.RunSQL("ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + attr.Field + " FLOAT DEFAULT '" + attr.DefaultVal + "' NULL");
                         break;
                     default:
                         throw new Exception("error MyFieldType= " + attr.MyFieldType + " Key=" + attr.Key);

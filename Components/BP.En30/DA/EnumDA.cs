@@ -10,7 +10,7 @@ namespace BP.DA
     public enum FieldCaseModel
     {
         /// <summary>
-        /// 无
+        /// 不敏感
         /// </summary>
         None,
         /// <summary>

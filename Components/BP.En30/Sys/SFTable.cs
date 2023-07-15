@@ -12,51 +12,55 @@ using BP.En;
 using Microsoft.CSharp;
 using BP.Web;
 using BP.Difference;
-
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.UI.WebControls;
+using NetTaste;
 
 namespace BP.Sys
 {
     /// <summary>
     /// 表数据来源类型
     /// </summary>
-    public enum SrcType
+    public class DictSrcType
     {
         /// <summary>
         /// 本地的类
         /// </summary>
-        BPClass = 0,
+        public const string BPClass = "BPClass";
         /// <summary>
         /// 通过ccform创建表
         /// </summary>
-        CreateTable = 1,
+        public const string CreateTable = "CreateTable";
         /// <summary>
         /// 表或视图
         /// </summary>
-        TableOrView = 2,
+        public const string TableOrView = "TableOrView";
         /// <summary>
         /// SQL查询数据
         /// </summary>
-        SQL = 3,
+        public const string SQL = "SQL";
         /// <summary>
         /// WebServices
         /// </summary>
-        WebServices = 4,
+        public const string WebServices = "WebServices";
         /// <summary>
         /// hand
         /// </summary>
-        Handler = 5,
+        public const string Handler = "Handler";
         /// <summary>
         /// JS请求数据.
         /// </summary>
-        JQuery = 6,
+        public const string JQuery = "JQuery";
         /// <summary>
         /// 系统字典表
         /// </summary>
-        SysDict = 7,
+        public const string SysDict = "SysDict";
         /// <summary>
         /// WebApi接口
         /// </summary>
-        WebApi = 8
+        public const string WebApi = "WebApi";
     }
     /// <summary>
     /// 编码表类型
@@ -135,7 +139,7 @@ namespace BP.Sys
         /// <summary>
         /// 表类型
         /// </summary>
-        public const string SrcType = "SrcType";
+        public const string DictSrcType = "DBSrcType";
         /// <summary>
         /// 字典表类型
         /// </summary>
@@ -218,6 +222,104 @@ namespace BP.Sys
         }
 
         /// <summary>
+        /// 获得webApi数据
+        /// </summary>
+        /// <param name="ht">参数</param>
+        /// <param name="requestMethod">POST/GET</param>
+        /// <param name="sfDBSrcNo">数据源</param>
+        /// <param name="SelectStatement">执行部分</param>
+        /// <returns>返回的数据</returns>
+        public static string Data_WebApi(Hashtable ht, string requestMethod, string sfDBSrcNo, string SelectStatement)
+        {
+            //返回值
+            //用户输入的webAPI地址
+            string apiUrl = SelectStatement;
+            if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
+
+            var mysrc = new SFDBSrc(sfDBSrcNo);
+
+            #region  GET 解析路径变量 /{xxx}/{yyy} ? xxx=xxx
+            if (requestMethod.ToUpper().Equals("GET") == true)
+            {
+                if (apiUrl.Contains("{") == true)
+                {
+                    if (ht != null)
+                    {
+                        foreach (string key in ht.Keys)
+                        {
+                            apiUrl = apiUrl.Replace("{" + key + "}", ht[key].ToString());
+                        }
+                    }
+                    apiUrl = mysrc.ConnString + apiUrl;
+                }
+                else
+                {
+                    apiUrl = mysrc.ConnString + apiUrl;
+                }
+                return BP.Tools.PubGlo.HttpPostConnect(apiUrl, "", requestMethod);
+            }
+            #endregion
+
+            if(apiUrl.StartsWith("http")==false)
+                apiUrl = mysrc.ConnString + apiUrl;
+
+            return BP.Tools.PubGlo.HttpPostConnect(apiUrl, "", requestMethod);
+        }
+        /// <summary>
+        /// 判断json 是否符合要求
+        /// </summary>
+        /// <param name="jsonItem"></param>
+        /// <param name="fieldNo"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="fieldParentNo"></param>
+        /// <exception cref="Exception"></exception>
+        private void checkJsonField(JObject jsonItem, string fieldNo, string fieldName, string fieldParentNo)
+        {
+            // 判断是否为数组嵌套
+            if (jsonItem.Type != JTokenType.Object)
+                throw new Exception("API返回格式错误，不为标准json数组格式");
+            // 判断是否包含所匹配的项
+            if (!DataType.IsNullOrEmpty(fieldNo) && !jsonItem.ContainsKey(fieldNo))
+                throw new Exception("字典[" + this.No + "]API不包含定义的No列：" + fieldNo);
+            if (!DataType.IsNullOrEmpty(fieldName) && !jsonItem.ContainsKey(fieldName))
+                throw new Exception("字典[" + this.No + "]API不包含定义的Name列：" + fieldName);
+
+            if (this.CodeStruct == CodeStruct.Tree)
+            {
+                if (!DataType.IsNullOrEmpty(fieldParentNo) && !jsonItem.ContainsKey(fieldParentNo))
+                    throw new Exception("字典[" + this.No + "]API不包含定义的ParentNo列：" + fieldParentNo);
+            }
+        }
+        /// <summary>
+        /// 过滤出新的json对象
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="fieldNo"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="fieldParentNo"></param>
+        /// <returns></returns>
+        private JObject getJSONByTargetName(JObject source, string fieldNo, string fieldName, string fieldParentNo)
+        {
+            JObject nObj = new JObject();
+            if (!DataType.IsNullOrEmpty(fieldNo))
+            {
+                nObj["No"] = source[fieldNo];
+            }
+
+            if (!DataType.IsNullOrEmpty(fieldName))
+            {
+                nObj["Name"] = source[fieldName];
+            }
+            if (this.CodeStruct == CodeStruct.Tree)
+            {
+                if (!DataType.IsNullOrEmpty(fieldParentNo))
+                    nObj["ParentNo"] = source[fieldParentNo];
+            }
+            return nObj;
+        }
+
+        /// <summary>
         /// 获得外部数据表
         /// </summary>
         public DataTable GenerHisDataTable(Hashtable ht = null)
@@ -226,7 +328,7 @@ namespace BP.Sys
             SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
 
             #region BP类
-            if (this.SrcType == BP.Sys.SrcType.BPClass)
+            if (this.SrcType == BP.Sys.DictSrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);
                 return ens.RetrieveAllToTable();
@@ -236,7 +338,7 @@ namespace BP.Sys
             #region  WebServices
             // this.SrcType == BP.Sys.SrcType.WebServices，by liuxc 
             //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
-            if (this.SrcType == BP.Sys.SrcType.WebServices)
+            if (this.SrcType == DictSrcType.WebServices)
             {
                 var td = this.TableDesc.Split(','); //接口名称,返回类型
                 var ps = (this.SelectStatement ?? string.Empty).Split('&');
@@ -250,7 +352,7 @@ namespace BP.Sys
                     pa = p.Split('=');
                     if (pa.Length != 2) continue;
 
-                    //此处要SL中显示表单时，会有问题
+                    //此处要 SL 中显示表单时，会有问题
                     try
                     {
                         if (pa[1].Contains("@WebUser.No"))
@@ -261,10 +363,10 @@ namespace BP.Sys
                             pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
                         if (pa[1].Contains("@WebUser.FK_Dept"))
                             pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
                     }
                     catch
-                    { }
+                    {
+                    }
 
                     if (pa[1].Contains("@WorkID"))
                         pa[1] = pa[1].Replace("@WorkID", HttpContextHelper.RequestParams("WorkID") ?? "");
@@ -293,21 +395,6 @@ namespace BP.Sys
                         return result as DataTable;
                     case "Json":
                         return BP.Tools.Json.ToDataTable(result as string);
-
-                    //var jdata = bp. LitJson.JsonMapper.ToObject(result as string);
-
-                    //if (!jdata.IsArray)
-                    //    throw new Exception("@返回的JSON格式字符串“" + (result ?? string.Empty) + "”不正确");
-
-                    //var dt = new DataTable();
-                    //dt.Columns.Add("No", typeof(string));
-                    //dt.Columns.Add("Name", typeof(string));
-
-                    //for (var i = 0; i < jdata.Count; i++)
-                    //{
-                    //    dt.Rows.Add(jdata[i]["No"].ToString(), jdata[i]["Name"].ToString());
-                    //}
-
                     //  return dt;
                     case "Xml":
                         if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
@@ -332,7 +419,6 @@ namespace BP.Sys
                             dt.Rows.Add(node.SelectSingleNode("No").InnerText,
                                         node.SelectSingleNode("Name").InnerText);
                         }
-
                         return dt;
                     default:
                         throw new Exception("@不支持的返回类型" + td[1]);
@@ -341,39 +427,94 @@ namespace BP.Sys
             #endregion
 
             #region WebApi接口
-            if (this.SrcType == BP.Sys.SrcType.WebApi)
+            if (this.SrcType == DictSrcType.WebApi)
             {
-                //返回值
-                string postData = "";
-                //用户输入的webAPI地址
-                string apiUrl = this.SelectStatement;
-                if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                    apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
-                string[] strs = apiUrl.Split('?');
-                //api接口地址
-                string apiHost = strs[0];
-                //api参数
-                string apiParams = "";
-                if(strs.Length==2)
-                    apiParams = strs[1];
-                //执行POST
-                postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
+                string postData = Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
 
-                DataTable dt = null;
-                try
+                // 需要替换的参数
+                string fieldNo = this.GetValStringByKey("FieldNo");
+                if (DataType.IsNullOrEmpty(fieldNo))
+                    fieldNo = "No";
+
+                string fieldName = this.GetValStringByKey("FieldName");
+                if (DataType.IsNullOrEmpty(fieldName))
+                    fieldName = "Name";
+
+                string fieldParentNo = this.GetValStringByKey("FieldParentNo");
+                if (DataType.IsNullOrEmpty(fieldParentNo))
+                    fieldParentNo = "ParentNo";
+
+                // 根节点
+                string jsonNode = this.GetValStringByKey("JsonNode");
+
+                JToken jToken = JToken.Parse(postData);
+                // 如果是JSON数组
+                if (jToken.Type == JTokenType.Array)
                 {
-                    dt = BP.Tools.Json.ToDataTable(postData);
-                    return dt;
+                    // 新的对象，用来删除原对象无用字段
+                    JArray newJsonArr = new JArray();
+                    JArray arr = (JArray)jToken;
+                    if(arr.Count > 0)
+                    {
+                        JObject firstItem = (JObject)arr[0];
+                        checkJsonField(firstItem, fieldNo, fieldName, fieldParentNo);
+                    }
+                    foreach (JObject obj in arr)
+                    {
+                        newJsonArr.Add(getJSONByTargetName(obj, fieldNo, fieldName, fieldParentNo));
+                    }
+                    return BP.Tools.Json.ConvertToDataTable(newJsonArr);
                 }
-                catch (Exception ex)
+                // 如果是JSON对象
+                if (jToken.Type == JTokenType.Object)
                 {
-                    throw new Exception("设置的WebAPI接口返回的数据出错，请检查接口返回值。");
+                    JObject jsonItem = (JObject)jToken;
+                    // 判断是不是有根节点
+                    // 如果有
+                    if (!DataType.IsNullOrEmpty(jsonNode) && jsonItem.ContainsKey(jsonNode))
+                    {
+                        // 新的对象，用来删除原对象无用字段
+                        JArray newJsonArr = new JArray();
+                        JToken jToken1 = jsonItem[jsonNode];
+                        // 判断当前是不是数组或者
+                        if (jToken1.Type == JTokenType.Array)
+                        {
+                            JArray arr = (JArray)jToken1;
+                            if (arr.Count > 0)
+                            {
+                                JObject firstItem = (JObject)arr[0];
+                                checkJsonField(firstItem, fieldNo, fieldName, fieldParentNo);
+                            }
+                            
+                            foreach (JObject obj in arr)
+                            {
+                                newJsonArr.Add(getJSONByTargetName(obj, fieldNo, fieldName, fieldParentNo));
+                            }
+                            return BP.Tools.Json.ToDataTable(newJsonArr.ToString());
+                        }
+                        if (jToken1.Type == JTokenType.Object)
+                        {
+                            JObject targetObj = (JObject)jToken;
+                            checkJsonField(targetObj, fieldNo, fieldName, fieldParentNo);
+                            JObject itemOfRootNode = getJSONByTargetName(targetObj, fieldNo, fieldName, fieldParentNo);
+                            return BP.Tools.Json.ToDataTable(itemOfRootNode.ToString());
+                        }
+                        throw new Exception("指定的RootNode下不是JSON数组 或 JSON对象");
+
+                    }
+                    // 如果没有配置rootNode，检查他本身有没有所需属性
+                    JObject currObj = (JObject)jToken;
+                    checkJsonField(currObj, fieldNo, fieldName, fieldParentNo);
+                    JObject itemOfResponse = getJSONByTargetName(currObj, fieldNo, fieldName, fieldParentNo);
+                    return BP.Tools.Json.ToDataTable(itemOfResponse.ToString());
                 }
+                throw new Exception("Web_API 没有正确返回JSON字符串");
+                #endregion
             }
             #endregion WebApi接口
 
             #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
-            if (this.SrcType == BP.Sys.SrcType.TableOrView)
+            if (this.SrcType == DictSrcType.TableOrView)
             {
                 string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
                 if (this.CodeStruct == BP.Sys.CodeStruct.Tree)
@@ -381,23 +522,20 @@ namespace BP.Sys
 
                 sql += " FROM " + this.SrcTable;
                 DataTable dt = src.RunSQLReturnTable(sql);
-                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
-                {
-                    dt.Columns["NO"].ColumnName = "No";
-                    dt.Columns["NAME"].ColumnName = "Name";
-                }
-                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-                {
-                    dt.Columns["no"].ColumnName = "No";
-                    dt.Columns["name"].ColumnName = "Name";
 
+                if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                {
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+                    if (dt.Columns.Count == 3)
+                        dt.Columns[2].ColumnName = "ParentNo";
                 }
                 return dt;
             }
             #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
 
             #region 动态SQL，edited by liuxc,2016-12-29
-            if (this.SrcType == BP.Sys.SrcType.SQL)
+            if (this.SrcType == DictSrcType.SQL)
             {
                 string runObj = this.SelectStatement;
 
@@ -407,49 +545,7 @@ namespace BP.Sys
                 if (runObj == null)
                     runObj = string.Empty;
 
-                runObj = runObj.Replace("~", "'");
-                runObj = runObj.Replace("/#", "+"); //为什么？
-                runObj = runObj.Replace("/$", "-"); //为什么？
-                if (runObj.Contains("@WebUser.No"))
-                    runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-                if (runObj.Contains("@WebUser.Name"))
-                    runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-
-                if (runObj.Contains("@WebUser.FK_DeptName"))
-                    runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
-
-                if (runObj.Contains("@WebUser.FK_Dept"))
-                    runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
-                if (runObj.Contains("@") == true && ht != null)
-                {
-                    foreach (string key in ht.Keys)
-                    {
-                        //值为空或者null不替换
-                        if (ht[key] == null || ht[key].Equals("") == true)
-                            continue;
-
-                        if (runObj.Contains("@" + key))
-                            runObj = runObj.Replace("@" + key, ht[key].ToString());
-
-                        //不包含@则返回SQL语句
-                        if (runObj.Contains("@") == false)
-                            break;
-                    }
-                }
-
-                if (runObj.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
-                {
-                    /*如果是bs*/
-                    foreach (string key in HttpContextHelper.RequestParamKeys)
-                    {
-                        if (string.IsNullOrEmpty(key))
-                            continue;
-                        runObj = runObj.Replace("@" + key, HttpContextHelper.RequestParams(key));
-                    }
-                }
-
+                runObj = Glo.DealExp(runObj, ht);
                 if (runObj.Contains("@") == true)
                     throw new Exception("@外键类型SQL错误," + runObj + "部分查询条件没有被替换.");
 
@@ -462,38 +558,110 @@ namespace BP.Sys
                 {
                     throw new Exception("err@获得SFTable(" + this.No + "," + this.Name + ")出现错误:SQL[" + runObj + "],数据库异常信息:" + ex.Message);
                 }
-
-                if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
                 {
-                    dt.Columns["NO"].ColumnName = "No";
-                    dt.Columns["NAME"].ColumnName = "Name";
-                }
-                if (SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
-                {
-                    dt.Columns["no"].ColumnName = "No";
-                    dt.Columns["name"].ColumnName = "Name";
-
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+                    if (dt.Columns.Count == 3)
+                        dt.Columns[2].ColumnName = "ParentNo";
                 }
                 return dt;
             }
             #endregion
 
             #region 自定义表.
-            if (this.SrcType == BP.Sys.SrcType.CreateTable)
-            {
-                string sql = "SELECT No, Name FROM " + this.No;
-                return src.RunSQLReturnTable(sql);
-            }
+            //if (this.SrcType == DictSrcType.CreateTable)
+            //{
+            //    string sql = "SELECT No, Name FROM " + this.No;
+            //    DataTable dt = src.RunSQLReturnTable(sql);
+            //    if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            //    {
+            //        dt.Columns[0].ColumnName = "No";
+            //        dt.Columns[1].ColumnName = "Name";
+            //        if (dt.Columns.Count == 3)
+            //            dt.Columns[2].ColumnName = "ParentNo";
+            //    }
+            //    return dt;
+            //}
 
-            if (this.SrcType == BP.Sys.SrcType.SysDict)
-            {
-                string sql = "SELECT MyPK, BH AS No, Name FROM Sys_SFTableDtl where FK_SFTable='" + this.No + "'";
-                return src.RunSQLReturnTable(sql);
-            }
             #endregion
 
-            return null;
+            #region 内置字典表.
+            if (this.SrcType == DictSrcType.SysDict || this.SrcType == DictSrcType.CreateTable)
+            {
+                string sql = "";
+                if (this.CodeStruct == CodeStruct.NoName)
+                    sql = "SELECT MyPK, BH AS No, Name FROM Sys_SFTableDtl WHERE FK_SFTable='" + this.No + "'";
+                else
+                    sql = "SELECT MyPK, BH AS No, Name,ParentNo FROM Sys_SFTableDtl WHERE FK_SFTable='" + this.No + "'";
+                DataTable dt = src.RunSQLReturnTable(sql);
 
+                if (dt!=null && dt.Rows.Count == 0)
+                {
+                    if (this.CodeStruct == CodeStruct.NoName)
+                    {
+                        SFTableDtl dtl = new SFTableDtl();
+                        dtl.BH = "001";
+                        dtl.Name = "Name 001";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.Insert();
+
+                        dtl = new SFTableDtl();
+                        dtl.BH = "002";
+                        dtl.Name = "Name 002";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.Insert();
+
+                        dtl = new SFTableDtl();
+                        dtl.BH = "003";
+                        dtl.Name = "Name 002";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.Insert();
+                    }
+                    //如果是tree.
+                    if (this.CodeStruct == CodeStruct.Tree)
+                    {
+                        SFTableDtl dtl = new SFTableDtl();
+                        dtl.BH = "001";
+                        dtl.Name = "根目录";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.ParentNo = "0"; // root 树结构编号.
+                        dtl.Insert();
+
+                        dtl = new SFTableDtl();
+                        dtl.BH = "002";
+                        dtl.Name = "Node 001";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.ParentNo = "001";
+                        dtl.Insert();
+
+                        dtl = new SFTableDtl();
+                        dtl.BH = "003";
+                        dtl.Name = "Node 002";
+                        dtl.MyPK = this.No + "_" + dtl.BH;
+                        dtl.FK_SFTable = this.No;
+                        dtl.ParentNo = "001";
+                        dtl.Insert();
+                    }
+                    dt = src.RunSQLReturnTable(sql);
+                }
+
+                if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+                {
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+                    if (dt.Columns.Count == 3)
+                        dt.Columns[2].ColumnName = "ParentNo";
+                }
+                return dt;
+            }
+            #endregion
+            throw new Exception("err@没有判断的类型." + this.SrcTable);
         }
         /// <summary>
         /// 修改外键数据
@@ -502,10 +670,10 @@ namespace BP.Sys
         public void UpdateData(string No, string Name, string FK_SFTable)
         {
             var sql = "";
-            if (this.SrcType == BP.Sys.SrcType.SysDict)
-                sql = "update Sys_SFTableDtl set Name = '" + Name + "' where MyPK='" + FK_SFTable + "_" + No + "'";
+            if (this.SrcType == DictSrcType.SysDict)
+                sql = "UPDATE Sys_SFTableDtl SET Name = '" + Name + "' WHERE MyPK='" + FK_SFTable + "_" + No + "'";
             else
-                sql = "update " + FK_SFTable + " set Name = '" + Name + "' where No = '" + No + "'";
+                sql = "UPDATE " + FK_SFTable + " SET Name = '" + Name + "' WHERE No = '" + No + "'";
             DBAccess.RunSQL(sql);
         }
         /// <summary>
@@ -515,33 +683,22 @@ namespace BP.Sys
         public void InsertData(string No, string Name, string FK_SFTable)
         {
             var sql = "";
-            if (this.SrcType == BP.Sys.SrcType.SysDict)
+            if (this.SrcType == BP.Sys.DictSrcType.SysDict)
                 sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable + "_" + No + "','" + FK_SFTable + "','" + No + "','" + Name + "')";
             else
                 sql = "insert into  " + FK_SFTable + "(No,Name) values('" + No + "','" + Name + "')";
             DBAccess.RunSQL(sql);
         }
+
         /// <summary>
-        /// 删除外键数据
-        /// </summary>
-        /// <returns></returns>
-        public void DeleteData(string No, string FK_SFTable)
-        {
-            var sql = "";
-            if (this.SrcType == BP.Sys.SrcType.SysDict)
-                sql = "delete from Sys_SFTableDtl where MyPK='" + FK_SFTable + "_" + No + "'";
-            else
-                sql = "delete from " + FK_SFTable + " where No = '" + No + "'";
-            DBAccess.RunSQL(sql);
-        }
-        /// <summary>
-        /// @wwh 修改了名字.
+        /// 修改了名字.
         /// </summary>
         /// <returns></returns>
         public string GenerJson()
         {
             return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
+
         /// <summary>
         /// 自动生成编号
         /// </summary>
@@ -557,7 +714,7 @@ namespace BP.Sys
             }
             else if (NoGenerModel == NoGenerModel.ByLSH)//编号按流水号生成
             {
-                if (this.SrcType == SrcType.SysDict)//如果是按系统字典表
+                if (this.SrcType == DictSrcType.SysDict)//如果是按系统字典表
                 {
                     try
                     {
@@ -716,7 +873,6 @@ namespace BP.Sys
                         }
             */
         }
-        #endregion
 
         #region 链接到其他系统获取数据的属性
         /// <summary>
@@ -901,23 +1057,23 @@ namespace BP.Sys
         /// <summary>
         /// 数据源类型
         /// </summary>
-        public SrcType SrcType
+        public string SrcType
         {
             get
             {
                 if (this.No.ToUpper().Contains("BP.") == true)
-                    return SrcType.BPClass;
+                    return DictSrcType.BPClass;
                 else
                 {
-                    SrcType src = (SrcType)this.GetValIntByKey(SFTableAttr.SrcType);
-                    if (src == BP.Sys.SrcType.BPClass)
-                        return Sys.SrcType.CreateTable;
+                    string src = this.GetValStringByKey(SFTableAttr.DictSrcType);
+                    if (src.Equals(BP.Sys.DictSrcType.BPClass))
+                        return Sys.DictSrcType.CreateTable;
                     return src;
                 }
             }
             set
             {
-                this.SetValByKey(SFTableAttr.SrcType, (int)value);
+                this.SetValByKey(SFTableAttr.DictSrcType, value);
             }
         }
         /// <summary>
@@ -929,16 +1085,16 @@ namespace BP.Sys
             {
                 switch (this.SrcType)
                 {
-                    case Sys.SrcType.TableOrView:
+                    case DictSrcType.TableOrView:
                         if (this.IsClass)
                             return "<img src='/WF/Img/Class.png' width='16px' broder='0' />实体类";
                         else
                             return "<img src='/WF/Img/Table.gif' width='16px' broder='0' />表/视图";
-                    case Sys.SrcType.SQL:
+                    case DictSrcType.SQL:
                         return "<img src='/WF/Img/SQL.png' width='16px' broder='0' />SQL表达式";
-                    case Sys.SrcType.WebServices:
+                    case DictSrcType.WebServices:
                         return "<img src='/WF/Img/WebServices.gif' width='16px' broder='0' />WebServices";
-                    case Sys.SrcType.WebApi:
+                    case DictSrcType.WebApi:
                         return "WebApi接口";
                     default:
                         return "";
@@ -1052,7 +1208,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-             //   uac.OpenForSysAdmin();
+                //   uac.OpenForSysAdmin();
                 uac.Readonly(); //@hongyan.
                 return uac;
             }
@@ -1114,8 +1270,8 @@ namespace BP.Sys
                 map.AddTBStringPK(SFTableAttr.No, null, "表英文名称", true, false, 1, 200, 20);
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
-                map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表@8=WebApi接口");
+                map.AddDDLStringEnum(SFTableAttr.DictSrcType, "BPClass", "数据表类型", SFTableAttr.DictSrcType, false);
+                //map.AddDDLSysEnum(SFTableAttr.DictSrcType, 0, "数据表类型", true, false, SFTableAttr.DictSrcType);
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
                 map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
@@ -1133,18 +1289,18 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.ColumnText, null, "显示的文字(名称列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.ParentValue, null, "父级值(父级列)", false, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.SelectStatement, null, "查询语句", true, false, 0, 1000, 600, true);
+
+                map.AddTBString("RequestMethod", "Get", "RequestMethod", true, false, 0, 100, 600, true);
+                map.AddTBString("FieldNo", "", "FieldNo", true, false, 0, 200, 600, true);
+                map.AddTBString("FieldName", "", "FieldName", true, false, 0, 200, 600, true);
+                map.AddTBString("FieldParentNo", "", "FieldParentNo", true, false, 0, 200, 600, true);
+                map.AddTBString("JsonNode", "", "根节点", true, false, 0, 200, 600, true);
+
+                //是否有参数
+                map.AddTBInt("IsPara", 0, "IsPara", false, false);
                 map.AddTBDateTime(SFTableAttr.RDT, null, "加入日期", false, false);
-
-
                 map.AddTBString(SFTableAttr.OrgNo, null, "组织编号", false, false, 0, 100, 20);
-
                 map.AddTBString(SFTableAttr.AtPara, null, "AtPara", false, false, 0, 50, 20);
-
-                for (int i = 0; i < 50; i++)
-                {
-                    map.AddTBString("BH" + i, null, "编号", true, true, 0, 3, 20);
-                    map.AddTBString("Name" + i, null, "名称", true, false, 0, 50, 20);
-                }
 
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
@@ -1170,7 +1326,6 @@ namespace BP.Sys
                 rm.IsForEns = true;
                 map.AddRefMethod(rm);
 
-
                 //rm = new RefMethod();
                 //rm.Title = "创建Table向导";
                 //rm.ClassMethodName = this.ToString() + ".DoGuide";
@@ -1191,13 +1346,24 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 映射方法.
         public string DoAttr()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/EnOnly.htm?EnName=BP.Sys.SFTable&No=" + this.No;
+            string projectName = HttpContextHelper.Request.Url.Segments[1];
+            if (projectName.Equals("WF/"))
+                projectName = "";
+            else
+                projectName = "/" + projectName;
+            return SystemConfig.HostURLOfBS + projectName + "/WF/Comm/EnOnly.htm?EnName=BP.Sys.SFTable&No=" + this.No;
         }
         public string DoNew()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
+            string projectName = HttpContextHelper.Request.Url.Segments[1];
+            if (projectName.Equals("WF/"))
+                projectName = "";
+            else
+                projectName = "/" + projectName;
+            return SystemConfig.HostURLOfBS + projectName + "/WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
         }
         /// <summary>
         /// 数据源管理
@@ -1205,7 +1371,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoMangDBSrc()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
+            return "../../Comm/Sys/SFDBSrcNewGuide.htm";
         }
         /// <summary>
         /// 创建表向导
@@ -1213,7 +1379,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoGuide()
         {
-            return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CreateSFGuide.htm";
+            return "../../Admin/FoolFormDesigner/CreateSFGuide.htm";
         }
         /// <summary>
         /// 编辑数据
@@ -1224,13 +1390,20 @@ namespace BP.Sys
             if (this.IsClass)
             {
 
-                return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Comm/Ens.htm?EnsName=" + this.No;
+                return "../../Comm/Ens.htm?EnsName=" + this.No;
             }
             else
             {
-                return BP.Difference.SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+                if (this.GetValIntByKey(SFTableAttr.CodeStruct) == 0)
+                    return "../../Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No;
+                else
+                    return "../../Admin/FoolFormDesigner/SFTableEditDataTree.htm?FK_SFTable=" + this.No;
             }
         }
+        #endregion
+
+
+        #region 重写方法.
         /// <summary>
         /// 检查是否有依赖的引用？
         /// </summary>
@@ -1258,75 +1431,17 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-            
+
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
                 this.OrgNo = BP.Web.WebUser.OrgNo;
                 this.No = this.OrgNo + "_" + this.No;
             }
-
-
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDateTime;
 
-            #region  如果是 系统字典表.
-            if (this.SrcType == BP.Sys.SrcType.SysDict && BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-            {
-                if (this.CodeStruct == CodeStruct.NoName)
-                {
-                    SFTableDtl dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_001");
-                    dtl.BH = "001";
-                    dtl.Name = "Item1";
-                    dtl.FK_SFTable = this.No;
-                    dtl.Insert();
-
-                    dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_002");
-                    dtl.BH = "002";
-                    dtl.Name = "Item2";
-                    dtl.FK_SFTable = this.No;
-                    dtl.Insert();
-
-                    dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_003");
-                    dtl.BH = "003";
-                    dtl.Name = "Item3";
-                    dtl.FK_SFTable = this.No;
-                    dtl.Insert();
-                }
-
-                if (this.CodeStruct == CodeStruct.Tree)
-                {
-                    SFTableDtl dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_001");
-                    dtl.BH = "001";
-                    dtl.Name = "Item1";
-                    dtl.FK_SFTable = this.No;
-                    dtl.ParentNo = "0";
-                    dtl.Insert();
-
-                    dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_002");
-                    dtl.BH = "002";
-                    dtl.Name = "Item2";
-                    dtl.FK_SFTable = this.No;
-                    dtl.ParentNo = "001";
-                    dtl.Insert();
-
-                    dtl = new SFTableDtl();
-                    dtl.setMyPK(this.No + "_003");
-                    dtl.BH = "003";
-                    dtl.Name = "Item3";
-                    dtl.FK_SFTable = this.No;
-                    dtl.ParentNo = "001";
-                    dtl.Insert();
-                }
-            }
-            #endregion  如果是 系统字典表.
-
             #region 如果是本地类. 
-            if (this.SrcType == BP.Sys.SrcType.BPClass)
+            if (this.SrcType == BP.Sys.DictSrcType.BPClass)
             {
                 Entities ens = ClassFactory.GetEns(this.No);
                 Entity en = ens.GetNewEntity;
@@ -1341,13 +1456,10 @@ namespace BP.Sys
             #endregion 如果是本地类.
 
             #region 本地类，物理表..
-            if (this.SrcType == BP.Sys.SrcType.CreateTable)
+            if (this.SrcType == BP.Sys.DictSrcType.CreateTable)
             {
                 if (DBAccess.IsExitsObject(this.No) == true)
-                {
                     return base.beforeInsert();
-                    //throw new Exception("err@表名[" + this.No + "]已经存在，请使用其他的表名.");
-                }
 
                 string sql = "";
                 if (this.CodeStruct == BP.Sys.CodeStruct.NoName || this.CodeStruct == BP.Sys.CodeStruct.GradeNoName)
@@ -1376,12 +1488,11 @@ namespace BP.Sys
 
             return base.beforeInsert();
         }
-
         protected override void afterInsert()
         {
             try
             {
-                if (this.SrcType == BP.Sys.SrcType.TableOrView)
+                if (this.SrcType == DictSrcType.TableOrView)
                 {
                     //暂时这样处理
                     string sql = "CREATE VIEW " + this.No + " (";
@@ -1410,22 +1521,111 @@ namespace BP.Sys
             }
             base.afterInsert();
         }
+        #endregion 重写方法.
 
+        #region 执行方法.
+        public string GenerDataOfJsonFromWebApi(string paras)
+        {
+            var isPara = this.GetValIntByKey("IsPara");
+            //if (isPara == 0)
+            //    return "err@无参字典，不能调用这个方法.";
+            if (isPara == 1 && paras.Contains("=") == false)
+                paras = "@Key=" + paras;
+            if (isPara == 2 && paras.Contains("=") == false)
+                return "err@多个参字典,正确的格式为:@para1=val1@para2=val2.";
+            //把参数转化为 ht.
+            SFParas ens = new SFParas();
+            ens.Retrieve("RefPKVal", this.No);
+
+            //获得ht.
+            Hashtable ht = SFTable.GenerHT(paras, ens);
+            DataTable dt = this.GenerHisDataTable(ht);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 根据参数获得json.
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public string GenerJsonByPara(string paras)
+        {
+            var isPara = this.GetValIntByKey("IsPara");
+            //if (isPara == 0)
+            //    return "err@无参字典，不能调用这个方法.";
+            if (isPara == 1 && paras.Contains("=") == false)
+                paras = "@Key=" + paras;
+            if (isPara == 2 && paras.Contains("=") == false)
+                return "err@多个参字典,正确的格式为:@para1=val1@para2=val2.";
+
+            //把参数转化为 ht.
+            SFParas ens = new SFParas();
+            ens.Retrieve("RefPKVal", this.No);
+
+            //获得ht.
+            Hashtable ht = SFTable.GenerHT(paras, ens);
+            try
+            {
+                DataTable dt = this.GenerHisDataTable(ht);
+                string json = BP.Tools.Json.ToJson(dt);
+                return json;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        /// <summary>
+        /// 获得原始的数据
+        /// </summary>
+        /// <returns></returns>
+        public string TS_YuanShi_Data_WebApi()
+        {
+            return Data_WebApi(null, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
+        }
+        /// <summary>
+        /// 获得原始的数据
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public string TS_YuanShi_Data_WebApi_Para(string paras)
+        {
+            //把参数转化为ht.
+            Hashtable ht = DataType.ParseParasToHT(paras);
+
+            //获取参数.
+            SFParas ens = new SFParas();
+            ens.Retrieve("RefPK", this.No);
+            //遍历它.
+            foreach (SFPara item in ens)
+            {
+                //内部参数.
+                if (item.IsSys == 0)
+                {
+                    if (ht.ContainsKey(item.ParaKey) == false)
+                        ht.Add(item.ParaKey, item.ExpVal);
+                    continue;
+                }
+
+                //如果是外部参数.
+                if (ht.ContainsKey(item.ParaKey) == true)
+                    continue;
+
+                string key = "";
+                if (ht.ContainsKey("Key") == true)
+                    key = ht["Key"].ToString();
+                ht.Add(item.ParaKey, key);
+            }
+            return Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
+        }
         /// <summary>
         /// 返回json.
         /// </summary>
         /// <returns></returns>
         public string GenerDataOfJson()
         {
-            //  BP.DA.Log.DebugWriteInfo("********  "+this.No+" - "+this.Name+"  ************************   ");
-            // BP.DA.Log.DebugWriteInfo(this.ToJson());
-
             DataTable dt = this.GenerHisDataTable();
             string json = BP.Tools.Json.ToJson(dt);
-
-            //   BP.DA.Log.DebugWriteInfo("************************"+ this.No+this.Name+ " ************************ json: \t\n" + //json);
             return json;
-            // return BP.Tools.Json.ToJson(this.GenerHisDataTable());
         }
         /// <summary>
         /// 初始化数据.
@@ -1465,7 +1665,53 @@ namespace BP.Sys
                 }
             }
         }
+        #endregion 执行方法.
 
+        /// <summary>
+        /// 获得数据
+        /// </summary>
+        /// <param name="paras">@Key=xxx@xxx=xxx</param>
+        /// <returns></returns>
+        public string Vue3_GenerJsonByParas(string paras)
+        {
+            //获取参数,.
+            SFParas ens = new SFParas();
+            ens.Retrieve("RefPK", this.No);
+
+            //通过公共的方法生成参数.
+            Hashtable ht = SFTable.GenerHT(paras, ens);
+
+            DataTable dt = this.GenerHisDataTable(ht);
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+        public static Hashtable GenerHT(string paras, SFParas ens)
+        {
+            //把参数转化为ht.
+            Hashtable ht = DataType.ParseParasToHT(paras);
+
+            //遍历它.
+            foreach (SFPara item in ens)
+            {
+                //内部参数.
+                if (item.IsSys == 0)
+                {
+                    if (ht.ContainsKey(item.ParaKey) == false)
+                        ht.Add(item.ParaKey, item.ExpVal);
+                    continue;
+                }
+
+                //如果是外部参数.
+                if (ht.ContainsKey(item.ParaKey) == true)
+                    continue;
+
+                string key = "";
+                if (ht.ContainsKey("Key") == true)
+                    key = ht["Key"].ToString();
+                ht.Add(item.ParaKey, key);
+            }
+            return ht;
+        }
     }
     /// <summary>
     /// 用户自定义表s

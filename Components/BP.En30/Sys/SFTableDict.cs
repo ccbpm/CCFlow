@@ -55,8 +55,7 @@ namespace BP.Sys
             "@0=自定义@1=流水号@2=标签的全拼@3=标签的简拼@4=按GUID生成");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
-                map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-            "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=微服务Handler外部数据源@6=JavaScript外部数据源@7=系统字典表");
+                map.AddDDLStringEnum(SFTableAttr.DictSrcType, "SysDict", "数据表类型", SFTableAttr.DictSrcType, false);
 
 
                 RefMethod rm = new RefMethod();
@@ -77,7 +76,12 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEdit()
         {
-            return BP.Difference.SystemConfig.HostURLOfBS + "WF/Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No + "&&QueryType=Dict";
+            if (this.GetValIntByKey(SFTableAttr.CodeStruct) == 0)
+                return  "../../Admin/FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + this.No + "&&QueryType=Dict";
+            else
+            {
+                return "../../Admin/FoolFormDesigner/SFTableEditDataTree.htm?FK_SFTable=" + this.No + "&&QueryType=Dict";
+            }
         }
         /// <summary>
         /// 删除之前要做的工作

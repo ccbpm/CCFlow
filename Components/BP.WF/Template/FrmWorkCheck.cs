@@ -200,11 +200,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示退回信息？
         /// </summary>
-        public bool FWCIsShowReturnMsg
+        public int FWCIsShowReturnMsg
         {
             get
             {
-                return this.GetValBooleanByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg);
+                return this.GetValIntByKey(NodeWorkCheckAttr.FWCIsShowReturnMsg);
             }
             set
             {
@@ -510,8 +510,9 @@ namespace BP.WF.Template
                 //map.AddTBString(NodeWorkCheckAttr.FWCNewDuanYu, null, "自定义常用短语(使用@分隔)", true, false, 0, 100, 10, true);
 
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
-                map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
-
+                //map.AddBoolean(NodeWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
+                map.AddDDLSysEnum(NodeWorkCheckAttr.FWCIsShowReturnMsg, 0, "退回信息显示规则", true, true,
+                 NodeWorkCheckAttr.FWCIsShowReturnMsg, "@0=不显示@1=退回到的节点显示@2=显示全部退回信息");
                 //增加如下字段是为了查询与排序的需要.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 4, 10);
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", false, false);

@@ -625,19 +625,18 @@ namespace BP.WF.Data
                 rm.Icon = "icon-reload";
                 rm.Title = "回滚";
                 rm.ClassMethodName = this.ToString() + ".DoRollback";
-
                 rm.HisAttrs.AddDDLSQL("NodeID", "0", "回滚到节点",
                    "SELECT NodeID+'' as No,Name FROM WF_Node WHERE FK_Flow='@FK_Flow'", true);
                 rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "轨迹修改";
-                rm.Icon = "icon-graph";
-                //   rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoEditTrack";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "轨迹修改";
+                //rm.Icon = "icon-graph";
+                ////   rm.IsForEns = false;
+                //rm.ClassMethodName = this.ToString() + ".DoEditTrack";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "调整流程";
@@ -650,13 +649,13 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "调整数据";
-                rm.IsForEns = false;
-                rm.Icon = "icon-target";
-                rm.ClassMethodName = this.ToString() + ".DoEditFrm";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "调整数据";
+                //rm.IsForEns = false;
+                //rm.Icon = "icon-target";
+                //rm.ClassMethodName = this.ToString() + ".DoEditFrm";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "彻底删除";
@@ -677,17 +676,16 @@ namespace BP.WF.Data
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                //rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Icon = "icon-wrench";
-                rm.Title = "修复数据";
-                //  rm.Title = "修复该流程数据实例";
+                //rm = new RefMethod();
+                ////rm.Icon = "../../WF/Img/Btn/CC.gif";
+                //rm.Icon = "icon-wrench";
+                //rm.Title = "修复数据";
+                ////  rm.Title = "修复该流程数据实例";
 
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".RepairDataIt";
-                rm.RefMethodType = RefMethodType.Func;
-                map.AddRefMethod(rm);
-
+                //rm.IsForEns = false;
+                //rm.ClassMethodName = this.ToString() + ".RepairDataIt";
+                //rm.RefMethodType = RefMethodType.Func;
+                //map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
@@ -701,11 +699,8 @@ namespace BP.WF.Data
                 rm.Title = "催办";
                 rm.ClassMethodName = this.ToString() + ".DoPress";
                 rm.HisAttrs.AddTBString("Note", null, "催办信息", true, false, 0, 500, 200);
-                //   rm.Warning = "您确定要删除吗？";
-                // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Icon = "icon-key";

@@ -53,6 +53,8 @@ namespace BP.Sys
         public const string CCFromRef = "CCFromRef";
         public const string LocalWS = "LocalWS";
         public const string LocalHandler = "LocalHandler";
+        public const string WebApi = "WebApi";
+
     }
     /// <summary>
     /// 消息控制方式
@@ -116,7 +118,11 @@ namespace BP.Sys
         /// <summary>
         /// 自定义WebApi
         /// </summary>
-        WebApi=8
+        WebApi=8,
+        /// <summary>
+        /// SFProduces
+        /// </summary>
+        SFProcedure = 9
     }
     /// <summary>
     /// 事件类型

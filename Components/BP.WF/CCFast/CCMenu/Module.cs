@@ -160,8 +160,9 @@ namespace BP.CCFast.CCMenu
                 map.AddTBString(MenuAttr.Icon, null, "Icon", true, false, 0, 500, 50, true);
                 map.AddTBInt(ModuleAttr.Idx, 0, "顺序", true, false);
                 map.AddTBInt(ModuleAttr.IsEnable, 1, "IsEnable", true, false);
-
                 map.AddTBString(ModuleAttr.OrgNo, null, "组织编号", true, false, 0, 50, 20);
+
+                map.AddTBInt("ChildDisplayModel", 0, "ChildDisplayModel", true, false);
 
                 this._enMap = map;
                 return this._enMap;

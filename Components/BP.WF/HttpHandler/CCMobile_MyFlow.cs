@@ -353,7 +353,7 @@ namespace BP.WF.HttpHandler
             if (nodeIDStr.EndsWith("01") == true)
             {
                 if (fl.DraftRole == DraftRole.SaveToDraftList)
-                    BP.WF.Dev2Interface.Node_SetDraft(this.FK_Flow, this.WorkID);
+                    BP.WF.Dev2Interface.Node_SetDraft(this.WorkID);
 
                 if (fl.DraftRole == DraftRole.SaveToTodolist)
                     BP.WF.Dev2Interface.Node_SetDraft2Todolist(this.WorkID);

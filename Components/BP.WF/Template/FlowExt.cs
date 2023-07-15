@@ -179,7 +179,6 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_Flow", "流程模版");
 
-
                 #region 基本属性。
                 map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 4, 3);
@@ -189,8 +188,9 @@ namespace BP.WF.Template
                 string sql = "";
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
-                    map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
-                    // map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), true);
+                    //map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
+                    sql = "SELECT No,Name FROM WF_FlowSort WHERE Name!='流程树' ORDER BY NO, IDX";
+                    map.AddDDLSQL(FlowAttr.FK_FlowSort, null, "类别", sql, true);
                 }
                 else
                 {
@@ -851,9 +851,9 @@ namespace BP.WF.Template
             #endregion 删除独立表单数据
 
             //流程运行信息
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList Where (WorkID=" + workid + " OR FID=" + workid + ")");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist Where (WorkID=" + workid + " OR FID=" + workid + ")");
             //删除退回信息
-            DBAccess.RunSQL("DELETE FROM WF_ReturnWork Where WorkID=" + workid);
+            //DBAccess.RunSQL("DELETE FROM WF_ReturnWork Where WorkID=" + workid);
             //考核信息
             DBAccess.RunSQL("DELETE FROM WF_CH Where (WorkID=" + workid + " OR FID=" + workid + ")");
             DBAccess.RunSQL("DELETE FROM WF_CHEval Where WorkID=" + workid);
@@ -1459,7 +1459,7 @@ namespace BP.WF.Template
             gwf.HuiQianTaskSta = HuiQianTaskSta.None;
             gwf.Update();
 
-            DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=1 WHERE WorkID=" + workid);
+            DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=1 WHERE WorkID=" + workid);
 
             GenerWorkerList gwl = new GenerWorkerList();
             gwl.FK_Node = nodeID;

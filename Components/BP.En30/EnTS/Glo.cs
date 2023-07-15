@@ -21,6 +21,8 @@ namespace BP.EnTS
         }
         public static void SetMap(string classID, string mapData)
         {
+            if (mapData == null)
+                throw new Exception("err@classID=["+ classID + "]的mapData不能为空.");
             Newtonsoft.Json.Linq.JObject json = Newtonsoft.Json.Linq.JObject.Parse(mapData);
 
             BP.En.Map myMap = new En.Map();

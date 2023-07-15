@@ -361,7 +361,7 @@ namespace BP.Sys
                     {
                         GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
 
-                        if (sf.SrcType == SrcType.SQL)
+                        if (sf.SrcType == DictSrcType.SQL)
                         {
                             //此种类型时，没有物理表或视图，从SQL直接查出数据
                             DataTable dt = sf.GenerHisDataTable();
@@ -1438,6 +1438,9 @@ namespace BP.Sys
                 //参数属性.
                 map.AddTBAtParas(4000); //
 
+
+                map.AddLang(); //增加多语言.
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -1670,7 +1673,56 @@ namespace BP.Sys
                 this.UIWidth = 125;
             if (this.MyDataType == DataType.AppDateTime)
                 this.UIWidth = 165;
+            if(this.MyDataType == DataType.AppString)
+            {
+                MapAttr attr = new MapAttr();
+                attr.setMyPK(this.MyPK);
+                attr.RetrieveFromDBSources();
+                if (this.TextModel == 2 || this.TextModel == 3)
+                {
+                    //attr.setMaxLen(4000);
+                    this.SetValByKey(MapAttrAttr.MaxLen, 4000);
+                }
 
+
+               //自动扩展字段长度. 需要翻译.
+                if (attr.MaxLen < this.MaxLen && DataType.IsNullOrEmpty(this.Field)==false)
+                {
+                    string sql = "";
+                    MapData md = new MapData();
+                    md.No = this.FK_MapData;
+                    if (md.RetrieveFromDBSources() == 1)
+                    {
+                        if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
+                        {
+                            switch (BP.Difference.SystemConfig.AppCenterDBType)
+                            {
+                                case DBType.MSSQL:
+                                    sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.Field + " NVARCHAR(" + this.MaxLen + ")";
+                                    break;
+                                case DBType.MySQL:
+                                    sql = "ALTER table " + md.PTable + " modify " + this.Field + " NVARCHAR(" + this.MaxLen + ")";
+                                    break;
+                                case DBType.Oracle:
+                                case DBType.DM:
+                                    sql = "ALTER table " + md.PTable + " modify " + this.Field + " VARCHAR2(" + this.MaxLen + ")";
+                                    break;
+                                case DBType.KingBaseR3:
+                                case DBType.KingBaseR6:
+                                    sql = "ALTER table " + md.PTable + " ADD  COLUMN " + this.Field + " Type NVARCHAR2(" + this.MaxLen + ")";
+                                    break;
+                                case DBType.PostgreSQL:
+                                case DBType.UX:
+                                    sql = "ALTER table " + md.PTable + " alter " + this.Field + " type character varying(" + this.MaxLen + ")";
+                                    break;
+                                default:
+                                    throw new Exception("err@没有判断的数据库类型.");
+                            }
+                            DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
+                        }
+                    }
+                }
+            }
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeUpdate()

@@ -20,6 +20,8 @@ namespace CCFlow.DataUser.API.Controllers
 
                 //执行方法返回json.
                 string data = ctrl.DoMethod(ctrl, ctrl.DoType);
+                if (data == null)
+                    return new HttpResponseMessage();
                 return new HttpResponseMessage { Content = new StringContent(data, System.Text.Encoding.GetEncoding("UTF-8"), "application/json") };
 
                 //返回执行的结果.

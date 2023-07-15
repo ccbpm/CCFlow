@@ -1298,9 +1298,6 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.JumpToNodes, null, "可跳转的节点", true, false, 0, 200, 10, true);
                 map.AddTBString(BtnAttr.ChangeDeptLab, "切换部门", "切换部门标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ChangeDeptEnable, false, "是否启用切换组织/部门", true, true);
-                map.AddTBString("SubmitSF", "提交身份", "提交身份", true, false, 0, 50, 10);
-                map.AddBoolean("SubmitSFEnable", false, "是否启用提交身份?", true, true);
-
 
                 map.AddGroupAttr("查看器按钮权限");
                 map.AddBoolean(BtnAttr.ShowParentFormEnableMyView, false, "查看父流程是否启用", true, true);

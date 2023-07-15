@@ -928,18 +928,10 @@ namespace BP.WF
                 userNo = WebUser.UserID;
 
             //任何人都可以启动.
-            string sql0 = "";
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-            {
-                sql0 = "SELECT A.FK_Flow FROM WF_Node A ";
-                sql0 += " WHERE  NodePosType=0  AND DeliveryWay=4  ";
-            }
-            else
-            {
-                sql0 = "SELECT A.FK_Flow FROM WF_Node A, WF_Flow B ";
-                sql0 += " WHERE A.NodePosType=0  AND A.DeliveryWay=4 AND A.FK_Flow=B.No ";
-                sql0 += " AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
-            }
+            string sql0 = "SELECT A.FK_Flow FROM WF_Node A, WF_Flow B ";
+            sql0 += " WHERE A.NodePosType=0  AND A.DeliveryWay=4  ";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
+                sql0 += " B.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
 
             //按岗位计算.
             string sql1 = "SELECT A.FK_Flow FROM WF_Node A, WF_NodeStation B, Port_DeptEmpStation C";
@@ -3488,6 +3480,7 @@ namespace BP.WF
                     BP.WF.Dev2Interface.Port_Login(mytk.EmpNo, mytk.OrgNo);
                     return mytk.EmpNo;
                 }
+
 
                 //如果是宽泛模式.
                 if (SystemConfig.TokenModel == 0)
@@ -6243,7 +6236,7 @@ namespace BP.WF
             gwl.HungupTimes = 0;
             gwl.FID = gwf.FID;
             gwl.FK_Dept = emp.FK_Dept;
-            gwl.DeptName = emp.FK_DeptText;
+            gwl.FK_DeptT = emp.FK_DeptText;
 
             if (gwl.Update() == 0)
             {
@@ -6641,7 +6634,7 @@ namespace BP.WF
                 gwl.IsRead = false;
                 gwl.WhoExeIt = 0;
                 gwl.FK_Dept = item.FK_Dept;
-                gwl.DeptName = item.FK_DeptText;
+                gwl.FK_DeptT = item.FK_DeptText;
                 gwl.FK_NodeText = nd.Name;
                 gwl.FK_Flow = nd.FK_Flow;
                 gwl.IsEnable = true;
@@ -7560,7 +7553,7 @@ namespace BP.WF
                 gwl.FID = 0;
                 gwl.FK_Flow = gwf.FK_Flow;
                 gwl.FK_Dept = empEn.FK_Dept;
-                gwl.DeptName = empEn.FK_DeptText;
+                gwl.FK_DeptT = empEn.FK_DeptText;
 
                 gwl.SDT = "无";
                 gwl.DTOfWarning = DataType.CurrentDateTime;
@@ -7753,7 +7746,7 @@ namespace BP.WF
 
                 gwl.FK_Flow = fl.No;
                 gwl.FK_Dept = emp.FK_Dept;
-                gwl.DeptName = emp.FK_DeptText;
+                gwl.FK_DeptT = emp.FK_DeptText;
 
 
                 gwl.SDT = "无";
@@ -10465,7 +10458,7 @@ namespace BP.WF
                 gwl.FK_Emp = BP.Web.WebUser.No;
                 gwl.FK_EmpText = BP.Web.WebUser.Name;
                 gwl.FK_Dept = BP.Web.WebUser.FK_Dept;
-                gwl.DeptName = WebUser.FK_DeptName;
+                gwl.FK_DeptT = WebUser.FK_DeptName;
 
                 gwl.IsPassInt = (int)askforSta;
                 gwl.Insert();
@@ -10963,7 +10956,7 @@ namespace BP.WF
                 gwl.FK_Node = nd.NodeID;
                 gwl.FK_NodeText = nd.Name;
                 gwl.FK_Dept = BP.Web.WebUser.FK_Dept;
-                gwl.DeptName = BP.Web.WebUser.FK_DeptName;
+                gwl.FK_DeptT = BP.Web.WebUser.FK_DeptName;
                 gwl.FK_Emp = BP.Web.WebUser.No;
                 gwl.FK_EmpText = BP.Web.WebUser.Name;
                 gwl.IsPassInt = -2;
@@ -10979,7 +10972,7 @@ namespace BP.WF
                 gwl.FK_Emp = emp.No;
                 gwl.FK_EmpText = emp.Name;
                 gwl.FK_Dept = emp.FK_Dept;
-                gwl.DeptName = emp.FK_DeptText;
+                gwl.FK_DeptT = emp.FK_DeptText;
                 gwl.IsPassInt = 0;
                 gwl.RDT = DataType.CurrentDateTime;
                 gwl.SDT = DataType.CurrentDateTime;
@@ -11321,7 +11314,7 @@ namespace BP.WF
                 foreach (GenerWorkerList item in ens)
                 {
                     if (item.FK_Emp == fk_emp)
-                        dr["FK_DeptT"] = item.DeptName;
+                        dr["FK_DeptT"] = item.FK_DeptT;
                 }
             }
 
@@ -11406,7 +11399,7 @@ namespace BP.WF
                 gwlOfMe.FK_EmpText = emp.Name;
                 gwlOfMe.IsPassInt = -1; //设置不可以用.
                 gwlOfMe.FK_Dept = emp.FK_Dept;
-                gwlOfMe.DeptName = emp.FK_DeptText; //部门名称.
+                gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
                 gwlOfMe.SetPara("HuiQianZhuChiRen", WebUser.No);
                 //表明后增加的组长

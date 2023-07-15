@@ -211,7 +211,7 @@ namespace BP.WF.HttpHandler
                 gwlZCR.FK_EmpText = GuestUser.Name;
                 gwlZCR.IsPassInt = 0; //设置不可以用.
                 gwlZCR.FK_Dept = "";
-                gwlZCR.DeptName = ""; //部门名称.
+                gwlZCR.FK_DeptT = ""; //部门名称.
                 gwlZCR.IsRead = false;
                 gwlZCR.GuestNo = GuestUser.No;
                 gwlZCR.GuestName = GuestUser.Name;

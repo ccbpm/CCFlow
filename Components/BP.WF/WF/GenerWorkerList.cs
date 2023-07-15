@@ -153,9 +153,6 @@ namespace BP.WF
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
-
-        public const string StaNo = "StaNo";
-
     }
     /// <summary>
     /// 工作者列表
@@ -354,11 +351,12 @@ namespace BP.WF
             {
                 this.SetValByKey(GenerWorkerListAttr.FK_Node, value);
             }
+           
         }
         /// <summary>
         /// 部门名称
         /// </summary>
-        public string DeptName
+        public string FK_DeptT
         {
             get
             {
@@ -653,9 +651,7 @@ namespace BP.WF
                 map.AddTBString(GenerWorkerListAttr.FK_NodeText, null, "节点名称", true, false, 0, 100, 100);
 
                 map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 5, 100);
-                map.AddTBString(GenerWorkerListAttr.StaNo, null, "岗位编号", true, false, 0, 100, 100);
-                map.AddTBString(GenerWorkerListAttr.FK_Dept, null, "部门", true, false, 0, 100, 100);
-                
+                map.AddDDLEntities(GenerWorkerListAttr.FK_Dept, null, "人员所在部门",new BP.Port.Depts(), false);
 
                 //如果是流程属性来控制的就按流程属性来计算。
                 map.AddTBDateTime(GenerWorkerListAttr.SDT, "应完成日期", false, false);

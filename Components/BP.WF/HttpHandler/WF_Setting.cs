@@ -229,7 +229,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept  FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + WebUser.No + "'";
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept, A.OrgNo, '' as OrgName  FROM Port_Dept A, Port_DeptEmp B,Port_Emp C WHERE A.No=B.FK_Dept AND C.FK_Dept=A.No AND C.No=B.FK_Emp AND C.UserID='" + WebUser.No + "'";
+                sql = "SELECT a.No, a.Name, A.NameOfPath, '0' AS  CurrentDept  FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + BP.Web.WebUser.OrgNo + "_" + WebUser.No + "'";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -245,7 +245,7 @@ namespace BP.WF.HttpHandler
             dt.Columns[2].ColumnName = "NameOfPath";
             dt.Columns[3].ColumnName = "CurrentDept";
 
-            if (SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
             {
                 dt.Columns[4].ColumnName = "OrgNo";
                 dt.Columns[5].ColumnName = "OrgName";

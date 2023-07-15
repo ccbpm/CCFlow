@@ -877,9 +877,9 @@ namespace BP.WF.HttpHandler
             string userNo = WebUser.No;
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 userNo = WebUser.OrgNo + "_" + WebUser.No;
-            json = DBAccess.GetBigTextFromDB("WF_Emp", "No", userNo, "StartFlows");
-            if (DataType.IsNullOrEmpty(json) == false)
-                return json;
+            //json = DBAccess.GetBigTextFromDB("WF_Emp", "No", userNo, "StartFlows");
+            //if (DataType.IsNullOrEmpty(json) == false)
+                //return json;
 
             //定义容器.
             DataSet ds = new DataSet();

@@ -816,16 +816,6 @@ namespace BP.Sys
             string MsgOK = "";
             string MsgErr = "";
 
-            if (nev.FK_Node != 0)
-            {
-                doc = doc.Replace("@FK_Node",  ""+nev.FK_Node);
-                doc = doc.Replace("@NodeID", "" + nev.FK_Node);
-            }
-            if (DataType.IsNullOrEmpty(nev.FK_Flow) == false)
-            {
-                doc = doc.Replace("@FlowNo", "" + nev.FK_Flow);
-                doc = doc.Replace("@FK_Flow", "" + nev.FK_Flow);
-            }
             doc = doc.Replace("~", "'");
             doc = doc.Replace("@WebUser.No", BP.Web.WebUser.No);
             doc = doc.Replace("@WebUser.Name", BP.Web.WebUser.Name);
@@ -858,6 +848,7 @@ namespace BP.Sys
 
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上. 
             doc = doc.Replace("@SDKFromServHost", BP.Difference.SystemConfig.AppSettings["SDKFromServHost"]);
+
             if (doc.Contains("@") == true)
             {
                 if (HttpContextHelper.Current != null)

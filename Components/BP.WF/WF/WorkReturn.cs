@@ -1213,7 +1213,7 @@ namespace BP.WF
             if (isHave == false)
             {
                 mygwl.FK_Dept = WebUser.FK_Dept;
-                mygwl.DeptName = WebUser.FK_DeptName;
+                mygwl.FK_DeptT = WebUser.FK_DeptName;
 
                 mygwl.FK_Emp = WebUser.No;
                 mygwl.FK_EmpText = WebUser.Name;
@@ -1593,7 +1593,7 @@ namespace BP.WF
             wl.FK_NodeText = nd.Name;
             // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
-            wl.DeptName = emp.FK_DeptText;
+            wl.FK_DeptT = emp.FK_DeptText;
 
             DateTime dtNew = DateTime.Now;
             // dtNew = dtNew.AddDays(nd.WarningHour);

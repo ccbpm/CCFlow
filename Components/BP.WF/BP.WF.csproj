@@ -181,6 +181,8 @@
     <Compile Include="Admin\FlowSort.cs" />
     <Compile Include="CCBill\Sys\Func.cs" />
     <Compile Include="CCBill\Template\ToolBarBtn.cs" />
+    <Compile Include="CCBill\WF_CCBill_OptOneFlow_FlowCenter.cs" />
+    <Compile Include="CCBill\WF_Methd.cs" />
     <Compile Include="CCFast\CCMenu\MenuDept.cs" />
     <Compile Include="CCFast\CCMenu\MenuEmp.cs" />
     <Compile Include="CCFast\CCMenu\MenuGroup.cs" />
@@ -188,6 +190,14 @@
     <Compile Include="CCFast\CCMenu\SearchAttr.cs" />
     <Compile Include="CCFast\Portal\WindowExt\ChartZZT.cs" />
     <Compile Include="CCFast\Portal\WindowExt\Info.cs" />
+    <Compile Include="Cloud\Admin.cs" />
+    <Compile Include="Cloud\Dept.cs" />
+    <Compile Include="Cloud\Dev2Interface.cs" />
+    <Compile Include="Cloud\Emp.cs" />
+    <Compile Include="Cloud\Glo.cs" />
+    <Compile Include="Cloud\HttpHandler\Portal_SaaS.cs" />
+    <Compile Include="Cloud\HttpHandler\Portal_SaaSOption.cs" />
+    <Compile Include="Cloud\Org.cs" />
     <Compile Include="OverrideEvent.cs" />
     <Compile Include="CCOA\CCBBS\BBSExt.cs" />
     <Compile Include="CCOA\CCBBS\BBS.cs" />
@@ -231,14 +241,6 @@
     <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
-    <Compile Include="Cloud\Admin.cs" />
-    <Compile Include="Cloud\Dept.cs" />
-    <Compile Include="Cloud\Dev2Interface.cs" />
-    <Compile Include="Cloud\Emp.cs" />
-    <Compile Include="Cloud\Glo.cs" />
-    <Compile Include="Cloud\HttpHandler\Portal_SaaSOption.cs" />
-    <Compile Include="Cloud\Org.cs" />
-    <Compile Include="Cloud\HttpHandler\Portal_SaaS.cs" />
     <Compile Include="Data\Admin2Group\CHExt.cs" />
     <Compile Include="Data\Admin2Group\GenerWorkFlowView.cs" />
     <Compile Include="Data\AdminGroup\CHExt.cs" />
@@ -724,7 +726,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Cloud\OrgSetting\" />
     <Folder Include="Cloud\Port\" />
     <Folder Include="Cloud\SaaSOption\" />
   </ItemGroup>

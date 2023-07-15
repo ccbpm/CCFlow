@@ -205,7 +205,7 @@ namespace BP.WF
             gwl.FID = 0;
             gwl.FK_Flow = fl.No;
             gwl.FK_Dept = WebUser.FK_Dept;
-            gwl.DeptName = WebUser.FK_DeptName;
+            gwl.FK_DeptT = WebUser.FK_DeptName;
 
             gwl.SDT = "无";
             gwl.DTOfWarning = DataType.CurrentDateTime;

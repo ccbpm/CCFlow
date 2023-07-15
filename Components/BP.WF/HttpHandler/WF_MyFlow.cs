@@ -1383,22 +1383,8 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
-                //启用提交身份
-                bool submitSFEnable = btnLab.GetValBooleanByKey("SubmitSFEnable");
-                if(submitSFEnable == true)
-                {
-                    dr = dt.NewRow();
-                    dr["No"] = "SubmitSF";
-                    dr["Name"] = btnLab.GetValStringByKey("SubmitSF");
-                    dr["Oper"] = "";
-                    dt.Rows.Add(dr);
-                    //获取当前人部门岗位
-                    string sql = "SELECT A.No AS DeptNo,B.No AS StationNo,A.Name AS DeptName,B.Name AS StationName From Port_Dept A,Port_Station B,Port_DeptEmpStation C WHERE A.No=C.FK_Dept AND B.No=C.FK_Station AND C.FK_Emp='" + WebUser.No + "'";
-                    DataTable deptStas = DBAccess.RunSQLReturnTable(sql);
-                    deptStas.TableName = "DeptStaion";
-                    ds.Tables.Add(deptStas);
 
-                }
+
                 //if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
                 //{
                 //    /*公文正文 */
@@ -1714,43 +1700,6 @@ namespace BP.WF.HttpHandler
                 new Exception("err@" + ex.Message);
             }
             return BP.Tools.Json.ToJson(ds);
-        }
-
-        public string Save_DeptSta()
-        {
-            GenerWorkerList gwl = new GenerWorkerList();
-            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
-            if (i == 0)
-            {
-                if (this.currND.IsStartNode == true)
-                {
-                    //增加GenerList数据
-                    gwl = new GenerWorkerList();
-                    gwl.WorkID = this.WorkID;
-                    gwl.FK_Emp = WebUser.No;
-                    gwl.FK_EmpText = WebUser.Name;
-                    gwl.FK_Node = this.FK_Node;
-                    gwl.FK_NodeText = this.currND.Name;
-                    gwl.FID = 0;
-                    gwl.FK_Flow = this.currND.FK_Flow;
-                    gwl.FK_Dept = this.GetRequestVal("DeptNo");
-                    gwl.DeptName = this.GetRequestVal("DeptName");
-                    gwl.SetValByKey(GenerWorkerListAttr.StaNo, this.GetRequestVal("StationNo"));
-                    gwl.SDT = "无";
-                    gwl.DTOfWarning = DataType.CurrentDateTime;
-                    gwl.IsEnable = true;
-                    gwl.IsPass = false;
-                    gwl.WhoExeIt = 1;
-                    gwl.Insert();
-                    return "更新成功";
-                }
-                return "err@不可能出现的错误";
-            }
-            gwl.FK_Dept = this.GetRequestVal("DeptNo");
-            gwl.DeptName = this.GetRequestVal("DeptName");
-            gwl.SetValByKey(GenerWorkerListAttr.StaNo, this.GetRequestVal("StationNo"));
-            gwl.Update();
-            return "更新成功";
         }
         /// <summary>
         /// 批量处理
@@ -2240,7 +2189,7 @@ namespace BP.WF.HttpHandler
                     gwl.FID = 0;
                     gwl.FK_Flow = this.currND.FK_Flow;
                     gwl.FK_Dept = WebUser.FK_Dept;
-                    gwl.DeptName = WebUser.FK_DeptName;
+                    gwl.FK_DeptT = WebUser.FK_DeptName;
                     gwl.SDT = "无";
                     gwl.DTOfWarning = DataType.CurrentDateTime;
                     gwl.IsEnable = true;
@@ -2471,7 +2420,7 @@ namespace BP.WF.HttpHandler
 
                     gwl.FK_Flow = gwf.FK_Flow;
                     gwl.FK_Dept = WebUser.FK_Dept;
-                    gwl.DeptName = WebUser.FK_DeptName;
+                    gwl.FK_DeptT = WebUser.FK_DeptName;
 
                     gwl.SDT = "无";
                     gwl.DTOfWarning = DataType.CurrentDateTimess;

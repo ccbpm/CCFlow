@@ -16,7 +16,6 @@ namespace BP.WF.Template
     /// </summary>
     public class CondAttr
     {
-        #region 属性.
         /// <summary>
         /// 关联的从表-vue版本的数据格式.
         /// </summary>
@@ -86,9 +85,9 @@ namespace BP.WF.Template
         /// 数据源
         /// </summary>
         public const string FK_DBSrc = "FK_DBSrc";
+
         public const string Tag1 = "Tag1";
         public const string JSFX = "JSFX";
-        #endregion 属性.
 
         #region 属性。
         /// <summary>
@@ -370,34 +369,8 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.ToNodeID, value);
             }
         }
-        #endregion
+        #endregion 
 
-        #region 重写.
-        protected override bool beforeUpdateInsertAction()
-        {
-            if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
-            {
-                if (this.CondType == CondType.Dir
-                    || this.CondType == CondType.Node
-                    || this.CondType == CondType.SubFlow)
-                {
-                    Node nd = new Node(this.FK_Node);
-                    this.RefFlowNo = nd.FK_Flow;
-                }
-
-                if (this.CondType == CondType.Flow)
-                {
-                    this.RefFlowNo = this.FK_Flow;
-                    if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
-                        throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
-                }
-
-                //for vue版本数据格式.增加一个主从表的标记字段.
-                if (this.CondType == CondType.Dir)
-                    this.RefPKVal = this.FK_Flow + '_' + this.FK_Node + '_' + this.ToNodeID;
-            }
-            return base.beforeUpdateInsertAction();
-        }
         protected override bool beforeInsert()
         {
             //设置他的主键。
@@ -419,8 +392,6 @@ namespace BP.WF.Template
             flow.ClearAutoNumCash(true);
             base.afterDelete();
         }
-        #endregion 重写.
-
         #region 实现基本的方方法
         /// <summary>
         /// 属性
@@ -451,6 +422,7 @@ namespace BP.WF.Template
 
                 this.SetValByKey(CondAttr.AttrKey, attr.KeyOfEn);
                 this.SetValByKey(CondAttr.AttrName, attr.Name);
+
             }
         }
         /// <summary>
@@ -494,6 +466,7 @@ namespace BP.WF.Template
             {
                 this.SetValByKey(CondAttr.Idx, value);
             }
+
         }
         /// <summary>
         /// 计算方向
@@ -586,6 +559,7 @@ namespace BP.WF.Template
                     if (s.Equals("@WebUser.FK_DeptName") == true)
                         return WebUser.FK_DeptName;
                 }
+
                 return s;
             }
             set
@@ -803,20 +777,11 @@ namespace BP.WF.Template
                     string strs = "," + this.OperatorValue.ToString() + ",";
                     strs = strs.Replace("@", ",");
 
-                    // 需要递归计算.
-                    string subDeptStr = "";
-                    if (this.IsSubDept)
-                    {
-                        foreach (string str in strs.Split(','))
-                        {
-                            subDeptStr = GenerDeptNosString(str, subDeptStr);
-                        }
-                    }
-                    strs += subDeptStr + ",";
-
-                    //计算出来当前人员的所有部门.
                     BP.Port.DeptEmps sts = new BP.Port.DeptEmps();
+
                     sts.Retrieve(BP.Port.DeptEmpAttr.FK_Emp, this.SpecOper);
+
+                    //@于庆海.
                     BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
                     emp.UserID = this.SpecOper;
                     if (emp.RetrieveFromDBSources() == 1)
@@ -830,7 +795,7 @@ namespace BP.WF.Template
                     string strs1 = "";
                     foreach (BP.Port.DeptEmp st in sts)
                     {
-                        if (strs.Contains("," + st.FK_Dept + ",") == true)
+                        if (strs.Contains("," + st.FK_Dept + ","))
                         {
                             this.MsgOfCond = "@以角色判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept;
 
@@ -840,9 +805,6 @@ namespace BP.WF.Template
                             else
                                 return false;
                         }
-
-
-
                         strs1 += st.FK_Dept;
                     }
 
@@ -1321,34 +1283,31 @@ namespace BP.WF.Template
         }
         #endregion
 
-        private string GenerDeptNosString(string deptNo, string deptNos)
+        protected override bool beforeUpdateInsertAction()
         {
-            BP.Port.Depts ens = new BP.Port.Depts();
-            ens.Retrieve(EntityTreeAttr.ParentNo, deptNo);
-
-            foreach (BP.Port.Dept en in ens)
+            if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
             {
-                deptNos += "," + en.No;
-                GenerDeptNosString(en.No, deptNos);
+                if (this.CondType == CondType.Dir
+                    || this.CondType == CondType.Node
+                    || this.CondType == CondType.SubFlow)
+                {
+                    Node nd = new Node(this.FK_Node);
+                    this.RefFlowNo = nd.FK_Flow;
+                }
+
+                if (this.CondType == CondType.Flow)
+                {
+                    this.RefFlowNo = this.FK_Flow;
+                    if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
+                        throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
+                }
+
+                //for vue版本数据格式.增加一个主从表的标记字段.
+                if (this.CondType == CondType.Dir)
+                    this.RefPKVal = this.FK_Flow + '_' + this.FK_Node + '_' + this.ToNodeID;
             }
-            return deptNos;
+            return base.beforeUpdateInsertAction();
         }
-
-        /// <summary>
-        /// 是否递归子部门 - 对部门条件计算有效.
-        /// </summary>
-        public bool IsSubDept
-        {
-            get
-            {
-                string val = this.GetValStringByKey("Tag1");
-                if (DataType.IsNullOrEmpty(val) == true || val.Equals("0"))
-                    return false;
-                return true;
-            }
-        }
-
-
     }
     /// <summary>
     /// 条件s

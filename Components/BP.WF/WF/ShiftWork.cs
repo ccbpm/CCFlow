@@ -71,7 +71,7 @@ namespace BP.WF
                         item.FK_EmpText = WebUser.Name;
 
                         item.FK_Dept = WebUser.FK_Dept;
-                        item.DeptName = WebUser.FK_DeptName;
+                        item.FK_DeptT = WebUser.FK_DeptName;
 
                         item.IsRead = false;
 

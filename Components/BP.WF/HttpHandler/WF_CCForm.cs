@@ -206,8 +206,8 @@ namespace BP.WF.HttpHandler
         public string HandlerMapExt()
         {
             string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
-            //if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
-            //    return "";
+            if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
+                return "";
 
             string oid = this.GetRequestVal("OID");
 
@@ -273,48 +273,32 @@ namespace BP.WF.HttpHandler
 
                                 string[] ss = str.Split(':');
                                 string fk_dtl = ss[0];
-                                MapDtl dtl = new MapDtl(fk_dtl);
-                                string mysql = str.Replace(dtl.No + ":", "");
-                                if (mysql == "" || mysql == null)
+                                if (ss[1] == "" || ss[1] == null)
                                     continue;
                                 string dtlKey = this.GetRequestVal("DtlKey");
                                 if (dtlKey == null)
                                     dtlKey = key;
                                 if (dtlKey.IndexOf(",") != -1)
                                     dtlKey = "'" + dtlKey.Replace(",", "','") + "'";
-                                mysql = DealSQL(mysql, dtlKey);
+                                string mysql = DealSQL(ss[1], dtlKey);
                                 if (mysql.Length <= 10)
                                     continue;
-                                if (mysql.Contains("@"))
-                                    return "请求的语句" + mysql + "还有未替换的@符号";
 
                                 GEDtls dtls = new GEDtls(fk_dtl);
-                               
+                                MapDtl dtl = new MapDtl(fk_dtl);
                                 DataTable dtDtlFull = null;
-                                if (me.DBType.Equals("0"))
-                                {
-                                    try
-                                    {
-                                        if (sfdb != null)
-                                            dtDtlFull = sfdb.RunSQLReturnTable(mysql);
-                                        else
-                                            dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
-                                    }
-                                }
-                                if (me.DBType.Equals("1"))
-                                {
-                                    System.Text.Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
-                                    string json = DataType.ReadURLContext(mysql, 8000, encode);
-                                    if (DataType.IsNullOrEmpty(json) == true)
-                                        return "err@执行URL没有返回结果值";
 
-                                    dtDtlFull = BP.Tools.Json.ToDataTable(json);
+                                try
+                                {
+                                    if (sfdb != null)
+                                        dtDtlFull = sfdb.RunSQLReturnTable(mysql);
+                                    else
+                                        dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
                                 }
-
+                                catch (Exception ex)
+                                {
+                                    throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
+                                }
                                 try
                                 {
                                     DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
@@ -349,7 +333,7 @@ namespace BP.WF.HttpHandler
                                 drRe[0] = fk_dtl;
                                 dtDtl.Rows.Add(drRe);
                             }
-                            return BP.Tools.Json.ToJson(dtDtl);
+                            return JSONTODT(dtDtl);
                             break;
                         case "ReqDDLFullList":
                             /* 获取要个性化填充的下拉框. */

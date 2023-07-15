@@ -1,3 +1,4 @@
+
 /*
 1. 该JS文件被嵌入到了MyFlowGener.htm 的工作处理器中. 
 2. 开发者可以重写该文件处理通用的应用,比如通用的函数.
@@ -13,13 +14,12 @@ function GenerNextStepEmp() {
     return "";
 }
 
-//页面启动函数.
-$(document).ready(function () {
-    //表单加载筛选发送下拉框（此方法在表单加载前执行的，取不到对应的表单元素，无法完成筛选）
-    LoaclOperation();
+//function AfterWindowLoad() {
+//}
 
-});
-
+////toolbar 加载后执行的事件.
+//function AfterToolbarLoad() {
+//}
 /*
  * 此函数为发送前做JS效验检查demo所用.
  * 1. 函数里面可以使用jquery语法.
@@ -36,50 +36,26 @@ function CheckBlank() {
         alert('电话不能为空.');
         return false;
     }
+
+    if (1 == 2) {
+        //获得下拉框.
+        var xb = $("#DDL_XB").val();
+    }
+
+ //   var xb = this.r $("#DDL_XB").val();
+
     return true;
 }
-
-function DZ() {
-
-    alert('sss');
-    var url = 'pop.htm';
-    window.open(url);
-}
+ 
 function LoaclOperation() {
 
-    if (GetQueryString("NodeID") != "202")
-        return;
-    var val = $("#DDL_SFBJBL option:selected").val();
-
-    if (val == 0) {
-
-        //启动子流程的选项设置为不可见
-        $("#DDL_ToNode option").eq(0).hide();
-        $("#DDL_ToNode option").eq(1).hide();
-        $("#DDL_ToNode option").eq(2).show();
-
-        //将Bar上的发送节点设置为结办节点
-        $("#DDL_ToNode").val("203");
-
-    }
-    else {
-
-        //显示启用启动子流程的选项
-        $("#DDL_ToNode option").eq(0).show();
-        $("#DDL_ToNode option").eq(1).show();
-        $("#DDL_ToNode option").eq(2).hide();
-
-        //将Bar上的发送节点设置为结办节点
-        $("#DDL_ToNode").val("302");
-
-    }
 }
 /*
 
 1. beforeSave、beforeSend、 beforeReturn、 beforeDelete 
 2 .MyFlowGener、MyFlowTree的固定方法，禁止删除
 3.主要写保存前、发送前、退回前、删除前事件
-4.返回值为 true、false
+4.返回值为 true、false,  如果返回false 就不执行该事件.
 
 */
 
@@ -90,6 +66,29 @@ function beforeSave() {
 
 //发生前事件
 function beforeSend() {
+    var nodeID = GetQueryString("NodeID"); //获得当前节点.
+    if (nodeID == 101) {
+        var name = $("#TB_Name").val(); //可以使用jquery.
+    }
+    if (nodeID === 702)
+    {
+        return CheckBlank();
+    }
+
+
+
+    if (nodeID === 901) {
+
+        //var km = $("#DDL_KM").val();
+        //var hj = $("#TB_BaoXiaoJinE").val();
+        //if (km == 0 && hj > 10000) {
+        //    alert('报销金额不能超过1w.');
+        //    return false;
+        //}
+        return true;
+       // return CheckBlank();
+    }
+
     return true;
 }
 
@@ -172,6 +171,19 @@ function WindowCloseReloadPage(msg) {
 
     $("#msgModal").modal().show();
     interval = setInterval("clock()", 1000);
+}
+
+/**
+ * 调用各项目各自电子签字代码
+ */
+function Siganture() {
+
+}
+/**
+ * 调用各项目各自盖章代码
+ */
+function Stamp() {
+
 }
 
 

@@ -11,5 +11,8 @@ var PortalConfig = {
     IsShowFast: true,              //是否显示快捷方式
     IsShowRefresh: true,             //是否显示刷新图标
     IsShowFlexible: true,
-    LogoutPath:"./",                //默认退出到的路径
+    LogoutPath: "/Portal/Standard/",                //默认退出到的路径
+    IsShowTwoLevelMenu: false,          //是不是两级菜单显示
+    IsShowTwoLevelMenu: false,          //是不是两级菜单显示
+    IsClassicalLayout:true,               //是否分栏布局
 }

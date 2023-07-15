@@ -1781,7 +1781,7 @@
     <FK_MapData>ND101</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
-    <DefVal>10002</DefVal>
+    <DefVal>0</DefVal>
     <DefValType>0</DefValType>
     <UIContralType>0</UIContralType>
     <MyDataType>3</MyDataType>
@@ -2701,7 +2701,7 @@
     <FK_MapData>ND102</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
-    <DefVal>10002</DefVal>
+    <DefVal>0</DefVal>
     <DefValType>0</DefValType>
     <UIContralType>0</UIContralType>
     <MyDataType>3</MyDataType>
@@ -3621,7 +3621,7 @@
     <FK_MapData>ND103</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
-    <DefVal>10002</DefVal>
+    <DefVal>0</DefVal>
     <DefValType>0</DefValType>
     <UIContralType>0</UIContralType>
     <MyDataType>3</MyDataType>
@@ -4679,7 +4679,7 @@
     <FK_MapData>ND104</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
-    <DefVal>10002</DefVal>
+    <DefVal>0</DefVal>
     <DefValType>0</DefValType>
     <UIContralType>0</UIContralType>
     <MyDataType>3</MyDataType>
@@ -6519,7 +6519,7 @@
     <FK_MapData>ND1Rpt</FK_MapData>
     <KeyOfEn>QingJiaTianShu</KeyOfEn>
     <Name>请假天数</Name>
-    <DefVal>10002</DefVal>
+    <DefVal>0</DefVal>
     <DefValType>0</DefValType>
     <UIContralType>0</UIContralType>
     <MyDataType>3</MyDataType>

@@ -7,13 +7,15 @@ using System.Data;
 using BP.WF;
 using BP.DA;
 using BP.WF.Template;
+using System.Web;
+using System.Web.SessionState;//第一步：导入此命名空间
 
 namespace CCFlow.SDKFlowDemo
 {
     /// <summary>
     /// Handler 的摘要说明
     /// </summary>
-    public class Handler : IHttpHandler
+    public class Handler : IHttpHandler, IRequiresSessionState
     {
         #region 属性.
         public HttpContext myHttpContext = null;
@@ -65,7 +67,10 @@ namespace CCFlow.SDKFlowDemo
                 this.OutInfo(BP.Tools.Json.ToJson(ht));
                 return;
             }
-
+            if (this.DoType.Equals("LogOut"))
+            {
+                BP.Web.WebUser.Exit();
+            }
             if (this.DoType.Equals("Login"))
             {
                 BP.Port.Emp emp = new BP.Port.Emp();

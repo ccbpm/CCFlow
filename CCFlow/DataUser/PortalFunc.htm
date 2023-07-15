@@ -22,7 +22,7 @@
                 var code = GetQueryString("code");
                 if (code == null || code == "") {
                     var data = hander.DoMethodReturnString("GetCode");
-                    window.location.href = data;
+                    window.location.href = filterXSS(data);
                     return;
                 }
 
@@ -71,7 +71,7 @@
                 default:
                     break;
             }
-            window.location.href = url + GetPara();
+            window.location.href = filterXSS(url) + GetPara();
         });
 
         function tokenCallBack(ssoTokenStr) {

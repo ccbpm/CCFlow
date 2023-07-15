@@ -35,7 +35,7 @@
                 default:
                     break;
             }
-            window.location.href = url+ GetPara();
+            window.location.href = filterXSS(url)+ GetPara();
         });
          
      </script>

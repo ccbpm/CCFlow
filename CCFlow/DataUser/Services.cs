@@ -1,54 +1,58 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Collections;
-using System.Web;
-using System.Web.Services;
+﻿using BP.Cloud;
+using BP.DA;
 using BP.WF;
 using BP.WF.Template;
-using BP.WF.Data;
-using System.Net;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
-using System.Text;
-using BP.Cloud;
+using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
-using BP.DA;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Script.Services;
 
 namespace CCFlow.DataUser
 {
     /// <summary>
-    /// LocalWS 的摘要说明
+    /// 路径必须是字符型，参数自定义
     /// </summary>
-    [WebService(Namespace = "http://tempuri.org/")]
-    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
-    // 若要允许使用 ASP.NET AJAX 从脚本中调用此 Web 服务，请取消对下行的注释。
-    [System.Web.Script.Services.ScriptService]
-    public class LocalWS : System.Web.Services.WebService
+    [ServiceContract]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
+    public class Services
     {
         //微信开发者appid和secret_key
         //第一版小程序
         private static string appid = "wxd4893788d8f6088b";
         private static string secret = "3f0850c81baf10847c05d01b769d2990";
+
         /// <summary>
-        /// 获得工作进度-用于展示流程的进度图
+        /// 获得工作进度-用于展示流程的进度图---CCBPMServices/DB_JobSchedule/1043926367
         /// </summary>
         /// <param name="workID">workID</param>
         /// <returns>返回进度数据</returns>
-        public string DB_JobSchedule(Int64 workID)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_JobSchedule/{workID}")]
+        public string DB_JobSchedule(string workID)
         {
-            DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(workID);
+            DataSet ds = BP.WF.Dev2Interface.DB_JobSchedule(int.Parse(workID));
             return BP.Tools.Json.ToJson(ds);
         }
+
         /// <summary>
-        /// 获得待办
+        /// 获得待办---CCBPMServices/DB_Todolist/?userNo=admin&sysNo=
         /// </summary>
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号,为空时返回平台所有数据。</param>
         /// <returns>返回待办</returns>
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_Todolist/?userNo={userNo}&sysNo={sysNo}")]
         public string DB_Todolist(string userNo, string sysNo = null)
         {
-            return null;
             Paras ps = new Paras();
             string sql = "";
             if (sysNo == null)
@@ -72,7 +76,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
         /// <returns></returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_Runing/?userNo={userNo}&sysNo={sysNo}")]
         public string DB_Runing(string userNo, string sysNo = null)
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerRuning(userNo, null, false, sysNo);
@@ -84,7 +88,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">系统编号，为空时返回平台所有数据。</param>
         /// <returns>返回我可以发起的流程列表.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_StarFlows/?userNo={userNo}&domain={domain}")]
         public string DB_StarFlows(string userNo, string domain = null)
         {
             DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(userNo, domain);
@@ -96,7 +100,7 @@ namespace CCFlow.DataUser
         /// <param name="userNo">用户编号</param>
         /// <param name="sysNo">子系统编号</param>
         /// <returns>我发起的流程列表.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_MyStartFlowInstance/?userNo={userNo}&domain={domain}&pageSize={pageSize}&pageIdx={pageIdx}")]
         public string DB_MyStartFlowInstance(string userNo, string domain = null, int pageSize = 0, int pageIdx = 0)
         {
             string sql = "";
@@ -114,7 +118,7 @@ namespace CCFlow.DataUser
         /// <param name="sqlOfSelect">要运行的SQL,查询</param>
         /// <param name="password">密码,双方约定的密码</param>
         /// <returns>json</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "DB_RunSQLReturnJSON/?sqlOfSelect={sqlOfSelect}&password={password}")]
         public string DB_RunSQLReturnJSON(string sqlOfSelect, string password)
         {
             // if ( password.Equals("xxxxxx") == false)
@@ -129,8 +133,8 @@ namespace CCFlow.DataUser
         /// <param name="flowNo">流程编号</param>
         /// <param name="userNo">工作人员编号</param>
         /// <returns>一个长整型的工作流程实例.</returns>
-        [WebMethod]
-        public Int64 Node_CreateWorkID(string userNo, string flowNo, string starterNo)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "CreateWorkID/?userNo={userNo}&flowNo={flowNo}&starterNo={starterNo}")]
+        public Int64 CreateWorkID(string userNo, string flowNo, string starterNo)
         {
             BP.WF.Dev2Interface.Port_Login(userNo);
             return BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, userNo);
@@ -144,8 +148,8 @@ namespace CCFlow.DataUser
         /// <param name="toNodeID">到达的节点ID.如果让系统自动计算就传入0</param>
         /// <param name="toEmps">到达的人员IDs,比如:zhangsan,lisi,wangwu. 如果为Null就标识让系统自动计算.</param>
         /// <returns>发送的结果信息.</returns>
-        [WebMethod]
-        public string Node_SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "SendWork/?flowNo={flowNo}&workid={workid}&atParas={atParas}&toNodeID={toNodeID}&toEmps={toEmps}")]
+        public string SendWork(string flowNo, Int64 workid, string atParas, int toNodeID, string toEmps)
         {
 
             BP.DA.AtPara ap = new BP.DA.AtPara(atParas);
@@ -164,8 +168,9 @@ namespace CCFlow.DataUser
 
             return BP.Tools.Json.ToJson(myht);
         }
-        [WebMethod]
-        public void Node_SaveAth(int nodeid, string flowNo, Int64 workid, string athNo, string frmID, byte[] byteFile, string fileName, string fileExt, string userNo, string sort = null, Int32 fid = 0, Int32 pworkid = 0)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "SaveAth/?nodeid={nodeid}&flowNo={flowNo}&workid={workid}&athNo={athNo}&frmID={frmID}&byteFile={byteFile}&fileName={fileName}&fileExt={fileExt}&userNo={userNo}&sort={sort}&fid={fid}&pworkid={pworkid}")]
+        public void SaveAth(int nodeid, string flowNo, Int64 workid, string athNo, string frmID, byte[] byteFile, string fileName, string fileExt, string userNo, string sort = null, Int32 fid = 0, Int32 pworkid = 0)
         {
             //把byte文件保存到临时文件中
             string tempPath = BP.Difference.SystemConfig.PathOfTemp + "\\" + DBAccess.GenerGUID() + "." + fileExt;
@@ -178,26 +183,25 @@ namespace CCFlow.DataUser
             BP.WF.Dev2Interface.CCForm_AddAth(nodeid, flowNo, workid, athNo, frmID, tempPath, fileName + "." + fileExt, sort, fid, pworkid);
         }
         /// <summary>
-        /// 保存参数
-        /// </summary>
-        /// <param name="workid">工作ID</param>
-        /// <param name="paras">用于控制流程运转的参数，比如方向条件. 格式为:@JinE=1000@QingJaiTianShu=100</param>
-        [WebMethod]
-        public void Flow_SaveParas(Int64 workid, string paras)
-        {
-            BP.WF.Dev2Interface.Flow_SaveParas(workid, paras);
-        }
-        /// <summary>
         /// 登录接口
         /// </summary>
         /// <param name="userNo"></param>
-        [WebMethod]
-        public void Port_Login(string token)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Port_TokenLogin/{token}")]
+        public void Port_TokenLogin(string token)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
             //BP.WF.Dev2Interface.Port_Login(userNo, orgNo);
         }
-       
+        /// <summary>
+        /// 保存参数
+        /// </summary>
+        /// <param name="workid">工作ID</param>
+        /// <param name="paras">用于控制流程运转的参数，比如方向条件. 格式为:@JinE=1000@QingJaiTianShu=100</param>
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "SaveParas/?workid={workid}&paras={paras}")]
+        public void SaveParas(Int64 workid, string paras)
+        {
+            BP.WF.Dev2Interface.Flow_SaveParas(workid, paras);
+        }
         /// <summary>
         /// 获得下一个节点信息
         /// </summary>
@@ -205,8 +209,9 @@ namespace CCFlow.DataUser
         /// <param name="workid">流程实例</param>
         /// <param name="paras">方向条件所需要的参数，可以为空。</param>
         /// <returns>下一个节点的JSON.</returns>
-        [WebMethod]
-        public string Flow_GenerNextStepNode(string flowNo, Int64 workid, string paras = null)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "GenerNextStepNode/?flowNo={flowNo}&workid={workid}&paras={paras}")]
+        public string GenerNextStepNode(string flowNo, Int64 workid, string paras = null)
         {
             if (paras != null)
                 BP.WF.Dev2Interface.Flow_SaveParas(workid, paras);
@@ -225,8 +230,9 @@ namespace CCFlow.DataUser
         /// <param name="toNodeID">节点ID</param>
         /// <param name="workid">工作事例ID</param>
         /// <returns>返回两个结果集一个是分组的Depts(No,Name)，另外一个是人员的Emps(No, Name, FK_Dept),接受后，用于构造人员选择器.</returns>
-        [WebMethod]
-        public string Flow_GenerNextStepNodeEmps(string flowNo, int toNodeID, int workid)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "GenerNextStepNodeEmps/?flowNo={flowNo}&toNodeID={toNodeID}&workid={workid}")]
+        public string GenerNextStepNodeEmps(string flowNo, int toNodeID, int workid)
         {
             Selector select = new Selector(toNodeID);
             Node nd = new Node(toNodeID);
@@ -240,8 +246,9 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="currNodeID">当前节点ID</param>
         /// <returns>返回节点集合的json.</returns>
-        [WebMethod]
-        public string Flow_WillToNodes(int currNodeID)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "WillToNodes/?currNodeID={currNodeID}")]
+        public string WillToNodes(int currNodeID)
         {
             Node nd = new Node(currNodeID);
             if (nd.CondModel != DirCondModel.ByLineCond)
@@ -259,7 +266,8 @@ namespace CCFlow.DataUser
         /// <param name="toEmps">退回到人员</param>
         /// <param name="returnMsg">退回信息</param>
         /// <returns></returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Node_ReturnWork/?workid={workid}&returnToNodeID={returnToNodeID}&toEmps={toEmps}&returnMsg={returnMsg}")]
         public string Node_ReturnWork(Int64 workid, int returnToNodeID, string toEmps, string returnMsg)
         {
             return BP.WF.Dev2Interface.Node_ReturnWork(workid, returnToNodeID, toEmps, returnMsg);
@@ -269,11 +277,12 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="workid">workID</param>
         /// <param name="msg">审核信息</param>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Node_WriteWorkCheck/?workid={workid}&msg={msg}")]
         public void Node_WriteWorkCheck(Int64 workid, string msg)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
-            BP.WF.Dev2Interface.Node_WriteWorkCheck(gwf.WorkID,  msg, "审核", null);
+            BP.WF.Dev2Interface.WriteTrackWorkCheck(gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID, msg, "审核", null);
         }
         /// <summary>
         /// 是否可以查看该工作
@@ -282,7 +291,8 @@ namespace CCFlow.DataUser
         /// <param name="workid">工作ID</param>
         /// <param name="userNo">人员ID</param>
         /// <returns>true,false</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Flow_IsCanView/?flowNo={flowNo}&workid={workid}&userNo={userNo}")]
         public bool Flow_IsCanView(string flowNo, Int64 workid, string userNo)
         {
             return BP.WF.Dev2Interface.Flow_IsCanViewTruck(flowNo, workid, userNo);
@@ -293,7 +303,8 @@ namespace CCFlow.DataUser
         /// <param name="workid">当前工作ID</param>
         /// <param name="workid">处理人员ID</param>
         /// <returns>true,false</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Flow_IsCanDoCurrentWork/?workid={workid}&userNo={userNo}")]
         public bool Flow_IsCanDoCurrentWork(Int64 workid, string userNo)
         {
             return BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(workid, userNo);
@@ -303,8 +314,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="currNodeID">节点ID.</param>
         /// <returns>当前节点信息</returns>
-        [WebMethod]
-        public string Flow_CurrNodeInfo(int currNodeID)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "CurrNodeInfo/?currNodeID={currNodeID}")]
+        public string CurrNodeInfo(int currNodeID)
         {
             Node nd = new Node(currNodeID);
             return nd.ToJson();
@@ -314,8 +325,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="flowNo">流程ID.</param>
         /// <returns>当前节点信息</returns>
-        [WebMethod]
-        public string Flow_CurrFlowInfo(string flowNo)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "CurrFlowInfo/{flowNo}")]
+        public string CurrFlowInfo(string flowNo)
         {
             Flow fl = new Flow(flowNo);
             return fl.ToJson();
@@ -325,8 +336,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="flowNo">流程ID.</param>
         /// <returns>当前节点信息</returns>
-        [WebMethod]
-        public string Flow_CurrGenerWorkFlowInfo(Int64 workID)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "CurrGenerWorkFlowInfo/?workID={workID}")]
+        public string CurrGenerWorkFlowInfo(Int64 workID)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
             return gwf.ToJson();
@@ -334,8 +345,8 @@ namespace CCFlow.DataUser
         /// <summary>
         /// 授权后获取小程序用户的OpenID
         /// </summary>
-        [WebMethod]
-        public string WeiXin_ASCGetUserInfo(string code)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ASCGetUserInfo/{code}")]
+        public string ASCGetUserInfo(string code)
         {
             string url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + secret + "&js_code=" + code + "&grant_type=client_credential";
             string serviceAddress = url;
@@ -357,8 +368,9 @@ namespace CCFlow.DataUser
         /// <param name="key"></param>
         /// <param name="iv"></param>
         /// <returns></returns>
-        [WebMethod]
-        public string WeiXin_AES_Decrypt(string encryptedDataStr, string key, string iv)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "AES_Decrypt/?encryptedDataStr={encryptedDataStr}&key={key}&iv={iv}")]
+        public string AES_Decrypt(string encryptedDataStr, string key, string iv)
         {
 
             RijndaelManaged rijalg = new RijndaelManaged();
@@ -399,8 +411,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="openID"></param>
         /// <returns></returns>
-        [WebMethod]
-        public string Port_LoadOrgInfo(string openID)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "LoadOrgInfo/{openID}")]
+        public string LoadOrgInfo(string openID)
         {
             //先从Port_User 去查找 openID, 如果没有记录，就转到注册页面上去
             //如果有就列出此人所有注册过的公司，选择其一登录
@@ -423,8 +435,9 @@ namespace CCFlow.DataUser
         /// <param name="userName"></param>
         /// <param name="tel"></param>
         /// <returns></returns>
-        [WebMethod]
-        public string WeiXin_RegByXiaoChengXu(string orgName, string orgShortName,
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "RegByXiaoChengXu/?orgName={orgName}&orgShortName={orgShortName}&openid={openid}&userName={userName}&tel={tel}")]
+        public string RegByXiaoChengXu(string orgName, string orgShortName,
             string openid, string userName, string tel)
         {
             //注册企业.
@@ -515,33 +528,32 @@ namespace CCFlow.DataUser
         /// <summary>
         /// 检查此人是否加入
         /// </summary>
-        [WebMethod]
-        public string WeiXin_CheckJoin(string openID, string orgNo)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "CheckJoin/?openID={openID}&orgNo={orgNo}")]
+        public string CheckJoin(string openID, string orgNo)
         {
             ////让管理员登录.
             //this.LetUserLogin("admin", "ccs");
 
-            //BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
-            //return apl.Invited_CheckIsExit(openID, orgNo);
-            return "";
+            BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
+            return apl.Invited_CheckIsExit(openID, orgNo);
 
             ////让管理员退出。
             //BP.Web.WebUser.Exit();
+
             //return "加入成功！";
         }
         /// <summary>
         /// 扫码增加人员
         /// </summary>
-        [WebMethod]
-        public string WeiXin_CreateEmp(string openID, string orgNo, string userNo, string tel, string empName, string deptNo)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "CreateEmp/?openID={openID}&orgNo={orgNo}&userNo={userNo}&tel={tel}&empName={empName}&deptNo={deptNo}")]
+        public string CreateEmp(string openID, string orgNo, string userNo, string tel, string empName, string deptNo)
         {
             ////让管理员登录.
             //this.LetUserLogin("admin", "ccs");
 
-            //BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
-            //return apl.Invited_AddEmp(openID, orgNo, userNo, tel, empName, deptNo);
-
-            return "";
+            BP.Cloud.HttpHandler.App_Portal apl = new BP.Cloud.HttpHandler.App_Portal();
+            return apl.Invited_AddEmp(openID, orgNo, userNo, tel, empName, deptNo);
 
             ////让管理员退出。
             //BP.Web.WebUser.Exit();
@@ -553,8 +565,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="orgNo"></param>
-        [WebMethod]
-        public string Port_ASCLoadDepts(string orgNo)
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "ASCLoadDepts/{orgNo}")]
+        public string ASCLoadDepts(string orgNo)
         {
             string sql = "SELECT * FROM Port_Dept WHERE OrgNo='" + orgNo + "' ORDER BY Idx";
             DataTable dt = new DataTable();
@@ -570,6 +582,8 @@ namespace CCFlow.DataUser
         /// <param name="password"></param>
         /// <param name="orgNo"></param>
         /// <returns></returns>
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+      UriTemplate = "Port_Login/?userNo={userNo}&password={password}&orgNo={orgNo}")]
         public string Port_Login(string userNo, string password, string orgNo)
         {
             BP.Port.Emp emp = new BP.Port.Emp();
@@ -596,7 +610,8 @@ namespace CCFlow.DataUser
         /// <param name="adminerName">管理员名字</param>
         /// <param name="keyval">比如：@Leaer=zhangsan@Tel=12233333@Idx=1</param>
         /// <returns>return 1 增加成功，其他的增加失败.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Org_Save/?token={token}&orgNo={orgNo}&name={name}&adminer={adminer}&adminerName={adminerName}&keyVals={keyVals}")]
         public string Port_Org_Save(string token, string orgNo, string name, string adminer, string adminerName, string keyVals)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -614,7 +629,8 @@ namespace CCFlow.DataUser
         /// <param name="kvs">属性值，比如: @Name=张三@Tel=18778882345@Pass=123, 如果是saas模式：就必须有@UserID=xxxx </param>
         /// <param name="stats">岗位编号：比如:001,002,003,</param>
         /// <returns>reutrn 1=成功,  其他的标识异常.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Emp_Save/?token={token}&orgNo={orgNo}&userNo={userNo}&userName={userName}&deptNo={deptNo}&kvs={kvs}&stats={stats}")]
         public string Port_Emp_Save(string token, string orgNo, string userNo, string userName, string deptNo, string kvs, string stats)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -628,7 +644,8 @@ namespace CCFlow.DataUser
         /// <param name="userNo"></param>
         /// <param name="stas">岗位用逗号分开</param>
         /// <returns>reutrn 1=成功,  其他的标识异常.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Emp_Delete/?token={token}&orgNo={orgNo}&userNo={userNo}")]
         public string Port_Emp_Delete(string token, string orgNo, string userNo)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -645,7 +662,8 @@ namespace CCFlow.DataUser
         /// <param name="parntNo">父节点编号</param>
         /// <param name="keyval">比如：@Leaer=zhangsan@Tel=12233333@Idx=1</param>
         /// <returns>return 1 增加成功，其他的增加失败.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Dept_Save/?token={token}&orgNo={orgNo}&no={no}&name={name}&parntNo={parntNo}&keyVals={keyVals}")]
         public string Port_Dept_Save(string token, string orgNo, string no, string name, string parntNo, string keyVals)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -659,7 +677,8 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="no">删除指定的部门编号</param>
         /// <returns></returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Dept_Delete/?token={token}&no={no}")]
         public string Port_Dept_Delete(string token, string no)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -674,7 +693,8 @@ namespace CCFlow.DataUser
         /// <param name="no">编号</param>
         /// <param name="name">名称</param>
         /// <returns>return 1 增加成功，其他的增加失败.</returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "Port_Station_Save/?token={token}&orgNo={orgNo}&no={no}&name={name}&keyVals={keyVals}")]
         public string Port_Station_Save(string token, string orgNo, string no, string name, string keyVals)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -687,7 +707,7 @@ namespace CCFlow.DataUser
         /// </summary>
         /// <param name="no">删除指定的部门编号</param>
         /// <returns></returns>
-        [WebMethod]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.WrappedRequest, RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Port_Station_Delete/?token={token}&no={no}")]
         public string Port_Station_Delete(string token, string no)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);

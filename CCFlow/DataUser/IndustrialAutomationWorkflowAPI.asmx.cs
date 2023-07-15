@@ -38,7 +38,7 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_LoginByToken(sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
             flowNo = BP.DA.DataType.ParseStringOnlyIntNumber(flowNo);   //规避注入风险，added by liuxc
 
@@ -61,7 +61,7 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_LoginByToken(sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
             BP.DA.AtPara ap = new BP.DA.AtPara(paras);
 
@@ -109,7 +109,7 @@ namespace ccbpm
         {
             //如果当前的用户登录信息与传递来的用户不一致，就让其调用登录接口，让其登录。
             if (BP.Web.WebUser.No != userNo)
-                BP.WF.Dev2Interface.Port_LoginByToken(sid);
+                BP.WF.Dev2Interface.Port_LoginBySID(sid);
 
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(userNo);
             return BP.Tools.Json.ToJson(dt);

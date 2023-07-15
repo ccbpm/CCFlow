@@ -23,8 +23,6 @@ body
 /* ��ť����  edit by zhoupeng ���Ǿ�ʹ�ð�ɫ�ı�����ɫ�ˣ���Ҫ�䶯��,��ȻӰ��ȫ��. */
 input[type="button"], input[type="submit"], input[type="file"] {
     border: 0; /*background: #4D77A7;*/
-    background-color: #62CAE3;
-    color: white;
     font-size: 12px;
     padding: 4px 15px;
     margin: 5px 3px 5px 3px;
@@ -62,7 +60,7 @@ textarea[disabled], input[type=text]:disabled
     width:100%;
     padding-left:10px;
      border: none !important;
-     background: none; 
+     background: #f2f2f2;
      text-align: left; 
      color: #666; 
      cursor: no-drop;
@@ -73,23 +71,10 @@ input[type=checkbox]:disabled
         display:inline;
         width:20px;
 }
-
-/*�ı���ֻ������.*/
- input[type=text]:disabled, input[type=password]:disabled {
-    /**border: 1px solid #DDD;
-    background-color: #F5F5F5;
-    color: #009999;*/
-    width: 100%;
-    padding-left: 10px;
-    border: none;
-    background: none;
-    text-align: left !important;
-    color: #666;
-    cursor: no-drop;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
+.mcheckbox {
+    display: none !important;
 }
+
 input[type="password"]::-webkit-input-placeholder {
     letter-spacing: 0;
     font-size: 14px;
@@ -143,11 +128,13 @@ th {
     color: 0a0a0a;
     white-space: nowrap;
     padding: 5px 2px;
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
+    background-color: #f8f8f8;
     font-size: 14px;
-    text-align: left;
-   
+    /*text-align: left;*/
     font-weight: bolder;
+    /*border-bottom: 1px solid #dedede;*/
+    /*text-align: center;*/
 }
  
  /*  idx ���������������� .*/
@@ -220,9 +207,11 @@ td input
 }
 caption
 {
+    margin-bottom:10px;
     height: 30px;
     text-align: left;
-    font-size: 14px;
+    /*font-size: 14px;*/
+    font-size:16px;
 	padding:0px;
    
     line-height: 30px;
@@ -442,13 +431,13 @@ display:block;
     display: table;
 }
 
-input[type=text], input[type=password], select
+/*input[type=text], input[type=password], select
 {
     border-radius: 5px;
     border: thin solid #CCCCCC;
     margin: 1px 1px;
     height:28px;
-}
+}*/
 
 .FDesc
 {
@@ -796,6 +785,7 @@ body table tr td {
   white-space: nowrap;*/
   word-wrap:break-word;
   word-break:break-all;
+  /*text-align:center;*/
 }
 
 

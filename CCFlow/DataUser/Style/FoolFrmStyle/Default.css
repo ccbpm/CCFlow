@@ -79,12 +79,12 @@
  background-color: !important;	
  border-which:bottom !important;	
  font-style:normal !important;	
- border-top:0px !important;	
+ margin-bottom:0px !important;	
  font-height:px !important;	
  font-color:red !important;	
  border-style:solid !important;	
  font-family:MicrosoftYaHei !important;	
- margin-bottom:0px !important;	
+ border-top-width:0px !important;	
  selfbody-width:px !important;	
  font-weight:normal !important;	
  font-size:px !important;	
@@ -103,7 +103,7 @@
  font-family:MicrosoftYaHei !important;	
  color:#666666 !important;	
  selfbody-width:200in !important;	
- line-height:36px !important;	
+ line-height:38px !important;	
  font-weight:normal !important;	
  font-size:14px !important;	
  }	
@@ -123,4 +123,30 @@
  selfbody-width:200em !important;	
  font-weight:normal !important;	
  font-size:14px !important;	
+ }	
+/* 控件:input-icon */	
+.input-icon	
+{ 	
+ font-color:red !important;	
+ font-size:24 !important;	
  }
+
+.layui-input-suffix {
+	width: 60px;
+	padding: 9px 15px 9px 15px;
+	line-height: 38px;
+	line-height: 20px;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 0 2px 2px 0px;
+	text-align: center;
+	background-color: #FAFAFA;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+	border-color: #f7f7f7;
+	display: inline;
+	border-left-color: none;
+	border-left: none;
+}

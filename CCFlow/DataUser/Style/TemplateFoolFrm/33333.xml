@@ -43,7 +43,7 @@
   <dt>
     <No>FoolFrmFieldLabel</No>
     <Name>字段名:FoolFrmFieldLabel</Name>
-    <Val>@background-color=#f7f7f7@line-height=38px@selfbody-width_Temp=200@selfbody-width-unit_Temp=in@selfbody-width=200 in@selfbody-hight_Temp=23@selfbody-hight-unit_Temp=pt@selfbody-hight=23 pt@font-size_Temp=14@font-size-unit_Temp=px@font-size=14 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei@color=#666666@border-which=all@border-width_Temp=1@border-width-unit_Temp=px@border-width=1 px@border-color=#d4d6d9@border-style=none</Val>
+    <Val>@background-color=#f7f7f7@selfbody-width_Temp=200@selfbody-width-unit_Temp=in@selfbody-width=200 in@selfbody-hight_Temp=23@selfbody-hight-unit_Temp=pt@selfbody-hight=23 pt@font-size_Temp=14@font-size-unit_Temp=px@font-size=14 px@font-weight=normal@font-style=normal@font-height_Temp=@font-height-unit_Temp=px@font-height= px@font-family=Microsoft YaHei@color=#666666@border-which=all@border-width_Temp=1@border-width-unit_Temp=px@border-width=1 px@border-color=#d4d6d9@border-style=none</Val>
     <GroupKey>FoolFrmStyle</GroupKey>
     <Note />
     <Idx>6</Idx>
@@ -56,5 +56,12 @@
     <Note />
     <Idx>7</Idx>
   </dt>
-  
+  <dt>
+    <No>input-icon</No>
+    <Name>控件:input-icon</Name>
+    <Val>@font-color=red@font-size=24</Val>
+    <GroupKey>FoolFrmStyle</GroupKey>
+    <Note />
+    <Idx>8</Idx>
+  </dt>
 </NewDataSet>

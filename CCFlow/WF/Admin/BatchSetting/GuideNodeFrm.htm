@@ -15,11 +15,11 @@
     <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
     <style id="theme-data"></style>
     <script type="text/javascript" language="javascript">
-
+        var flowNo = '';
         //页面启动函数.
         $(function () {
 
-            var flowNo = GetQueryString("FK_Flow");
+            flowNo = GetQueryString("FK_Flow");
 
             var nds = new Entities("BP.WF.Nodes");
             nds.Retrieve("FK_Flow", flowNo, "Step");

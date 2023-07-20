@@ -112,8 +112,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Port_Emp_Save(string token, string orgNo, string userNo, string userName, string deptNo, string kvs, string stats)
         {
-             Port_GenerToken(token);
-            
+            Port_GenerToken(token);
+
             if (WebUser.IsAdmin == false)
                 return Return_Info(500, "不是管理员不能维护人员信息", null);
 
@@ -132,8 +132,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Port_Emp_Delete(string token, string userNo, string orgNo = "")
         {
-             Port_GenerToken(token);
-            
+            Port_GenerToken(token);
+
             if (WebUser.IsAdmin == false)
                 return Return_Info(500, "不是管理员不能删除人员信息", null);
 
@@ -154,8 +154,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Port_Org_Save(string token, string orgNo, string name, string adminer, string adminerName, string keyVals = "")
         {
-             Port_GenerToken(token);
-          
+            Port_GenerToken(token);
+
             if (WebUser.IsAdmin == false)
                 return Return_Info(500, "[" + BP.Web.WebUser.Name + "]不是管理员不能维护组织信息", null);
             return Return_Info(200, "同步成功", BP.Port.OrganizationAPI.Port_Org_Save(orgNo, name, adminer, adminerName, keyVals));
@@ -175,8 +175,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Port_Dept_Save(string token, string no, string name, string parentNo, string orgNo = "", string keyVals = "")
         {
-             Port_GenerToken(token);
-           
+            Port_GenerToken(token);
+
             if (WebUser.IsAdmin == false)
                 return Return_Info(500, "[" + BP.Web.WebUser.Name + "]不是管理员不能维护部门信息", null);
             return Return_Info(200, "保存成功", BP.Port.OrganizationAPI.Port_Dept_Save(orgNo, no, name, parentNo, keyVals));
@@ -191,8 +191,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Port_Dept_Delete(string token, string no)
         {
-              Port_GenerToken(token);
-           
+            Port_GenerToken(token);
+
             if (WebUser.IsAdmin == false)
                 return Return_Info(500, "[" + BP.Web.WebUser.Name + "]不是管理员不能删除部门信息", null);
             return Return_Info(200, "删除部门成功", BP.Port.OrganizationAPI.Port_Dept_Delete(no));
@@ -327,7 +327,6 @@ namespace CCFlow.DataUser.API.Controllers
         }
         #endregion  组织人员岗位维护
 
-
         #region 菜单接口.
         /// <summary>
         /// 可以发起的流程
@@ -336,11 +335,11 @@ namespace CCFlow.DataUser.API.Controllers
         /// <param name="domain">流程所属的域</param>
         /// <returns></returns>
         [HttpGet, HttpPost]
-        public Object DB_Start(string token, string domain="")
+        public Object DB_Start(string token, string domain = "")
         {
             //根据token登录
             Port_GenerToken(token);
-            
+
             //获取可以发起的列表
             DataTable dt = BP.WF.Dev2Interface.DB_StarFlows(BP.Web.WebUser.No, domain);
             return Return_Info(200, "获取可以发起的流程成功", BP.Tools.Json.ToJson(dt));
@@ -367,7 +366,7 @@ namespace CCFlow.DataUser.API.Controllers
         /// <param name="domain"></param>
         /// <returns></returns>
         [HttpGet, HttpPost]
-        public Object DB_Runing(string token, string domain = ""    )
+        public Object DB_Runing(string token, string domain = "")
         {
             //根据token登录
             Port_GenerToken(token);
@@ -390,7 +389,22 @@ namespace CCFlow.DataUser.API.Controllers
             DataTable dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(null, domain);
             return Return_Info(200, "获取草稿成功", BP.Tools.Json.ToJson(dt));
         }
-
+        /// <summary>
+        /// 可以发起的流程
+        /// </summary>
+        /// <param name="token">密钥</param>
+        /// <param name="domain">流程所属的域, 可以为空</param>
+        /// <param name="flowNo">指定的流程，可以为空.</param>
+        /// <returns>抄送列表</returns>
+        [HttpGet, HttpPost]
+        public Object DB_CCList(string token, string domain = "", string flowNo = "")
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            //获取可以发起的列表
+            DataTable dt = BP.WF.Dev2Interface.DB_CCList(domain, flowNo);
+            return Return_Info(200, "获取抄送成功.", BP.Tools.Json.ToJson(dt));
+        }
         /// <summary>
         /// 打开的表单
         /// </summary>
@@ -404,8 +418,8 @@ namespace CCFlow.DataUser.API.Controllers
         public Object GenerFrmUrl(string token, Int64 workID, string flowNo, int nodeID)
         {
             //根据token登录
-             Port_GenerToken(token);
-            
+            Port_GenerToken(token);
+
             /*
              * 发起的url需要在该流程的开始节点的表单方案中，使用SDK表单，并把表单的url设置到里面去.
              * 设置步骤:
@@ -450,8 +464,8 @@ namespace CCFlow.DataUser.API.Controllers
         public Object Node_CreateBlankWorkID(string token, string flowNo)
         {
             //根据token登录
-             Port_GenerToken(token);
-           
+            Port_GenerToken(token);
+
             try
             {
                 Int64 workid = Dev2Interface.Node_CreateBlankWork(flowNo, BP.Web.WebUser.No);
@@ -595,7 +609,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Node_Shift(string token, Int64 workID, string toEmpNo, string msg)
         {
-        
+
             try
             {
                 //根据token登录
@@ -708,8 +722,8 @@ namespace CCFlow.DataUser.API.Controllers
         public Object Flow_SetTitle(string token, Int64 workID, string title)
         {
             //根据token登录
-             Port_GenerToken(token);
-            
+            Port_GenerToken(token);
+
             try
             {
                 BP.WF.Dev2Interface.Flow_SetFlowTitle(null, workID, title);
@@ -733,7 +747,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Node_SendWork(string token, Int64 workID, string toNodeIDStr = "0", string toEmps = "", string paras = "", string checkNote = "")
         {
-       
+
             try
             {
                 //根据token登录
@@ -771,8 +785,8 @@ namespace CCFlow.DataUser.API.Controllers
         public Object DB_GenerWorkFlow(string token, string flowNo)
         {
             //根据token登录
-           Port_GenerToken(token);
-           
+            Port_GenerToken(token);
+
             try
             {
                 GenerWorkFlows gwfs = new GenerWorkFlows();
@@ -801,8 +815,8 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object DB_GenerWillReturnNodes(string token, int nodeID, Int64 workID)
         {
-          
-           
+
+
             try
             {
                 //根据token登录
@@ -918,8 +932,8 @@ namespace CCFlow.DataUser.API.Controllers
         public Object CC_BatchCheckOver(string token, string workIDs)
         {
             //根据token登录
-              Port_GenerToken(token);
-           
+            Port_GenerToken(token);
+
             if (DataType.IsNullOrEmpty(workIDs))
             {
                 return Return_Info(500, "执行批量审批的WorkIDs不能为空", "");
@@ -938,6 +952,28 @@ namespace CCFlow.DataUser.API.Controllers
         #endregion 节点方法.
 
         #region 流程方法.
+        /// <summary>
+        /// 近期工作
+        /// </summary>
+        /// <param name="token">密钥</param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public Object Flow_RecentWorkInit(string token)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+
+            try
+            {
+                string st1r = BP.WF.Dev2Interface.Flow_RecentWorkInit();
+                return Return_Info(200, "查询成功", st1r);
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "查询失败", ex.Message);
+            }
+
+        }
         /// <summary>
         /// 批量删除流程
         /// </summary>
@@ -989,7 +1025,7 @@ namespace CCFlow.DataUser.API.Controllers
             {
                 //根据token登录
                 Port_GenerToken(token);
-            
+
                 string[] strs = workIDs.Split(',');
 
                 foreach (string workidStr in strs)
@@ -1023,7 +1059,7 @@ namespace CCFlow.DataUser.API.Controllers
             {
                 //根据token登录
                 Port_GenerToken(token);
-            
+
 
                 string[] strs = workIDs.Split(',');
 
@@ -1051,7 +1087,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Flow_DoUnSend(string token, string workIDs)
         {
-         
+
             //获取可以发起的列表
             string[] strs = workIDs.Split(',');
             if (DataType.IsNullOrEmpty(workIDs))
@@ -1088,7 +1124,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Flow_DeleteDraft(string token, string workIDs)
         {
-          
+
             string[] strs = workIDs.Split(',');
             if (DataType.IsNullOrEmpty(workIDs))
                 return Return_Info(500, "批量删除草稿的WorkIDs不能为空", "");
@@ -1227,7 +1263,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object WorkCheckModel_Init(string token, int nodeID)
         {
-           
+
 
             try
             {
@@ -1336,7 +1372,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Batch_Delete(string token, string workIDs)
         {
-        
+
 
             try
             {
@@ -1378,7 +1414,7 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object Search_Init(string token, string key, string dtFrom, string dtTo, string scop, int pageIdx)
         {
-           
+
 
             try
             {
@@ -1390,13 +1426,13 @@ namespace CCFlow.DataUser.API.Controllers
                 QueryObject qo = new QueryObject(gwfs);
                 if (DataType.IsNullOrEmpty(key) == false)
                 {
-                    qo.AddWhere(GenerWorkFlowAttr.Title, " LIKE ", "%" + key + "%");
+                    qo.AddWhere(GenerWorkFlowAttr.Title, " LIKE ", "'%" + key + "%'");
                     qo.addAnd();
                 }
 
                 //我参与的.
                 if (scop.Equals("0") == true)
-                    qo.AddWhere(GenerWorkFlowAttr.Emps, "LIKE", "%@" + WebUser.No + ",%");
+                    qo.AddWhere(GenerWorkFlowAttr.Emps, "LIKE", "'%@" + WebUser.No + "%'");
 
                 //我发起的.
                 if (scop.Equals("1") == true)
@@ -1415,9 +1451,9 @@ namespace CCFlow.DataUser.API.Controllers
                 else
                 {
                     qo.addAnd();
-                    qo.AddWhere(GenerWorkFlowAttr.RDT, ">=", dtFrom);
+                    qo.AddWhere(GenerWorkFlowAttr.RDT, ">=", dtFrom, "dtForm");
                     qo.addAnd();
-                    qo.AddWhere(GenerWorkFlowAttr.RDT, "<=", dtTo);
+                    qo.AddWhere(GenerWorkFlowAttr.RDT, "<=", dtTo,"dtTo");
                 }
 
                 var count = qo.GetCount(); //获得总数.

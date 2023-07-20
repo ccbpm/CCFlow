@@ -1,0 +1,265 @@
+/*公共样式*/
+*{
+    padding:0;
+    margin:0;
+}
+html {
+    font-family: "Microsoft Yahei";
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    /*min-height: 650px;*/
+}
+body {
+    margin: 0;
+    color: #202830;
+    height: 100%;
+    overflow: scroll;
+    background: #fff; 
+  /*overflow-y: hidden; */
+    -webkit-overflow-scrolling: touch;
+    font-family: "Microsoft Yahei";
+    font-size:14px;
+    /*min-height: 650px;*/
+}
+.index_body{
+    background: #ffffff;
+}
+a {
+    background: transparent;
+    text-decoration: none;
+}
+a:active ,a:focus{
+    outline: 0;
+    text-decoration: none;
+}
+img {
+    border: 0;
+    vertical-align: middle;
+}
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent; /* For some Androids */
+    outline: none;
+    margin:0;padding:0;
+}
+textarea {
+    resize: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+td, th {
+    padding: 0;
+}
+h1, h2, h3, h4, h5, h6, p, figure, form, blockquote {
+    margin: 0;
+}
+ul, ol, li, dl, dd {
+    margin: 0;
+    padding: 0;
+}
+ul, ol {
+    list-style: none;
+}
+i{
+    font-style: normal;
+}
+button {
+    border: none;
+}
+input[type="text"] {
+    padding-left: 5px;
+}
+input[type="password"] {
+    padding-left: 5px;
+}
+input[type="button"] {
+    border: none;
+}
+input::-moz-placeholder, textarea::-moz-placeholder {
+    color: #B6B6B6;
+}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #B6B6B6;
+}
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #B6B6B6;
+}
+select {
+    padding-left: 5px;
+    color: #333;
+}
+select.info-select{
+    display: inline-block;
+}
+textarea {
+    padding-left: 5px;
+}
+label {
+    /*font-weight: 700;*/
+}
+select::-ms-expand { display: none; }
+input::-ms-clear{display:none;}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+.check-tip {
+    text-align: left;
+    font-size: 12px;
+    padding-left: 120px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #ff2528;
+}
+
+/*签章demo样式*/
+textarea {
+    overflow: auto;
+    border: none;
+}
+input {
+    border: 1px solid #eee;
+}
+.ws-header {
+    height: 60px;
+    width: 100%;
+    background-color: #4F5360;
+    color: #fff;
+}
+
+.ws-header span {
+    line-height: 60px;
+    font-size: 22px;
+    font-weight: 500;
+    margin-left: 60px;
+}
+
+.ws-cont {
+    height: auto;
+    width: 1000px;
+    background-color: #fff;
+    color: #333;
+}
+
+.cont-tit {
+    line-height: 80px;
+    font-size: 28px;
+    font-weight: 500;
+    margin-left: 38%;
+    /*text-align: center;*/
+}
+
+.ws-form {
+    width: 1000px;
+    margin-left: 3%;
+    /*margin: 0 auto;*/
+}
+
+.ws-form ul {
+    width: 100%;
+    margin: 0 0;
+}
+
+.ws-form li {
+    
+}
+
+.ws-form li span {
+    
+}
+
+.ws-form-tit {
+    height: 40px;
+    background-color: #eee;
+    border: 1px solid #eee;
+    border-bottom: none;
+}
+
+.ws-form-tit span {
+    line-height: 40px;
+    font-size: 14px;
+    margin-left: 28px;
+    color: #666;
+}
+
+.ws-form-cont {
+    height: 45px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-bottom: none;
+}
+
+.ws-form-cont li {
+    height: 45px;
+}
+
+.ws-form-cont li span {
+    line-height: 45px;
+    font-size: 14px;
+    margin-left: 6px;
+    font-weight: 520;
+}
+
+.ws-form-cont-2 {
+    width: 49.1%;
+    border-right: 1px solid #eee;
+    float: left;
+}
+
+.ws-form-cont-4 {
+    width: 24.5%;
+    border-right: 1px solid #eee;
+    float: left;
+}
+
+.last-li {
+    border: none;
+}
+
+.li-description {
+    width: 75px;
+    display: inline-block;
+}
+
+.li-info {
+    
+}
+
+.cont-area {
+    height: 157px;
+    border: 1px solid #eee;
+    border-bottom: none;
+    text-align: left;
+}
+
+.sign-btn {
+    width: 120px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    background-color: #4367EB;
+    color: #fff;
+    float: right;
+}
+
+.check-btn {
+    width: 120px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    background-color: #47B8B7;
+    color: #fff;
+    float: right;
+}

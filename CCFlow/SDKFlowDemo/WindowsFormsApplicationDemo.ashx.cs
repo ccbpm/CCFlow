@@ -198,7 +198,7 @@ namespace CCFlow.SDKFlowDemo
         /// <returns></returns>
         public string GenerWillReturnNodes()
         {
-            DataTable dt= BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node,this.WorkID,0);
+            DataTable dt= BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.WorkID);
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion 退回窗口。

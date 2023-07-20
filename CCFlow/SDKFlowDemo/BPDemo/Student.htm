@@ -20,14 +20,14 @@
             var no = GetQueryString("No");
 
             //创建实体.
-            var en = new Entity("BP.Demo.BPFramework.Student");
+            var en = new Entity("BP.Demo.Student");
             if (no != null) {
                 en.SetPKVal(no);
                 en.RetrieveFromDBSources();
             }
 
             //绑定下拉框. 
-            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BPFramework.BanJis");
+            GenerBindEntities("DDL_FK_BanJi", "BP.Demo.BanJis");
             //绑定枚举.
             GenerBindEnumKey("DDL_XB", "XB");
 
@@ -45,7 +45,7 @@
 
             //创建实体.
             var no = GetQueryString("No");
-            var en = new Entity("BP.Demo.BPFramework.Student");
+            var en = new Entity("BP.Demo.Student");
 
             if (no == null) {
 
@@ -66,7 +66,7 @@
                 en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.Save();
-                window.location.href = window.location.href;
+                Reload();
             }
         }
 

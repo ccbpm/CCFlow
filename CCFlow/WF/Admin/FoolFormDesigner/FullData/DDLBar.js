@@ -25,8 +25,13 @@ function DBTypeChange() {
     var val = $("#DDL_DBType").val();
     if (val == 0) {
         $("#DBSrc").show();
+        $("#RequestMethod").hide();
+    } else if (val == 1) {
+        $("#DBSrc").hide();
+        $("#RequestMethod").show();
     } else {
         $("#DBSrc").hide();
+        $("#RequestMethod").hide();
     }
 }
 

@@ -128,7 +128,7 @@
             var en = new Entity("BP.Demo.BPFramework.Student", no);
             en.Delete();
             alert("删除成功");
-            window.location.href = window.location.href;
+            Reload();
         }
 
         function DelAll() {
@@ -140,7 +140,7 @@
                 var en = new Entity("BP.Demo.BPFramework.Student", no);
                 en.Delete();
             });
-            window.location.href = window.location.href;
+            Reload();
         }
 
         //选择与取消选择.

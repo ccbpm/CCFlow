@@ -1,0 +1,500 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>外部用户登陆 </title>
+    <base target="_self" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link href="/WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <!--<link href="login.css" rel="stylesheet" type="text/css" />-->
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../Standard/js/md5.js"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Standard/layer/layer.js"></script>
+    <script type="text/javascript">
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                Login();
+                return false;
+            }
+        }
+
+        //初始化页面函数.....
+        $(function () {
+            localStorage.setItem('Token', '');
+
+        });
+
+        function LoginAdmin() {
+            SetHref("./Admin/Login.htm");
+        }
+
+        function LoginText() {
+            SetHref("Default.htm");
+        }
+        //执行后台登录.
+        function Login(isZZJ) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppGuest");
+            var userNo = $("#TB_No").val();
+            var pass = $("#TB_PW").val();
+
+            if (userNo == "" || pass == "") {
+                layer.msg("<font>请输入用户名，密码.</font>");
+                return;
+            }
+
+            var orgNo = GetQueryString("OrgNo");
+            handler.AddPara("TB_No", userNo);
+            handler.AddPara("TB_PW", pass);
+            handler.AddPara("OrgNo", orgNo);
+
+            var data = handler.DoMethodReturnString("Login_Submit");
+            if (data.indexOf('err@') == 0) {
+                layer.msg("<font color=red>" + data + "</font>");
+                $("#validate").show();
+                return;
+            }
+
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            if (isZZJ == 1) {
+                SetHref('/WF/AppClassic/Home.htm');
+                return;
+            }
+
+            SetHref("../Standard/Default.htm");
+            return;
+
+            layer.close(index);
+            alert(data);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="login-container">
+            <section class="login-sidebox">
+                <div class="login-sidebox-content">
+                    <div class="login-sidebox-header">
+                        <div class="login-sidebox-logo">
+                            <img alt="logo" src="../Standard/image/logo.png" /><span>驰骋BPM</span>
+                        </div>
+                        <h2 class="login-sidebox-subtitle">
+                            <!--驰骋低代码开发平台<br /> CCFast 2.0-->
+                            <div>驰骋低代码开发平台</div>
+                            <div style="margin-top:10px;"> CCFast 2.0</div>
+                        </h2>
+                    </div>
+                    <div class="login-sidebox-body">
+                        <ul>
+                            <li>外部用户是指不在本组织内的用户.</li>
+                            <li>一个组织可以有多种外部用户，比如：企业的供应商、客户都是外部用户。</li>
+                            <li>外部用户也有登陆、发起、待办、在途等功能。</li>
+                            <li>外部用户的数据由开发者维护。</li>
+                        </ul>
+                    </div>
+                    <div class="login-sidebox-footer">
+                        <div>
+                            <a href="http://ccflow.org/frm=Localhost">官网</a> - <a href="http://doc.ccbpm.cn">文档</a> - <a href="http://ccflow.org/ke.htm">视频教程</a>
+                        </div>
+                    </div>
+                    <div class="bottom-bg-img"></div>
+                </div>
+            </section>
+            <section class="login-form">
+                <div class="login-form-header">
+                    <div id="incoName">外部用户登陆</div>
+                </div>
+                <div class="login-form-body">
+                    <form id="cc" class="form-signin">
+
+                        <div class="login-wrap">
+
+                            <div class="form-group">
+
+                                <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="默认账号:admin" lay-verify="required" class="form-control" />
+                            </div>
+                            <div class="form-group">
+
+                                <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码:123" lay-verify="required" class="form-control" />
+                            </div>
+
+                            <div id="">
+                                <input type="button" class="btn btn-lg btn-login btn-block" value="登录" id="Btn_Login" onclick="Login(1);" />
+                                <br />
+
+                                <div style="float:left">
+                                    <a href="javascript:LoginAdmin()"> 超管admin登陆</a>
+                                </div>
+                                <div style="float:right">
+
+                                    <a href="SelectOneOrg.htm"> 选择登陆组织</a>
+                                </div>
+
+                            </div>
+                            <!--<input type="button" class="btn btn-primary btn-block" value="测试版本test" id="Btn_LoginExt" onclick="LoginText();" />-->
+                            <!--//  <input type="button" class="btn btn-primary btn-block" value="登录简洁版(开发中)" id="Btn_LoginSimple" onclick="LoginSimple();" />
+                            // <input type="button" class="btn btn-primary btn-block" value="登录表单引擎(开发中)" id="Btn_LoginFrm" onclick="LoginFrm();" />-->
+                            <!--<div class="text-center">
+                            <div class="forget-password">
+                                <a href="javascript:Mobile();">手机登录</a>-->
+                            <!--<a href="../AppClassic/Login.htm">前台登录</a>-->
+                            <!--</div>
+                            </div>-->
+                        </div>
+                        <div>
+                            <!--<div class="login-other">
+                                <span class="text-muted">
+                                    其他资源
+                                </span>
+                            </div>
+                            <div class="login-list">
+                                <div class="item">
+                                    <a href="#" data-toggle="tooltip" title="官网">-->
+                            <!--<img class="item" src="image/gitee.svg" />-->
+                            <!--</a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" data-toggle="tooltip" title="使用 GitHub 帐号登录">
+                                        <img class="item" src="image/git.svg" />
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" data-toggle="tooltip" title="微信">
+                                        <img class="item" src="image/weixin-2.svg" />
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" data-toggle="tooltip" title="使用 QQ 账号登录">
+                                        <img class="item" src="image/qq.svg" />
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" data-toggle="tooltip" title="使用支付宝账号登录">
+                                        <img class="item" src="image/zhifubao.svg" />
+                                    </a>
+                                </div>
+                            </div>-->
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+        <div class="login-footer">
+            <ul class="login-footer-body">
+                <li>
+                    <a href="http://ccflow.org?Frm=Localhot" target="_blank">地区：济南市高新区.碧桂园凤凰国际A座F19</a>
+                </li>
+                <li> <a href="http://ccflow.org?Frm=Localhot" target="_blank">电话：0531-82374939,18660153393</a></li>
+                <li><a href="http://ccflow.org?Frm=Localhot" target="_blank">济南驰骋信息技术有限公司@2003-2022</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <style type="text/css">
+        html {
+            font-size: 16px;
+            -ms-overflow-style: auto;
+        }
+
+        .btn:focus,
+        .btn:active:focus,
+        .btn.active:focus,
+        .btn.focus,
+        .btn:active.focus,
+        .btn.active.focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        body {
+            color: #797979;
+            background: #f1f2f7;
+            -webkit-overflow-scrolling: touch;
+            font-family: 'Microsoft YaHei';
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: #17a2b8;
+                text-decoration: none;
+            }
+
+
+        .container-fluid {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1000px;
+            background-image: url(./image/ccloginbg.jpg);
+            background-size: 100% 100%;
+            background-position: 100%;
+            background-repeat: no-repeat;
+        }
+
+        .login-container {
+            min-height: 570px;
+            box-shadow: 0px 20px 80px 0px rgba(0,0,0,0.3);
+            display: flex;
+            width: 1120px;
+            border-radius: 2vh;
+        }
+
+            .login-container section {
+                width: 50%;
+            }
+
+            .login-container .login-sidebox {
+                position: relative;
+                /*         background: -webkit-gradient(linear, left bottom, left top, from(#3a485a), to(#607089));
+                background: linear-gradient(0deg, #3a485a 0%, #607089 100%);*/
+                color: #fff;
+                border-top-left-radius: 2vh;
+                border-bottom-left-radius: 2vh;
+                background: linear-gradient(to bottom right, #122d70, rgba(255, 255, 255, 0));
+            }
+
+                .login-container .login-sidebox::before, .login-container .login-sidebox::after {
+                    content: '';
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    position: absolute;
+                }
+
+                .login-container .login-sidebox::before {
+                    background: url(image/left-1.png) no-repeat 0 0;
+                }
+
+                .login-container .login-sidebox::after {
+                    background: url(image/left-2.png) no-repeat right bottom;
+                }
+
+                .login-container .login-sidebox .login-sidebox-content {
+                    padding: 80px 80px 48px;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                    .login-container .login-sidebox .login-sidebox-content .login-sidebox-body ul {
+                        padding-left: 20px;
+                    }
+
+                        .login-container .login-sidebox .login-sidebox-content .login-sidebox-body ul li {
+                            margin: 10px 0;
+                        }
+
+        .login-sidebox-header {
+            margin-bottom: 40px;
+        }
+
+        .login-sidebox-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+            .login-sidebox-logo img {
+                width: 48px;
+                height: auto;
+                border-radius: 50%;
+                margin-right: 14px;
+            }
+
+            .login-sidebox-logo span {
+                display: inline;
+                font-size: 2rem;
+                font-weight: 700;
+            }
+
+        .login-sidebox-subtitle {
+            font-size: 20pt;
+            font-weight: nor
+        }
+
+        .login-sidebox-footer {
+            margin-top: 20px;
+            border-top: solid 1px #ddd;
+            padding-top: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 10;
+        }
+            /*.bottom-bg-img {
+            width: 240px;
+            height: 240px;
+            position: absolute;
+            left: -10px;
+            bottom: -120px;*/
+            /*background-image: url(./image/ccloginbottom.png);*/
+            /*background-size: 100% 100%;
+            background-position: 100%;
+        }*/
+
+            .login-sidebox-footer a {
+                cursor: pointer;
+                color: #fff;
+            }
+
+        .login-form {
+            padding: 64px;
+            font-size: 0.875rem;
+            border-top-right-radius: 2vh;
+            border-bottom-right-radius: 2vh;
+            background-color: #fff;
+        }
+
+        .login-form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-left: 40px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+            .login-form-header div {
+                margin-bottom: 0;
+                font-size: 2rem;
+                color: #122d70;
+            }
+
+        .form-signin {
+            margin: auto;
+            width: 80%;
+        }
+
+
+        .login-other {
+            display: table;
+            text-align: center;
+            white-space: nowrap;
+            margin: 0.25rem 0 0.625rem 0;
+            margin-top: 30px;
+        }
+
+            .login-other:before, .login-other:after {
+                background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABaAAAAACCAYAAACuTHuKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo1OThBRDY4OUNDMTYxMUU0OUE3NUVGOEJDMzMzMjE2NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo1OThBRDY4QUNDMTYxMUU0OUE3NUVGOEJDMzMzMjE2NyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjU5OEFENjg3Q0MxNjExRTQ5QTc1RUY4QkMzMzMyMTY3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU5OEFENjg4Q0MxNjExRTQ5QTc1RUY4QkMzMzMyMTY3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+VU513gAAADVJREFUeNrs0DENACAQBDBIWLGBJQby/mUcJn5sJXQmOQMAAAAAAJqt+2prAAAAAACg2xdgANk6BEVuJgyMAAAAAElFTkSuQmCC");
+                content: '';
+                display: table-cell;
+                position: relative;
+                top: 50%;
+                width: 50%;
+                background-repeat: no-repeat;
+            }
+
+            .login-other:before {
+                background-position: right 1em top 50%;
+            }
+
+            .login-other:after {
+                background-position: left 1em top 50%;
+            }
+
+        .login-list {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: auto;
+            /*margin-left:30px;*/
+        }
+
+            .login-list .item {
+                width: 25px;
+                height: 25px;
+            }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .login-wrap {
+            margin-top: 35px;
+        }
+
+            .login-wrap .form-control {
+                font-weight: bold;
+                padding: 8px 10px;
+                /*width:*/
+                height: auto;
+                line-height: 24px;
+                border-radius: 2vh;
+            }
+
+
+        .btn-login {
+            color: #fff;
+            /*background: #fe7300;*/
+            background-color: #122d70;
+            border: 0px;
+            border-radius: 2.5vh;
+        }
+
+            .btn-login:hover {
+                /*background: #f38d30;*/
+                background: #122d70;
+                color: #fff;
+                outline: none
+            }
+
+            .btn-login:focus {
+                background: #122d70;
+                color: #fff;
+                border: 0px;
+                outline: none;
+            }
+
+        .forget-password {
+            padding: 16px 0;
+        }
+
+        @media (min-width: 768px) {
+            .login-footer {
+                display: block;
+                position: absolute;
+                bottom: 40px;
+                width: 100%;
+            }
+
+                .login-footer .login-footer-body {
+                    display: flex;
+                    justify-content: space-around;
+                    margin: auto;
+                    padding-left: 0;
+                    width: 1000px;
+                }
+
+                    .login-footer .login-footer-body li {
+                        list-style: none;
+                    }
+
+                        .login-footer .login-footer-body li a {
+                            /*color: #7e8392;*/
+                            color: #fff;
+                        }
+        }
+    </style>
+
+</body>
+</html>

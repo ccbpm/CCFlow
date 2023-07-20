@@ -1,0 +1,820 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_MapData>
+    <No>Dict_XueShengTaiZhang11</No>
+    <Name>学生台账11</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>Dict_XueShengTaiZhang11</PTable>
+    <PTableModel>0</PTableModel>
+    <UrlExt />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableCol>0</TableCol>
+    <Tag />
+    <FK_FormTree>ec7fff09-a</FK_FormTree>
+    <FrmType>0</FrmType>
+    <FrmTypeText>傻瓜表单</FrmTypeText>
+    <FrmShowType>0</FrmShowType>
+    <EntityType>2</EntityType>
+    <EntityTypeText>编号名称实体</EntityTypeText>
+    <AppType>0</AppType>
+    <DBSrc />
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2021-12-15 10:12:13</Ver>
+    <Icon />
+    <FlowCtrls />
+    <AtPara>@HidenField=@DDLShowWays=*XB=0*@FrmEvents_AutoNum=0@DTSearchLabel=出生日期@DTSearchWay=1@MapExts_AutoNum=0@IsSearchKey=1@DTSearchKey=ChuShengRiQi@DTShowWay=0@StringSearchKeys=@ListShowWay=0@MapDtls_AutoNum=0@RptSearchKeys=*XB*@ListShowWayKey=@FrmRBs_AutoNum=0@MapFrames_AutoNum=0@FrmAttachments_AutoNum=0@FrmImgAths_AutoNum=0</AtPara>
+    <OrgNo />
+    <FrmImgAths_AutoNum>0</FrmImgAths_AutoNum>
+    <MapDtls_AutoNum>0</MapDtls_AutoNum>
+    <ListShowWayKey />
+    <FrmEvents_AutoNum>0</FrmEvents_AutoNum>
+    <DTSearchLabel>出生日期</DTSearchLabel>
+    <FrmRBs_AutoNum>0</FrmRBs_AutoNum>
+    <DTSearchWay>1</DTSearchWay>
+    <HidenField />
+    <IsSearchKey>1</IsSearchKey>
+    <DTSearchKey>ChuShengRiQi</DTSearchKey>
+    <DTShowWay>0</DTShowWay>
+    <StringSearchKeys />
+    <ListShowWay>0</ListShowWay>
+    <MapFrames_AutoNum>0</MapFrames_AutoNum>
+    <FrmAttachments_AutoNum>0</FrmAttachments_AutoNum>
+    <MapExts_AutoNum>0</MapExts_AutoNum>
+    <RptSearchKeys>*XB*</RptSearchKeys>
+    <DDLShowWays>*XB=0*</DDLShowWays>
+  </Sys_MapData>
+  <Sys_GroupField>
+    <OID>652</OID>
+    <Lab>基础信息</Lab>
+    <FrmID>Dict_XueShengTaiZhang11</FrmID>
+    <CtrlType />
+    <CtrlID />
+    <IsZDMobile>0</IsZDMobile>
+    <ShowType>0</ShowType>
+    <ShowTypeText>显示</ShowTypeText>
+    <Idx>1</Idx>
+    <GUID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>XB_CH_0</MyPK>
+    <Lab>女</Lab>
+    <EnumKey>XB</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+    <OrgNo />
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>XB_CH_1</MyPK>
+    <Lab>男</Lab>
+    <EnumKey>XB</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+    <OrgNo />
+  </Sys_Enum>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_Addr</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>Addr</KeyOfEn>
+    <Name>地址</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>4</Idx>
+    <ICON>icon-location-pin</ICON>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_AtPara</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>AtPara</KeyOfEn>
+    <Name>参数</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>4000</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-99</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_BillNo</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>BillNo</KeyOfEn>
+    <Name>编号</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-100</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_BillState</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>BillState</KeyOfEn>
+    <Name>单据状态</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-98</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_ChuShengRiQi</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>ChuShengRiQi</KeyOfEn>
+    <Name>出生日期</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>5</Idx>
+    <ICON>0</ICON>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_Email</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>Email</KeyOfEn>
+    <Name>邮件</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>3</Idx>
+    <ICON>icon-envelope-letter</ICON>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_FK_Dept</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>创建人部门</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-1</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_NianLing</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>NianLing</KeyOfEn>
+    <Name>年龄</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>7</Idx>
+    <ICON>0</ICON>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_OID</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>主键</Name>
+    <DefVal>0</DefVal>
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>2</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>1</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_OrgNo</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>OrgNo</KeyOfEn>
+    <Name>创建人所在的组织</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-1</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_RDT</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>创建时间</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>145</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-97</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_Starter</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>Starter</KeyOfEn>
+    <Name>创建人</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-1</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_StarterName</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>StarterName</KeyOfEn>
+    <Name>创建人名称</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>32</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-1</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_Tel</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>Tel</KeyOfEn>
+    <Name>电话</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>50</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>2</Idx>
+    <ICON>icon-phone</ICON>
+    <AtPara>@FontSize=12</AtPara>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_Title</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>Title</KeyOfEn>
+    <Name>名称</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <LGTypeText>普通</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>400</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>1</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>1</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>-90</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Dict_XueShengTaiZhang11_XB</MyPK>
+    <FK_MapData>Dict_XueShengTaiZhang11</FK_MapData>
+    <KeyOfEn>XB</KeyOfEn>
+    <Name>性别</Name>
+    <DefVal />
+    <DefValType>1</DefValType>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <LGTypeText>枚举</LGTypeText>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey>XB</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <ExtIsSum>0</ExtIsSum>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSecret>0</IsSecret>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <FontSize>0</FontSize>
+    <IsSigan>0</IsSigan>
+    <GUID />
+    <EditType>0</EditType>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <TextColSpan>1</TextColSpan>
+    <RowSpan>1</RowSpan>
+    <GroupID>652</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <CSSCtrl>0</CSSCtrl>
+    <CSSLabel>0</CSSLabel>
+    <Idx>6</Idx>
+    <ICON>0</ICON>
+    <AtPara />
+  </Sys_MapAttr>
+</NewDataSet>

@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>驰骋BPM</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <!--- 引入代码. -->
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/layui/css/layui.css">
+    <!--- 引入代码. -->
+    <script src="../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../WF/Portal/layui/layui.js"></script>
+
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Portal/js/vue/vue.js"></script>
+    <script src="../WF/Scripts/layui/LayuiDialog.js"></script>
+    <script type="text/javascript">
+
+        var orgNo = null;
+        //页面启动函数.
+        $(function () {
+
+            orgNo = GetQueryString("OrgNo");
+
+            var webUser = new WebUser();
+            if (webUser.No == "" || webUser.No == undefined)
+                InitPage();
+            else
+                return;
+            
+        });
+
+        function InitPage() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Login_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            if (data.indexOf('url@') == 0) {
+                var data = data.replace('url@', '');
+                SetHref(data);
+                //  SetHref( "Apps.htm";
+                return;
+            }
+        }
+    </script>
+    <style>
+        .header {
+            line-height: 40px;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+            .header strong {
+                font-size: 16px;
+                padding-left: 10px;
+            }
+
+        .mainBox {
+            border-bottom: 10px solid #efefef;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .bodyBox {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .apps-home-title {
+            font-size: 15px;
+            padding: 10px 0px;
+            font-weight: bold
+        }
+
+        .iconTitle {
+            text-align: center;
+            padding-bottom: 15px;
+            padding-top: 10px;
+        }
+
+            .iconTitle i {
+                display: block;
+                padding: 5px 0px 10px;
+                font-size: 20px;
+                position: relative;
+            }
+
+                .iconTitle i sup {
+                    font-size: 12px;
+                    color: #ff0000;
+                    font-weight: bold;
+                    position: absolute;
+                    left: 50%;
+                    margin-left: 10px;
+                }
+
+            .iconTitle:nth-child(3n+1) {
+                color: red;
+            }
+
+            .iconTitle:nth-child(3n+2) {
+                color: #2e889b;
+            }
+
+            .iconTitle:nth-child(3n+3) {
+                color: #0094ff;
+            }
+
+            .iconTitle:nth-child(3n+4) {
+                color: #c42500;
+            }
+
+            .iconTitle span {
+                font-size: 12px;
+                color: #333
+            }
+
+        .editBtn a {
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 3px 10px;
+            font-weight: 100;
+            font-size: 12px;
+            border-radius: 5px;
+        }
+
+        .fred {
+            font-size: 10px;
+            line-height: 1.4;
+            position: absolute;
+            top: -2px;
+            margin-left: -5px;
+            padding: 1px 5px;
+            color: #fff;
+            background: red;
+            display: inline-block;
+            border-radius: 100px;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="apps-home" class="apps-home">
+        <div class="header">
+            <div class="pull-right">
+                <i class="fa fa-bell-o"></i>
+            </div>
+            <div class="userInfo">
+                <strong>首页</strong>
+            </div>
+        </div>
+        <div class="layui-container mainBox">
+            <div class="layui-row">
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Start')">
+
+                    <i class="fa fa-paper-plane-o"></i>
+                    <span>发起</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Todolist')">
+                    <i class="fa fa-file-text-o"><span class="fred">{{Todolist_EmpWorks}}</span></i>
+                    <span>待办</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Runing')">
+                    <i class="fa fa-indent"><span class="fred">{{MyStart_Runing}}</span></i>
+
+                    <span>在途</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Complate')">
+                    <i class="fa fa-paper-plane-o"></i>
+                    <span>已完成</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('CC')">
+                    <i class="fa fa-file-text-o"><span class="fred">{{Todolist_EmpWorks}}</span></i>
+                    <span>抄送</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Draft')">
+                    <i class="fa fa-indent"><span class="fred">{{MyStart_Runing}}</span></i>
+
+                    <span>草稿</span>
+                </div>
+                <div class="layui-col-xs3 iconTitle" @click="OPenPage('Search')">
+                    <i class="fa fa-search"></i>
+                    <span>查询</span>
+                </div>
+            </div>
+
+            <div class="apps-home-title">
+                常用菜单
+            </div>
+            <div class="layui-row">
+                <div v-for="item in myMenus" class="layui-col-xs3 iconTitle" :data-id="item.No" @click="OpenMenu(item.No)">
+                    <i :class="item.Icon"></i> <span>{{item.Name}}</span>
+                </div>
+            </div>
+            <div class="apps-home-title">
+                最近发起的流程
+            </div>
+            <div class="layui-row">
+                <div v-for="(item,Index) in historyFlow" class="layui-col-xs3 iconTitle" @click="OpenStartFlow(item.FK_Flow)">
+                    <i :class="item.Icon"></i> <span>{{item.FlowName}}</span>
+                    <hr v-if="(Index+1)%4 == 0" style="border-bottom: none !important;" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-container bodyBox">
+            <div class="apps-home-title">应用中心</div>
+            <div class="layui-row">
+                <div v-for="(item,Index) in systems" :key="Index" :data-id="item.No" class="layui-col-xs3 iconTitle" @click="OpenApps(item.No,Index)">
+                    <i :class="item.Icon"></i> <span>{{item.Name}}</span>
+                    <hr v-if="(Index+1)%4 == 0" style="border-bottom: none !important;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./Default.js"></script>
+    <script src="../WF/Portal/DefaultMenuGlo.js"></script>
+</body>
+</html>

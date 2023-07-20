@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>驰骋BPM多租户工作模式- 后台管理</title>
+    <link href="../../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="./fonts/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="fonts/font-icons.min.css" rel="Stylesheet" />
+
+    <script src="../../../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../../GPM/config.js" type="text/javascript"></script>
+    <!--<script src="GPMMenus.js" type="text/javascript"></script>-->
+    <script src="../../../GPM/API.js"></script>
+    <style>
+        .sidebar-menu {
+        }
+
+        .menu_left {
+            padding: 0 10px;
+            height: 45px;
+            line-height: 45px;
+        }
+
+        .menu_left_main {
+            padding-left: 12px;
+            font-size: 15px;
+            color: #000;
+        }
+
+            .menu_left_main:hover, .menu_left_main:focus {
+                color: #000;
+            }
+
+        .nav > li > a i {
+            margin-right: 0;
+        }
+
+        .nav-second-level li a {
+            padding: 0;
+            padding-left: 25px;
+            /*color: #999c9e;*/
+            color: #555555;
+            font-weight: 500;
+        }
+
+        .navbar-default .nav > li > a:focus, .navbar-default .nav > li > a:hover {
+            color: #5053f1;
+            background-color: #5053f1;
+            border-right: 0;
+            border-radius: 6px;
+        }
+
+        .nav.navbar-right > li > a {
+            color: #fff;
+        }
+
+        .nav > li > a:hover, .nav > li > a:focus {
+            background: rgba(0,0,0,.1);
+        }
+
+        .ccflow-home .fred {
+            color: #fff;
+        }
+
+        .J_menuItem {
+            font-size: 15px;
+            padding-left: 12px;
+        }
+
+            .J_menuItem i {
+                font-size: 16px;
+            }
+
+        /* 左侧logo */
+        .left-top-logo {
+            background: #5053f1;
+        }
+
+        body.mini-navbar .nav-header {
+            padding: 0;
+            background-color: #5053f1;
+        }
+        /* 侧边栏切换图标 */
+        .btn-info {
+            background: #5053f1;
+            border-color: #5053f1;
+            display: flex;
+            font-size: 16px;
+        }
+        /* 头部主题色 */
+        .top-theme {
+            background: #5053f1;
+            background: -webkit-gradient(linear,left bottom,right top,color-stop(0,#5053f1),color-stop(1,#2780ec));
+        }
+        .btn-info:hover {
+            background: #5053f1;
+            border-color: #5053f1;
+        }
+        .btn-info:focus {
+            background: #5053f1;
+            border-color: #5053f1;
+        }
+        .btn-info:active {
+            background: #5053f1;
+            border-color: #5053f1;
+        }
+            .btn-info:active:focus {
+                background: #5053f1;
+                border-color: #5053f1;
+            }
+    </style>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            var webUser = new WebUser();
+            if (webUser.No == "") {
+                SetHref("Login.htm");
+                return;
+            }
+
+            //赋值系统名称.
+            document.title = appName;
+            $("#appNameOfSmall").html(appNameOfSmall);
+            $("#appNameOfSmaller").html(appNameOfSmaller);
+
+            if (webUser.No == "admin") {
+                $("#exitBar").before("<li><a href='../../../WF/Admin/Portal/Default.htm' ><i class='icon-fire'></i>后台</a></li>");
+            }
+
+            //InitLeftMenuComm();
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var data = handler.DoMethodReturnString("Home_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            //调用公共类库的方法:执行批量主表赋值
+            GenerFullAllCtrlsVal(data);
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            if (flowNo != null) {
+                window.open('../../../WF/MyFlow.htm?FK_Flow=' + flowNo);
+                return;
+            }
+            return;
+        });
+    </script>
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden; line-height: 1.4;">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close">
+                <i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse" style="background:#fff;">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header left-top-logo" style="height:53px">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:18px;" id="appNameOfSmall">
+                                        驰骋BPM多租户
+                                        <!-- <strong class="font-bold"><img src="../../DataUser/ICON/logoHome.png"/></strong> -->
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element" id="appNameOfSmaller">SaaS</div>
+                    </li>
+                    <ul class="sidebar-menu" role="menu">
+                        <li class="menu_left active">
+                            <a href="#" class="menu_left_main">
+                                <i class="fa fa-fw icon-grid"></i>
+                                <span class="nav-label lang" data-key="jcgn"><b>系统管理</b></span>
+                            </a>
+                            <ul class="nav nav-second-level treeview-menu">
+                                <li class="menu_left">
+                                    <a href="/GPM/Organization.htm" data-href="/GPM/Organization.htm" class="J_menuItem ccflow-menu-log">
+                                        <i class="icon-organization"></i>
+                                        <span class="nav-label lang">组织树</span>
+                                    </a>
+                                </li>
+                                <li class="menu_left">
+                                    <a href="/WF/Comm/Search.htm?EnsName=BP.WF.Port.AdminGroup.Orgs" class="J_menuItem ccflow-menu-log">
+                                        <i class="icon-settings"></i>
+                                        <span class="nav-label lang">组织</span>
+                                    </a>
+                                </li>
+                                <li class="menu_left">
+                                    <a href="/WF/Portal/FlowTree.htm" class="J_menuItem ccflow-menu-log">
+                                        <i class="icon-share"></i>
+                                        <span class="nav-label lang">流程</span>
+                                    </a>
+                                </li>
+
+                                <li class="menu_left">
+                                    <a href="/WF/Portal/FrmTree.htm" class="J_menuItem ccflow-menu-log">
+                                        <i class="icon-docs"></i>
+                                        <span class="nav-label lang">表单</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1" style="overflow:hidden">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top top-theme" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-info " href="#"><i class="fa fa-bars sidebar-toggle"></i> </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li><a href="Welcome.htm?DoType=Out" class="J_menuItem ccflow-home"><i class="icon icon-home fred fz18"></i>主页</a>  </li>
+                        <li><a href="/GPM/Organization.htm" class="J_menuItem"><i class="icon icon-message fred fz18"></i>组织树</a> </li>
+                        <li><a href="/WF/Comm/Search.htm?EnsName=BP.WF.Port.AdminGroup.Orgs" class="J_menuItem"><i class="icon icon-message fred fz18"></i>组织</a> </li>
+                        <!--<li><a href="../FlowSta/" class="J_menuItem"><i class="icon icon-message fred fz18"></i>待办</a> </li>
+                        <li><a href='../WF/Setting/Default.htm' title="设置个人信息." class="J_menuItem"><i class="icon iconfont icon-wo"></i><label id="UserName" /></a></li>-->
+                        <li id="exitBar">
+                            <a href="Login.htm?DoType=Out"><i class="icon iconfont icon-tuichu fred fz18"></i>退出</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row J_mainContent" id="content-main">
+                <div id="tabpanel">
+                </div>
+                <iframe id="J_iframe" width="100%" height="100%" src="Welcome.htm" frameborder="0" data-id="Welcome.htm"></iframe>
+                <!--<iframe id="J_iframe" width="100%" height="100%" src="/WF/Portal/FlowTree.htm" frameborder="0" data-id="/WF/Portal/FlowTree.htm"></iframe>-->
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+
+    <script type="text/javascript" src="../../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../../WF/Style/skin/plugins/metisMenu/jquery.metisMenu.js" type="text/javascript"></script>
+    <script src="../../../WF/Style/skin/plugins/slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+
+    <script src="../../../WF/Style/skin/js/appnew.js?v=4.1.0" type="text/javascript"></script>
+    <script src="../../../WF/Style/skin/js/index.js" type="text/javascript"></script>
+
+    <script src="../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../WF/Comm/Gener.js"></script>
+</body>
+
+</html>

@@ -49,7 +49,16 @@
                 $("#doc").html("<h3>该表单没有从表.</h3>");
                 return;
             }
-
+            var tag5 = en.Tag5 || "0";
+            $("#RB_Type_" + tag5).attr("checked", true);
+            if (tag5 == "0") {
+                $("#doc").show();
+                $("#TB_Tag1").hide();
+            } else {
+                $("#doc").hide();
+                $("#TB_Tag1").show();
+                $("#TB_Tag1").val(en.Tag1);
+            }
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < mapDtls.length; i++) {
                 var dtl = mapDtls[i];
@@ -57,7 +66,7 @@
                 if (tag1 != "" && tag1 != null) {
                     //第二批创建从表No是否在第一批创建从表的填充SQL里
                     if (tag1.indexOf(dtl.No) != -1)
-                        sql = tag1.split("$")[i + 1].split(":")[1]; //分割字符串，获取sql语句
+                        sql = tag1.split("$")[i + 1].replace(dtl.No + ":", ""); //分割字符串，获取sql语句
                     else
                         sql = "";
                 }
@@ -72,9 +81,7 @@
                 html += "</td>";
                 html += "</tr>";
             }
-
             $("#doc").html(html);
-
         });
 
         function Save() {
@@ -110,16 +117,22 @@
             var mapDtls = new Entities("BP.Sys.MapDtls");
             mapDtls.Retrieve("FK_MapData", frmID);
 
+            en.Tag5 = $("input[name='RB_Type']:checked").val();
 
-            var tag1 = "";
-            for (var i = 0; i < mapDtls.length; i++) {
+            if (en.Tag5 == 0) {
+                var tag1 = "";
+                for (var i = 0; i < mapDtls.length; i++) {
 
-                var dtl = mapDtls[i];
+                    var dtl = mapDtls[i];
 
-                var sql = $("#" + dtl.No).val();
-                tag1 += "$" + dtl.No + ":" + sql;
+                    var sql = $("#" + dtl.No).val();
+                    tag1 += "$" + dtl.No + ":" + sql;
+                }
+                en.Tag1 = tag1;
+            } else {
+                en.Tag1 = $("#TB_Tag1").val();
             }
-            en.Tag1 = tag1;
+            
 
 
             if (n == 0)
@@ -129,14 +142,29 @@
 
             Reload();
         }
+        function ChangeShow(type) {
+            if (type == 0) {
+                $("#doc").show();
+                $("#TB_Tag1").hide();
+            } else {
+                $("#doc").hide();
+                $("#TB_Tag1").show();
+            }
+               
+        }
     </script>
 </head>
 <body>
     <form id="cc">
 
         <div id="bar"> </div>
+        <div>
+            从表填充方式：
+            <input type="radio" name="RB_Type" id="RB_Type_0" value="0" onchange="ChangeShow(0)" />分别填充
+            <input type="radio" name="RB_Type" id="RB_Type_1" value="1" onchange="ChangeShow(1)" />请求URL一次性获取数据填充
+        </div>
         <div id="doc"></div>
-
+        <textarea rows="4" name="TB_Tag1" id="TB_Tag1" style="width: 98%;"> </textarea>
     </form>
 
 

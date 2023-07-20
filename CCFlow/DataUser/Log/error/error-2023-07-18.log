@@ -1,0 +1,100 @@
+2023-07-18 09:35:48.7291|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT MyPK, FK_Emp, FK_Dept, DeptName, StationNo, StationNoT FROM Port_DeptEmp WHERE (1=1) AND ( ( Port_DeptEmp.FK_Emp =@FK_Emp) ) ORDER BY Idx Exception=Unknown column 'Idx' in 'order clause'
+
+
+2023-07-18 09:35:59.0877|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT MyPK, FK_Emp, FK_Dept, DeptName, StationNo, StationNoT FROM Port_DeptEmp WHERE (1=1) AND ( ( Port_DeptEmp.FK_Emp =@FK_Emp) ) ORDER BY Idx Exception=Unknown column 'Idx' in 'order clause'
+
+
+2023-07-18 09:37:15.0984|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT MyPK, FK_Emp, FK_Dept, DeptName, StationNo, StationNoT FROM Port_DeptEmp WHERE (1=1) AND ( ( Port_DeptEmp.FK_Emp =@FK_Emp) ) ORDER BY Idx Exception=Unknown column 'Idx' in 'order clause'
+
+
+2023-07-18 09:37:28.5747|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT MyPK, FK_Emp, FK_Dept, DeptName, StationNo, StationNoT FROM Port_DeptEmp WHERE (1=1) AND ( ( Port_DeptEmp.FK_Emp =@FK_Emp) ) ORDER BY Idx Exception=Unknown column 'Idx' in 'order clause'
+
+
+2023-07-18 09:39:06.6124|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT MyPK, FK_Emp, FK_Dept, DeptName, StationNo, StationNoT FROM Port_DeptEmp WHERE (1=1) AND ( ( Port_DeptEmp.FK_Emp =@FK_Emp) ) ORDER BY Idx Exception=Unknown column 'Idx' in 'order clause'
+
+
+2023-07-18 09:42:32.7466|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 09:42:49.3384|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 09:42:57.5185|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 09:45:29.5505|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 09:58:22.2227|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 09:58:57.7276|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7710)
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 637
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1737
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2161
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3651
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7390
+
+
+2023-07-18 10:36:48.9263|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL=SELECT RDT FROM WF_GenerWorkerlist WHERE IsPass=0 AND FK_Emp='admin' ORDER BY RDT DESC  Exception=Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+
+
+2023-07-18 14:32:13.0109|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT PinLei, ShuLiang,IFNULL(Idx,0) Idx,IFNULL(OID,0) OID,IFNULL(RefPK, '0') RefPK,IFNULL(FID,0) FID,IFNULL(RDT,'2023-07-18') RDT,IFNULL(Rec, '@WebUser.No') Rec FROM ND1403Dtl1 WHERE (1=1) AND ( ( ND1403Dtl1.RefPK =@RefPK) ) ORDER BY Idx Exception=Unknown column 'PinLei' in 'field list'
+
+
+2023-07-18 15:01:45.1018|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT No, Name, ParentNo, Idx, FK_Flow FROM Sys_FormTree WHERE (1=1) AND ( ( Sys_FormTree.ParentNo =@ParentNo) )  Exception=Unknown column 'FK_Flow' in 'field list'
+
+

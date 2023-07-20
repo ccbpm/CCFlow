@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>驰骋云平台</title>
+    <script src="/WF/Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="../../WF/Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #f4f4f4;
+        }
+        legend {
+            font-size: larger;
+            font-style: italic;
+            font-weight: bolder;
+        }
+        .main-content {
+            width: 50%;
+            padding: 55px;
+            background: #fff;
+            margin-top: 10px;
+            box-shadow: 0px 0px 5px 2px #c7c7c7;
+            border-radius: 5px;
+        }
+        .layui-tab-title {
+            display: flex;
+            align-items: center;
+        }
+        .layui-tab-bar{
+            display:none;
+        }
+        .layui-tab-content{
+            padding: 15px 20px;
+        }
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!--注册页面-->
+    <div class="layui-form" id="zhou">
+        <center>
+
+            <div style="width:90%;border:0px;">
+                <div colspan="2">
+                    <div id="toolbar"></div>
+                    <img src="./Img/ccflowAD_Title.png" style="width:800px;" />
+                </div>
+
+                <div colspan="1" valign="top" class="main-content">
+
+                    <div style="text-align:left;">
+                        <h2 style="font-weight:700">请选择注册方式</h2>
+                        <ul>
+                            <li>我们提供了三种注册模式</li>
+                        </ul>
+                        <div class="layui-tab layui-tab-card">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this"><img src="/CCMobilePortal/imgs/Web.png" style="width:30px;height:30px;" />模式1：网站账户注册</li>
+                                <li><img src="/CCMobilePortal/imgs/QYWX.png" style="width:30px;height:30px;" />模式2：从企业微信商城注册</li>
+                                <li><img src="/CCMobilePortal/imgs/DD.png" style="width:30px;height:30px;" />模式3：从钉钉商城注册(未开放)</li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div class="layui-tab-item layui-show">
+                                    <ul>
+                                        <li>普通的注册方式，输入账号，企业信息进行注册.</li>
+                                        <li><a href="RegisterByWebSite.htm" style="color: #551A8B; font-weight: 700;">点击这里开始注册</a></li>
+                                    </ul>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <ul>
+                                        <li>在PC上下载企业微信端，并使用管理员登录。</li>
+                                        <li>点击:<a href="javascript:alert('暂未开放.')" style="color: #551A8B; font-weight: 700;"> 请点击这里 </a> </li>
+                                        <!--<li>点击:<a href="https://work.weixin.qq.com/wework_admin/frame#apps/appStore/index"> 请点击这里</a> </li>-->
+                                        <li>按照步骤执行添加安装,进入系统后，完善与修改人员、部门信息。</li>
+                                    </ul>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <ul>
+                                        <li>在PC上下载钉钉PC端，并使用管理员登录。</li>
+                                        <li>点击:<a href="javascript:alert('暂未开放.')" style="color: #551A8B; font-weight: 700;"> 请点击这里 </a> </li>
+                                        <li>按照步骤执行添加安装,进入系统后，完善与修改人员、部门信息。</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                        <h2 style="font-weight: 700; margin-top:20px;" >已有账号，我要登陆.</h2>
+
+                        <ul>
+                            <li><a href="Login.htm"  style="color: #551A8B; font-weight: 700;">登陆</a></li>
+                        </ul>
+                        <h2 style="font-weight: 700; margin-top:20px;">特别声明</h2>
+                        <ul>
+                            <li>1. 驰骋BPM不提供saas服务，仅仅提供saas模式的测试，应用驰骋bpm需要本地化部署。</li>
+                            <li>2. 驰骋BPM分为：单组织版、集团版、SAAS版本. 前端分为：H5、vue2、vue3版本。</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </center>
+        <center>
+            <div id="FrmEnd">
+            </div>
+        </center>
+
+        <div id="WeiXin"></div>
+
+    </div>
+
+    <script type="text/javascript">
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate
+                , $ = layui.$;
+
+            //自定义验证规则
+            form.verify({
+                title: function (value) {
+                    if (value.length < 5) {
+                        return '标题至少得5个字符啊';
+                    }
+                },
+                password2: function (value) {
+                    password = $("#TB_PassWord").val();
+                    if (value != password) {
+
+                        return "两次输入的密码不一致";
+                    }
+                },
+
+                password: [
+                    /^[\S]{3,12}$/
+                    , '密码必须3到12位，且不能出现空格'
+                ],
+                content: function (value) {
+                    layedit.sync(editIndex);
+                }
+            });
+
+            //监听提交
+            form.on('submit(yu)', function (data) {
+
+                Save();
+                //layer.alert(JSON.stringify(data.field), {
+                //    title: '最终的提交信息'
+                //})
+                //return;
+
+            });
+
+        });
+    </script>
+</body>
+</html>

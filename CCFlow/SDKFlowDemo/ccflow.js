@@ -16,7 +16,7 @@ function Forward(appPath, fk_flow, workid) {
 function Return(appPath, fk_flow,fk_node, workid) {
     var url = '/WF/WorkOpt/ReturnWork.htm?FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&WorkID=' + workid;
     window.showModalDialog(url, 'sd', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
-    window.location.href = window.location.href;
+    Reload();
     return false;
 }
 

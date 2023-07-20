@@ -67,8 +67,10 @@
 
 
             DBTypeChange();
-
-
+            $("#DDL_RequestMethod").val(en.Tag3);
+            var tag4 = en.Tag4;
+            tag4 = tag4.replace(/~/g, "'").replace(/'/g, "\"");
+            $("#TB_Post").val(tag4)
         });
 
         function Save() {
@@ -116,6 +118,11 @@
             var tag2 = $("#TB_Tag2").val();
             en.Tag2 = tag2; //设置主表的SQL.
 
+            en.Tag3 = $("#DDL_RequestMethod").val();
+            var tag4 = $("#TB_Post").val();
+            tag4 = tag4.replace(/"/g, "'").replace(/'/g, "~");
+            en.Tag4 = tag4;
+
             if (i == 0)
                 en.Insert();
             else
@@ -152,7 +159,15 @@
                     </select>
                 </td>
             </tr>
-
+            <tr id="RequestMethod">
+                <td> 请求模式</td>
+                <td>
+                    <select id="DDL_RequestMethod" name="DDL_RequestMethod">
+                        <option value="Get">GET</option>
+                        <option value="Post">POST</option>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <td colspan="2">
                     填充主表数据数据源表达式(SQL/URL)
@@ -163,7 +178,16 @@
                     <textarea rows="4" name="TB_SQL" id="TB_SQL" style="width: 98%;"> </textarea>
                 </td>
             </tr>
-
+            <tr class="Post">
+                <td colspan="2">
+                    POST请求参数
+                </td>
+            </tr>
+            <tr class="Post">
+                <td colspan="2">
+                    <textarea rows="4" name="TB_Post" id="TB_Post" style="width: 98%;"> </textarea>
+                </td>
+            </tr>
 
             <tr id="okBack1">
                 <td colspan="4">

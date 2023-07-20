@@ -71,7 +71,17 @@
 		    //执行实体的方法.
 		    //var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
 		    var msg2 = emp.DoMethodReturnString("ChangePass", "123", "321", "321"); //重置密码:不带参数的方法.
-		    alert(msg2);
+            alert(msg2);
+
+            //var en = new Entity("BP.Sys.GroupField");
+            //en.Lab = "xxx";
+            //en.FrmID = "xxxx";
+            //en.Insert();
+
+
+            //执行分组移动。
+            var ens = new Entities("BP.Sys.GroupFields");
+            ens.DoMethodReturnString("Move", "xxx,x,,xxxxx");
 
 		    return;
 		}
@@ -91,12 +101,14 @@
             //实体参数.
             var ur = new Entity("BP.Sys.UserRegedit");
             ur.MyPK = "admin_BP.WF.Template.SQLTemplates_SearchAttrs";
-            var i = ur.RetrieveFromDBSources();
+            var i =  ur.RetrieveFromDBSources();
             if (i == 0)
                 ur.Insert();
 
             ur.SetPara("SQLType", "all"); //给参数字段赋值.
             ur.Update(); //执行更新.
+
+            //alert("aaa");
 
             // 重新查询出来.
             ur.MyPK = "admin_BP.WF.Template.SQLTemplates_SearchAttrs";
@@ -110,8 +122,16 @@
 
         function Test_Adv() {
 
+         
             var emp = new Entity("BP.Port.Emp");
             emp.No = "zhoupeng";
+
+            //判断是否
+            if (emp.IsExits() == false)
+            {
+
+            }
+
             var i = emp.RetrieveFromDBSources(); //从数据库查询，查询不到不返回异常.
             if (i == 0)
                 alert('实体不存在');
@@ -135,7 +155,7 @@
             alert("BP.Port.Emps查询到:" + emps.length);
 
             //获得性别为女的学生.
-            var students1 = new Entities("BP.Demo.BPFramework.Students", "XB", "0");
+            var students1 = new Entities("BP.Demo.Students", "XB", "0");
             alert("Students XB=0 查询到:" + students1.length);
 
             for (var i = 0; i < students1.length; i++) {
@@ -146,7 +166,7 @@
                 alert(info);
 
                 //把json转化为entity.
-                var student = new Entity("BP.Demo.BPFramework.Student", jsonEn);
+                var student = new Entity("BP.Demo.Student", jsonEn);
                 var info = student.No + " - " + student.Name;
                 alert(info);
 
@@ -157,16 +177,16 @@
 
 
             //获得性别为女的学生并且按年龄排序.
-            var students2 = new Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
+            var students2 = new Entities("BP.Demo.Students", "XB", "0", "Age");
             alert("Students XB=0 查询到:" + students2.length);
 
 
             //获得性别为女的,并且班级为01 的学生.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01");
+            var students3 = Entities("BP.Demo.Students", "XB", "0", "FK_BanJi", "01");
             alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
 
             //获得性别为女的,并且班级为01 的学生, 按照年龄排序.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01", "Age");
+            var students3 = Entities("BP.Demo.Students", "XB", "0", "FK_BanJi", "01", "Age");
             alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
 
         }
@@ -177,7 +197,7 @@
             alert("BP.Port.Emps查询到:" + emps.length);
 
             //获得性别为女的学生.
-            var students = new Entities("BP.Demo.BPFramework.Students");
+            var students = new Entities("BP.Demo.Students");
             students.Retrieve("XB", 0);
             alert("Students XB=0 查询到:" + students.length);
 
@@ -201,7 +221,7 @@
         //执行方法.
         function TestEns_Method() {
 
-            var ens = new Entities("BP.Demo.BPFramework.Students");
+            var ens = new Entities("BP.Demo.Students");
 
             var data = ens.DoMethodReturnString("EnsMothed");
             alert('ens执行方法的结果为:' + data);
@@ -212,8 +232,12 @@
 
         function ExecHttpHandlerMonthod() {
 
+            //执行分组移动。
+            var ens = new Entities("BP.Sys.GroupFields");
+            ens.DoMethodReturnString("Move", "xxxxxx,xxxx,dddxxx,xxxxx");
+
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
-            var handler = HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var handler =new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
 
             handler.AddUrlData();  //把url参数加入里面去.
             handler.AddFormData(); //把form数据加入里面去.
@@ -222,7 +246,7 @@
             handler.AddPara("TB_PW", "123");
 
             //执行提交.
-            var result = handler.Login_Submit();
+          //  var result = handler.Login_Submit();
 
             //var resultJSON = handler.DoMethodReturnJSON("Login_Submit");
             var result = handler.DoMethodReturnString("Login_Submit");

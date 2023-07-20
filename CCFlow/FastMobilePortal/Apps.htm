@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <!--- 引入代码. -->
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/icons/font-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/icons/icons.css">
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../WF/Portal/layui/css/customer.css">
+
+    <link href="../CCMobile/js/mui/css/mui.css" rel="stylesheet" />
+    <script src="../CCMobile/js/mui/js/mui.min.js"></script>
+    <script type="text/javascript" src="../WF/Portal/js/sortjs/Sortable.min.js"></script>
+    <!--- 引入代码. -->
+    <script src="../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../WF/Portal/layui/layui.js"></script>
+    <script src="../WF/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../WF/Portal/js/vue/vue.js"></script>
+    <script src="../WF/Scripts/layui/LayuiDialog.js"></script>
+    <script src="DefaultMenu.js"></script>
+   
+    <style>
+        html, body {
+            background: #fff;
+        }
+
+        .header {
+            line-height: 40px;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+            .header strong {
+                font-size: 16px;
+                padding-left: 10px;
+            }
+
+        .mobile-apps-centeros {
+        }
+
+        .subTitle strong {
+            font-size: 13px;
+            padding: 10px 0px;
+            display: block
+        }
+
+        .iconTitle {
+            text-align: center;
+            padding-bottom: 15px;
+            padding-top: 10px;
+        }
+
+            .iconTitle i {
+                display: block;
+                padding: 5px 0px 10px;
+                font-size: 20px;
+            }
+
+            .iconTitle:nth-child(3n+1) {
+                color: red;
+            }
+
+            .iconTitle:nth-child(3n+2) {
+                color: #2e889b;
+            }
+
+            .iconTitle:nth-child(3n+3) {
+                color: #0094ff;
+            }
+
+            .iconTitle:nth-child(3n+4) {
+                color: #c42500;
+            }
+
+            .iconTitle span {
+                font-size: 13px;
+                color: #414141
+            }
+
+        .layui-tab-title li {
+            font-size: 15px;
+        }
+
+        .layui-tab-brief > .layui-tab-title .layui-this {
+            color: #000;
+            font-weight: bold;
+        }
+
+            .layui-tab-brief > .layui-tab-title .layui-this:after {
+                border-bottom: 2px solid #d00026
+            }
+        .mui-scroll > .mui-active {
+            border-bottom: 2px solid #d00026
+        }
+        .mui-segmented-control.mui-scroll-wrapper {
+            height: 42px;
+        }
+        * {
+            touch-action: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--<div id="mymask">
+        正在加载..
+    </div>-->
+    <div class="flow" id="flow">
+        <div class="header"><a href="Default.htm"><i class="fa fa-chevron-left"></i> <strong>应用中心</strong></a></div>
+        <div class="layui-container mobile-apps-centeros">
+            <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                <div class="mui-scroll">
+                    <a v-for="(item,index) in flowNodes" :key="index" :data-id="item.No" :data-pid="item.ParentNo"
+                       :data-sysid="item.No" :class="{'mui-active':selectedTopMenuIndex === item.No,'mui-control-item':true}" @click="ChangeSystemNo(item.No)">
+                        <span :data-sysno="item.No" :data-name="item.Name" 
+                              :data-idx="index">{{item.Name}}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="layui-tab-content subTitle">
+                <div  v-for="(item,index) in flowNodes" :key="index" :class="{'mui-active':selectedTopMenuIndex === item.No,'mui-slider-item':true, 'mui-control-content':true}" :data-pid="item.No" :id="item.No">
+                    <div v-for="(module,idx) in item.children" :key="idx" :data-pid="item.No" :data-id="module.No"
+                         :data-moduleid="module.No" :data-sysidx="index">
+                        <strong class="item-module-dp" :data-sysno="item.No"
+                                :data-moduleno="module.No" :data-name="module.Name" :data-pidx="index" :data-idx="idx">
+                            {{module.Name}}
+                        </strong>
+                        <div class="layui-row" v-show="k ==0 ||(k+1)%4 == 0" v-for="(m,k) in  module.children">
+                            <template v-for="(menu,menu_idx) in module.children" v-if="menu_idx>=k&& menu_idx<=k+3">
+                                <div class="layui-col-xs3 iconTitle"
+                                     :data-menuno="menu.No" :data-pid="module.No" :data-id="menu.No" :data-sysidx="index"
+                                     :data-moduleidx="idx">
+                                    <div @click="openPage(menu)">
+                                        <i :class="menu.Icon"></i> <span>{{menu.Name}}</span>
+                                    </div>
+
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="./Apps.js"></script>
+    <script src="../WF/Portal/DefaultMenuGlo.js"></script>
+    <script>
+        mui.init();
+        (function ($) {
+            //阻尼系数
+            var deceleration = mui.os.ios ? 0.003 : 0.0009;
+            $('.mui-scroll-wrapper').scroll({
+                bounce: false,
+                indicators: true, //是否显示滚动条
+                deceleration: deceleration
+            });
+        })(mui);
+    </script>
+</body>
+
+</html>

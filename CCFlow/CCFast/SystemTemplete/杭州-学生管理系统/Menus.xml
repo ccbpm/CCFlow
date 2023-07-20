@@ -1,0 +1,229 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <MySystem>
+    <No>ec7fff09-a</No>
+    <Name>杭州-学生管理系统</Name>
+    <IsEnable>1</IsEnable>
+    <Icon>icon-briefcase</Icon>
+    <OrgNo />
+    <Idx>0</Idx>
+  </MySystem>
+  <Modules>
+    <No>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</No>
+    <Name>学籍管理</Name>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <SystemNoText>杭州-学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Modules>
+    <No>fa443f04-ad5c-4b66-b234-58c02708f2f0</No>
+    <Name>系统管理</Name>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <SystemNoText>杭州-学生管理系统</SystemNoText>
+    <Icon>icon-folder</Icon>
+    <Idx>0</Idx>
+    <IsEnable>1</IsEnable>
+    <OrgNo />
+  </Modules>
+  <Menus>
+    <No>1130978f-362d-458d-be9e-31ba05aa408c</No>
+    <Name>我的tab容器页</Name>
+    <MenuModel>Tabs</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt />
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>3</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>26d830d9-4638-4e3d-88c6-5d5bf5c82311</No>
+    <Name>学生台账11</Name>
+    <MenuModel>Dict</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>Dict_XueShengTaiZhang11</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>1</ListModel>
+    <ListModelText>视图模式</ListModelText>
+    <Idx>1</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>4299ba9b-164b-4453-a83d-a49862abc8a9</No>
+    <Name>工作日志</Name>
+    <MenuModel>WorkRec</MenuModel>
+    <Mark>WorkRec</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/WorkRec/Default.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-doc</Icon>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>5</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>9a1c7010-b656-45a2-87fc-be1b6d9fe713</No>
+    <Name>统计分析</Name>
+    <MenuModel>Windows</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt />
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>7</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>a30b493e-3d44-4ffa-92b6-83dde1dc443c</No>
+    <Name>任务</Name>
+    <MenuModel>Task</MenuModel>
+    <Mark>Task</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/Task/Task.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-note</Icon>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>9</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>aafcb958-58fe-4b9b-9f88-3a3656ca4857</No>
+    <Name>科目1</Name>
+    <MenuModel>DictTable</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>KeMu1</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>fa443f04-ad5c-4b66-b234-58c02708f2f0</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>0</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>aecd0dc7-04d9-4499-ad9c-07d06158c556</No>
+    <Name>日历&amp;日程</Name>
+    <MenuModel>Calendar</MenuModel>
+    <Mark>Calendar</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/Calendar/Month.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-calendar</Icon>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>11</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>e35cceec-8eeb-43e0-a897-12ea35bc13a0</No>
+    <Name>班级字典1</Name>
+    <MenuModel>DictTable</MenuModel>
+    <Mark />
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>BanJiZiDian1</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon />
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>fa443f04-ad5c-4b66-b234-58c02708f2f0</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>0</Idx>
+    <OrgNo />
+  </Menus>
+  <Menus>
+    <No>eb751f56-e2ca-4383-b88d-360f7b2145c9</No>
+    <Name>知识管理</Name>
+    <MenuModel>KnowledgeManagement</MenuModel>
+    <Mark>KnowledgeManagement</Mark>
+    <Tag1 />
+    <FrmID />
+    <FlowNo />
+    <OpenWay>1</OpenWay>
+    <OpenWayText>本窗口</OpenWayText>
+    <UrlExt>/CCFast/KnowledgeManagement/Default.htm</UrlExt>
+    <MobileUrlExt />
+    <IsEnable>1</IsEnable>
+    <Icon>icon-eyeglass</Icon>
+    <SystemNo>ec7fff09-a</SystemNo>
+    <ModuleNo>9b747ab6-6990-4dcc-a02f-f14c4bc18be8</ModuleNo>
+    <ModuleNoText />
+    <ListModel>0</ListModel>
+    <ListModelText>编辑模式</ListModelText>
+    <Idx>13</Idx>
+    <OrgNo />
+  </Menus>
+</NewDataSet>

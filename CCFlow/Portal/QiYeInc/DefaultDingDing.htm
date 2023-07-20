@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--通用JS-->
+    <script src="WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <meta charset="utf-8" />
+    <title>驰骋BPM云服务-钉钉</title>
+</head>
+<script type="text/javascript">
+
+    //钉钉登录.
+    function MobileQiYeWeixinLogin() {
+        var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+
+        var data = handler.DoMethodReturnString("QiYeWeiXinSaoMa");
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
+        }
+        window.open(data, 'top');
+        //window.location.href = filterXSS(data);
+        return;
+    }
+    //钉钉安装.
+    function MobileQiYeWeixinInstall() {
+        var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+
+        var data = handler.DoMethodReturnString("QiYeWeiXinSaoMaInstall");
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
+        }
+        window.open(data, 'top');
+        // SetHref(data);
+        return;
+    }
+</script>
+<body>
+
+    <center>
+        <table style="width:auto">
+            <tr>
+                <td colspan="2">
+                    <div id="x" style="float:left">
+                        <img src="Title.png" style="max-width:300px" alt="驰骋BPM">
+
+                    </div>
+
+                    <div id="x" style="float:right;">
+                        <img src="Imgs/DingDing.png" style="width:150px;" />
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    驰骋BPM已经入住钉钉，成为钉钉服务商。
+                    极简设计、零代码构建本组织的BPM系统。
+
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <fieldset>
+                        <legend>我要扫码登录</legend>
+
+                        <ul>
+                            <li>
+                                <a href="javascript:MobileQiYeWeixinLogin()"><img src="//wwcdn.weixin.qq.com/node/wwopen/wwopenmng/style/images/independent/brand/300x40_blue$cecbbc4e.png" srcset="//wwcdn.weixin.qq.com/node/wwopen/wwopenmng/style/images/independent/brand/300x40_blue_2x$c22687e4.png 2x" alt="我要扫码登录"></a>
+                            </li>
+                        </ul>
+
+
+                        <legend> 我要安装到驰骋BPM云到钉钉.</legend>
+
+                        <ul>
+                            <li>
+                                <a href="javascript:MobileQiYeWeixinInstall()"><img src="./Imgs/WXInstall.png" /></a>
+                            </li>
+                        </ul>
+
+
+                        <legend>还没有钉钉？我要注册。</legend>
+                        <ul>
+                            <li>
+                                <a href="https://work.weixin.qq.com/wework_admin/register_wx?from=service_register" target="_blank">
+                                    我要注册钉钉
+                                </a>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>没有钉钉，那就网站注册</legend>
+                        <ul>
+                            <li>简单注册就拥有本组织的BPM系统.</li>
+                            <li>您登录后，需要自己维护组织结构(用户、部门、岗位、以及对应关系).</li>
+                            <li>
+                                <a href="RegisterByWebSite.htm" target="_blank">
+                                    网站注册
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="LoginWebSite.htm" target="_blank">
+                                    我已经注册过,登录用户登录.
+                                </a>
+                            </li>
+
+                            <li>
+                                手机Web版本扫码登录
+                                <div id="qrcodeContent">
+                                    <div id="qrcode"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </fieldset>
+
+                </td>
+                <td valign="top">
+
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>品牌保障-功能强大</legend>
+                        <p>驰骋BPM云完全继承了ccflow全部功能.</p>
+                        <p>ccflow是国内知名开源的老牌工作流程引擎.</p>
+                        <p>ccflow性能稳定，功能强大，低代码开发.</p>
+                        <p>适合国情：发送、退回、移交、加签、打印等.</p>
+                        <p>驰骋BPM云,让高大上的BPM系统平民化.</p>
+                    </fieldset>
+
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>PC移动端同步应用</legend>
+                        <p>1.直接网站注册驰骋BPM，三分钟搞定.</p>
+                        <p>2.与钉钉,微信深度集成,点击组织结构即可使用.</p>
+                        <p>3.待办、发起、手机微信、钉钉就可以完成.</p>
+                        <p>4.消息提醒功能手机、钉钉、邮件都可以接受消息.</p>
+                        <p>5.海量的表单模版，拿来就可以用.</p>
+                        <p>6.与微信深度集成，组织架构（人员部门岗位变更后）即时数据同步。</p>
+                    </fieldset>
+
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>节约成本-管理省心</legend>
+                        <p>不需要购买服务器，申请域名。</p>
+                        <p>不需要配备高级的运维人员。</p>
+                        <p>无需担心数据安全、备份、丢失。</p>
+                        <p>不需要单独维护组织结构，直接与微信钉钉集成并同步。</p>
+                        <p>专业的服务团队是您企业应用的有力保障。</p>
+                    </fieldset>
+
+                </td>
+            </tr>
+        </table>
+
+    </center>
+
+
+
+</body>
+</html>

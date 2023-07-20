@@ -1,0 +1,92 @@
+.login-bg {
+    background-size: 100% 100%;
+    background-color: #f8f8f8;
+}
+.login-bg-login {
+    /*background-color: #f8f8f8;*/
+}
+/*login box*/
+.login-box {
+    z-index: 100;
+    margin: 0 auto;
+    padding-top: 5%;
+    max-width: 460px;
+}
+
+    .login-box h1 {
+        /*background: url(../../../../DataUser/ICON/logo.png) no-repeat left;*/
+        background: url(../../Standard//image/cclog-logo.jpg)no-repeat left;
+        height: 35px;
+        /*text-indent: -9999px ;*/
+        background-size: 25%;
+        text-indent: -9999px;
+        margin-left: 45px;
+    }
+
+.login-form {
+    background: #fff;
+    padding: 40px 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px #b7e9fe;
+}
+
+.login-nav{ color: #999; font-size: 12px;}
+
+
+
+/*login box*/
+.login-box_admin{z-index:100;margin:0 auto;padding-top:10%;max-width:360px}
+
+    .login-box_admin h1 {
+        background: url(../../../../DataUser/ICON/IconSmall.png) no-repeat left;
+        width: 500px;
+        height: 120px;
+        text-indent: -9999px;
+
+    }
+
+
+
+/* login-title */
+.login_title {
+    /*margin: 30px 0;*/
+    /*margin-bottom: 35px;*/
+    margin-bottom: 30px;
+    margin-top: 10px;
+    font-size: 25px;
+    text-align: center;
+    /*color: #00a2e8;*/
+}
+.login_title b{
+    color: #00a2e8;
+}
+/* login-input */
+#TB_No, #TB_PW {
+    margin: 0 auto;
+    width: 65%;
+    height: 40px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #eee;
+}
+#TB_No {
+    margin-top: 17px;
+    margin-bottom: 25px;
+}
+/* login-btn-groups */
+.login-btn-active {
+    margin-top: 50px;
+}
+    .login-btn-active #Btn_Login {
+        margin: 10px auto;
+        width: 65%;
+        height: 40px;
+        border-radius: 15px;
+        background: #00a2e8;
+        border: none;
+        outline: none;
+        border-color: #fff;
+        font-size: 16px;
+        font-family: Arial,"Microsoft Yahe","Î¢ÈíÑÅºÚ";
+    }

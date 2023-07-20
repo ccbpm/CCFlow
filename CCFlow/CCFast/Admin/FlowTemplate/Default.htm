@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>表单模版库</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="/App/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/App/layuiadmin/style/admin.css" media="all">
+    <link href="FlowDesigner/css/icons.css" rel="stylesheet" />
+    <script src="../TemplateCfg.js"></script>
+    <style>
+        /*/*body{background:#ffffff;}*/
+        a:hover {
+            color: #e36d6d;
+        }
+
+        ul {
+            display: flex;
+        }
+
+        li {
+            list-style: none;
+            text-align: center;
+            font-size: 13.9px;
+        }
+
+        .active {
+            background: #e36d6d;
+            color: #e36d6d;
+        }
+    </style>
+    <script src="/App/layuiadmin/layui/layui.js"></script>
+    <script>
+
+        layui.config({
+            base: '/App/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index']);
+
+
+        let filter = document.getElementsByClassName("filter")
+        for (let i = 0; i < filter.length; i++) {
+            filter[i].addEventListener('click', function () {
+                filter[i].classList.add('active')
+                for (let j = 0; j < filter.length; j++) {
+                    if (i != j) {
+                        filter[j].classList.remove('active')
+                    }
+                }
+            })
+        }
+
+        var hyNo = null;
+        var funcNo = null;
+        $(function () {
+
+            var hys = new Entities("BP.FrmTemplate.Sort1s");
+            hys.RetrieveAll();
+
+            var funcs = new Entities("BP.FrmTemplate.SortFuncs");
+            funcs.RetrieveAll();
+
+            var sortHtml = "<ul>";
+            sortHtml = "<li id='allduncs' style='float: left; padding: 10px 10px 10px 5%;'> <a href=\"javascript:SetAllSort();\" style='float: left;padding:10px;' >全部功能&nbsp;&nbsp;&nbsp;&nbsp;></a> </li>";
+            for (var i = 0; i < funcs.length; i++) {
+
+                var func = funcs[i];
+                sortHtml += "<li   style='float: left;padding:10px;'><a class='filter funcs' style='float: left;padding:10px;background:#c4e6ee;' href=\"javascript:SetFunc('" + func.No + "');\" >" + func.Name + "</a></li> ";
+            }
+            sortHtml += "</ul>";
+            $("#Funcs").html(sortHtml);
+
+            var sortHtml = "<ul>";
+            sortHtml += "<li  id='allhys' style='float: left;padding: 10px 0px 10px 5%;'><a  style='float: left;padding:10px;' href=\"javascript:SetAllHY();\" >全部行业&nbsp;&nbsp;&nbsp;&nbsp;></a></li>";
+
+            for (var i = 0; i < hys.length; i++) {
+                var hy = hys[i];
+                sortHtml += "<li  style='float: left;padding:10px;margin: 10px 0px 10px 10px;'><a class='filter hys' style='padding:10px;background:#ccd9f0;' href=\"javascript:SetHY('" + hy.No + "');\" >" + hy.Name + "</a></li>";
+            }
+            sortHtml += "</ul>";
+            $("#HYs").html(sortHtml);
+
+            BindData();
+
+            BindStyle();
+        });
+
+        function BindStyle() {
+            $(".funcs").click(function () {
+                $(".funcs").removeClass("active");
+                $(this).toggleClass("active");
+            });
+            $(".hys").click(function () {
+                $(".hys").removeClass("active");
+                $(this).toggleClass("active");
+            });
+
+            $('#allduncs').click(function () {
+                $(".funcs").removeClass("active");
+            });
+            $("#allhys").click(function () {
+                $(".hys").removeClass("active");
+            });
+        }
+        function SetAllHY() {
+            hyNo = null;
+
+            BindData();
+        }
+        function SetAllSort() {
+            funcNo = null;
+            BindData();
+        }
+
+        function SetHY(no) {
+            hyNo = no;
+            BindData();
+
+        }
+        function SetFunc(no) {
+            funcNo = no;
+            BindData();
+        }
+
+        function BindData() {
+
+            var html = "";
+            var flowhtml = "";
+
+            var frms = new Entities("BP.FrmTemplate.FrmClouds");
+
+            if (hyNo == null && funcNo == null)
+                frms.Retrieve("IsTuiJian", 1);
+
+            if (hyNo == null && funcNo != null)
+                frms.Retrieve("FK_SortFunc", funcNo);
+
+            if (hyNo != null && funcNo == null)
+                frms.Retrieve("FK_FormTree", hyNo);
+
+            if (hyNo != null && funcNo != null)
+                frms.Retrieve("FK_FormTree", hyNo, "FK_SortFunc", funcNo);
+
+
+
+
+            flowhtml += "<div class='layui-row layui-col-space10 demo-list' style='margin:0px;'>";
+            for (var i = 0; i < frms.length; i++) {
+                var frm = frms[i];
+
+                flowhtml += "<div class='layui-col-sm4 layui-col-md3 layui-col-lg2'>";
+                flowhtml += "<div style='height: 115px;' class='layui-card'>";
+
+
+                var str = frm.Name;
+                if (str.length > 10) {//超出程度用...代替
+                    str = str.substring(0, 10) + "...";
+                }
+
+                flowhtml += "<div align='center' >";
+                flowhtml += "<span style='float:right'>";
+                flowhtml += "<a href=\"javascript:Install('" + frm.No + "','" + frm.Name + "');\" title='安装' > <i class='layui-icon'>&#xe601;</i> </a> </a>";
+
+                flowhtml += "</a></span>";
+
+                flowhtml += "</div>";
+                flowhtml += "<br/>";
+
+                flowhtml += "<div align='center' ><a href=\"javascript:ViewIt('" + frm.No + "');\" title='预览'>";
+                flowhtml += "<img style='width:55px' src = '/App/FlowDesigner/FlowIcon/aa.png'  onerror=\"nofind();\" ' />";
+
+                flowhtml += "</br>" + str + "</br>";
+                flowhtml += "</A>";
+                flowhtml += "</div>";
+
+                flowhtml += "</div>";
+                flowhtml += "</div>";
+            }
+
+            $("#docs").html(flowhtml);
+        }
+
+        //预览
+        function ViewIt(frmID) {
+            var url = "http://template.ccbpm.cn/Guide.aspx?DoType=ToFrm&FrmID=" + frmID;
+            WinOpenFull(url);
+        }
+        //安装
+        function Install(frmID, frmName) {
+            var url = "/App/FlowDesigner/NewFlowByTemplateFromCloud.htm?FrmID=" + frmID + "&FrmName=" + frmName;
+            OpenWindowRight(url, '安装:' + frmName);
+        }
+
+        function nofind() {
+            var img = event.srcElement;
+            img.src = "/App/FlowDesigner/AppTemplate/DefaultIcon.png";
+        }
+
+        //已知URL,在右侧打开页面
+        function OpenWindowRight(url, title) {
+            if (top.layui.index) {
+                top.layui.index.openTabsPage(url, title)
+            } else {
+                window.open(url)
+            }
+        }
+
+
+    </script>
+    <style>
+        /* 这段样式只是用于演示 */
+        #LAY-component-grid-list .demo-list .layui-card {
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <table style="width:100%;">
+        <tr>
+            <td>
+                <div id="Funcs"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <div id="HYs"></div>
+            </td>
+        </tr>
+    </table>
+
+    <div id="docs" style="display:inline;float:right;width:95%;margin-top:20px;margin-left:0px "></div>
+
+</body>
+</html>

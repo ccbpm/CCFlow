@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>驰骋BPM云平台</title>
+    <script type="text/javascript" src="/WF/Scripts/jquery-1.7.2.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="GenerScript.js"></script>
+    <script src="/WF/Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="/WF/Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+        $(function () {
+
+        });
+
+        function CheckUserNo(ctrl) {
+
+            var val = ctrl.value;
+
+            var user = new Entity("BP.Cloud.Emp");
+            if (val == '')
+                return;
+
+            user.No = val;
+            if (user.RetrieveFromDBSources() == 1) {
+                alert("您好，该手机号已经注册过了。");
+                return;
+            }
+            return;
+        }
+        function CheckOrgNo(ctrl) {
+
+            var val = ctrl.value;
+            if (val == '')
+                return;
+
+            if (val.length <= 3) {
+                alert('组织编号[' + val + ']长度不够');
+                $("#TB_OrgNo").focus();
+                return;
+            }
+
+            var org = new Entity("BP.Cloud.Org");
+            org.No = val;
+            if (org.RetrieveFromDBSources() == 1) {
+                alert("组织编号[" + val + "]已经注册过了。");
+                $("#TB_OrgNo").focus();
+                return;
+            }
+        }
+
+        function Save() {
+
+            var userNo = $("#TB_Adminer").val();
+            if (userNo.indexOf('_') != -1) {
+                alert('人员编号["+userNo+"]，不能有 - 号.');
+                return;
+            }
+            var orgNo = $("#TB_OrgNo").val();
+            if (orgNo.indexOf('_') != -1) {
+                alert('组织编号["+orgNo+"]，不能有 - 号.');
+                return;
+            }
+
+            var html = "正在注册请稍候...";
+            html += "<ul>";
+            html += " <li>1，大概需要1 - 3分钟时间。。</li>";
+            html += " <li>2，为您初始化组织结构、流程模版基础数据。</li>";
+            html += " <li>3，系统为您初始化的模版并不能适合您的组织，您可以登陆后台进行设计流程。</li>";
+            html += " <li>4，在设计流程之前您需要维护好您的组织结构。</li>";
+            html += "</ul>";
+
+            var index = layer.msg(html, {
+                icon: 16,
+                shade: [0.3, '#000']
+            });
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+            handler.AddFormData(); //复制表单的全部数据必须有name值.
+
+            var data = handler.DoMethodReturnString("RegisterAdminer_Submit");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            alert(data + ".\t\n将要转入登录主页，请在系统管理菜单设计流程模版。");
+
+            //  alert(data + "请您填写企业账户信息.");
+
+            SetHref( "/App/Portal/Home.htm");
+        }
+    </script>
+
+    <style type="text/css">
+        legend {
+            font-size: larger;
+            font-style: italic;
+            font-weight: bolder;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!--注册页面-->
+    <form class="layui-form" id="zhou">
+
+        <center>
+            <table style="width:90%;border:0px;">
+                <tr>
+                    <td colspan="2">
+                        <div id="toolbar"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="1" style="width:30%;" valign="top">
+                        <fieldset>
+                            <legend> 帮助 </legend>
+                            <ul>
+                                <li>第1步：注册管理员.</li>
+                                <li>第2步：注册企业账户.</li>
+                                <li>第3步：登录完善企业信息并设计流程.</li>
+                            </ul>
+
+                            <legend> 驰骋云BPM使用协议书 </legend>
+                            <ul>
+                                <li>欢迎您使用ccbpm云服务！！！</li>
+                                <li>驰骋BPM云服务可为您提供免费的BPM的SAAS服务，您只要注册一个帐号就可以轻松免费的使用她。</li>
+                                <li>如果您使用驰骋BPM的服务，您就需要接受如下条款。</li>
+                                <li>1. 如果您的或者您公司的同事，在3个月内没有任何登录，为了节省宝贵的空间资源，我公司的系统管理员有权删除而不需要负担任何责任。</li>
+                                <li>2. 用户数量在100人以内，流程在50个以内，永久免费。如果您需要获得我们的更多服务，请联系我公司的客服。</li>
+                                <li>3. 对于免费的用户，我们可以为您提供免费的服务，但不承担责任。</li>
+                                <li>济南驰骋信息技术有限公司具有以上条款的解释权.</li>
+                            </ul>
+
+                        </fieldset>
+                    </td>
+                    <td>
+                        <fieldset>
+                            <legend> 管理员帐号信息 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Default.htm"><img style="width:30px; height:30px;" src="/Imgs/Login.png">我有账户，我要登录</a> </legend>
+                           
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">姓名</label>
+                                <div class="layui-input-inline" style="width:200px;">
+                                    <input type="text" name="TB_AdminerName" lay-verify="required" placeholder="管理员姓名" autocomplete="off" class="layui-input">
+                                </div>
+                                <span class="layui-form-mid" style="color:#ff0000;font-size:20px;">*</span>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">E-mail</label>
+                                <div class="layui-input-inline" style="width:200px;">
+                                    <input type="text" name="TB_Email" lay-verify="email" placeholder="请输入E-mail" autocomplete="off" class="layui-input">
+                                </div>
+                                <span class="layui-form-mid" style="color:#ff0000;font-size:20px;">*</span>
+                                <div class="layui-form-mid layui-word-aux">
+                                    丢失密码可以用E-mail找回.
+                                </div>
+                            </div>
+                            <!--</fieldset>
+
+                            <fieldset>-->
+                            <legend>组织信息</legend>
+                            <div class="layui-form-item">
+
+                                <label style="" class="layui-form-label">企业账号</label>
+                                <div class="layui-input-inline" style="width:200px;">
+                                    <input type="text" name="TB_OrgNo" onblur="CheckOrgNo(this)" lay-verify="TB_OrgNo" placeholder="请输入企业账号" autocomplete="off" class="layui-input">
+                                </div>
+                                <span class="layui-form-mid" style="color:#ff0000;font-size:20px;">*</span>
+                                <div class="layui-form-mid layui-word-aux">例如:chichengsoft, 必须是3-12位的字母加数字的组合</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">企业简称</label>
+                                <div class="layui-input-inline" style="width:200px;">
+                                    <input type="text" name="TB_OrgName" lay-verify="required" placeholder="请输入企业简称" autocomplete="off" class="layui-input">
+                                </div>
+                                <span class="layui-form-mid" style="color:#ff0000;font-size:20px;">*</span>
+                                <div class="layui-form-mid layui-word-aux">例如驰骋BPM</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">企业全称</label>
+                                <div class="layui-input-inline" style="width:260px;">
+                                    <input type="text" name="TB_OrgNameFull" lay-verify="required" placeholder="例如:济南驰骋信息技术有限公司" autocomplete="off" class="layui-input">
+                                </div>
+                                <span class="layui-form-mid" style="color:#ff0000;font-size:20px;">*</span>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+
+                            <!-- 提交按钮.... -->
+                            <div class="layui-form-item" style="margin-right:30px;">
+                                <div class="layui-input-block">
+
+                                    <button type="button" class="layui-btn" lay-submit="" lay-filter="yu">提交注册</button>
+
+                                    <a href="Default.htm">我已经有帐号，我要登录。</a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </form>
+
+    <script type="text/javascript">
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate
+                , $ = layui.$;
+
+
+
+
+            //自定义验证规则
+            form.verify({
+                title: function (value) {
+                    if (value.length < 5) {
+                        return '标题至少得5个字符啊';
+                    }
+                },
+                password2: function (value) {
+                    password = $("#TB_PassWord").val();
+                    if (value != password) {
+
+                        return "两次输入的密码不一致";
+                    }
+                },
+
+                password: [
+                    /^[\S]{3,12}$/
+                    , '密码必须3到12位，且不能出现空格'
+                ],
+                content: function (value) {
+                    layedit.sync(editIndex);
+                }
+            });
+
+            //监听提交
+            form.on('submit(yu)', function (data) {
+
+                Save();
+                //layer.alert(JSON.stringify(data.field), {
+                //    title: '最终的提交信息'
+
+                //})
+                //return;
+
+            });
+
+        });
+    </script>
+</body>
+</html>

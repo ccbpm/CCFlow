@@ -15,7 +15,7 @@ var myvue=new Vue({
         Save: function () {
             var input = $("#reply-input")
             var en = new Entity("BP.CCBill.FrmBBS");
-            en.Name = input.val();
+            en.Docs = input.val();
             en.WorkID = this.workID; 
             en.FrmID = GetQueryString("FrmID");
             en.ParentNo = "0";
@@ -134,7 +134,7 @@ function obj2arr(obj) {
 function SaveAsReply(index) {
     parentNo = $('#Renum' + index).data('noid')
     var en = new Entity("BP.CCBill.FrmBBS");
-    en.Name = $("#Retext" + index).val();
+    en.Docs = $("#Retext" + index).val();
     console.log(en.Name);
     en.ParentNo = parentNo;
     en.WorkID = myvue.workID; 

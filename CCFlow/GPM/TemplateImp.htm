@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>组织结构模版导入</title>
+    <script type="text/javascript" src="/WF/Scripts/easyUI/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/WF/Scripts/easyUI/jquery.easyui.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引入新版本的类库. -->
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../layuiadmin/layui/lay/modules/layer.js"></script>
+    <script src="../layuiadmin/layui/layui.js"></script>
+    <style type="text/css">
+        input[type="button"], input[type="submit"], input[type="file"] {
+            border: 0;
+            background-color: #5cb2ff;
+            color: white;
+            font-size: 14px;
+            padding: 3px 15px;
+            margin: 5px 3px 5px 3px;
+            border-radius: 4px;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+
+
+
+        function Save() {
+            $("#Btn_Save").html("正在导入...");
+            //必须要选择文件
+            var fileValue = $("#file").val();
+            if (fileValue == "") {
+                alert("提示 : 没有要导入信息的Execl表。");
+                return;
+            }
+
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".xls" && fileExt.toLowerCase() != ".xlsx") {
+                alert("提示 : 所选不是excel文件，请重新选择。");
+                return;
+            }
+
+            layer.load(2, {
+                shade: [0.1, '#fff']
+            });
+
+            var doMethod = "Template_Save";
+            var httpHandlerName = "BP.Cloud.HttpHandler.App_Org";
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" + httpHandlerName,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
+                },
+                success: function (data) {
+                    layer.closeAll('loading');
+
+                    alert(data);
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    
+                    var url = "Organization.htm";
+                    SetHref(url);
+                      
+                }
+            });
+
+        }
+
+    </script>
+</head>
+<body>
+
+
+    <form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+        <table style=" width:100%">
+
+            <tr>
+                <td valign="top" style="width:30%;">
+                    <fieldset>
+                        <legend> 模版导入</legend>
+                        <ul>
+                            <li>上传本地的约定格式的xls文件 <input type="file" id="file" name="file" /> </li>
+                            <li>
+                                选择导入方式<select id="DDL_Way">
+                                    <option value="0" selected="true"> 更新方式导入 </option>
+
+                                </select>
+                            </li>
+
+                            <li>
+                                <input type="button" value="执行导入" id="Btn_Save" onclick="Save()" />
+                            </li>
+
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend> 导入说明 </legend>
+                        <ul>
+                            <li> 模版下载 </li>
+                            <li> <a href="Template.xlsx">模版.xls </a> </li>
+                            <li> 仔细阅读模板文件内容. </li>
+
+                        </ul>
+                    </fieldset>
+                    <div>
+
+                        <img src="../../WF/Img/loading.gif" style="display: none;" id="pic">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+</body >
+</html >

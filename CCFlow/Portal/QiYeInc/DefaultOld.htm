@@ -1,0 +1,430 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>驰骋BPM云服务，免费的SAAS模式的BPM服务，表单服务，流程引擎在线设计</title>
+    <meta name="renderer" content="webkit">
+   
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <!--通用JS-->
+    <script src="WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="/WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <!--layui-->
+    <script src="/App/layuiadmin/layui/layui.js" type="text/javascript"></script>
+    <link href="App/layuiadmin/layui/css/layui.css" rel="stylesheet" />
+    <link href="WF/Comm/CSS/common.css" rel="stylesheet" />
+    <script src="App/layuiadmin/layui/lay/modules/layer.js"></script>
+    <link href="App/layuiadmin/layui/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <link href="App/layuiadmin/style/login.css" rel="stylesheet" />
+
+    <!-- 生成二维码. -->
+    <script src="/Script/qrcodejs/qrcode.min.js"></script>
+    <script src="Script/qrcodejs/qrcode.js"></script>
+    <script type="text/javascript">
+        var orgNo = null;
+        $(function () {
+
+            //处理二级域名.
+            orgNo = GetOrgNo();
+
+            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                SetHref( "/CCMobilePortal/Default.htm?OrgNo=" + orgNo);
+                return;
+            }
+
+            if (orgNo == null) {
+
+                //没有获取到组织编号,就需要使用手机号登录.
+                $("#TB_No").attr("placeholder", "登录手机号.");
+            }
+            if (orgNo != null) {
+
+                $("#welcome").hide();
+
+                var org = new Entity("BP.Cloud.Org", orgNo);
+
+                var html = "<h3>您好，欢迎您登录: <font color=green><b>" + org.Name + "</b></font> BPM系统.</h3>";
+
+                html += "<img src='/DataUser/OrgIcon/" + orgNo + ".png' onerror=\"this.src='/DataUser/OrgIcon/default.png'\" style='width:300px;' />";
+                html += "<br/>";
+                html += "<a href='Register.htm'><h3>免费创建我单位的BPM系统.</h3></a>";
+
+                $("#docs").html(html);
+            }
+
+            //手机端登录.
+            MobileWebLogin();
+
+        })
+
+        function GetOrgNo() {
+
+            //处理二级域名.
+            var domain = GetQueryString("OrgNo");
+
+            //如果没有就从url获取二级域名.
+            if (domain == null || domain == '') {
+
+                var url = GetHrefUrl().toLowerCase();
+                if (url.indexOf('localhost') != -1)
+                    return null;
+
+                if (url.indexOf('//ccbpm.cn') != -1)
+                    return null;
+
+                var h = url.split(".")[0];
+                var domain = h.split("//")[1];
+                if (domain != null)
+                    domain = domain.toLowerCase();
+
+                if (domain == 'www' || domain == 'ww')
+                    return null;
+
+                var url = "http://www.ccbpm.cn/Default.htm?OrgNo=" + domain;
+                SetHref(url);
+                return null;
+            }
+            return domain;
+        }
+
+        function Password() {
+
+            //var val = $("#TB_Email").val();
+
+            var msg = "请输入您的注册ID或者E-mail,";
+            msg += "\t\n系统会把密码重置连接发送到您的邮箱.";
+
+            var val = promptGener(msg);
+            if (val == null || val == false)
+                return;
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_Portal");
+            handler.AddPara("Email", val);
+            var data = handler.DoMethodReturnString("PasswordReq_Save");
+            alert(data);
+
+            // SetHref( "Login.html";
+        }
+        function Back() {
+            SetHref( "Login.html");
+        }
+
+
+        function Login() {
+
+            var no = $("#TB_No").val();
+            var pass = $("#TB_PassWord").val();
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+            handler.AddPara("No", no); //复制表单的全部数据必须有name值.
+            handler.AddPara("PassWord", pass);
+            handler.AddPara("OrgNo", orgNo);
+
+            var data = handler.DoMethodReturnString("Login_Submit");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            var url = data;
+            if (url.indexOf("url") == 0) {
+                var a = url.substring(5);
+                SetHref( a);
+            }
+            return;
+        }
+
+        function ShowBigImg(obj) {
+            var img = new Image();
+            img.src = obj.src;
+
+            var imgHtml = "<img src='" + obj.src + "' width='500px' height='500px' />";
+            //弹出层
+            layer.open({
+                type: 1,
+                shade: 0.8,
+                offset: 'auto',
+                area: [542 + 'px', 542 + 'px'],
+                shadeClose: true,//点击外围关闭弹窗
+                scrollbar: false,//不现实滚动条
+                title: "驰骋BPM公众号", //不显示标题
+                content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                cancel: function () {
+                    //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+                }
+            });
+        }
+
+
+        //手机端web登录.
+        function MobileWebLogin() {
+
+            var url = "http://www.ccbpm.cn/CCMobilePortal/Default.htm";
+            if (orgNo != null) {
+                url += "?OrgNo=" + orgNo;
+            }
+
+
+            var div = document.getElementById("qrcode");
+            var qrcode = new QRCode(div, {
+                width: 200,
+                height: 200
+            });
+
+            qrcode.makeCode(url);
+
+        }
+        //企业微信登录.
+        function MobileQiYeWeixinLogin() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+
+            var data = handler.DoMethodReturnString("QiYeWeiXinSaoMa");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            SetHref(data);
+
+            return;
+        }
+        //企业微信安装.
+        function MobileQiYeWeixinInstall() {
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+
+            var data = handler.DoMethodReturnString("QiYeWeiXinSaoMaInstall");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            SetHref(data);
+
+            return;
+        }
+        function MobileXCXLogin() {
+            var url = "http://www.ccbpm.cn/CCMobilePortal/Default.htm";
+            if (orgNo != null) {
+                url += "?OrgNo=" + orgNo;
+            }
+            alert(url);
+        }
+    </script>
+
+
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout-admin layui-layout-admin">
+        <!--头部-->
+        <div class="layui-header" style="background-color:white">
+            <a class="logo" href="http://ccflow.org" target="_blank">
+                <img src="Title.png" style="max-width:300px" alt="驰骋BPM">
+            </a>
+        </div>
+        <!--内容-->
+        <div class="layui-container" style="margin-top:20px">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md8" style="border:1px solid #e6e6e6">
+                    <div id="docs"></div>
+
+                    <div class="layui-card" id="welcome">
+                        <div class="layuiadmin-card-text">
+                            <div style="text-align: center;font-weight: bold;font-size: 20px;">让每个组织都能用的起,高大上的BPM系统!!!</div>
+                            <ul class="site-idea">
+                                <li style="background-color:#377637cf;color:#f2f2f2">
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>品牌保障-功能强大</legend>
+                                        <p>驰骋BPM云完全继承了ccflow全部功能.</p>
+                                        <p>ccflow是国内知名开源的老牌工作流程引擎.</p>
+                                        <p>ccflow性能稳定，功能强大，低代码开发.</p>
+                                        <p>适合国情：发送、退回、移交、加签、打印等.</p>
+                                        <p>驰骋BPM云,让高大上的BPM系统平民化.</p>
+                                    </fieldset>
+                                </li>
+                                <li style="background-color:#a3a347;color:#f2f2f2">
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>PC移动端同步应用</legend>
+                                        <p>1.直接网站注册驰骋BPM，三分钟搞定.</p>
+                                        <p>2.与钉钉,微信深度集成,点击组织结构即可使用.</p>
+                                        <p>3.待办、发起、手机微信、钉钉就可以完成.</p>
+                                        <p>4.消息提醒功能手机、钉钉、邮件都可以接受消息.</p>
+                                        <p>5.海量的表单模版，拿来就可以用.</p>
+                                        <p>6.与钉钉，微信深度集成，组织架构（人员部门岗位变更后）即时数据同步。</p>
+                                    </fieldset>
+                                </li>
+                                <li style="margin-top:5px;background-color:#a74444;color:#f2f2f2">
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>节约成本-管理省心</legend>
+                                        <p>不需要购买服务器，申请域名。</p>
+                                        <p>不需要配备高级的运维人员。</p>
+                                        <p>无需担心数据安全、备份、丢失。</p>
+                                        <p>不需要单独维护组织结构，直接与微信钉钉集成并同步。</p>
+                                        <p>专业的服务团队是您企业应用的有力保障。</p>
+                                    </fieldset>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4" style="border:1px solid #e6e6e6;border-left:none">
+                    <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+
+                        <div id="" style="padding:20px;">
+                            <b>登录</b> -<font color="red"><b> <a href="Register.htm">注册企业BPM应用</a></b></font>
+                            -<a href="/Helper/Default.htm" target="_blank">帮助中心</a>
+                            -<a href="javascript:Password();">找回密码</a>
+
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="TB_No"></label>
+                            <input type="text" name="TB_No" id="TB_No" lay-verify="required" placeholder="用户名" class="layui-input">
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="TB_PassWord2"></label>
+                            <input type="password" name="TB_PassWord" id="TB_PassWord" lay-verify="required" placeholder="密码" class="layui-input">
+                        </div>
+
+                        <div class="layui-form-item">
+                            <button class="layui-btn layui-btn-fluid" onclick="Login()">帐号登录</button>
+                        </div>
+                        <div class="layui-form-item" style="margin-bottom: 20px;">
+
+                            <!--<input type="checkbox" name="remember" lay-skin="primary" title="记住密码">-->
+                            <!--<a href="/App/Portal/PasswordReq.htm" target="_blank" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>-->
+
+
+                            <ul>
+                                <li>
+                                    <a href="javascript:MobileQiYeWeixinLogin()"><img src="//wwcdn.weixin.qq.com/node/wwopen/wwopenmng/style/images/independent/brand/300x40_blue$cecbbc4e.png" srcset="//wwcdn.weixin.qq.com/node/wwopen/wwopenmng/style/images/independent/brand/300x40_blue_2x$c22687e4.png 2x" alt="企业微信登录"></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:MobileQiYeWeixinInstall()">企业微信扫码安装CCBPM应用</a>
+                                </li>
+                                <li><a href="javascript:MobileXCXLogin()">微信小程序扫码登录</a></li>
+
+                                <li>
+                                    <fieldset>
+                                        <legend> 手机Web版本扫码登录</legend>
+                                        <div id="qrcodeContent">
+                                            <div id="qrcode"></div>
+                                        </div>
+                                    </fieldset>
+
+                                </li>
+                            </ul>
+
+
+                        </div>
+
+                        <div class="layui-trans layui-form-item layadmin-user-login-other">
+                            <!--<label>社交账号登入</label>-->
+                            <!--<a href="javascript:alert('');"><i class="layui-icon layui-icon-login-qq"></i></a>
+                            <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
+                            <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>-->
+                            <!--<a href="Register.htm" class="layadmin-user-jump-change layadmin-link">注册企业BPM应用</a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--底部-->
+        <div class="layui-footer footer">
+            <div class="link center">
+                <ul>
+                    <li class="first"><a target="_blank" href="http://ccflow.org">驰骋官网</a></li>
+                    <li><a target="_blank" href="http://edu.ccflow.org">流程学院</a></li>
+
+                    <li><a target="_blank" href="http://ccflow.ke.qq.com">视频教程</a></li>
+                    <li><a target="_blank" href="http://doc.ccbpm.cn">操作手册</a></li>
+                    <li class="last"><a target="_blank" href="http://ccflow.org/down.htm">源代码下载</a></li>
+                </ul>
+            </div>
+            <div class="content center" style="bottom:10px">
+
+                <div class="copyright">
+                    <p class="fl pt10 mr10">
+                        提醒：
+                    </p>
+                    <p class="fl">1.驰骋BPM云分为免费版和收费版.</p>
+                    <p class="fl">2.收费的客户会有专属的服务器，专属的带宽，运行更流畅.</p>
+                    <p class="fl">3.vip客户我们可以为您提供流程策划、优化服务，问题解答服务，问题解决服务。</p>
+
+                </div>
+                <div class="code">
+                    <img src="http://ccflow.org/WeiXin/WeiXinBiger.jpg" alt="驰骋BPM公众号" style="width:60px" onclick="ShowBigImg(this)" />
+                </div>
+            </div>
+        </div>
+        <div class="link-fixed">
+            <a class="online pub-btn btn-golden" style="color:#4b2e83;display:none" href="http://app.ccflow.org" target="_blank" onclick="return showGotoOldVersionQNR(event);"><img src="/Content/site/images/skip.ico"><p style="margin-top:-7px;">前往旧版</p></a>
+            <a class="online pub-btn btn-golden" href="http://app.ccflow.org" target="_blank"><i class="layui-icon layui-icon-group" style="font-size: 30px; color: #4a1b60;display:block"></i>经典案例</a>
+            <a class="online pub-btn btn-golden" href="https://jq.qq.com/?_wv=1027&amp;k=mSHGQUpQ" target="_blank">
+                <i class="layui-icon layui-icon-service" style="font-size: 30px; color: #4a1b60;display:block"></i>QQ客服
+            </a>
+            <a class="online pub-btn btn-golden" href="./Helper/Default.htm" target="_blank"> <i class="layui-icon layui-icon-help" style="font-size: 30px; color: #4a1b60;display:block"></i> 常见问题</a>
+
+        </div>
+    </div>
+
+
+</body>
+<style type="text/css">
+    .layui-layout-admin .layui-footer {
+        left: 0px !important;
+        background-color: #442976 !important;
+        height: 110px !important;
+        line-height: 26px;
+    }
+
+    .site-idea {
+        margin: 50px 0;
+        font-size: 0;
+        text-align: center;
+        font-weight: 300;
+    }
+
+        .site-idea li {
+            display: inline-block;
+            vertical-align: top;
+            *display: inline;
+            *zoom: 1;
+            font-size: 14px;
+        }
+
+        .site-idea li {
+            width: 298px;
+            height: 150px;
+            padding: 30px;
+            line-height: 24px;
+            margin-left: 30px;
+            border: 1px solid #d2d2d2;
+            text-align: left;
+        }
+
+            .site-idea li:first-child {
+                margin-left: 0
+            }
+
+        .site-idea .layui-field-title {
+            border-color: #d2d2d2
+        }
+
+            .site-idea .layui-field-title legend {
+                margin: 0 20px 20px 0;
+                padding: 0 20px;
+                text-align: center;
+            }
+</style>
+</html>

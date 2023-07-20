@@ -105,17 +105,18 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     public void WriteLogApp()
     {
         // 写入一条消息.
-        BP.Sys.Glo.WriteLineInfo("这是一条消息. ");
+       BP.Sys.Base.Glo.WriteLineInfo("这是一条消息. ");
 
         // 写入一条警告.
-        BP.Sys.Glo.WriteLineWarning("这是一条警告. ");
+        BP.Sys.Base.Glo.WriteLineWarning("这是一条警告. ");
 
         // 写入一条异常或者错误.
-        BP.Sys.Glo.WriteLineError("这是一条错误. ");  // 以上这些日志写入了 \DataUser\Log\*.*
+        BP.Sys.Base.Glo.WriteLineError("这是一条错误. ");  // 以上这些日志写入了 \DataUser\Log\*.*
 
         //写入用户日志
-        BP.Sys.Glo.WriteUserLog("Login", "stone", "系统登录");
-        BP.Sys.Glo.WriteUserLog("Login", "stone", "系统登录", "192.168.1.100");  // 以上用户日志写入了 Sys_UserLog 表里.)
+        BP.Sys.Base.Glo.WriteUserLog("Login", "stone", "系统登录");
+
+        BP.Sys.Base.Glo.WriteUserLog("Login", "stone", "系统登录", "192.168.1.100");  // 以上用户日志写入了 Sys_UserLog 表里.)
     }
     /// <summary>
     /// 全局的基本应用,获取当前操作员的信息.
@@ -182,7 +183,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
 
         // 不知道数据库类型.
         ps = new Paras();
-        ps.SQL = "DELETE FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "UserNo";
+        ps.SQL = "DELETE FROM Port_Emp WHERE No=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "UserNo";
         ps.Add("UserNo", "abc");
         BP.DA.DBAccess.RunSQL(ps);
 
@@ -204,7 +205,6 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         //spName = "MySp";
         //BP.DA.DBAccess.RunSP(spName, ps);
         #endregion 执行带有参数.
-
 
         #region 向数据库存储、读写文件.
         //写入实例.

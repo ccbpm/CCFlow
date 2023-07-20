@@ -1,0 +1,23 @@
+.customContainer{
+    width: 16%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #ffffff;
+    border-right: 1px solid #ddd;
+    overflow-x: hidden;
+}
+.customContainerScroll{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+.pdf-wrapper{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 16%;
+    bottom: 0;
+}

@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>首页</title>
+    <link href="../../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="fonts/font-icons.min.css" rel="Stylesheet" />
+    <link href="../../../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script src="../../../WF/Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../../../WF/Style/skin/js/mp.mansory.min.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/layui/layui/lay/modules/layer.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        //页面启动函数.
+        $(function () {
+            InitPage();
+        });
+        //增加一个标签.
+        function AddTab(title, url) {
+            alert("1")
+            js.addTabPage($("#mainPage"), title, url);
+        }
+        function WinOpenInit(url) {
+            window.parent.WinOpenParentMenu(url, "待办");
+        }
+        //初始化数据.
+        function InitPage() {
+
+            return;
+             
+             
+        }
+    </script>
+    <style type="text/css">
+        td {
+            border: none;
+            line-height: 1.42857;
+            padding: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <!--模块化信息-->
+        <div class="row c" id="infoContent">
+            <h3> 超级用户后台登陆 </h3>
+            <ul>
+                <ol> 管理组织与组织下的人员. </ol>
+                <ol> 管理每个组织下的流程.</ol>
+                <ol> 管理每个组织下的表单.</ol>
+
+            </ul>
+        </div> 
+    </div>
+    <!--<div style="text-align: right; margin-right: 5px; margin-top: 5px; margin-bottom: 20px">
+        <a href="PersonalBars.htm"><i class="icon-settings"></i>模块设置</a>
+
+    </div>-->
+</body>
+</html>

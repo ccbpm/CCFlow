@@ -1,0 +1,111 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>CCFlowCloud administrator </title>
+    <meta charset="UTF-8" />
+    <link href="login.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <script src="../../../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <link href="../../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="config.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        $(function () {
+            $('#ContentShow').hide();
+        });
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            if (e.keyCode == 13) {
+                Login();
+                return false;
+            }
+        }
+
+        function Login() {
+
+            var userNo = $("#TB_No").val();
+            var userPass = $("#TB_PW").val();
+
+            if (userNo == "" || userPass == "") {
+                layer.msg('请输入用户名与密码');
+                return false;
+            }
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Admin");
+            handler.AddPara("TB_No", userNo);
+            handler.AddPara("TB_PW", userPass);
+            var data = handler.DoMethodReturnString("Login_AdminOnlySaas");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var webUser = new WebUser();
+
+            var url = GetQueryString("FromUrl");
+            if (url == null || url == undefined)
+                url = "Home.htm?OrgNo=" + webUser.OrgNo + "&UserNo=" + webUser.No;
+
+            location.href = url;
+        }
+        function LoginEmp() {
+            window.location.href = "../Login.htm";
+        }
+        function Assist() {
+            $('#ContentShow').show();
+        }
+        function hideAssist() {
+            $('#ContentShow').hide();
+        }
+
+    </script>
+</head>
+<body class="login-bg login-bg-login">
+
+    <div class="login-box">
+        <h1 class="logo-name"></h1>
+        <div class="login_title">驰骋BPM多租户-超级管理员登陆</div>
+        <div class="login-form">
+            <form id="Form1">
+                <div class="form-group">
+                    <!-- 输入框只读 -->
+                    <input type="text" id="TB_No" name="TB_No" value="admin" placeholder="请输入账号" readonly="readonly" lay-verify="required" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="TB_PW" name="TB_PW" placeholder="请输入密码" lay-verify="required" class="form-control" />
+                </div>
+                <div class="login-btn-active">
+                    <input type="button" id="Btn_Login" onclick="Login()"
+                           class="btn btn-primary btn-block"
+                           value="超管admin登录" />
+
+                    <!--<input type="button" id="Btn_Login" onclick="LoginEmp()"
+                    class="btn btn-primary btn-block"
+                    value="" />-->
+                </div>
+
+                <div id="msg"></div>
+            </form>
+        </div>
+        <div style="float:right;margin-top:10px;">
+            <a href="javascript:LoginEmp()"> 返回:Saas用户登陆</a>
+        </div>
+
+        <div style="float:left;margin-top:10px;">
+            <div onmouseover='Assist()' onmouseout="hideAssist()">帮助</div>
+            <ul id="ContentShow">
+                <li> 创建、删除、修改组织.</li>
+                <li> 查看各个组织的人员、角色、设置情况.</li>
+                <li> 各个组织的流程、表单创建情况.</li>
+                <li> 对系统运行的查询、统计、分析.</li>
+            </ul>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="../../../WF/Scripts/QueryString.js"></script>
+    <script src="../../../WF/Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../WF/Comm/Gener.js"></script>
+
+</body>
+</html>

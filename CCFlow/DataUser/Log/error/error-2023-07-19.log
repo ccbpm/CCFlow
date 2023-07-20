@@ -1,0 +1,80 @@
+2023-07-19 15:00:59.0571|ERROR|
+位置：CCFlow.DataUser.API.Controllers.CommController.ProcessRequest(D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:49)
+err@登录时间过长,请重新登录. @其他信息:err@在执行类[BP.WF.HttpHandler.WF_Comm]，方法[WebUser_Init]错误 	
+ @err@ token 过期或失效. 	
+ @技术信息:   在 BP.WF.Dev2Interface.Port_LoginByToken(String token) 位置 D:\CCFlowCloud\Components\BP.WF\Dev2Interface.cs:行号 3525
+   在 BP.WF.HttpHandler.DirectoryPageBase.DealToken(DirectoryPageBase page, String mothodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 62
+   在 BP.WF.HttpHandler.DirectoryPageBase.DoMethod(DirectoryPageBase myEn, String methodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 109
+   在 CCFlow.DataUser.API.Controllers.CommController.ProcessRequest() 位置 D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:行号 22 	
+相关参数:@DoType=WebUser_Init@Token=d97d3043-d11e-4781-96f7-9e89f43af157@t=1689750057248
+
+
+2023-07-19 15:00:59.2744|ERROR|
+位置：CCFlow.DataUser.API.Controllers.CommController.ProcessRequest(D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:49)
+err@登录时间过长,请重新登录. @其他信息:err@在执行类[BP.WF.HttpHandler.WF_Comm]，方法[WebUser_Init]错误 	
+ @err@ token 过期或失效. 	
+ @技术信息:   在 BP.WF.Dev2Interface.Port_LoginByToken(String token) 位置 D:\CCFlowCloud\Components\BP.WF\Dev2Interface.cs:行号 3525
+   在 BP.WF.HttpHandler.DirectoryPageBase.DealToken(DirectoryPageBase page, String mothodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 62
+   在 BP.WF.HttpHandler.DirectoryPageBase.DoMethod(DirectoryPageBase myEn, String methodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 109
+   在 CCFlow.DataUser.API.Controllers.CommController.ProcessRequest() 位置 D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:行号 22 	
+相关参数:@DoType=WebUser_Init@Token=d97d3043-d11e-4781-96f7-9e89f43af157@t=1689750059118
+
+
+2023-07-19 15:05:19.9676|ERROR|
+位置：CCFlow.DataUser.API.Controllers.CommController.ProcessRequest(D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:49)
+err@登录时间过长,请重新登录. @其他信息:err@在执行类[BP.WF.HttpHandler.WF_Comm]，方法[WebUser_Init]错误 	
+ @err@ token 过期或失效. 	
+ @技术信息:   在 BP.WF.Dev2Interface.Port_LoginByToken(String token) 位置 D:\CCFlowCloud\Components\BP.WF\Dev2Interface.cs:行号 3525
+   在 BP.WF.HttpHandler.DirectoryPageBase.DealToken(DirectoryPageBase page, String mothodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 62
+   在 BP.WF.HttpHandler.DirectoryPageBase.DoMethod(DirectoryPageBase myEn, String methodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 109
+   在 CCFlow.DataUser.API.Controllers.CommController.ProcessRequest() 位置 D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:行号 22 	
+相关参数:@DoType=WebUser_Init@Token=836211da-4519-4feb-8620-e8061a7d9b19@t=1689750319180
+
+
+2023-07-19 15:32:11.0326|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7713)
+   在 BP.WF.Template.FindWorker.GetEmpDeptBySFModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1498
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1332
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1798
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2164
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3654
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7393
+
+
+2023-07-19 15:32:19.7031|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7713)
+   在 BP.WF.Template.FindWorker.GetEmpDeptBySFModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1498
+   在 BP.WF.Template.FindWorker.FindByWorkFlowModel() 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1332
+   在 BP.WF.Template.FindWorker.DoIt(Flow fl, WorkNode currWn, WorkNode toWn) 位置 D:\CCFlowCloud\Components\BP.WF\Template\FindWorker.cs:行号 1798
+   在 BP.WF.WorkNode.Func_GenerWorkerLists(WorkNode town) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 269
+   在 BP.WF.WorkNode.NodeSend_11(Node toND) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2164
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3654
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7393
+
+
+2023-07-19 15:42:34.0967|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL= SELECT WF_GenerWorkFlow.WorkID, WF_GenerWorkFlow.Title, WF_GenerWorkFlow.FK_Flow, WF_Flow_FK_Flow.Name AS FK_FlowText, WF_GenerWorkFlow.BillNo, WF_GenerWorkFlow.FK_Node, WF_GenerWorkFlow.WFSta, CASE WF_GenerWorkFlow.WFSta WHEN 0 THEN '运行中' WHEN 1 THEN '已完成' WHEN 2 THEN '其他' WHEN NULL THEN '运行中' END "WFStaText", WF_GenerWorkFlow.Starter,IFNULL(WF_GenerWorkFlow.RDT,'2023-07-19') RDT, WF_GenerWorkFlow.NodeName, WF_GenerWorkFlow.TodoEmps, WF_GenerWorkFlow.FlowNote, WF_GenerWorkFlow.Emps, WF_GenerWorkFlow.WFState, WF_GenerWorkFlow.FID, WF_GenerWorkFlow.PWorkID, WF_GenerWorkFlow.SKeyWords FROM WF_GenerWorkFlow LEFT JOIN WF_Flow AS WF_Flow_FK_Flow ON WF_GenerWorkFlow.FK_Flow=WF_Flow_FK_Flow.No WHERE (1=1) AND ( ( WF_GenerWorkFlow.Starter =@Starter) AND ( WFState=2 or WFState=3 or WFState=4 or WFState=5 or WFState=6 or WFState=8 or WFState=10 ) )  Exception=Unknown column 'WF_GenerWorkFlow.SKeyWords' in 'field list'
+
+
+2023-07-19 16:06:22.6395|ERROR|
+位置：BP.En.Entity.Retrieve(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:1271)
+@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = ND3103
+
+
+2023-07-19 16:07:27.3152|ERROR|
+位置：BP.En.Entity.Retrieve(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:1271)
+@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = ND3103
+
+
+2023-07-19 16:21:57.1259|ERROR|
+位置：BP.En.Entity.Retrieve(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:1271)
+@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = ND3103
+
+
+2023-07-19 16:22:38.2225|ERROR|
+位置：BP.En.Entity.Retrieve(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:1271)
+@没有[表单注册表  Sys_MapData, 类[BP.Sys.MapData], 物理表[Sys_MapData] 实例。PK = ND3103
+
+

@@ -65,14 +65,17 @@ function GenerFoolFrm(wn, isComPare) {
                 return attr.KeyOfEn == keyOfEn;
             })[0];
             var tag = mapAttr.Tag || "";
-            if (tag != "")
+            if (tag != "") {
                 tag = DealExp(tag);
-            if (mapAttr.UIIsEnable == 1) {
-                //执行js
-                DBAccess.RunUrlReturnString(tag);
+                if (mapAttr.UIIsEnable == 1) {
+                    //执行js
+                    DBAccess.RunUrlReturnString(tag);
+                }
+                if (mapAttr.UIIsEnable == 2)
+                    DBAccess.RunFunctionReturnStr(tag);
             }
-            if (mapAttr.UIIsEnable == 2)
-                DBAccess.RunFunctionReturnStr(tag);
+               
+            
             if (mapAttr.UIIsEnable != 0 && isReadonly != true)
                 FullIt("", mapAttr.MyPK + "_FullData", "Btn_" + mapAttr.KeyOfEn, 0);
         })
@@ -402,6 +405,7 @@ function InitMapAttr(frmData, tableCol, groupID) {
                 mapExt.MyPK = myExts[0].MyPK;
                 str = mapExt.DoMethodReturnString("ReadBigNoteHtmlText");
             }
+            str = replaceAll(str, "../../../../", basePath + "/");
             html += "<div class='layui-row FoolFrmFieldRow'>";
             html += "<div  class='" + textWidth + " FoolFrmFieldLabel'>" + str + "</div>";
             html += "</div>";

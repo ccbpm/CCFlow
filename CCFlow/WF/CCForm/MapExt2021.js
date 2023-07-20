@@ -461,9 +461,25 @@ function FullCtrl(selectVal, ctrlIdBefore, mapExt) {
         endId = ctrlIdBefore.substring(ctrlIdBefore.lastIndexOf('_'));
     }
     var isDtlField = endId !== "" ? true : false;
-
-    var dataObj = GetDataTableByDB(dbSrc, mapExt.DBType, mapExt.FK_DBSrc, selectVal,mapExt,"Doc");
-
+    var dataObj;
+    //如果是URL 的POST请求
+    if (mapExt.DBType == 1 && mapExt.Tag4 == "Post") {
+        var kvs = GenerPageKVs();
+        var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+        handler.AddPara("Key", selectVal);
+        handler.AddPara("FK_MapExt", mapExt.MyPK);
+        handler.AddPara("KVs", kvs);
+        handler.AddPara("DoTypeExt", "ReqCtrl");
+        handler.AddPara("OID", oid);
+        var data = handler.DoMethodReturnString("HandlerMapExt");
+        if (data.indexOf("err@") != -1) {
+            alert(data);
+            return;
+        }
+        dataObj = JSON.parse(data);
+    } else {
+        dataObj = GetDataTableByDB(dbSrc, mapExt.DBType, mapExt.FK_DBSrc, selectVal, mapExt, "Doc");
+    }
     TableFullCtrl(dataObj, ctrlIdBefore, beforeID, endId, mapExt);
 
     //如果含有FullDataDtl也需要处理
@@ -595,10 +611,8 @@ function TableFullCtrl(dataObj, ctrlIdBefore, beforeID, endId,mapExt) {
                 }
             });
         }
-        if (isHaveKey == false)
-            break;
+       
     }
-    debugger
     if (mapExt != null) {
         var mapData = new Entity("BP.Sys.MapData", mapExt.FK_MapData);
         if (mapData.FrmType == 10) {
@@ -649,8 +663,7 @@ function FullCtrlDDL(selectVal, ctrlID, mapExt) {
 function FullDtl(selectVal, mapExt,oid) {
     if (mapExt.Tag1 == "" || mapExt.Tag1 == null)
         return;
-
-    var kvs = "";
+    var kvs = GenerPageKVs();
     var dbType = mapExt.DBType;
     var dbSrc = mapExt.Tag1;
     var url = GetLocalWFPreHref();
@@ -685,28 +698,62 @@ function FullDtl(selectVal, mapExt,oid) {
         }
         dataObj = cceval("(" + data + ")"); //转换为json对象 	
     }
-
-    for (var i in dataObj.Head) {
-        if (typeof (i) == "function")
-            continue;
-
-        for (var k in dataObj.Head[i]) {
-            var fullDtl = dataObj.Head[i][k];
-            //  alert('您确定要填充从表吗?，里面的数据将要被删除。' + key + ' ID= ' + fullDtl);
+    debugger
+    if (!!dataObj) {
+        $.each(dataObj, function (i, item) {
+            var fullDtl = item['Dtl'];
             var frm = document.getElementById('Frame_' + fullDtl);
-            if (frm==null || frm.length == 0)
-                continue;
-            var src = frm.src;
-            if (src != undefined || src != null) {
-                var idx = src.indexOf("&Key");
-                if (idx == -1)
-                    src = src + '&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
-                else
-                    src = src.substring(0, idx) + '&ss=d&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
-                frm.src = src;
+            if (!!frm) {
+                var src = frm.src;
+                if (src != undefined || src != null) {
+                    var idx = src.indexOf("&Key");
+                    if (idx == -1)
+                        src = src + '&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
+                    else
+                        src = src.substring(0, idx) + '&ss=d&Key=' + selectVal + '&FK_MapExt=' + mapExt.MyPK;
+                    frm.src = src;
+                }
             }
-        }
+            
+        })
     }
+    
+}
+function GenerPageKVs() {
+    var ddls = null;
+    ddls = parent.document.getElementsByTagName("select");
+    kvs = "";
+    for (var i = 0; i < ddls.length; i++) {
+        var id = ddls[i].name;
+
+        if (id.indexOf('DDL_') == -1) {
+            continue;
+        }
+        var myid = id.replace('DDL_','');
+        kvs += '~' + myid + '=' + ddls[i].value;
+    }
+
+    ddls = document.getElementsByTagName("select");
+    for (var i = 0; i < ddls.length; i++) {
+        var id = ddls[i].name;
+
+        if (id.indexOf('DDL_') == -1) {
+            continue;
+        }
+        var myid = id.replace('DDL_', '');
+        kvs += '~' + myid + '=' + ddls[i].value;
+    }
+    ddls = document.getElementsByTagName("input");
+    for (var i = 0; i < ddls.length; i++) {
+        var id = ddls[i].name;
+
+        if (id.indexOf('TB_') == -1) {
+            continue;
+        }
+        var myid = id.replace('TB_', '');
+        kvs += '~' + myid + '=' + ddls[i].value;
+    }
+    return kvs;
 }
 function DealSQL(dbSrc, key, kvs) {
 

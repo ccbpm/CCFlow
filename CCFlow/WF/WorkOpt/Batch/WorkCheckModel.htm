@@ -41,6 +41,7 @@
             var mapAttrs = data.Sys_MapAttr; //要显示的字段.
 
             node = new Entity("BP.WF.Node", nodeID);
+            console.log(node);
             var BatchCheckNoteModel = node.GetPara("BatchCheckNoteModel");
             if (BatchCheckNoteModel == undefined)
                 BatchCheckNoteModel = "0"; //审核意见填写方式,默认为选择的Item一个意见.
@@ -244,6 +245,7 @@
             }
 
             var BatchCheckNoteModel = node.GetPara("BatchCheckNoteModel")
+            console.log(BatchCheckNoteModel);
             //如果是 每条记录单独的意见，就提示一下。
             if (BatchCheckNoteModel == "1") {
                 if (window.confirm('确定要执行吗？') == false)
@@ -279,6 +281,7 @@
 
             //判断审核组件的状态，如果启用了. 并且审核意见填写模式为一个 统一 的意见.
             var sta = node.FWCSta;
+            console.log(sta);
             var checkNote = ""; //审核意见.
             if (sta == 1 && BatchCheckNoteModel == "0") {
                 var checkNote = promptGener('请输入审核意见', "同意");
@@ -305,6 +308,7 @@
             $("#batchModal").modal().show();
             // $("#batchModal").find('.modal-title').text("67");
             data = data.replace(/@/g, '<br/>@');
+            console.log(data);
             $("#msgContent").html(data);
             $('#batchModal').on('hidden.bs.modal', function () {
 
@@ -324,6 +328,7 @@
             toNodeID = nodeID;
             $('#modalHeader').text("选择接受人");
             modalIframeSrc = "../" + OperHtml + ".htm?FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + workid + "&ToNode=" + nodeID + "&IsSend=1&PageFrom=WorkCheckModel" + "&s=" + Math.random();
+            console.log(modalIframeSrc);
             $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
             $('#returnWorkModal').modal().show();
         }
@@ -352,7 +357,6 @@
             //    return;
 
             var workIds = GetWorkIDs();
-
             if (workIds == "") {
                 alert("选择需要退回的流程数据");
                 return;
@@ -360,6 +364,8 @@
             var url = "";
             var fk_node = GetQueryString("FK_Node");
             var isFrameCross = GetHrefUrl().indexOf(basePath) == -1 ? 1 : 0;
+            console.log(basePath);
+            console.log(isFrameCross);
             if (workIds.indexOf(",") == -1)
                 url = "../ReturnWork.htm?FK_Node=" + fk_node + "&WorkID=" + workIds + "&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
             else {
@@ -419,6 +425,10 @@
         }
         function Btn_Back() {
             var type = GetQueryString("Type");
+            var mode = GetQueryString('mode');
+            if (mode = 'tookitVue3') {
+                window.close()
+            }
             if (type == 0)
                 SetHref("../../Batch.htm");
             else if (type == 1)

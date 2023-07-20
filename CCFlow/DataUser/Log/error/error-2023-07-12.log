@@ -1,0 +1,27 @@
+2023-07-12 18:35:58.0980|ERROR|
+位置：CCFlow.DataUser.API.Controllers.CommController.ProcessRequest(D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:49)
+err@登录时间过长,请重新登录. @其他信息:err@在执行类[BP.WF.HttpHandler.WF_Comm]，方法[HttpHandler]错误 	
+ @err@ token 过期或失效. 	
+ @技术信息:   在 BP.WF.Dev2Interface.Port_LoginByToken(String token) 位置 D:\CCFlowCloud\Components\BP.WF\Dev2Interface.cs:行号 3518
+   在 BP.WF.HttpHandler.DirectoryPageBase.DealToken(DirectoryPageBase page, String mothodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 62
+   在 BP.WF.HttpHandler.DirectoryPageBase.DoMethod(DirectoryPageBase myEn, String methodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 109
+   在 CCFlow.DataUser.API.Controllers.CommController.ProcessRequest() 位置 D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:行号 22 	
+相关参数:@DoType=HttpHandler@DoMethod=Login_Init@HttpHandlerName=BP.WF.HttpHandler.WF_Portal@t=0.4847752210592098
+
+
+2023-07-12 18:36:33.2754|ERROR|
+位置：CCFlow.DataUser.API.Controllers.CommController.ProcessRequest(D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:49)
+err@登录时间过长,请重新登录. @其他信息:err@在执行类[BP.WF.HttpHandler.WF_Comm]，方法[HttpHandler]错误 	
+ @err@ token 过期或失效. 	
+ @技术信息:   在 BP.WF.Dev2Interface.Port_LoginByToken(String token) 位置 D:\CCFlowCloud\Components\BP.WF\Dev2Interface.cs:行号 3518
+   在 BP.WF.HttpHandler.DirectoryPageBase.DealToken(DirectoryPageBase page, String mothodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 62
+   在 BP.WF.HttpHandler.DirectoryPageBase.DoMethod(DirectoryPageBase myEn, String methodName) 位置 D:\CCFlowCloud\Components\BP.WF\HttpHandler\Base\DirectoryPageBase.cs:行号 109
+   在 CCFlow.DataUser.API.Controllers.CommController.ProcessRequest() 位置 D:\CCFlowCloud\CCFlow\DataUser\API\Controllers\CommController.cs:行号 22 	
+相关参数:@DoType=HttpHandler@DoMethod=Login_Init@HttpHandlerName=BP.WF.HttpHandler.WF_Portal@t=0.8603546343756773
+
+
+2023-07-12 19:14:32.7135|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3146)
+SQL=SELECT RDT FROM WF_GenerWorkerlist WHERE IsPass=0 AND FK_Emp='admin' ORDER BY RDT DESC  Exception=Timeout in IO operation
+
+

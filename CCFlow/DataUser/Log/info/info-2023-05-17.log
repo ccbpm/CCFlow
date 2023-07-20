@@ -1,0 +1,280 @@
+2023-05-17 16:46:02.3973|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[Idx]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:02.6972|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[Idx]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:32.8425|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:33.1955|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:33.3683|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:33.5168|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:33.6659|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:34.0161|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:36.3657|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[所在分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:36.6659|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[所在分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:37.5262|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:37.7023|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:37.8503|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:38.0009|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:38.1641|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[Tag]名称[组件类型]映射类型为[Int],数据类型为[varchar]
+
+
+2023-05-17 16:46:38.1641|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:38.9791|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[Tag]名称[组件类型]映射类型为[Int],数据类型为[varchar]
+
+
+2023-05-17 16:46:38.9791|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.1766|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.3244|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.4786|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.6261|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.7756|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:39.9233|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.0715|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.2247|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.3750|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.5232|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.6717|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[Tag]名称[组件类型]映射类型为[Int],数据类型为[varchar]
+
+
+2023-05-17 16:46:40.6717|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.8208|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[Tag]名称[组件类型]映射类型为[Int],数据类型为[varchar]
+
+
+2023-05-17 16:46:40.8208|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:40.9700|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:41.1173|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:41.3212|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:41.9292|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:43.2532|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:43.4093|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:43.5572|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:43.7452|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:43.8931|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:44.0435|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:45.6260|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:46.0526|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:46.3279|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:46.6551|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:46.8275|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:47.2601|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:47.4590|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:46:47.6085|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[Sys_MapAttr]字段[GroupID]名称[显示的分组]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:47:30.0932|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:47:31.8776|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:47:32.4361|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 16:47:33.0258|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 17:01:45.6301|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+
+2023-05-17 17:01:50.6322|INFO|
+位置：BP.En.Entity.CheckPhysicsTable_SQL(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:2510)
+err@字段类型不匹配,表[WF_Flow]字段[Idx]名称[显示顺序号(在发起列表中)]映射类型为[Int],数据类型为[nvarchar]
+
+

@@ -174,6 +174,11 @@ namespace BP.WF.Template
         protected override bool beforeDelete()
         {
             this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
+
+            //删除条件.
+            Conds nds = new Conds();
+            nds.Delete(CondAttr.FK_Node, this.Node, CondAttr.ToNodeID, this.ToNode);
+
             return base.beforeDelete();
         }
         /// <summary>

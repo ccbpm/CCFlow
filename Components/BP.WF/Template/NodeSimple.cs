@@ -146,7 +146,8 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.DeliveryParas, null, "参数", true, false, 0, 300, 10);
                 map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 50, 10);
                 map.AddBoolean(NodeAttr.IsResetAccepter, false, "可逆节点时重新计算接收人?", true, true, true);
-
+                map.AddTBInt(NodeAttr.NodeType, 0, "节点类型", true, true);
+                map.AddTBInt(NodeAttr.CondModel, 0, "方向条件控制规则", true, true);
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", true, true);
                 #endregion 基本属性.
 

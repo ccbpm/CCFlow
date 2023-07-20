@@ -399,7 +399,7 @@ namespace BP.Web
             set
             {
                 SetSessionByKey("token", value);
-                HttpContextHelper.AddCookie("CCS", "Token", WebUser.Token);
+                HttpContextHelper.AddCookie("CCS", "Token", value);
 
             }
         }

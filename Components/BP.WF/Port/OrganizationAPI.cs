@@ -25,7 +25,7 @@ namespace BP.Port
         public static string Port_Org_Save(string orgNo, string name, string adminer, string adminerName, string keyVals)
         {
             if (BP.Web.WebUser.IsAdmin == false)
-                return "err@["+ BP.Web.WebUser.Name+"]不是管理员不能维护组织信息";
+                return "err@[" + BP.Web.WebUser.Name + "]不是管理员不能维护组织信息";
 
             int msg = 0;
             if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
@@ -62,7 +62,7 @@ namespace BP.Port
         /// <param name="deptNo">部门编号</param>
         /// <param name="kvs">属性值，比如: @Name=张三@Tel=18778882345@Pass=123, 如果是saas模式：就必须有@UserID=xxxx </param>
         /// <param name="stats">角色编号：比如:001,002,003,</param>
-        /// <returns>reutrn 1=成功,  其他的标识异常.</returns>
+        /// <returns>执行信息.</returns>
         public static string Port_Emp_Save(string orgNo, string userNo, string userName, string deptNo, string kvs, string stats)
         {
             if (BP.Web.WebUser.IsAdmin == false)
@@ -138,14 +138,14 @@ namespace BP.Port
                 de.FK_Dept = deptNo;
                 de.FK_Emp = userNo;
                 de.OrgNo = orgNo;
-                //    de.IsMainDept = true;
+                de.DeptName = dept.Name;
                 de.MyPK = de.FK_Dept + "_" + userNo;
-                de.DirectInsert();
 
                 //更新角色.
                 if (stats == null)
                     stats = "";
                 string[] strs = stats.Split(',');
+                string staNames = "";
                 for (int i = 0; i < strs.Length; i++)
                 {
                     string str = strs[i];
@@ -157,6 +157,8 @@ namespace BP.Port
                     if (st.RetrieveFromDBSources() == 0)
                         throw new Exception("err@角色编号错误." + str);
 
+                    staNames += st.Name + ",";
+
                     //插入部门.
                     DeptEmpStation des = new DeptEmpStation();
                     des.FK_Dept = deptNo;
@@ -166,6 +168,10 @@ namespace BP.Port
                     des.MyPK = de.FK_Dept + "_" + des.FK_Emp + "_" + des.FK_Station;
                     des.DirectInsert();
                 }
+
+                de.StationNo = stats;
+                de.StationNoT = staNames;
+                de.DirectInsert();
 
                 DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + orgNo + "' WHERE No='" + emp.No + "'");
                 return "人员信息保存成功";
@@ -282,7 +288,7 @@ namespace BP.Port
         /// </summary>
         /// <param name="no">删除指定的部门编号</param>
         /// <returns></returns>
-        
+
         public static string Port_Dept_Delete(string no)
         {
             if (BP.Web.WebUser.IsAdmin == false)
@@ -348,7 +354,7 @@ namespace BP.Port
                 en.Update();
 
                 DBAccess.RunSQL("UPDATE Port_Station SET OrgNo='" + orgNo + "' WHERE No='" + no + "'");
-                return "["+name+"]保存成功";
+                return "[" + name + "]保存成功";
             }
             catch (Exception ex)
             {
@@ -422,7 +428,7 @@ namespace BP.Port
                 if (en.RetrieveFromDBSources() == 0)
                 {
                     en.Name = name;
-                    en.SetValByKey("OrgNo",orgNo);
+                    en.SetValByKey("OrgNo", orgNo);
                     en.Insert();
                 }
                 foreach (string item in ap.HisHT.Keys)

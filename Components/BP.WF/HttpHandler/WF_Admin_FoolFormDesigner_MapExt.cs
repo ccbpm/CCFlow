@@ -390,8 +390,7 @@ namespace BP.WF.HttpHandler
                     if (s.Contains(attr.KeyOfEn + ":") == false)
                         continue;
 
-                    string[] ss = s.Split(':');
-                    attr.DefVal = ss[1]; //使用这个字段作为对应设置的sql.
+                    attr.DefVal = s.Replace(attr.KeyOfEn+":",""); //使用这个字段作为对应设置的sql.
                 }
             }
 
@@ -415,7 +414,7 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs(me.FK_MapData);
             attrs.Retrieve(MapAttrAttr.FK_MapData, me.FK_MapData,
                 MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
-
+            MapAttr mapAttr = new MapAttr(this.FK_MapData + "_" + me.AttrOfOper);
             string str = "";
             foreach (MapAttr attr in attrs)
             {
@@ -425,7 +424,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 sql = sql.Trim();
 
-                if (sql.Contains("@Key") == false)
+                if (sql.Contains("@Key") == false && (int)mapAttr.UIContralType != 18)
                     return "err@在配置从表:" + attr.KeyOfEn + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
 
                 str += "$" + attr.KeyOfEn + ":" + sql;

@@ -206,8 +206,8 @@ namespace BP.WF.HttpHandler
         public string HandlerMapExt()
         {
             string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
-            if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
-                return "";
+            //if (DataType.IsNullOrEmpty(this.GetRequestVal("Key")))
+            //    return "";
 
             string oid = this.GetRequestVal("OID");
 
@@ -250,21 +250,101 @@ namespace BP.WF.HttpHandler
                     switch (this.GetRequestVal("DoTypeExt"))
                     {
                         case "ReqCtrl":
-                            // 获取填充 ctrl 值的信息.
-                            sql = this.DealSQL(me.DocOfSQLDeal, key);
-                            //System.Web.HttpContext.Current.Session["DtlKey"] = key;
-                            HttpContextHelper.SessionSet("DtlKey", key);
-                            if (sfdb != null)
-                                dt = sfdb.RunSQLReturnTable(sql);
-                            else
-                                dt = DBAccess.RunSQLReturnTable(sql);
-
-                            return JSONTODT(dt);
+                            string requestbody = me.Tag4; //body
+                            requestbody = requestbody.Replace("~", "\"");
+                            requestbody = DealSQL(requestbody, key);
+                            requestbody = requestbody.Replace("@fulltype", "0");
+                            string urlCtrl = DealSQL(me.Doc, key);
+                            string strCtrl = PubGlo.HttpPostConnect(urlCtrl, requestbody, "POST", true);
+                            JObject jsonCtrl = strCtrl.ToJObject();
+                            //code=0，表示请求成功，否则失败
+                            if (jsonCtrl["code"].ToString().Equals("0") == false)
+                                return "err@执行URL返回结果失败";
+                            string ctrlData = jsonCtrl["data"].ToString();
+                            return ctrlData;
                             break;
                         case "ReqDtlFullList":
                             /* 获取填充的从表集合. */
                             DataTable dtDtl = new DataTable("Head");
                             dtDtl.Columns.Add("Dtl", typeof(string));
+                            string dbType = me.DBType; //0 执行SQL 1 执行URL
+                            string requestMesthod = me.Tag3; // Get ,Post
+                            string questbody = me.Tag4; //body
+                            string type = me.GetValStringByKey("Tag5");
+                            if (type.Equals("1") && dbType.Equals("1"))
+                            {
+                                string url = DealSQL(me.Tag1, key);
+                                string result = "";
+                                if (requestMesthod.ToLower().Equals("get"))
+                                    result = DataType.ReadURLContext(url, 9000);
+                                else
+                                {
+                                    questbody = questbody.Replace("~", "\"");
+                                    questbody = DealSQL(questbody, key);
+                                    questbody = questbody.Replace("@fulltype", "1");
+                                    result = PubGlo.HttpPostConnect(url, questbody, "POST", true);
+                                }
+                                if (DataType.IsNullOrEmpty(result) == true)
+                                    return "err@请求失败";
+                                //数据序列化
+                                var jsonData = result.ToJObject();
+                                //code=0，表示请求成功，否则失败
+                                if (jsonData["code"].ToString().Equals("0")==false)
+                                    return "err@执行URL返回结果失败";
+                                string data = jsonData["data"].ToString();
+                                JToken jToken = JToken.Parse(data);
+                                if (jToken.Type == JTokenType.Object)
+                                {
+                                    JObject jsonItem = (JObject)jToken;
+                                    System.Collections.Generic.IEnumerable<JProperty> properties = jsonItem.Properties();
+                                    foreach (JProperty item in properties)
+                                    {
+                                        //判断值是不是集合
+                                        if(item.Value.Type == JTokenType.Array)
+                                        {
+                                            JArray arr = (JArray)item.Value;
+                                            if (arr.Count == 0)
+                                                continue;
+                                            dt = BP.Tools.Json.ConvertToDataTable(arr);
+                                            MapDtl dtl = new MapDtl(item.Name);
+                                            try
+                                            {
+                                                DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                BP.Sys.GEDtl mydtl = new GEDtl(dtl.No);
+                                                mydtl.CheckPhysicsTable();
+                                            }
+
+                                            foreach (DataRow dr in dt.Rows)
+                                            {
+                                                BP.Sys.GEDtl mydtl = new GEDtl(dtl.No);
+                                                foreach (DataColumn dc in dt.Columns)
+                                                {
+                                                    mydtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                                }
+                                                mydtl.RefPKInt = int.Parse(oid);
+                                                if (mydtl.OID > 100)
+                                                {
+                                                    mydtl.InsertAsOID(mydtl.OID);
+                                                }
+                                                else
+                                                {
+                                                    mydtl.OID = 0;
+                                                    mydtl.Insert();
+                                                }
+
+                                            }
+                                            DataRow drRe = dtDtl.NewRow();
+                                            drRe[0] = dtl.No;
+                                            dtDtl.Rows.Add(drRe);
+                                        }
+                                        
+                                    }
+                                }
+                                return BP.Tools.Json.ToJson(dtDtl);
+                            }
                             string[] strsDtl = me.Tag1.Split('$');
                             foreach (string str in strsDtl)
                             {
@@ -273,32 +353,48 @@ namespace BP.WF.HttpHandler
 
                                 string[] ss = str.Split(':');
                                 string fk_dtl = ss[0];
-                                if (ss[1] == "" || ss[1] == null)
+                                MapDtl dtl = new MapDtl(fk_dtl);
+                                string mysql = str.Replace(dtl.No + ":", "");
+                                if (mysql == "" || mysql == null)
                                     continue;
                                 string dtlKey = this.GetRequestVal("DtlKey");
                                 if (dtlKey == null)
                                     dtlKey = key;
                                 if (dtlKey.IndexOf(",") != -1)
                                     dtlKey = "'" + dtlKey.Replace(",", "','") + "'";
-                                string mysql = DealSQL(ss[1], dtlKey);
+                                mysql = DealSQL(mysql, dtlKey);
                                 if (mysql.Length <= 10)
                                     continue;
+                                if (mysql.Contains("@"))
+                                    return "请求的语句" + mysql + "还有未替换的@符号";
 
                                 GEDtls dtls = new GEDtls(fk_dtl);
-                                MapDtl dtl = new MapDtl(fk_dtl);
+                               
                                 DataTable dtDtlFull = null;
+                                if (me.DBType.Equals("0"))
+                                {
+                                    try
+                                    {
+                                        if (sfdb != null)
+                                            dtDtlFull = sfdb.RunSQLReturnTable(mysql);
+                                        else
+                                            dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
+                                    }
+                                }
+                                if (me.DBType.Equals("1"))
+                                {
+                                    System.Text.Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
+                                    string json = DataType.ReadURLContext(mysql, 8000, encode);
+                                    if (DataType.IsNullOrEmpty(json) == true)
+                                        return "err@执行URL没有返回结果值";
 
-                                try
-                                {
-                                    if (sfdb != null)
-                                        dtDtlFull = sfdb.RunSQLReturnTable(mysql);
-                                    else
-                                        dtDtlFull = DBAccess.RunSQLReturnTable(mysql);
+                                    dtDtlFull = BP.Tools.Json.ToDataTable(json);
                                 }
-                                catch (Exception ex)
-                                {
-                                    throw new Exception("err@执行填充从表出现错误,[" + dtl.No + " - " + dtl.Name + "]设置的SQL" + mysql);
-                                }
+
                                 try
                                 {
                                     DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + oid);
@@ -333,7 +429,7 @@ namespace BP.WF.HttpHandler
                                 drRe[0] = fk_dtl;
                                 dtDtl.Rows.Add(drRe);
                             }
-                            return JSONTODT(dtDtl);
+                            return BP.Tools.Json.ToJson(dtDtl);
                             break;
                         case "ReqDDLFullList":
                             /* 获取要个性化填充的下拉框. */

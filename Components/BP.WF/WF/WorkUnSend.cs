@@ -318,7 +318,7 @@ namespace BP.WF
                    BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
-                    wlN.FK_DeptT = myEmp.FK_DeptText;
+                    wlN.DeptName = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }
@@ -833,7 +833,7 @@ namespace BP.WF
                     BP.Port.Emp myEmp = new BP.Port.Emp(s);
                     wlN.FK_EmpText = myEmp.Name;
                     wlN.FK_Dept = myEmp.FK_Dept;
-                    wlN.FK_DeptT = myEmp.FK_DeptText;
+                    wlN.DeptName = myEmp.FK_DeptText;
 
                     wlN.Insert();
                 }

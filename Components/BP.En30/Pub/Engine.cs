@@ -1171,84 +1171,91 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 #region 从表
                 string shortName = "";
                 ArrayList al = this.EnsDataDtls;
-                foreach (Entities dtls in al)
+                for(int K = 0; K < 2; K++)
                 {
-                    Entity dtl = dtls.GetNewEntity;
-                    string dtlEnName = dtl.ToString();
-                    shortName = dtlEnName.Substring(dtlEnName.LastIndexOf(".") + 1);
-
-                    if (str.IndexOf(shortName) == -1)
-                        continue;
-
-                    int pos_rowKey = str.IndexOf("<" + shortName + ".") + 1;
-                    int row_start = -1, row_end = -1;
-                    if (pos_rowKey != -1)
+                    foreach (Entities dtls in al)
                     {
-                        row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\nestrow");
-                        if(row_start == -1)
-                            row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
-                        row_end = str.Substring(pos_rowKey).IndexOf("\\nestrow");
-                        if (row_end == -1)
-                            row_end = str.Substring(pos_rowKey).IndexOf("\\row");
-                    }
+                        Entity dtl = dtls.GetNewEntity;
+                        string dtlEnName = dtl.ToString();
+                        shortName = dtlEnName.Substring(dtlEnName.LastIndexOf(".") + 1);
 
-                    if (row_start == -1 || row_end == -1)
-                        continue; //如果没有发现标记.
+                        if (str.IndexOf(shortName) == -1)
+                            continue;
 
-                    //获得row的数据.
-                    string row = str.Substring(row_start, (pos_rowKey - row_start) + row_end);
-                    str = str.Replace(row, "");
-
-                    Map map = dtls.GetNewEntity.EnMap;
-                    int i = dtls.Count;
-                    while (i > 0)
-                    {
-                        i--;
-                        string rowData = row.Clone() as string;
-                        dtl = dtls[i];
-                        //替换序号  
-                        int rowIdx = i + 1;
-                        rowData = rowData.Replace("<IDX>", rowIdx.ToString());
-
-                        foreach (Attr attr in map.Attrs)
+                        int pos_rowKey = str.IndexOf("<" + shortName + ".") + 1;
+                        int row_start = -1, row_end = -1;
+                        if (pos_rowKey != -1)
                         {
-                            switch (attr.MyDataType)
-                            {
-                                case DataType.AppDouble:
-                                case DataType.AppFloat:
-                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStringByKey(attr.Key));
-                                    break;
-                                case DataType.AppMoney:
-                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValDecimalByKey(attr.Key).ToString("0.00"));
-                                    break;
-                                case DataType.AppInt:
-
-                                    if (attr.MyDataType == DataType.AppBoolean)
-                                    {
-                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
-                                        int v = dtl.GetValIntByKey(attr.Key);
-                                        if (v == 1)
-                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "是");
-                                        else
-                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "否");
-                                    }
-                                    else
-                                    {
-                                        if (attr.IsEnum)
-                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", GetCode(dtl.GetValRefTextByKey(attr.Key)));
-                                        else
-                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
-                                    }
-                                    break;
-                                default:
-                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
-                                    break;
-                            }
+                            row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\nestrow");
+                            if (row_start == -1)
+                                row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
+                            
+                           
+                            row_end = str.Substring(pos_rowKey).IndexOf("\\nestrow");
+                            if (row_end == -1)
+                                row_end = str.Substring(pos_rowKey).IndexOf("\\row");
+                           
                         }
 
-                        str = str.Insert(row_start, rowData);
+                        if (row_start == -1 || row_end == -1)
+                            continue; //如果没有发现标记.
+
+                        //获得row的数据.
+                        string row = str.Substring(row_start, (pos_rowKey - row_start) + row_end);
+                        str = str.Replace(row, "");
+
+                        Map map = dtls.GetNewEntity.EnMap;
+                        int i = dtls.Count;
+                        while (i > 0)
+                        {
+                            i--;
+                            string rowData = row.Clone() as string;
+                            dtl = dtls[i];
+                            //替换序号  
+                            int rowIdx = i + 1;
+                            rowData = rowData.Replace("<IDX>", rowIdx.ToString());
+
+                            foreach (Attr attr in map.Attrs)
+                            {
+                                switch (attr.MyDataType)
+                                {
+                                    case DataType.AppDouble:
+                                    case DataType.AppFloat:
+                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStringByKey(attr.Key));
+                                        break;
+                                    case DataType.AppMoney:
+                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValDecimalByKey(attr.Key).ToString("0.00"));
+                                        break;
+                                    case DataType.AppInt:
+
+                                        if (attr.MyDataType == DataType.AppBoolean)
+                                        {
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
+                                            int v = dtl.GetValIntByKey(attr.Key);
+                                            if (v == 1)
+                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "是");
+                                            else
+                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", "否");
+                                        }
+                                        else
+                                        {
+                                            if (attr.IsEnum)
+                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", GetCode(dtl.GetValRefTextByKey(attr.Key)));
+                                            else
+                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
+                                        }
+                                        break;
+                                    default:
+                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
+                                        break;
+                                }
+                            }
+
+                            str = str.Insert(row_start, rowData);
+                        }
                     }
                 }
+                
                 #endregion 从表
 
                 #region 明细 合计信息。

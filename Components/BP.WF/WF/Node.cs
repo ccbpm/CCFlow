@@ -11,7 +11,7 @@ using BP.WF.Template.CCEn;
 using BP.WF.Port;
 using System.Collections.Generic;
 using BP.WF.Template.SFlow;
-
+using BP.Web;
 
 namespace BP.WF
 {
@@ -20,6 +20,145 @@ namespace BP.WF
     /// </summary>
     public class Node : Entity
     {
+        #region 参数属性-AR 部门集合与岗位集合.
+        /// <summary>
+        /// 模式.
+        /// </summary>
+        public int ARStaModel
+        {
+            get
+            {
+                return this.GetParaInt("ARStaModel", 0);
+            }
+        }
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public string ARStaPara
+        {
+            get
+            {
+                return this.GetParaString("ARStaPara");
+            }
+        }
+        /// <summary>
+        /// 生成SQL
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public string ARStaModelStasSQL(Int64 workID)
+        {
+            string sql = "";
+            string ARStaPara = this.ARStaPara; //参数.
+            switch (this.ARStaModel)
+            {
+                case 0: //提交人所有的角色.
+                    sql = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.No + "'";
+                    break;
+                case 1: //提交人使用的角色.
+                    sql = "SELECT FK_Station FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + workID;
+                    break;
+                case 10: //指定节点提交人的使用角色.
+                    sql = "SELECT FK_Station FROM WF_GenerWorkerList WHERE  FK_Node=" + ARStaPara + " AND WorkID=" + workID;
+                    break;
+                case 11: //指定节点提交人的所有角色.
+                    sql = "SELECT B.FK_Station FROM WF_GenerWorkerList A, Port_DeptEmpStation B WHERE  A.FK_Node=" + ARStaPara + " AND A.WorkID=" + workID + " AND A.FK_Emp=B.FK_Emp ";
+                    break;
+                case 20: //字段(参数)值是人员编号-所有角色
+                case 21: // 字段(参数)值是角色编号
+                    Flow fl = new Flow(this.FK_Flow);
+                    string ptable = fl.PTable;
+                    MapAttr attr = new MapAttr(ARStaPara);
+                    string mysql = "SELECT " + attr.KeyOfEn + " FROM " + fl.PTable + " WHERE OID=" + workID;
+                    string val = DBAccess.RunSQLReturnString(mysql); //获得字段值.
+                    if (this.ARStaModel == 20)
+                        sql = "SELECT FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + val + "'";
+                    if (this.ARStaModel == 21)
+                        sql = "SELECT No FROM Port_Station WHERE No='" + val + "'";
+                    break;
+                default:
+                    throw new Exception("err@没有判断的模式：" + this.ARStaModel);
+                    break;
+            }
+            return sql;
+        }
+        #endregion 参数属性-AR 部门集合与岗位集合.
+
+        #region 参数属性-AR 部门集合与岗位集合.
+        /// <summary>
+        /// 模式.
+        /// </summary>
+        public int ARDeptModel
+        {
+            get
+            {
+                return this.GetParaInt("ARDeptModel", 0);
+            }
+        }
+        /// <summary>
+        /// 参数
+        /// </summary>
+        public string ARDeptPara
+        {
+            get
+            {
+                return this.GetParaString("ARDeptPara");
+            }
+        }
+        /// <summary>
+        /// 生成SQL
+        /// </summary>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public string ARDeptModelDeptsSQL(Int64 workID)
+        {
+            string sql = "";
+            string ARDeptPara = this.ARDeptPara; //参数.
+            switch (this.ARDeptModel)
+            {
+                case 0: //提交人所有的部门.
+                    sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + WebUser.No + "'";
+                    break;
+                case 1: //提交人登陆部门.
+                    sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + WebUser.No + "' AND FK_Dept='" + WebUser.FK_Dept + "'";
+                    break;
+                case 2: //提交人使用部门.
+                    sql = "SELECT FK_Dept FROM WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND WorkID=" + workID;
+                    break;
+                case 10: //指定节点提交人的使用部门.
+                    sql = "SELECT FK_Dept FROM WF_GenerWorkerList WHERE  FK_Node=" + ARDeptPara + " AND WorkID=" + workID;
+                    break;
+                case 11: //指定节点提交人的所有部门.
+                    sql = "SELECT B.FK_Dept FROM WF_GenerWorkerList A, Port_DeptEmp B WHERE  A.FK_Node=" + ARDeptPara + " AND A.WorkID=" + workID + " AND A.FK_Emp=B.FK_Emp ";
+                    break;
+                case 12: //指定节点提交人的所有部门.
+                    sql = "SELECT B.FK_Dept FROM WF_GenerWorkerList A, Port_Emp B WHERE  A.FK_Node=" + ARDeptPara + " AND A.WorkID=" + workID + " AND A.FK_Emp=B.No ";
+                    break;
+                case 20: //字段(参数)值是人员编号-主部门
+                case 21: //字段(参数)值是人员编号-所有部门
+                case 22: //字段(参数)值是部门编号.
+                    Flow fl = new Flow(this.FK_Flow);
+                    string ptable = fl.PTable;
+                    MapAttr attr = new MapAttr(ARDeptPara);
+                    string mysql = "SELECT " + attr.KeyOfEn + " FROM " + fl.PTable + " WHERE OID=" + workID;
+                    string val = DBAccess.RunSQLReturnString(mysql); //获得字段值.
+                    if (this.ARDeptModel == 20)
+                        sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + val + "'";
+                    if (this.ARDeptModel == 21)
+                        sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + val + "'";
+                    if (this.ARDeptModel == 22)
+                        sql = "SELECT No FROM Port_Dept WHERE No='" + val + "'";
+                    break;
+                default:
+                    throw new Exception("err@没有判断的模式：" + this.ARDeptModel);
+                    break;
+            }
+            return sql;
+        }
+        #endregion 参数属性-AR 部门集合与岗位集合.
+
         #region 参数属性
         /// <summary>
         /// 方向条件控制规则
@@ -1617,7 +1756,7 @@ namespace BP.WF
         {
             get
             {
-               
+
                 if (this.HisFlow.FlowDevModel != FlowDevModel.JiJian && this.HisFormType == NodeFormType.FoolForm || this.HisFormType == NodeFormType.ChapterFrm
                     || this.HisFormType == NodeFormType.FoolTruck
                     || this.HisFormType == NodeFormType.Develop)

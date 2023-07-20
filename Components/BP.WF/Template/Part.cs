@@ -2,6 +2,7 @@
 using BP.En;
 using BP.Sys;
 using BP.Tools;
+using System;
 /// <summary>
 /// 先阶段主要用于流程属性中的时限规则
 /// </summary>
@@ -381,8 +382,15 @@ namespace BP.WF.Template
             if (urlUodel.ToLower().Equals("get") == true)
                 return DataType.ReadURLContext(url, 9000); //返回字符串.
 
-            string doc = PubGlo.HttpPostConnect(url, pdocs);
-            return doc;
+            try
+            {
+                string doc = PubGlo.HttpPostConnect(url, pdocs);
+                return doc;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message+" - " +url;
+            }
         }
         public string ARWebApi(string paras)
         {

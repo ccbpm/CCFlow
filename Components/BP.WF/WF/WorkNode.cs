@@ -626,17 +626,17 @@ namespace BP.WF
                 {
                     wl.FK_Dept = dt.Rows[0][1].ToString();
                     Dept dept = new Dept(wl.FK_Dept);
-                    wl.FK_DeptT = dept.Name;
+                    wl.DeptName = dept.Name;
                     if (dept.RetrieveFromDBSources() == 0)
                     {
                         wl.FK_Dept = emp.FK_Dept;
-                        wl.FK_DeptT = emp.FK_DeptText;
+                        wl.DeptName = emp.FK_DeptText;
                     }
                 }
                 else
                 {
                     wl.FK_Dept = emp.FK_Dept;
-                    wl.FK_DeptT = emp.FK_DeptText;
+                    wl.DeptName = emp.FK_DeptText;
                 }
                 wl.WhoExeIt = town.HisNode.WhoExeIt; //设置谁执行它.
 
@@ -833,7 +833,7 @@ namespace BP.WF
                     string empNames = "";
                     foreach (GenerWorkerList wl in this.HisWorkerLists)
                     {
-                        info += BP.WF.Glo.DealUserInfoShowModel(wl.FK_DeptT, wl.FK_EmpText) + ":";
+                        info += BP.WF.Glo.DealUserInfoShowModel(wl.DeptName, wl.FK_EmpText) + ":";
 
                         empNos += wl.FK_Emp + ",";
                         empNames += wl.FK_EmpText + ",";
@@ -1219,7 +1219,7 @@ namespace BP.WF
                         gwl.FK_Emp = Executor;
                         gwl.FK_EmpText = ExecutorName;
                         gwl.FK_Dept = emp.FK_Dept;
-                        gwl.FK_DeptT = emp.FK_DeptText;
+                        gwl.DeptName = emp.FK_DeptText;
                         gwl.WhoExeIt = nd.WhoExeIt;
                         gwl.SDT = DataType.CurrentDateTime;
                         gwl.DTOfWarning = DataType.CurrentDateTime;
@@ -1278,17 +1278,17 @@ namespace BP.WF
                         {
                             gwl.FK_Dept = dt.Rows[0][1].ToString();
                             Dept dept = new Dept(gwl.FK_Dept);
-                            gwl.FK_DeptT = dept.Name;
+                            gwl.DeptName = dept.Name;
                             if (dept.RetrieveFromDBSources() == 0)
                             {
                                 gwl.FK_Dept = emp.FK_Dept;
-                                gwl.FK_DeptT = emp.FK_DeptText;
+                                gwl.DeptName = emp.FK_DeptText;
                             }
                         }
                         else
                         {
                             gwl.FK_Dept = emp.FK_Dept;
-                            gwl.FK_DeptT = emp.FK_DeptText;
+                            gwl.DeptName = emp.FK_DeptText;
                         }
                         gwl.WhoExeIt = nd.WhoExeIt;
                         gwl.SDT = DataType.CurrentDateTime;
@@ -1468,17 +1468,17 @@ namespace BP.WF
                         {
                             gwl.FK_Dept = dt.Rows[0][1].ToString();
                             Dept dept = new Dept(gwl.FK_Dept);
-                            gwl.FK_DeptT = dept.Name;
+                            gwl.DeptName = dept.Name;
                             if (dept.RetrieveFromDBSources() == 0)
                             {
                                 gwl.FK_Dept = emp.FK_Dept;
-                                gwl.FK_DeptT = emp.FK_DeptText;
+                                gwl.DeptName = emp.FK_DeptText;
                             }
                         }
                         else
                         {
                             gwl.FK_Dept = emp.FK_Dept;
-                            gwl.FK_DeptT = emp.FK_DeptText;
+                            gwl.DeptName = emp.FK_DeptText;
                         }
                         gwl.WhoExeIt = nd.WhoExeIt;
                         gwl.SDT = DataType.CurrentDateTime;
@@ -1799,7 +1799,10 @@ namespace BP.WF
             if (nds.Count == 1)
             {
                 Node toND = (Node)nds[0];
-                return toND;
+                if (toND.HisNodeType == NodeType.UserNode)
+                    return toND;
+                AddToTrack(ActionType.Route, "", "", toND.NodeID, toND.Name, "节点" + currNode.Name + "经过路由" + toND.Name);
+                return NodeSend_GenerNextStepNode_Ext(toND);
             }
             if (nds.Count == 0)
                 throw new Exception(BP.WF.Glo.multilingual("@没找到下一步节点.", "WorkNode", "not_found_next_node", new string[0]));
@@ -2528,7 +2531,7 @@ namespace BP.WF
                         wl.FK_Node = this.HisNode.NodeID;
                         wl.FK_NodeText = this.HisNode.Name;
                         wl.FK_Dept = WebUser.FK_Dept;
-                        wl.FK_DeptT = WebUser.FK_DeptName;
+                        wl.DeptName = WebUser.FK_DeptName;
                         if (wl.IsExits == false)
                             wl.Insert();
                     }
@@ -2564,7 +2567,7 @@ namespace BP.WF
                     gwf.FK_Node = nd.NodeID;
                     gwf.NodeName = nd.Name;
                     gwf.FK_Dept = oneGWL.FK_Dept;
-                    gwf.DeptName = oneGWL.FK_DeptT;
+                    gwf.DeptName = oneGWL.DeptName;
                     gwf.TodoEmps = operators;
                     gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
                     gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
@@ -2687,7 +2690,7 @@ namespace BP.WF
                         wl.FK_Node = this.HisNode.NodeID;
                         wl.FK_NodeText = this.HisNode.Name;
                         wl.FK_Dept = WebUser.FK_Dept;
-                        wl.FK_DeptT = WebUser.FK_DeptName;
+                        wl.DeptName = WebUser.FK_DeptName;
                         if (wl.IsExits == false)
                             wl.Insert();
 
@@ -2720,7 +2723,7 @@ namespace BP.WF
                         gwf.FK_Node = nd.NodeID;
                         gwf.NodeName = nd.Name;
                         gwf.FK_Dept = oneGWL.FK_Dept;
-                        gwf.DeptName = oneGWL.FK_DeptT;
+                        gwf.DeptName = oneGWL.DeptName;
                         gwf.TodoEmps = wl.FK_Emp + ", " + wl.FK_EmpText + ";";
                         gwf.Domain = this.HisGenerWorkFlow.Domain; //域.
                         gwf.Sender = WebUser.No + "," + WebUser.Name + ";";
@@ -3099,7 +3102,7 @@ namespace BP.WF
                     gwf.FK_FlowSort = toNode.HisFlow.FK_FlowSort;
                     gwf.NodeName = toNode.Name;
                     gwf.FK_Dept = wl.FK_Dept;
-                    gwf.DeptName = wl.FK_DeptT;
+                    gwf.DeptName = wl.DeptName;
                     gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText + ";";
                     if (wl.GroupMark != "")
                         gwf.Paras_GroupMark = wl.GroupMark;
@@ -3152,8 +3155,8 @@ namespace BP.WF
                     flGwl.FK_EmpText = WebUser.Name;
                     flGwl.FK_Node = this.HisNode.NodeID;
                     flGwl.Sender = WebUser.No + "," + WebUser.Name;
-                    flGwl.FK_Dept = WebUser.FK_Dept;
-                    flGwl.FK_DeptT = WebUser.FK_DeptName;
+                    //flGwl.FK_Dept = WebUser.FK_Dept;
+                    //flGwl.DeptName = WebUser.FK_DeptName;
                     flGwl.IsPassInt = -2; // -2; //标志该节点是干流程人员处理的节点.
                     //  wl.FID = 0; //如果是干流，
                     flGwl.Save();
@@ -6590,7 +6593,7 @@ namespace BP.WF
 
                     gwl.FK_Flow = node.FK_Flow;
                     gwl.FK_Dept = emp.FK_Dept;
-                    gwl.FK_DeptT = emp.FK_DeptText;
+                    gwl.DeptName = emp.FK_DeptText;
 
                     gwl.SDT = "无";
                     gwl.DTOfWarning = DataType.CurrentDateTimess;
@@ -8342,11 +8345,8 @@ namespace BP.WF
             }
 
 
-
             #region  补充gwl数据.让其出现在途.
             GenerWorkerList gwl = new GenerWorkerList();
-            gwl.FK_Dept = WebUser.FK_Dept;
-            gwl.FK_DeptT = WebUser.FK_DeptName;
             gwl.FK_Emp = WebUser.No;
             gwl.FK_EmpText = WebUser.Name;
             gwl.FK_Flow = this.HisFlow.No;

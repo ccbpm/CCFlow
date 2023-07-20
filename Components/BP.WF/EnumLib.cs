@@ -1110,7 +1110,14 @@ namespace BP.WF
         /// 绑定字典表
         /// </summary>
         BySFTable = 52,
-
+        /// <summary>
+        /// 按指定的部门集合与设置的岗位交集
+        /// </summary>
+        ByStationSpecDepts = 56,
+        /// <summary>
+        /// 按指定的角色集合与设置的部门交集
+        /// </summary>
+        ByStationSpecStas = 57,
         /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>

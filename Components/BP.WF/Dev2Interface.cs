@@ -928,10 +928,18 @@ namespace BP.WF
                 userNo = WebUser.UserID;
 
             //任何人都可以启动.
-            string sql0 = "SELECT A.FK_Flow FROM WF_Node A, WF_Flow B ";
-            sql0 += " WHERE A.NodePosType=0  AND A.DeliveryWay=4  ";
-            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                sql0 += " B.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+            string sql0 = "";
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                sql0 = "SELECT A.FK_Flow FROM WF_Node A ";
+                sql0 += " WHERE  NodePosType=0  AND DeliveryWay=4  ";
+            }
+            else
+            {
+                sql0 = "SELECT A.FK_Flow FROM WF_Node A, WF_Flow B ";
+                sql0 += " WHERE A.NodePosType=0  AND A.DeliveryWay=4 AND A.FK_Flow=B.No ";
+                sql0 += " AND B.OrgNo='" + BP.Web.WebUser.OrgNo + "'";
+            }
 
             //按岗位计算.
             string sql1 = "SELECT A.FK_Flow FROM WF_Node A, WF_NodeStation B, Port_DeptEmpStation C";
@@ -3481,7 +3489,6 @@ namespace BP.WF
                     return mytk.EmpNo;
                 }
 
-
                 //如果是宽泛模式.
                 if (SystemConfig.TokenModel == 0)
                 {
@@ -4950,6 +4957,116 @@ namespace BP.WF
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt", workID);
             return rpt;
         }
+
+        /// <summary>
+        /// 近期工作
+        /// </summary>
+        public static string Flow_RecentWorkInit()
+        {
+            /* 近期工作. */
+            string sql = "";
+            string empNo = BP.Web.WebUser.No;
+            sql += "SELECT  * FROM WF_GenerWorkFlow  WHERE ";
+            sql += " (Emps LIKE '%@" + empNo + "@%' OR Emps LIKE '%@" + empNo + ",%' OR Emps LIKE '%," + empNo + "@%')";
+            // sql += " AND Starter!='" + empNo + "'"; //不能是我发起的.
+
+            //if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
+            //    sql += " AND FK_Flow='" + this.FK_Flow + "'"; //如果有流程编号,就按他过滤.
+
+            sql += " AND WFState >1 ORDER BY RDT DESC ";
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            //添加oracle的处理
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                dt.Columns["TSPAN"].ColumnName = "TSpan";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["SENDDT"].ColumnName = "SendDT";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["PFID"].ColumnName = "PFID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+
+                dt.Columns["GUID"].ColumnName = "Guid";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["DOMAIN"].ColumnName = "Domain";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["pri"].ColumnName = "PRI";
+                dt.Columns["workid"].ColumnName = "WorkID";
+                dt.Columns["fid"].ColumnName = "FID";
+                dt.Columns["wfstate"].ColumnName = "WFState";
+                dt.Columns["wfsta"].ColumnName = "WFSta";
+                dt.Columns["weeknum"].ColumnName = "WeekNum";
+                dt.Columns["tspan"].ColumnName = "TSpan";
+                dt.Columns["todosta"].ColumnName = "TodoSta";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["todoempsnum"].ColumnName = "TodoEmpsNum";
+                dt.Columns["todoemps"].ColumnName = "TodoEmps";
+                dt.Columns["title"].ColumnName = "Title";
+                dt.Columns["tasksta"].ColumnName = "TaskSta";
+                dt.Columns["systype"].ColumnName = "SysType";
+                dt.Columns["startername"].ColumnName = "StarterName";
+                dt.Columns["starter"].ColumnName = "Starter";
+                dt.Columns["sender"].ColumnName = "Sender";
+                dt.Columns["senddt"].ColumnName = "SendDT";
+                dt.Columns["sdtofnode"].ColumnName = "SDTOfNode";
+                dt.Columns["sdtofflow"].ColumnName = "SDTOfFlow";
+                dt.Columns["rdt"].ColumnName = "RDT";
+                dt.Columns["pworkid"].ColumnName = "PWorkID";
+                dt.Columns["pflowno"].ColumnName = "PFlowNo";
+                dt.Columns["pfid"].ColumnName = "PFID";
+                dt.Columns["pemp"].ColumnName = "PEmp";
+                dt.Columns["nodename"].ColumnName = "NodeName";
+                dt.Columns["guid"].ColumnName = "Guid";
+                dt.Columns["guestno"].ColumnName = "GuestNo";
+                dt.Columns["guestname"].ColumnName = "GuestName";
+                dt.Columns["flownote"].ColumnName = "FlowNote";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["fk_ny"].ColumnName = "FK_NY";
+                dt.Columns["fk_node"].ColumnName = "FK_Node";
+                dt.Columns["fk_flowsort"].ColumnName = "FK_FlowSort";
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["fk_dept"].ColumnName = "FK_Dept";
+                dt.Columns["emps"].ColumnName = "Emps";
+                dt.Columns["domain"].ColumnName = "Domain";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+                dt.Columns["billno"].ColumnName = "BillNo";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
         /// <summary>
         /// 产生一个新的工作
         /// </summary>
@@ -6236,7 +6353,7 @@ namespace BP.WF
             gwl.HungupTimes = 0;
             gwl.FID = gwf.FID;
             gwl.FK_Dept = emp.FK_Dept;
-            gwl.FK_DeptT = emp.FK_DeptText;
+            gwl.DeptName = emp.FK_DeptText;
 
             if (gwl.Update() == 0)
             {
@@ -6634,7 +6751,7 @@ namespace BP.WF
                 gwl.IsRead = false;
                 gwl.WhoExeIt = 0;
                 gwl.FK_Dept = item.FK_Dept;
-                gwl.FK_DeptT = item.FK_DeptText;
+                gwl.DeptName = item.FK_DeptText;
                 gwl.FK_NodeText = nd.Name;
                 gwl.FK_Flow = nd.FK_Flow;
                 gwl.IsEnable = true;
@@ -7493,9 +7610,23 @@ namespace BP.WF
                 gwf.Paras_DBTemplate = true;
 
             if (i == 0)
-                gwf.Insert();
+            {
+                gwf.Insert(); //插入.
+                GenerWorkerList gwl = new GenerWorkerList();
+                gwl.WorkID = gwf.WorkID;
+                gwl.FK_Emp = gwf.Starter;
+                gwl.FK_Node = gwf.FK_Node;
+                gwl.FK_Dept = WebUser.FK_Dept;
+                gwl.DeptName = WebUser.FK_DeptName;
+                gwl.FK_EmpText = WebUser.Name;
+                gwl.IsEnable = true;
+                gwl.IsRead = true;
+                gwl.IsPass = false;
+                gwl.Insert();
+            }
             else
                 gwf.Update();
+
 
             //更新 domian.
             DBAccess.RunSQL("UPDATE WF_GenerWorkFlow  SET Domain=(SELECT Domain FROM WF_FlowSort WHERE WF_FlowSort.No=WF_GenerWorkFlow.FK_FlowSort) WHERE WorkID=" + wk.OID);
@@ -7553,7 +7684,7 @@ namespace BP.WF
                 gwl.FID = 0;
                 gwl.FK_Flow = gwf.FK_Flow;
                 gwl.FK_Dept = empEn.FK_Dept;
-                gwl.FK_DeptT = empEn.FK_DeptText;
+                gwl.DeptName = empEn.FK_DeptText;
 
                 gwl.SDT = "无";
                 gwl.DTOfWarning = DataType.CurrentDateTime;
@@ -7746,7 +7877,7 @@ namespace BP.WF
 
                 gwl.FK_Flow = fl.No;
                 gwl.FK_Dept = emp.FK_Dept;
-                gwl.FK_DeptT = emp.FK_DeptText;
+                gwl.DeptName = emp.FK_DeptText;
 
 
                 gwl.SDT = "无";
@@ -9425,7 +9556,6 @@ namespace BP.WF
                 throw new Exception("参数错误，htWork 不能为空, 保存失败。");
 
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
-
             try
             {
                 Node nd = new Node(gwf.FK_Node);
@@ -9502,6 +9632,7 @@ namespace BP.WF
                 wk.SetValByKey(GERptAttr.FK_Dept, WebUser.FK_Dept);
                 ExecEvent.DoFrm(nd.MapData, EventListFrm.SaveBefore, wk);
                 wk.Save();
+
                 #region 保存从表
                 if (dsDtls != null)
                 {
@@ -10458,7 +10589,7 @@ namespace BP.WF
                 gwl.FK_Emp = BP.Web.WebUser.No;
                 gwl.FK_EmpText = BP.Web.WebUser.Name;
                 gwl.FK_Dept = BP.Web.WebUser.FK_Dept;
-                gwl.FK_DeptT = WebUser.FK_DeptName;
+                gwl.DeptName = WebUser.FK_DeptName;
 
                 gwl.IsPassInt = (int)askforSta;
                 gwl.Insert();
@@ -10956,7 +11087,7 @@ namespace BP.WF
                 gwl.FK_Node = nd.NodeID;
                 gwl.FK_NodeText = nd.Name;
                 gwl.FK_Dept = BP.Web.WebUser.FK_Dept;
-                gwl.FK_DeptT = BP.Web.WebUser.FK_DeptName;
+                gwl.DeptName = BP.Web.WebUser.FK_DeptName;
                 gwl.FK_Emp = BP.Web.WebUser.No;
                 gwl.FK_EmpText = BP.Web.WebUser.Name;
                 gwl.IsPassInt = -2;
@@ -10972,7 +11103,7 @@ namespace BP.WF
                 gwl.FK_Emp = emp.No;
                 gwl.FK_EmpText = emp.Name;
                 gwl.FK_Dept = emp.FK_Dept;
-                gwl.FK_DeptT = emp.FK_DeptText;
+                gwl.DeptName = emp.FK_DeptText;
                 gwl.IsPassInt = 0;
                 gwl.RDT = DataType.CurrentDateTime;
                 gwl.SDT = DataType.CurrentDateTime;
@@ -11314,7 +11445,7 @@ namespace BP.WF
                 foreach (GenerWorkerList item in ens)
                 {
                     if (item.FK_Emp == fk_emp)
-                        dr["FK_DeptT"] = item.FK_DeptT;
+                        dr["FK_DeptT"] = item.DeptName;
                 }
             }
 
@@ -11399,7 +11530,7 @@ namespace BP.WF
                 gwlOfMe.FK_EmpText = emp.Name;
                 gwlOfMe.IsPassInt = -1; //设置不可以用.
                 gwlOfMe.FK_Dept = emp.FK_Dept;
-                gwlOfMe.FK_DeptT = emp.FK_DeptText; //部门名称.
+                gwlOfMe.DeptName = emp.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
                 gwlOfMe.SetPara("HuiQianZhuChiRen", WebUser.No);
                 //表明后增加的组长

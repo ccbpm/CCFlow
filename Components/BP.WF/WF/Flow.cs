@@ -1685,13 +1685,29 @@ namespace BP.WF
                     if (this.FlowDevModel == FlowDevModel.JiJian)
                         nd.SetValByKey(NodeAttr.NodeFrmID, "ND" + Int32.Parse(this.No) + "01");
 
+                    #region 设置路由节点或者用户节点到路由节点的转向规则为连接线
+                    //路由节点
+                    if (nd.HisNodeType == NodeType.RouteNode)
+                        nd.CondModel = DirCondModel.ByLineCond;
+                    //到达的节点
+                    Nodes toNDs = nd.HisToNodes;
+                    foreach(Node toND in toNDs)
+                    {
+                        if(toND.HisNodeType == NodeType.RouteNode)
+                        {
+                            nd.CondModel = DirCondModel.ByLineCond;
+                            break;
+                        }
+                    }
+                    #endregion 设置路由节点或者用户节点到路由节点的转向规则为连接线
+
                     //设置它的位置类型.
                     nd.SetValByKey(NodeAttr.NodePosType, (int)nd.GetHisNodePosType());
                     msg += "@信息: -------- 开始检查节点ID:(" + nd.NodeID + ")名称:(" + nd.Name + ")信息 -------------";
 
                     #region 对节点的访问规则进行检查
                     msg += "@信息:开始对节点的访问规则进行检查.";
-                    if (nd.HisNodeType == 0)
+                    if (nd.HisNodeType == NodeType.UserNode)
                     {
                         switch (nd.HisDeliveryWay)
                         {
@@ -1826,7 +1842,7 @@ namespace BP.WF
                     }
                     #endregion 检查节点完成条件的定义.
 
-                    #region 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
+                    /*#region 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
                     MapAttr mattr = new MapAttr();
                     if (nd.HisFormType == NodeFormType.RefOneFrmTree)
                     {
@@ -1866,7 +1882,7 @@ namespace BP.WF
 
 
                     }
-                    #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.
+                    #endregion 如果是引用的表单库的表单，就要检查该表单是否有FID字段，没有就自动增加.*/
 
                     //如果是子线城，子线程的表单必须是轨迹模式。
                     if (nd.IsSubThread == true)
@@ -1939,7 +1955,7 @@ namespace BP.WF
                 //处理焦点字段.
                 foreach (Node nd in nds)
                 {
-                    if (nd.FocusField.Trim() == "")
+                    if (nd.FocusField.Trim() == "" && nd.HisNodeType==NodeType.UserNode)
                     {
                         Work wk = nd.HisWork;
                         string attrKey = "";

@@ -23,6 +23,12 @@ namespace BP.Port
         /// 组织编码
         /// </summary>
         public const string OrgNo = "OrgNo";
+        /// <summary>
+        /// 岗位编码
+        /// </summary>
+        public const string StationNo = "StationNo";
+        public const string StationNoT = "StationNoT";
+        public const string DeptName = "DeptName";
         #endregion
     }
     /// <summary>
@@ -84,6 +90,39 @@ namespace BP.Port
                 SetValByKey(DeptEmpAttr.OrgNo, value);
             }
         }
+        public string StationNo
+        {
+            get
+            {
+                return this.GetValStringByKey(DeptEmpAttr.StationNo);
+            }
+            set
+            {
+                SetValByKey(DeptEmpAttr.StationNo, value);
+            }
+        }
+        public string StationNoT
+        {
+            get
+            {
+                return this.GetValStringByKey(DeptEmpAttr.StationNoT);
+            }
+            set
+            {
+                SetValByKey(DeptEmpAttr.StationNoT, value);
+            }
+        }
+        public string DeptName
+        {
+            get
+            {
+                return this.GetValStringByKey(DeptEmpAttr.DeptName);
+            }
+            set
+            {
+                SetValByKey(DeptEmpAttr.DeptName, value);
+            }
+        }
         #endregion
 
         #region 构造函数
@@ -110,10 +149,9 @@ namespace BP.Port
                 map.AddTBString(DeptEmpAttr.OrgNo, null, "组织编码", false, false, 0, 50, 50);
 
                 //For Vue3版本.
-                map.AddTBString("DeptName", null, "部门名称(Vue3)", false, false, 0, 500, 36);
-                map.AddTBString("StationNo", null, "岗位编号(Vue3)", false, false, 0, 500, 36);
-                map.AddTBString("StationNoT", null, "岗位名称(Vue3)", false, false, 0, 500, 36);
-
+                map.AddTBString(DeptEmpAttr.DeptName, null, "部门名称(Vue3)", false, false, 0, 500, 36);
+                map.AddTBString(DeptEmpAttr.StationNo, null, "岗位编号(Vue3)", false, false, 0, 500, 36);
+                map.AddTBString(DeptEmpAttr.StationNoT, null, "岗位名称(Vue3)", false, false, 0, 500, 36);
 
                 this._enMap = map;
                 return this._enMap;

@@ -878,6 +878,78 @@ namespace BP.WF.Template
             }
             #endregion
 
+            #region 按照指定的角色集合与节点设置部门交集计算.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationSpecStas)
+            {
+                Node nd = town.HisNode;
+                string sqlStations = nd.ARStaModelStasSQL(this.town.WorkID); //获得部门的sqls.
+                string sqlDepts = "SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + nd.NodeID;
+                DataTable dtDepts = DBAccess.RunSQLReturnTable(sqlDepts);
+                if (dtDepts.Rows.Count == 1)
+                {
+                    //如果只有一个部门.
+                    string deptNo = dtDepts.Rows[0][0].ToString();
+                    while (true)
+                    {
+                        string mysql = "SELECT FK_Emp FROM Port_DeptEmpStation A WHERE FK_Station IN ("+ sqlStations + ")  FK_Dept='" + deptNo + "'";
+                        dt = DBAccess.RunSQLReturnTable(mysql);
+                        if (dt.Rows.Count == 0)
+                        {
+                            deptNo = DBAccess.RunSQLReturnVal("SELECT ParentNo FROM Port_Dept WHERE No='" + deptNo + "'").ToString();
+                            if (deptNo.Equals("0") == true)
+                                throw new Exception("err@到达节点[" + this.town.HisNode.Name + "],接受人规则是[按照指定的角色集合与节点设置部门交集计算],没有获得接受人." );
+                            continue;
+                        }
+                        return dt;
+                    }
+                }
+
+                //获得两个的交集.
+                string mysql1 = " SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station IN(" + sqlStations + ") AND FK_Dept IN (" + sqlDepts + ")";
+                dt = DBAccess.RunSQLReturnTable(mysql1);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("err@到达节点[" + this.town.HisNode.Name + "],接受人规则是[按照指定的角色集合与节点设置部门交集计算],没有获得接受人.");
+                return dt;
+            }
+            #endregion 按照指定的部门集合与岗位的交集计算
+
+            #region 按照指定的部门集合与节点设置角色交集计算.
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationSpecDepts)
+            {
+                Node nd = town.HisNode;
+                string sqlDepts = nd.ARDeptModelDeptsSQL(this.town.WorkID); //获得部门的sqls.
+                DataTable dtDepts = DBAccess.RunSQLReturnTable(sqlDepts);
+                if (dtDepts.Rows.Count == 1)
+                {
+                    //如果只有一个部门.
+                    string deptNo = dtDepts.Rows[0][0].ToString();
+                    while (true)
+                    {
+                        string mysql = " SELECT FK_Emp FROM Port_DeptEmpStation A,WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + nd.NodeID + " AND A.FK_Dept='" + deptNo + "'";
+                        dt = DBAccess.RunSQLReturnTable(mysql);
+                        if (dt.Rows.Count == 0)
+                        {
+                            deptNo = DBAccess.RunSQLReturnVal("SELECT ParentNo FROM Port_Dept WHERE No='" + deptNo + "'").ToString();
+                            if (deptNo.Equals("0") == true)
+                                throw new Exception("err@到达节点[" + this.town.HisNode.Name + "],接受人规则是[按照指定的部门集合与节点设置角色交集计算],没有获得接受人.");
+                            continue;
+                        }
+                        return dt;
+                    }
+                }
+
+                string sqlStations = "SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID;
+                //获得两个的交集.
+                string mysql1 = " SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Station IN(" + sqlStations + ") AND FK_Dept IN (" + sqlDepts + ")";
+                dt = DBAccess.RunSQLReturnTable(mysql1);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("err@到达节点[" + this.town.HisNode.Name + "],接受人规则是[按照指定的部门集合与节点设置角色交集计算],没有获得接受人.");
+                return dt;
+
+            }
+            #endregion 按照指定的角色集合与部门的交集计算
+
+
             #region 仅按角色计算
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationOnly)
             {
@@ -1028,7 +1100,7 @@ namespace BP.WF.Template
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByAPIUrl)
             {
                 //组织参数.
-                string paras = "@WorkID=" + this.WorkID+"@OID="+this.WorkID;
+                string paras = "@WorkID=" + this.WorkID + "@OID=" + this.WorkID;
 
                 var part = new Part("AR" + this.town.HisNode.NodeID);
                 string strs = part.ARWebApi(paras);
@@ -1406,6 +1478,7 @@ namespace BP.WF.Template
             {
                 if (DataType.IsNullOrEmpty(sfVal))
                     sfVal = currWn.HisNode.NodeID.ToString();
+
                 Paras ps = new Paras();
                 ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerlist WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node Order By RDT DESC";
                 ps.Add("OID", this.WorkID);
@@ -1413,7 +1486,7 @@ namespace BP.WF.Template
 
                 DataTable dt = DBAccess.RunSQLReturnTable(ps);
                 if (dt.Rows.Count == 0)
-                    throw new Exception("err@不符合常理，没有找到数据");
+                    throw new Exception("err@不符合常理，没有找到数据，到达节点[" + this.town.HisNode.NodeID + "," + town.HisNode.Name + "]");
                 ht.Add("EmpNo", dt.Rows[0][0].ToString());
                 ht.Add("DeptNo", dt.Rows[0][1].ToString());
             }
@@ -1421,6 +1494,8 @@ namespace BP.WF.Template
             //按照 字段的值的人员编号作为身份计算.
             if (sfModel == 2)
             {
+                if (DataType.IsNullOrEmpty(sfVal) == true)
+                    throw new Exception("err@流程模板配置错误，到达节点[" + this.town.HisNode.NodeID + "," + town.HisNode.Name + "]根据字段值作为人员编号，没有配置字段值:" + sfVal);
                 //获得字段的值.
                 string empNo = "";
                 if (currWn.HisNode.HisFormType == NodeFormType.RefOneFrmTree)

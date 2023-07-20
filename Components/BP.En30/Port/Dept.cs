@@ -301,7 +301,6 @@ namespace BP.Port
                     dept.GenerNameOfPath();
                     GenerChildNameOfPath(dept.No);
 
-
                     //更新人员路径信息.
                     BP.Port.Emps emps = new BP.Port.Emps();
                     emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);

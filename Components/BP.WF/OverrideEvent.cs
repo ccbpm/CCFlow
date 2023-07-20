@@ -164,7 +164,7 @@ namespace BP.WF
             apiParas = apiParas.Replace("@TimeSpan", DBAccess.GenerOID("TS").ToString()); //时间戳.
             apiParas = apiParas.Replace("@EventMark", myEventMark); //稳超定义的，事件标记.
             apiParas = apiParas.Replace("@EventID", eventMark); //EventID 定义的事件类型.
-            apiParas = apiParas.Replace("@SPYJ", "无"); //审批意见.
+            apiParas = apiParas.Replace("@SPYJ", "xxx无xx"); //审批意见.
 
             //如果表单的数据有,就执行一次替换.
             apiParas = Glo.DealExp(apiParas, wn.rptGe);

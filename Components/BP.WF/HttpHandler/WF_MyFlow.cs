@@ -1383,8 +1383,6 @@ namespace BP.WF.HttpHandler
                     dr["Oper"] = "";
                     dt.Rows.Add(dr);
                 }
-
-
                 //if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
                 //{
                 //    /*公文正文 */
@@ -1664,6 +1662,50 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
                 #endregion  //加载自定义的button.
 
+                //启用提交身份
+                int submitSFEnable = btnLab.GetValIntByKey("SubmitSFEnable");
+                if (submitSFEnable != 0)
+                {
+                    dr = dt.NewRow();
+                    dr["No"] = "SubmitSF";
+                    dr["Name"] = btnLab.GetValStringByKey("SubmitSF");
+                    dr["Oper"] = "";
+                    dt.Rows.Add(dr);
+
+                    string sql = "";
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "SELECT  top 1 FK_Dept,StaNo From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + btnLab.NodeID + " AND IsPass=1 Order By RDT DESC";
+                    else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                        sql = "SELECT * FROM (SELECT FK_Dept,StaNo From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + btnLab.NodeID + " AND IsPass=1 Order By RDT DESC ) WHERE ROWNUM =1";
+                    else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = "SELECT FK_Dept,StaNo From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + btnLab.NodeID + " AND IsPass=1 Order By RDT DESC limit 1,1";
+                    else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                        sql = "SELECT FK_Dept,StaNo From WF_GenerWorkerList WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + btnLab.NodeID + " AND IsPass=1 Order By RDT DESC limit 1";
+                    DataTable dtt = DBAccess.RunSQLReturnTable(sql);
+                    dtt.TableName = "SelectSF";
+                    ds.Tables.Add(dtt);
+
+                    //按照部门
+                    if (submitSFEnable == 1)
+                    {
+                        //获取当前人部门岗位
+                        sql = "SELECT A.No AS DeptNo,A.Name AS DeptName From Port_Dept A,Port_DeptEmp B WHERE A.No=B.FK_Dept  AND B.FK_Emp='" + WebUser.No + "'";
+                        DataTable depts = DBAccess.RunSQLReturnTable(sql);
+                        depts.TableName = "Depts";
+                        ds.Tables.Add(depts);
+                    }
+                    if (submitSFEnable == 2)
+                    {
+                        //获取当前人部门岗位
+                        sql = "SELECT A.No AS DeptNo,B.No AS StationNo,A.Name AS DeptName,B.Name AS StationName From Port_Dept A,Port_Station B,Port_DeptEmpStation C WHERE A.No=C.FK_Dept AND B.No=C.FK_Station AND C.FK_Emp='" + WebUser.No + "'";
+                        DataTable deptStas = DBAccess.RunSQLReturnTable(sql);
+                        deptStas.TableName = "DeptStaion";
+                        ds.Tables.Add(deptStas);
+                    }
+
+
+                }
+
                 #region 加载到达节点下拉框数据源.
                 DataTable dtNodes = GenerDTOfToNodes(gwf, nd);
                 if (dtNodes != null)
@@ -1700,6 +1742,47 @@ namespace BP.WF.HttpHandler
                 new Exception("err@" + ex.Message);
             }
             return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string Save_DeptSta()
+        {
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            string stationNo = this.GetRequestVal("StationNo");
+            if (DataType.IsNullOrEmpty(stationNo)) stationNo = "";
+            if (i == 0)
+            {
+                if (this.currND.IsStartNode == true)
+                {
+                    //增加GenerList数据
+                    gwl = new GenerWorkerList();
+                    gwl.WorkID = this.WorkID;
+                    gwl.FK_Emp = WebUser.No;
+                    gwl.FK_EmpText = WebUser.Name;
+                    gwl.FK_Node = this.FK_Node;
+                    gwl.FK_NodeText = this.currND.Name;
+                    gwl.FID = 0;
+                    gwl.FK_Flow = this.currND.FK_Flow;
+                    gwl.FK_Dept = this.GetRequestVal("DeptNo");
+                    gwl.DeptName = this.GetRequestVal("DeptName");
+                    if(stationNo.Equals("")==false)
+                        gwl.SetValByKey(GenerWorkerListAttr.StaNo, this.GetRequestVal("StationNo"));
+                    gwl.SDT = "无";
+                    gwl.DTOfWarning = DataType.CurrentDateTime;
+                    gwl.IsEnable = true;
+                    gwl.IsPass = false;
+                    gwl.WhoExeIt = 1;
+                    gwl.Insert();
+                    return "更新成功";
+                }
+                return "err@不可能出现的错误";
+            }
+            gwl.FK_Dept = this.GetRequestVal("DeptNo");
+            gwl.DeptName = this.GetRequestVal("DeptName");
+            if (stationNo.Equals("") == false)
+                gwl.SetValByKey(GenerWorkerListAttr.StaNo, this.GetRequestVal("StationNo"));
+            gwl.Update();
+            return "更新成功";
         }
         /// <summary>
         /// 批量处理
@@ -1854,7 +1937,14 @@ namespace BP.WF.HttpHandler
                 {
                     if (item.NodeID == returnNode)
                         continue;
-
+                    NodeType hisNodeType = (NodeType)item.GetValIntByKey(NodeAttr.NodeType);
+                    
+                    if(hisNodeType == NodeType.RouteNode && nd.CondModel != DirCondModel.ByLineCond)
+                    {
+                        nd.CondModel=DirCondModel.ByLineCond;
+                        nd.Update();
+                        throw new Exception("err@节点[" + nd.Name + "]到达的节点中有路由节点,转向规则需要选择由连接线控制");
+                    }
                     dr = dtToNDs.NewRow();
                     dr["No"] = item.NodeID;
                     dr["Name"] = item.Name;
@@ -2006,7 +2096,6 @@ namespace BP.WF.HttpHandler
                 #endregion 处理授权人.
 
 
-
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht, null,
                     this.ToNode, null, WebUser.No, WebUser.Name, WebUser.FK_Dept,
                     WebUser.FK_DeptName, null, this.FID, this.PWorkID,
@@ -2023,7 +2112,6 @@ namespace BP.WF.HttpHandler
                     gwf.Update();
                 }
                 #endregion 处理授权 
-
 
                 //当前节点.
                 Node currNode = new Node(this.FK_Node);
@@ -2189,7 +2277,7 @@ namespace BP.WF.HttpHandler
                     gwl.FID = 0;
                     gwl.FK_Flow = this.currND.FK_Flow;
                     gwl.FK_Dept = WebUser.FK_Dept;
-                    gwl.FK_DeptT = WebUser.FK_DeptName;
+                    gwl.DeptName = WebUser.FK_DeptName;
                     gwl.SDT = "无";
                     gwl.DTOfWarning = DataType.CurrentDateTime;
                     gwl.IsEnable = true;
@@ -2275,7 +2363,6 @@ namespace BP.WF.HttpHandler
                     //有可能是，实体调用.
                     GenerWorkFlow gwf = new GenerWorkFlow();
                     gwf.WorkID = this.WorkID;
-                  
                     if ( DataType.IsNumStr(this.PFlowNo)==true && gwf.RetrieveFromDBSources() == 1 )
                     {
                         BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow, this.WorkID, this.PWorkID, gwf.PEmp, gwf.PNodeID);
@@ -2420,7 +2507,7 @@ namespace BP.WF.HttpHandler
 
                     gwl.FK_Flow = gwf.FK_Flow;
                     gwl.FK_Dept = WebUser.FK_Dept;
-                    gwl.FK_DeptT = WebUser.FK_DeptName;
+                    gwl.DeptName = WebUser.FK_DeptName;
 
                     gwl.SDT = "无";
                     gwl.DTOfWarning = DataType.CurrentDateTimess;

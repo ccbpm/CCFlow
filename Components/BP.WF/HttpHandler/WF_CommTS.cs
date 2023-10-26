@@ -369,7 +369,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Entity_GenerSQLAttrDB()
         {
-            // PK  PKVal ClassID Row
+            DataTable dt = null;
             string attrKey = this.GetRequestVal("AttrKey"); //  "SELECT * FROM WHERE XX=@SortNo ";
             if (this.PK.Equals("NodeID") == true)
             {
@@ -383,8 +383,7 @@ namespace BP.WF.HttpHandler
                 Attr attr = en.EnMap.GetAttrByKey(attrKey);
                 string sql = attr.UIBindKey;
                 sql = BP.WF.Glo.DealExp(sql, en);
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                return BP.Tools.Json.ToJson(dt);
+                dt = DBAccess.RunSQLReturnTable(sql);
             }
 
             if (this.PK.Equals("MyPK") == true)
@@ -399,8 +398,7 @@ namespace BP.WF.HttpHandler
                 Attr attr = en.EnMap.GetAttrByKey(attrKey);
                 string sql = attr.UIBindKey;
                 sql = BP.WF.Glo.DealExp(sql, en);
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                return BP.Tools.Json.ToJson(dt);
+                dt = DBAccess.RunSQLReturnTable(sql);
             }
 
             if (this.PK.Equals("WorkID") == true)
@@ -415,8 +413,7 @@ namespace BP.WF.HttpHandler
                 Attr attr = en.EnMap.GetAttrByKey(attrKey);
                 string sql = attr.UIBindKey;
                 sql = BP.WF.Glo.DealExp(sql, en);
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                return BP.Tools.Json.ToJson(dt);
+                dt = DBAccess.RunSQLReturnTable(sql);
             }
 
             if (this.PK.Equals("No") == true)
@@ -431,11 +428,28 @@ namespace BP.WF.HttpHandler
                 Attr attr = en.EnMap.GetAttrByKey(attrKey);
                 string sql = attr.UIBindKey;
                 sql = BP.WF.Glo.DealExp(sql, en);
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                return BP.Tools.Json.ToJson(dt);
+                dt = DBAccess.RunSQLReturnTable(sql);
             }
-
-            return "";
+            if (dt == null)
+                return "";
+            if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                string columnName = "";
+                foreach (DataColumn col in dt.Columns)
+                {
+                    columnName = col.ColumnName.ToUpper();
+                    switch (columnName)
+                    {
+                        case "NO":
+                            col.ColumnName = "No";
+                            break;
+                        case "NAME":
+                            col.ColumnName = "Name";
+                            break;
+                    }
+                }
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
         public string Entity_Save()
         {

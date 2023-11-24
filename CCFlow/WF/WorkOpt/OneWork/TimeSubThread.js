@@ -218,7 +218,7 @@ function InitPage() {
 
                 var doc = "";
                 doc += "<span>审批人</span>";
-                doc += gwl.FK_EmpText;
+                doc += gwl.EmpName;
                 //判断是否隐藏
                 if (Hide_IsRead == true) {
 
@@ -270,7 +270,7 @@ function InitPage() {
 
                 var left = "";
                 left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
-                left += "<br>" + gwl.FK_EmpText;
+                left += "<br>" + gwl.EmpName;
 
                 var newRow = "";
                 newRow = "<tr  title='等待审批人员' >";

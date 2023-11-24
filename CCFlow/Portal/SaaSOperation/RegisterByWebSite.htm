@@ -19,7 +19,6 @@
         });
 
         function CheckUserNo(ctrl) {
-
             var val = ctrl.value;
             if (val == '')
                 return;
@@ -96,6 +95,22 @@
             font-style: italic;
             font-weight: bolder;
         }
+        .main-center {
+            display: flex;
+            justify-content: center;
+        }
+        .register-box {
+            padding: 30px;
+            background: #fff;
+            margin-top: 10px;
+            box-shadow: 0px 0px 5px 2px #c7c7c7;
+            border-radius: 5px;
+        }
+        .register {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 10px 10px
+        }
     </style>
 
 </head>
@@ -106,18 +121,18 @@
 
         <center>
             <table style="width:80%;border:0px;">
-                <tr>
+                <tr class="main-center">
                     <td colspan="1">
                         <div id="toolbar"></div>
                         <img src="./Img/ccflowAD_Title.png" style="width:800px;" />
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <fieldset>
-                            <legend> 管理员帐号信息 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Login.htm"><img style="width:30px; height:30px;" src="./Img/Login.png">我有账户，我要登录</a> </legend>
+                <tr class="main-center">
+                    <td style=" width: 65.5%;">
+                        <div class="register-box">
+                            <div class="register"> 管理员帐号信息 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="Login.htm"><img style="width:30px; height:30px;" src="./Img/Login.png">我有账户，我要登录</a> </div>
                             <div class="layui-form-item">
-                                <label style="" class="layui-form-label">手机号(登录帐号)</label>
+                                <label  class="layui-form-label">手机号(登录帐号)</label>
                                 <div class="layui-input-inline" style="width:200px;">
                                     <input type="text" onblur="CheckUserNo(this)" id="TB_Adminer" value="" name="TB_Adminer" lay-verify="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
                                 </div>
@@ -157,7 +172,7 @@
                             </div>
                             <!--</fieldset>
                             <fieldset>-->
-                            <legend>组织信息</legend>
+                            <div class="register">组织信息</div>
                             <!--<div class="layui-form-item">
                                 <label style="" class="layui-form-label">企业账号</label>
                                 <div class="layui-input-inline" style="width:200px;">
@@ -200,7 +215,7 @@
                                     <!--<a href="Default.htm">我已经有帐号，我要登录。</a>-->
                                 </div>
                             </div>
-                        </fieldset>
+                        </div>
                     </td>
                 </tr>
             </table>

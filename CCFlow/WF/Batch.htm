@@ -58,15 +58,15 @@
                 var en = data[idx];
 
                 var url = "";
-                url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + en.NodeID;
+                url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + en.NodeID+"&PageName=Batch";
 
                 //审核组件模式.
                 if (en.BatchRole == 1)
-                    url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + en.NodeID;
+                    url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + en.NodeID+"&PageName=Batch";
 
                 //审核分组模式.
                 if (en.BatchRole == 2)
-                    url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + en.NodeID;
+                    url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + en.NodeID + "&PageName=Batch";
 
                 //自定义url模式.
                 if (en.BatchRole == 3)
@@ -75,7 +75,7 @@
                                        <div class="panel panel-info">
                                       <div class="panel-heading">${en.FlowName}</div>
                                       <div class="panel-body">
-                                       <a href=\"${url}\">${en.Name}</a> &nbsp;<span class="badge label label-danger">${en.NUM}</span>
+                                       <a href=\"${url}\">${en.Name}</a> &nbsp;<span class="badge label label-danger">${en.Num}</span>
                                       </div>
                                     </div>
                                     </div>`

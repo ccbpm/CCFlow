@@ -80,6 +80,19 @@
             node.FWCSta = fwcSta;
             node.Update();
 
+
+            var mypk = node.NodeFrmID + "_" + node.NodeID + "_" + node.FK_Flow;
+            var frmNode = new Entity("BP.WF.Template.FrmNodeExt");
+            frmNode.SetPKVal(mypk);
+            if (frmNode.RetrieveFromDBSources() == 1) {
+
+                if (fwcSta == 0)
+                    frmNode.IsEnableFWC = 0;
+                else
+                    frmNode.IsEnableFWC = 1;
+
+                frmNode.Update();
+            }
         }
     </script>
 </head>

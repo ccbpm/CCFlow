@@ -8,61 +8,153 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <link href="../../Style/skin/css/Default.css" rel="stylesheet" />
     <link href="../../Style/skin/adminfont/iconfont.css" rel="stylesheet" />
-    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../Scripts/dayjs.min.js"></script>
+    <script src="../../Scripts/vue.js"></script>
+    <style>
+        [v-cloak] {
+            display: none !important;
+        }
+        body table tr td {
+            padding: 10px 10px;
+        }
+
+        table thead > tr > th > .cell {
+            padding: 10px 10px;
+            text-align: left;
+        }
+
+        .checkFlow {
+            margin: 10px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        ol {
+            padding-left: 25px;
+        }
+        .btmContent {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .warning-row {
+            color: #dada88;
+        }
+
+        .info-row {
+            color: green;
+        }
+
+        .error-row {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="cc-checkflow">
-        <form id="form1">
-            <table class="table">
-            </table>
-            <h2 class="main-cl6">流程检查信息</h2>
-            <div id="Msg" class="cc-checkflow-msg" />
-        </form>
+    <div class="cc-checkflow" id="app">
+        <div class="checkFlow">
+            <div>CCBPM流程设计</div>
+            <div style="font-size:20px;">检测报告</div>
+        </div>
+        <div style="padding-left:10px;">说明：</div>
+        <ol>
+            <li>由于内外部环境问题，质检程序不能100%检测到流程设计中的全部问题.</li>
+            <li>质检程序根据检测的问题分为三个级别提示、警告、错误。</li>
+            <li>错误是必须修改的、是程序运行错误的。</li>
+            <li>CCBPM会把系统设置错误的地方自动更正过来。</li>
+            <li>CCBPM会自动修复数据表结构。</li>
+        </ol>
+        <!--<h2 class="main-cl6">流程检查信息</h2>-->
+        <p v-if="tableData.length == 0">检查流程中,请稍候...</p>
+        <div id="Msg" class="cc-checkflow-msg"></div>
+        <div style="padding:0 10px;">
+            <el-table :data="tableData"
+                      border=border
+                      style="width: 100%"
+                      :cell-style="tableCellStyle">
+                <el-table-column type="index" label="序" width="50"> </el-table-column>
+                <el-table-column prop="NodeID"
+                                 label="节点ID"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="NodeName"
+                                 label="节点名称"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="ChekOption"
+                                 label="检查内容">
+                </el-table-column>
+                <el-table-column prop="Msg"
+                                 label="信息"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="InfoType"
+                                 label="状态"
+                                 width="100">
+                </el-table-column>
+            </el-table>
+        </div>
+        <p style="margin: 20px 0 15px 0; padding-left: 10px;">致：</p>
+        <p class="btmContent">驰骋BPM 研发部 </p>
+        <p class="btmContent" v-cloak=v-cloak>{{ currentTime }}</p>
     </div>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-    <script type="text/javascript" language="javascript">
-        //页面启动函数.
-        $(function () {
+    <script src="../../Scripts/element/element.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    tableData: [],
+                    currentTime: '',
+                };
+            },
+            methods: {
+                InitPage() {
+                    this.currentTime = dayjs().format('YYYY年MM月DD日');
+                    const en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
+                    const data = en.DoMethodReturnString("DoCheck");
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    this.handlerResponse(data);
+                },
+                handlerResponse(rawStr) {
+                    this.tableData = JSON.parse(rawStr);
+                    console.log(this.tableData);
 
-            $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行流程检查,大约持续 1-3 分钟时间,ccbpm会创建修复数据表字段,请稍后......</blue><br><br><br><br></center>");
-
-            var en = new Entity("BP.WF.Flow", GetQueryString("FK_Flow"));
-            var data = en.DoMethodReturnString("DoCheck");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            var tips = data.split("@");
-            //第一个元素为空,删除掉
-            delete (tips[0]);
-            html = "<ul>";
-            for (index in tips) {
-                tip = tips[index];
-                html += "<li>" + tip + "</li>";
-            }
-            html += "<ul>";
-
-            html = html.replace(/>信息:/g, "><font style='font-weight:bold;'>信息:</font>");
-            html = html.replace(/>警告:/g, "><font style='font-weigth:bold; color:green;'>警告:</font>");
-            html = html.replace(/>错误:/g, "><font style='font-weight:bold; color:red ;'>错误:</font>");
-
-            $("#Msg").html(html);
-            return;
-
-        });
-
-        //发起流程测试.
-        function StartTester() {
-            var url = '../TestFlow.htm?FK_Flow=' + GetQueryString("FK_Flow");
-            SetHref(url);
-        }
+                },
+                // 改变某一列单元格背景颜色
+                tableCellStyle({ row, column, rowIndex, columnIndex }) {
+                    let rowColor = {};
+                    switch (row.InfoType) {
+                        case '信息':
+                            rowColor.color = ''
+                            break;
+                        case '警告':
+                            rowColor.color = '#dada88'
+                            break;
+                        case '错误':
+                            rowColor.color = 'red'
+                            break;
+                        case '提示':
+                            rowColor.color = 'green'
+                            break;
+                    }
+                    return rowColor;
+                },
+            },
+            created: function () {
+                this.InitPage();
+            },
+        })
     </script>
 </body>
 </html>

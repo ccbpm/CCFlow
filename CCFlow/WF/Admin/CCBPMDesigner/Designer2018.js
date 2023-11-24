@@ -266,7 +266,11 @@ function SetNodeFWCSta(nodeID, fwcSta) {
         var frmNode = new Entity("BP.WF.Template.FrmNode");
         frmNode.SetPKVal(mypk);
         if (frmNode.RetrieveFromDBSources() == 1) {
-            frmNode.IsEnableFWC = fwcSta;
+
+            if (fwcSta==0)
+                frmNode.IsEnableFWC = 0;
+            else
+                frmNode.IsEnableFWC = 1;
             frmNode.Update();
         }
     }
@@ -763,9 +767,7 @@ $(function () {
                 NodeFrmFree(activeId); 
             },
             "pmNodeAccepterRole": function (t) {
-
                 var activeId = _canvas.getActiveId(); //右键当前的ID
-
                 NodeAccepterRole(activeId);
             }
         },
@@ -784,7 +786,7 @@ $(function () {
             "clmNewName": function (t) {
                 //修改标签名称.
                 var activeId = _canvas.getActiveId(); //右键当前的ID
-                console.log('activeId', activeId);
+   				console.log('activeId', activeId);
                 var windowtext = $("#lab" + activeId).text();
 
                 windowtext = windowtext.replace(/(^\s*)|(\s*$)/g, ""); //去掉左右空格.
@@ -1076,7 +1078,7 @@ function GenerDrowFlowData() {
 
     //节点. 取出来显示
     var nodes = new Entities("BP.WF.Nodes");
-    nodes.Retrieve("FK_Flow", flowNo);
+    nodes.Retrieve("FK_Flow", flowNo, "Step");
 
     //方向. 取出来显示
     var dirs = new Entities("BP.WF.Template.Directions");
@@ -1210,8 +1212,6 @@ function GetLabNoteData() {
 
         var lab = labs[i];
 
-        //console.log(lab.Name);
-
         lab.Name = DealSpecStr(lab.Name);
 
         //alert(lab.Name);
@@ -1308,7 +1308,7 @@ function FlowCheck() {
     var flowId = Number(flowNo);
     flowId = String(flowId);
     url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + flowNo + "&FK_MapData=ND" + flowId + "MyRpt";
-    OpenLayuiDialog(url, "检查流程", window.innerWidth * 0.40);
+    OpenLayuiDialog(url, "检查流程", window.innerWidth * 0.50);
     return;
 }
 
@@ -1433,9 +1433,9 @@ function FrmPower(nodeID) {
 
 //接受人规则.
 function NodeAccepterRole(nodeID) {
-
+    var fromNode = new Entity("BP.WF.Template.NodeSimple", nodeID);
     var url = basePath + "/WF/Admin/AttrNode/AccepterRole/Default.htm?FK_MapData=ND" + nodeID + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
-    OpenLayuiDialog(url, "接受人规则" + nodeID, window.innerWidth * 0.8);
+    OpenLayuiDialog(url, "接受人规则" +'&nbsp;'+ fromNode.Name +','+ nodeID, window.innerWidth * 0.8);
     return;
 }
 

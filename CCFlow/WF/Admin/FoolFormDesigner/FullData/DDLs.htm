@@ -30,6 +30,11 @@
             var keyOfEn = GetQueryString("KeyOfEn");
             var thisPK = refPK + "_FullData";
 
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = thisPK;
+            en.SetPKVal(en.MyPK);
+            var n = en.RetrieveFromDBSources();
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", frmID);
             handler.AddPara("KeyOfEn", keyOfEn);
@@ -49,7 +54,18 @@
                 $("#doc").html("<h3>没有要填充的下拉框字段.</h3>");
                 return;
             }
-
+            var tag6 = en.Tag6 || "0";
+            $("#RB_Type_" + tag6).attr("checked", true);
+            if (tag6 == "0") {
+                $("#doc").show();
+                $("#TB_Tag").hide();
+                $("#TB_Post").hide();
+            } else {
+                $("#doc").hide();
+                $("#TB_Tag").show();
+                $("#TB_Tag").val(en.Tag);
+                $("#TB_Post").val(en.Tag4);
+            }
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < data.length; i++) {
                 var mapAttr = data[i];
@@ -79,9 +95,14 @@
             var thisPK = refPK + "_FullData";
             //            var mapExt = new Entity("BP.Sys.MapExt", thisPK);
             //            var mapAtrr = new Entity("BP.Sys.MapAttr", frmID);
+            var tag4 = $("#TB_Post").val();
+            tag4 = tag4.replace(/"/g, "'").replace(/'/g, "~");
+
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
             handler.AddPara("FK_MapData", GetQueryString("FK_MapData"));
-            handler.AddPara("Tag", str);
+            handler.AddPara("Tag4", tag4);
+            handler.AddPara("Tag", $("#TB_Tag").val());
+            handler.AddPara("Tag6", $("input[name='RB_Type']:checked").val());
             handler.AddPara("MyPK", thisPK);
             handler.AddPara("AttrOfOper", GetQueryString("KeyOfEn"));
             handler.AddFormData();
@@ -93,17 +114,32 @@
 
             Reload();
         }
+        function ChangeShow(type) {
+            if (type == 0) {
+                $("#doc").show();
+                $("#TB_Tag").hide();
+            } else {
+                $("#doc").hide();
+                $("#TB_Tag").show();
+            }
+
+        }
 
     </script>
 </head>
 <body>
     <form id="cc">
 
-        <div id="bar">
+        <div id="bar"></div>
+        <div>
+            下拉框填充方式：
+            <input type="radio" name="RB_Type" id="RB_Type_0" value="0" onchange="ChangeShow(0)" />分别填充
+            <input type="radio" name="RB_Type" id="RB_Type_1" value="1" onchange="ChangeShow(1)" />请求URL一次性获取数据填充
         </div>
-
-        <div id="doc">
-        </div>
+        <div id="doc"></div>
+        <textarea rows="4" name="TB_Tag" id="TB_Tag" style="width: 98%;"> </textarea>
+        <p>POST请求参数:</p>
+        <textarea rows="4" name="TB_Post" id="TB_Post" style="width: 98%;"> </textarea>
         <fieldset>
             <legend>帮助.</legend>
             <ul>

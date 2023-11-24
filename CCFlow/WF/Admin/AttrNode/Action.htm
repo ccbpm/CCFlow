@@ -59,8 +59,8 @@
 
                 html += "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
-                html += "<td>" + en.FK_Event + "</td>";
-                html += "<td>" + GetActionTypeName(en.FK_Event) + "</td>";
+                html += "<td>" + en.EventID + "</td>";
+                html += "<td>" + GetActionTypeName(en.EventID) + "</td>";
                 html += "<td>" + GetDoType(en.EventDoType) + "</td>";
                 html += "<td>" + en.DoDoc + "</td>";
                 html += "<td><a href=\"javascript:Edit('" + en.MyPK + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
@@ -78,7 +78,7 @@
         }
 
         function Edit(mypk) {
-            var url = "ActionDtl.htm?FK_Node=" + GetQueryString("FK_Node")+"&MyPK="+mypk;
+            var url = "ActionDtl.htm?FK_Node=" + GetQueryString("FK_Node") + "&MyPK=" + mypk;
             SetHref(url);
         }
         function Delete(mypk) {

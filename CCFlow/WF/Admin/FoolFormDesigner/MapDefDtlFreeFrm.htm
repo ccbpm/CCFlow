@@ -6,242 +6,229 @@
     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" type="text/css" />
 
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <base target="_self" />
 
-      <script type="text/javascript">
-          function Esc() {
-              if (event.keyCode == 27)
-                  window.close();
-              return true;
-          }
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
 
-          //公共变量.
-          //表单ID.
-          var fk_mapData = GetQueryString("FK_MapData");
-          //明细表ID.
-          var fk_mapDtl = GetQueryString("FK_MapDtl");
-          //所属表单id
-          var fk_node = GetQueryString("FK_Node");
+        //公共变量.
+        //表单ID.
+        var fk_mapData = GetQueryString("FK_MapData");
+        //明细表ID.
+        var fk_mapDtl = GetQueryString("FK_MapDtl");
+        //所属表单id
+        var fk_node = GetQueryString("FK_Node");
 
-          var isFor = GetQueryString("For");
-          var fk_flow = GetQueryString("FK_Flow");
-          var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + '&For=' + isFor + '&m=' + Math.random();
-          if (fk_flow != null && fk_flow != undefined && fk_flow != "")
-              url += '&FK_Flow=' + fk_flow;
-          $(function () {
+        var isFor = GetQueryString("For");
+        var fk_flow = GetQueryString("FK_Flow");
+        var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + '&For=' + isFor + '&m=' + Math.random();
+        if (fk_flow != null && fk_flow != undefined && fk_flow != "")
+            url += '&FK_Flow=' + fk_flow;
+        $(function () {
 
-              $("#F").attr("src", url);
+            $("#F").attr("src", url);
 
-              if (isFor != null || isFor != undefined) {
+            if (isFor != null || isFor != undefined) {
 
-                  $("#DtlAttr").html(isFor);
-                  return;
-                  // $("#DtlAttr").hide();
-                  //document.getElementById("DtlAttr").style = "";
-              }
-
-
-              var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
-              handler.AddUrlData();
-              var data = handler.DoMethodReturnString("MapDefDtlFreeFrm_Init");
+                $("#DtlAttr").html(isFor);
+                return;
+                // $("#DtlAttr").hide();
+                //document.getElementById("DtlAttr").style = "";
+            }
 
 
-              if (data.indexOf('err@') == 0) {
-                  alert(data);
-                  return;
-              }
-
-              if (data.indexOf("sln@") != -1 && isFor == false) {
-                  var slnDtlNo = data.substr("sln@".length);
-                  location.href = "MapDefDtlFreeFrm.htm?FK_MapDtl=" + slnDtlNo + "&FK_MapData=Temp&For=" + GetQueryString("For") + "&t=" + Math.random();
-              }
-
-          });
-
-          function HelpGroup() {
-              var msg = '字段分组：就是把类似的字段放在一起，让用户操作更友好。\t\n比如：我们纳税人设计一个基础信息采集节点。';
-              msg += '在登记纳税人基础信息时，我们可以把基础信息、车船信息、房产信息、投资人信息分组。\t\n \t\n分组的格式为:@从字段名称1=分组名称1@从字段名称2=分组名称2 ,\t\n比如：节点信息设置，@NodeID=基本信息@LitData=考核信息。';
-              alert(msg);
-          }
-
-          //主表存储表为数据库表时，从表的字段也不能自动创建
-          function AddF(fk_mapdata) {
-              var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&FK_Flow='+GetQueryString("FK_Flow")+'&IsDtlAdd=1&s=' + Math.random();
-              var mapDtl = new Entity("BP.Sys.MapDtl");
-              mapDtl.SetPKVal(fk_mapdata);
-              if (mapDtl.RetrieveFromDBSources() != 0) {
-                  var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapdata);
-                  var mapData = new Entity("BP.Sys.MapData", mapDtl.FK_MapData);
-                  if (mapData != null && mapData.PTableModel == 2)
-                      url = 'FieldTypeListChoseOneField.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&IsDtlAdd=1&s=' + Math.random();
-              }
-             
-              OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
-                  ReloadDtlFrame();
-              });
-          }
-
-          function HidAttr(mypk) {
-              var url = 'HidAttr.htm?FK_MapData=' + mypk;
-              var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
-              Reload();
-          }
-
-          function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
-
-              var url = '';
-              var title = ''
-
-              //普通字段类型.
-              if (ftype == "1") {
-                  if (uiControlType == 6) {
-                      url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&inlayer=1&PKVal=" + mypk;
-                      title = '字段附件属性';
-                  } else {
-                      url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
-                      title = '字段String属性';
-                  }
-              }
-
-              //数值字段类型.
-              if (ftype == "2") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
-                  title = '字段Int属性';
-              }
-
-              //数值字段类型.
-              if (ftype == "3") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
-                  title = '字段Float属性';
-              }
-
-              //数值字段类型.
-              if (ftype == "5") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
-                  title = '字段Double属性';
-              }
-
-              //数值字段类型.
-              if (ftype == "8") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
-                  title = '字段Moeny属性';
-              }
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("MapDefDtlFreeFrm_Init");
 
 
-              //日期类型date.
-              if (ftype == "6") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
-                  title = '字段Date属性';
-              }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-              //日期类型datetime.
-              if (ftype == "7") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
-                  title = '字段DateTime属性';
-              }
+            if (data.indexOf("sln@") != -1 && isFor == false) {
+                var slnDtlNo = data.substr("sln@".length);
+                location.href = "MapDefDtlFreeFrm.htm?FK_MapDtl=" + slnDtlNo + "&FK_MapData=Temp&For=" + GetQueryString("For") + "&t=" + Math.random();
+            }
 
-              // boolen 类型.
-              if (ftype == "4") {
-                  url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&inlayer=1&PKVal=" + mypk;
-                  title = '字段Boolen属性';
-              }
+        });
 
-              if (url == '') {
-                  alert('@没有判断的类型' + ftype);
-                  return;
-              }
+        function HelpGroup() {
+            var msg = '字段分组：就是把类似的字段放在一起，让用户操作更友好。\t\n比如：我们纳税人设计一个基础信息采集节点。';
+            msg += '在登记纳税人基础信息时，我们可以把基础信息、车船信息、房产信息、投资人信息分组。\t\n \t\n分组的格式为:@从字段名称1=分组名称1@从字段名称2=分组名称2 ,\t\n比如：节点信息设置，@NodeID=基本信息@LitData=考核信息。';
+            alert(msg);
+        }
 
-              OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-                  Reload();
-              });
-          }
+        //主表存储表为数据库表时，从表的字段也不能自动创建
+        function AddF(fk_mapdata) {
+            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&FK_Flow=' + GetQueryString("FK_Flow") + '&IsDtlAdd=1&s=' + Math.random();
+            var mapDtl = new Entity("BP.Sys.MapDtl");
+            mapDtl.SetPKVal(fk_mapdata);
+            if (mapDtl.RetrieveFromDBSources() != 0) {
+                var mapDtl = new Entity("BP.Sys.MapDtl", fk_mapdata);
+                var mapData = new Entity("BP.Sys.MapData", mapDtl.FK_MapData);
+                if (mapData != null && mapData.PTableModel == 2)
+                    url = 'FieldTypeListChoseOneField.htm?FK_MapData=' + fk_mapdata + '&inlayer=1&IsDtlAdd=1&s=' + Math.random();
+            }
 
-          function EditEnum(fk_mapdata, mypk, enumKey) {
+            OpenLayuiDialog(url, "插入列", 0, 90, "auto", true);
+        }
 
-              var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
-              OpenEasyUiDialog(url, "eudlgframe", "编辑枚举字段", 800, 500, "icon-edit", true, null, null, null, function () {
-                  ReloadDtlFrame();
-              });
-          }
-          function EditTable(fk_mapdata, mypk, fk_sfTable) {
+        function HidAttr(mypk) {
+            var url = 'HidAttr.htm?FK_MapData=' + mypk;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 700px; dialogWidth: 900px;center: yes; help: no');
+            Reload();
+        }
 
-              var url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&inlayer=1&PKVal=" + mypk;
-              OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {
-                  ReloadDtlFrame();
-              });
-          }
-          //刷新.
-          function ReloadDtlFrame() {
-              Reload();
-          }
-          function Esc() {
-              if (event.keyCode == 27)
-                  window.close();
-              return true;
-          }
+        function Edit(mypk, ftype, gf, fk_mapdata, uiControlType) {
 
-          var isInser = "";
-          function EditDtl(fk_mapData, dtlKey) {
+            var url = '';
+            var title = ''
 
-              var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&PKVal=" + dtlKey;
-              var W = document.body.clientWidth - 40;
-              var H = document.body.clientHeight - 40;
-              OpenEasyUiDialog(url, "eudlgframe", "设置", W, H, "icon-edit", true, null, null, null, function () {
-                  Reload();
-              });
-          }
+            //普通字段类型.
+            if (ftype == "1") {
+                if (uiControlType == 6) {
+                    url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmAttachmentExt&inlayer=1&PKVal=" + mypk;
+                    title = '字段附件属性';
+                } else {
+                    url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrString&inlayer=1&PKVal=" + mypk;
+                    title = '字段String属性';
+                }
+            }
 
-          function EditMapDtl(dtlKey) {
+            //数值字段类型.
+            if (ftype == "2") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
+                title = '字段Int属性';
+            }
 
-              var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&inlayer=1&PKVal=" + dtlKey;
+            //数值字段类型.
+            if (ftype == "3") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
+                title = '字段Float属性';
+            }
 
-              OpenEasyUiDialog(url, "eudlgframe", "设置", 800, 500, "icon-edit", true, null, null, null, function () {
-                  Reload();
-              });
-          }
+            //数值字段类型.
+            if (ftype == "5") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
+                title = '字段Double属性';
+            }
 
-          function closeDlg() {
-              $("#eudlg").dialog("close");
-          }
+            //数值字段类型.
+            if (ftype == "8") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrNum&inlayer=1&PKVal=" + mypk;
+                title = '字段Moeny属性';
+            }
 
-          //然浏览器最大化.
-          function ResizeWindow() {
-              if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
-                  var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-                  var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
-                  window.moveTo(0, 0);           //把window放在左上角     
-                  window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
-              }
-          }
-          window.onload = ResizeWindow;
-         
-     </script>
+
+            //日期类型date.
+            if (ftype == "6") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
+                title = '字段Date属性';
+            }
+
+            //日期类型datetime.
+            if (ftype == "7") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrDT&inlayer=1&PKVal=" + mypk;
+                title = '字段DateTime属性';
+            }
+
+            // boolen 类型.
+            if (ftype == "4") {
+                url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrBoolen&inlayer=1&PKVal=" + mypk;
+                title = '字段Boolen属性';
+            }
+
+            if (url == '') {
+                alert('@没有判断的类型' + ftype);
+                return;
+            }
+
+            OpenLayuiDialog(url, title, 0, 90, "auto", true);
+        }
+
+        function EditEnum(fk_mapdata, mypk, enumKey) {
+
+            var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnum&inlayer=1&PKVal=' + mypk + '&s=' + Math.random();
+            OpenLayuiDialog(url, "编辑枚举字段", 0, 90, "auto", true);
+        }
+        function EditTable(fk_mapdata, mypk, fk_sfTable) {
+
+            var url = "../../Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTable&inlayer=1&PKVal=" + mypk;
+            OpenLayuiDialog(url, "外键字段属性", 0, 90, "auto", true);
+        }
+        //刷新.
+        function ReloadDtlFrame() {
+            Reload();
+        }
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        var isInser = "";
+        function EditDtl(fk_mapData, dtlKey) {
+
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&PKVal=" + dtlKey;
+            var W = document.body.clientWidth - 40;
+            var H = document.body.clientHeight - 40;
+            OpenLayuiDialog(url, "设置", W, 90, "auto", true);
+        }
+
+        function EditMapDtl(dtlKey) {
+
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.Frm.MapDtlExt&inlayer=1&PKVal=" + dtlKey;
+
+            OpenLayuiDialog(url, "设置", 0, 90, "auto", true);
+        }
+
+        function closeDlg() {
+            $("#eudlg").dialog("close");
+        }
+
+        //然浏览器最大化.
+        function ResizeWindow() {
+            if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
+                var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
+                var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
+                window.moveTo(0, 0);           //把window放在左上角
+                window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
+            }
+        }
+        window.onload = ResizeWindow;
+
+    </script>
 </head>
 <body>
 
- <div class='easyui-layout' data-options='fit:true'>
-        <div data-options="region:'north',noheader:true,split:false,border:false" style='height:30px;overflow-y:hidden'>
-            <div style='float:left' id="DtlAttr">
-                <a href="javascript:EditMapDtl(fk_mapDtl)" class='easyui-linkbutton' data-options="iconCls:'icon-edit',plain:true">属性</a>
-            </div>
-            <div style='float:right'>
-                <a href="javascript:AddF(fk_mapDtl);" > 插入列</a>
-                <a href="javascript:alert('将要取消');AddFGroup(fk_mapDtl);" class='easyui-linkbutton' data-options="iconCls:'icon-new',plain:true">插入列组</a>
+    <div class='easyui-layout' data-options='fit:true'>
+        <div data-options="region:'north',noheader:true,split:false,border:false" style='height:50px;overflow-y:hidden'>
+            <div style="padding:10px 8px;display:flex;justify-content:space-between;" id="DtlAttr">
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-border-green" onclick="EditMapDtl(fk_mapDtl)">属性</button>
+                <button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-border-green" onclick="AddF(fk_mapDtl)">插入列</button>
             </div>
             <div style='clear:both'></div>
         </div>
         <div data-options="region:'center',noheader:true,border:false" style="overflow-y:hidden">
-            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:400px' src=''    ></iframe>
-           <!-- <iframe id='Iframe1' frameborder='0' scrolling="auto" style='width:100%;height:100%' src='this.url'    ></iframe>-->
+            <iframe id='F' frameborder='0' scrolling="auto" style='width:100%;height:400px' src='this.url'></iframe>
 
         </div>
     </div>

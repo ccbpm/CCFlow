@@ -12,6 +12,7 @@
 
     <script src="../../../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script src="../../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../WF/Comm/Gener.js" type="text/javascript"></script>
     <script src="../../../GPM/config.js" type="text/javascript"></script>
     <!--<script src="GPMMenus.js" type="text/javascript"></script>-->
@@ -97,18 +98,22 @@
             background: #5053f1;
             background: -webkit-gradient(linear,left bottom,right top,color-stop(0,#5053f1),color-stop(1,#2780ec));
         }
+
         .btn-info:hover {
             background: #5053f1;
             border-color: #5053f1;
         }
+
         .btn-info:focus {
             background: #5053f1;
             border-color: #5053f1;
         }
+
         .btn-info:active {
             background: #5053f1;
             border-color: #5053f1;
         }
+
             .btn-info:active:focus {
                 background: #5053f1;
                 border-color: #5053f1;
@@ -118,19 +123,9 @@
         //页面启动函数.
         $(function () {
 
-            var webUser = new WebUser();
-            if (webUser.No == "") {
+            if (loadWebUser.No == "") {
                 SetHref("Login.htm");
                 return;
-            }
-
-            //赋值系统名称.
-            document.title = appName;
-            $("#appNameOfSmall").html(appNameOfSmall);
-            $("#appNameOfSmaller").html(appNameOfSmaller);
-
-            if (webUser.No == "admin") {
-                $("#exitBar").before("<li><a href='../../../WF/Admin/Portal/Default.htm' ><i class='icon-fire'></i>后台</a></li>");
             }
 
             //InitLeftMenuComm();
@@ -257,7 +252,7 @@
     <script src="../../../WF/Style/skin/js/appnew.js?v=4.1.0" type="text/javascript"></script>
     <script src="../../../WF/Style/skin/js/index.js" type="text/javascript"></script>
 
-    <script src="../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../WF/Scripts/config.js"></script>
     <script type="text/javascript" src="../../../WF/Comm/Gener.js"></script>

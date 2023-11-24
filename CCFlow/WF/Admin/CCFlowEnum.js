@@ -50,8 +50,10 @@ if (typeof DeliveryWay == "undefined") {
         //所有人员都可以发起
         DeliveryWay.BySelected_1 = 41,
         // 按表单选择人员
-        DeliveryWay.ByPreviousNodeFormEmpsField = 5,
-        DeliveryWay.ByPreviousNodeFormDepts = 52,
+        DeliveryWay.ByPreviousNodeFormEmpsField = 5, //字段是主表.
+        DeliveryWay.ByPreviousNodeFormEmpsFrmDtl = 501, //字段是从表.
+        DeliveryWay.ByPreviousNodeFormEmpsTeam = 502, // 字段是权限组.
+        DeliveryWay.ByPreviousNodeFormDepts = 503, //字段是部门编号
         //按表单选择岗位
         DeliveryWay.ByPreviousNodeFormStationsAI = 53,
         DeliveryWay.ByPreviousNodeFormStationsOnly = 54,
@@ -391,6 +393,35 @@ if (typeof DirCondModel == "undefined") {
         /// 主观选择： 按钮模式
         /// </summary>
         DirCondModel.ByButtonSelected = 3
+}
+
+//方向条件控制
+if (typeof ListShowModel == "undefined") {
+    var ListShowModel = {}
+        /// <summary>
+        /// 表格
+        /// </summary>
+        ListShowModel.Table = 0,
+        /// <summary>
+        /// 卡片
+        /// </summary>
+         ListShowModel.Card = 1,
+        /// <summary>
+        /// 自定义
+        /// </summary>
+        ListShowModel.Self = 2,
+        /// <summary>
+        /// 2维表
+        /// </summary>
+        ListShowModel.TwoD= 3,
+        /// <summary>
+        /// 3维表左
+        /// </summary>
+        ListShowModel.ThreeDL = 4,
+        /// <summary>
+        /// 3维表上
+        /// </summary>
+        ListShowModel.ThreeDT = 5
 }
 
 //流程计划时间

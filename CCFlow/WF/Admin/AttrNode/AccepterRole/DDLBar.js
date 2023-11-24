@@ -124,10 +124,12 @@ function InitBar(optionKey) {
 
     if (isSatrtNode == false) {
         html += "<option value=null disabled='disabled' >+按节点表单的数据计算</option>";
-        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是人员编号</option>";
-        html += "<option value=" + DeliveryWay.ByPreviousNodeFormDepts + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是部门编号</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsField + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是人员编号(主表)</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsFrmDtl + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是人员编号(从表)</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormDepts + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是部门编号(求部门负责人)</option>";
         html += "<option value=" + DeliveryWay.ByPreviousNodeFormStationsAI + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是岗位编号(按岗位智能计算)</option>";
         html += "<option value=" + DeliveryWay.ByPreviousNodeFormStationsOnly + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是岗位编号(仅按岗位计算)</option>";
+        html += "<option value=" + DeliveryWay.ByPreviousNodeFormEmpsTeam + " >&nbsp;&nbsp;&nbsp;&nbsp;字段是权限组</option>";
         html += "<option value=" + DeliveryWay.ByDtlAsSubThreadEmps + " >&nbsp;&nbsp;&nbsp;&nbsp;由上一节点的明细表来决定子线程的接受人</option>";
     }
 

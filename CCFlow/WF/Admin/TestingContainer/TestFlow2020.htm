@@ -263,7 +263,8 @@
         function StartIt(empNo, workID) {
 
             var token = GetQueryString("Token") || GetQueryString("Token");
-
+            if (!token || token == "null")
+                token = localStorage.getItem("Token");
             var webUser = new WebUser();
 
             $("#Btn_Reset").val("正在以[" + empNo + "]启动流程,请稍候....");
@@ -292,7 +293,8 @@
 
             //启动测试容器.
             //WinOpenFull(data);
-            localStorage.setItem('AdminToken', token)
+            localStorage.setItem('AdminToken', token);
+           
             //SetHref(data)
             WinOpenFull(data, "xx");    //打开全屏
         }

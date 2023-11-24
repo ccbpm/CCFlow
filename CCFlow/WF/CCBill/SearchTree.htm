@@ -318,11 +318,14 @@
                     var nodes = $(".layui-tree-txt");
                     $.each(nodes, function (idx, node) {
                         var theme = DealText(localStorage.getItem("themeColorInfo"));
-                        theme = JSON.parse(theme);
-                        if (node.innerHTML == obj.data.title)
-                            $(node).css("color", theme.selectedMenu);
-                        else
-                            $(node).css("color", "#555");
+                        if (!!theme) {
+                            theme = JSON.parse(theme);
+                            if (node.innerHTML == obj.data.title)
+                                $(node).css("color", theme.selectedMenu);
+                            else
+                                $(node).css("color", "#555");
+                        }
+                        
                     })
                     tableData = SearchData(listShowWayKey, obj.data.id);
                     layui.table.reload('lay_table_dict', { data: tableData });
@@ -720,6 +723,8 @@
             }
 
             var theme = DealText(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
             theme = JSON.parse(theme);
 
             var html = "\n .layui-btn{\n background-color:" + theme.selectedMenu + ";\n}\n .layui-laypage .layui-laypage-curr .layui-laypage-em{\n background-color:" + theme.selectedMenu + ";\n}";

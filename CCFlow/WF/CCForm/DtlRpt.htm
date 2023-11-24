@@ -1,0 +1,914 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>从表</title>
+    <meta charset="UTF-8" />
+    <base target="_self" />
+    <script src="../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/vue.js"></script>
+    <link href="../Scripts/element/element.css" rel="stylesheet" />
+    <script src="../Scripts/element/element.js"></script>
+</head>
+
+<body>
+    <div class="p-1" id="App">
+        <div>
+            <div style="text-align: right; margin-bottom: 5px">
+                <el-button v-if="isInsert" @click="AddRow" icon="el-icon-circle-plus-outline">新增</el-button>
+                <el-button v-if="isSave" @click="SaveAll(true)" :disabled="btnDisabled" icon="el-icon-folder-checked">保存</el-button>
+                <el-button v-if="isSave" @click="Setting()" :disabled="btnDisabled" icon="el-icon-setting">设置</el-button>
+                <template v-for="item in btnList">
+                    <el-button type="default" @click="BtnClick(item)">
+                        {{ item }}
+                    </el-button>
+                </template>
+                <el-button v-if="mapDtl.ImpModel === '1'" @click="ExpDtl">导出</el-button>
+                <el-button v-if="isImp && isSave" @click="ImpDtl">导入</el-button>
+                <!--<el-button @click="fullScreen">
+                <FullscreenOutlined />
+            </el-button>-->
+            </div>
+            <div>
+                <el-table :data="tableData"
+                          :span-method="arraySpanMethod"
+                          border
+                          style="width: 100%"
+                          :key="tempData">
+                    <template v-for="column in columns">
+                        <el-table-column :prop="column.key" :label="column.title">
+                            <template v-if="!!column.children" v-for="item in column.children">
+                                <el-table-column :prop="item.key" :label="item.title">
+                                    <template v-if="!!item.edit && item.edit==true " slot-scope="scope">
+                                        <el-input v-if="item.attr.MyDataType === 2 && item.attr.LGType === 0"
+                                                  v-model.number="scope.row[item.key]"></el-input>
+                                        <el-input v-if="item.attr.MyDataType === 3 || item.attr.MyDataType === 5"
+                                                  v-model.number="scope.row[item.key]"></el-input>
+                                        <el-input v-if="item.attr.MyDataType === 8"
+                                                  v-model.number="scope.row[item.key]"></el-input>
+                                        <el-input v-if="item.attr.MyDataType === 1"
+                                                  v-model="scope.row[item.key]"></el-input>
+                                    </template>
+                                </el-table-column>
+                            </template>
+                            <template slot-scope="scope">
+                                <span v-show="!column.edit || column.edit==false">{{scope.row[column.key+'Text'] || scope.row[column.key+'T'] ||scope.row[column.key]}}</span>
+                                <template v-show="!!column.edit && column.edit==true">
+                                    <el-input v-if="!!column.attr && column.attr.MyDataType === 2 && column.attr.LGType === 0"
+                                              v-model.number="scope.row[column.key]"></el-input>
+                                    <el-input v-if="!!column.attr && (column.attr.MyDataType === 3 || column.attr.MyDataType === 5)"
+                                              v-model.number="scope.row[column.key]"></el-input>
+                                    <el-input v-if="!!column.attr && column.attr.MyDataType === 8"
+                                              v-model.number="scope.row[column.key]"></el-input>
+                                    <el-input v-if="!!column.attr && column.attr.MyDataType === 1"
+                                              v-model="scope.row[column.key]" v-show="true"></el-input>
+                                </template>
+                                <template v-if="column.key === 'Oper'">
+                                    <el-link type="primary" @click="DeleteRow(scope.$index, scope.row)" icon="el-icon-circle-close" style=" color:red;"></el-link>
+                                </template>
+                            </template>
+
+                        </el-table-column>
+                    </template>
+                </el-table>
+            </div>
+        </div>
+        <el-dialog title="二维/三维显示设置" :visible.sync="dialogTableVisible">
+            <el-form label-width="80px">
+                <el-form-item v-if="isInsert == false" :label="d1Attr.Name">
+                    <el-checkbox-group v-model="selectD1" @change="SettingChange()">
+                        <el-checkbox v-for="item in ddl1s" :label="item.value" :key="item.value">{{item.label}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item :label="d2Attr.Name">
+                    <el-checkbox-group v-model="selectD2" @change="SettingChange()">
+                        <el-checkbox v-for="item in ddl2s" :label="item.value" :key="item.value">{{item.label}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item v-if="parseInt(mapDtl.ListShowModel) === 4 || parseInt(mapDtl.ListShowModel) === 5" :label="d3Attr.Name">
+                    <el-checkbox-group v-model="selectD3" @change="SettingChange()">
+                        <el-checkbox v-for="item in ddl3s" :label="item.value" :key="item.value">{{item.label}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+    
+    <script type="text/javascript">
+        var baseInfo = new Vue({
+            el: '#App',
+            data: function () {
+                return {
+                    btnDisabled: false,
+                    columns: [],
+                    tableData: [],
+                    dtlData: [],
+                    tempData: 0,
+                    mapDtl: {},
+                    mapAttrs: [],
+                    frmData: {},
+                    valAttr: {},//报表值属性
+                    d1Attr: {},//维度1字段属性
+                    d2Attr: {},//维度2字段属性
+                    d3Attr: {},//维度3字段属性
+                    d1: '',
+                    d2: '',
+                    d3: '',
+                    numberField: '',
+                    selectD: {},
+                    ddl1s:[],
+                    ddl2s: [],
+                    ddl3s: [],
+                    isInsert: true,
+                    isDelete: true,
+                    isSave: true,
+                    //从表导入问题
+                    isImp: false,
+                    cacheSelectedData: [],
+                    btnList: [],
+                    isReadonly: (GetQueryString("IsReadonly") || "0") == "0" ? false : true,
+                    dialogTableVisible: false,
+                    selectD: {},
+                    selectD1: [],
+                    selectD2:[],
+                    selectD3: [],
+                }
+            },
+            methods: {
+                SettingChange: function () {
+                    if (this.isInsert == false && this.selectD1.length == 0) {
+                        this.$message.error("展示的1维字段集合不能为空");
+                        return;
+                    }
+                    if (this.selectD2.length == 0) {
+                        this.$message.error("展示的2维字段集合不能为空");
+                        return;
+                    }
+                    if ((parseInt(this.mapDtl.ListShowModel) === 4 || parseInt(this.mapDtl.ListShowModel) === 5) && this.selectD3.length == 0) {
+                        this.$message.error("展示的3维字段集合不能为空");
+                        return;
+                    }
+                    this.InitPage();
+                },
+                InitPage: function () {
+                    const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                    handler.AddUrlData()
+                    const data = handler.DoMethodReturnString('DtlRpt_Init');
+                    if (typeof data === 'string' && data.includes('err@')) {
+                        this.$message.error(data.replace('err@', ''));
+                        return;
+                    }
+                    
+                    this.frmData = JSON.parse(data);
+                    this.mapDtl = this.frmData['Sys_MapDtl'][0] || {};
+                    this.columns = [];
+                    this.tableData = [];
+                    this.tempData++;
+                    let btns = this.mapDtl.Btns || '';
+                    btns = btns.replace('，', ',');
+                    this.btnList = btns === '' ? [] : btns.split(',');
+                    
+                    //是否启用导入功能
+                    const impexts = this.frmData['Sys_MapExt']?.filter((mapExt) => mapExt.ExtModel === 'DtlImp' && mapExt.DoWay != 0) || [];
+                    this.impExt = impexts.length > 0 ? impexts[0] : {};
+                    this.isImp = impexts.length > 0;
+
+                    this.isSave =
+                        (parseInt(this.mapDtl.IsDelete) === 1 || parseInt(this.mapDtl.IsInsert) === 1 || parseInt(this.mapDtl.IsUpdate) == 1) &&
+                    parseInt(this.mapDtl.IsReadonly) == 0 &&
+                        this.isReadonly == false;
+
+                    this.mapAttrs = this.frmData['Sys_MapAttr'].filter((attr) => attr.UIVisible == 1);
+
+                    //维度值
+                    this.d1 = GetPara(this.mapDtl.AtPara, 'D1') || '';
+                    this.d2 = GetPara(this.mapDtl.AtPara, 'D2') || '';
+                    this.d3 = GetPara(this.mapDtl.AtPara, 'D3') || '';
+                    this.numberField = GetPara(this.mapDtl.AtPara, 'NumberField') || '';
+                    if (!this.numberField) {
+                        this.$message.error('请配置明细表[' + this.mapDtl.Name + ']的数值字段');
+                        return;
+                    }
+                    //维度1字段
+                    this.d1Attr = this.mapAttrs.filter((mapAttr) => mapAttr.KeyOfEn === this.d1)[0];
+                    const isString = this.d1Attr.MyDataType === 1 && this.d1Attr.UIContralType === 0 && this.d1Attr.LGType === 0;
+                    this.isInsert = this.mapDtl.IsInsert === '1' && isString === true && this.isReadonly == false;
+                    this.isDelete = (this.mapDtl.IsDelete === '1' || this.mapDtl.IsInsert === '1') && isString === true && this.isReadonly == false;
+                    if (isString == false)
+                        this.ddl1s = this.GetDDLOption(this.d1Attr, this.frmData);
+                    //维度Value
+                    this.valAttr = this.mapAttrs.filter((mapAttr) => mapAttr.KeyOfEn === this.numberField)[0];
+                    this.valAttr['bit'] =
+                        this.valAttr.DefVal == '' ? 2 : this.valAttr.DefVal.includes('.') == false ? 2 : this.valAttr.DefVal.substring(this.valAttr.DefVal.indexOf('.') + 1).length;
+
+                   
+                    if (this.selectD2.length==0) {
+                        const val = this.frmData.MainTable[0][this.mapDtl.No] || ""; 
+                        if (val === '') {
+                            this.selectD1 = [];
+                            this.selectD2 = [];
+                            this.selectD3 = [];
+                        } else {
+                            //存储方式D1:field1,field2;D2:field3,field4
+                            const arr = val.split(';');
+                            arr.forEach((item) => {
+                                const strs = item.split(':');
+                                if (!!strs[0]) {
+                                    if(strs[0] == this.d1)
+                                        this.selectD1 = strs[1].split(',');
+                                    if (strs[0] == this.d2)
+                                        this.selectD2 = strs[1].split(',');
+                                    if (strs[0] == this.d3)
+                                        this.selectD3 = strs[1].split(',');
+                                }
+                            });
+                        }
+                    }
+                    
+
+                    //初始化从表表头信息
+                    this.InitColumn(this.frmData);
+                    this.dtlData = this.frmData['DBDtl'];
+                    //根据维度1字段分组
+                    const map = {};
+                    this.dtlData.forEach((obj) => {
+                        const key = obj[this.d1];
+                        if (map[key]) {
+                            map[key].push(obj);
+                        } else {
+                            map[key] = [obj];
+                        }
+                    });
+                    this.tableData = [];
+                    if (parseInt(this.mapDtl.ListShowModel) === 3) {
+                        const selectVal = isString === true ? [] : this.selectD1;
+                        for (const key in map) {
+                            const arr = map[key];
+                            const item = {};
+                            item[this.d1] = key;
+                            if (selectVal.length != 0 && selectVal.includes(key.toString()) == false) continue;
+                            item['IsEnable'] = 1;
+                            item[this.d1 + 'T'] = arr[0][this.d1 + 'T'] || arr[0][this.d1 + 'Text'];
+                            this.columns.forEach((column) => {
+                                if (column.key != this.d1 && column.key != 'Oper') {
+                                    const obj = arr.filter((obj) => obj[this.d2].toString() == column.keyVal)[0];
+                                    item[this.d2 + column.keyVal] = obj[this.valAttr.KeyOfEn];
+                                    item[this.d2] = obj[this.d2];
+                                    item[this.d2 + 'T'] = obj[this.d2 + 'T'];
+                                }
+                            });
+                            this.tableData.push(item);
+                        }
+                    }
+                    if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                        const map = {};
+                        this.dtlData.forEach((obj) => {
+                            const key = obj[this.d1] + '_' + obj[this.d2];
+                            if (map[key]) {
+                                map[key].push(obj);
+                            } else {
+                                map[key] = [obj];
+                            }
+                        });
+                        const selectVal1 = isString === true ? [] : this.selectD1;
+                        const selectVal2 = this.selectD2;
+                        for (const key in map) {
+                            const arr = map[key];
+                            const item = {};
+                            if (selectVal1.length != 0 && selectVal1.includes(arr[0][this.d1].toString()) == false) continue;
+                            if (selectVal2.length != 0 && selectVal2.includes(arr[0][this.d2].toString()) == false) continue;
+                            item['IsEnable'] = 1;
+                            item[this.d1] = arr[0][this.d1];
+                            item[this.d1 + 'T'] = arr[0][this.d1 + 'T'] || arr[0][this.d1 + 'Text'];
+                            item[this.d2] = arr[0][this.d2];
+                            item[this.d2 + 'T'] = arr[0][this.d2 + 'T'] || arr[0][this.d2 + 'Text'];
+                            this.columns.forEach((column) => {
+                                if (!!column.key && column.key != this.d1 && column.key != this.d2 && column.key != 'Oper') {
+                                    const obj = arr.filter((obj) => obj[this.d3].toString() == column.keyVal)[0];
+                                    item[this.d3 + column.keyVal] = obj[this.valAttr.KeyOfEn];
+                                    item[this.d3] = obj[this.d3];
+                                    item[this.d3 + 'T'] = obj[this.d3 + 'T'] || obj[this.d3 + 'Text'];
+                                }
+                            });
+                            this.tableData.push(item);
+                        }
+                    }
+                    if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                        const selectVal = isString === true ? [] : this.selectD1;
+                        for (const key in map) {
+                            const arr = map[key];
+                            const item = {};
+                            item[this.d1] = key;
+                            if (selectVal.length != 0 && selectVal.includes(key.toString()) == false) continue;
+                            item['IsEnable'] = 1;
+                            item[this.d1 + 'T'] = arr[0][this.d1 + 'T'] || arr[0][this.d1 + 'Text'];
+                            this.columns.forEach((column) => {
+                                if (column.key != this.d1 && column.key != 'Oper') {
+                                    column.children.forEach((child) => {
+                                        debugger
+                                        const curobj = arr.filter((obj) => obj[this.d2].toString() == child.D2Val && obj[this.d3].toString() == child.D3Val)[0];
+                                        item[this.d3 + '_' + child.D3Val + '_' + child.D2Val] = curobj[this.valAttr.KeyOfEn];
+                                        item[this.d2] = curobj[this.d2];
+                                        item[this.d2 + 'T'] = curobj[this.d2 + 'T'] || curobj[this.d2 + 'Text'];
+                                        item[this.d3] = curobj[this.d3];
+                                        item[this.d3 + 'T'] = curobj[this.d3 + 'T'] || curobj[this.d3 + 'Text'];
+                                    });
+                                }
+                            });
+                            this.tableData.push(item);
+                        }
+                    }
+                },
+                InitColumn: function (frmData) {
+                    const listShowModel = parseInt(this.mapDtl.ListShowModel);
+                    if (listShowModel === 3) {
+                        if (!this.d2) {
+                            this.$message({
+                                message: '请配置维度字段2的值',
+                                type: 'warning'
+                            });
+                            return;
+                        }
+                    }
+
+                    this.d2Attr = this.mapAttrs.filter((mapAttr) => mapAttr.KeyOfEn === this.d2)[0];
+                    this.ddl2s = this.GetDDLOption(this.d2Attr, frmData);
+                    if (parseInt(this.mapDtl.ListShowModel) === 3 || parseInt(this.mapDtl.ListShowModel) === 5)
+                        this.columns.push({
+                            title: '',
+                            key: this.d1,
+                            edit: this.isInsert == true ? true : false,
+                            width: this.d1Attr.UIWidth || 100,
+                            align: 'center',
+                            attr: this.d1Attr,
+                        });
+
+                    if (parseInt(this.mapDtl.ListShowModel) === 3) {
+                        const d2Select = this.selectD2 || [];
+                        this.ddl2s.forEach((item) => {
+                            if (d2Select.length == 0 || d2Select.includes(item.value.toString())) {
+                                this.columns.push({
+                                    title: item.label,
+                                    key: this.d2 + item.value,
+                                    keyVal: item.value,
+                                    align: 'center', //居中
+                                    width: this.valAttr.UIWidth || 100,
+                                    edit: this.valAttr.UIIsEnable && this.isSave == true && parseInt(this.mapDtl.EditModel) === 0,
+                                    attr: this.valAttr,
+                                });
+                            }
+                        });
+                        if (this.isInsert || this.isDelete) {
+                            this.columns.push({
+                                title: '操作',
+                                key: 'Oper',
+                                width: 80,
+                                align: 'center',
+                                fixed: 'right',
+                            });
+                        }
+                        return;
+                    }
+                    this.d3Attr = this.mapAttrs.filter((mapAttr) => mapAttr.KeyOfEn === this.d3)[0];
+                    this.ddl3s = this.GetDDLOption(this.d3Attr, frmData);
+                    if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                        let d2Count = this.ddl2s.length;
+                        const selectVal = this.selectD2;
+                        if (selectVal.length != 0) {
+                            d2Count = this.ddl2s.filter((item) => selectVal.includes(item.value.toString())).length;
+                        }
+                        this.columns.push({
+                            title: '',
+                            key: this.d1,
+                            edit: this.isInsert == true ? true : false,
+                            width: this.d1Attr.UIWidth || 100,
+                            align: 'center',
+                            attr: this.d1Attr,
+                            colSpan: 2,
+                            
+                        });
+                        this.columns.push({
+                            title: '',
+                            key: this.d2,
+                            colSpan: 0,
+                            edit: false,
+                            width: this.d2Attr.UIWidth || 100,
+                            align: 'center',
+                            attr: this.d2Attr,
+                        });
+                        const d3Select = this.selectD3 || [];
+                        this.ddl3s.forEach((item) => {
+                            if (d3Select.length == 0 || d3Select.includes(item.value.toString())) {
+                                this.columns.push({
+                                    title: item.label,
+                                    key: this.d3 + item.value,
+                                    keyVal: item.value,
+                                    align: 'center', //居中
+                                    width: this.valAttr.UIWidth || 100,
+                                    edit: this.valAttr.UIIsEnable && this.isSave == true && parseInt(this.mapDtl.EditModel) === 0,
+                                    attr: this.valAttr,
+                                });
+                            }
+                        });
+                        if (this.isInsert || this.isDelete) {
+                            this.columns.push({
+                                title: '操作',
+                                key: 'Oper',
+                                width: 80,
+                                align: 'center',
+                                fixed: 'right',
+                            });
+                        }
+                    }
+                    if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                        const d2Select = this.selectD2 || [];
+                        const d3Select = this.selectD3 || [];
+                        this.ddl2s.forEach((item) => {
+                            if (d2Select.length == 0 || d2Select.includes(item.value.toString())) {
+                                //获取子级
+                                const childColumns = [];
+                                this.ddl3s.forEach((obj) => {
+                                    if (d3Select.length == 0 || d3Select.includes(obj.value.toString())) {
+                                        childColumns.push({
+                                            title: obj.label,
+                                            key: this.d3 + '_' + obj.value + '_' + item.value,
+                                            D2Val: item.value,
+                                            D3Val: obj.value,
+                                            align: 'center', //居中
+                                            width: this.valAttr.UIWidth || 100,
+                                            edit: this.valAttr.UIIsEnable && this.isSave == true && parseInt(this.mapDtl.EditModel) === 0,
+                                            attr: this.valAttr,
+                                        });
+                                    }
+                                });
+                                this.columns.push({
+                                    key:'',
+                                    title: item.label,
+                                    children: childColumns,
+                                });
+                            }
+                        });
+                        if (this.isInsert || this.isDelete) {
+                            this.columns.push({
+                                title: '操作',
+                                key: 'Oper',
+                                width: 80,
+                                align: 'center',
+                                fixed: 'right',
+                            });
+                        }
+                        return;
+                    }
+                },
+                arraySpanMethod: function ({ row, column, rowIndex, columnIndex }) {
+                    if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                        let d2Count = this.ddl2s.length;
+                        const selectVal = this.selectD2;
+                        if (selectVal.length != 0) {
+                            d2Count = this.ddl2s.filter((item) => selectVal.includes(item.value.toString())).length;
+                        }
+                        if (columnIndex == 0 || columnIndex== this.columns.length-1) {
+                            if (rowIndex % d2Count == 0) return { rowspan: d2Count, colspan:1 };
+                            else return { rowspan: 0, colspan: 0};
+                        }
+                        
+                    }
+                },
+                Setting: function () {
+                    if (this.selectD1.length === 0 && this.ddl1s.length != 0)
+                        this.ddl1s.forEach((item) => this.selectD1.push(item.value));
+                    if (this.selectD2.length === 0 && this.ddl2s.length != 0)
+                        this.ddl2s.forEach((item) => this.selectD2.push(item.value));
+                    if (this.selectD3.length === 0 && this.ddl3s.length != 0)
+                        this.ddl3s.forEach((item) => this.selectD3.push(item.value));
+                    this.dialogTableVisible = true;
+                },
+                AddRow: function () {
+                    //执行新增.
+                    const row = {};
+                    //二维
+                    const d2Select = this.selectD2 || [];
+                    if (parseInt(this.mapDtl.ListShowModel) === 3) {
+                        row['OID'] = 0;
+                        row['IsEnable'] = 1;
+                        row[this.d1] = '';
+                        this.ddl2s.forEach((item) => {
+                            if (d2Select.length == 0 || d2Select.includes(item.value.toString())) {
+                                row[this.d2 + item.value] = this.valAttr.MyDataType==1?"":0;
+                                row[this.d2] = item.value;
+                                row[this.d2 + 'T'] = item.label;
+                            }
+                        });
+                        this.tableData.push(row);
+                    }
+                    //三维左
+                    const d3Select = this.selectD3 || [];
+                    if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                        this.ddl2s.forEach((obj) => {
+                            if (d2Select.length == 0 || d2Select.includes(obj.value.toString())) {
+                                const row = {};
+                                row['OID'] = 0;
+                                row['IsEnable'] = 1;
+                                row[this.d1] = '';
+                                row[this.d2] = obj.value;
+                                row[this.d2 + 'T'] = obj.label;
+                                this.ddl3s.forEach((item) => {
+                                    if (d3Select.length == 0 || d3Select.includes(item.value.toString())) {
+                                        row[this.d3 + item.value] = this.valAttr.MyDataType == 1 ? "" : 0;
+                                        row[this.d3] = item.value;
+                                        row[this.d3 + 'T'] = item.label;
+                                    }
+                                });
+                                this.tableData.push(row);
+                            }
+                        });
+                    }
+                    //三维上
+                    if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                        const row = {};
+                        row['OID'] = 0;
+                        row['IsEnable'] = 1;
+                        row[this.d1] = '';
+                        this.ddl2s.forEach((d2) => {
+                            if (d2Select.length == 0 || d2Select.includes(this.d2.toString())) {
+                                row[this.d2] = this.d2;
+                                row[this.d2 + 'T'] = d2.label;
+                                this.ddl3s.forEach((item) => {
+                                    if (d3Select.length == 0 || d3Select.includes(item.value.toString())) {
+                                        row[this.d3 + '_' + item.value + '_' + this.d2] = this.valAttr.MyDataType == 1 ? "" : 0;
+                                        row[this.d3] = item.value;
+                                        row[this.d3 + 'T'] = item.label;
+                                    }
+                                });
+                            }
+                        });
+                        this.tableData.push(row);
+                    }
+                    this.tempData++;
+                    this.setIframeHeight();
+                },
+                DeleteRow: function (index = -1, record) {
+                    if (index == -1) {
+                        //获取选中的值
+                        return;
+                    }
+                    this.$confirm('确定要删除该行数据吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let curIdx = index;
+                        //二维表
+                        if (parseInt(this.mapDtl.ListShowModel) === 3 && !!record) {
+                            for (const item of this.ddl2s) {
+                                const result = this.dtlData.filter((obj) => obj[this.d2] === item[this.d2] && obj[this.d1] === record[this.d1]);
+                                if (result.length != 0) {
+                                    //删除行
+                                    const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                                    handler.AddPara('FK_MapDtl', this.mapDtl.No);
+                                    handler.AddPara('RefOID', result[0]['OID']);
+                                    handler.AddPara('RefPKVal', GetQueryString("WorkID"));
+                                    const data = handler.DoMethodReturnString('Dtl_DeleteRow');
+                                    if (typeof data === 'string' && data.includes('err@')) {
+                                        this.$message.error(data.replace('err@', ''));
+                                        return;
+                                    }
+                                }
+                            }
+                            this.tableData.splice(index, 1);
+                            this.tempData--;
+                        }
+
+                        //三维报表左
+                        if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                            //删除多行数据
+                            for (const item of this.ddl2s) {
+                                for (const ddl3 of this.ddl3s) {
+                                    if (!record[this.d1]) record[this.d1] = this.tableData[index + this.ddl2s.length - 1][this.d1];
+                                    const result = this.dtlData.filter(
+                                        (data) => data[this.d1] === record[this.d1] && data[this.d2].toString() === item.value && data[this.d3].toString() === ddl3.value,
+                                    );
+                                    if (result.length != 0) {
+                                        //删除行
+                                        const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                                        handler.AddPara('FK_MapDtl', this.mapDtl.No);
+                                        handler.AddPara('RefOID', result[0]['OID']);
+                                        handler.AddPara('RefPKVal', GetQueryString("WorkID"));
+                                        const data = handler.DoMethodReturnString('Dtl_DeleteRow');
+                                        if (typeof data === 'string' && data.includes('err@')) {
+                                            this.$message.error(data.replace('err@', ''));
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            this.tableData.splice(curIdx, this.selectD2.length === 0 ? this.ddl2s.length : this.selectD2.length);
+                            this.tempData--;
+                        }
+                        //三维报表上
+                        if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                            //删除数据
+                            for (const item of this.ddl2s) {
+                                for (const ddl3 of this.ddl3s) {
+                                    const result = this.dtlData.filter(
+                                        (data) => data[this.d1] === record[this.d1] && data[this.d2].toString() === item.value && data[this.d3].toString() === ddl3.value,
+                                    );
+                                    if (result.length != 0) {
+                                        //删除行
+                                        const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                                        handler.AddPara('FK_MapDtl', this.mapDtl.No);
+                                        handler.AddPara('RefOID', result[0]['OID']);
+                                        handler.AddPara('RefPKVal', GetQueryString("WorkID"));
+                                        const data = handler.DoMethodReturnString('Dtl_DeleteRow');
+                                        if (typeof data === 'string' && data.includes('err@')) {
+                                            this.$message.error(data.replace('err@', ''));
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            this.tableData.splice(index, 1);
+                            this.tempData--;
+                        }
+                    });
+                    this.setIframeHeight();
+                },
+                SaveAll: function (isSaveOnly) {
+                    this.btnDisabled = true;
+                    if (this.tableData.length == 0) return true;
+                    //保存从表的校验
+                    if (isSaveOnly === false) {
+                        const newMapAttrs = this.mapAttrs.filter((mapAttr) => mapAttr.UIIsInput === 1);
+                        let msg = '';
+                        this.tableData.forEach((rowData, idx) => {
+                            let str = '';
+                            newMapAttrs.forEach((mapAttr) => {
+                                if (mapAttr.LGType === FieldTypeS.Enum && rowData[mapAttr.KeyOfEn] === -1) str += '字段' + mapAttr.Name + '值不能为空,\n';
+                                if (rowData[mapAttr.KeyOfEn] === null || rowData[mapAttr.KeyOfEn] === '') str += '字段' + mapAttr.Name + '值不能为空,\n';
+                            });
+                            if (str != '') msg += '明细表[' + this.mapDtl.Name + ']第' + (idx + 1) + '行必填项:\n' + str;
+                        });
+                        if (msg != '') {
+                            this.btnDisabled = false;
+                            this.$message.error(msg);
+                            return false;
+                        }
+                    }
+                    const handler = new HttpHandler('BP.WF.HttpHandler.WF_CCForm');
+                    handler.AddUrlData()
+                    handler.AddPara('EnsName', this.mapDtl.No);
+                    if (this.isInsert === true) {
+                        const mydtlData = [];
+                        const d2Select = this.selectD2 || [];
+                        let oids = '';
+                        if (parseInt(this.mapDtl.ListShowModel) === 3) {
+                            this.tableData.forEach((item) => {
+                                this.ddl2s.forEach((obj2) => {
+                                    const result = this.dtlData.filter((data) => data[this.d1] === item[this.d1] && data[this.d2].toString() === obj2.value);
+                                    if (result.length === 1) oids += result[0].OID + ',';
+                                    const row = result.length === 1 ? result[0] : {};
+                                    row[this.d2] = obj2.value;
+                                    row[this.d2 + 'T'] = obj2.label;
+                                    row[this.d1] = item[this.d1];
+                                    if (d2Select.length === 0 || d2Select.includes(obj2.value.toString())) {
+                                        row['IsEnable'] = 1;
+                                        row[this.valAttr.KeyOfEn] = item[this.d2 + obj2.value];
+                                    } else {
+                                        row['IsEnable'] = 0;
+                                        row[this.valAttr.KeyOfEn] = 0;
+                                    }
+                                    mydtlData.push(row);
+                                });
+                            });
+                        }
+                        const d3Select = this.selectD3 || [];
+                        if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                            let idx = 0;
+                            this.tableData.forEach((item) => {
+                                if (!item[this.d1]) {
+                                    let ddlIdx = -1;
+                                    this.ddl2s.forEach((ddl2, curIdx) => {
+                                        if (ddl2.value === item[this.d2].toString()) ddlIdx = curIdx;
+                                    });
+                                    item[this.d1] = this.tableData[idx - ddlIdx][this.d1];
+                                }
+                                this.ddl3s.forEach((obj3) => {
+                                    const result = this.dtlData.filter((data) => data[this.d1] === item[this.d1] && data[this.d2] === item[this.d2] && data[this.d3].toString() === obj3.value);
+                                    const row = result.length === 1 ? result[0] : {};
+                                    if (result.length === 1) oids += result[0].OID + ',';
+                                    row[this.d2] = item[this.d2];
+                                    row[this.d2 + 'T'] = item[this.d2 + 'T'];
+                                    row[this.d3] = obj3.value;
+                                    row[this.d3 + 'T'] = obj3.label;
+                                    row[this.d1] = item[this.d1];
+                                    if (d2Select.length === 0 || d2Select.includes(item[this.d2].toString())) {
+                                        if (d3Select.length === 0 || d3Select.includes(obj3.value.toString())) {
+                                            row['IsEnable'] = 1;
+                                            row[this.valAttr.KeyOfEn] = item[this.d3 + obj3.value];
+                                        } else {
+                                            row['IsEnable'] = 0;
+                                            row[this.valAttr.KeyOfEn] = 0;
+                                        }
+                                    } else {
+                                        row['IsEnable'] = 0;
+                                        row[this.valAttr.KeyOfEn] = 0;
+                                    }
+                                    mydtlData.push(row);
+                                });
+                                idx++;
+                            });
+                        }
+                        if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                            this.tableData.forEach((item) => {
+                                this.ddl2s.forEach((obj2) => {
+                                    this.ddl3s.forEach((obj3) => {
+                                        const result = this.dtlData.filter(
+                                            (data) => data[this.d1] === item[this.d1] && data[this.d2].toString() === obj2.value && data[this.d3].toString() === obj3.value,
+                                        );
+                                        if (result.length === 1) oids += result[0].OID + ',';
+                                        const row = result.length === 1 ? result[0] : {};
+                                        row[this.d2] = obj2.value;
+                                        row[this.d2 + 'T'] = obj2.label;
+                                        row[this.d3] = obj3.value;
+                                        row[this.d3 + 'T'] = obj3.label;
+                                        row[this.d1] = item[this.d1];
+                                        if (d2Select.length === 0 || d2Select.includes(obj2.value.toString())) {
+                                            if (d3Select.length === 0 || d3Select.includes(obj3.value.toString())) {
+                                                row['IsEnable'] = 1;
+                                                row[this.valAttr.KeyOfEn] = item[this.d3 + '_' + obj3.value + '_' + obj2.value];
+                                            } else {
+                                                row['IsEnable'] = 0;
+                                                row[this.valAttr.KeyOfEn] = 0;
+                                            }
+                                        } else {
+                                            row['IsEnable'] = 0;
+                                            row[this.valAttr.KeyOfEn] = 0;
+                                        }
+                                        mydtlData.push(row);
+                                    });
+                                });
+                            });
+                        }
+                        this.dtlData.forEach((item) => {
+                            if (oids.includes(item.OID + ',') === false) {
+                                item['IsEnable'] = 0;
+                                mydtlData.push(item);
+                            }
+                        });
+                        this.dtlData = mydtlData;
+                    } else {
+                        if (parseInt(this.mapDtl.ListShowModel) === 3) {
+                            this.dtlData.forEach((item) => {
+                                const obj = this.tableData.filter((obj) => obj[this.d1] === item[this.d1]);
+                                if (obj.length == 0) {
+                                    item[this.valAttr.KeyOfEn] = 0;
+                                    item['IsEnable'] = 0;
+                                } else {
+                                    if (typeof obj[0][this.d2 + item[this.d2]] === 'undefined') {
+                                        item[this.valAttr.KeyOfEn] = 0;
+                                        item['IsEnable'] = 0;
+                                    } else {
+                                        item[this.valAttr.KeyOfEn] = obj[0][this.d2 + item[this.d2]];
+                                        item['IsEnable'] = 1;
+                                    }
+                                }
+                            });
+                        }
+                        if (parseInt(this.mapDtl.ListShowModel) === 4) {
+                            this.dtlData.forEach((item) => {
+                                const obj = this.tableData.filter((obj) => obj[this.d1] === item[this.d1] && obj[this.d2] === item[this.d2]);
+                                if (obj.length == 0) {
+                                    item[this.valAttr.KeyOfEn] = 0;
+                                    item['IsEnable'] = 0;
+                                } else {
+                                    if (typeof obj[0][this.d3 + item[this.d3]] === 'undefined') {
+                                        item[this.valAttr.KeyOfEn] = 0;
+                                        item['IsEnable'] = 0;
+                                    } else {
+                                        item[this.valAttr.KeyOfEn] = obj[0][this.d3 + item[this.d3]];
+                                        item['IsEnable'] = 1;
+                                    }
+                                }
+                            });
+                        }
+
+                        if (parseInt(this.mapDtl.ListShowModel) === 5) {
+                            this.dtlData.forEach((item) => {
+                                const obj = this.tableData.filter((obj) => obj[this.d1] === item[this.d1]);
+                                if (obj.length == 0) {
+                                    item[this.valAttr.KeyOfEn] = 0;
+                                    item['IsEnable'] = 0;
+                                } else {
+                                    if (typeof obj[0][this.d3 + '_' + item[this.d3] + '_' + item[this.d2]] === 'undefined') {
+                                        item[this.valAttr.KeyOfEn] = 0;
+                                        item['IsEnable'] = 0;
+                                    } else {
+                                        item[this.valAttr.KeyOfEn] = obj[0][this.d3 + '_' + item[this.d3] + '_' + item[this.d2]];
+                                        item['IsEnable'] = 1;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    var paras = '';
+                    //存储方式D1:field1,field2;D2:field3,field4
+                    paras += this.d1 + ":" + this.selectD1.join(",") + ";"
+                    paras += this.d2 + ":" + this.selectD2.join(",") + ";"
+                    paras += this.d3 + ":" + this.selectD3.join(",") + ";"
+                    if (isSaveOnly == false)
+                        handler.AddPara("Paras", paras);
+                    handler.AddPara('Json', encodeURIComponent(JSON.stringify(this.dtlData)));
+                    const data =  handler.DoMethodReturnString('Dtl_Save');
+                    if (typeof data === 'string' && data.includes('err@')) {
+                        this.$message.error(data.replace('err@', ''));
+                        this.btnDisabled = false;
+                        return false;
+                    }
+                    if (isSaveOnly == true) {
+                        this.btnDisabled = false;
+                        this.$message(this.mapDtl.Name + '保存成功');
+                        if (this.isInsert)  this.InitPage();
+                    }
+                    this.btnDisabled = false;
+                    return true;
+                },
+                inputBlur: function (record, index) {
+                    //判断当前的值是否重复
+                    let isHave = false;
+                    this.tableData.forEach((item, idx) => {
+                        if (!!record[this.d1] && item[this.d1] === record[this.d1] && (idx < index || idx >= index + this.ddl2s.length)) {
+                            isHave = true;
+                        }
+                    });
+                    if (isHave === false) return;
+                    this.$message('输入一维字段的值已经存在,请重新输入值');
+                    this.tableData[index][this.d1] = '';
+                    this.tempData--;
+                },
+                GetDDLOption: function (mapAttr, frmData) {
+                    let uiBindKey = mapAttr.UIBindKey || '';
+                    if (uiBindKey == '')
+                        return [
+                            {
+                                value: '',
+                                label: '绑定的外键枚举值丢失',
+                            },
+                        ];
+                    const options = [];
+                    let data = frmData[mapAttr.KeyOfEn];
+                    if (data == undefined) data = frmData[mapAttr.UIBindKey];
+                    //枚举字段
+                    if (data == undefined && mapAttr.LGType === FieldTypeS.Enum) {
+                        const myEnums = frmData.Sys_Enum.filter((sysEnum) => sysEnum.EnumKey == uiBindKey);
+                        if ((mapAttr.UIIsInput === 0 || mapAttr.DefVal === '-1') && mapAttr.UIContralType == UIContralType.DDL) {
+                            options.push({
+                                value: mapAttr.MyDataType === DataType.AppString ? '-1' : -1,
+                                label: '-无-',
+                            });
+                        }
+                        myEnums.forEach((item) => {
+                            options.push({
+                                value: item.StrKey || item.IntKey,
+                                label: item.Lab,
+                            });
+                        });
+                        return options;
+                    }
+
+                    if (data == undefined)
+                        return [
+                            {
+                                value: '',
+                                label: '请选择',
+                            },
+                        ];
+
+                    return data.map((item) => {
+                        return {
+                            value: item.No,
+                            label: item.Name,
+                        };
+                    });
+                },
+                setIframeHeight: function () {
+                    var h = $("body").height();
+                    if ($("body").height() < 230) {
+                        h = 230;
+                    }
+                    if (window.frameElement != null)
+                        $("#" + window.frameElement.getAttribute("id"), parent.document).height(h);
+                },
+            },
+            mounted: function () {
+                this.InitPage();
+                this.setIframeHeight();
+            },
+        });
+        function SaveAll() {
+            return baseInfo.SaveAll(false);
+        }
+    </script>
+</body>

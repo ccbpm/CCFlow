@@ -64,7 +64,7 @@
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_Done&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_Done&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo + "&Token=" + GetQueryString("Token"),
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
                 },
@@ -129,7 +129,7 @@
             $("#cc").form("submit", {
                 type: 'POST',
                 dataType: 'html',
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_DoneBPMN&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=Imp_DoneBPMN&HttpHandlerName=" + httpHandlerName + "&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo + "&Token=" + GetQueryString("Token"),
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交
                 },

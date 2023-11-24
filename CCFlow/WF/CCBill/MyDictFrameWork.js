@@ -287,6 +287,8 @@ $(function () {
         styleScope.innerHTML = DealText("\n .sidebar .group .group-items .active{\n background-color:'#5053f1';\n}");
     }
     var theme = DealText(localStorage.getItem("themeColorInfo"));
+    if (theme == null || theme == undefined || theme == "")
+        return;
     theme = JSON.parse(theme);
     var styleScope = document.getElementById("theme-data")
     styleScope.innerHTML = DealText("\n .sidebar .group .group-items .active{\n background-color:" + theme.selectedMenu + ";\n}");

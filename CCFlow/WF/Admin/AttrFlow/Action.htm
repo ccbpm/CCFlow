@@ -30,7 +30,6 @@
             border-bottom: none;
             margin-bottom: 10px;
         }
-
     </style>
     <script type="text/javascript">
         //页面启动函数.
@@ -51,7 +50,7 @@
 
 
             var html = "<table class='table table-bordered table-striped table-hover table-condensed' style='width:100%;'>";
-          
+
             html += "<tr>";
             html += "<th>序</th>";
             html += "<th>事件标记</th>";
@@ -67,7 +66,7 @@
 
                 html += "<tr>";
                 html += "<td class=Idx>" + (i + 1) + "</td>";
-                html += "<td>" + en.FK_Event + "</td>";
+                html += "<td>" + en.EventID + "</td>";
                 html += "<td>" + GetActionTypeName(en.FK_Event) + "</td>";
                 html += "<td>" + GetDoType(en.EventDoType) + "</td>";
                 html += "<td>" + en.DoDoc + "</td>";

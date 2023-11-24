@@ -9,42 +9,78 @@
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../Comm/fonts/font-icons.min.css" rel="stylesheet" />
+    <script src="../../Portal/layui/layui.js"></script>
+    <script src="../../Scripts/layui/LayuiDialog.js"></script>
+    <script src="../../Scripts/layui/layui/layui.js"></script>
+    <link href="../../Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+
     <style>
-        .bg_color{
-            background:#f6f6f6;
+        .bg_color {
+            background: #f6f6f6;
         }
+
         .title-center {
             text-align: center;
             color: #393939;
-            background:#fff;
-            font-weight:bold;
+            background: #fff;
+            font-weight: bold;
+            height:41px;
         }
+
         .title-center-nobold {
             text-align: center;
             color: #393939;
             background: #fff;
-            font-weight:500;
+            font-weight: 500;
+            height: 41px;
         }
+
         .title-content {
             padding: 8px 25px;
         }
+        /* 头部内容 */
+        .top_content {
+            display: flex;
+            margin: 0px 35px;
+            height: 40px;
+            background: white;
+            line-height: 40px;
+            border-radius: 5px;
+        }
+
+            .top_content div {
+                margin: 0 10px
+            }
+
+            .top_content .top_example {
+                font-weight: 700;
+            }
         /* 第一个表格布局 */
         #gwf, #gwls {
             margin: 10px 35px;
             background: #fff;
-            padding-bottom: 30px;
+            padding-bottom: 15px;
             border-radius: 10px;
         }
+
         .add_line::before {
             content: '';
             margin-left: -10px;
             margin-right: 5px;
             border-left: 5px solid #0237a1;
         }
+
         .content_color {
             color: #666;
-            background:#f6f6f6;
-            border:1px solid #fff;
+            background: #f6f6f6;
+            border: 1px solid #fff;
+        }
+        .layui-btn{
+            border-radius:5px;
+        }
+        .layui-btn-normal {
+            background: #0237a1;
         }
     </style>
     <script language="javascript" type="text/javascript">
@@ -52,7 +88,7 @@
         var flowNo = GetQueryString("FK_Flow");
         var workID = GetQueryString("WorkID");
         var userNo = GetQueryString("UserNo");
-        var token = GetQueryString("Token") ||GetQueryString("Token");
+        var token = GetQueryString("Token") || GetQueryString("Token");
 
         var tester = GetQueryString("Tester");
 
@@ -97,12 +133,10 @@
             html += "<th class='title-center' >处理时间</th>";
 
             html += "<th class='title-center' >是否读取？</th>";
+            html += "<th class='title-center' >IsPass状态</th>";
+            html += "<th class='title-center' >操作</th>";
 
-            html += "<th class='title-center' >状态</th>";
-            html += "<th class='title-center' >IsPass</th>";
-            html += "<th class='title-center' >节点类型</th>";
-
-           // html += "<th>操作</th>";
+            // html += "<th>操作</th>";
             html += "</tr>";
 
             for (var i = 0; i < ens.length; i++) {
@@ -116,9 +150,9 @@
 
                 html += "<td class='title-center-nobold ' >" + i + "</td>";
                 html += "<td class='title-center-nobold '>" + en.FK_Emp + "</td>";
-                html += "<td class='title-center-nobold '>" + en.FK_EmpText + "</td>";
+                html += "<td class='title-center-nobold '>" + en.EmpName + "</td>";
                 html += "<td class='title-center-nobold '>" + en.FK_Node + "</td>";
-                html += "<td class='title-center-nobold '>" + en.FK_NodeText + "</td>";
+                html += "<td class='title-center-nobold '>" + en.NodeName + "</td>";
 
                 html += "<td class='title-center-nobold '>" + en.RDT + "</td>";
 
@@ -127,15 +161,18 @@
                 } else {
                     html += "<td class='title-center-nobold '>" + en.CDT + "</td>";
                 }
-                html += "<td class='title-center-nobold '>" + en.IsRead + "</td>";
-                html += "<td class='title-center-nobold '>" + en.IsPass + "</td>";
+                if (en.IsRead == 0) {
+                    html += "<td class='title-center-nobold '>" + '未读' + "</td>";
+                } else {
+                    html += "<td class='title-center-nobold '>" + '已读' + "</td>";
+                }
 
                 if (en.IsPass == 0 && en.FK_Node == gwf.FK_Node) {
-                    html += "<td class='title-center-nobold'><b><font color=green>待办</font></b></td>";
-                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
+                    html += "<td class='title-center-nobold'><b><font color=green>" + en.IsPass + "-待办</font></b></td>";
+                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/></td>";
                 } else if (en.IsPass == 0 && en.FID != 0) {
-                    html += "<td class='title-center-nobold '><b><font color=green>待办</font></b></td>";
-                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "',1)\">移动端</a></td>";
+                    html += "<td class='title-center-nobold '><b><font color=green>" + en.IsPass + "待办</font></b></td>";
+                    html += "<td class='title-center-nobold '><a href=\"javascript:ChangUser('" + en.FK_Emp + "','" + en.FK_Node + "','" + en.WorkID + "','" + en.FID + "')\">切换用户</a><br/></td>";
 
                 } else if (en.IsPass == -2) {
                     html += "<td class='title-center-nobold '>分流</td>";
@@ -159,7 +196,7 @@
 
             //******************************** 绑定流程信息 **/
             var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
-            var html = "<table table table-bordered  style='width:93%;margin: 40px 15px 25px 15px;'>";   //style = 'width:900px;'
+            var html = "<table table table-bordered  style='width:93%;margin: 35px 15px 25px 15px;'>";   //style = 'width:900px;'
             html += "<caption style='color:#000;margin-top: 20px;' class='add_line'>流程信息</caption>";
             html += "<tr>";
             html += "<th class='title-center'>标题</th>";
@@ -180,10 +217,12 @@
             html += "<td class='title-content'>" + gwf.FK_Node + "," + gwf.NodeName + "</td>";
             html += "<th class='title-center'>当前待办人员</th>";
             html += "<td class='title-content'>" + gwf.TodoEmps + "</td>";
+            html += "<th class='title-center'>流程名称</th>";
+            html += "<td class='title-content'>" + gwf.FlowName + "</td>";
 
-            html += "<td colspan=2 class='title-content'> <b>";
-            html += "<a href='javascript:Skip();' >实例运维：跳转-调整-删除-移交-强制结束</a></b>";
-            html += "</td>";
+            //html += "<td colspan=2 class='title-content'> <b>";
+            //html += "<a href='javascript:Skip();' >实例运维：跳转-调整-删除-移交-强制结束</a></b>";
+            //html += "</td>";
 
             html += "</table>";
             $("#gwf").html(html);
@@ -192,7 +231,7 @@
 
         function Skip() {
             var url = "../../Comm/En.htm?EnName=BP.WF.Data.GenerWorkFlowView&PKVal=" + workID + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WFSta=all";
-            SetHref(url);
+			OpenLayuiDialog(url, "实例运维", window.innerWidth, 100, "r", true);
         }
 
         function ChangUser(empNo, nodeID, workid, fid, isMobile) {
@@ -216,7 +255,6 @@
             if (orgNo != webUser.OrgNo) {
                 alert(" 系统错误: " + orgNo + " curr:" + webUser.OrgNo + ", 出现了组织结构编号不一致.");
                 return;
-
             }
             handler.AddPara("OrgNo", orgNo);
 
@@ -227,9 +265,9 @@
             }
             localStorage.setItem("Token", data);
             if (isMobile == 1)
-                window.open('../../../CCMobile/MyFlow.htm?Token='+data+'&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+                window.open('../../../CCMobile/MyFlow.htm?Token=' + data + '&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
             else
-                window.open('../../MyFlow.htm?Token=' + data +'&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
+                window.open('../../MyFlow.htm?Token=' + data + '&FK_Flow=' + flowNo + '&WorkID=' + workid + "&FID=" + fid + "&FK_Node=" + nodeID, '_self');
 
 
             window.parent.InitPageUserInfo(data);
@@ -267,6 +305,14 @@
     <div id="userInfo"></div>
 
     <center>
+        <div class="top_content">
+            <div class="top_example"><i class="icon-plane" style="font-weight:700;"></i> 流程测试容器\\实例运维：</div>
+            <div><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick='javascript:Skip();'>跳转</button></div>
+            <div><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick='javascript:Skip();'>调整</button>  </div>
+            <div><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick='javascript:Skip();'>删除</button>  </div>
+            <div><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick='javascript:Skip();'>移交</button> </div>
+            <div><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick='javascript:Skip();'>强制结束</button> </div>
+        </div>
         <div id="gwf"></div>
 
         <div id="gwls"></div>

@@ -154,8 +154,8 @@
                 row += "<tr>";
                 num++;
                 row += "<td>" + num + "</td>";
-                row += "<td>" + gwl.FK_EmpText + "</td>";
-                row += "<td  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
+                row += "<td>" + gwl.EmpName + "</td>";
+                row += "<td  title='" + (gwl.DeptName || gwl.FK_DeptT) + "' >" + (gwl.DeptName || gwl.FK_DeptT) + "</td>";
 
                 if (gwl.IsPass == -1) {
                     row += "<td>新增</td>";

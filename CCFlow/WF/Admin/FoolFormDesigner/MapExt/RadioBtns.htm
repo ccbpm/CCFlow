@@ -126,7 +126,7 @@
             //监听列表值单选框，更新当前选中的列表值
             form.on('radio(radioList)', function (data) {
                 //changeSys_FrmRB();//保存当前打开的列表配置
-                radioValue = parseInt(data.value);//更改当前选中的列表值
+                radioValue = data.value;//更改当前选中的列表值
                 Reload();
             });
             //根据列表值构造表格数据和配置数据

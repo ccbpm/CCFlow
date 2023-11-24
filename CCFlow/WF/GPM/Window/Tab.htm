@@ -51,7 +51,7 @@
             var enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "待办";
-            enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=0 GROUP BY FK_NodeText";
+            enDtl.Exp0 = "SELECT NodeName AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=0 GROUP BY NodeName";
             enDtl.FontColor = "Yellow";
             enDtl.WindowsShowType = 0; //饼图
             enDtl.Insert();
@@ -59,7 +59,7 @@
             enDtl = new Entity("BP.CCFast.Portal.WindowExt.TabDtl");
             enDtl.RefPK = en.No;
             enDtl.Name = "在途";
-            enDtl.Exp0 = "SELECT FK_NodeText AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=1 GROUP BY FK_NodeText";
+            enDtl.Exp0 = "SELECT NodeName AS '节点名', COUNT(*) as '数量' FROM WF_GenerWorkerlist WHERE FK_Emp='@WebUser.No' AND IsPass=1 GROUP BY NodeName";
             enDtl.FontColor = "Blue";
             enDtl.WindowsShowType = 1; //折线图
             enDtl.Insert();

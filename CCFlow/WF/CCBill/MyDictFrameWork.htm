@@ -17,9 +17,24 @@
     <link rel="stylesheet" href="MyDictFrameWork.css">
     <script src="MyDictMethodDeal.js"></script>
     <title></title>
+    <script>
+        $(function () {
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .sidebar .group .group-items .active{\n background-color: '#5053f1' !important; \n color:'#fff'; \n}";
+            }
+            var theme = filterXSS(localStorage.getItem("themeColorInfo"));
+            if (theme == "" || theme == "undefined" || theme == null) return;
+            var data = JSON.parse(theme);
+            var styleScope = document.getElementById("theme-data");
+            var html = styleScope.innerHTML;
+            html += "\n .sidebar .group .group-items .active{\nbackground-color: " + data.selectedMenu + " !important; \n color:'#fff'\n}";
+            styleScope.innerHTML = filterXSS(html);
+        })
+    </script>
     <style>
         [v-cloak] {
             display: none;
+           
         }
     </style>
     <style id="theme-data">
@@ -83,5 +98,6 @@
 
 </div>
 <script src="./MyDictFrameWork.js" type="text/javascript"></script>
+
 </body>
 </html>

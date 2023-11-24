@@ -96,6 +96,13 @@
             margin-bottom: 10px;
             padding-bottom: 5px;
         }
+        .layui-form-item .layui-input-inline{
+            margin-right:0px;
+        }
+        .layui-form-label {
+            background: #f2f2f2;
+            margin-right: 10px;
+        }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -113,6 +120,9 @@
         }
         var isDelayedSend = GetQueryString("IsDelayedSend") || "0";
         $(function () {
+            if (pageFrom == "WorkCheckModel") {
+                $("#Btn_Close")[0].innerText = "执行发送";
+            }
             if (isDelayedSend == "1") {
                 $("#Btn_Send").hide();
                 $("#Div_DelayedSend").show();
@@ -178,6 +188,20 @@
             $(".Msg").hide();
 
             var int = setInterval("clock()", 1000);
+
+            //天
+            for (var i = 0; i <= 30; i++) {
+                var optionElementDays = $("<option value='" + i + "'>" + i + "</option>");
+                $("#TB_Day").append(optionElementDays);
+                console.log($("#TB_Day"));
+            }
+            //小时
+            for (var i= 0; i <= 24; i++) {
+                var optionElementHours = $("<option value='" + i + "'>" + i + "</option>");
+                $("#TB_Hour").append(optionElementHours);
+            }
+            //select需要重新渲染，不然数据在页面上渲染不出来
+            layui.form.render('select');
 
         });
 
@@ -648,11 +672,11 @@
         <div class="layui-form" style="margin-top:10px">
             <div class="layui-form-item">
                 <div class="layui-input-inline">
-                    <input type="text" name="TB_Day" id="TB_Day" class="layui-input" value="0" />
+                    <select name="TB_Day" id="TB_Day"></select>
                 </div>
                 <label class="layui-form-label">天</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="TB_Hour" id="TB_Hour" class="layui-input" value="0" />
+                    <select name="TB_Hour" id="TB_Hour"></select>
                 </div>
                 <label class="layui-form-label">小时</label>
                 <div class="layui-input-inline">

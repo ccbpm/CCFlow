@@ -190,8 +190,10 @@
                             if (nodeID.value.substr(nodeID.value.length - 2) == "01")
                                 $('#pmNodeAccepterRole span').text("设置发起人");
                             else
-                                $('#pmNodeAccepterRole span').text("设置接受人");
-
+                                if (node.NodeType == 0)
+                                    $('#pmNodeAccepterRole span').text("设置接受人");
+                                else
+                                    $('#pmNodeAccepterRole').hide();
 
                             if (node.RunModel == 0) {
                                 $('#pmfun span').text("线型:" + nodeID.value);

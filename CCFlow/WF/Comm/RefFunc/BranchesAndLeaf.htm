@@ -403,11 +403,14 @@
 
                     var dbTrees = data["DBTrees"]; //左边的树.
                     this.selectedRows = data["DBMMs"]; //选择的数据.
+                    var showCols = "";
                     if (data["Base_Info"] != undefined) {
                         IsEnsOfMExitParentNo = data["Base_Info"][0].IsExitParentNo;
                         if (data["Base_Info"][0].ExtShowCols != undefined && data["Base_Info"][0].ExtShowCols != "")
                             showCols = data["Base_Info"][0].ExtShowCols;
                     }
+                    if (showCols == "")
+                        showCols = "No=编号@Name=名称";
                     this.createJsonToTree(dbTrees, this.rootNo);
                     //显示列的中文名称.
                     var tmp = showCols.split("@");

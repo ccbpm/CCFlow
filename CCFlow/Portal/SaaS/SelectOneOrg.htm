@@ -37,7 +37,7 @@
         $(function () {
             var orgs;
             if (plant == "JFlow") {
-                var httphandler = new HttpHandler("BP.Cloud.HttpHandler.Portal_SaaS");
+                var httphandler = new HttpHandler("BP.Cloud.Httphandler.Portal_SaaS");
                 var data = httphandler.DoMethodReturnJSON("SelectOneOrg_Init");
                 if (data.indexOf('err@') == 0) {
                     alert(data);

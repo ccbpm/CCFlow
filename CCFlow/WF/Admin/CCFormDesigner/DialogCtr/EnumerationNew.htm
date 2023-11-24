@@ -189,7 +189,24 @@
 
             pageData.DoType = "FrmEnumeration_SaveEnum";
         }
+        function checkKey() {
+            var doType = GetQueryString("DoType");
+            if (doType == null || doType == undefined) {
+                doType = "FrmEnumeration_NewEnum";
+            }
+            var keyofEn = $("#TB_EnumKey").val();
+            var en = new Entity("BP.Sys.SysEnumMain");
+            en.SetPKVal(keyofEn);
+            en.No = keyofEn;
 
+            if (doType == "FrmEnumeration_NewEnum") {
+                var i = en.RetrieveFromDBSources();
+                if (i == 1) {
+                    alert('枚举值已经存在，请重新填写枚举值。');
+                    return;
+                }
+            }
+        }
         //执行保存.
         function SaveEnum() {
 
@@ -213,7 +230,22 @@
                 return;
             }
 
+            var doType = GetQueryString("DoType");
+            if (doType == null || doType == undefined) {
+                doType = "FrmEnumeration_NewEnum";
+            }
 
+            //新建时检查是否已经存在
+            var enC = new Entity("BP.Sys.SysEnumMain");
+            enC.SetPKVal(keyofEn);
+
+            if (doType == "FrmEnumeration_NewEnum") {
+                var i = enC.RetrieveFromDBSources();
+                if (i == 1) {
+                    alert('枚举值已经存在');
+                    return;
+                }
+            }
             //删除现在的枚举值.
             var se = new Entity("BP.Sys.SysEnum");
             se.Delete("EnumKey", keyofEn);
@@ -241,12 +273,6 @@
 
             //alert('将要保存' + strs + "  name=" + name + " keyofEn=" + keyofEn);
             //定义参数，让其保存到数据库里。
-
-            var doType = GetQueryString("DoType");
-            if (doType == null || doType == undefined) {
-                doType = "FrmEnumeration_NewEnum";
-            }
-
             var en = new Entity("BP.Sys.SysEnumMain");
             en.SetPKVal(keyofEn);
             en.No = keyofEn;
@@ -271,7 +297,6 @@
                 en.Update();
 
             }
-
             // var data = en.DoMethodReturnString("SaveEnum", strs);
             //alert(data);
 
@@ -317,7 +342,7 @@
                 <td>标签 </td>
                 <td><input id="TB_EnumName" class="cc-input" /> </td>
                 <td>枚举键值 </td>
-                <td><input id="TB_EnumKey" class="cc-input" /> </td>
+                <td><input id="TB_EnumKey" class="cc-input" onblur="checkKey()"/> </td>
                 <td>
                     <label for="RB_QP">
                         <input id="RB_QP" type="radio" name="RB_QPJP" value="ziduanquanpin" />

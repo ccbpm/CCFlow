@@ -121,8 +121,8 @@
                 idx++;
                 strs += "<tr>";
                 strs += "<td class=Idx >" + idx + "</td>";
-                strs += "<td>" + gwl.FK_NodeText + "</td>";
-                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+                strs += "<td>" + gwl.NodeName + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.EmpName + "</td>";
                 var openStr = "";
                 if (gwl.IsPass == 1) {
 
@@ -214,8 +214,8 @@
                     continue;
 
                 strs += "<tr>";
-                strs += "<td>" + gwl.FK_NodeText + "</td>";
-                strs += "<td>" + gwl.FK_Emp + " " + gwl.FK_EmpText + "</td>";
+                strs += "<td>" + gwl.NodeName + "</td>";
+                strs += "<td>" + gwl.FK_Emp + " " + gwl.EmpName + "</td>";
 
                 var openStr = "";
                 openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + gwl.FK_Node + "')\">表单</a>";

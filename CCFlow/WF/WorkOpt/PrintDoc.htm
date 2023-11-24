@@ -42,7 +42,8 @@
                 data = data.replace("info@", "");
                 data = JSON.parse(data);
                 if (data.length == 0) {
-                    alert("没有绑定表单，无需打印");
+                    //   alert("没有绑定表单，无需打印");
+                    console.log("没有绑定表单，无需打印");
                     return;
                 }
                 var html = "";
@@ -65,9 +66,9 @@
 
 
             //如果是一个url.
-            if (data.indexOf('url@') == 0) {
+            if (data.indexOf('file@') == 0) {
 
-                data = data.replace('url@', '');
+                data = data.replace('file@', '');
                 if (data.indexOf('rtf@') != -1) {
                     window.location.href = filterXSS(data).replace('rtf@', '');
                 } else {

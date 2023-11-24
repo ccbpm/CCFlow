@@ -773,13 +773,16 @@ function AfterBindEn_DealMapExt(frmData) {
                                 selects.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", pageData.WorkID);
                                 var dt = GetDataTableByDB(mapExt.Doc, mapExt.DBType, mapExt.FK_DBSrc, val, mapExt, "Doc");
                                 var data = [];
+                                var vals = "";
                                 dt.forEach(function (item) {
                                     data.push({
                                         No: item.No,
                                         Name: item.Name,
                                         selected: IsHaveSelect(item.No, selects)
                                     })
+                                    vals += IsHaveSelect(item.No, selects) ? item.No + "," : '';
                                 })
+                                $("#TB_" + mapExt.AttrOfOper).val(vals);
                                 cb(data);
                             },
 
@@ -2157,7 +2160,7 @@ function setHandWriteSrc(HandWriteID, imagePath, type) {
  * @param {any} frmType
  * @param {any} InitPage
  */
-function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
+function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage, FK_MapData, FK_Node, FID) {
     // model=1 自由表单, model=2傻瓜表单.
     var wWidth = window.innerWidth * 2 / 3;
     if (wWidth > 1200) {
@@ -2167,7 +2170,7 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     if (pkVal != "0")
         isNew = 0;
     var params = GetParentParams();
-    var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&IsNew=" + isNew + params;
+    var url = basePath + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal + "&IsNew=" + isNew + params+'&FK_Node='+FK_Node+'&FrmID='+FK_MapData;
 
     OpenLayuiDialog(url, '编辑', wWidth, null, "r", false, false, false, null, function () {
         var iframe = $(window.frames["dlg"]).find("iframe");
@@ -2317,9 +2320,15 @@ function checkBlanks() {
                 if (ele.attr('type') == "text") {
                     if (ele.val() == "") {
                         checkBlankResult = false;
-                        ele.addClass('errorInput');
+                        if (ele.is(":hidden") == true && $("#mapExt_" + keyofen).length != 0)
+                            $("#mapExt_" + keyofen).addClass('errorInput');
+                        else
+                            ele.addClass('errorInput');
                     } else {
-                        ele.removeClass('errorInput');
+                        if (ele.is(":hidden") == true && $("#mapExt_" + keyofen).length != 0)
+                            $("#mapExt_" + keyofen).removeClass('errorInput');
+                        else
+                            ele.removeClass('errorInput');
                     }
                 }
 

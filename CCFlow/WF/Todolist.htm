@@ -103,7 +103,7 @@
             //设置表头.
             var groupBy = GetQueryString("GroupBy");
             if (groupBy == "" || groupBy == null)
-                groupBy = "ByNode";
+                groupBy = "ByFlow";
 
             var nodeIDt = GetQueryString("FK_Node");
 
@@ -120,18 +120,18 @@
             }
 
             if (groupBy == "ByNode") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' ><img class='Icon' style='width: 17px;' src='Img/sortChange.png'>" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' ><img class='Icon'style='width: 17px;' src='Img/sortChange.png'>" + window.lang.fqr + "</th>";
             }
 
             if (groupBy == "ByFlow") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' >" + window.lang.fqr + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' ><img class='Icon'style='width: 17px;' src='Img/sortChange.png'>" + window.lang.jiedian + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByStarter' ><img class='Icon' style='width: 17px;'class='Icon' src='Img/sortChange.png'>" + window.lang.fqr + "</th>";
             }
 
             if (groupBy == "ByStarter") {
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' >" + window.lang.liucheng + "</th>";
-                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' >" + window.lang.jiedian + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByFlow' ><img class='Icon'style='width: 17px;' src='Img/sortChange.png'>" + window.lang.liucheng + "</th>";
+                tablet += "<th><a href='?FK_Node=" + nodeIDt + "&GroupBy=ByNode' ><img class='Icon' style='width: 17px;'src='Img/sortChange.png'>" + window.lang.jiedian + "</th>";
             }
 
 
@@ -350,12 +350,12 @@
 
                     //判断期限是否少于三天，加警告颜色
                     var date = new Date();
-                    var edt = work.SDT.replace(/\-/g, "/");
+                    var edt = work.SDTOfNode.replace(/\-/g, "/");
                     edt = new Date(Date.parse(edt.replace(/-/g, "/")));
                     passTime = GetSpanTime(date, edt);
                     //判断流程是否逾期
-                    if (date.getTime() > edt.getTime() )//&& work.WFState == 2 && entStr != "01" && work.RDT != work.SDT
-                    //&& paras.indexOf("&IsCC=1") == -1) 
+                    if (date.getTime() > edt.getTime())//&& work.WFState == 2 && entStr != "01" && work.RDT != work.SDT
+                    //&& paras.indexOf("&IsCC=1") == -1)
                     {
                         listbox += "<td><font color=red>" + window.lang.yuqi + "</font></td>";
                     }
@@ -459,15 +459,15 @@
                 return;
             }
             var url = "";
-            url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + fk_node;
+            url = "./WorkOpt/Batch/BatchList.htm?FK_Node=" + fk_node+"&PageName=Todolist";
 
             //审核组件模式.
             if (node.BatchRole == 1)
-                url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + fk_node;
+                url = "./WorkOpt/Batch/WorkCheckModel.htm?FK_Node=" + fk_node + "&PageName=Todolist";
 
             //审核分组模式.
             if (node.BatchRole == 2)
-                url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + fk_node;
+                url = "./WorkOpt/Batch/GroupFieldModel.htm?FK_Node=" + fk_node + "&PageName=Todolist";
 
             //自定义url模式.
             if (node.BatchRole == 3)

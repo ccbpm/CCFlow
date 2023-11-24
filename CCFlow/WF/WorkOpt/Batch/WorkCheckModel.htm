@@ -23,6 +23,11 @@
         //页面启动函数.
         $(function () {
             InitPage();
+            var mode = GetQueryString('mode');
+            //tookitVue3 用于tookitVue3批处理页面返回按钮的隐藏
+            if (mode == 'tookitVue3') {
+                $('#Btn_Back').hide()
+            }
         });
 
         function InitPage() {
@@ -56,7 +61,7 @@
             thead += "<th>标题</th>";
             thead += "<th>发起人</th>";
             thead += "<th>接收日期</th>";
-            var files = node.GetPara("BatchFields")||"";
+            var files = node.GetPara("BatchFields") || "";
             var editFiles = node.GetPara("EditFields") || "";
             for (var i = 0; i < mapAttrs.length; i++) {
                 var attr = mapAttrs[i];
@@ -66,8 +71,8 @@
                     continue;
                 if (attr.Name == "审核意见")
                     continue;
-                    thead += "<th>" + attr.Name + "</th>";
-              
+                thead += "<th>" + attr.Name + "</th>";
+
             }
 
             //判断该节点是否启用审核组件
@@ -116,9 +121,9 @@
                             tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
                         }
                     }
-                       
+
                     else
-                        tbody += "<td><input type='text' id='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' name='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' value='" + wk[mapAttr.KeyOfEn]+"'></td>";
+                        tbody += "<td><input type='text' id='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' name='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' value='" + wk[mapAttr.KeyOfEn] + "'></td>";
                 }
 
                 // 启用审核组件并且可编辑 ，如果是：每个记录后面都有一个意见框.的模式.
@@ -151,7 +156,7 @@
             if (sta == 1 && BatchCheckNoteModel == "1")
                 bar += '<button type=button   onclick="Btn_BatchCheckMsg()">批量意见</button>';
 
-            bar += '<button type=button   onclick="Btn_Back()">返回</button>';
+            bar += '<button type=button   onclick="Btn_Back()" id="Btn_Back">返回</button>';
 
             $("#btnDiv").append(bar);
 
@@ -306,10 +311,18 @@
             }
 
             $("#batchModal").modal().show();
-            // $("#batchModal").find('.modal-title').text("67");
-            data = data.replace(/@/g, '<br/>@');
-            console.log(data);
-            $("#msgContent").html(data);
+            var result = "";
+            if (data.indexOf("撤销本次发送") != -1) {
+                var str = data.split('撤销本次发送');
+                for (var i = 0; i < str.length; i++) {
+                    if (str[i] == "")
+                        continue;
+                    result += str[i].substring(0, str[i].lastIndexOf('@'));
+                }
+
+            }
+            result = result.replace(/@/g, '<br/>@');
+            $("#msgContent").html(result);
             $('#batchModal').on('hidden.bs.modal', function () {
 
                 $("#Table1").html("");
@@ -424,17 +437,14 @@
             return workIds;
         }
         function Btn_Back() {
+            var pageName = GetQueryString("PageName") || "Bath";
             var type = GetQueryString("Type");
-            var mode = GetQueryString('mode');
-            if (mode = 'tookitVue3') {
-                window.close()
-            }
             if (type == 0)
-                SetHref("../../Batch.htm");
+                SetHref("../../"+pageName+".htm");
             else if (type == 1)
-                SetHref("../../Batch.htm?FK_Node=" + GetQueryString("FK_Node"));
+                SetHref("../../" + pageName +".htm?FK_Node=" + GetQueryString("FK_Node"));
             else
-                SetHref("../../Batch.htm");
+                SetHref("../../" + pageName +".htm");
         }
 
         function InitMapAttr(mapAttr) {
@@ -715,7 +725,7 @@
                     <h4 class="modal-title" id="modalHeader">批量处理</h4>
                 </div>
                 <div class="modal-body" style="text-align: left; word-wrap: break-word;">
-                    <div style="width:100%; border: 0px; height: 490px;overflow-y:scroll" id="msgContent" name="iframePopModalForm">
+                    <div style="width:100%; border: 0px; height: 400px;overflow-y:scroll" id="msgContent" name="iframePopModalForm">
                     </div>
                     <div style="text-align: right; margin-bottom:10px">
                         <button type="button" id="BatchOK" class="btn" data-dismiss="modal" onclick="ReloadPage()">

@@ -224,7 +224,7 @@ function InitPage() {
                 var newRow = "";
                 newRow = "<tr>";
                 newRow += "<td >" + idx + "</td>";
-                newRow += "<td >" + gwl.FK_NodeText + "</td>";
+                newRow += "<td >" + gwl.NodeName + "</td>";
                 //newRow += "<td >" + '' + "</td>";
 
                 if (gwl.IsRead == "1") {
@@ -233,7 +233,7 @@ function InitPage() {
                     newRow += "<td ><span><font color=green>尚未阅读.</font></span></td>";
                 }
                 newRow += "<td >" + '等待审批' + "</td>";
-                newRow += "<td >" + gwl.FK_EmpText + "</td>";
+                newRow += "<td >" + gwl.EmpName + "</td>";
                 newRow += "<td >" + gwl.RDT + "</td>";
                 newRow += "<td ></td>";
                 newRow += "<td ></td>";

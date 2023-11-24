@@ -151,7 +151,7 @@
                 <div class="item item-other">{{gwf.StarterName}}</div>
                 <div class="item item-other">{{gwf.RDT}}</div>
                 <div class="item item-other">
-                    {{gwf.FK_NodeText}}
+                    {{gwf.NodeName}}
                 </div>
                 <div class="item item-other"><i :class="gwf.Icon"></i> {{gwf.IconTitle}}</div>
             </div>
@@ -320,6 +320,8 @@
                 html += "\n .layui-form-select dl dd.layui-this{\n background-color:#5053f1' !important;\n}";
             }
             var theme = DealText(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
             theme = JSON.parse(theme);
             var styleScope = document.getElementById("theme-data");
 

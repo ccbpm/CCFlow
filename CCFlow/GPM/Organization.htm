@@ -305,6 +305,10 @@
                 var fk_dept = webUser.FK_Dept;
                 if (webUser.CCBPMRunModel != 0) {
                     fk_dept = webUser.OrgNo;
+                    $("#OrgAttr").show();
+
+                } else {
+                    $("#OrgAttr").hide();//隐藏组织属性按钮
                 }
                 var handler = new HttpHandler("BP.WF.HttpHandler.GPMPage");
                 var ens = handler.DoMethodReturnJSON("Organization_Init");
@@ -754,12 +758,13 @@
             handler.AddPara("OrgNo", orgNo);
             handler.AddPara("OrgName", orgName);
             var data = handler.DoMethodReturnString("Organization_CreateOrg");
-            alert(data);
+
             if (data.indexOf('err@') == 0) {
                 return;
             }
-
-            window.location.href = window.location.href;
+            layer.msg(data.replace('info@',''), { icon: 1, time: 2000 }, function(){
+                location.reload();
+            });
         }
 
         //设置展开前三级
@@ -869,25 +874,30 @@
             var html = "";
             html += "<div class='container'>";
             html += "<div class='fixed-table-header'>";
-            html += "<table class='table table-hover table-striped table-bordered' id='table-loading' style='width: 97%;margin-top:10px;margin-left:15px;' >";
-            html += "<tr>";
-            // html += "<a class='layui-btn layui-btn-primary layui-border-gray layui-btn-sm btn-change' href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a>  ";
-            html += "<div class='' style='float:left;padding:10px;'>";
+
+            html += "<div style='display:flex;justify-content: space-between;'>"
+            html += "<div class='' style='padding:10px;'>";
             html += "<a class='layui-btn layui-btn-primary layui-border-gray layui-btn-sm btn-change' href=\"javascript:EditDept('" + dept.No + "')\" >" + dept.Name + " </a>  ";
+            if(deptNo != 100){
+                html += "<a class='layui-btn layui-btn-primary layui-border-gray layui-btn-sm btn-change' href=\"javascript:DeleteOrg('" + dept.OrgNo + "')\" >删除组织</a>  ";
+            }
             html += "</div>";
 
 
-            html += "<div class='' style='float:right;padding:10px;'>";
+            html += "<div class='' style='padding:10px;'>";
             if (webUser.No == "admin" && webUser.CCBPMRunModel == 2 && dept.OrgNo == '100') {
                 //   "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-sm btn-change' href='javascript:EditEmp()'>新建人员</a>   ";
             } else {
                 html += "<a class='layui-btn layui-btn-primary layui-border-blue layui-btn-sm btn-change' href='javascript:EditEmp()'>新建人员</a>  ";
             }
             html += "</div>";
+            html += "</div>";
 
-            html += "</tr>";
 
-            //   "/*<a class='layui-btn layui-btn-primary layui-border-green layui-btn-sm btn-change' href='javascript:RefEmps()'>关联兼职</a> */ </h5></tr>";
+            html += "<div style='height:750px;overflow:auto'>";
+
+            html += "<table class='table table-hover table-striped table-bordered' id='table-loading' style='width: 97%;margin-top:10px;margin-left:15px;' >";
+
 
             html += "<thead ><tr> ";
             html += "<th style='background-color:#F2F2F2;'>序号</th>";
@@ -1036,9 +1046,23 @@
             html += "</table>";
             html += "</div>";
             html += "</div>";
+            html += "</div>";
             $("#Emps").html(html);
             bindContextMenu()
             bindSortableJs()
+        }
+
+        function DeleteOrg(no) {
+            if (no === '100') {
+                layer.alert("组织编号为" + no + ",不能删除根节点的组织。(请点击新建组织创建您的组织）");
+                return;
+            }
+            layer.confirm('您确定要删除组织吗？', { icon: 3, title: '提示' }, function (index) {
+                layer.close(index);
+                var org = new Entity("BP.Cloud.Org", no);
+                org.DoMethodReturnString("DoDelete");
+                location.reload();
+            });
         }
 
         function OpenChatFeiGe(toEmpNo, toEmpName, deptNo, deptName, orgNo, orgName) {
@@ -1386,7 +1410,7 @@
             var url = "TemplateImp.htm";
             //OpenWindowRight(url, '导入组织结构');
             var W = document.body.clientWidth - 250;
-            OpenLayuiDialog(url, "导入组织结构", W, 100, "r", false);
+            OpenLayuiDialog(url, "导入组织结构", W, 100, "r", true);
             //OpenLayuiDialog(url, "导入组织结构", 90000, false, false, true, false, false);
         }
     </script>

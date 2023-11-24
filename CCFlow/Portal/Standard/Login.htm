@@ -82,14 +82,14 @@
                 }
             });
 
-            handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
+            /*handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");
 
             var data = handler.DoMethodReturnString("Login_VerifyState");
 
             if (data.indexOf('err@') == 0) {
                 document.getElementById("validate").style.display = "block";
                 document.getElementById("verifycode").src = data.split('@')[1];
-            }
+            }*/
         });
         function createCode() {
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Portal");

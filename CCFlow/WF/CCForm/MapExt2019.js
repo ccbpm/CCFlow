@@ -93,7 +93,7 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
 
             //表格模式
             if (TBModel == "Table")
-                showDataGrid(tbid, selectVal, mapExt);
+                showDataGrid(tbid, selectVal, mapExt, "Dtl");
 
             oldValue = selectVal;
 
@@ -112,18 +112,21 @@ function DoAnscToFillDiv(sender, selectVal, tbid, fk_mapExt, TBModel) {
  * @param {any} dbSource 如果是SQL的时，SQL的查询来源，本地，外部数据源
  * @param {any} keyVal 选择替换的值
  */
-function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal,mapExt,field) {
+function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal, mapExt, field, type) {
     // debugger
     if (dbSrc == null || dbSrc == undefined || dbSrc == "")
         return null;
     if (dbType == 0) {
         var mypk = mapExt.MyPK;
+        if (mapExt.MyPK == undefined || mapExt.MyPK == "") {
+            mypk = mapExt.pkval;
+        }
         mapExt = new Entity("BP.Sys.MapExt", mapExt);
         mapExt.MyPK = mypk;
         //增加表单上的
-        var paras = getPageData() + "@&Key=" + keyVal;
+        var paras = getPageData() + "@Key=" + keyVal;
         var pkval = GetQueryString("WorkID") || GetQueryString("OID");
-        var data = mapExt.DoMethodReturnString("GetDataTableByField", field, paras, null, pkval);
+        var data = mapExt.DoMethodReturnString("GetDataTableByField", field, paras, null, pkval, type);
         if (data.indexOf("err@") != -1) {
             alert(data);
             return null;
@@ -150,10 +153,11 @@ function GetDataTableByDB(dbSrc, dbType, dbSource, keyVal,mapExt,field) {
 
 /**
 * 文本自动完成表格展示
+ * type 是否为从表Dtl
 */
-function showDataGrid(tbid, selectVal, mapExtMyPK) {
+function showDataGrid(tbid, selectVal, mapExtMyPK, type) {
     var mapExt = new Entity("BP.Sys.MapExt", mapExtMyPK);
-    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal,mapExt,"Tag4");
+    var dataObj = GetDataTableByDB(mapExt.Tag4, mapExt.DBType, mapExt.FK_DBSrc, selectVal, mapExt, "Tag4", type);
     var columns = mapExt.Tag3;
     $("#divInfo").remove();
     $("#" + tbid).after("<div style='position:relative;z-index:999;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);width:100%' id='divInfo'><table class='layui-hide' style='width:100%;' id='autoTable' lay-filter='autoTable'></table></div>");
@@ -216,7 +220,7 @@ function showDataGrid(tbid, selectVal, mapExtMyPK) {
             var data = obj.data;
             $("#" + tbid).val(data.No);
             $("#divInfo").remove();
-            FullIt(data.No, mapExt.MyPK, tbid);
+            FullIt(data.No, mapExt.pkval, tbid);
 
         });
     })
@@ -1215,6 +1219,9 @@ function getPageData() {
                 break;
         }
     });
+
+    if (params == "@")
+        params = "";
 
     return params;
 

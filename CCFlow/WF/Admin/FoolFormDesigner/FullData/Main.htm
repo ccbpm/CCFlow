@@ -67,10 +67,11 @@
 
 
             DBTypeChange();
-            $("#DDL_RequestMethod").val(en.Tag3);
-            var tag4 = en.Tag4;
-            tag4 = tag4.replace(/~/g, "'").replace(/'/g, "\"");
-            $("#TB_Post").val(tag4)
+            var requestMethod = en.GetPara("RequestMethod", "Get");
+            $("#DDL_RequestMethod").val(requestMethod);
+            var postContent = en.GetPara("PostContent", "");
+            postContent = postContent.replace(/~/g, "'").replace(/'/g, "\"");
+            $("#TB_Post").val(postContent)
         });
 
         function Save() {
@@ -87,6 +88,7 @@
             en.MyPK = thisPK;
             en.SetPKVal(en.MyPK);
             var i = en.RetrieveFromDBSources();
+            en.SetPara("RequestMethod",$("#DDL_RequestMethod").val());
 
             en.FK_MapData = frmID;
             if (extType != "PageLoadFull") {
@@ -109,19 +111,23 @@
 
             //按钮的操作的时候不判断语句是否有@Key
             var keyControlType = GetQueryString("UIControlType") || "";
-            if (keyControlType!="18" && sql.indexOf('@Key') == -1 && extType != "PageLoadFull") {
-                alert("表达式里必须有 @Key 参数.");
-                return;
+            if (!(en.DBType == 1 && en.Tag3 == 'Post')) {
+                //方便填充主表字段 只判断@
+                if (sql.indexOf('@') == -1 && extType != "PageLoadFull") {
+                    alert("表达式里必须有 @Key 参数.");
+                    return;
+                }
             }
+
 
             en.Doc = sql; //设置主表的SQL.
             var tag2 = $("#TB_Tag2").val();
             en.Tag2 = tag2; //设置主表的SQL.
 
-            en.Tag3 = $("#DDL_RequestMethod").val();
-            var tag4 = $("#TB_Post").val();
-            tag4 = tag4.replace(/"/g, "'").replace(/'/g, "~");
-            en.Tag4 = tag4;
+
+            var postContent = $("#TB_Post").val();
+            postContent = postContent.replace(/"/g, "'").replace(/'/g, "~");
+            en.SetPara("PostContent", postContent);
 
             if (i == 0)
                 en.Insert();

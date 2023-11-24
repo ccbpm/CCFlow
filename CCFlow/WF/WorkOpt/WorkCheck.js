@@ -157,7 +157,7 @@ function GetWorkCheck_Node(checkData, keyOfEn, checkField, FWCVer) {
 function WorkCheck_Parse(track, frmWorkCheck, SignType, showNodeName, isShowCheck, FWCVer) {
 
     //解析节点上传的附件
-    var subaths = GetSubAths(track.NodeID);
+    var subaths = GetSubAths(track.NodeID, frmWorkCheck);
 
     //仅显示自己的审核意见
     if (frmWorkCheck.FWCMsgShow == "1" && track.NodeID == checkParam.FK_Node && track.IsDoc == false) {
@@ -400,7 +400,7 @@ function WorkCheck_Stamp_Parse(track, frmWorkCheck, showNodeName, isShowCheck, F
 
     idx = parseInt(idx) + 1;
     //解析节点上传的附件
-    var subaths = GetSubAths(track.NodeID);
+    var subaths = GetSubAths(track.NodeID, frmWorkCheck);
 
     //仅显示自己的审核意见
     if (frmWorkCheck.FWCMsgShow == "1" && track.NodeID == checkParam.FK_Node && track.IsDoc == false) {
@@ -805,7 +805,7 @@ function openHandWriting() {
  * @param {any} nodeID 当前节点ID
  * @param {any} aths 审核组件上传的附件
  */
-function GetSubAths(nodeID) {
+function GetSubAths(nodeID, frmWorkCheck) {
 
     //1.获取节点上传的附件
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
@@ -821,8 +821,14 @@ function GetSubAths(nodeID) {
 
     //2.解析上传的附件
     var _Html = '';
+    debugger
     $.each(naths, function () {
-        _Html += GetAthHtml(this);
+        if (frmWorkCheck.FWCMsgShow == "1") {
+            if (this.Rec === webUser.No)
+                _Html += GetAthHtml(this);
+        }
+        else
+            _Html += GetAthHtml(this);
     });
 
     return _Html;
@@ -890,7 +896,7 @@ function GetAthHtml(ath) {
 function AddUploafFileHtm(divid, fwcShowModel) {
     if ($("#file_upload").length == 0) {
         var html = "<div id='s' style='float:right;margin-right:10px;margin-top:5px;' >"
-            + "<label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' onchange='UploadChange(" + fwcShowModel + ");' ><span>文件上传</span></label>"
+            + "<label id='realBtn' class='btn btn-info' style=''><input type='file' name='file' id='file' style='display:inline;left:-9999px;position:absolute;' onchange='UploadChange(" + fwcShowModel + ");' ><span><i class='layui-icon'>&#xe67c;</i>文件上传</span></label>"
             + "</div>";
 
         $("#" + divid).append(html);

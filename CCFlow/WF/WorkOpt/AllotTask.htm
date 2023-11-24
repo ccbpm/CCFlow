@@ -39,9 +39,9 @@
 
                 var gwl = gwls[i];
                 if (gwl.IsEnable == 1)
-                    html += "<li style='list-style-type:none;'><label><input checked='checked' type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
+                    html += "<li style='list-style-type:none;'><label><input checked='checked' type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.EmpName + "</label></li>";
                 else
-                    html += "<li style='list-style-type:none;'><label><input type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.FK_EmpText + "</label></li>";
+                    html += "<li style='list-style-type:none;'><label><input type=checkbox value='' id='" + gwl.FK_Emp + "' >" + gwl.FK_Emp + "," + gwl.EmpName + "</label></li>";
             }
 
             html += "</ul>";
@@ -107,7 +107,7 @@
                     continue;
 
                 obj += gwl.FK_Emp + "@";
-                objExt += gwl.FK_EmpText + "&nbsp;&nbsp;";
+                objExt += gwl.EmpName + "&nbsp;&nbsp;";
             }
             rm.Objs = obj;
             rm.ObjsExt = objExt;
@@ -120,7 +120,7 @@
 
                 emps += gwl.FK_Emp + "@";
 
-                var empInfo = gwl.FK_Emp + "," + gwl.FK_EmpText;
+                var empInfo = gwl.FK_Emp + "," + gwl.EmpName;
 
                 if (obj.indexOf(gwl.FK_Emp) != -1)
                     empExts += empInfo;

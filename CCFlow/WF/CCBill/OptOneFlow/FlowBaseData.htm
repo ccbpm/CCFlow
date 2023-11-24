@@ -141,7 +141,7 @@
 
             <div class="item item-name"
                  style="text-align: left" :data-mypk="item.WorkID" :data-name="item.Title"
-                 :data-idx="idx" @click.stop="OpenMyView(item.FK_Flow,item.WorkID)">
+                 :data-idx="idx" @click.stop="OpenMyView(item.FK_Flow,item.WorkID,item.FK_Node)">
                 <span> <font color="blue">{{item.Title}}</font></span>
             </div>
             <div class="item item-other">{{item.StarterName}}</div>
@@ -177,11 +177,12 @@
             },
             methods: {
 
-                OpenMyView: function (flowNo, workid) {
+                OpenMyView: function (flowNo, workid,nodeID) {
 
                     var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
                     handler.AddPara("WorkID", workid);
                     handler.AddPara("FK_Flow", flowNo);
+                    handler.AddPara("FK_Node", nodeID);
                     var data = handler.DoMethodReturnString("MyView_Init");
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -324,6 +325,8 @@
                 html += "\n .layui-form-select dl dd.layui-this{\n background-color:'#5053f1' !important;\n}";
             }
             var theme = DealText(localStorage.getItem("themeColorInfo"));
+            if (theme == null || theme == undefined || theme == "")
+                return;
             theme = JSON.parse(theme);
             var styleScope = document.getElementById("theme-data");
 

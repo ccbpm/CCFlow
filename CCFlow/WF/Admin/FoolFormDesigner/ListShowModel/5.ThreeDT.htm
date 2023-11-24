@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!--SQL编辑器-->
+    <link href="../../../Scripts/CodeMirror/lib/codemirror.css" rel="stylesheet" />
+    <link href="../../../Scripts/CodeMirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="../../../Scripts/CodeMirror/lib/codemirror.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="../../../Scripts/CodeMirror/mode/sql/sql.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="../../../Scripts/CodeMirror/addon/hint/sql-hint.js"></script>
+    <script src="../../../Scripts/LoadSql.js"></script>
+
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(ListShowModel.ThreeDT);
+            var no = GetQueryString("FK_MapData");
+            var mapDtl = new Entity("BP.Sys.MapDtl", no);
+            GenerFullAllCtrlsVal(mapDtl);
+            var attrs = new Entities("BP.Sys.MapAttrs");
+            attrs.Retrieve("FK_MapData", no,"UIVisible",1);
+            var selectVal = mapDtl.GetPara("D1") || "";
+            GenerBindDDL("DDLPara_D1", attrs, "KeyOfEn", "Name", selectVal);
+            selectVal = mapDtl.GetPara("D2") || "";
+            GenerBindDDL("DDLPara_D2", attrs, "KeyOfEn", "Name", selectVal);
+            selectVal = mapDtl.GetPara("D3") || "";
+            GenerBindDDL("DDLPara_D3", attrs, "KeyOfEn", "Name", selectVal);
+            selectVal = mapDtl.GetPara("NumberField") || "";
+            GenerBindDDL("DDLPara_NumberField", attrs, "KeyOfEn", "Name", selectVal);
+        });
+
+        function Save() {
+
+            //更新节点表单类型.
+            var no = GetQueryString("FK_MapData");
+            var mapDtl = new Entity("BP.Sys.MapDtl", no);
+            mapDtl.ListShowModel = ListShowModel.ThreeDT;
+            mapDtl.SetPara("D1", $("#DDLPara_D1").val());
+            mapDtl.SetPara("D2", $("#DDLPara_D2").val());
+            mapDtl.SetPara("D3", $("#DDLPara_D3").val());
+            mapDtl.SetPara("NumberField", $("#DDLPara_NumberField").val());
+            mapDtl.Update();
+            alert("保存成功")
+            Reload();
+        }
+    </script>
+</head>
+<body>
+
+    <div id="bar"></div>
+
+    <fieldset>
+        <legend>
+            <label for="RB_ListShowModel_3"> 3维表左展示 </label>
+        </legend>
+
+        <ul>
+            <li style="font-weight: bold;font-size: 15px;">
+                <label>维度1字段</label>
+                <select id="DDLPara_D1" name="DDLPara_D1"></select>
+                <label>维度2字段</label>
+                <select id="DDLPara_D2" name="DDLPara_D2"></select>
+                <label>维度3字段</label>
+                <select id="DDLPara_D3" name="DDLPara_D3"></select>
+                <label>输入字段</label>
+                <select id="DDLPara_NumberField" name="DDLPara_NumberField"></select>
+            </li>
+            <li>
+                从表里有三个字段，两个外键或者枚举类型的字段，一个数值/字符类型的字段.
+            </li>
+            <li>需要交叉数据展现模式，用于数据采集或者展现. </li>
+            <li>从左侧开始,第1个字段是第1维度,头部是第2维度. </li>
+            <li> <img class="HelpImg" src="ListShowModel5.png" /> </li>
+        </ul>
+    </fieldset>
+</body>
+</html>

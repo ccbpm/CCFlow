@@ -141,9 +141,11 @@
 
             if (mypk != null && mypk != undefined && mypk != "") {
                 en.SetPKVal(mypk);
+                en.EventID = en.FK_Event;
                 en.Update();
             } else {
-                en.SetPKVal(en.FK_Event + Math.random());
+                en.SetPKVal(en.FK_Event + "_" + Math.random());
+                en.EventID = en.FK_Event;
                 en.Insert();
             }
 

@@ -22,7 +22,7 @@
             flowNo = GetQueryString("FK_Flow");
 
             var nds = new Entities("BP.WF.Nodes");
-            nds.Retrieve("FK_Flow", flowNo, "Step");
+            nds.Retrieve("NodeType", 0, "FK_Flow", flowNo, "Step");
             nds = nds.TurnToArry();
             $.each(nds, function (i, nd) {
                 nd.Idx = i + 1;
@@ -79,12 +79,16 @@
         //设计表单
         function NodeFrmD(nodeID) {
 
+           // debugger;
+          //  alert(nodeID);
+
             var node = new Entity("BP.WF.Node", nodeID);
             if (node.FormType == 1 || node.FormType == 0 ||node.FormType == 10) { //自由表单，傻瓜表单.
                 //傻瓜表单.
                 var url = basePath + "/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=ND" + nodeID + "&IsFirst=1&FK_Flow=" + flowNo + "&FK_Node=" + nodeID;
                 url += "&UserNo=" + GetQueryString("UserNo");
                 url += "&Token=" + GetQueryString("Token");
+               
                 OpenLayuiDialog(url, "设计表单ND" + nodeID, window.innerWidth * 0.9);
                 return;
             }

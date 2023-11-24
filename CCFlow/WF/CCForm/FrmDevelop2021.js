@@ -6,7 +6,20 @@
 var currentURL = GetHrefUrl();
 var frmData;
 var isShowMustInput = getConfigByKey("FrmDevelop_IsShowStar", '1');
+var isHaveLoadMapExt = false;
 
+var baseUrl = "./CCForm/";
+if (GetHrefUrl().indexOf("CCForm") != -1)
+    baseUrl = "./";
+if (GetHrefUrl().indexOf("CCBill") != -1)
+    baseUrl = "../CCForm/";
+if (GetHrefUrl().indexOf("AdminFrm.htm") != -1 || GetHrefUrl().indexOf("RefFunc") != -1)
+    baseUrl = "../../CCForm/";
+
+if (isHaveLoadMapExt == false) {
+    Skip.addJs(baseUrl + "MapExt2021.js");
+    isHaveLoadMapExt = true;
+}
 //图片签名
 var isButtonShowSignature = getConfigByKey("IsButtonShowSignature", false);
 var UserICon = getConfigByKey("UserICon", '../DataUser/Siganture/'); //获取签名图片的地址
@@ -17,7 +30,7 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
         isComPare = false;
     $("head").append("<style>.layui-form-radio{margin:0px;padding-right:0px}</style>")
     var html = "";
-    html="\n .table.sortEnabled tr.firstRow th, table.sortEnabled tr.firstRow td{\n padding-right: 20px;\n  background-repeat: no-repeat;\n  background-position: center right;\n}";
+    html = "\n .table.sortEnabled tr.firstRow th, table.sortEnabled tr.firstRow td{\n padding-right: 20px;\n  background-repeat: no-repeat;\n  background-position: center right;\n}";
     $("head").append("<style>" + html + "</style>");
 
     html = "";
@@ -391,7 +404,7 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
             }
 
             if (mapAttr.UIContralType == 6) {//字段附件
-                var _html = getFieldAth(mapAttr,frmData.Sys_FrmAttachment);
+                var _html = getFieldAth(mapAttr, frmData.Sys_FrmAttachment);
                 $("#TB_" + mapAttr.KeyOfEn).hide();
                 $("#TB_" + mapAttr.KeyOfEn).after(_html);
 
@@ -540,6 +553,7 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
             $(element).remove();
     }
 
+
     //审核组件的判断
     if (frmData.WF_FrmNodeComponent != null && frmData.WF_FrmNodeComponent != undefined) {
         var nodeComponents = frmData.WF_FrmNodeComponent[0];//节点组件
@@ -561,6 +575,31 @@ function GenerDevelopFrm(wn, fk_mapData, isComPare) {
         var html = SubFlow_Init(frmData.WF_Node[0]);
         $("#SubFlow").html(html);
     }
+
+    $.each($(".Btn"), function (idx, item) {
+        $(this).on("click", function () {
+            var keyOfEn = item.id.substring(3);
+            var mapAttr = $.grep(frmData.Sys_MapAttr, function (attr) {
+                return attr.KeyOfEn == keyOfEn;
+            })[0];
+            var tag = mapAttr.Tag || "";
+            if (tag != "") {
+                tag = DealExp(tag);
+                if (mapAttr.UIIsEnable == 1) {
+                    //执行js
+                    DBAccess.RunUrlReturnString(tag);
+                }
+                if (mapAttr.UIIsEnable == 2)
+                    DBAccess.RunFunctionReturnStr(tag);
+            }
+
+
+            if (mapAttr.UIIsEnable != 0 && isReadonly != true)
+                FullIt("", mapAttr.MyPK + "_FullData", "Btn_" + mapAttr.KeyOfEn, 0);
+        })
+
+    })
+
 }
 
 /**

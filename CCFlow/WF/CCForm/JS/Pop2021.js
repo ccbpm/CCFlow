@@ -177,8 +177,8 @@ function CommPopDialog(poptype, mapAttr, mapExt, pkval, frmData, baseUrl, mapExt
         "KeyOfEn": mapExt.AttrOfOper,
         "RefPKVal": pkval,
         "elemId": mtagsId,
-        "onUnselect": function (target,record) {
-            Delete_FrmEleDB(mapExt.AttrOfOper, pkval, record.No);
+        "onUnselect": function (target) {
+            Delete_FrmEleDB(mapExt.AttrOfOper, pkval, target.No);
             var elemId = mapExt.AttrOfOper + "_mtags";
             $("#TB_" + mapExt.AttrOfOper).val($("#" + elemId).mtags("getText"));
         }

@@ -58,6 +58,7 @@
                 $("#doc").hide();
                 $("#TB_Tag1").show();
                 $("#TB_Tag1").val(en.Tag1);
+                $("#TB_Post").val(en.Tag4);
             }
             var html = "<table style='width:99%;'>";
             for (var i = 0; i < mapDtls.length; i++) {
@@ -117,6 +118,10 @@
             var mapDtls = new Entities("BP.Sys.MapDtls");
             mapDtls.Retrieve("FK_MapData", frmID);
 
+            var tag4 = $("#TB_Post").val();
+            tag4 = tag4.replace(/"/g, "'").replace(/'/g, "~");
+            en.Tag4 = tag4;
+
             en.Tag5 = $("input[name='RB_Type']:checked").val();
 
             if (en.Tag5 == 0) {
@@ -132,8 +137,8 @@
             } else {
                 en.Tag1 = $("#TB_Tag1").val();
             }
-            
 
+            en.SetPara("FullDataDtls", "Dtls"); //获得选择的值.
 
             if (n == 0)
                 en.Insert();
@@ -150,7 +155,7 @@
                 $("#doc").hide();
                 $("#TB_Tag1").show();
             }
-               
+
         }
     </script>
 </head>
@@ -165,6 +170,9 @@
         </div>
         <div id="doc"></div>
         <textarea rows="4" name="TB_Tag1" id="TB_Tag1" style="width: 98%;"> </textarea>
+        <p>POST请求参数:</p>
+        <textarea rows="4" name="TB_Post" id="TB_Post" style="width: 98%;"> </textarea>
+
     </form>
 
 

@@ -105,7 +105,7 @@
                             <!--<li><a href="../../WF/SearchZongHe.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang">综合查询2022</span></a></li>-->
                             <!--<li><a href="../../WF/RptSearch/Default.htm" class="J_menuItem"><i class="icon iconfont icon-zonghechaxun"></i><span class="lang" data-key="zhcx">综合查询</span></a></li>-->
                             <!--<li><a href="../../WF/Watchdog.htm" class="J_menuItem"><i class="icon iconfont icon-lcchaxun"></i><span class="lang">流程监控</span></a></li>-->
-                            <li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Delays" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="yqlc">逾期流程</span><label class="label label-warning pull-right" id="OutTime"><font color=red>0</font></label></a></li>
+                            <!--<li><a href="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.Delays" class="J_menuItem"><i class="icon iconfont icon-shenpi"></i><span class="lang" data-key="yqlc">逾期流程</span><label class="label label-warning pull-right" id="OutTime"><font color=red>0</font></label></a></li>-->
                         </ul>
                     </li>
 
@@ -235,7 +235,7 @@
             }
             document.title = window.lang.chichengwfsystem;
             $(".lang-setting").attr("title", window.lang.szgrxx);
-
+            w
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
             var data = handler.DoMethodReturnString("Home_Init");
 

@@ -262,7 +262,7 @@ function InitPage() {
                 }
 
                 doc += "<p><span>审批人:</span><strong>";
-                doc += gwl.FK_EmpText;
+                doc += gwl.EmpName;
                 doc += "</strong></p>";
                 //判断是否隐藏
                
@@ -320,7 +320,7 @@ function InitPage() {
 
                 var left = "<div class='usernameInfo'>";
                 left += "<span class='uimg'><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' /></span><div class='ut'><span class='uname'>";
-                left += "" + gwl.FK_EmpText;      
+                left += "" + gwl.EmpName;      
                 left += "</span></div></div>";
                
 

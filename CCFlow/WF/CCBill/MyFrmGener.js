@@ -1,4 +1,6 @@
-﻿/**
+﻿
+
+/**
  * 初始化按钮的操作
  */
 function ToolBar_Init(entityType) {
@@ -56,7 +58,7 @@ function ToolBar_Init(entityType) {
                 break;
             case "Save":
                 //保存从表数据
-                $("[name=Dtl]").each(function (i, obj) {
+                $("iframe[name=Dtl]").each(function (i, obj) {
                     var contentWidow = obj.contentWindow;
                     if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
                         contentWidow.SaveAll();
@@ -101,7 +103,7 @@ function ToolBar_Init(entityType) {
                 break;
             case "Submit":
                 //保存从表数据
-                $("[name=Dtl]").each(function (i, obj) {
+                $("iframe[name=Dtl]").each(function (i, obj) {
                     var contentWidow = obj.contentWindow;
                     if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
                         contentWidow.SaveAll();
@@ -205,30 +207,23 @@ function ToolBar_Init(entityType) {
                     url += "&PWorkID=" + pworkid;
                 SetHref(url);
                 break;
-            case "Print":
-                var type = $(this).data("type");
-                var url = "";
-                if (type == "HTML" || type == "PDF") {
-                    url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=" + type;
-                    OpenLayuiDialog(url, "打印ZIP", window.innerWidth / 2, Window.innerHeight / 2, "auto");
-                    break;
-                }
-               
-                if (type == "RTF") {
-                    url = "../WorkOpt/PrintDoc.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill";
-                    OpenLayuiDialog(url, "打印RTF", window.innerWidth / 2, 50, "auto");
-                    break;
-                }
-                if (type == "CCWord") {
-                    url = "../WorkOpt/PrintDoc.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill";
-                    OpenLayuiDialog(url, "打印CCWord", window.innerWidth / 2, 50, "auto");
-                    break;
-                }
-                if (type == "ZIP") {
-                    url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=zip";
-                    OpenLayuiDialog(url, "打印ZIP", window.innerWidth / 2, 50, "auto");
-                    break;
-                }
+            case "PrintPDF":
+            case "PrintHtml":
+                var type = this.name === "PrintPDF" ? "PDF" : "Html";
+                url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=" + type;
+                OpenLayuiDialog(url, "打印" + type, window.innerWidth / 2, Window.innerHeight / 2, "auto");
+                break;
+            case "PrintRTF":
+                url = "../WorkOpt/PrintDoc.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill";
+                OpenLayuiDialog(url, "打印RTF", window.innerWidth / 2, 50, "auto");
+                break;
+            case "PrintCCWord":
+                url = "../WorkOpt/PrintDoc.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill";
+                OpenLayuiDialog(url, "打印CCWord", window.innerWidth / 2, 50, "auto");
+                break;
+            case "ExpZip":
+                url = "../WorkOpt/Packup.htm?FrmID=" + GetQueryString("FrmID") + "&WorkID=" + GetQueryString("WorkID") + "&SourceType=Bill&FileType=zip";
+                OpenLayuiDialog(url, "打印ZIP", window.innerWidth / 2, 50, "auto");
                 break;
             case "dictFlow":
                 break;

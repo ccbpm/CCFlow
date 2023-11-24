@@ -76,7 +76,7 @@
                                     <button class="btn btn-success btn-sm position" type="button" onclick="javascript:SearchKey();"><i class="fa fa-search"></i>查询</button>
                                 </td>
                                 <td style="padding-left:22px;">
-                                    <button class="btn btn-success btn-sm" style="padding-left:22px;" type="button" onclick="javascript:More();"><i class="fa fa-adjust"></i>更多...</button>
+                                    <button class="btn btn-success btn-sm" type="button" onclick="javascript:More();"><i class="fa fa-adjust"></i>更多...</button>
                                 </td>
                             </tr>
                         </table>
@@ -336,10 +336,10 @@
                 pageCount = parseInt(total / pageSize);
             if (pageCount == 0) pageCount = 1;
 
-            var div = window.parent.document.getElementById("Todolist_Complete");
-            if (div != null) {
-                div.innerHTML = realCount;
-            }
+            //var div = window.parent.document.getElementById("Todolist_Complete");
+            //if (div != null) {
+            //    div.innerHTML = realCount;
+            //}
 
             return data;
 
@@ -466,17 +466,21 @@
     </script>
     <script>
         $(function () {
-            if (CustomerNo != "" && CustomerNo != null) {
-                html += "\n .btn{\n background-color:#5053f1'; \n}\n .btn-success:hover{\n background-color:'#5053f1'; \n}\n.btn-success:focus{\n background-color:'#5053f1';\n}\n.btn-success:active{\n background-color'#5053f1';\n}\n.btn-success:active:focus{\n background-color:'#1a60ff';border-color:'#5053f1'; \n}";
-                styleScope.innerHTML = filterXSS(html);
-            }
             var theme = filterXSS(localStorage.getItem("themeColorInfo"));
-            if (theme == "" || theme == "undefined" || theme == null) return;
+            if (theme == null || theme == undefined || theme == "")
+                return;
             var data = JSON.parse(theme);
             var styleScope = document.getElementById('theme-data');
             var html = styleScope.innerHTML;
-            html += "\n .btn{\n background-color:" + data.selectedMenu + "; \n}\n .btn-success:hover{\n background-color:" + data.selectedMenu + "; \n}\n.btn-success:focus{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active:focus{\n background-color:" + data.selectedMenu + ";border-color:" + data.selectedMenu + "; \n}";
-            styleScope.innerHTML = filterXSS(html);
+            if (CustomerNo != "" && CustomerNo != null) {
+                html += "\n .btn{\n background-color:'#5053f1'; \n}\n .btn-success:hover{\n background-color:'#5053f1'; \n}\n.btn-success:focus{\n background-color:'#5053f1';\n}\n.btn-success:active{\n background-color:'#5053f1';\n}\n.btn-success:active:focus{\n background-color:'#1a60ff';border-color:'#5053f1'; \n}";
+                styleScope.innerHTML = filterXSS(html);
+            }
+            if (theme == "" || theme == "undefined" || theme == null) return;
+            else {
+                html += "\n .btn{\n background-color:" + data.selectedMenu + "; \n}\n .btn-success:hover{\n background-color:" + data.selectedMenu + "; \n}\n.btn-success:focus{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active{\n background-color:" + data.selectedMenu + ";\n}\n.btn-success:active:focus{\n background-color:" + data.selectedMenu + ";border-color:" + data.selectedMenu + "; \n}";
+                styleScope.innerHTML = filterXSS(html);
+            }
         })
     </script>
 </body>

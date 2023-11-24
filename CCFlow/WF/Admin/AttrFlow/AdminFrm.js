@@ -397,7 +397,7 @@ function Save(saveType) {
     }
 
     //保存从表数据
-    $("[name=Dtl]").each(function (i, obj) {
+    $("iframe[name=Dtl]").each(function (i, obj) {
         var contentWidow = obj.contentWindow;
         if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
             contentWidow.SaveAll();
@@ -492,7 +492,7 @@ function getFlowDevModelText(model) {
         case FlowDevModel.RefOneFrmTree:
             return "绑定表单库的单表单";
         case FlowDevModel.FrmTree:
-            return "绑定表单库的多表单";
+            return "表单树";
         case FlowDevModel.SDKFrm:
             return "SDK表单";
         case FlowDevModel.SelfFrm:

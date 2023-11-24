@@ -208,14 +208,15 @@
                 if (lb == "myWords")//我的词汇
                 {
                     //判断是否存在我的词汇
-                    var defVals = new Entities("BP.Sys.DefVals", "FK_MapData", FK_MapData, "AttrKey", AttrKey, "FK_Emp", webUser.No, "LB", "1", "CURVALUE", text);
+                    var defVals = new Entities("BP.Sys.DefVals");
+                    defVals.Retrieve("FrmID", FK_MapData, "AttrKey", AttrKey, 'EmpNo', webUser.No, "LB", "1", "CurValue", text);
                     if (defVals.length != 0) {
                         alert("该词汇已经存在，不能重复录入");
                         return;
                     }
                     var defVal = new Entity("BP.Sys.DefVal");
-                    defVal.FK_MapData = FK_MapData;
-                    defVal.FK_Emp = webUser.No;
+                    defVal.FrmID = FK_MapData;
+                    defVal.EmpNo = webUser.No;
                     defVal.AttrKey = AttrKey;
                     defVal.LB = "1";
                     defVal.CurValue = text;

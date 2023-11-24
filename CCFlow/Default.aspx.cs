@@ -1,41 +1,171 @@
-﻿using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using System.Collections.Concurrent;
-using System.IO;
-using Newtonsoft.Json;
+﻿using BP.DA;
 using BP.En;
 using BP.Port;
-using BP.DA;
 using BP.Sys;
+using BP.Sys.FrmUI;
+using BP.Web;
 using BP.WF;
 using BP.WF.Template;
-using System.Drawing;
-using BP.WF.Port;
-using BP.Difference;
-using CCFlow.DataUser.API;
+using System;
+using System.Collections;
+using System.Data;
 
 namespace CCFlow
 {
     public partial class Default : System.Web.UI.Page
     {
+        public void TestTitleRole()
+        {
+
+            //1登陆.
+            BP.WF.Dev2Interface.Port_Login("lisi");
+
+            //2.创建空白的workid.
+            Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork("001"); //创建空白的WorkID.
+
+            //3.设置草稿.
+            BP.WF.Dev2Interface.Node_SetDraft(workID); //设置草稿.
+
+            //4.保存数据: 到ccform.
+            Hashtable ht = new Hashtable();
+            ht.Add("QingJiaTianShu", "11000");
+            BP.WF.Dev2Interface.Node_SaveWork(workID, ht, null, null); //保存数据..
+
+            //5.执行发送.
+            BP.WF.Dev2Interface.Node_SendWork("001", workID, 102, "liyan,yuwen"); //执行发送.
+
+            //6. 打开工作处理器.
+            string urlH5 = "http://ccbpmhost:9090/WF/Port.htm?DoWhat=MyFlow&WorkID=" + workID + "&Token=" + WebUser.Token + "&FlowNo=001";
+            string urlVue3 = "http://ccbpmhost:9090/WF/Port?DoWhat=MyFlow&WorkID=" + workID + "&Token=" + WebUser.Token + "&FlowNo=001";
+
+            ////获取可以发起列表.
+            //BP.WF.Dev2Interface.DB_Start();
+            //string urlH5 = "http://ccbpmhost:9090/WF/Port.htm?DoWhat=StartToken=xxxxx&FlowNo=xxxx";
+            //待办.
+            // BP.WF.Dev2Interface.DB_Todolist();
+            ////BP.WF.Dev2Interface.Flow_ReSetFlowTitle(Title, ht);
+            //GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            //this.Response.Write(gwf.Title + " - " + workID);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-          //  EventDoType.Disable
-           // DataType.AppBoolean
-            //  BP.Sys.SFTable
-            //  EnConfig
-            //  string str=  QuanYiSoft.ClientAPISAAS.Port_Login("ccs");
-            //     this.Response.Write(str);
-            //  BP.Sys.SFTable
-            //  this.Response.Write("OSModel=" + SystemConfig.CCBPMRunModel.ToString());
+
+            //BP.Sys.SFDBSrc en = new BP.Sys.SFDBSrc();
+            //en.GetTables();
+
+            //  BP.Difference.SystemConfig.AppCenterDBFieldCaseModel
+            // BP.DA.DBType.DM
+            //this.TestTitleRole();
+            // UIContralType.SignCheck
+            // MapAttrString ms = new MapAttrString();
+            // ms.DoRenameField();
+            // BP.WF.Dev2Interface.Port_Login("admin");
+            // BP.WF.Glo.ReCreateView();
+            // BP.WF.Glo.UpdataCCFlowVer();
+            //   UIContralType.AthShow.
+            return;
+
+            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("041");
+            //SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork("041", workid, null, 0, "liyan,fuhui,zhanghaicheng");
+            //this.Response.Write(objs.ToJson());
+            /////定义容器.
+            //DataSet ds = new DataSet();
+
+            //DataTable dt = new DataTable();
+            //dt.TableName = "Ath1";
+            //dt.Columns.Add("FileName");
+            //dt.Columns.Add("FileUrl");
+
+            //DataRow dr =dt.NewRow();
+            //dr[0] = "我的附件1.doc";
+            //dr[1] = "http://localst:9003:/xxx.docx";
+            //dt.Rows.Add(dr);
+
+            //dr = dt.NewRow();
+            //dr[0] = "我的附件2.doc";
+            //dr[1] = "http://localst:9003:/xxx.docx";
+            //dt.Rows.Add(dr);
+            //ds.Tables.Add(dt);
+            //string json1 = BP.Tools.Json.ToJson(ds);
+            //this.Response.Write(json1);
+            return;
+
+
+            // https://poc3.ccbpm.cn/?/WF/Port?DoWhat=GoHome&Token=xxxx
+            // BP.Difference.SystemConfig.AppCenterDBLengthStr
+            // 创建workid.
+            // Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork("qingjia");
+            // 执行发送.
+            //BP.WF.Dev2Interface.Node_SendWork("qingjia", workid, null,null,102,"zangsan,li");
+            //return;
+            //  BP.DA.DataType.CurrentDateTime
+            // sf.FK_SFDBSrc
+            // BP.Cloud.Dept
+            //    TestTitleRole();
+            CCRole rl = new CCRole();
+            rl.CheckPhysicsTable();
+
+            CCList cc = new CCList();
+            cc.CheckPhysicsTable();
+
+            SelectAccper SA = new SelectAccper();
+            SA.CheckPhysicsTable();
+            // BP.WF.
+            BP.WF.Dev2Interface.Port_Login("admin"); //登陆.
+            Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork("017"); //创建空白的WorkID.
+            BP.WF.Dev2Interface.Node_SetDraft(workID); //设置草稿.
+            BP.WF.Dev2Interface.Node_SendWork("017", workID); //执行发送.
+
+            //string flowNo = "046";
+            //// BP.WF.
+            //BP.WF.Dev2Interface.Port_Login("admin"); //登陆.
+            //Int64 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo); //创建空白的WorkID.
+            //BP.WF.Dev2Interface.Node_SetDraft(workID); //设置草稿.
+
+            //string todoEmps = "xxx,xxx";
+            //BP.WF.Dev2Interface.Node_SendWork(flowNo, workID,0, todoEmps); //执行发送.
+            //  GenerWorkFlow gwf = new GenerWorkFlow(workID);
+            //this.Response.Write(gwf.TodoEmps + " - " + gwf.Emps);
+
+            ////发送到下一个节点.
+            //BP.WF.Dev2Interface.Port_Login("xxxxx"); //登陆.
+            //BP.WF.Dev2Interface.Node_SendWork(flowNo, workID, 0, null); //执行发送.
+
+            //  gwf = new GenerWorkFlow(workID);
+            // this.Response.Write(gwf.TodoEmps + " - " + gwf.Emps);
+            return;
+
+            //BP.Port.Emp emp = new BP.Port.Emp();
+            //emp.No = "001";
+            //emp.Name = "TOM";
+            //emp.Retrieve();
+            //string empNo = emp.No;
+            //string empName = emp.Name;
+            //BP.Port.Emp emp = new BP.Port.Emp();
+            //emp.setNo("001");
+            //emp.setName("TOM");
+            //emp.Insert();
+            //String empNo = emp.getNo();
+            //String empName = emp.getName();
+
+            //   BP.WF.Dev2Interface.DB_CCList()
+            //BP.Port.Emp emp = new BP.Port.Emp();D:\CCFlowCloud\Components\BP.WF\EnumLib.cs
+
+            //emp.No = "admin";
+            //emp.Retrieve();
+            //emp.Update();
+            //emp.Delete();
+
+            //BP.WF.Dev2Interface.Port_Login("admin");
+            //string flowNo = "032";
+            //Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo);
+            //SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(flowNo, workid, 0, "yuwen");
+            //this.Response.Write(objs.ToMsgOfHtml());
+
+            ////让yuwen 登陆.
+            //BP.WF.Dev2Interface.Port_Login(objs.VarAcceptersID);
+            //string msg = BP.WF.Dev2Interface.Node_ReturnWork(workid, 3201, "我要退回.", false);
             return;
             //    FlowDevModel.JiJian
             //  BP.WF.Dev2Interface.Node_DoCCCheckNote
@@ -79,7 +209,7 @@ namespace CCFlow
             ////    BP.Port.Emp emp = new Emp();
             ////    emp.No = DBAccess.GenerGUID();
             ////    emp.Name = emp.No;
-            ////    emp.FK_Dept = "1001";
+            ////    emp.DeptNo = "1001";
             ////    emp.Insert();
             ////}
 
@@ -333,7 +463,7 @@ namespace CCFlow
             //BP.Port.Emp emp = new Emp();
             //emp.Name = "张三";
             //emp.No = "009";
-            //emp.FK_Dept = "100";
+            //emp.DeptNo = "100";
             //emp.Insert();
             ////BP.Demo.BanJi en = new BP.Demo.BanJi();
             ////en.Name = "1年级";
@@ -379,25 +509,25 @@ namespace CCFlow
             foreach (Emp item in ens)
             {
                 BP.Port.DeptEmp de = new BP.Port.DeptEmp();
-                de.FK_Emp = item.No;
-                de.FK_Dept = item.No;
+                de.EmpNo = item.No;
+                de.DeptNo = item.No;
                 de.Insert();
                 BP.Port.DeptEmpStation des = new BP.Port.DeptEmpStation();
                 if (item.Name.Contains("分监区") == true)
                 {
 
-                    des.FK_Dept = item.No;
-                    des.FK_Emp = item.No;
-                    des.FK_Station = "98";
+                    des.DeptNo = item.No;
+                    des.EmpNo = item.No;
+                    des.StationNo = "98";
                     des.Insert();
                     continue;
                 }
 
                 if (item.Name.Contains("监区") == true)
                 {
-                    des.FK_Dept = item.No;
-                    des.FK_Emp = item.No;
-                    des.FK_Station = "97";
+                    des.DeptNo = item.No;
+                    des.EmpNo = item.No;
+                    des.StationNo = "97";
                     des.Insert();
                     continue;
                 }
@@ -405,16 +535,16 @@ namespace CCFlow
 
                 if (item.Name.Contains("刑罚") == true)
                 {
-                    des.FK_Dept = item.No;
-                    des.FK_Emp = item.No;
-                    des.FK_Station = "6";
+                    des.DeptNo = item.No;
+                    des.EmpNo = item.No;
+                    des.StationNo = "6";
                     des.Insert();
                     continue;
                 }
 
-                des.FK_Dept = item.No;
-                des.FK_Emp = item.No;
-                des.FK_Station = "19";
+                des.DeptNo = item.No;
+                des.EmpNo = item.No;
+                des.StationNo = "19";
                 des.Insert();
             }
 
@@ -513,7 +643,7 @@ namespace CCFlow
             msg += "@发送到了:" + objs.VarToNodeID + ", " + objs.VarToNodeName + ", " + objs.VarAcceptersID + ":" + objs.VarAcceptersName;
             msg += "发送消息:" + objs.ToMsgOfText();
 
-            if (objs.VarAcceptersID == null || objs.IsStopFlow == true)
+            if (objs.VarAcceptersID == null || objs.ItIsStopFlow == true)
                 return msg += "@流程已经结束.";
 
             // 第4个节点:
@@ -523,7 +653,7 @@ namespace CCFlow
             msg += "@发送到了:" + objs.VarToNodeID + ", " + objs.VarToNodeName + ", " + objs.VarAcceptersID + ":" + objs.VarAcceptersName;
             msg += "发送消息:" + objs.ToMsgOfText();
 
-            if (objs.VarAcceptersID == null || objs.IsStopFlow == true)
+            if (objs.VarAcceptersID == null || objs.ItIsStopFlow == true)
                 return msg += "@流程已经结束.";
 
             if (objs.VarAcceptersID.Equals(userNo) == false)
@@ -622,8 +752,8 @@ namespace CCFlow
             {
                 DeptEmp de = new DeptEmp();
                 de.MyPK = dr[0].ToString();
-                de.FK_Emp = dr[1].ToString();
-                de.FK_Dept = dr[2].ToString();
+                de.EmpNo = dr[1].ToString();
+                de.DeptNo = dr[2].ToString();
                 de.OrgNo = dr[3].ToString();
                 de.Insert();
             }

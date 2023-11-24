@@ -80,12 +80,14 @@
 .layui-form-select dl dd.layui-this {
     background-color: #5053f1;
     color: #fff
-}.layui-form-checkbox,.layui-form-select dl dd.layui-disabled{background-color:#fff}.layui-form-selected dl{display:block}.layui-form-checkbox,.layui-form-checkbox *,.layui-form-switch{display:inline-block;vertical-align:middle}.layui-form-selected .layui-edge{margin-top:-9px;-webkit-transform:rotate(180deg);transform:rotate(180deg);margin-top:-3px\9}:root .layui-form-selected .layui-edge{margin-top:-9px\0/IE9}.layui-form-selectup dl{top:auto;bottom:42px}.layui-select-none{margin:5px 0;text-align:center;color:#999}.layui-select-disabled .layui-disabled{border-color:#cacaca!important}.layui-select-disabled .layui-edge{border-top-color:#d2d2d2}.layui-form-checkbox{position:relative;height:30px;line-height:30px;margin-right:10px;padding-right:30px;cursor:pointer;font-size:0;-webkit-transition:.1s linear;transition:.1s linear;box-sizing:border-box}.layui-form-checkbox span{padding:0 10px;height:100%;font-size:14px;border-radius:2px 0 0 2px;background-color:#d2d2d2;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.layui-form-checkbox:hover span{background-color:#c2c2c2}.layui-form-checkbox i{position:absolute;right:0;top:0;width:30px;height:28px;border:1px solid #d2d2d2;border-left:none;border-radius:0 2px 2px 0;color:#fff;font-size:20px;text-align:center}.layui-form-checkbox:hover i{border-color:#c2c2c2;color:#c2c2c2}
+}.layui-form-checkbox,.layui-form-select dl dd.layui-disabled{background-color:#fff}.layui-form-selected dl{display:block}.layui-form-checkbox,.layui-form-checkbox *,.layui-form-switch{display:inline-block;vertical-align:middle}.layui-form-selected .layui-edge{margin-top:-9px;-webkit-transform:rotate(180deg);transform:rotate(180deg);margin-top:-3px\9}:root .layui-form-selected .layui-edge{margin-top:-9px\0/IE9}.layui-form-selectup dl{top:auto;bottom:42px}.layui-select-none{margin:5px 0;text-align:center;color:#999}.layui-select-disabled .layui-disabled{border-color:#cacaca!important}.layui-select-disabled .layui-edge{border-top-color:#d2d2d2}.layui-form-checkbox{position:relative;height:auto;line-height:30px;margin-right:10px;padding-right:30px;cursor:pointer;font-size:0;-webkit-transition:.1s linear;transition:.1s linear;box-sizing:border-box}.layui-form-checkbox span{padding:0 10px;height: auto;font-size:12px;border-radius:2px 0 0 2px;background-color:#d2d2d2;color:#fff;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;white-space: pre-wrap;}.layui-form-checkbox:hover span{background-color:#c2c2c2}.layui-form-checkbox i{position:absolute;right:0;top:0;width:30px;height:28px;border:1px solid #d2d2d2;border-left:none;border-radius:0 2px 2px 0;color:#fff;font-size:20px;text-align:center}.layui-form-checkbox:hover i{border-color:#c2c2c2;color:#c2c2c2}
 .layui-form-checked, .layui-form-checked:hover {
-    border-color: #5053f1
+    border-color: #5053f1;
+	    margin-bottom: 3px;
 }
     .layui-form-checked span, .layui-form-checked:hover span {
-        background-color: #5053f1
+        background-color: #5053f1;
+		white-space: pre-wrap;
     }
     .layui-form-checked i, .layui-form-checked:hover i {
         color: #5053f1

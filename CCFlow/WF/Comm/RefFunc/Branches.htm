@@ -73,22 +73,28 @@
         .el-tag {
             margin: 5px 5px;
         }
+        .el-card__header {
+            padding: 10px 20px;
+        }
+        .el-card__body {
+            padding: 10px 20px;
+        }
     </style>
 </head>
 <body>
-    <!--<div class="container-fluid" style=" width:100%;">
-        <el-button type="primary" click="IsBack()">返回</el-button>
-
-    </div>-->
-    <div class="row row-margin-top" id="app">
-        <el-button v-if="isBackBtn === 0 " type="primary" @click="IsBack()">返回</el-button>
-        <el-tag v-for="tag in tags"
-                :key="tag.id"
-                 closable
-                :type="tag.type"
-                @close="handleClose(tag)">
-            {{tag.name}}
-        </el-tag>
+    <div class="row row-margin-top" style="width: 100%" id="app">
+        <el-card style="margin: 0 8px 8px" shadow="hover">
+            <div slot="header">
+                <span>已选中的部门</span>
+            </div>
+            <el-tag v-for="tag in tags"
+                    :key="tag.id"
+                    closable
+                    :type="tag.type"
+                    @close="handleClose(tag)">
+                {{tag.name}}
+            </el-tag>
+        </el-card>
 
         <el-tree :props="defaultProps"
                  :load="loadNode"
@@ -102,151 +108,187 @@
                  @check-change="handleCheckChange">
         </el-tree>
     </div>
-</body>
-<script type="text/javascript">
-    new Vue({
-        el: '#app',
-        data() {
-            return {
-                checkAll: false,
-                mapExt: null,
-                defaultProps: {
-                    children: 'children',
-                    label: 'name',
-                    isLeaf: (data, node) => {
-                        if (node.level === 4) {
-                            return true
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    checkAll: false,
+                    mapExt: null,
+                    defaultProps: {
+                        children: 'children',
+                        label: 'name',
+                        isLeaf: (data, node) => {
+                            if (node.level === 4) {
+                                return true
+                            }
+                        }
+                    },
+                    jsonTree: [],
+                    rootNo: null,
+                    child: [],
+                    isBackBtn: '',
+                    tags: [],
+                };
+            },
+            methods: {
+                handleClose(tag) {
+                    //console.log(tag);
+                    var en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    en[GetQueryString("AttrOfMInMM")] = tag.id;
+                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), tag.id);
+                    //取消选中时如果tags数组中有已经选中的数据，再进行点击取消删除时进项删除该项
+                    var tmp = $.grep(this.tags, function (value) {
+                        return value.id != tag.id;
+                    });
+                    this.tags = tmp;
+
+                    let chooseRes = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
+                    //console.log(chooseRes);
+                    for (var i = 0; i < chooseRes.length; i++) {
+                        if (chooseRes[i] == tag.id) {
+                            this.$refs.tree.setChecked(tag.id, false)
                         }
                     }
                 },
-                jsonTree: [],
-                rootNo: null,
-                child: [],
-                isBackBtn: '',
-                tags: [],
-            };
-        },
-        methods: {
-            handleClose(tag) {
-                var en = new Entity(GetQueryString("Dot2DotEnName"));
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                en[GetQueryString("AttrOfMInMM")] = tag.id;
-                en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), tag.id);
-                //取消选中时如果tags数组中有已经选中的数据，再进行点击取消删除时进项删除该项
-                var tmp = $.grep(this.tags, function (value) {
-                    return value.id != tag.id;
-                });
-                this.tags = tmp;
-
-                let chooseRes = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
-                console.log(chooseRes);
-                for (var i = 0; i < chooseRes.length; i++) {
-                    if (chooseRes[i] == tag.id) {
-                        this.$refs.tree.setChecked(tag.id, false)
-                    }
-                }
-            },
-            handleCheckChange(data, checked, z) {
-                console.log(data);
-                //console.log(r);
-                //console.log(z);
-                let arr = []
-                let res = this.$refs.tree.getCheckedNodes()
-                res.forEach((item) => {
-                    arr.push(item.id)
-                })
-                var en = new Entity(GetQueryString("Dot2DotEnName"));
-                en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
-                en[GetQueryString("AttrOfMInMM")] = data.id;
-                if (checked == true) {
-                    //判断数据是否存在，如果存在选中时就不再添加，不存在再添加
-                    var flag = false;
-                    for (var i in  this.tags) {
-                        if (this.tags[i].id == data.id) {  
-                            flag = true;  
+                handleCheckChange(data, checked, z) {
+                    //console.log(data);
+                    //console.log(z);
+                    let arr = []
+                    let res = this.$refs.tree.getCheckedNodes()
+                    res.forEach((item) => {
+                        arr.push(item.id)
+                    })
+                    var en = new Entity(GetQueryString("Dot2DotEnName"));
+                    en[GetQueryString("AttrOfOneInMM")] = GetPKVal();
+                    en[GetQueryString("AttrOfMInMM")] = data.id;
+                    en.DeptName = data.name;
+                    if (checked == true) {
+                        //判断数据是否存在，如果存在选中时就不再添加，不存在再添加
+                        var flag = false;
+                        for (var i in this.tags) {
+                            if (this.tags[i].id == data.id) {
+                                flag = true;
+                            }
                         }
-                    } 
-                    if (flag == false) {
-                        this.tags.push({
-                            id: data.id,
-                            name: data.name,
+                        if (flag == false) {
+                            this.tags.push({
+                                id: data.id,
+                                name: data.name,
+                            })
+                        }
+
+                        //选中
+                        en.Save();
+                    } else {
+                        //取消选中时如果tags数组中有已经选中的数据，再进行点击取消删除时进项删除该项
+                        var tmp = $.grep(this.tags, function (value) {
+                            return value.id != data.id;
+                        });
+                        this.tags = tmp;
+                        //取消选中
+                        en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), data.id);
+                    }
+                },
+                //判断是否有上一路径;
+                IsBack() {
+                    this.isBackBtn = GetQueryString("BackBtn"),
+                        console.log(this.isBackBtn);
+                    if (document.referrer.includes("EmpDepts.htm")) {
+                        window.history.go(-1);
+                    } else {
+                        window.history.go(0);
+                    }
+                },
+                //懒加载
+                loadNode(node, resolve) {
+                    if (node.level === 0) {
+                        var roootData = [];
+                        roootData = this.jsonTree.map(key => {
+                            return {
+                                name: key.label,
+                                id: key.id,
+                                children: key.children,
+                            }
                         })
+                        return resolve(roootData);
+                    }
+                    if (node.level > 3) {
+                        return resolve([]);
+                    }
+                    if (node.level > 0) {
+                        var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
+                        ens.Retrieve("ParentNo", node.data.id, "Idx");
+                        this.child = this.creatTreeChildern(ens, node.data.id);
+                        var data = [];
+                        data = this.child.map(item => {
+                            return {
+                                name: item.label,
+                                id: item.id,
+                                children: item.children,
+                            }
+                        })
+                        setTimeout(() => {
+                            resolve(data);
+                        }, 500);
                     }
 
-                    //选中
-                    en.Save();
-                } else {
-                    //取消选中时如果tags数组中有已经选中的数据，再进行点击取消删除时进项删除该项
-                    var tmp = $.grep(this.tags, function (value) {
-                        return value.id != data.id;
+                },
+                createJsonToTree(jsonArray, parentNo) {
+                    //获取ParentNo的数据
+                    var items = $.grep(jsonArray, function (obj) {
+                        return obj.No == parentNo;
                     });
-                    this.tags = tmp;
-                    //取消选中
-                    en.Delete(GetQueryString("AttrOfOneInMM"), GetPKVal(), GetQueryString("AttrOfMInMM"), data.id);
-                }
-            },
-            //判断是否有上一路径;
-            IsBack() {
-                this.isBackBtn = GetQueryString("BackBtn"),
-                    console.log(this.isBackBtn);
-                if (document.referrer.includes("EmpDepts.htm")) {
-                    window.history.go(-1);
-                } else {
-                    window.history.go(0);
-                }
-            },
-            //懒加载
-            loadNode(node, resolve) {
-                if (node.level === 0) {
-                    var roootData = [];
-                    roootData = this.jsonTree.map(key => {
-                        return {
-                            name: key.label,
-                            id: key.id,
-                            children: key.children,
+                    if (items.length != 0) {
+                        this.jsonTree.push({
+                            "id": items[0].No,
+                            "label": items[0].Name,
+                            "children": this.creatTreeChildern(jsonArray, items[0].No),
+                            "state": { checked: checked, disabled: false }
+                        });
+                    } else {
+                        for (var i = 0; i < jsonArray.length; i++) {
+                            var data = jsonArray[i];
+                            if (data.ParentNo.trim() == parentNo) {
+                                var checked = false;
+                                this.jsonTree.push({
+                                    "id": data.No,
+                                    "label": data.Name,
+                                    "children": this.creatTreeChildern(jsonArray, data.No),
+                                    "state": { checked: checked, disabled: false }
+                                });
+                            }
                         }
-                    })
-                    return resolve(roootData);
+                        this._(this.jsonTree);
+                    }
                 }
-                if (node.level > 3) {
-                    return resolve([]);
-                }
-                if (node.level > 0) {
-                    var ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
-                    ens.Retrieve("ParentNo", node.data.id, "Idx");
-                    this.child = this.creatTreeChildern(ens, node.data.id);
-                    var data = [];
-                    data = this.child.map(item => {
-                        return {
-                            name: item.label,
-                            id: item.id,
-                            children: item.children,
+                , _(treeArray) {
+                    $.each(treeArray, function (i, o) {
+                        if ($.isArray(o.children)) {
+                            if (o.children.length == 0) {
+                                o.children = [];
+                            } else {
+                                this._(o.children);
+                            }
                         }
-                    })
-                    setTimeout(() => {
-                        resolve(data);
-                    }, 500);
-                }
-
-            },
-            createJsonToTree(jsonArray, parentNo) {
-                //获取ParentNo的数据
-                var items = $.grep(jsonArray, function (obj) {
-                    return obj.No == parentNo;
-                });
-                if (items.length != 0) {
-                    this.jsonTree.push({
-                        "id": items[0].No,
-                        "label": items[0].Name,
-                        "children": this.creatTreeChildern(jsonArray, items[0].No),
-                        "state": { checked: checked, disabled: false }
                     });
-                } else {
+                },
+                creatTreeChildern(jsonArray, parentNo) {
+                    var childList = []
                     for (var i = 0; i < jsonArray.length; i++) {
                         var data = jsonArray[i];
-                        if (data.ParentNo.trim() == parentNo) {
+                        if (data.ParentNo == parentNo) {
                             var checked = false;
-                            this.jsonTree.push({
+                            this.jsonTree.filter((ID) => {
+                                if (ID.id === parentNo) ID.children.push({
+                                    "id": data.No,
+                                    "label": data.Name,
+                                    "children": this.creatTreeChildern(jsonArray, data.No),
+                                    "state": { checked: checked, disabled: false }
+                                })
+                            })
+                            childList.push({
                                 "id": data.No,
                                 "label": data.Name,
                                 "children": this.creatTreeChildern(jsonArray, data.No),
@@ -254,85 +296,50 @@
                             });
                         }
                     }
-                    this._(this.jsonTree);
-                }
-            }
-            , _(treeArray) {
-                $.each(treeArray, function (i, o) {
-                    if ($.isArray(o.children)) {
-                        if (o.children.length == 0) {
-                            o.children = [];
-                        } else {
-                            this._(o.children);
-                        }
-                    }
-                });
-            },
-            creatTreeChildern(jsonArray, parentNo) {
-                var childList = []
-                for (var i = 0; i < jsonArray.length; i++) {
-                    var data = jsonArray[i];
-                    if (data.ParentNo == parentNo) {
-                        var checked = false;
-                        this.jsonTree.filter((ID) => {
-                            if (ID.id === parentNo) ID.children.push({
-                                "id": data.No,
-                                "label": data.Name,
-                                "children": this.creatTreeChildern(jsonArray, data.No),
-                                "state": { checked: checked, disabled: false }
-                            })
-                        })
-                        childList.push({
-                            "id": data.No,
-                            "label": data.Name,
-                            "children": this.creatTreeChildern(jsonArray, data.No),
-                            "state": { checked: checked, disabled: false }
-                        });
-                    }
-                }
 
-                return childList;
-            },
-            //获取父节点数据
-            loadTree() {
-                var webUser = new WebUser()
-                //global
-                let global = window;
-                global.selectedNodes = [];
-                global.selectedRows = [];
-                this.rootNo = GetQueryString("RootNo");
-                if (this.rootNo == "@WebUser.FK_Dept")
-                    this.rootNo = webUser.FK_Dept;
-                if (webUser.CCBPMRunModel == 2)
-                    this.rootNo = webUser.OrgNo;
-                if (this.rootNo == null || this.rootNo == "")
-                    this.rootNo = webUser.FK_Dept;
-                let ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
-                ens.Retrieve("ParentNo", this.rootNo, "Idx");                   
-                this.createJsonToTree(ens, this.rootNo);
-                if (ens.length == 0) {
-                    let ParentNo = 'OrgNo';
-                    ens.Retrieve(ParentNo, this.rootNo, "Idx");
+                    return childList;
+                },
+                //获取父节点数据
+                loadTree() {
+                    var webUser = new WebUser()
+                    //global
+                    let global = window;
+                    global.selectedNodes = [];
+                    global.selectedRows = [];
+                    this.rootNo = GetQueryString("RootNo");
+                    if (this.rootNo == "@WebUser.FK_Dept")
+                        this.rootNo = webUser.FK_Dept;
+                    if (webUser.CCBPMRunModel == 2)
+                        this.rootNo = webUser.OrgNo;
+                    if (this.rootNo == null || this.rootNo == "")
+                        this.rootNo = webUser.FK_Dept;
+                    let ens = new Entities(GetQueryString("EnsOfM")); //BP.Port.Depts
+                    ens.Retrieve("ParentNo", this.rootNo, "Idx");
                     this.createJsonToTree(ens, this.rootNo);
-                }
-                //查询选中的部门
-                ens = new Entities(GetQueryString("Dot2DotEnName") + "s");
-                ens.Retrieve(GetQueryString("AttrOfOneInMM"), GetPKVal());
+                    if (ens.length == 0) {
+                        let ParentNo = 'OrgNo';
+                        ens.Retrieve(ParentNo, this.rootNo, "Idx");
+                        this.createJsonToTree(ens, this.rootNo);
+                    }
+                    //查询选中的部门
+                    ens = new Entities(GetQueryString("Dot2DotEnName") + "s");
+                    ens.Retrieve(GetQueryString("AttrOfOneInMM"), GetPKVal());
 
-                for (var i = 0; i < ens.length; i++) {
-                    var en = ens[i];
-                    this.tags.push({
-                        id: en.FK_Dept,
-                        name: en.FK_DeptText,
-                    })
+                    for (var i = 0; i < ens.length; i++) {
+                        var en = ens[i];
+                        this.tags.push({
+                            id: en.FK_Dept,
+                            name: en.DeptName,
+                        })
 
-                }
-                console.log(this.tags);
+                    }
+                    //console.log(this.tags);
+                },
             },
-        },
-        created() {
-            this.loadTree();
-        },
-    })
-</script>
+            created() {
+                this.loadTree();
+            },
+        })
+    </script>
+</body>
 </html>

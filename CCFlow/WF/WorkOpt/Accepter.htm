@@ -137,6 +137,7 @@
         if (isFrameCross == null || isFrameCross == undefined || isFrameCross == "" || isFrameCross == "null")
             isFrameCross = 0;
         var isDelayedSend = GetQueryString("IsDelayedSend") || "0";
+        var pageFrom = GetQueryString("PageFrom");
         $(function () {
             
             var IsSend = GetQueryString("IsSend");

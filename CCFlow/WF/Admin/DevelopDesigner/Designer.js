@@ -175,7 +175,7 @@ UE.plugins['text'] = function () {
             var w = prompt("请输入：比如25(数值)或者50%(百分比)", baidu.editor.dom.domUtils.getStyle(this.anchorEl, 'width').replace("px", ""));
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result && w.indexOf("%")!=-1) {
+            if (result && w.indexOf("%") != -1) {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -373,7 +373,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
     }
 
     if (shap == 'Btn') {
-        var url = '../../Comm/EnOnly.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + fk_mapdata + "_" + mypk;
+        var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.FrmBtn&PKVal=' + fk_mapdata + "_" + mypk;
         CCForm_ShowDialog(url, '按钮' + mypk + '属性', null, null, shap, fk_mapdata + "_" + mypk, anchorEl);
         return;
     }
@@ -492,7 +492,7 @@ function showFigurePropertyWin(shap, mypk, fk_mapdata, anchorEl) {
 function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
 
     if (w == null || w == undefined)
-        w = window.innerWidth* 3/4;
+        w = window.innerWidth * 3 / 4;
 
     if (h == null || h == undefined)
         h = 460;
@@ -605,9 +605,9 @@ function CCForm_ShowDialog(url, title, w, h, shap, MyPK, anchorEl) {
                 en.SetPKVal(MyPK);
                 if (en.RetrieveFromDBSources() == 0)
                     UE.dom.domUtils.remove(anchorEl, false);
-                else{
-                    UE.dom.domUtils.setStyle(anchorEl, 'width', en.UIWidth+'px');
-                    UE.dom.domUtils.setStyle(anchorEl, 'height', en.UIHeight+'px');
+                else {
+                    UE.dom.domUtils.setStyle(anchorEl, 'width', en.UIWidth + 'px');
+                    UE.dom.domUtils.setStyle(anchorEl, 'height', en.UIHeight + 'px');
                 }
                 break;
             case "Button":
@@ -809,7 +809,7 @@ UE.plugins['enum'] = function () {
 
             var percent = new RegExp(/^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/);
             var result = percent.test(w);
-            if (result && w.indexOf("%") != -1){
+            if (result && w.indexOf("%") != -1) {
                 baidu.editor.dom.domUtils.setStyle(this.anchorEl, 'width', w);
                 return;
             }
@@ -1660,7 +1660,7 @@ UE.plugins['component'] = function () {
                     frmBtn.Delete();
                 }
 
-                
+
                 baidu.editor.dom.domUtils.remove(this.anchorEl, false);
             }
             this.hide();
@@ -2648,7 +2648,7 @@ function Save() {
 
     //审核组件  判断当前是否是节点表单，节点表单才包含审核组件
     var fk_node = GetQueryString("FK_Node");
-    if (fk_node != null && fk_node != undefined && fk_node != "0" && fk_node !="undefined") {
+    if (fk_node != null && fk_node != undefined && fk_node != "0" && fk_node != "undefined") {
         var element = getElementByAttr(imgs, "data-type", "WorkCheck");
         if (element == null) {
             var node = new Entity("BP.WF.Node", fk_node);

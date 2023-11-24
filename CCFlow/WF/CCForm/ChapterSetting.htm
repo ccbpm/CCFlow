@@ -39,10 +39,10 @@
         var treeList = [];
         var groupFields = null;
         var attrs = null;
-        var showGroup;
-        var showAttrs;
-        var showGroupRes = [];
-        var showAttrRes = [];
+        var hideGroup;
+        var hideAttrs;
+        var hideGroupRes = [];
+        var hideAttrRes = [];
         var table;
         layui.use(['tree', 'jquery', 'laypage', 'form', 'treeTable', 'table', 'layer'], function () {
             var treeTable = layui.treeTable, form = layui.form;
@@ -63,15 +63,17 @@
                 var en = new Entity(frmID, oid);
                 console.log("获取的表单设置信息：", en);
                 //存储显示状态
-                showGroup = en.GetPara("ShowGroup");
-                if (showGroup == undefined)
-                    showGroup = [];
-                else showGroup = showGroup.split(',');
-                showAttrs = en.GetPara("ShowAttrs");
-                if (showAttrs == undefined)
-                    showAttrs = [];
-                else showAttrs = showAttrs.split(',');
-                console.log(showGroup, showAttrs);
+                hideGroup = en.GetPara("HideGroup");
+                if (hideGroup == undefined || hideGroup == null || hideGroup == '')
+                    hideGroup = [];
+                else hideGroup = hideGroup.split(',');
+                hideAttrs = en.GetPara("HideAttrs");
+                if (hideAttrs == undefined || hideAttrs == null || hideAttrs == '')
+                    hideAttrs = [];
+                else hideAttrs = hideAttrs.split(',');
+                hideAttrRes = hideAttrs;
+                hideGroupRes = hideGroup;
+                console.log(hideAttrRes, hideGroupRes);
 
                 //形成树形数据
                 groupFields.forEach((item) => {
@@ -81,10 +83,10 @@
                             title: item.Lab,
                             children: [],
                             parentId: "0",
+                            treeType:'field',//章节
                             IsShow: hideOrShow(item.OID.toString(), "field"),//判断是否显示
                             ...item,
                         };
-                        if (child.IsShow) showGroupRes.push(child.id);
                         child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
                         treeList.push(child);
                     }
@@ -92,27 +94,30 @@
                 console.log(treeList);
                 //渲染表格
                 tableRender();
+                table.expandAll();
                 //渲染表格方法
                 function tableRender() {
                     table = treeTable.render({
-                        elem: '#menu',
-                        data: treeList,
+                        elem: '#menu',//容器的id
+                        data: treeList,//数据源
                         //toolbar: 'default',
                         //height: 'full-200',
+                        //数据源是列表也行，根据parentId构造树形结构；是树形的也可以，根children构造树形结构
                         tree: {
                             treeSpid: '0',		//最上级的父级id
-                            iconIndex: 1,
-                            isPidData: true,
+                            iconIndex: 1,//展开符号在哪一列
+                            isPidData: true,//根据parentId来构造树形结构
                             idName: 'id',//父ID
                             pidName: 'parentId',//子ID
                             openName: 'open',// 是否默认展开的字段名
                         },
-                        defaultToolbar: ['filter', 'print', 'exports'],
+                        defaultToolbar: ['filter', 'print', 'exports'],//右上角
                         cols: [[
-                            { type: 'numbers', fixed: 'left' }
+                            { type: 'numbers', fixed: 'left' }//复选，单选
                             , { field: 'title', title: '名称' }
                             , {
                                 field: 'CtrlType', title: '内容类型', align: 'center', templet: function (record) {
+                                    //自定义渲染
                                     return '<span>' + getCtrlTypeText(record.CtrlType) + '</span>';
                                 }
                             }
@@ -140,30 +145,35 @@
 
                 //监听显示状态操作
                 form.on('radio(hideOrShow)', function (data) {
-                    console.log(data.value.split('+')[1] === "true");
-                    var id = data.value.split('+')[0];
-                    var isChecked = data.value.split('+')[1] === "true" ? true : false;
-
-                    var isGroup = groupFields.filter((item) => item.OID == id);//本条数据存在于章节数据吗
-                    var isAttrs = attrs.filter((item) => item.KeyOfEn == id);//本条数据存在于字段数据吗
-                    if (isAttrs.length > 0 && isGroup.length > 0) {
-                        alert("无法判断本条数据是章节数据还是字段数据，二者都有这个key");
-                        return;
-                    };
+                    var id = data.value.split('+')[0];//节点id
+                    var isChecked = data.value.split('+')[1] === "true" ? true : false;//节点显示或者隐藏
                     
                     EachList(id, treeList, isChecked);
+                    // 获取垂直滚动条的位置
+                    var scrollTopPosition = $(window).scrollTop();
+
+                    // 获取水平滚动条的位置
+                    var scrollLeftPosition = $(window).scrollLeft();
+                    table.expandAll
                     tableRender();
-                    table.expand(id,true);//刷新表格后展开当前行
+                    //table.expand(id, true);//刷新表格后展开当前行
+                    table.expandAll();
+                    // 调整滚动条的垂直位置
+                    $(window).scrollTop(scrollTopPosition);
+
+                    // 调整滚动条的水平位置
+                    $(window).scrollLeft(scrollLeftPosition);
+
                 });
 
                 
             });
             //递归寻找当前节点(显示隐藏状态改变的当前节点),参数：要寻找的id，要遍历的列表,要改变的状态
-            function EachList(id, list,isShow) {
+            function EachList(id, list, isShow) {
                 $(list).each(function (i, item) {
                     if (item.id === id) {
                         item.IsShow = isShow;
-                        changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                        changeRes(item.id, isShow, item.treeType);//改变结果数组
                         if (item.children && item.children.length > 0 && isShow === false) {
                             //当本节点的状态变为隐藏，递归改变本节点的子节点状态
                             EachChildern(item.children, isShow);
@@ -186,13 +196,14 @@
                 $(data).each(function (i, item) {
                     if (!isShow) {
                         item.IsShow = isShow;
-                        changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                        changeRes(item.id, isShow, item.treeType);//改变结果数组
+                    }
+
+                    if (Array.isArray(item.children)&&item.children.length > 0) {
+                        EachChildern(item.children, isShow);
                     }
                     if (item.children == undefined)
                         return true;
-                    if (item.children.length > 0) {
-                        EachChildern(item.children, isShow);
-                    }
                 })
             }
 
@@ -208,7 +219,7 @@
                         var findChild = EachParent(id, item.children, isShow);
                         if (findChild == "FindChild") {
                             item.IsShow = isShow;
-                            changeRes(item.id, isShow, item.CtrlType);//改变结果数组
+                            changeRes(item.id, isShow, item.treeType);//改变结果数组
                             return "FindChild";
                         }
                     }
@@ -216,27 +227,34 @@
                 return "NotChild";
             };
 
-            //改变显示结果数组showGroupRes和showAttrRes
-            function changeRes(id, isShow, CtrlType) {
-                if (isShow) {//如果是显示状态
-                    if (CtrlType == undefined) {//没有CtrlType这个属性，说明这个id是字段
-                        showAttrRes.push(id);
-                    } else showGroupRes.push(id);
-                } else {//如果是隐藏状态，从结果数组中去掉这个id
-                    if (CtrlType == undefined) {//没有CtrlType这个属性，说明这个id是字段
-                        showAttrRes = showAttrRes.filter((item) => item != id)
-                    } else showGroupRes = showGroupRes.filter((item) => item != id);
+            //改变显示结果数组hideGroupRes和hideAttrRes
+            function changeRes(id, isShow, treeType) {
+                if (isShow) {//如果是显示状态,从hide结果数组中去掉这一个
+                    if (treeType == "attr") {//attr是字段
+                        hideAttrRes = hideAttrRes.filter((item) => item != id)
+                    } else {
+                        hideGroupRes = hideGroupRes.filter((item) => item != id);
+                    }
+                } else {//如果是隐藏状态，往hide结果数组中加入这个id
+                    if (treeType == "attr") {//attr是字段
+                        if (hideAttrRes.indexOf(id) == -1)
+                            hideAttrRes.push(id);
+                    } else {
+                        if (hideGroupRes.indexOf(id) == -1)
+                            hideGroupRes.push(id);
+                    }
                 }
             };
 
             // 保存，测试使用，保存方法在父级
             function Save() {
-                console.log(showGroupRes.join(','), showAttrRes.join(','));
+                console.log(hideGroupRes.join(','), hideAttrRes.join(','));
+                return;
                 var en = new Entity(frmID, oid);
-                if (showGroupRes.length != 0 )
-                    en.SetPara("ShowGroup", showGroupRes.join(','));
-                if (showAttrRes.length != 0)
-                    en.SetPara("ShowAttrs", showAttrRes.join(','));
+                //if (hideGroupRes.length != 0 )
+                    en.SetPara("HideGroup", '');
+                //if (hideAttrRes.length != 0)
+                    en.SetPara("HideAttrs", '');
                 en.Update();
             }
         })
@@ -250,10 +268,10 @@
                         title: item.Lab,
                         children: [],
                         parentId: parentId.toString(),
+                        treeType:'field',
                         IsShow: hideOrShow(item.OID.toString(), "field"),//判断是否显示
                         ...item,
                     };
-                    if (child.IsShow) showGroupRes.push(child.id);
                     child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
                     children.push(child);
                 }
@@ -273,17 +291,18 @@
                         id: item.KeyOfEn,
                         title: item.Name,
                         parentId: groupId.toString(),
+                        treeType:'attr',//字段
                         IsShow: hideOrShow(item.KeyOfEn, "attr"),//判断是否显示
                         ...item,
                     }
                     if ((ctrlType === "" || ctrlType == null) && attr.TextModel != 1) {//默认型控件，只显示文本字段
                         if (attr.MyDataType == 1 && attr.UIContralType == 0) {
-                            if (attr.IsShow) showAttrRes.push(attr.id);
+                            //if (attr.IsShow) hideAttrRes.push(attr.id);
                             attrList.push(attr);
                         };
 
                     } else if (ctrlType === "Attr") {//Attr控件所有类型的字段都显示
-                        if (attr.IsShow) showAttrRes.push(attr.id);
+                        //if (attr.IsShow) hideAttrRes.push(attr.id);
                         attrList.push(attr);
                     };
                 };
@@ -315,13 +334,9 @@
         //判断这一个章节或字段是否显示
         function hideOrShow(key, fieldOrAttr) {
             if (fieldOrAttr == "field") {
-                if (showGroup.length == 0)//如果showGroup是空，则所有的groupFields都显示
-                    return true;
-                return showGroup.indexOf(key) > -1 ? true : false;
+                return hideGroup.indexOf(key) > -1 ? false : true;
             } else if (fieldOrAttr == "attr") {
-                if (showAttrs.length == 0)//如果showAttrs是空，则所有的attr都显示
-                    return true;
-                return showAttrs.indexOf(key) > -1 ? true : false;
+                return hideAttrs.indexOf(key) > -1 ? false : true;
             };
         }
        
@@ -362,8 +377,8 @@
                     </div>
 
                     <script type="text/html" id="switchTpl">
-                        <input type="radio"  value="{{d.id}}+{{true}}" title="显示" {{ d.IsShow == true ? "checked" : "" }} lay-filter="hideOrShow">
-                        <input type="radio"  value="{{d.id}}+{{false}}" title="隐藏" {{ d.IsShow == false ? "checked" : "" }} lay-filter="hideOrShow">
+                        <input type="radio"  value="{{d.id}}+{{true}}+{{d.treeType}}" title="显示" {{ d.IsShow == true ? "checked" : "" }} lay-filter="hideOrShow">
+                        <input type="radio"  value="{{d.id}}+{{false}}+{{d.treeType}}" title="隐藏" {{ d.IsShow == false ? "checked" : "" }} lay-filter="hideOrShow">
                     </script>
 
                 </div>

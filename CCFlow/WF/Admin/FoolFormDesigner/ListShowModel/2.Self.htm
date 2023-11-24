@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动发起</title>
+    <link href="../../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../../Scripts/EasyUIUtility.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="DDLBar.js" type="text/javascript"></script>
+    <script src="../../CCFlowEnum.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            //初始化下拉框.
+            InitBar(ListShowModel.Self);
+            var no = GetQueryString("FK_MapData");
+            var mapDtl = new Entity("BP.Sys.MapDtl", no);
+            $("#UrlDtl").val(mapDtl.UrlDtl);
+
+        });
+
+        function Save() {
+            $("#Btn_Save").html("正在保存请稍后...")
+            //更新节点表单类型.
+            var no = GetQueryString("FK_MapData");
+            var mapDtl = new Entity("BP.Sys.MapDtl", no);
+            mapDtl.ListShowModel = ListShowModel.Self;
+            mapDtl.UrlDtl = $("#UrlDtl").val();
+            if (!mapDtl.UrlDtl) {
+                alert('自定义的URL不能为空');
+                return;
+            }
+            if (mapDtl.Update() == 0)
+                mapDtl.Insert();
+            alert("保存成功")
+            Reload();
+        }
+    </script>
+</head>
+<body>
+    <div id="bar">
+        <textarea id="UrlDtl" name="UrlDtl" style="width:80%;height:50px"></textarea>
+    </div>
+
+    <fieldset id="help">
+        <legend id="help">
+             自定义模式. 
+        </legend>
+        <ul>
+            <li>定义: 从表展示方式为自定义URL </li>
+            <li>说明：该模式下，是当现在的从表不能满足客户对数据展现采集的要求，需要写一个自定义的url实现，但是数据还是要存储在当前从表里面来。</li>
+            <li>比如：对输入的复杂的计算,目前的从表不能控制到位.</li>
+            <li> <img class="HelpImg" src="ListShowModel2.png" /> </li>
+        </ul>
+    </fieldset>
+</body>
+</html>

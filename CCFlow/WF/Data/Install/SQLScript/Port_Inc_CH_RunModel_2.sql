@@ -91,7 +91,7 @@ INSERT INTO Port_Emp (No,UserID,Name,Pass,FK_Dept,Tel,Email,EmpSta,OrgNo) VALUES
  
 -- Port_DeptEmp 人员与部门的对应 ;
 DELETE FROM Port_DeptEmp;
-INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,DeptName,StationNo,StationNoT,OrgNo) VALUES('100_yuwen','ccs_yuwen','100','集团总部','01','总经理','ccs');
+INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,DeptName,StationNo,StationNoT,OrgNo) VALUES('100_ccs_yuwen','ccs_yuwen','100','集团总部','01','总经理','ccs');
 
 -- 市场部 ;
 INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,DeptName,StationNo,StationNoT,OrgNo) VALUES('1001_ccs_zhanghaicheng','ccs_zhanghaicheng','1001','集团市场部','02','市场部经理','ccs') ;
@@ -115,7 +115,7 @@ INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,DeptName,StationNo,StationNoT,OrgN
 INSERT INTO Port_DeptEmp (MyPK,FK_Emp,FK_Dept,DeptName,StationNo,StationNoT,OrgNo) VALUES('1005_ccs_liyan','ccs_liyan','1005','集团总部','11','人力资源助理岗','ccs') ;
 
 -- Port_DeptEmpStation 人员与岗位的对应 ;
-INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station,OrgNo) VALUES('100_ccs_yuwen_01','ccs_100','ccs_yuwen','01','ccs')  ;
+INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station,OrgNo) VALUES('100_ccs_yuwen_01','100','ccs_yuwen','01','ccs')  ;
 
 -- 市场部; 
 INSERT INTO Port_DeptEmpStation (MyPK,FK_Dept,FK_Emp,FK_Station,OrgNo) VALUES('1001_ccs_zhanghaicheng_02','1001','ccs_zhanghaicheng','02','ccs')  ;

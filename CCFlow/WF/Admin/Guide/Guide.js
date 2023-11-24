@@ -169,7 +169,9 @@ function HiddenShow() {
 }
 
 function Frm() {
-
+    if (flowNo == null) {
+        flowNo = GetQueryString("flowNo");
+    }
     var flow = new Entity("BP.WF.Flow", flowNo);
 
     var flowDevModel = flow.GetPara("FlowDevModel") || flow.FlowDevModel; //设计模式.

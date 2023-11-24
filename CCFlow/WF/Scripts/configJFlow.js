@@ -8,7 +8,7 @@ var basePath = basePath();
 var Handler = basePath + "/WF/Comm/ProcessRequest"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
 var webUser = null; //定义通用变量用户信息
 var IsIELower10 = false;
-
+var CustomerNo = "BKGY";//客户编号
 var ver = IEVersion();
 if (ver == 6 || ver == 7 || ver == 8 || ver == 9)
     IsIELower10 = true;

@@ -14,22 +14,13 @@ function DtlAthTable_Init(athchment, athDivID, refPKVal) {
 * @param athDivID 生成的附件信息追加的位置
 */
 function InitDtlAthPage(athchmentMyPK, athDivID, refPKVal) {
-    var athchment = new Entity("BP.Sys.FrmAttachment", athchmentMyPK);
-    //文件类型指定的任意文件，表格展示
-    if (athchment.FileType == 0) {
-        var index = athDivID.replace("Div_" + athchmentMyPK + "_", "");
-        var _html ="<a href='javaScript:void(0);' onclick='OpenDtlAth(this,\""+athchmentMyPK+"\")' style='margin-left:20px' titile='附件'> <i class='fa fa-upload' aria-hidden='true'></a>"
-        $("#" + athDivID).after(_html);
-        $("#" + athDivID).remove();
-        return;
-    }
-
+    //var athchment = new Entity("BP.Sys.FrmAttachment", athchmentMyPK);
     //1.请求后台数据
     var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
     handler.AddUrlData();
     handler.AddPara("RefOID", refPKVal);
-    handler.AddPara("FK_FrmAttachment", athchment.MyPK);
-    handler.AddPara("FK_MapData", athchment.FK_MapData);
+    handler.AddPara("FK_FrmAttachment", athchmentMyPK);
+    handler.AddPara("FK_MapData", dbDtl.No);
     var data = handler.DoMethodReturnString("Ath_Init");
     if (data.indexOf('err@') == 0) {
         //执行方法报错
@@ -47,13 +38,33 @@ function InitDtlAthPage(athchmentMyPK, athDivID, refPKVal) {
     data = JSON.parse(data);
     athDesc = data["AthDesc"][0]; // 附件属性
     var dbs = data["DBAths"];  // 附件列表数据
+    //文件类型指定的任意文件，表格展示
+    if (athDesc.FileType == 0) {
+        var index = athDivID.replace("Div_" + athchmentMyPK + "_", "");
+        var _html = "<span id='" + athDivID.replace("Div_", "Span_") + "'>上传附件(" + dbs.length +")</span><a href='javaScript:void(0);' onclick='OpenDtlAth(this,\"" + athchmentMyPK + "\")' style='margin-left:20px' titile='附件'> <i class='fa fa-upload' aria-hidden='true'></i></a>"
+        $("#" + athDivID).after(_html);
+        $("#" + athDivID).remove();
+        return;
+    }
+
+    
     //图片显示
-    $("#" + athDivID).html(FileShowPic_Dtl(athDesc, dbs, athDivID, refPKVal,athchment.FK_MapData));
+    $("#" + athDivID).html(FileShowPic_Dtl(athDesc, dbs, athDivID, refPKVal, athDesc.FK_MapData));
     $.each($("#" + athDivID+" .athImg"), function (index, item) {
         $(item).on("click", function () {
             var _this = $(this); //将当前的pimg元素作为_this传入函数  
             var src = _this.parent().css("background-image").replace("url(\"", "").replace("\")", "")
             imgDtlShow(this, src);
+        });
+        $(item).on("mouseover", function () {
+            var _this = $(this);  
+            _this.prev().show();
+           
+        });
+        $(item).on("mouseout", function () {
+            var _this = $(this);
+            _this.prev().hide();
+
         });
     })    
 }
@@ -73,19 +84,16 @@ function FileShowPic_Dtl(athDesc, dbs,athDivID,refPKVal,fk_mapData) {
         var db = dbs[i];
         var url = GetFileStream(db.MyPK, db.FK_FrmAttachment);
         _Html += "<div id='" + db.MyPK + "' class='image-item athInfo' style='background-image: url(&quot;" + url + "&quot;);width:135px !important'>";
-        if ((athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == webUser.No)))
-            _Html += "<div class='image-close' onclick='Del(\"" + db.MyPK + "\",\"" + db.FK_FrmAttachment + "\",\"" + athDivID + "\",\"" + fk_mapData +"\")'>X</div>";
+        if (pageData.IsReadonly != "1" && (athDesc.DeleteWay == 1) || ((athDesc.DeleteWay == 2) && (db.Rec == webUser.No)))
+            _Html += "<div class='image-close' style='display:none' onclick='Del(\"" + db.MyPK + "\",\"" + db.FK_FrmAttachment + "\",\"" + athDivID + "\",\"" + fk_mapData +"\")'>X</div>";
         _Html += "<div style ='width: 100%; height: 100%;' class='athImg' ></div>";
         _Html += "<div class='image-name' id = 'name-0-0' > ";
-       /* if (athDesc.IsDownload == 0)
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' >" + db.FileName + "</p>";
-        else
-            _Html += "<p style = 'text-align:center;width:63.4px;margin:0;padding:0;overflow:hidden;text-overflow: ellipsis;white-space: nowrap' ><a href=\"javascript:Down2018('" + db.MyPK + "');\" title='" + db.FileName.split(".")[0] + "'>" + db.FileName.split(".")[0] + "</a></p>";*/
+
         _Html += "</div>";
         _Html += "</div>";
     }
     //可以上传附件，增加上传附件按钮
-    if (athDesc.IsUpload == true && pageData.IsReadonly != "1") {
+    if (dbs.length<athDesc.TopNumOfUpload &&  athDesc.IsUpload == true && pageData.IsReadonly != "1") {
 
         _Html += "<div class='image-item space' style='width: 135px !important'><input type='file' id='file_" + athDivID + "'name='file_" + athDesc.MyPK + "' accept='" + exts + "' onchange='UploadChangeAth(\"" + athDesc.MyPK + "\",\"" + athDivID + "\",\"" + refPKVal + "\"," + athDesc.FileMaxSize + "," + athDesc.TopNumOfUpload + "," + dbs.length + ",\"" + fk_mapData+"\");'></div>";
     }
@@ -265,7 +273,6 @@ function imgDtlShow(obj, src) {
 
 //打开附件.
 function OpenDtlAth(obj, athMyPK) {
-    debugger
     var index = $(obj).parent().parent().attr("data-id");
     var dtlOID = $(obj).parent().parent().data().data.OID || 0;
     var workID = GetQueryString("RefPKVal");
@@ -283,20 +290,22 @@ function OpenDtlAth(obj, athMyPK) {
         var W = parent.window.innerWidth / 2;
         parent.OpenLayuiDialog(url, "从表多附件", W, 70, "auto", false, false, false, null, function () {
             //关闭窗口事件
-            AthNum = $("#athModel_" + dtlName + "_AthMDtl").find("a").length;
-            var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-            $("#Ath_" + rowCurrentIndex).html(AthNum);
-            $("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
+            var iframe = $(parent.window.frames["dlg"]).find("iframe");
+            if (iframe.length > 0) {
+                AthNum = iframe[0].contentWindow.athNum;
+                $("#Span_" + athMyPK + "_" + index).html("上传附件(" + AthNum +")");
+            }
 
         });
         return;
     }
     OpenBootStrapModal(url, "从表多附件", window.innerWidth / 2, 70, "auto", false, false, false, null, function () {
         //关闭窗口事件
-        AthNum = $("#athModel_" + dtlName + "_AthMDtl").find("a").length;
-        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-        $("#Ath_" + rowCurrentIndex).html(AthNum);
-        $("#TB_AthNum_" + rowCurrentIndex).val(AthNum);
+        var iframe = $(window.frames["dlg"]).find("iframe");
+        if (iframe.length > 0) {
+            AthNum = iframe[0].contentWindow.athNum;
+            $("#Span_" + athMyPK + "_" + index).html("上传附件(" + AthNum + ")");
+        }
 
     });
 }

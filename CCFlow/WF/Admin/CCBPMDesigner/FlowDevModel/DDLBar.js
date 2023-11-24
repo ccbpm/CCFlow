@@ -22,7 +22,7 @@ function InitBar(optionKey) {
     }
     html += "</select>";
 
-    var sorts = new Entities("BP.WF.Admin.FlowSorts");
+    var sorts = new Entities("BP.WF.Template.FlowSorts");
     var webUser = new WebUser();
     if (webUser.CCBPMRunModel == 0)
         sorts.RetrieveAll();

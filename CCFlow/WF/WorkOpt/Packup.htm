@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>打包下载</title>
-    
+
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
@@ -39,11 +39,23 @@
                 }
                 var html = "";
                 html += "<fieldset>";
-                html += "<legend>ND" + GetQueryString("FK_Node") + "绑定的表单</legend>";
+                var title = GetQueryString("FK_Node");
+                if (!!title) {
+                    html += "<legend>ND" + title + "绑定的表单</legend>";
+                }
                 html += "<ul>";
-               
+
+                //for (var i = 0; i < data.length; i++) {
+                //    html += "<li><a href='javaScript:void(0)' target=_blank onclick='PackUpPDF(\"" + data[i].No + "\",\"" + data[i].Name + "\")' >" + data[i].Name + "</a></li>";
+                //}
                 for (var i = 0; i < data.length; i++) {
-                    html += "<li><a href='javaScript:void(0)' target=_blank onclick='PackUpPDF(\"" + data[i].No + "\",\"" + data[i].Name + "\")' >" + data[i].Name + "</a></li>";
+                    var path = data[i].Name.replace("../", "").replace("../", "");
+                    if (data[i].No == "zip") {
+                        html += "<li><a href='" + path + "' target=_blank download>" + data[i].No + "下载</a></li>"
+                    } else {
+                        html += "<li><a href='" + basePath + "/" + path + "' target=_blank download>" + data[i].No + "下载</a></li>"
+
+                    }
                 }
                 html += "<li>说明：点击上面的表单名称生成PDF进行打印</li>";
                 html += "</ul>";
@@ -141,7 +153,7 @@
                 return;
             }
             var url = JSON.parse(data);
-            
+
             downloadFile(url[0].Name);
         }
 
@@ -154,17 +166,15 @@
     </script>
 
     <style type="text/css">
-        #tb_msg
-        {
+        #tb_msg {
             height: 72px;
             width: 272px;
-            
         }
     </style>
 </head>
 <body>
- 
- <div id="Msg"><img src='../Img/loading.gif' />正在加载请稍候... </div>
+
+    <div id="Msg"><img src='../Img/loading.gif' />正在加载请稍候... </div>
 
 </body>
 </html>

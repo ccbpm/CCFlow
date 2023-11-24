@@ -95,6 +95,7 @@ function beforeUploadFun(opt) {
 * 初始化附件列表信息
 * @param athDivID 生成的附件信息追加的位置
 */
+var athNum = 0;
 function InitAthPage(athDivID, uploadUrl) {
     AthParams.PKVal = athRefPKVal;
     //1.请求后台数据
@@ -123,6 +124,7 @@ function InitAthPage(athDivID, uploadUrl) {
     data = JSON.parse(data);
     athDesc = data["AthDesc"][0]; // 附件属性
     var dbs = data["DBAths"];  // 附件列表数据
+    athNum = dbs.length;
     //不显示附件分组
     if (athDesc.IsVisable == "0") {
         $("#" + athDivID).hide();
@@ -234,9 +236,6 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
         _html += "<th  style='" + colstyle + "width:50px;'>序号</th>";
         if (isHaveSort == true)
             _html += "<th style='" + colstyle + "width:120px' nowrap=true >" + sortColoum + "</th>";
-        //if ((athDesc.IsUpload == 0 || pageData.IsReadonly == "1") || athDesc.IsExpCol == 1)
-        //    _html += "<th  style='" + colstyle + "width:200px'>文件名</th>";
-        //else
         _html += "<th  style='" + colstyle + "width:200px'>文件名</th>";
         //_html += "<th  style='" + colstyle + "width:50px;'>大小KB</th>";
         _html += "<th  style='" + colstyle + "width:120px;'>上传时间</th>";
@@ -265,10 +264,12 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
         }
         //增加操作列
         _html += "<th  nowrap=true  style='" + colstyle + "width:23%;text-align: center;' >";
+        _html += "操作";
+        if (athDesc.IsEnableTemplate == 1 && (athDesc.IsUpload == true && pageData.IsReadonly != "1"))
+            _html += " | <a href='javaScript:void(0)'onclick='ShowTemplateAth(\"" + athDesc.MyPK + "\")' style='color:blue'>附件模板</a>";
         if (athDesc.IsDownload == 1 && dbs.length > 0)
-            _html += "操作" + "<a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" ><img src='" + currImgPath + "/FileType/zip.png' style='width:16px;height:16px;margin-left:5px;' alt='打包下载' /></a>";
-        else
-           _html += "操作";
+            _html +=  " | <a href=\"javascript:DownZip('" + athDesc.MyPK + "','" + AthParams.PKVal + "')\" ><img src='" + currImgPath + "/FileType/zip.png' style='width:16px;height:16px;margin-left:5px;' alt='打包下载' /></a>";
+      
 
         //if (((athDesc.IsUpload != 0 || pageData.IsReadonly != "1") || athDesc.IsExpCol != 1) && _html.indexOf("操作") != -1) {
         //    _html += "<div style='float:right' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> ";
@@ -448,24 +449,12 @@ function FileShowWayTable(athDesc, dbs, uploadUrl) {
             _html += "<div style='float:right;display:none' id='fileUpload_" + athDesc.MyPK + "' class='fileUploadContent'></div> ";
             _html += "<input id='Sort_" + athDesc.MyPK + "'style='display:none'>";
         }
-        //if (isHaveSort == true || athDesc.IsNote) {
-        //    var operations = "";
-        //    for (var idx = 0; idx < fileSorts.length; idx++) {
-        //        operations += "<option  value='" + fileSorts[idx] + "'>" + fileSorts[idx] + "</option>";
-        //    }
-
-        //    if (isHaveSort == true) {
-        //        _html += "<div style='float:left;padding-right:2px'>";
-        //        _html += "请选择" + sortColoum + "：";
-        //        _html += "<select id='Sort_" + athDesc.MyPK + "' class='form-control' style='margin:0px 0px !important;width:auto !important'>" + operations + "</select>";
-        //        _html += "</div>";
-        //    }
-        //    if (athDesc.IsNote)
-        //        _html += "<input type='text' id='TB_Note' style='width:90%;display:none;' size='30'/>";
-        //}
         _html += "</div>";
         _html += "</td>";
         _html += "</tr>";
+    } else {
+        //隐藏附件模板
+        $("#" + athDesc.MyPK + "_Template").hide();
     }
 
     if ($("#tbody_" + athDesc.MyPK).length == 0) {
@@ -1143,4 +1132,78 @@ function InitRBShowContentAth(mapAttr, defValue, RBShowModel, enableAttr) {
             rbHtml += "<label><input " + enableAttr + " " + (obj.IntKey == defValue ? "checked='checked' " : "") + " type='radio' name='RB_" + mapAttr.KeyOfEn + "' id='RB_" + mapAttr.KeyOfEn + "_" + obj.IntKey + "' value='" + obj.IntKey + "'  />&nbsp;" + obj.Lab + "</label><br/>";
     });
     return rbHtml;
+}
+
+//显示附件模板，并增加下载功能
+function ShowTemplateAth(athMyPK) {
+    var ens = new Entities("BP.Sys.SysFileManagers");
+    ens.Retrieve("RefVal", athMyPK, "RDT");
+    var fileManagers = ens.TurnToArry();
+    if (fileManagers.length == 0) {
+        layer.alert("没有上传附件模板,请联系管理员");
+        return;
+    }
+    var _html = `<table class="layui-table" >
+      <thead>
+        <tr>
+          <th>名称</th>
+          <th>上传时间</th>
+          <th>下载<a href="javascript:DownTemplateZip('${athMyPK}')" ><img src='${basePath}/WF/Img/FileType/zip.png' style='width:16px;height:16px;margin-left:5px;' alt='打包下载' /></a></th>
+        </tr>
+      </thead>
+      <tbody>`;
+    fileManagers.forEach(fileManager => {
+        _html += `<tr>
+            <td>${fileManager.MyFileName}${fileManager.MyFileExt}</td>
+            <td>${fileManager.RDT}</td>
+            <td><a href='javaScript:void(0)' onclick='downLoadFileM(${fileManager.OID})'>下载</a></td></tr> `
+    })
+    _html += `</tbody></table>`;
+
+    layer.open({
+        type: 1,
+        content: _html,
+        area: '600px'
+    });
+}
+function downLoadFileM(OID) {
+    if (plant == "CCFlow")
+        SetHref(basePath + '/WF/Comm/ProcessRequest?DoType=HttpHandler&HttpHandlerName=BP.WF.HttpHandler.WF_CommEntity&DoMethod=EntityMutliFile_Load&OID=' + OID);
+    else {
+        SetHref(basePath + '/WF/Ath/EntityMutliFile_Load.do?OID=' + OID);
+    }
+}
+/**
+* 打包下载
+* @param athMyPK 附件属性MyPK
+*/
+function DownTemplateZip(athMyPK) {
+
+    var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    httpHandler.AddUrlData();
+    httpHandler.AddPara("FK_FrmAttachment", athMyPK);
+    var data = httpHandler.DoMethodReturnString("AttachmentTemplate_DownZip");
+
+    if (data.indexOf('err@') == 0) {
+        alert(data); //如果是异常，就提提示.
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+
+        data = data.replace('url@', ''); //如果返回url，就直接转向.
+
+        var i = data.indexOf('\DataUser');
+        var str = '/' + data.substring(i);
+        str = str.replace('\\\\', '\\');
+        if (plant != 'CCFlow') {
+            var currentPath = GetHrefUrl();
+            var path = currentPath.substring(0, currentPath.indexOf('/WF') + 1);
+            str = path + str;
+        } else {
+            str = basePath + str;
+        }
+        SetHref(str);
+    }
+
 }

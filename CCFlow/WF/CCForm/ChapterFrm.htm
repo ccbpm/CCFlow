@@ -52,8 +52,8 @@
         var attrs = null;
         var treeClick = null;
         var isReadonly = 0; //是否只读？
-        var showGroup;//存储章节的显示状态，空则全部显示
-        var showAttrs;//存储字段的显示状态，空则全部显示
+        var hideGroup;//存储隐藏的章节
+        var hideAttrs;//存储隐藏的字段
         var pageData = {};
         var form = layui.form;
         var data;//表单内容信息，包括各种章节，字段，下拉列表值等
@@ -63,7 +63,7 @@
             var treelist = null;
             var Tip = null;
             var Tree_set = null;
-
+            var firstLeafID = "";
             //页面启动函数.
             $(function () {
 
@@ -100,37 +100,42 @@
                 var en = new Entity(frmID, oid);
                 console.log("获取的表单设置信息：", en);
                 //存储显示状态
-                showGroup = en.GetPara("ShowGroup");
-                if (showGroup == undefined)
-                    showGroup = [];
-                else showGroup = showGroup.split(',');
-                showAttrs = en.GetPara("ShowAttrs");
-                if (showAttrs == undefined)
-                    showAttrs = [];
-                else showAttrs = showAttrs.split(',');
-                console.log("显示隐藏配置：", showGroup, showAttrs);
+                hideGroup = en.GetPara("HideGroup") || "";
+                
+                if (hideGroup == "")
+                    hideGroup = [];
+                else hideGroup = hideGroup.split(',');
+                hideAttrs = en.GetPara("HideAttrs")||"";
+                if (hideAttrs == "")
+                    hideAttrs = [];
+                else hideAttrs = hideAttrs.split(',');
+                console.log("hideGroup：", typeof en.GetPara("HideGroup"), "hideAttrs:", typeof en.GetPara("HideAttrs"));
+                console.log("显示隐藏配置：", hideGroup, hideAttrs);
 
                 var group = [];
-
+                var i = 0;
                 //形成树形数据
                 groupFields.forEach((item) => {
                     if (item.ParentOID === "" || item.ParentOID == null) {
                         var child = {
                             id: item.OID.toString(),
-                            title: item.Lab,
+                            title: item.Lab == "封面" ? item.Lab:(i + 1) +"、"+item.Lab,
                             children: [],
                             spread: true,
                             logType: "chapter",//是章节还是字段
                             ...item,
                         };
-                        if ((showGroup.length > 0 && showGroup.indexOf(child.id) > -1) || showGroup.length === 0) {//看设置是否显示
+                        if ( hideGroup.indexOf(child.id) == -1) {//不隐藏才添加
                             if (item.CtrlType === "Attr") {//Attr控件将其下的字段值放在attrChildren 中方便解析
-                                child.attrChildren = getAttrChildren(item.OID.toString(), item.CtrlType);
+                                child.attrChildren = getAttrChildren(item.OID.toString(), item.CtrlType, (i + 1) + "." );
                             } else {
-                                child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                                child.children = [...getChildren(item.OID.toString(), (i + 1) + "."), ...getAttrChildren(item.OID.toString(), item.CtrlType, (i + 1) + ".")];
                             };
                             group.push(child);
+                            if (item.Lab != "封面")
+                                i++;
                         };
+                       
                     }
                 });
                 console.log(group)
@@ -194,6 +199,7 @@
                         ...data,
                         Sys_MapAttr: group.attrChildren,
                     }
+                    console.log(thisAttrData)
                     attrhtm += '<div id="Group_' + group.OID + '">';
                     var tableCol = data.Sys_MapData[0].TableCol === 0 ? 4 : 6;
                     attrhtm += InitMapAttr(thisAttrData, tableCol, group.OID);
@@ -201,8 +207,9 @@
                     $("#divCCForm").html(attrhtm);
                     //占一行的元素标签靠左
                     var hang = $(".layui-col-sm12.layui-col-md12.layui-col-xm12.FoolFrmFieldLabel>.layui-form-label");
-                    $(hang).attr("style", "text-align:left");
-
+                    $.each(hang, function (index, item) {
+                        $(item).attr("style", "text-align:left");
+                    })
                     //装载表单数据与修改表单元素风格.
                     LoadFrmDataAndChangeEleStyle(thisAttrData);
                     //渲染表单
@@ -262,6 +269,29 @@
                         }
 
                     })
+                    $.each($(".layui-attr-btn"), function (idx, item) {
+                        $(this).on("click", function () {
+                            var keyOfEn = item.id.substring(4);
+                            var mapAttr = $.grep(thisAttrData.Sys_MapAttr, function (attr) {
+                                return attr.KeyOfEn == keyOfEn;
+                            })[0];
+                            var tag = mapAttr.Tag || "";
+                            if (tag != "") {
+                                tag = DealExp(tag);
+                                if (mapAttr.UIIsEnable == 1) {
+                                    //执行js
+                                    DBAccess.RunUrlReturnString(tag);
+                                }
+                                if (mapAttr.UIIsEnable == 2)
+                                    DBAccess.RunFunctionReturnStr(tag);
+                            }
+
+
+                            if (mapAttr.UIIsEnable != 0 && isReadonly != true)
+                                FullIt("", mapAttr.MyPK + "_FullData", "Btn_" + mapAttr.KeyOfEn, 0);
+                        })
+
+                    })
                     $("#toIframe").hide();
                     $("#textRea").hide();
                     $("#divCCForm").show();
@@ -298,10 +328,10 @@
                         $("#divCCForm").hide();
                         $("#textRea").show();
                         if (name !== obj.data.Name) {
-                            Tip = obj.data.Tip;
-                            name = obj.data.Name;
+                            Tip = obj.data.Tip;//提示信息
+                            name = obj.data.Name;//右边的title
                             getContent(obj.data.KeyOfEn);
-                            eleDom = $(obj.elem[0]).find(".rate");
+                            eleDom = $(obj.elem[0]).find(".rate");//打对号
                         }
                         $(obj.elem[0]).addClass("tree-txt-active");
                         Savetab(OId, eleOneDom);
@@ -324,19 +354,19 @@
                             url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
                         }
 
-                        if (obj.data.CtrlType == "ChapterFrmLinkFrm") {
+                        if (obj.data.CtrlType == "ChapterFrmLinkFrm") {//表单
                             url = basePath + "/WF/CCForm/Frm.htm?1=1&FrmID=" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + obj.data.CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
 
                         }
 
-                        if (obj.data.CtrlType == "ChapterFrmSelfUrl") {
+                        if (obj.data.CtrlType == "ChapterFrmSelfUrl") {//自定义URL
                             if (obj.data.CtrlID.indexOf('http') == 0)
                                 if (obj.data.CtrlID.indexOf('?') > -1) {
                                     url = obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
                                 } else {
                                     url = obj.data.CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
                                 }
-                            else {
+                            else {//引用当前项目里的页面
                                 if (obj.data.CtrlID.indexOf('?') > -1) {
                                     url = basePath + "/" + obj.data.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
                                 } else {
@@ -364,26 +394,31 @@
                         }
                         $('.layui-tree-set').removeClass("tree-txt-active");
                         $(obj.elem[0]).addClass("tree-txt-active");
-
-
                     }
                 }
-
+            
                 Tree = tree.render({
-                    elem: '#test1',
-                    data: group,
-                    id: 'treeId',
-                    click: function (obj) {
+                    elem: '#test1',//容器id
+                    data: group,//数据源
+                    id: 'treeId',//树的id
+                    click: function (obj) {//树节点的点击函数
                         treeClick(obj)
                     }
                 });
+        
 
-                $("#expandAll").click(function () {
+                //按钮展开折叠点节点   expandAll
+                $("#shrink").click(function () {
                     treeExpand(group);
                     function treeExpand(list) {
+                        //var isSpread = true;
                         $.each(list, function (index, item) {
-                            if (item.logType == "chapter") {
+                            if (item.logType == "chapter" && item.spread == true) {
+                                item.spread = false;
+                                $('#shrink > #icon').attr("class","icon-plus")
+                            } else{
                                 item.spread = true;
+                                $('#shrink > #icon').attr("class", "icon-minus")
                             }
                             if (Array.isArray(item.children) && item.children.length > 0) {
                                 treeExpand(item.children);
@@ -394,24 +429,25 @@
                         data: group,
                     });
                 });
+        
 
-                $("#foldAll").click(function () {
-                    treeFold(group);
-                    function treeFold(list) {
-                        $.each(list, function (index, item) {
-                            if (item.logType == "chapter") {
-                                item.spread = false;
-                            }
-                            if (Array.isArray(item.children) && item.children.length > 0) {
-                                treeFold(item.children);
-                            }
-                        })
-                    }
-                    tree.reload('treeId', {
-                        data: group,
+                //$("#foldAll").click(function () {
+                //    treeFold(group);
+                //    function treeFold(list) {
+                //        $.each(list, function (index, item) {
+                //            if (item.logType == "chapter") {
+                //                item.spread = false;
+                //            }
+                //            if (Array.isArray(item.children) && item.children.length > 0) {
+                //                treeFold(item.children);
+                //            }
+                //        })
+                //    }
+                //    tree.reload('treeId', {
+                //        data: group,
                         
-                    });
-                });
+                //    });
+                //});
 
                 // 判断第一项是否有子集 并选中状态 跳转iframe页面
                 function treeSet() {
@@ -425,6 +461,7 @@
                     })
                     Tree_set = document.querySelectorAll('.layui-tree>.layui-tree-set');
                     Tree_set.forEach((item, index) => {
+                        
                         $(item).attr("title", group[index].title);
                         $(item).attr("id", "Pnode" + group[index].OID);
 
@@ -432,34 +469,46 @@
                         var h = `<i class="icon-check rate"></i>`;
                         $(item).find(".layui-tree-main").append(h);
                         //替换 tree icon
-                        if (item.childNodes.length == 1) {
+                        if (item.childNodes.length == 2) {
                             var sclass = $(item).find('.layui-tree-iconClick');
-                            $(sclass).empty();
-                            if (group[index].CtrlType == "Dtl") {
-                                // let i = `<i class="icon-notebook"></i>`
-                                let i = `<i class="icon-folder"></i>`
-                                $(sclass).html(i);
-                            }
-                            if (group[index].CtrlType == "Attr") {
-                                // let i = `<i class="icon-notebook"></i>`
-                                let i = `<i class="icon-folder"></i>`
-                                $(sclass).html(i);
-                            }
+                            //$(sclass).empty();
+                            //$(sclass).each(function () {
+                            //    $(this).html('');
+                            //    if (group[index].CtrlType == "Dir") {
+                            //        let i = `<i class="icon-folder"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
+                            //    if (group[index].CtrlType == "Dtl") {
+                            //        let i = `<i class="icon-folder"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
+                            //    if (group[index].CtrlType == "Attr") {
+                            //        let i = `<i class="icon-folder"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
 
-                            if (group[index].CtrlType == "Ath") {
-                                let i = `<i class="icon-paper-clip"></i>`
-                                $(sclass).html(i);
-                            }
+                            //    if (group[index].CtrlType == "Ath") {
+                            //        let i = `<i class="icon-paper-clip"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
 
-                            if (group[index].CtrlType == "ChapterFrmLinkFrm") {
-                                let i = `<i class="icon-folder"></i>`
-                                $(sclass).html(i);
-                            }
+                            //    if (group[index].CtrlType == "ChapterFrmLinkFrm") {
+                            //        let i = `<i class="icon-folder"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
 
-                            if (group[index].CtrlType == "ChapterFrmSelfUrl") {
-                                let i = `<i class="icon-folder"></i>`
-                                $(sclass).html(i);
-                            }
+                            //    if (group[index].CtrlType == "ChapterFrmSelfUrl") {
+                            //        let i = `<i class="icon-folder"></i>`
+                            //        $(this).html(i);
+                            //        return;
+                            //    }
+                            //})
+                            
                         } else {
                             var sclass = $(item).find('.layui-tree-iconClick');
                             $(sclass).empty();
@@ -467,94 +516,76 @@
                             let i = `<i class="icon-folder"></i>`
                             $(sclass).html(i);
                         }
-                        //下方是选取第一个元素，待实现
                         //默认第一个选中
-                        /*
                         if (index == 0) {
-                            var firstShow = group[index];//第一个显示的内容
-                            console.log('一级目录1：',group[index]);
-                            if (group[index].children && group[index].children.length > 0) {
-                                firstShow = group[index].children[0];
-                                console.log('二级目录1：', group[index].children[0]);
-                                if (group[index].children[0].children && group[index].children[0].children.length > 0) {
-                                    firstShow = group[index].children[0].children[0];
-                                    console.log('二级目录1：', group[index].children[0].children[0]);
-                                }
-                            }
-                            console.log('第一个显示的内容：', firstShow);
-
-                            var firstShowDom;//第一个显示的元素
-                            if ($(item).find('.layui-tree-pack>.layui-tree-set').length > 0) {
-                                firstShowDom = item;//第一个显示的元素
-                                console.log('一级元素', $(firstShowDom).attr('data-id'));
-                                var levelFirst = item;
-                                if ($(levelFirst).find('.layui-tree-pack>.layui-tree-set').length > 0) {
-                                    firstShowDom = $(levelFirst).find('.layui-tree-pack>.layui-tree-set')[0];
-                                    console.log('二级元素', $(firstShowDom).attr('data-id'));
-                                    var levelTow = $(levelFirst).find('.layui-tree-pack>.layui-tree-set')[0];
-                                    //if ($(levelTow).find('.layui-tree-pack>.layui-tree-set').length > 0) {
-                                    //    firstShowDom = $(levelTow).find('.layui-tree-pack>.layui-tree-set')[0];
-                                    //    console.log('三级元素', $(firstShowDom).attr('data-id'));
-                                    //}
-                                }
-                            }
-                            console.log('第一个显示的元素：', $(firstShowDom).attr('data-id'));
-
-                            if ($(firstShowDom).find('.layui-tree-pack>.layui-tree-set').length == 0) {
-                                alert();
+                            var newGroup = group[index];
+                            if (main.length == 0) {
+                                setFirstSelect(newGroup);
                                 $('.layui-tree-set').removeClass("tree-txt-active");
-                                $(firstShowDom).addClass("tree-txt-active");
-                                var url = '';
-                                //如果点击章.
-                                if (firstShow.CtrlType == "Dtl") {
-                                    url = Ele_Dtl_Chapter(firstShow.CtrlID);
-                                }
-
-                                if (firstShow.CtrlType == "Attr") {
-                                    alert('第一个显示填报合同');
-                                    IniAttr(firstShow);
-                                }
-
-                                if (firstShow.CtrlType == "Ath") {
-                                    url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + firstShow.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                                }
-
-                                if (firstShow.CtrlType == "ChapterFrmLinkFrm") {
-                                    url = basePath + "/WF/CCForm/Frm.htm?1=1&FrmID=" + firstShow.CtrlID + "&OID=" + oid + "&FK_MapData=" + firstShow.CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
-                                }
-
-                                if (firstShow.CtrlType == "ChapterFrmSelfUrl") {
-                                    if (firstShow.CtrlID.indexOf('http') == 0)
-                                        url = firstShow.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                                    else
-                                        url = basePath + "" + firstShow.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
-                                }
-                                if (firstShow.CtrlType == '') {
-                                    return;
-                                }
-                                eleOneDom = firstShowDom;
-                                OId = firstShow.OID;
-                                if (firstShow.CtrlType != "Attr")
-                                    iframeFun("toIframe", url, OId, eleOneDom);
+                                $(item).addClass("tree-txt-active");
+                                $("#Title").html(newGroup.Name);
                             } else {
-                                alert('第一个显示文本内容');
-                                firstShowDom.checked = true;
-                                firstShowDom.children[index].checked = true;
-                                key = firstShow.KeyOfEn;
-                                tinyInit();
-                                treelist[index].classList.add("tree-txt-active");
-                                name = firstShow.Name;
-                                $("#Title").html(name)
-                                getContent(treelist[index].dataset.id);
-                                Tip = firstShow.Tip;
-                                eleDom = $(treelist[index]).find(".rate");
+                                newGroup = newGroup.children[0];
+                                if (newGroup.children.length == 0) {
+                                    setFirstSelect(newGroup);
+                                    item.children[index].checked = true;
+                                    key = item.children[index].KeyOfEn;
+                                    treelist[index].classList.add("tree-txt-active");
+                                    name = group[index].children[index].Name;
+                                    $("#Title").html(name)
+                                }  
                             }
-                        }*/
+                            item.checked = true;
+                        }
                     })
+
                     showType(group, Tree_set)
-
                 }
+                function setFirstSelect(newGroup) {
+                    $("#welcome").hide();
+                    getContent(key);
+                    var url = '';
+                    //如果点击章.
+                    if (newGroup.CtrlType == "Dtl") {
+                        url = Ele_Dtl_Chapter(newGroup.CtrlID);
 
+                    }
+                    if (newGroup.CtrlType == "Attr") {
+
+                        IniAttr(newGroup);
+                        return;
+                    }
+
+                    if (newGroup.CtrlType == "Ath") {
+                        url = basePath + "/WF/CCForm/Ath.htm?1=1&AthPK=" + newGroup.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                    }
+
+                    if (newGroup.CtrlType == "ChapterFrmLinkFrm") {//表单
+                        url = basePath + "/WF/CCForm/Frm.htm?1=1&FrmID=" + newGroup.CtrlID + "&OID=" + oid + "&FK_MapData=" + newGroup.CtrlID + "&FK_Node=" + GetQueryString("FK_Node");
+
+                    }
+
+                    if (newGroup.CtrlType == "ChapterFrmSelfUrl") {//自定义URL
+                        if (newGroup.CtrlID.indexOf('http') == 0)
+                            if (newGroup.CtrlID.indexOf('?') > -1) {
+                                url = newGroup.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                            } else {
+                                url = newGroup.CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                            }
+                        else {//引用当前项目里的页面
+                            if (newGroup.CtrlID.indexOf('?') > -1) {
+                                url = basePath + "/" + newGroup.CtrlID + "&OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                            } else {
+                                url = basePath + "/" + newGroup.CtrlID + "?" + "OID=" + oid + "&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node");
+                            }
+                        }
+                    }
+                    if (newGroup.CtrlType == '') {
+                        return;
+                    }
+                    OId = newGroup.OID;
+                    iframeFun("toIframe", url, OId, eleOneDom, false);
+                }
                 treeSet();
                 $("#tips").click(function () {
                     openDialog(Tip, key);
@@ -577,30 +608,33 @@
 
             });
 
-
             //递归构造章节树形结构，获取parentId的孩子
-            function getChildren(parentId) {
+            function getChildren(parentId,parentXuHao) {
                 var children = [];
+                var i = 1;
                 groupFields.forEach((item) => {
                     if (item.ParentOID === parentId) {
                         var child = {
                             id: item.OID.toString(),
-                            title: item.Lab,
+                            title: parentXuHao+i+"、"+item.Lab,
                             children: [],
                             attrChildren: [],
                             spread: true,
                             logType: "chapter",
                             ...item,
                         };
-                        if ((showGroup.length > 0 && showGroup.indexOf(child.id) > -1) || showGroup.length === 0) {//看设置是否显示
+                        if ( hideGroup.indexOf(child.id) == -1) {//不隐藏才添加
                             if (item.CtrlType === "Attr") {
                                 child.attrChildren = getAttrChildren(item.OID.toString(), item.CtrlType);
+                                if (idx == 0)
+                                    firstLeafID = child.id
                             } else {
-                                child.children = [...getChildren(item.OID.toString()), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
+                                child.children = [...getChildren(item.OID.toString(), parentXuHao + i+"."), ...getAttrChildren(item.OID.toString(), item.CtrlType)];
                             };
                             children.push(child);
+                            i++;
                         };
-
+                        
                     }
                 });
                 return children;
@@ -637,7 +671,7 @@
                                 return item.EnumKey == attr.KeyOfEn;
                             });
                         }
-                        if ((showAttrs.length > 0 && showAttrs.indexOf(attr.KeyOfEn) > -1) || showAttrs.length === 0) {//看是否设置显示
+                        if (hideAttrs.indexOf(attr.KeyOfEn) == -1) {//看是否设置显示
                             if ((ctrlType === "" || ctrlType == null) && attr.TextModel != 1) {//默认型控件，只显示文本字段
                                 if (attr.MyDataType == 1 && attr.UIContralType == 0) {
                                     attrList.push(attr);
@@ -940,9 +974,9 @@
 
 
             $('#View').click(function () {
-                var url = "ChapterFrmPrint.htm?FrmID=" + frmID + "&OID=" + oid + "&IsReadonly=1" + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node");
-                // WinOpenFull(url);
-                OpenLayuiDialog(url, '', '1200', '', '', false)
+                var url = "ChapterFrmView.htm?FrmID=" + frmID + "&OID=" + oid + "&IsReadonly=1" + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node");
+                //WinOpenFull(url);
+                OpenLayuiDialog(url, '查看表单', '1200', '', '', false)
 
 
             })
@@ -963,7 +997,7 @@
                     }
                 });
             })
-
+            //富文本编辑器
             function getContent(KeyOfEn) {
                 //var cdata = ChapterFrmShow(KeyOfEn);
                 //changeDBval(cdata, KeyOfEn);
@@ -1043,10 +1077,10 @@
                 return false;
             }
             var en = new Entity(frmID, oid);
-            if (showGroup.length != 0)
-                en.SetPara("ShowGroup", showGroup.join(','));
-            if (showAttrs.length != 0)
-                en.SetPara("ShowAttrs", showAttrs.join(','));
+            //if (hideGroup.length != 0)
+                en.SetPara("HideGroup", hideGroup.join(','));
+            //if (hideAttrs.length != 0)
+                en.SetPara("HideAttrs", hideAttrs.join(','));
             en.Update();
             return true;
         }
@@ -1097,13 +1131,14 @@
         }
         //弹窗确认函数
         function modalOkFunc() {
-            var showGroupRes = $(window.frames["dlg"]).find("iframe")[0].contentWindow.showGroupRes;
-            var showAttrRes = $(window.frames["dlg"]).find("iframe")[0].contentWindow.showAttrRes;
+            var hideGroupRes = $(window.frames["dlg"]).find("iframe")[0].contentWindow.hideGroupRes;
+            var hideAttrRes = $(window.frames["dlg"]).find("iframe")[0].contentWindow.hideAttrRes;
+            console.log('弹窗', hideGroupRes, hideAttrRes);
             var en = new Entity(frmID, oid);
-            if (showGroupRes.length != 0)
-                en.SetPara("ShowGroup", showGroupRes.join(','));
-            if (showAttrRes.length != 0)
-                en.SetPara("ShowAttrs", showAttrRes.join(','));
+            //if (hideGroupRes.length != 0)
+                en.SetPara("HideGroup", hideGroupRes.join(','));
+            //if (hideAttrRes.length != 0)
+                en.SetPara("HideAttrs", hideAttrRes.join(','));
             en.Update();
         }
     </script>
@@ -1118,7 +1153,14 @@
             width: 100%;
             display: flex;
         }
-
+        .btn_shrink {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 15px;
+            height: 25px;
+            font-size: 18px;
+        }
         .border_1 {
             border: 1px solid #ccc;
             height: 100%;
@@ -1268,8 +1310,8 @@
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
                         <!--demo-tree demo-tree-box-->
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="expandAll">全部展开</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" id="foldAll">全部折叠</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm btn_shrink" id="shrink"><i id="icon" class="icon-minus"></i></button>
+                        <!--<button class="layui-btn layui-btn-primary layui-btn-sm" id="foldAll">全部折叠</button>-->
                         <div id="test1" class="" style="height: calc(100vh - 30px); overflow-x: auto "></div>
                     </div>
                 </div>
@@ -1279,27 +1321,29 @@
         <div class="h-100" id="scrollDiv" style="overflow-y:hidden">
             <div class="layui-tab-title" style="display:flex;justify-content:end;background:#fff">
                 <div id="elemPage"></div>
-                <!--<button class="layui-btn layui-btn-primary layui-btn-sm" id="View">查看</button>-->
+                <button class="layui-btn layui-btn-primary layui-btn-sm" id="View">查看</button>
                 <button class="layui-btn layui-btn-primary layui-btn-sm" id="menuShow">目录</button>
                 <button class="layui-btn layui-btn-primary layui-btn-sm" id="setting" onclick="openSetting()">设置</button>
                 <button class="layui-btn layui-btn-sm" style="background: #5053f1" id="tips">填报提示</button>
                 <!--<button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('up')">上一节</button>-->
                 <!--<button class="layui-btn layui-btn-primary layui-btn-sm" onclick="tabChange('down')">下一节</button>-->
             </div>
+            <!--富文本编辑器-->
             <div class="layui-form" id="textRea">
                 <!--<div class="labelTitle">
-                    <span id="Title"></span>
-                    <button class="layui-right layui-btn layui-btn-sm" id="tips">填报提示</button>
-                </div>-->
+            <span id="Title"></span>
+            <button class="layui-right layui-btn layui-btn-sm" id="tips">填报提示</button>
+        </div>-->
                 <div id="welcome" class="welcome">
                     <div>
                         <!--<img src="../../DataUser/ICON/ccbp" width="240"/>
-                        <div>欢迎使用章节表单</div>-->
+                <div>欢迎使用章节表单</div>-->
                     </div>
-                    
+
                 </div>
                 <textarea id="mytextarea"></textarea>
             </div>
+            <!--iframe页面  Dtl Ath ChapterFrmLinkFrm ChapterFrmSelfUrl-->
             <div class="layui-form">
                 <iframe id="toIframe" frameborder="0" style="width:100%;"></iframe>
             </div>

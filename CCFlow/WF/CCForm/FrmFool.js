@@ -73,9 +73,7 @@ function GenerFoolFrm(wn, isComPare) {
                 }
                 if (mapAttr.UIIsEnable == 2)
                     DBAccess.RunFunctionReturnStr(tag);
-            }
-               
-            
+            }    
             if (mapAttr.UIIsEnable != 0 && isReadonly != true)
                 FullIt("", mapAttr.MyPK + "_FullData", "Btn_" + mapAttr.KeyOfEn, 0);
         })
@@ -100,7 +98,6 @@ function ShowFoolByTable(frmData, tableCol, Sys_GroupFields, node, isComPare) {
         else
             gfLabHtml = "<div class='layui-row FoolFrmGroupBar' id='Group_" + gf.CtrlID + "'>"
 
-
         gfLabHtml += "<div class='layui-col-xs12'>";
         gfLabHtml += gf.Lab;
         gfLabHtml += "</div>";
@@ -120,6 +117,7 @@ function ShowFoolByTable(frmData, tableCol, Sys_GroupFields, node, isComPare) {
                 //附件分组不显示或者是审核组件中的附件
                 if (ath != null && (ath.IsVisable == "0" || ath.NoOfObj == "FrmWorkCheck"))
                     break;
+                
                 //增加附件分组
                 _html += gfLabHtml;
                 _html += "<div class='layui-row'>"
@@ -215,6 +213,7 @@ function ShowFoolByTable(frmData, tableCol, Sys_GroupFields, node, isComPare) {
     });
     return _html;
 }
+
 /**
     * Tab页签的方式显示
     */
@@ -881,10 +880,10 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                 if (maxNum != "")
                     dataInfo += " data-max='" + maxNum + "'";
                 if (suffix != "") {
-                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;width:calc(100% - 60px)!important;display:inline'  value='0' " + dataInfo + " style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;padding-right:10px;width:calc(100% - 60px)!important;display:inline'  value='0' " + dataInfo + " style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
                     _html += "<label class='layui-input-suffix'>" + suffix + "</label>";
                 } else {
-                    _html += "<input class='" + ccsCtrl + " layui-input'  value='0' " + dataInfo + " style='text-align:right;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input'  value='0' " + dataInfo + " style='text-align:right;padding-right:10px;'  onkeyup=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'int');if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
 
                 }
                 _html += "</div>";
@@ -895,7 +894,8 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                 } else {
                     enableAttr = "";
                 }
-                return "<div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' lay-skin='switch' lay-text='是|否' " + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' value='1'></div>";
+                var layText = (GetPara(mapAttr.AtPara, 'checkedTips') || "是") + "|" + (GetPara(mapAttr.AtPara, 'unCheckedTips') || "否")
+                return "<div class='checkbox' id='DIV_" + mapAttr.KeyOfEn + "'><label for='CB_" + mapAttr.KeyOfEn + "' ></label><input type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' id='CB_" + mapAttr.KeyOfEn + "' lay-skin='switch' lay-text='" + layText+"' " + (mapAttr.DefVal == 1 ? "checked = 'checked'" : "") + enableAttr + " lay-filter='" + mapAttr.KeyOfEn + "' value='1'></div>";
             case 3://浮点
             case 5://双精度
                 var _html = "<div id = 'DIV_" + mapAttr.KeyOfEn + "' class='ccbpm-input-group' >";
@@ -914,10 +914,10 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                     dataInfo += " data-max='" + maxNum + "'";
 
                 if (suffix != "") {
-                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;width:calc(100% - 60px)!important;display:inline'  value='0.00' " + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;padding-right:10px;width:calc(100% - 60px)!important;display:inline'  value='0.00' " + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
                     _html += "<label class='layui-input-suffix'>" + suffix + "</label>";
                 } else {
-                    _html += "<input class='" + ccsCtrl + " layui-input'  value='0.00'  " + dataInfo + "  style='text-align:right;' onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input'  value='0.00'  " + dataInfo + "  style='text-align:right;padding-right:10px' onkeyup=" + '"' + "valitationAfter(this, 'float');if(isNaN(value)) execCommand('undo');limitLength(this," + bit + ");" + '"' + " onafterpaste=" + '"' + " valitationAfter(this, 'float');if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' placeholder='" + (mapAttr.Tip || '') + "'/>";
 
                 }
                 _html += "</div>";
@@ -980,10 +980,10 @@ function InitMapAttrOfCtrlFool(frmData, mapAttr) {
                     dataInfo += " data-max='" + maxNum + "'";
 
                 if (suffix != "") {
-                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;width:calc(100% - 60px)!important;display:inline'" + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;padding-right:10px;width:calc(100% - 60px)!important;display:inline'" + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
                     _html += "<label class='layui-input-suffix'>" + suffix + "</label>";
                 } else {
-                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;' " + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
+                    _html += "<input class='" + ccsCtrl + " layui-input' style='text-align:right;padding-right:10px;' " + dataInfo + "  onkeyup=" + '"' + "valitationAfter(this, 'money');limitLength(this," + bit + "); FormatMoney(this, " + bit + ", ',',0)" + '"' + " onafterpaste=" + '"' + "valitationAfter(this, 'money');if(isNaN(value))execCommand('undo');" + '"' + " onblur=" + '"' + "FormatMoney(this, " + bit + ", ',',1)" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' value='0.00' placeholder='" + (mapAttr.Tip || '') + "'" + disabled + "/>";
 
                 }
                 _html += "</div>";
@@ -1282,7 +1282,9 @@ function Ele_Dtl(frmDtl, isComPare) {
         if (src.indexOf("?") == -1)
             src += "?1=1";
     }
-
+    if (frmDtl.ListShowModel == "3" || frmDtl.ListShowModel == "4" || frmDtl.ListShowModel == "5") {
+        src = baseUrl + "DtlRpt.htm?1=1";
+    }
     var refpk = this.pageData.WorkID;
     if (refpk == undefined)
         refpk = pageData.OID;

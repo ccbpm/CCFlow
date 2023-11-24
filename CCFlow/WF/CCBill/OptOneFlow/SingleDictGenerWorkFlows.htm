@@ -164,7 +164,7 @@
 
                         <div class="item item-name item-name-dp"
                              style="text-align: left" :data-mypk="generWorkFlow.WorkID" :data-name="generWorkFlow.Title" :data-pidx="index"
-                             :data-idx="idx" @click.stop="OpenMyView(generWorkFlow.FK_Flow,generWorkFlow.WorkID)">
+                             :data-idx="idx" @click.stop="OpenMyView(generWorkFlow.FK_Flow,generWorkFlow.WorkID,generWorkFlow.FK_Node)">
                             <span> <font color="blue">{{generWorkFlow.Title}}</font></span>
                         </div>
                         <div class="item item-other">{{generWorkFlow.StarterName}}</div>

@@ -65,7 +65,7 @@
                             <td>
                                 <label>
                                     <input type="radio" name="enumSelect" @click="ChangeEnum(sysEnumMain)" />
-                                    <template v-if="sysEnumMain.EnumKey!=''">
+                                    <template v-if="sysEnumMain.EnumKey&&sysEnumMain.EnumKey!=''">
                                         {{sysEnumMain.EnumKey}}
                                     </template>
 
@@ -134,7 +134,7 @@
                 },
                 ChangeEnum: function (sysEnumMain) {
                     this.SelectEnum = sysEnumMain;
-                    if (this.SelectEnum.EnumKey != "")
+                    if (!!this.SelectEnum.EnumKey)
                         $("#TB_KeyOfEn").val(this.SelectEnum.EnumKey);
                     else
                         $("#TB_KeyOfEn").val(this.SelectEnum.No);
@@ -359,7 +359,7 @@
                 }
 
             }
-            var UIBindKey = selectEmum.EnumKey != "" ? selectEmum.EnumKey : selectEmum.No;
+            var UIBindKey = !!selectEmum.EnumKey ? selectEmum.EnumKey : selectEmum.No;
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner");
             handler.AddPara("KeyOfEn", KeyOfEn);
             handler.AddPara("DtlKeyOfEn", dtlKey);

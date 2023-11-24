@@ -161,6 +161,7 @@
             -moz-text-overflow: ellipsis;
             -webkit-text-overflow: ellipsis;
         }
+
         .btn-sm {
             padding: 0 10px;
             height: 26px;
@@ -411,7 +412,7 @@
         }
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo, fid,title) {
+        function OpenFrm(workid, nodeID, flowNo, fid, title) {
             JumpFlowPage("MyView", title, workid, flowNo, nodeID, fid);
             return;
         }
@@ -426,14 +427,14 @@
         //页面启动函数.
         $(function () {
             var _html = `<tr>
-                        <th width="40">${window.lang.xu}</th>
-                        <th style="width:35%;">${window.lang.biaoti}</th>
-                        <th width="60">${window.lang.fqr}</th>
-                        <th width="200">${window.lang.fqbm}</th>
-                        <th>${window.lang.dqjd}</th>
-                        <th width="120">${window.lang.sdrq}</th>
-                        <th width="150">${window.lang.dqclr}</th>
-                    </tr>`;
+                                <th width="40">${window.lang.xu}</th>
+                                <th style="width:35%;">${window.lang.biaoti}</th>
+                                <th width="60">${window.lang.fqr}</th>
+                                <th width="200">${window.lang.fqbm}</th>
+                                <th>${window.lang.dqjd}</th>
+                                <th width="120">${window.lang.sdrq}</th>
+                                <th width="150">${window.lang.dqclr}</th>
+                            </tr>`;
             $("#threadDiv").html(_html);
             InitPage();
             Paginator(pageCount, pageIdx);
@@ -506,9 +507,9 @@
             //生成分组的字符串.
             var str = "@";
             for (var i = 0; i < sourceData.length; i++) {
-                if (str.indexOf('@' + sourceData[i].FlowName+"@") == -1) {
+                if (str.indexOf('@' + sourceData[i].FlowName + "@") == -1) {
                     if (flowNos == null || (flowNos != null && flowNos.indexOf(sourceData[i].FK_Flow) != -1))
-                        str += sourceData[i].FlowName+"@";
+                        str += sourceData[i].FlowName + "@";
                 }
 
             }
@@ -577,7 +578,7 @@
                     }
 
                     listbox += "<td>" + num + "</td>";
-                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.CurrNode + "','" + work.FK_Flow + "','" + work.FID + "','" + work.FlowName +"')\" >" + work.Title + "</a></td>";
+                    listbox += "<td><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "','" + work.FID + "','" + work.FlowName + "')\" >" + work.Title + "</a></td>";
                     listbox += "<td>" + work.StarterName + "</td>";
                     listbox += "<td>" + work.DeptName + "</td>";
                     listbox += "<td>" + work.NodeName + "</td>";
@@ -698,13 +699,13 @@
                 onPageClicked: function (event, originalEvent, type, page) {
                     pageIdx = page;
                     InitPage(page);
-                    $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount} 
-                        ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
+                    $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount}
+                                ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
                 }
             };
             $('#page_nav').bootstrapPaginator(options);
-            $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount} 
-                ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
+            $('#page_info').html("").append(`<li class='disabled controls'>${window.lang.danqian} ${pageIdx} ${window.lang.ye}，${window.lang.zonggong} ${pageCount}
+                        ${window.lang.ye},${window.lang.zonggong} ${total} ${window.lang.record}。</li>`);
 
         }
     </script>

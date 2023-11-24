@@ -170,13 +170,12 @@ function removeplaceholder(obj, bit) {
  * 输入验证firfox, ff浏览器不支持execCommand()
  */
 
-function limitLength(obj, length) {
+function limitLength(obj, dlen) {
     obj.value = obj.value.replace(/[^\d,.-]/g, "");  //清除“数字”和“.”以外的字符 ;
-    if (length != null && length != "" && length != "undefined") {
-        if (obj.value.indexOf('.') >= 0 && obj.value.split('.')[1].length > length) {
+    if (dlen != null && dlen != "" && dlen != "undefined") {
+        if (obj.value.indexOf('.') >= 0 && obj.value.split('.')[1].length > dlen) {
             var val = obj.value.toString();
-            obj.value = val.toFixed(length);
-            //obj.focus();
+            obj.value = parseFloat(val).toFixed(dlen);
         }
     }
 }

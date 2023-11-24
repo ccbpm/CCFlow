@@ -610,7 +610,7 @@ function initModal(modalType, toNode, url, isDelayedSend) {
                 if (toNode != null)
                     title = "先会签，后发送。";
                 else
-                    title = "会签";
+                    title = "加签";
                 modalIframeSrc = ccbpmPath + "/WF/WorkOpt/HuiQian.htm?FK_Node=" + paramData.FK_Node + "&FID=" + paramData.FID + "&WorkID=" + paramData.WorkID + "&FK_Flow=" + paramData.FK_Flow + "&ToNode=" + toNode + "&Info=&s=" + Math.random() + "&isFrameCross=" + isFrameCross;
                 isShowColseBtn = 0;
                 break;
@@ -1469,9 +1469,9 @@ function NodeFormSend() {
         return true;
     }
     //检查，保存从表
-    if ($("[name=Dtl]").length > 0) {
+    if ($("iframe[name=Dtl]").length > 0) {
         var formCheckResult = true;
-        $("[name=Dtl]").each(function (i, obj) {
+        $("iframe[name=Dtl]").each(function (i, obj) {
             var contentWidow = obj.contentWindow;
             if (contentWidow != null) {
                 if (contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {

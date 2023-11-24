@@ -28,9 +28,9 @@
         $(function () {
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
-            var isSSS = node.IsTask;
-            var IsRememme = node.IsRM;
-            var IsExpSender = node.IsExpSender;
+            var isSSS = node.GetPara("IsTask",1);
+            var IsRememme = node.GetPara("IsRM",1);
+            var IsExpSender = node.GetPara("IsExpSender",1);
             if (isSSS == 0) document.getElementById("CB_IsSSS").checked = false;
             if (IsRememme == 0) document.getElementById("CB_IsRememme").checked = false;
             if (IsExpSender == 0) document.getElementById("CB_IsExpSender").checked = false;
@@ -43,17 +43,18 @@
             var nodeID = GetQueryString("FK_Node");
             var node = new Entity("BP.WF.Node", nodeID);
             if (document.getElementById("CB_IsSSS").checked)
-                node.IsTask = 1;
+                node.SetPara("IsTask",1);
             else
-                node.IsTask = 0;
+                node.SetPara("IsTask",  0);
             if (document.getElementById("CB_IsRememme").checked)
-                node.IsRM = 1;
+                node.SetPara("IsRM",1);
             else
-                node.IsRM = 0;
+                node.SetPara("IsRM", 0);
             if (document.getElementById("CB_IsExpSender").checked)
-                node.IsExpSender = 1;
+                node.SetPara("IsExpSender", 1);
             else
-                node.IsExpSender = 0;
+                node.SetPara("IsExpSender", 0);
+
             node.Update();
 
 

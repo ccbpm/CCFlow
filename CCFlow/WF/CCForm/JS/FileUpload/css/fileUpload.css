@@ -133,6 +133,7 @@
 /*******************************Ath自己的CSS样式******************************************/
 .table > thead > tr > td, .table > tbody > tr > td {
     border: 1px solid #ddd;
+	text-align: center;
 }
 
 .table > thead > tr > th {

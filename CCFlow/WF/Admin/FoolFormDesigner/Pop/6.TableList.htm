@@ -26,7 +26,6 @@
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
 
-
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
@@ -69,8 +68,6 @@
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
 
             var err = "";
-            if (mapExt.GetPara("Title") == "")
-                err += '\t\n必填字段[标题]不能为空';
 
             if (err != "") {
                 alert(err);

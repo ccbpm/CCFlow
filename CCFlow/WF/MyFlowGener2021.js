@@ -148,7 +148,7 @@ function GenerWorkNode() {
 function BindFrm() {
     var node = flowData.WF_Node[0];
     var flow = flowData.WF_Flow[0];
-    var flowDevModel = GetPara(flow.AtPara, "FlowDevModel");
+    var flowDevModel = GetPara(flow.AtPara, "FlowDevModel") || flow.FlowDevModel;
     flowDevModel = flowDevModel == null || flowDevModel == undefined || flowDevModel == "" ? 0 : parseInt(flowDevModel);
     var frmNode = flowData["WF_FrmNode"];
     var flow = flowData["WF_Flow"];
@@ -235,7 +235,7 @@ function BindFrm() {
             break;
         case FlowDevModel.RefOneFrmTree://表单库单表单
             if (frmNode != null && frmNode != undefined) {
-                // frmNode = frmNode[0];
+                frmNode = Array.isArray(frmNode)? frmNode[0]:frmNode;
                 if (frmNode.FrmType == 0) { //傻瓜表单
                     $('head').append('<link href="../DataUser/Style/FoolFrmStyle/Default.css" rel="stylesheet" type="text/css" />');
                     Skip.addJs("./CCForm/FrmFool.js?ver=" + Math.random());
@@ -465,7 +465,7 @@ function Save(saveType) {
     }
 
     //保存从表数据
-    $("[name=Dtl]").each(function (i, obj) {
+    $("iframe[name=Dtl]").each(function (i, obj) {
         var contentWidow = obj.contentWindow;
         if (contentWidow != null && contentWidow.SaveAll != undefined && typeof (contentWidow.SaveAll) == "function") {
             contentWidow.SaveAll();
@@ -626,7 +626,7 @@ function SaveDtlAll() {
 }
 
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
-function checkBlanks() {
+/*function checkBlanks() {
     var checkBlankResult = true;
     //获取所有的列名 找到带* 的LABEL mustInput
 
@@ -669,7 +669,7 @@ function checkBlanks() {
     });
 
     return checkBlankResult;
-}
+}*/
 
 //正则表达式检查
 function checkReg() {

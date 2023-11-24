@@ -42,14 +42,17 @@
                 //访问后台，获得一个工作ID.
                 var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
                 handler.AddUrlData();
-                workID = handler.DoMethodReturnString("Default_Init");
-                if (workID.indexOf('err@') == 0) {
+                var data = handler.DoMethodReturnString("Default_Init");
+                if (data.indexOf('err@') == 0) {
 
-                    var url = 'error.htm?err=' + workID;
+                    var url = 'error.htm?err=' + data;
 
-                    confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
+                    confirm("测试容器发起错误，请参考以下信息：<\br>" + data);
                     window.close();
                 }
+                var str = data.split('@');
+                workID = str[0];
+                localStorage.setItem("Token", str[1]);
                 var webUser = new WebUser()
                 var orgNo = GetQueryString("OrgNo");
                 document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
@@ -114,7 +117,7 @@
         var flowNo = GetQueryString("FK_Flow");
         // var urlEnd = "&FK_Flow=" + flowNo + "&WorkID=" + workID + "&UserNo=" + userNo + "&Token=" + sid;
         function InitPageUserInfo(token) {
-            token = token || "";
+            token = token || localStorage.getItem("Token");
 
             //先设置缓存为空.
             webUserJsonString = null;
@@ -152,6 +155,17 @@
             html += "<td class='left-user-end' >部门</td>";
             html += "<td class='left-user-left'>" + webUser.FK_DeptName + "</td>";
             html += "</tr>";
+
+            html += "<tr>";
+            html += "<td class='left-user-end' >WorkID</td>";
+            html += "<td class='left-user-left'>" + workID + "</td>";
+            html += "</tr>";
+
+            html += "<tr>";
+            html += "<td class='left-user-end' >模板编号</td>";
+            html += "<td class='left-user-left'>" + GetQueryString("FK_Flow") + "</td>";
+            html += "</tr>";
+
             html += "</table>";
 
             $("#userInfo").html(html);
@@ -261,7 +275,7 @@
 
         //重新启动.
         function Restart() {
-
+            localStorage.setItem("Token", "");
             webUserJsonString = null;
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_TestingContainer");
             handler.AddUrlData();
@@ -272,8 +286,9 @@
                 confirm("测试容器发起错误，请参考以下信息：<\br>" + workID);
                 window.close();
             }
-            workID = data;
-            localStorage.setItem("Token", "");
+            var str = data.split('@');
+            workID = str[0];
+            localStorage.setItem("Token", str[1]);
             InitPageUserInfo();
             document.getElementById("J_iframe").src = "../../MyFlow.htm?FK_Flow=" + flowNo + "&WorkID=" + workID;
         }
@@ -296,8 +311,19 @@
         }
 
         //关闭页面登录 admin.
-        $(window).on('beforeunload', function () {
-            LetAdminerLogin();
+        $(window).on('beforeunload', function (e) {
+            //获取事件鼠标的位置
+            var n = window.event.screenX - window.screenLeft;
+            //获取浏览器界面可活动的窗口宽度（50是右上角关闭按钮的宽度）
+            var b = n > document.documentElement.scrollWidth - 50;
+            //window.event.clientY表示事件的y值（鼠标）
+            //window.event.altKey表示是否按下列alt键（alt+F4）
+            if (b && window.event.clientY < 0 || window.event.altKey) {
+                LetAdminerLogin();
+            } else {
+                alert("是刷新而非关闭");
+            }
+            
         });
 
 
@@ -383,7 +409,7 @@
             <div class="sidebar-collapse">
                 <div id="userInfo" style="box-sizing:border-box;"></div>
                 <div style="background-color: #dee6f3 !important; padding: 10px 35px; border-top: solid 1px #ccc; border-bottom: solid 1px #ccc; color: #000; font-weight: bold; ">
-                   <i class="icon-cloud-upload" style="margin-right:5px;"></i> 操作功能
+                   <i class="icon-cloud-upload" style="margin-right:5px;"></i> 测试容器
                 </div>
                 <div class="sidebar-collapse" id="Info">
                 </div>

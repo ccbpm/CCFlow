@@ -64,7 +64,7 @@
                 newRow += "<td>" + nameLink + "</td>";
                 newRow += "<td>" + en.Name + "</td>";
                 newRow += "<td>" + en.FK_SFDBSrcText + "</td>";
-                newRow += "<td>" + en.SrcTypeText + "</td>";
+                newRow += "<td>" + (en.SrcTypeText || en.DBSrcType) + "</td>";
 
                 if (en.CodeStruct == 1)
                     newRow += "<td>树结构</td>";

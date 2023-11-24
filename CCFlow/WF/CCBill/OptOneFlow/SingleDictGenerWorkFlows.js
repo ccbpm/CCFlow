@@ -18,11 +18,12 @@ new Vue({
             }
         },
 
-        OpenMyView: function (flowNo, workid) {
+        OpenMyView: function (flowNo, workid,nodeID) {
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyView");
             handler.AddPara("WorkID", workid);
             handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FK_Node", nodeID);
             var data = handler.DoMethodReturnString("MyView_Init");
             if (data.indexOf('err@') == 0) {
                 $("#Msg").html("<br>" + data);

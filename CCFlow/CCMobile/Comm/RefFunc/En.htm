@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link href="../../js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../js/mui/css/mui.picker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../js/mui/css/mui.dtpicker.css" rel="stylesheet" />
+    <link href="../../js/mui/css/mui.indexedlist.css" rel="stylesheet" type="text/css" />
+    <script src="../../js/jquery.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.view.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.picker.min.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.dtpicker.js"></script>
+
+    <!-- 引入通用基础JS -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/commonYangYH.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>>
+    <script src="../../MapAttr.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var pkVal;
+        var enName;
+        var frmData;
+        var dtM;
+        var userRegedit;
+        var count;
+        var isReadonly = GetQueryString("isReadonly") || "0";
+        //初始化页面
+        $(function () {
+            InitEnInfo();
+        });
+
+        /**
+         * 获取En页面的数据列表数据集合
+         */
+        function InitEnInfo() {
+            //获取主键的值
+            pkVal = GetPKVal();
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            enName = GetQueryString("EnName");
+            httpHandler.AddPara("EnName", enName);
+            httpHandler.AddPara("PKVal", pkVal);
+            var data = httpHandler.DoMethodReturnString("Entity_Init");
+            if (data.indexOf('err@') == 0) {
+                mui.alert(data.replace('err@', ''), '错误消息提醒');
+                return;
+            }
+
+            //解析json.
+            frmData = JSON.parse(data);
+            dtM = frmData["dtM"];
+            RefMethod(); //初始化菜单.
+
+            //加载mui的点击事件
+            var dtms = $(".dtm");
+            //表单是否是第一次加载
+            var IsFirstLoad = [];
+            dtms.each(function (i, dtm) {
+                var id = this.getAttribute('id');
+                var type = this.getAttribute('data-type');
+                var dataInfo = this.getAttribute('data-info');
+                IsFirstLoad[i] = true;
+                dtm.addEventListener('tap', function () {
+                    //执行刷新事件
+                    //如果是基础信息，显示解析字段
+                    if (type == "Main") {
+                        EnOnly_Init();
+                    }
+                    //如果是html,则加载html页面
+                    if (type == "Url") {
+                        if (dataInfo.indexOf("OneWork/OneWork.htm") != -1)
+                            dataInfo = "../../WorkOpt/OneWork/TimeBase.htm?From=En&EnName=" + enName + "&" + dataInfo.substring(dataInfo.indexOf("?") + 1);
+                        SetHref(dataInfo);
+                    }
+                    //如果是方法，则执行方法
+                    if (type == "Func") {
+                        //获取扩展方法
+                        var dtmI = dtM[id];
+                        var url = dtmI.Url;
+                        //if (url.indexOf("../RefMethod.htm") != -1)
+                        //    url = url.replace("../RefMethod.htm", "../../../WF/Comm/RefMethod.htm");
+                        OPenFun(url, dtmI.Warning, dtmI.Title, dtmI.FunPara);
+                        return;
+                    }
+
+
+                });
+
+            });
+            EnOnly_Init();
+        }
+
+        /**
+         *解析Entity的基础信息和相关功能
+         */
+        function RefMethod() {
+
+
+            //用户设置
+            var mypk = new WebUser().No + "_Funcs_HS_" + GetQueryString("EnName");
+            userRegedit = new Entity("BP.Sys.UserRegedit");
+            userRegedit.SetPKVal(mypk);
+            count = userRegedit.RetrieveFromDBSources();
+
+
+            var mainData = frmData.MainTable[0];
+            var title = "基本信息";
+            //if (mainData.Name != null && mainData.Name != "undefined" && mainData.Name != "") {
+            //    title = mainData.Name + title;
+            //    $("#headTitle").text(title);
+            //}
+
+
+            var _html = "";
+            _html += "<li class='mui-table-view-cell mui-collapse mui-active'>";
+            _html += "<a class='mui-navigate-right dtm' href='#'  id='mainInfo' data-type='Main' style='text-align:left'>" + title + "</a>";
+            _html += "<div class='mui-collapse-content'>";
+            _html += "<form  id='en_mainInfo' method='post'  class='mui-input-group'>";
+            _html += "</form>";
+            _html += "</div>";
+            _html += "</li>";
+
+            $("#entree").append(_html);
+            if (pkVal == null)
+                return;
+            if (dtM.length == 0)
+                return;
+            _html = "";
+            for (var idx = 0; idx < dtM.length; idx++) {
+
+                var rm = dtM[idx];
+                if ((rm.RefAttrKey != null && rm.RefAttrKey != "") || rm.IsCanBatch == "1" || rm.Visable == "0")
+                    continue;
+
+                if (userRegedit != null && userRegedit != undefined && userRegedit.Vals.indexOf("," + rm.No + ",") != -1)
+                    continue;
+
+                //显示基本信息及扩展功能
+                var icon = "../../Img/dot.png";
+                if (rm.Icon != null && rm.Icon != "" && rm.Icon.indexOf('http') != 0) {
+                    icon = "../" + rm.Icon;
+                }
+                _html += "<li class='mui-table-view-cell'>";
+                if (parseInt(rm.RefMethodType) == 0)
+                    _html += "<a class='mui-navigate-right dtm' href='javascript:void(0)'  id='" + rm.No + "' data-type='Func' style='text-align:left'>" + rm.Title + "</a>";
+                else
+                    _html += "<a class='mui-navigate-right dtm' href='javascript:void(0)'  id='" + rm.No + "' data-type='Url' data-info='" + rm.Url + "' style='text-align:left'>" + rm.Title + "</a>";
+                _html += "</li>";
+            }
+            $("#dtmtree").append(_html);
+
+        }
+        /**
+         * 打开方法
+         * @param url
+         * @param warning
+         * @param title
+         * @param FunPara
+         */
+        function OPenFun(url, warning, title, FunPara) {
+            if (title == "轨迹")
+                url = url + "&title=轨迹";
+            if (FunPara == true || FunPara == "true")
+                mui.openWindow({
+                    url: url, //通过URL传参
+                });
+            else {
+                if (warning == null || warning == "null" || warning == "")
+                    warning = "确定要执行吗？";
+                else {
+                    warning = warning.replace(/,\s+/g, ",");
+                    warning = warning.replace(/\s+/g, "\r\n");
+                }
+                mui.confirm("\"" + warning + "\"", title, ["取消", "确认"], function (e) {
+                    if (e.index == 0)
+                        return;
+                    SetHref(url);
+                })
+            }
+
+        }
+        /**
+         * 解析字段
+         */
+        function EnOnly_Init() {
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            httpHandler.AddUrlData();
+            httpHandler.AddPara("PKVal", pkVal);
+            var data = httpHandler.DoMethodReturnString("EntityOnly_Init");
+            if (data.indexOf('err@') == 0) {
+                $("#en_mainInfo").html(data);
+                return;
+            }
+
+            //解析json.
+            var enData = JSON.parse(data);
+            var mapData = enData["Sys_MapData"][0];
+            mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
+            mainData = enData["MainData"];
+            $("#headTitle").text(mapData.Name);
+            InitToolBar(mapData);
+            var enM = enData["dtM"];
+            //获取没有解析的外部数据源
+            var uiBindKeys = enData["UIBindKey"];
+            if (uiBindKeys != null && uiBindKeys.length != 0) {
+                //获取外部数据源 handler/JavaScript
+                var operdata;
+                for (var i = 0; i < uiBindKeys.length; i++) {
+                    var sfTable = new Entity("BP.Sys.SFTable", uiBindKeys[i].No);
+                    var srcType = sfTable.SrcType;
+                    if (srcType != null && srcType != "") {
+                        //Handler 获取外部数据源
+                        if (srcType == 5) {
+                            var selectStatement = sfTable.SelectStatement;
+                            if (plant == 'CCFlow')
+                                selectStatement = basePath + "/DataUser/SFTableHandler.ashx" + selectStatement;
+                            else
+                                selectStatement = basePath + "/DataUser/SFTableHandler/" + selectStatement;
+                            operdata = DBAccess.RunDBSrc(selectStatement, 1);
+                        }
+                        //JavaScript获取外部数据源
+                        if (srcType == 6) {
+                            operdata = DBAccess.RunDBSrc(sfTable.FK_Val, 2);
+                        }
+                        enData[uiBindKeys[i].No] = operdata;
+                    }
+                }
+
+            }
+
+
+            $("#en_mainInfo").html("");
+            //InitToolbar(); //初始工具栏.
+            var Sys_GroupFields = enData.Sys_GroupField;
+            //加入隐藏字段
+            var html = "";
+            $.grep(enData.Sys_MapAttr, function (item) {
+                return item.UIVisible == 0;
+
+            }).forEach(function (attr) {
+                var defval = ConvertDefVal(enData.MainTable[0], attr.DefVal, attr.KeyOfEn);
+                html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
+
+
+            });
+            $("#en_mainInfo").append(html);
+            //处理表单
+            var mapAttrsHtml = "";
+            for (var i = 0; i < Sys_GroupFields.length; i++) {
+                var gf = Sys_GroupFields[i];
+                if (count != 0 && userRegedit.MVals.indexOf("," + gf.OID + ",") != -1 && gf.OID != mapData.GetPara("PK"))//去除基本信息
+                    continue;
+
+                var lab = gf.Lab;
+                if (lab.indexOf(',') != -1) {
+                    lab = lab.substring(0, lab.indexOf(','));
+                }
+
+                mapAttrsHtml += "<div class=\"mui-table-view-divider\"><h5 style='color:black;'>" + lab + "</h5></div>";
+
+                mapAttrsHtml += InitDtlMapAttr(enData.Sys_MapAttr, gf.OID, enData, isReadonly, "en");
+
+            }
+
+            $("#en_mainInfo").append(mapAttrsHtml);
+
+            LoadEnOnly(enData);
+
+            mui(".mui-switch").switch();
+
+
+            //监听开关事件
+            var SW = $('.mui-switch');
+            $.each(SW, function (i, obj) {
+                var KeyOfEn = $(obj).attr("id");
+
+                document.getElementById(KeyOfEn).addEventListener("toggle", function (event) {
+                    KeyOfEn = KeyOfEn.substring(3);
+                    if (event.detail.isActive) {
+                        $("#TB_" + KeyOfEn).val("1");
+                    } else {
+                        $("#TB_" + KeyOfEn).val("0");
+                    }
+                })
+            });
+            //初始化复选下拉框
+            var selectPicker = $('.selectpicker');
+            $.each(selectPicker, function (i, selectObj) {
+                var defVal = $(selectObj).attr('data-val');
+                var defValArr = defVal.split(',');
+                $(selectObj).selectpicker('val', defValArr);
+            });
+
+
+            var pickdates = $("#en_mainInfo .ccformdate");
+            pickdates.each(function (i, pickdate) {
+                var id = this.getAttribute('id');
+                if ($("#" + id).html() == '') {
+                    $("#" + id).html("<p>请选择时间<p>");
+                }
+                pickdate.addEventListener('tap', function () {
+                    var _self = this;
+                    var optionsJson = this.getAttribute('data-options') || '{}';
+                    var options = JSON.parse(optionsJson);
+                    if (options.type == 0) {
+                        options.type = "date";//yyyy-MM-dd
+                    } else if (options.type == 1) {
+                        options.type = "date-time";//yyyy-MM-dd HH:mm
+                    } else if (options.type == 2) {
+                        options.type = "datetime";//yyyy-MM-dd HH:mm:ss
+                    } else if (options.type == 3) {
+                        options.type = "month";//yyyy-MM
+                    } else if (options.type == 4) {
+                        options.type = "time-min";//HH:mm
+                    } else if (options.type == 5) {
+                        options.type = "time";//HH:mm:ss
+                    } else if (options.type == 6) {
+                        options.type = "month-day";//MM-dd
+                    } else if (options.type == 7) {
+                        options.type = "year";//yyyy
+                    }
+
+                    var id = this.getAttribute('id');
+                    /*
+                        * 首次显示时实例化组件
+                        * 示例为了简洁，将 options 放在了按钮的 dom 上
+                        * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                        */
+                    _self.picker = new mui.DtPicker(options);
+                    _self.picker.show(function (rs) {
+                        /*
+                            * rs.value 拼合后的 value
+                            * rs.text 拼合后的 text
+                            * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                            * rs.m 月，用法同年
+                            * rs.d 日，用法同年
+                            * rs.h 时，用法同年
+                            * rs.i 分（minutes 的第二个字母），用法同年
+                            */
+
+                        /*
+                            * 返回 false 可以阻止选择框的关闭
+                            * return false;
+                            */
+                        /*
+                            * 释放组件资源，释放后将将不能再操作组件
+                            * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                            * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                            * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                            */
+                        $("#" + id).html(rs.text);
+                        $("#TB_" + id.substr(4)).val(rs.text);
+                        _self.picker.dispose();
+                        _self.picker = null;
+                    });
+                }, false);
+            });
+        }
+
+        function InitToolBar(mapData) {
+            //设置按钮
+
+            $("#NewBtn").hide();
+            $("#SaveBtn").hide();
+            $("#DeleteBtn").hide();
+            var isTree = GetQueryString("isTree");
+            var isReadonly = GetQueryString("isReadonly");
+            if (isTree == "1") {
+                if (isReadonly != "1")
+                    $("#SaveBtn").show();
+            } else {
+                //权限控制.
+                if (mapData.GetPara("IsInsert") == 1) {
+                    $("#NewBtn").show();
+                }
+
+                if (mapData.GetPara("IsUpdate") == 1) {
+                    $("#SaveBtn").show();
+                }
+                if (mapData.GetPara("IsDelete") == 1) {
+                    var pkVal = GetPKVal();
+                    if (pkVal != null)
+                        $("#DeleteBtn").show();
+                }
+            }
+            document.getElementById("SaveBtn").addEventListener("tap", function () {
+                Update();
+            });
+
+        }
+        //新建.
+        function New() {
+
+            var url = GetHrefUrl();
+            url = url.replace("#", "");
+            url = replaceParamVal(url, "PKVal", "");
+
+            SetHref(url); //刷新.
+        }
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var en = new Entity(enName, pkVal);
+
+            //删除相关的设置
+            var mapExts = new Entities("BP.Sys.MapExts");
+            mapExts.Retrieve("FK_MapData", en.FK_MapData, "AttrOfOper", en.KeyOfEn);
+            if (mapExts) {
+                for (var index = 0; index < mapExts.length; index++) {
+                    var mapExt = new Entity("BP.Sys.MapExt", mapExts[index].MyPK);
+                    mapExt.Delete();
+                }
+            }
+            en = new Entity(enName, pkVal);
+            var rs = en.Delete();
+            if (rs != null && rs != undefined && rs != '' && rs.indexOf("err@") == -1) {
+                mui.alert("删除成功.");
+            }
+            SetHref("../Search.htm?EnsName=" + enName + "s");
+        }
+
+        //更新.
+        function Update() {
+            var url = GetHrefUrl();
+            var en = new Entity(enName);
+            var pkval = GetPKVal();
+
+            if (checkBlanks() == false) {
+                mui.alert("请输入必填项！");
+                return false;
+            }
+
+            if (pkval == null || pkval == "") {
+
+                en.CopyForm();
+
+                //有编号列.
+                if (en.No != undefined) {
+
+                    //获取当前主键字段是否可以编辑?
+                    var val = $("#TB_No").prop("disabled");
+
+                    //主键是可以别用户自定义的 zhangsan.
+                    if (val == false) {
+                        if (en.IsExits() == true) {
+                            mui.alert('编号为[' + en.No + ']的数据已经存在.');
+                            return;
+                        }
+                    }
+
+                }
+
+
+                var info = en.Insert();
+                if (info.toString().indexOf("err@") != -1) {
+                    return;
+                }
+
+
+
+                SetHref(url); //刷新.
+                return;
+            }
+
+            en.pkval = pkval;
+            en.RetrieveFromDBSources();
+            en.SetPKVal(pkval);
+
+            en.CopyForm();
+            $.each($(".mui-switch"), function (i, item) {
+                var id = item.id;
+                if (id == undefined || id == "")
+                    return true;
+                if ($(item).hasClass("mui-active") == true) {
+                    var key = id.replace("SW_", "");
+                    en[key] = 1;
+                }
+            })
+            en.pkval = pkval;
+            en.SetPKVal(pkval);
+
+            var info = en.Update();
+            if (info == 0) {
+                alert('更新错误:' + info);
+                return;
+            }
+            SetHref(url); //刷新.
+        }
+        function LoadEnOnly(frmData) {
+            //设置默认值
+            for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
+
+                var mapAttr = frmData.Sys_MapAttr[j];
+
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'.
+                var defValue = ConvertDefVal(frmData.MainTable[0], mapAttr.DefVal, mapAttr.KeyOfEn);
+                //if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (defValue == "10002" || defValue == "10002.0000"))
+                //    defValue = "";
+
+                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+                    $('#TB_' + mapAttr.KeyOfEn).html(defValue);//只读大文本放到div里
+                    if (mapAttr.MyDataType == FormDataType.AppDate || mapAttr.MyDataType == FormDataType.AppDateTime)
+                        $('#LAB_' + mapAttr.KeyOfEn).html(defValue);
+                }
+
+                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+                    // 判断下拉框是否有对应option, 若没有则追加
+                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                        var mainTable = frmData.MainTable[0];
+                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                        //@浙商银行
+                        if (selectText == undefined)
+                            selectText = mainTable[mapAttr.FKText];
+                        if (selectText == undefined)
+                            selectText = "";
+                        $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                    }
+                    //
+                    $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
+                }
+
+                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1") {
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+                        //判断是否存在mui-active这个类
+                        if ($("#SW_" + mapAttr.KeyOfEn).hasClass("mui-active") == false)
+                            $("#SW_" + mapAttr.KeyOfEn).addClass("mui-active");
+                    } else {
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+                        //判断是否存在mui-active这个类
+                        if ($("#SW_" + mapAttr.KeyOfEn).hasClass("mui-active") == true)
+                            $("#SW_" + mapAttr.KeyOfEn).removeClass("mui-active");
+                    }
+                }
+
+                if (mapAttr.UIIsEnable == "0") {
+
+                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
+            }
+        }
+
+        //填充默认数据
+        function ConvertDefVal(MainTable, defVal, keyOfEn) {
+            var result = defVal;
+            //通过MAINTABLE返回的参数
+            for (var ele in MainTable) {
+                if (keyOfEn == ele) {
+                    result = MainTable[ele];
+                    break;
+                }
+            }
+            return result = unescape(result);
+        }
+        //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
+        function checkBlanks() {
+            var checkBlankResult = true;
+            //获得所有的class=mustInput的元素.
+            var lbs = $('.mustInput');
+            var msg = "";
+            $.each(lbs, function (i, obj) {
+
+                if ($(obj).parent().css('display') != 'none' && (($(obj).parent().next().css('display')) != 'none' || ($(obj).siblings("textarea").css('display')) != 'none')) {
+                } else {
+                    return;
+                }
+
+                var keyofen = $(obj).data().keyofen;
+                if (keyofen == undefined)
+                    return;
+                var ele = $("#TB_" + keyofen);
+                if (ele.length == 0)
+                    ele = $("#DDL_" + keyofen);
+                if (ele.length == 0)
+                    ele = $("#CB_" + keyofen);
+                if (ele.length == 0) {
+                    ele = $("input[name='CB_" + keyofen + "']");
+                    if (ele.length != 0) {
+                        var val = $("input[name='CB_" + keyofen + "']:checked").val();
+                        if (val == -1 || val == undefined) {
+                            checkBlankResult = false;
+                            $("input[name$='CB_" + keyofen + "']").parent().addClass('errorInput');
+                        } else {
+                            $("input[name$='CB_" + keyofen + "']").parent().removeClass('errorInput');
+                        }
+                        return;
+                    } else {
+                        var val = $("input[name='RB_" + keyofen + "']:checked").val();
+                        if (val == -1 || val == undefined) {
+                            checkBlankResult = false;
+                            $("input[name$='RB_" + keyofen + "']").parent().addClass('errorInput');
+                        } else {
+                            $("input[name$='RB_" + keyofen + "']").parent().removeClass('errorInput');
+                        }
+
+                        return;
+                    }
+                }
+                switch (ele[0].tagName.toUpperCase()) {
+                    case "INPUT":
+                        if (ele.attr('type') == "text") {
+                            if (ele.val() == "") {
+                                checkBlankResult = false;
+                                ele.addClass('errorInput');
+                            } else {
+                                ele.removeClass('errorInput');
+                            }
+                        }
+
+
+                        break;
+                    case "SELECT":
+                        if (ele.val() == null || ele.val() == "" || ele.val() == -1 || ele.children('option:checked').text() == "*请选择") {
+                            checkBlankResult = false;
+                            ele.parent().addClass('errorInput');
+                        } else {
+                            ele.parent().removeClass('errorInput');
+                        }
+                        break;
+                    case "TEXTAREA":
+                        if (ele.val() == "") {
+                            checkBlankResult = false;
+                            ele.addClass('errorInput');
+                        } else {
+                            ele.removeClass('errorInput');
+                        }
+                        break;
+                }
+
+            });
+
+
+            return checkBlankResult;
+        }
+
+    </script>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title" id="headTitle">基础信息</h1>
+        <!--<a class="mui-action-back mui-icon mui-pull-right" style="font-size:12px;" id="DeleteBtn" onclick="Delete()">删除</a>-->
+        <a class="mui-action-back mui-icon mui-pull-right" style=" display: none;font-size: 14px; margin-right: 2px" id="SaveBtn">保存</a>
+        <!--<a class="mui-action-back mui-icon mui-pull-right" style="font-size: 12px;margin-right:2px" id="NewBtn" onclick="New()">新建</a>-->
+
+    </header>
+
+    <div class="mui-content">
+        <div class="mui-card">
+            <ul class="mui-table-view" id="entree"></ul>
+            <ul class="mui-table-view mui-table-view-chevron" id="dtmtree"></ul>
+        </div>
+    </div>
+</body>
+
+</html>

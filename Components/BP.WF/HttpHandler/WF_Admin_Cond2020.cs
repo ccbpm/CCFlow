@@ -30,11 +30,14 @@ namespace BP.WF.HttpHandler
         }
         public string List_Move()
         {
+            string ptable = this.GetRequestVal("PTable");
+            string pkField = this.GetRequestVal("PKField"); 
+
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
-                string sql = "UPDATE WF_Cond SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
+                string enNo = ens[i];
+                string sql = "UPDATE "+ ptable + " SET Idx=" + i + " WHERE "+ pkField + "='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
             return "顺序移动成功..";
@@ -47,7 +50,7 @@ namespace BP.WF.HttpHandler
                 toNodeID = int.Parse(mystr);
 
             int condType = this.GetRequestValInt("CondType");
-            return List_DoCheckExt(condType,this.FK_Node, toNodeID);
+            return List_DoCheckExt(condType,this.NodeID, toNodeID);
         }
         /// <summary>
         /// 校验是否正确

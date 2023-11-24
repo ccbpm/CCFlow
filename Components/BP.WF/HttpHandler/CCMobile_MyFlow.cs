@@ -38,16 +38,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetNoteValue()
         {
-            int fk_node = this.FK_Node;
+            int fk_node = this.NodeID;
             if (fk_node == 0)
-                fk_node = int.Parse(this.FK_Flow + "01");
+                fk_node = int.Parse(this.FlowNo + "01");
             Node nd = new Node(fk_node);
             #region  获取节点表单的数据
             Work wk = nd.HisWork;
             wk.OID = this.WorkID;
             wk.RetrieveFromDBSources();
             wk.ResetDefaultVal();
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestQueryStringKeys)
@@ -129,20 +129,20 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //节点信息
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
             ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
             //流程信息
-            Flow flow = new Flow(this.FK_Flow);
+            Flow flow = new Flow(this.FlowNo);
             ds.Tables.Add(flow.ToDataTableField("WF_Flow"));
 
             //操作按钮信息
-            BtnLab btnLab = new BtnLab(this.FK_Node);
+            BtnLab btnLab = new BtnLab(this.NodeID);
             ds.Tables.Add(btnLab.ToDataTableField("WF_BtnLab"));
 
             #region  加载自定义的button.
             BP.WF.Template.NodeToolbars bars = new NodeToolbars();
-            bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node, NodeToolbarAttr.IsMyFlow, 1, NodeToolbarAttr.Idx);
+            bars.Retrieve(NodeToolbarAttr.FK_Node, this.NodeID, NodeToolbarAttr.IsMyFlow, 1, NodeToolbarAttr.Idx);
             ds.Tables.Add(bars.ToDataTableField("WF_NodeToolbar"));
             #endregion  //加载自定义的button.
 
@@ -151,7 +151,7 @@ namespace BP.WF.HttpHandler
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
-            if (this.FK_Node.ToString().EndsWith("01") == false)
+            if (this.NodeID.ToString().EndsWith("01") == false)
             {
                 if (gwf.WFState == WFState.Askfor)
                     isAskForOrHuiQian = true;
@@ -168,7 +168,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //执行会签后的状态
-                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole == 0)
+                    if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader && btnLab.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
                     {
                         if (gwf.HuiQianZhuChiRen != WebUser.No && gwf.GetParaString("AddLeader").Contains(WebUser.No + ",") == false)
                             isAskForOrHuiQian = true;
@@ -196,7 +196,7 @@ namespace BP.WF.HttpHandler
             #region 按钮旁的下拉框
             if (nd.CondModel != DirCondModel.ByLineCond)
             {
-                if (nd.IsStartNode == true || gwf.TodoEmps.Contains(WebUser.No + ",") == true)
+                if (nd.ItIsStartNode == true || gwf.TodoEmps.Contains(WebUser.No + ",") == true)
                 {
                     /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 
@@ -213,7 +213,7 @@ namespace BP.WF.HttpHandler
                     #region 增加到达延续子流程节点。
                     if (nd.SubFlowYanXuNum >= 0)
                     {
-                        SubFlowYanXus ygflows = new SubFlowYanXus(this.FK_Node);
+                        SubFlowYanXus ygflows = new SubFlowYanXus(this.NodeID);
                         foreach (SubFlowYanXu item in ygflows)
                         {
                             DataRow dr = dtToNDs.NewRow();
@@ -234,13 +234,13 @@ namespace BP.WF.HttpHandler
                         string mysql = "";
                         // 找出来上次发送选择的节点.
                         if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MSSQL)
-                            mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC";
+                            mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FlowNo) + "Track A WHERE A.NDFrom=" + this.NodeID + " AND ActionType=1 ORDER BY WorkID DESC";
                         else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
-                            mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                            mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FlowNo) + "Track A WHERE A.NDFrom=" + this.NodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                         else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
-                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
-                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
+                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FlowNo) + "Track A WHERE A.NDFrom=" + this.NodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
+                        else if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                            mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FlowNo) + "Track A WHERE A.NDFrom=" + this.NodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1";
 
                         //获得上一次发送到的节点.
                         defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
@@ -328,8 +328,8 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccfrm = new WF_CCForm();
             string str = ccfrm.FrmGener_Save();
 
-            Flow fl = new Flow(this.FK_Flow);
-            Node nd = new Node(this.FK_Node);
+            Flow fl = new Flow(this.FlowNo);
+            Node nd = new Node(this.NodeID);
             Work wk = nd.HisWork;
             if (this.WorkID != 0) {
                 wk.OID = this.WorkID;
@@ -349,7 +349,7 @@ namespace BP.WF.HttpHandler
 
 
             // 这里保存的时候，需要保存到草稿,没有看到PC端对应的方法。
-            string nodeIDStr = this.FK_Node.ToString();
+            string nodeIDStr = this.NodeID.ToString();
             if (nodeIDStr.EndsWith("01") == true)
             {
                 if (fl.DraftRole == DraftRole.SaveToDraftList)
@@ -363,7 +363,7 @@ namespace BP.WF.HttpHandler
 
         public string MyFlowGener_Delete()
         {
-            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, WebUser.Name + "用户删除", true);
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FlowNo, this.WorkID, WebUser.Name + "用户删除", true);
             return "删除成功...";
         }
 

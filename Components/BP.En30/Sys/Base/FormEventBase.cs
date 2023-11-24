@@ -256,7 +256,6 @@ namespace BP.Sys.Base
         /// <param name="EventSource"></param>
         /// <param name="en"></param>
         /// <param name="atPara"></param>
-        /// <param name="jumpToEmps"></param>
         /// <returns></returns>
         public string DoIt(string EventSource, Entity en, string atPara)
         {
@@ -290,7 +289,7 @@ namespace BP.Sys.Base
                 }
             }
 
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -334,10 +333,8 @@ namespace BP.Sys.Base
                     return this.DtlRowSaveAfter();
                 default:
                     throw new Exception("@没有判断的表单事件类型:" + EventSource);
-                    break;
             }
             #endregion 执行事件.
-            return null;
         }
         #endregion 基类方法.
     }

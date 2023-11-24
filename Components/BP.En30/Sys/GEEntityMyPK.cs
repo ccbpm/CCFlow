@@ -57,19 +57,19 @@ namespace BP.Sys
         /// <returns></returns>
         public override string ToString()
         {
-            return this.FK_MapData;
+            return this.FrmID;
         }
         public override string ClassID
         {
             get
             {
-                return this.FK_MapData;
+                return this.FrmID;
             }
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         /// <summary>
         /// 通用OID实体
         /// </summary>
@@ -82,11 +82,11 @@ namespace BP.Sys
         /// <param name="frmID">节点ID</param>
         public GEEntityMyPK(string frmID)
         {
-            this.FK_MapData = frmID;
+            this.FrmID = frmID;
         }
         public GEEntityMyPK(string frmID, string pk)
         {
-            this.FK_MapData = frmID;
+            this.FrmID = frmID;
             this.PKVal = pk;
             this.Retrieve();
         }
@@ -103,10 +103,10 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                if (this.FK_MapData == null)
-                    throw new Exception("没有给" + this.FK_MapData + "值，您不能获取它的Map。");
+                if (this.FrmID == null)
+                    throw new Exception("没有给" + this.FrmID + "值，您不能获取它的Map。");
 
-                this._enMap = BP.Sys.MapData.GenerHisMap(this.FK_MapData);
+                this._enMap = BP.Sys.MapData.GenerHisMap(this.FrmID);
                 return this._enMap;
             }
         }
@@ -117,9 +117,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntityMyPKs();
-                return new GEEntityMyPKs(this.FK_MapData);
+                return new GEEntityMyPKs(this.FrmID);
             }
         }
         #endregion
@@ -133,14 +133,14 @@ namespace BP.Sys
         #region 重载基类方法
         public override string ToString()
         {
-            //if (this.FK_MapData == null)
+            //if (this.FrmID == null)
             //    throw new Exception("@没有能 FK_MapData 给值。");
-            return this.FK_MapData;
+            return this.FrmID;
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         #endregion
 
         #region 方法
@@ -151,9 +151,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntityMyPK();
-                return new GEEntityMyPK(this.FK_MapData);
+                return new GEEntityMyPK(this.FrmID);
             }
         }
         /// <summary>
@@ -165,7 +165,7 @@ namespace BP.Sys
       
         public GEEntityMyPKs(string frmID)
         {
-            this.FK_MapData = frmID;
+            this.FrmID = frmID;
         }
         #endregion
 

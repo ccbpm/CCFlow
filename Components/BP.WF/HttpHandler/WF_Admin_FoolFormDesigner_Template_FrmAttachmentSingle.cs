@@ -37,10 +37,10 @@ namespace BP.WF.HttpHandler
         {
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请上传文件模板";
-            HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
             //保存文件到临时目录
-            string path =  BP.Difference.SystemConfig.PathOfTemp + file.FileName;
-            HttpContextHelper.UploadFile(file, path);
+            string path =  BP.Difference.SystemConfig.PathOfTemp + HttpContextHelper.GetNameByIdx(0);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), path);
             BP.Sys.FrmUI.FrmAttachmentSingle ath = new Sys.FrmUI.FrmAttachmentSingle(this.MyPK);
             //存储到模板库里。
             DBAccess.SaveFileToDB(path, ath.EnMap.PhysicsTable, "MyPK", this.MyPK, "TemplateFile");

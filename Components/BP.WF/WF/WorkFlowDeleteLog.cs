@@ -209,7 +209,7 @@ namespace BP.WF
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -223,7 +223,7 @@ namespace BP.WF
         /// <summary>
         /// 流程类别
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {

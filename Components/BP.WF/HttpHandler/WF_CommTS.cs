@@ -191,7 +191,7 @@ namespace BP.WF.HttpHandler
                 cond.MyPK = pkval;
                 cond.Retrieve();
 
-                return WF_Admin_Cond2020.List_DoCheckExt(cond.CondTypeInt, cond.FK_Node, cond.ToNodeID);
+                return WF_Admin_Cond2020.List_DoCheckExt(cond.CondTypeInt, cond.NodeID, cond.ToNodeID);
             }
             #endregion 特殊业务处理.
 
@@ -430,7 +430,7 @@ namespace BP.WF.HttpHandler
                 sql = BP.WF.Glo.DealExp(sql, en);
                 dt = DBAccess.RunSQLReturnTable(sql);
             }
-            if (dt == null)
+            if(dt == null)
                 return "";
             if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -462,7 +462,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.SetValByKey(item.Key, item.Value);
                 }
-                var num = en.Save();
+                int num = en.Save();
 
                 return num.ToString();
             }
@@ -476,7 +476,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.SetValByKey(item.Key, item.Value);
                 }
-                var num = en.Save();
+                int num = en.Save();
                 return num.ToString();
             }
 
@@ -488,7 +488,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.SetValByKey(item.Key, item.Value);
                 }
-                var num = en.Save();
+                int num = en.Save();
                 return num.ToString();
             }
 
@@ -500,7 +500,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.SetValByKey(item.Key, item.Value);
                 }
-                var num = en.Save();
+                int num = en.Save();
                 return num.ToString();
             }
 
@@ -512,7 +512,7 @@ namespace BP.WF.HttpHandler
                 {
                     en.SetValByKey(item.Key, item.Value);
                 }
-                var num = en.Save();
+                int num = en.Save();
                 return num.ToString();
             }
 
@@ -521,7 +521,7 @@ namespace BP.WF.HttpHandler
         }
         public bool checkPower(string classID, string pkval)
         {
-            if (classID.Contains("BP.WF.Admin") == true && BP.Web.WebUser.IsAdmin == false)
+            if (classID.Contains("BP.WF.Template") == true && BP.Web.WebUser.IsAdmin == false)
                 throw new Exception("非法用户.");
 
             return true;
@@ -544,6 +544,8 @@ namespace BP.WF.HttpHandler
                 }
                 en.No = this.PKVal;
 
+                string val = en.Update().ToString();
+
                 //判断是否有对应的后端实体类，如果有则要执行更新.
                 if (DataType.IsNullOrEmpty(this.RefEnName) == false)
                 {
@@ -559,8 +561,7 @@ namespace BP.WF.HttpHandler
                     }
                     enServ.Update();
                 }
-
-                return en.Update().ToString();
+                return val;
             }
 
             if (this.PK.Equals("MyPK") == true)
@@ -935,7 +936,7 @@ namespace BP.WF.HttpHandler
 
             return "err@没有判断的类型Entities_RetrieveLikeKey:" + this.PKVal;
         }
-        
+
         /// <summary>
         /// 执行删除
         /// </summary>
@@ -957,7 +958,7 @@ namespace BP.WF.HttpHandler
 
                     enServ.PKVal = this.PKVal;
                     enServ.RetrieveFromDBSources();
-                    var i = enServ.Delete();
+                    int i = enServ.Delete();
 
                     en.Delete(); //执行本实体的删除.
                     return i.ToString();
@@ -979,7 +980,7 @@ namespace BP.WF.HttpHandler
 
                     enServ.PKVal = this.PKVal;
                     enServ.RetrieveFromDBSources();
-                    var i = enServ.Delete();
+                    int i = enServ.Delete();
 
                     en.Delete(); //执行本实体的删除.
                     return i.ToString();
@@ -1003,7 +1004,7 @@ namespace BP.WF.HttpHandler
 
                     enServ.PKVal = this.PKVal;
                     enServ.RetrieveFromDBSources();
-                    var i = enServ.Delete();
+                    int i = enServ.Delete();
 
                     en.Delete(); //执行本实体的删除. 
                     return i.ToString();
@@ -1026,7 +1027,7 @@ namespace BP.WF.HttpHandler
 
                     enServ.PKVal = this.PKVal;
                     enServ.RetrieveFromDBSources();
-                    var i = enServ.Delete();
+                    int i = enServ.Delete();
 
                     en.Delete(); //执行本实体的删除.
                     return i.ToString();
@@ -1050,7 +1051,7 @@ namespace BP.WF.HttpHandler
 
                     enServ.PKVal = this.PKVal;
                     enServ.RetrieveFromDBSources();
-                    var i = enServ.Delete();
+                    int i = enServ.Delete();
 
                     en.Delete(); //执行本实体的删除.
                     return i.ToString();
@@ -1064,8 +1065,7 @@ namespace BP.WF.HttpHandler
 
         public string Entity_Upload()
         {
-            var files = HttpContextHelper.RequestFiles();
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
             string saveTo = this.GetRequestVal("SaveTo");
@@ -1078,26 +1078,31 @@ namespace BP.WF.HttpHandler
             else
             {
                 if (saveTo.StartsWith("/DataUser"))
+                {
                     realSaveTo = SystemConfig.PathOfWebApp + saveTo;
+
+                    //DataUser路径去重
+                    realSaveTo = realSaveTo.Replace("DataUser//DataUser", "DataUser");
+                }
             }
             //获取文件的名称
-            string fileName = files[0].FileName;
+            string fileName = HttpContextHelper.GetNameByIdx(0);
             if (fileName.IndexOf("/") >= 0)
                 fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
             //文件后缀
-            string ext = System.IO.Path.GetExtension(files[0].FileName);
+            string ext = System.IO.Path.GetExtension(HttpContextHelper.GetNameByIdx(0));
 
             //文件大小
-            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+            float size = HttpContextHelper.RequestFileLength(HttpContextHelper.RequestFiles(0)) / 1024;
 
             FileInfo info = new FileInfo(saveTo);
-            HttpContextHelper.UploadFile(files[0], realSaveTo + fileName+ext);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), realSaveTo + fileName + "." + ext);
             AtPara para = new AtPara();
             para.SetVal("FileName", fileName);
             para.SetVal("FileExt", ext);
             para.SetVal("FileSize", size.ToString());
-            para.SetVal("FilePath", saveTo + fileName + ext);
+            para.SetVal("FilePath", saveTo + fileName + "." + ext);
             string saveInfo = para.GenerAtParaStrs();
             if (this.PK.Equals("No") == true)
             {

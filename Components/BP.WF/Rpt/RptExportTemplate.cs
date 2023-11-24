@@ -38,7 +38,7 @@ namespace BP.WF.Rpt
         {
             foreach(RptExportTemplateCell cell in Cells)
             {
-                if (cell.FK_MapData == fk_mapdata)
+                if (cell.FrmID == fk_mapdata)
                     return true;
             }
 
@@ -81,7 +81,7 @@ namespace BP.WF.Rpt
         {
             foreach(RptExportTemplateCell cell in Cells)
             {
-                if (!string.IsNullOrWhiteSpace(cell.DtlKeyOfEn))
+                if (!BP.DA.DataType.IsNullOrEmpty(cell.DtlKeyOfEn))
                     return cell.FK_DtlMapData;
             }
 
@@ -117,7 +117,7 @@ namespace BP.WF.Rpt
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_cellName))
+                if (BP.DA.DataType.IsNullOrEmpty(_cellName))
                     _cellName = GetCellName(ColumnIdx, RowIdx);
 
                 return _cellName;
@@ -132,7 +132,7 @@ namespace BP.WF.Rpt
         /// <summary>
         /// 字段所属fk_mapdata
         /// </summary>
-        public string FK_MapData { get; set; }
+        public string FrmID { get; set; }
 
         /// <summary>
         /// 字段英文名

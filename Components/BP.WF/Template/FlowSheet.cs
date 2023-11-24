@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.Collections;
 using BP.DA;
 using BP.Port;
 using BP.En;
 using BP.Web;
-using BP.Sys;
-using BP.WF.Data;
 
 namespace BP.WF.Template
 {
@@ -152,7 +149,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用开始节点数据重置按钮
         /// </summary>
-        public bool IsResetData
+        public bool ItIsResetData
         {
 
             get
@@ -168,7 +165,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否自动装载上一笔数据
         /// </summary>
-        public bool IsLoadPriData
+        public bool ItIsLoadPriData
 
         {
             get
@@ -228,7 +225,7 @@ namespace BP.WF.Template
         public FlowSheet(string _No)
         {
             this.No = _No;
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
             {
                 int i = this.RetrieveFromDBSources();
                 if (i == 0)
@@ -403,7 +400,7 @@ namespace BP.WF.Template
                 if (gwf.WFState != WFState.Complete)
                     return "err@仅仅能对已经完成的流程才能回滚,当前流程走到了["+gwf.NodeName+"]工作人员["+gwf.TodoEmps+"].";
 
-                gwf.FK_Flow = this.No;
+                gwf.FlowNo = this.No;
                 gwf.FlowName = this.Name;
                 gwf.WorkID = workid;
                 gwf.PWorkID = rpt.PWorkID;
@@ -412,18 +409,18 @@ namespace BP.WF.Template
                 gwf.PEmp = rpt.PEmp;
 
 
-                gwf.FK_Node = backToNodeID;
+                gwf.NodeID = backToNodeID;
                 gwf.NodeName = endN.Name;
 
                 gwf.Starter = rpt.FlowStarter;
                 gwf.StarterName = empStarter.Name;
-                gwf.FK_FlowSort = fl.FK_FlowSort;
+                gwf.FlowSortNo = fl.FlowSortNo;
                 gwf.SysType = fl.SysType;
                 gwf.Title = rpt.Title;
                 gwf.WFState = WFState.ReturnSta; /* 设置为退回的状态 */
-                gwf.FK_Dept = rpt.FK_Dept;
+                gwf.DeptNo = rpt.DeptNo;
 
-                Dept dept = new Dept(empStarter.FK_Dept);
+                Dept dept = new Dept(empStarter.DeptNo);
 
                 gwf.DeptName = dept.Name;
                 gwf.PRI = 1;
@@ -461,25 +458,25 @@ namespace BP.WF.Template
                     // 增加上 工作人员的信息.
                     GenerWorkerList gwl = new GenerWorkerList();
                     gwl.WorkID = workid;
-                    gwl.FK_Flow = this.No;
+                    gwl.FlowNo = this.No;
 
-                    gwl.FK_Node = ndFrom;
-                    gwl.FK_NodeText = ndFromT;
-                    gwl.IsPass = true;
-                    if (gwl.FK_Node == backToNodeID)
+                    gwl.NodeID = ndFrom;
+                    gwl.NodeName = ndFromT;
+                    gwl.ItIsPass = true;
+                    if (gwl.NodeID == backToNodeID)
                     {
-                        gwl.IsPass = false;
+                        gwl.ItIsPass = false;
                         currWl = gwl;
                     }
 
-                    gwl.FK_Emp = EmpFrom;
-                    gwl.FK_EmpText = EmpFromT;
+                    gwl.EmpNo = EmpFrom;
+                    gwl.EmpName= EmpFromT;
                     if (gwl.IsExits)
                         continue; /*有可能是反复退回的情况.*/
 
-                    Emp emp = new Emp(gwl.FK_Emp);
-                    gwl.FK_Dept = emp.FK_Dept;
-                    gwl.DeptName = emp.FK_DeptText;
+                    Emp emp = new Emp(gwl.EmpNo);
+                    gwl.DeptNo = emp.DeptNo;
+                    gwl.DeptName = emp.DeptText;
 
 
                     todoEmps += emp.UserID + "," + emp.Name + ";";
@@ -488,7 +485,7 @@ namespace BP.WF.Template
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
                     //gwl.WarningHour = nd.WarningHour;
-                    gwl.IsEnable = true;
+                    gwl.ItIsEnable = true;
                     gwl.WhoExeIt = nd.WhoExeIt;
                     gwl.Insert();
                 }
@@ -498,39 +495,20 @@ namespace BP.WF.Template
                 gwf.TodoEmpsNum = num;
 
                 gwf.Update();
-
-
-                #region 加入退回信息, 让接受人能够看到退回原因.
-                ReturnWork rw = new ReturnWork();
-                rw.WorkID = workid;
-                rw.ReturnNode = backToNodeID;
-                rw.ReturnNodeName = endN.Name;
-                rw.Returner = WebUser.No;
-                rw.ReturnerName = WebUser.Name;
-
-                rw.ReturnToNode = currWl.FK_Node;
-                rw.ReturnToEmp = currWl.FK_Emp;
-                rw.BeiZhu = note;
-                rw.RDT = DataType.CurrentDateTime;
-                rw.IsBackTracking = false;
-                rw.setMyPK(DBAccess.GenerGUID());
-                rw.Insert();
-                #endregion   加入退回信息, 让接受人能够看到退回原因.
-
                 //更新流程表的状态.
-                rpt.FlowEnder = currWl.FK_Emp;
+                rpt.FlowEnder = currWl.EmpNo;
                 rpt.WFState = WFState.ReturnSta; /*设置为退回的状态*/
-                rpt.FlowEndNode = currWl.FK_Node;
+                rpt.FlowEndNode = currWl.NodeID;
                 rpt.Update();
 
                 // 向接受人发送一条消息.
-                BP.WF.Dev2Interface.Port_SendMsg(currWl.FK_Emp, "工作恢复:" + gwf.Title, "工作被:" + WebUser.No + " 恢复." + note, "ReBack" + workid, BP.WF.SMSMsgType.SendSuccess, this.No, int.Parse(this.No + "01"), workid, 0);
+                BP.WF.Dev2Interface.Port_SendMsg(currWl.EmpNo, "工作恢复:" + gwf.Title, "工作被:" + WebUser.No + " 恢复." + note, "ReBack" + workid, BP.WF.SMSMsgType.SendSuccess, this.No, int.Parse(this.No + "01"), workid, 0);
 
                 //写入该日志.
-                WorkNode wn = new WorkNode(workid, currWl.FK_Node);
-                wn.AddToTrack(ActionType.RebackOverFlow, currWl.FK_Emp, currWl.FK_EmpText, currWl.FK_Node, currWl.FK_NodeText, note);
+                WorkNode wn = new WorkNode(workid, currWl.NodeID);
+                wn.AddToTrack(ActionType.RebackOverFlow, currWl.EmpNo, currWl.EmpName, currWl.NodeID, currWl.NodeName, note);
 
-                return "@已经还原成功,现在的流程已经复原到(" + currWl.FK_NodeText + "). @当前工作处理人为(" + currWl.FK_Emp + " , " + currWl.FK_EmpText + ")  @请通知他处理工作.";
+                return "@已经还原成功,现在的流程已经复原到(" + currWl.NodeName + "). @当前工作处理人为(" + currWl.EmpNo + " , " + currWl.EmpName + ")  @请通知他处理工作.";
             }
             catch (Exception ex)
             {

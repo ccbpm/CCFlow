@@ -1,0 +1,124 @@
+License Agreement
+
+BY INSTALLING, DOWNLOADING, COPYING OR OTHERWISE USING THE PRODUCT, YOU AGREE TO BE BOUND BY THE TERMS OF THIS EULA. IF YOU DO NOT AGREE TO THE TERMS OF THIS EULA, DO NOT INSTALL, DOWNLOAD, COPY OR USE THE PRODUCT.
+1. IMPORTANT NOTICE.
+
+YOU SHOULD READ THE FOLLOWING TERMS AND CONDITIONS CAREFULLY BEFORE YOU DOWNLOAD, INSTALL OR USE E-ICEBLUE'S COMPONENT AND RELATED DOCUMENTATION (THE "LICENSED SOFTWARE") DISTRIBUTED UNDER THE TRADEMARK OF COMPONENT AND/OR E-ICEBLUE. BY INSTALLING OR USING THE LICENSED SOFTWARE, YOU AGREE TO BE BOUND BY THIS LICENSE AGREEMENT, AND ITS TERMS SHALL BE BINDING WITH RESPECT TO YOUR USE OF THE LICENSED SOFTWARE. IF YOU DO NOT AGREE TO THE FOLLOWING TERMS AND CONDITIONS, DO NOT INSTALL OR USE THE SOFTWARE.
+2. DEFINITIONS.
+
+A. "e-iceblue" means e-iceblue Corporation
+B. "You" and "Your" mean the party purchasing a license to use the Licensed Software under the terms of this agreement.
+C. "Application Programming Interface or API" means a publicly accessible interface defining the ways by which an application program may request services from libraries and/or software.
+D. "Licensed Software" means compiled Objects, Modules, License Key and any and all updates thereto, together with all associated documentation provided by e-iceblue or its authorized resellers.
+E. "License Key" means a unique code provided by e-iceblue or its authorized resellers which identifies You, as well as the license type, and which unlocks or enables certain features of the Licensed Software.
+F. "Application" or "Your Application" means a software application that You develop which incorporates all or parts of the Licensed Software.
+G. "Evaluation Trial Period" means a specified period of time during which You may temporarily use the Licensed Software for evaluation purposes only.
+3. LICENSE GRANT.
+
+The Cumulative License granted to You by e-iceblue is a combination of the Base License Grant, described in section (3A) below, which is common to every Licensed Software title covered by this agreement, and one or more supplemental License Grant which covers the specific product obtained by You from e-iceblue or its authorized resellers.
+Four basic types of supplemental License Grants are described in sections (3B): Evaluation License, Developer License, Developer OEM License, Site Enterprise License, Site OEM License.
+These five basic types are hereby further defined and/or restricted as to the number of developers, servers, geography locations and distribution method(s), depending on the specific product(s) being licensed by You.
+The precise combination of the Base License Grant and one or more supplemental License Grant(s) obtained by You is identified by e-iceblue at the time of purchase or most recent upgrade.
+3A. BASE LICENSE GRANT.
+
+In consideration of Your payment of applicable license fees and/or Your acceptance of the terms of this Agreement, e-iceblue hereby grants to You certain nonexclusive and nontransferable rights limited by the terms of this Agreement.
+The Licensed Software is licensed (not sold) to You, for use strictly under the terms of this Agreement, and e-iceblue reserves all rights not expressly granted to You herein. If You upgrade the Licensed Software to a higher-numbered version thereof or to a comparable E-iceblue product, this license is terminated and Your rights shall be limited to the license associated with the upgraded product or version.
+In addition, You acknowledge that the Licensed Software may contain certain third party software components which are distributed under the terms of their own licenses.
+3B. EVALUATION LICENSE.
+
+In order to facilitate an efficient evaluation process of the Licensed Software by developers, e-iceblue may, at its discretion, provide specially designed, temporary License Key(s) that are encoded with an embedded expiration date.
+The License granted in conjunction with such License Key(s) is considered temporary, and multiple developers may use it for the sole purpose of evaluating the Licensed Software during a specific Evaluation Trial Period. Licensed Evaluation Trial Software contains mechanisms that inhibit its ability to function at a later date.
+It is Your responsibility to ensure that the Applications You create do not contain Licensed Evaluation Trial Software and that their ability to function at a later date is not inhibited or diminished.
+3C. DEVELOPER LICENSE.
+
+The following terms and conditions contained in this section (3C) apply to You ONLY if at the time of original purchase or most recent upgrade, the License granted to You by E-iceblue was defined as "Developer License".
+The specific license level selected by you at the time of purchase or most recent upgrade determines whether the license applies to (1) a single named developer, or (2) a team of named developers, for example a Developer Team, or (3) a single site (facility or campus) whereby an unlimited number of developers located within said site (facility or campus) may be allowed access to the Licensed Software.
+
+You are hereby granted a nonexclusive, royalty-free license to integrate the Licensed Software into Your Applications and to distribute such Licensed Software in connection with said Applications, provided that
+(a) said Applications do not in any way compete with the Licensed Software, or provide substantially the same functionality as the Licensed Software, or expose the functionality of the Licensed Software through a programmable interface;
+(b) each of Your Applications developed using Licensed Software is substantially larger, more complex, and contains a significantly wider range of functions as compared to the Licensed Software;
+(c) each of Your Applications developed using Licensed Software is designed for end users, rather than for developers who would be able to build other software that would compete with the Licensed Software, and
+(d) You do not permit further distribution of the Licensed Software by Your end users.
+
+You may embed the License Keys in the Applications You distribute, provided that the following conditions are met:
+(a) each such Application must be marked with a prominent copyright notice bearing Your name as declared by You during purchase of the License;
+(b) the License Key may not be embedded in any such Application or distributed in any other manner that makes the License Key visible to the end user, and
+(c) each such Application must include the following comment in its source code within close proximity to each copy of an embedded License Key: "This application utilizes a licensed copy of e-iceblue software, copyright (c) 2004-2018, which is the property of e-iceblue Corporation, www.e-iceblue.com. All rights are reserved by e-iceblue.
+Use of any objects outside of the context of this application is a violation of United States and international copyright laws and other applicable laws."
+
+For each License Key provided to You by e-iceblue, depending on the specific license level selected by you at the time of purchase or most recent upgrade, You are granted a nonexclusive License to make the Licensed Software and/or the License Key(s) available either to the specified number of Your named developers or to an unlimited number of Your developers located at a single site (facility or campus) as indicated by e-iceblue and further explained below.
+Should either the number of named developers or the number of sites with access to the Licensed Software and/or the License Key(s) ever exceed the number indicated at the time of original purchase or most recent upgrade, You agree to inform E-iceblue of such change and to upgrade Your License accordingly by paying an upgrade fee to e-iceblue in a timely manner.
+
+    One Developer Subscription authorizes One developer to utilize our product to create unlimited number of applications which can be deployed at only One geography location within your organization. This type of license supports one server or multiple servers in the same place, which is/are used to host your web application.
+    One Developer OEM Subscription authorizes One developer to create any number of applications using our product which can be deployed at Unlimited geography locations. This type of license allows royalty-free distribution.
+    One Site Enterprise Subscription entitles up to 10 developers in the register enterprise to create an unlimited number of custom applications/service using our product. It allows deployment of any number of custom applications at up to 10 geography locations.
+    One Site Enterprise OEM Subscription authorizes up to 50 developers in the register organization to create an unlimited number of custom applications using our product. It allows royalty-free deployment of any number of custom applications to Unlimited geography locations.
+
+4. RESTRICTIONS ON USE AND TRANSFER.
+
+You may not sublicense, rent, lease, assign or otherwise transfer the Licensed Software or any of Your rights thereto, either in whole or in part, to anyone else, except that You may, after obtaining written permission from e-iceblue, permanently transfer the Licensed Software in its entirety, provided You retain no copies of the Licensed Software and the transferee agrees to the terms and conditions of this Agreement.
+Use of the Licensed Software with a License Key obtained from a source other than e-iceblue or its authorized resellers is expressly and strictly forbidden. e-iceblue reserves the right to take any and all actions that e-iceblue, in its sole discretion, deems necessary to protect against, monitor and control the use of the Licensed Software with illegal License Keys.
+You agree to ensure that anyone who uses any portion of the Licensed Software provided to You complies with the terms and conditions of this Agreement.
+5. INTELLECTUAL PROPERTY RIGHTS.
+
+You acknowledge that the Licensed Software contains copyrighted material, trade secrets, trademarks and other proprietary material of e-iceblue ("Confidential Information"), and is protected under United States and international copyright law and other applicable laws.
+You may not engage in any unauthorized use or disclosure of any Confidential Information. You agree that the source code of the Licensed Software is confidential and proprietary to e-iceblue. Accordingly, You may not copy the Licensed Software, or decompile, disassemble, reverse engineer or create a derivative work based upon the Licensed Software, or authorize anyone else to do so.
+You must reproduce and maintain all copyright notices that are contained in the Licensed Software on any copy thereof that You make or use.
+6. TERM AND TERMINATION.
+
+Except as otherwise provided in this Agreement, depending on the specific license level selected by you at the time of purchase or most recent upgrade, the term of the license granted herein is either perpetual, or alternatively the license is periodic, valid for a specific period of time, such as a month or a year.
+The license becomes effective when You install or use the Licensed Software. You may terminate this license at any time by destroying any and all copies of the Licensed Software or by returning all such copies to e-iceblue.
+This Agreement and the associated license for the Licensed Software will terminate automatically and without provision of notice by e-iceblue if You fail to comply with any of the terms or conditions of this Agreement or if You cease permanent use of the Licensed Software, for whatever reason.
+Upon termination of this Agreement for any reason, You agree that You will destroy all copies of the Licensed Software or return all such copies to e-iceblue. In addition to this sentence and the previous sentence, Sections 4, 5 and 7-13 shall survive any termination of this Agreement.
+7. LIMITED WARRANTY.
+
+e-iceblue warrants that the Licensed Software will perform substantially in accordance with its accompanying documentation, when operated in the execution environment specified in such documentation, for the warranty period ending thirty (30) days following the date on which You first install or first use the Licensed Software.
+This limited warranty is void if failure of the Licensed Software to conform to such warranty is caused in whole or in part by
+(a) any defect in any hardware or other equipment used with the Licensed Software;
+(b) any failure of any hardware or any other equipment used with the Licensed Software to function in accordance with applicable manufacturer's specifications for such items;
+(c) any alteration, modification or enhancement of the Licensed Software by You or anyone other than e-iceblue;
+(d) any failure by You or anyone else to follow e-iceblue's instructions with respect to proper use of the Licensed Software; or
+(e) improper use, abuse, accident, neglect or negligence on the part of You or anyone other than e-iceblue.
+e-iceblue will not be obligated to honor the limited warranty or provide any remedy thereunder unless the Licensed Software is returned to e-iceblue along with the original dated receipt.
+Any replacement Licensed Software will be warranted for thirty (30) days following the date on which e-iceblue provides it to You.
+
+EXCEPT AS OTHERWISE SET FORTH IN THIS AGREEMENT, THE LICENSED SOFTWARE IS PROVIDED TO YOU "AS IS", AND E-ICEBLUE MAKES NO EXPRESS OR IMPLIED WARRANTIES WHATSOEVER WITH RESPECT TO ITS FUNCTIONALITY, CONDITION, PERFORMANCE, OPERABILITY OR USE.
+WITHOUT LIMITING THE FOREGOING, E-ICEBLUE DISCLAIMS ALL IMPLIED WARRANTIES INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR FREEDOM FROM INFRINGEMENT.
+SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSIONS MAY NOT APPLY TO YOU.
+THIS LIMITED WARRANTY GIVES YOU SPECIFIC LEGAL RIGHTS, AND YOU MAY ALSO HAVE OTHER RIGHTS THAT VARY FROM ONE JURISDICTION TO ANOTHER.
+8. LIMITATIONS OF LIABILITY.
+
+YOUR SOLE AND EXCLUSIVE REMEDY FOR ANY BREACH OF THE FOREGOING LIMITED WARRANTY SHALL BE, AT E-ICEBLUE'S OPTION, EITHER (A) REPAIR OR REPLACEMENT OF THE LICENSED SOFTWARE SO THAT IT CONFORMS TO THE FOREGOING LIMITED WARRANTY, OR (B) REFUND OF THE FEE THAT YOU PAID TO LICENSE THE LICENSED SOFTWARE.
+IN NO EVENT SHALL E-ICEBLUE BE LIABLE FOR ANY DAMAGES OF ANY TYPE, WHETHER DIRECT OR INDIRECT, CONSEQUENTIAL, INCIDENTAL OR SPECIAL DAMAGES, INCLUDING WITHOUT LIMITATION, LOST REVENUES, LOST PROFITS, LOSSES RESULTING FROM BUSINESS INTERRUPTION OR LOSS OF DATA, REGARDLESS OF THE FORM OF ACTION OR LEGAL THEORY UNDER WHICH SUCH LIABILITY MAY BE ASSERTED, EVEN IF E-ICEBLUE HAS BEEN ADVISED OF THE POSSIBILITY OR LIKELIHOOD OF SUCH DAMAGES.
+E-ICEBLUE SHALL HAVE NO LIABILITY WITH RESPECT TO ANY DATA THAT IS READ, ACCESSED, STORED OR PROCESSED WITH THE LICENSED SOFTWARE, OR FOR THE COSTS OF RECOVERING ANY SUCH DATA.
+IN NO EVENT SHALL E-ICEBLUE'S MAXIMUM AGGREGATE LIABILITY UNDER THIS AGREEMENT EXCEED THE TOTAL FEES PAID OR PAYABLE BY YOU TO LICENSE THE LICENSED SOFTWARE.
+SOME JURISDICTIONS DO NOT ALLOW THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATION OR EXCLUSION MAY NOT APPLY TO YOU.
+9. INDEMNIFICATION.
+
+You agree to defend, indemnify, and hold E-iceblue and all of its employees, agents, representatives, directors, officers, partners, shareholders, attorneys, predecessors, successors, and assigns harmless from and against any and all claims, proceedings, damages, injuries, liabilities, losses, costs, and expenses (including reasonable attorneys' fees and litigation expenses), relating to or arising from Your use of the Licensed Software, or any breach of this Agreement, except to the extent such claim relates to or arises from a violation by e-iceblue of any third party copyright, trademark, trade secret or other intellectual property right.
+10. EXPORT.
+
+You agree that You will not export or transmit the Licensed Software or any Applications, directly or indirectly, to any restricted countries or in any manner that would violate United States laws and regulations as shall from time to time govern the license and delivery of technology abroad by persons subject to the jurisdiction of the United States government, including the Export Administration Act of 1979, as amended, and any applicable laws or regulations issued thereafter.
+11. U.S. GOVERNMENT RESTRICTED RIGHTS.
+
+If You are licensing the Licensed Software on behalf of the U.S. Government or any of its agencies ("Government"), the use, duplication, reproduction, release, modification, disclosure or transfer of the Licensed Software by the Government is subject to restricted rights in accordance with Federal Acquisition Regulation ("FAR") 12.212 for civilian agencies and Defense Federal Acquisition Regulation Supplement ("DFARS") 227.7202 for military agencies.
+The Licensed Software is commercial. Use of the Licensed Software by the Government is further restricted in accordance with the terms and conditions of this Agreement.
+12. MISCELLANEOUS.
+
+If any provision of this Agreement is held to be invalid or unenforceable under any circumstances, its application in any other circumstances and the remaining provisions of this Agreement shall not be affected.
+No waiver of any right under this Agreement shall be effective unless given in writing by an authorized representative of e-iceblue.
+No waiver by e-iceblue of any right shall be deemed to be a waiver of any other right of e-iceblue arising under this Agreement.
+This Agreement is solely between You and e-iceblue and shall not be construed to create any third party beneficiary rights in any other individual, partnership, corporation or other entity.
+This Agreement shall be governed by and interpreted in accordance with the laws of the State of New York, without regard to its provisions governing conflicts of law.
+Any and all disputes between You and e-iceblue pertaining to this Agreement shall be submitted to one arbitrator in binding arbitration within ten miles of New York City, New York in accordance with the Commercial Rules of the American Arbitration Association ("AAA").
+The arbitrator shall be experienced in computer consulting, the development of custom software, the sale of packaged software, or related services.
+If You and e-iceblue do not agree on an arbitrator within sixty (60) days of the institution of the arbitration, the arbitrator shall be chose by AAA.
+Evidence and argument may be presented in person or by telephone, fax, postal mail, electronic mail, and other methods of communication approved by the arbitrator.
+The prevailing party in such proceeding shall be entitled to recover its actually incurred costs, including reasonable attorney's fees, arbitration and court costs.
+All hearings shall be held and a written arbitration award issued within one-hundred eighty (180) days of the date on which the arbitrator is appointed.
+Judgment on the award shall be final and binding and may be entered in any court of competent jurisdiction.
+13. ENTIRE AGREEMENT.
+
+YOU AGREE THAT THIS AGREEMENT IS THE COMPLETE AND EXCLUSIVE STATEMENT OF THE AGREEMENT BETWEEN YOU AND E-ICEBLUE, AND THAT IT SUPERSEDES ANY PROPOSALS OR PRIOR AGREEMENTS, ORAL OR WRITTEN, AND ANY OTHER COMMUNICATIONS RELATING TO THE LICENSED SOFTWARE AND THE SUBJECT MATTER HEREOF.
+E-ICEBLUE SHALL NOT BE BOUND BY ANY PROVISION OF ANY PURCHASE ORDER, RECEIPT, ACCEPTANCE, CONFIRMATION, CORRESPONDENCE OR OTHERWISE, OR BY ANY AGREEMENT BETWEEN YOU AND ANY OTHER PARTY, UNLESS E-ICEBLUE SPECIFICALLY AGREES TO SUCH PROVISION IN WRITING IN A FORM OF A LEGAL CONTRACT, DATED AND SIGNED BY YOU AND BY E-ICEBLUE'S OFFICER OR AUTHORIZED EMPLOYEE.
+NO VENDOR, DISTRIBUTOR, PROVIDER, RESELLER, OEM, SALES REPRESENTATIVE, OR OTHER PERSON IS AUTHORIZED TO MODIFY THIS AGREEMENT OR TO MAKE ANY WARRANTY, REPRESENTATION OR PROMISE REGARDING THE LICENSED SOFTWARE WHICH IS DIFFERENT FROM THOSE SET FORTH IN THIS AGREEMENT.

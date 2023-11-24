@@ -52,7 +52,7 @@ namespace BP.Sys
         {
             get
             {
-                var uac = new UAC();
+                UAC uac = new UAC();
                 uac.Readonly();
                 uac.IsView = false;
                 return uac;

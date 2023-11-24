@@ -5,6 +5,8 @@ using BP.Sys;
 using BP.DA;
 using BP.WF.Template;
 using BP.Difference;
+using System.Web;
+using System.IO;
 
 namespace BP.WF.HttpHandler
 {
@@ -20,20 +22,20 @@ namespace BP.WF.HttpHandler
         #region 修改轨迹.
         public string EditTrackDtl_Init()
         {
-            Track tk = new Track(this.FK_Flow, this.MyPK);
+            Track tk = new Track(this.FlowNo, this.MyPK);
             return tk.Msg;
         }
         public string EditTrackDtl_Save()
         {
             string msg = this.GetRequestVal("Msg");
-            string tackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string tackTable = "ND" + int.Parse(this.FlowNo) + "Track";
             string sql = "UPDATE " + tackTable + " SET Msg='" + msg + "' WHERE MyPK='" + this.MyPK + "'";
             DBAccess.RunSQL(sql);
             return "修改成功";
         }
         public string EditTrackDtl_Delete()
         {
-            string tackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string tackTable = "ND" + int.Parse(this.FlowNo) + "Track";
             string sql = "DELETE FROM  " + tackTable + " WHERE MyPK='" + this.MyPK + "'";
             DBAccess.RunSQL(sql);
             return "删除成功.";
@@ -48,10 +50,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string APICodeFEE_Init()
         {
-            if (string.IsNullOrWhiteSpace(FK_Flow))
+            if (DataType.IsNullOrEmpty(this.FlowNo))
                 return "err@FK_Flow参数不能为空！";
 
-            Flow flow = new Flow(this.FK_Flow);
+            Flow flow = new Flow(this.FlowNo);
 
             string tmpPath = "";
 
@@ -135,7 +137,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string NodeAttrs_Init()
         {
-            var strFlowId = GetRequestVal("FK_Flow");
+            string strFlowId = GetRequestVal("FK_Flow");
             if (DataType.IsNullOrEmpty(strFlowId))
             {
                 return "err@参数错误！";
@@ -177,7 +179,7 @@ namespace BP.WF.HttpHandler
                 dr["HisDeliveryWayText"] = node.HisDeliveryWayText;
 
                 //接收方数量
-                var intHisDeliveryWayCount = 0;
+                int intHisDeliveryWayCount = 0;
                 if (node.HisDeliveryWay == BP.WF.DeliveryWay.ByStation)
                 {
                     dr["HisDeliveryWayJsFnPara"] = "ByStation";
@@ -225,7 +227,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             // 把流程信息放入.
-            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            BP.WF.Flow fl = new BP.WF.Flow(this.FlowNo);
             DataTable dtFlow = fl.ToDataTableField("Flow");
             ds.Tables.Add(dtFlow);
 
@@ -249,7 +251,7 @@ namespace BP.WF.HttpHandler
 
 
             //把节点信息放入.
-            BP.WF.Nodes nds = new Nodes(this.FK_Flow);
+            BP.WF.Nodes nds = new Nodes(this.FlowNo);
             DataTable dtNode = nds.ToDataTableField("Nodes");
             ds.Tables.Add(dtNode);
 
@@ -266,7 +268,7 @@ namespace BP.WF.HttpHandler
         public string DTSBTable_Save()
         {
             //获取流程属性
-            Flow flow = new Flow(this.FK_Flow);
+            Flow flow = new Flow(this.FlowNo);
             //获取主键方式
             DataDTSWay dtsWay = (DataDTSWay)this.GetRequestValInt("RB_DTSWay");
 
@@ -337,12 +339,12 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtColms); //列名.
 
             //属性列表.
-            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
+            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FlowNo) + "Rpt");
             DataTable dtAttrs = attrs.ToDataTableStringField("Sys_MapAttr");
             ds.Tables.Add(dtAttrs);
 
             //加入流程配置信息
-            Flow flow = new Flow(this.FK_Flow);
+            Flow flow = new Flow(this.FlowNo);
             DataTable dtFlow = flow.ToDataTableField("Flow");
             ds.Tables.Add(dtFlow);
 
@@ -351,8 +353,8 @@ namespace BP.WF.HttpHandler
         }
         public string DTSBTableExt_Save()
         {
-            string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            Flow fl = new Flow(this.FK_Flow);
+            string rpt = "ND" + int.Parse(this.FlowNo) + "Rpt";
+            Flow fl = new Flow(this.FlowNo);
             MapAttrs mattrs = new MapAttrs(rpt);
 
             string pk = this.GetRequestVal("DDL_OID");
@@ -442,7 +444,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 //Flow en = new Flow();
-                //en.No = this.FK_Flow;
+                //en.No = this.FlowNo;
                 //en.Retrieve();
 
                 //int val = this.GetRequestValInt("RB_StartGuideWay");
@@ -493,7 +495,7 @@ namespace BP.WF.HttpHandler
                 //    en.StartGuideWay = BP.WF.Template.StartGuideWay.SubFlowGuide;
                 //}
 
-                //BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FK_Flow + "01"));
+                //BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes(int.Parse(this.FlowNo + "01"));
                 //if (fns.Count >= 2)
                 //{
                 //    if (en.StartGuideWay == StartGuideWay.ByFrms)
@@ -523,7 +525,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(FK_Flow);
+                BP.WF.Template.TruckViewPower en = new BP.WF.Template.TruckViewPower(this.FlowNo);
                 en.Retrieve();
 
                 en = BP.Pub.PubClass.CopyFromRequestByPost(en) as BP.WF.Template.TruckViewPower;
@@ -540,31 +542,38 @@ namespace BP.WF.HttpHandler
 
         #region 数据导入.
         /// <summary>
-        /// 导入bpmn2.0 @hongyan. 这个方法翻译过去.
+        /// 导入bpmn2.0
         /// </summary>
         /// <returns></returns>
         public string Imp_DoneBPMN()
         {
-            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的流程模版。";
 
             //设置文件名
-            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[1].FileName);
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(HttpContextHelper.RequestFiles(1).FileName);
 
             //文件存放路径
             string filePath = BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
-            files[1].SaveAs(filePath);
-            HttpContextHelper.UploadFile(files[1], filePath);
+            //2023.8.21,解决文件文件目录不存在报错的异常，不存在时先创建 by oppein
+            FileInfo saveFileInfo = new FileInfo(filePath);
+            string saveDirectory = saveFileInfo.DirectoryName;
+            if (!Directory.Exists(saveDirectory))
+            {
+                Directory.CreateDirectory(saveDirectory);
+            }
 
-            string flowNo = this.FK_Flow;
+            HttpContextHelper.RequestFiles(1).SaveAs(filePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(1), filePath);
+
+            string flowNo = this.FlowNo;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
 
             //检查流程编号
             if (DataType.IsNullOrEmpty(flowNo) == false)
             {
                 Flow fl = new Flow(flowNo);
-                FK_FlowSort = fl.FK_FlowSort;
+                FK_FlowSort = fl.FlowSortNo;
             }
 
             //检查流程类别编号
@@ -583,7 +592,7 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("FK_Flow", flow.No);
             ht.Add("FlowName", flow.Name);
-            ht.Add("FK_FlowSort", flow.FK_FlowSort);
+            ht.Add("FK_FlowSort", flow.FlowSortNo);
             ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
             return BP.Tools.Json.ToJson(ht);
         }
@@ -593,26 +602,25 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Imp_Done()
         {
-            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的流程模版。";
 
             //设置文件名
-            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(HttpContextHelper.GetNameByIdx(0));
 
             //文件存放路径
             string filePath = BP.Difference.SystemConfig.PathOfTemp + "" + fileNewName;
             //files[0].SaveAs(filePath);
-            HttpContextHelper.UploadFile(files[0], filePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
-            string flowNo = this.FK_Flow;
+            string flowNo = this.FlowNo;
             string FK_FlowSort = this.GetRequestVal("FK_Sort");
 
             //检查流程编号
             if (DataType.IsNullOrEmpty(flowNo) == false)
             {
                 Flow fl = new Flow(flowNo);
-                FK_FlowSort = fl.FK_FlowSort;
+                FK_FlowSort = fl.FlowSortNo;
             }
 
             //检查流程类别编号
@@ -636,7 +644,7 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("FK_Flow", flow.No);
             ht.Add("FlowName", flow.Name);
-            ht.Add("FK_FlowSort", flow.FK_FlowSort);
+            ht.Add("FK_FlowSort", flow.FlowSortNo);
             ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
             return BP.Tools.Json.ToJson(ht);
         }
@@ -650,7 +658,7 @@ namespace BP.WF.HttpHandler
         public string NodesIcon_Init()
         {
             DataSet ds = new DataSet();
-            Nodes nds = new Nodes(this.FK_Flow);
+            Nodes nds = new Nodes(this.FlowNo);
             DataTable dt = nds.ToDataTableField("Nodes");
             ds.Tables.Add(dt);
 
@@ -688,11 +696,11 @@ namespace BP.WF.HttpHandler
 
             //流程上的字段
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
-            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FK_Flow) + "rpt", "LGType", 0, "MyDataType", 1);
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + int.Parse(this.FlowNo) + "rpt", "LGType", 0, "MyDataType", 1);
             ds.Tables.Add(attrs.ToDataTableField("FrmFields"));
 
             //节点 
-            BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+            BP.WF.Nodes nds = new BP.WF.Nodes(this.FlowNo);
             ds.Tables.Add(nds.ToDataTableField("Nodes"));
 
             //mypk
@@ -715,9 +723,9 @@ namespace BP.WF.HttpHandler
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;  //流程时限规则
-            msg.FK_Flow = this.FK_Flow;
+            msg.FlowNo = this.FlowNo;
 
-            BP.WF.Nodes nds = new BP.WF.Nodes(this.FK_Flow);
+            BP.WF.Nodes nds = new BP.WF.Nodes(this.FlowNo);
 
             #region 其他节点的处理人方式（求选择的节点）
             string nodesOfSMS = "";
@@ -796,7 +804,7 @@ namespace BP.WF.HttpHandler
 
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt(sql));
             }
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
             {
                 ht.Add("OverTimeNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM WF_EMPWORKS where to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "'"));
             }
@@ -863,7 +871,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp ";
                 sql += "UNION SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
             }
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
             {
                 sql = "SELECT  p.name,COUNT (w.WorkID) AS Num from Port_Emp p,WF_EmpWorks w  WHERE p. NO = w.FK_Emp AND WFState >1 to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "' GROUP BY p.name,w.FK_Emp";
             }
@@ -890,7 +898,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName ";
                 sql += "UNION SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
             }
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
             {
                 sql = "SELECT DeptName, count(WorkID) as Num FROM WF_EmpWorks WHERE WFState >1 and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW(), GETDATE(), 120) AND Fk_flow = '" + fk_flow + "' GROUP BY DeptName";
             }
@@ -917,7 +925,7 @@ namespace BP.WF.HttpHandler
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}') AND(sysdate - TO_DATE(SDT, 'yyyy-mm-dd hh24:mi:ss')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName ";
                 sql += "UNION Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and REGEXP_LIKE(SDT, '^[0-9]{4}-[0-9]{2}-[0-9]{2}$') AND (sysdate - TO_DATE(SDT, 'yyyy-mm-dd')) > 0 AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
             }
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
             {
                 sql = "Select NodeName,count(*) as Num from WF_EmpWorks WHERE WFState >1 and to_timestamp(CASE WHEN SDT='无' THEN '' ELSE SDT END, 'yyyy-mm-dd hh24:MI:SS') < NOW() AND Fk_flow = '" + fk_flow + "' GROUP BY NodeName";
             }

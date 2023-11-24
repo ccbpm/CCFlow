@@ -28,7 +28,7 @@ namespace BP.WF.Template
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FK_MapData";
         /// <summary>
         /// 是否必填
         /// </summary>
@@ -41,14 +41,7 @@ namespace BP.WF.Template
         /// 类型
         /// </summary>
         public const string EleType = "EleType";
-        /// <summary>
-        /// 是否写入流程表？
-        /// </summary>
-        public const string IsWriteToFlowTable = "IsWriteToFlowTable";
-        /// <summary>
-        /// 是否写入流程注册表
-        /// </summary>
-        public const string IsWriteToGenerWorkFlow = "IsWriteToGenerWorkFlow";
+       
     }
 	/// <summary>
 	/// 表单字段方案
@@ -56,20 +49,6 @@ namespace BP.WF.Template
     public class FrmField : EntityMyPK
     {
         #region 基本属性
-        /// <summary>
-        /// 元素类型.
-        /// </summary>
-        public string EleType
-        {
-            get
-            {
-                return this.GetValStringByKey(FrmFieldAttr.EleType);
-            }
-            set
-            {
-                this.SetValByKey(FrmFieldAttr.EleType, value);
-            }
-        }
         /// <summary>
         /// 正则表达式
         /// </summary>
@@ -98,7 +77,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否为空
         /// </summary>
-        public bool IsNotNull
+        public bool ItIsNotNull
         {
             get
             {
@@ -109,38 +88,24 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmFieldAttr.IsNotNull, value);
             }
         }
-        /// <summary>
-        /// 是否写入流程数据表
-        /// </summary>
-        public bool IsWriteToFlowTable
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FrmFieldAttr.IsWriteToFlowTable);
-            }
-            set
-            {
-                this.SetValByKey(FrmFieldAttr.IsWriteToFlowTable, value);
-            }
-        }
         
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStringByKey(FrmFieldAttr.FK_MapData);
+                return this.GetValStringByKey(FrmFieldAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmFieldAttr.FK_MapData, value);
+                this.SetValByKey(FrmFieldAttr.FrmID, value);
             }
         }
         public void setFK_MapData(string val)
         {
-            this.SetValByKey(FrmFieldAttr.FK_MapData, val);
+            this.SetValByKey(FrmFieldAttr.FrmID, val);
         }
         /// <summary>
         /// 字段
@@ -163,7 +128,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -177,7 +142,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 解决方案
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -240,7 +205,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否是数字签名?
         /// </summary>
-        public bool IsSigan
+        public bool ItIsSigan
         {
             get
             {
@@ -251,12 +216,7 @@ namespace BP.WF.Template
                 this.SetValByKey(MapAttrAttr.IsSigan, value);
             }
         }
-
-        public override string InitMyPKVals()
-        {
-            this.setMyPK( this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + this.KeyOfEn + "_" + this.EleType);
-            return base.InitMyPKVals();
-        }
+ 
         #endregion
 
         #region 构造方法
@@ -293,10 +253,9 @@ namespace BP.WF.Template
                 map.AddTBString(FrmFieldAttr.FK_Flow, null, "流程编号", true, false, 0, 4, 4);
                 map.AddTBInt(FrmFieldAttr.FK_Node, 0, "节点", true, false);
 
-                map.AddTBString(FrmFieldAttr.FK_MapData, null, "表单ID", true, false, 0, 100, 10);
+                map.AddTBString(FrmFieldAttr.FrmID, null, "表单ID", true, false, 0, 100, 10);
                 map.AddTBString(FrmFieldAttr.KeyOfEn, null, "字段", true, false, 0, 200, 20);
                 map.AddTBString(FrmFieldAttr.Name, null, "字段名", true, false, 0, 500, 20);
-                map.AddTBString(FrmFieldAttr.EleType, null, "类型", true, false, 0, 20, 20);
 
                 //控制内容.
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可用", true, true);
@@ -306,14 +265,15 @@ namespace BP.WF.Template
                 // Add 2013-12-26.
                 map.AddTBInt(FrmFieldAttr.IsNotNull, 0, "是否为空", true, false);
                 map.AddTBString(FrmFieldAttr.RegularExp, null, "正则表达式", true, false, 0, 500, 20);
+                map.AddTBString("EleType", null, "EleType", true, false, 0, 22, 20);
+                
 
-                // 是否写入流程表? 2014-01-26，如果是，则首先写入该节点的数据表，然后copy到流程数据表里
-                // 在节点发送时有ccflow自动写入，写入目的就是为了
-                map.AddTBInt(FrmFieldAttr.IsWriteToFlowTable, 0, "是否写入流程表", true, false);
-                map.AddTBInt(FrmFieldAttr.IsWriteToGenerWorkFlow, 0, "是否写入流程注册表", true, false);
+                //// 是否写入流程表? 2014-01-26，如果是，则首先写入该节点的数据表，然后copy到流程数据表里
+                //// 在节点发送时有ccflow自动写入，写入目的就是为了
+                //  //map.AddTBInt(FrmFieldAttr.IsWriteToFlowTable, 0, "是否写入流程表", true, false);
 
                 //map.AddDDLSysEnum(FrmFieldAttr.IsWriteToFlowTable, 0, "写入规则", true, true, FrmFieldAttr.IsWriteToFlowTable,
-                  //  "@0=不写入@1=写入流程数据表@2=写入流程注册表@3=写入全部");
+                //  "@0=不写入@1=写入流程数据表@2=写入流程注册表@3=写入全部");
 
                 map.AddBoolean(MapAttrAttr.IsSigan, false, "是否签名", true, true);
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
@@ -326,12 +286,8 @@ namespace BP.WF.Template
 
         protected override bool beforeInsert()
         {
-            if (DataType.IsNullOrEmpty(this.EleType))
-                this.EleType = "Field";
 
-            if(this.EleType.Equals("Field") ==true)
-                this.setMyPK(this.FK_MapData + "_"+ this.FK_Node + "_" + this.KeyOfEn);
-
+                this.setMyPK(this.FrmID + "_"+ this.NodeID + "_" + this.KeyOfEn);
 
             return base.beforeInsert();
         }
@@ -349,8 +305,9 @@ namespace BP.WF.Template
         /// </summary>
         public FrmFields(string fk_mapdata, int nodeID)
         {
-            this.Retrieve(FrmFieldAttr.FK_MapData, fk_mapdata, 
+            this.Retrieve(FrmFieldAttr.FrmID, fk_mapdata, 
                 FrmFieldAttr.FK_Node, nodeID,FrmFieldAttr.EleType, "Field");
+           
         }
         /// <summary>
         /// 得到它的 Entity 

@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Renci.SshNet.Async</name>
+    </assembly>
+    <members>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.ListDirectoryAsync(Renci.SshNet.SftpClient,System.String,System.Action{System.Int32},System.Threading.Tasks.TaskFactory{System.Collections.Generic.IEnumerable{Renci.SshNet.Sftp.SftpFile}},System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously retrieve list of files in remote directory
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="path">The path.</param>
+            <param name="listCallback">The list callback.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns>List of directory entries</returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.DownloadAsync(Renci.SshNet.SftpClient,System.String,System.IO.Stream,System.Threading.Tasks.TaskFactory,System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously download the file into the stream.
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="path">Remote file path.</param>
+            <param name="output">Data output stream.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.DownloadAsync(Renci.SshNet.SftpClient,System.String,System.IO.Stream,System.Action{System.UInt64},System.Threading.Tasks.TaskFactory,System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously download the file into the stream.
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="path">Remote file path.</param>
+            <param name="output">Data output stream.</param>
+            <param name="downloadCallback">The download callback.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.UploadAsync(Renci.SshNet.SftpClient,System.IO.Stream,System.String,System.Action{System.UInt64},System.Threading.Tasks.TaskFactory,System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously upload the stream into the remote file.
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="input">Data input stream.</param>
+            <param name="path">Remote file path.</param>
+            <param name="uploadCallback">The upload callback.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.UploadAsync(Renci.SshNet.SftpClient,System.IO.Stream,System.String,System.Boolean,System.Action{System.UInt64},System.Threading.Tasks.TaskFactory,System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously upload the stream into the remote file.
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="input">Data input stream.</param>
+            <param name="path">Remote file path.</param>
+            <param name="canOverride">if set to <c>true</c> then existing file will be overwritten.</param>
+            <param name="uploadCallback">The upload callback.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.SynchronizeDirectoriesAsync(Renci.SshNet.SftpClient,System.String,System.String,System.String,System.Threading.Tasks.TaskFactory{System.Collections.Generic.IEnumerable{System.IO.FileInfo}},System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously synchronizes the directories.
+            </summary>
+            <param name="client">The <see cref="T:Renci.SshNet.SftpClient"/> instance</param>
+            <param name="sourcePath">The source path.</param>
+            <param name="destinationPath">The destination path.</param>
+            <param name="searchPattern">The search pattern.</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns>List of uploaded files.</returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.ExecuteAsync(Renci.SshNet.SshCommand,System.Threading.Tasks.TaskFactory{System.String},System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously run a command.
+            </summary>
+            <param name="command">The <see cref="T:Renci.SshNet.SshCommand"/> instance</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns>Command execution result.</returns>
+        </member>
+        <member name="M:Renci.SshNet.Async.SshNetExtensions.ExecuteAsync(Renci.SshNet.SshCommand,System.String,System.Threading.Tasks.TaskFactory{System.String},System.Threading.Tasks.TaskCreationOptions,System.Threading.Tasks.TaskScheduler)">
+            <summary>
+            Asynchronously run a command.
+            </summary>
+            <param name="command">The <see cref="T:Renci.SshNet.SshCommand"/> instance</param>
+            <param name="commandText">The command text to execute</param>
+            <param name="factory">The <see cref="T:System.Threading.Tasks.TaskFactory">TaskFactory</see> used to create the Task</param>
+            <param name="creationOptions">The TaskCreationOptions value that controls the behavior of the
+            created <see cref="T:System.Threading.Tasks.Task">Task</see>.</param>
+            <param name="scheduler">The <see cref="T:System.Threading.Tasks.TaskScheduler">TaskScheduler</see>
+            that is used to schedule the task that executes the end method.</param>
+            <returns>Command execution result.</returns>
+        </member>
+    </members>
+</doc>

@@ -11,9 +11,8 @@ using BP.WF.Template;
 using BP.Difference;
 using BP.Web;
 using BP.WF.Template.SFlow;
-using BP.WF.Template.CCEn;
 using BP.WF.Template.Frm;
-
+using Aliyun.OSS;
 
 namespace BP.WF
 {
@@ -24,16 +23,30 @@ namespace BP.WF
     /// </summary>
     public class TemplateFlow : BP.En.EntityNoName
     {
+        public static void DoIt()
+        {
+            string tables = "WF_Flow,WF_Node,WF_Cond";
+
+            string frmID = "";
+            //WF_Flow
+
+
+            //WF_Node
+
+            //Sys_MapAttr
+
+            //Sys_
+        }
 
         #region 构造方法
         /// <summary>
         /// 流程
         /// </summary>
-         public TemplateFlow()
+        public TemplateFlow()
         {
             this.No = "";
         }
-    
+
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -145,7 +158,7 @@ namespace BP.WF
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
                 map.AddTBString(FlowAttr.OrgNo, null, "OrgNo", true, true, 0, 50, 10);
 
-                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true); //@hongyan.
+                map.AddTBDateTime(FlowAttr.CreateDate, null, "创建日期", true, true); 
                 map.AddTBString(FlowAttr.Creater, null, "创建人", true, true, 0, 100, 10, true);
 
                 // 改造参数类型.

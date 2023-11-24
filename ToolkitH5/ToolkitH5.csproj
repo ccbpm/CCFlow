@@ -68,6 +68,7 @@
     <Content Include="AppDemo\CRM\F004_CuiKuan.htm" />
     <Content Include="AppDemo\DataBase.js" />
     <Content Include="AppDemo\Draft.htm" />
+    <Content Include="AppDemo\Frms\F064.htm" />
     <Content Include="AppDemo\Frms\F024SDKToolbarFrm.htm" />
     <Content Include="AppDemo\Frms\F025SDKFrm.htm" />
     <Content Include="AppDemo\home.css" />

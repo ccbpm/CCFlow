@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>切换部门</title>
+    <link href="../css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/themes/classic/theme-classic.css" rel="stylesheet" type="text/css" />
+    <link href="../css/Main.css" rel="stylesheet" type="text/css" />
+    <link href="../js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="../js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+
+        $(document).on("pageshow", "#page_HuiQianList", function () {
+            // MessageShow("正在加载...", false);
+            Load_DeptList();
+        });
+
+        //弹出消息
+        function MessageShow(msg, autoClose) {
+            if (autoClose == true) {
+                $.mobile.loading().loader("show", "c", msg, true);
+                _MsgDialogT = setTimeout("MsgHidenLoader()", 2000);
+            } else {
+                $.mobile.loading().loader("show", "c", "", false);
+                //最长15秒自动隐藏
+                _MsgDialogT = setTimeout("MsgHidenLoader()", 15000);
+            }
+        }
+
+        //关闭消息
+        function MsgHidenLoader() {
+            $.mobile.loading().loader('hide');
+            if (_MsgDialogT != null) {
+                clearTimeout(_MsgDialogT);
+            }
+        }
+
+        //页面启动函数.
+        function Load_DeptList() {
+            $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在获取部门信息.</font>");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            var data = handler.DoMethodReturnString("ChangeDept_Init");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=ChangeDept_Init&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
+
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    if (data.length == 0) {
+                        $("#Msg").html("您有0个部门不需要切换部门.");
+                        return;
+                    }
+
+                    if (data.length == 1) {
+                        $("#Msg").html("<br><br>您只有1个部门<br><font color=green >(" + data[0].Name + ")</font><br>不需要切换部门.<br><br>");
+                        return;
+                    }
+
+                    var html = "<ul>";
+                    for (var i = 0; i < data.length; i++) {
+                        var dept = data[i];
+
+                        if (dept.CurrentDept == 1)
+                            html += "<li style='width:240px;'><font color='green'><b>" + dept.Name + "（当前部门）</b></font></li>";
+                        else
+                            html += "<li style='width:240px;' onclick=\"ChangeDept_Submit('" + dept.No + "');\" style='font-color:green;' ><u>" + dept.Name + "</u></li>";
+                    }
+
+                    html += "</ul>";
+
+                    $("#Msg").html(html);
+                    return;
+//                }
+//            });
+        }
+
+        function ChangeDept_Submit(deptNo) {
+
+            //执行登录..
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Setting");
+            handler.AddPara("DeptNo", deptNo);
+            var data = handler.DoMethodReturnString("ChangeDept_Submit");
+//            $.ajax({
+//                type: 'post',
+//                async: true,
+//                url: Handler + "?DoType=ChangeDept_Submit&DeptNo=" + deptNo + "&m=" + Math.random(),
+//                dataType: 'html',
+//                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+                    alert(data);
+            SetHref('../../CCMobilePortal/Home.htm');
+//                }
+//            });
+        }
+
+        function Back() {
+            SetHref('../../CCMobilePortal/Home.htm');
+            return;
+        }
+    </script>
+</head>
+<body>
+    <div id="page_HuiQianList" data-role="page" data-theme="d">
+        <header class="mui-bar mui-bar-nav">
+		    <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript:Back();"></a>
+		    <h1 class="mui-title">切换部门</h1>
+	    </header>
+        <!--<div data-role="header" onclick="Back();" data-position="fixed" data-tap-toggle="false"
+            data-theme="b">
+            <h2>
+                切换部门</h2>
+            <a href="../Home.htm" target="_self" data-icon="carat-l" data-iconpos="notext"></a>
+        </div>-->
+        <div class="mui-content" data-role="main">
+            <ul id="LV_HuiQianList" data-role="listview">
+            </ul>
+            <center>
+                <fieldset style="width: 100%; text-align: left; float: center; margin: 20px;">
+                    <legend>切换部门 - 请选择您要切换的部门 </legend>
+                    <div id="Msg" style="margin: 10px;" />
+                </fieldset>
+            </center>
+        </div>
+        <div data-role="panel" id="inside-a" data-position="right" data-display="overlay"
+            data-theme="d">
+            <ul id="Ul1" data-role="listview" data-theme="b">
+                <li data-icon="back"><a href="#" data-rel="close">关闭</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

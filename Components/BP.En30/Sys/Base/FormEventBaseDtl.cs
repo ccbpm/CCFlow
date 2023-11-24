@@ -74,7 +74,7 @@ namespace BP.Sys.Base
         /// <summary>
         /// 从表ID
         /// </summary>
-        public string FK_MapDtl
+        public string MapDtlNo
         {
             get
             {
@@ -318,7 +318,7 @@ namespace BP.Sys.Base
                 }
             }
 
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -350,11 +350,9 @@ namespace BP.Sys.Base
                     return this.DtlRowDelAfter();
                 default:
                     throw new Exception("@没有判断的表单从表事件类型:" + eventType);
-                    break;
             }
             #endregion 执行事件.
 
-            return null;
         }
         #endregion 基类方法.
     }

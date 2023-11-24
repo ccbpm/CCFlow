@@ -29,10 +29,10 @@
             //var html = "<b>Toolkit配置文件:/WF/config.js</b> ";
  
             var html = "<ul>";
-            html += "<li>BPM服务器地址:<font color=#409EFF><b>" + host + "</b> </font></li>";
-            html += "<li>BPM平台:<font color=#409EFF><b>" + plant + "</b></font></li>";
-            html += "<li>设计流程:<a href='" + host + "' target=_blank > 进入BPM设计器后台</a></li>";
-            html += "<li>子系统(域名):<font color=#409EFF><b>" + domain + "</b></font></li>";
+            html += "<li>BPM服务器地址：<font color=#FFF><span>" + host + "</span> </font></li>";
+            html += "<li>BPM平台：<font color=#FFF><span>" + plant + "</span></font></li>";
+            html += "<li>设计流程：<a href='" + host + "' target=_blank > 进入BPM设计器后台</a></li>";
+            html += "<li>子系统(域名)：<font color=#FFF><span>" + domain + "</span></font></li>";
             html += "</ul>";
 
             //var url = host + "/AppDemo/Standard/Login.htm";
@@ -69,6 +69,7 @@
                 return;
             }
 
+            //debugger;
             //第2步: 开始登录ccbpm,获得 token.
             //  1. 为了系统安全，请把 LoginCCBPM 的方法写入您的后台代码.
             //  2. LoginCCBPM 方法位于/WF/config.js文件中.
@@ -84,16 +85,15 @@
         }
     </script>
     <style>
-        .title {
-            left: 0;
-            top: 0;
-            width: 100vw;
-            display: flex;
-            position: fixed;
-            background-color: #409EFF;
+        .bg_login {
+            background-image: url('Img/dengluBg.jpg');
+            background-size: 100% 101%;
+            height: 100%;
+            width: 100%;
+            overflow-y: hidden;
+            scrollbar-width: none;
         }
-
-        .Tips {
+ /*       .Tips {
             width: 25vw;
             margin: 5rem 2rem;
             padding-left: 12px;
@@ -117,36 +117,32 @@
                 line-height: 30px;
                 padding-left: 20px;
                 text-align: left;
-            }
+            }*/
         #tip{
             margin-top:10px;
         }
             #tip ul {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                margin-left: 5px;
                 margin-left: 25px;
+                margin-top: 20px;
             }
                 #tip ul li {
-                    color:#a1a1a1
+                    color: #fff;
+                    margin-bottom: 10px;
+                    font-size: 15px;
                 }
-                #tip ul li a {
-                    color: #a1a1a1
-                }
-                    #tip ul li font b {
-                        color: #a1a1a1
+                    #tip ul li a {
+                        color: #fff;
                     }
-        .login {
-            width: auto;
-        }
+                    #tip ul li font b {
+                        color: #fff;
+                    }
 
         .login_title {
             border: none;
             font-size: 2.5rem;
             font-weight: bold;
             color: #000;
-            margin-bottom:0;
+            margin-bottom:20px;
         }
 
         .form_item {
@@ -155,104 +151,95 @@
             margin-bottom: 3rem;
         }
         .form_props {
-            margin-top: -1rem;
+            margin-top: 0;
         }
 
         .form-control {
             width: 100%;
-            height: 40px;
-            border-radius: 2.5vh;
+            height: 45px;
+            border-radius: 25px;
         }
-
-        .center-content {
-            margin-top: 100px;
-            width: 100vw;
-            height: 70vh;
-        }
-
         .layout {
             display: flex;
             justify-content: center;
-            align-items: center;
             margin-top: 20px;
-            width: 980px;
-            height: 525px;
-            box-shadow: 0 0 15px grey;
+            padding:0 115px;
         }
 
         .login_button {
             background-color: #409EFF;
             color: white;
             width: 100%;
-            height: 4rem;
+            /*height: 4rem;*/
+            height:45px;
             font-size: 1.5rem;
             border-color: #409EFF;
             border-radius: 2.5vh;
             box-shadow: none;
         }
-
+        .left-top{
+            margin-bottom:15px;
+        }
         .left-content {
-            margin-top: 50px;
-            width: 500px;
-            height: 485px;
-            text-align: start;
-            padding: 0px 0 0 55px;
+            display:flex;
+            flex-direction:column;
+            align-items:start;
+            margin-top: 25px;
+            width: 100%;
         }
-        .logo-img {
-            width: 165px;
+        .title_log {
+            margin-bottom: 10px;
+            width: 100px;
+            margin-left: 10px;
         }
-
-        .workflow {
-            margin-top: 20px;
-            font-size: 30px;
-            font-weight: bold;
+        .title {
+            font-size: 20px;
+            color: #fff;
+            margin-left: 100px;
         }
-
-        .platform {
-            font-size: 25px;
-            font-weight: bold;
-        }
-
         .right-content {
-            margin-top: 135px;
-            width: 490px;
-            height: 485px;
-            padding: 0px 50px;
+            margin-top: 95px;
+            width: 100%;
         }
-
-        .details {
-            font-size: 15px;
-        }
-
-            .details div {
-                margin: 17px 0;
-            }
         /* 其他登陆方式 */
         .login-other {
+            /*margin-top: 25px;*/
+            margin-top: 10px;
             height: 40px;
-            width: 280px;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .line {
-            flex-grow: 1;
-            height: 0.1px;
-            background-color: #c5c4c4;
+        .login_address{
+            margin-top:25px;
+            color:#777777;
         }
+            .login_address div{
+                font-size:13px;
+                margin:5px 0;
+            }
+
+            .line {
+                flex-grow: 1;
+                height: 0.1px;
+                background-color: #c5c4c4;
+            }
 
         .login-list {
-            width: 200px;
+            margin-top:20px;
+            /*margin-left: 10px;*/
+            width: 100%;
             height: 40px;
             display: flex;
-            justify-content: center
+            justify-content: space-around;
         }
 
         .item {
             width: 35px;
             height: 37px;
             border-radius: 3vh;
+            margin-left: 10px;
         }
         .item_link{
             margin:0 5px;
@@ -262,43 +249,33 @@
         }
     </style>
 </head>
-<!--style="background-image:url(Img/login_bg.png )"-->
-<body>
-    <div class="title">
-        <h4 style="color: white; margin-left: 2rem; margin-top: 20px; margin-bottom: 15px;">经典的、永恒的、奔腾不息的驰骋BPM......</h4>
-    </div>
-    <center style="display: flex; justify-content: center; align-items: center;  " class="center-content">
+<body class="bg_login">
         <div class="layout">
             <!-- 左侧内容 -->
             <div class="left-content">
-                <!-- style="float: left" -->
-                <div class="logo-img" style="float: left"><img class="logo-img" src="./Img/logo.png" style="width:100px;margin-bottom:10px;" /></div>
-                <!-- style="width:100px;" -->
-                <!--<div style="text-align:center; float:right">CCBPM二开工具包-工作示意图</div>-->
-                <!--<div class="logo-img"><img class="logo-img" src="./Img/logo.png" /></div>-->
-                <!-- text-align:center; float:right -->
-                <!--<div style="text-align: center; float: right; margin-top: 10px; font-size: 16px;">工具包-工作示意图</div>-->
-                <!--<img style="width:100%; padding-top:10px;" src="https://foruda.gitee.com/images/1684907810541528476/bb6fd47c_358162.png" />-->
-                <img style=" margin-top: 20px; width: 475px; height: 320px;" src="Img/login_Bgnew .png" />
+                <div class="left-top">
+                    <img src="Img/title_login.png" class="title_log" />
+                    <span class="title">经典的、永恒的、奔腾不息的驰骋BPM</span>
+                </div>
+                <img src="Img/Toolkit.png" style="width: 100%; height: 400px;" />
                 <div id="tip"></div>
             </div>
             <div class="right-content">
-                <form id="Form1" style=" margin-top: 30px;">
-                    <fieldset class="login">
-                        <legend class="login_title">CCBPM二开工具包 - <font color="#409EFF">H5版</font> </legend>
-                        <div class="form_item">
-                            <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号:admin管理员" lay-verify="required"
-                                   class="form-control" />
-                        </div>
-                        <div class="form_item form_props">
-                            <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码为:123" lay-verify="required"
-                                   class="form-control" />
-                        </div>
+                <form id="Form1" style="display: flex; flex-direction: column; align-items: center; padding-left: 170px; ">
 
-                        <div class="form_item">
-                            <input type="button" onclick="LoginCRMSystem();" class="login_button" value="登录(子)系统" />
-                            <!--<input type="button" onclick="LoginAPIModel();" class="btn btn-primary btn-block" value="ERP-操作员登录(API模式)" />-->
-                        </div>
+                    <div class="login_title"><b style=" font-size: 35px;">CCBPM二开工具包 </b> <font color="#409EFF" style=" font-size: 35px;">- H5版</font> </div>
+                    <div class="form_item">
+                        <input type="text" id="TB_No" name="TB_No" placeholder="请输入账号:admin管理员" lay-verify="required"
+                               class="form-control" />
+                    </div>
+                    <div class="form_item form_props">
+                        <input type="password" id="TB_PW" name="TB_PW" placeholder="默认密码为:123" lay-verify="required"
+                               class="form-control" />
+                    </div>
+
+                    <div class="form_item">
+                        <input type="button" onclick="LoginCRMSystem();" class="login_button" value="登录(子)系统" />
+                    </div>
                     </fieldset>
                     <div>
                         <div class="login-other">
@@ -311,73 +288,73 @@
                         <div class="login-list">
                             <div class="item_link">
                                 <a href="http://doc.ccbpm.cn" data-toggle="tooltip" title="在线文档">
-                                    <img class="item" src="./Img/wendang1.png" /> 
-                                    <div style="width:70px;">在线文档</div>
+                                    <img class="item" src="./Img/wendang1.png" />
+                                    <!--<div style="width:70px;">在线文档</div>-->
                                 </a>
                             </div>
                             <div class="item_link">
                                 <a href="http://ccflow.org" data-toggle="tooltip" title="官方网站">
                                     <img class="item" src="./Img/guanwang1.png" />
-                                    <div style="width:70px;">官方网站</div>
+                                    <!--<div style="width:70px;">官方网站</div>-->
                                 </a>
                             </div>
                             <div class="item_link">
                                 <a href="http://ccflow.org/Ke.html" data-toggle="tooltip" title="视频教程">
                                     <img class="item" src="./Img/shipin.png" />
-                                    <div style="width:70px;">视频教程</div>
+                                    <!--<div style="width:70px;">视频教程</div>-->
                                 </a>
                             </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="login_address">
+                            <div>地址：济南市高新区.碧桂园凤凰国际A座F19 </div>
+                            <div>联系方式：0531-82374939、18660153393(微信)</div>
+                            <div>版权：济南驰骋信息技术有限公司&nbsp;@2003-2023</div>
+                        </div>
+                </div>
+            </form>
 
 
-            </div>
         </div>
+    </div>
 
-        <!--<div style="display:flex;justify-content:center;flex-direction:row;">
-            <fieldset class="Tips">
-                <legend >什么是工具包模式集成?</legend>
-                <ul >
-                    <li> 工具包模式就是ccbpm为开发这提供一个文件目录,植入到对方开发架构的一种模式. </li>
-                    <li>这个目录通过配置文件与驰骋bpm服务器进行交互，提供一系列的接口函数让开发者调用。 </li>
-                    <li>工具包里，包含一些功能页面，比如:发起、待办、在途、草稿等可以让用户绑定到自己的菜单体系上。 </li>
-                    <li>工具包里包含流程组件：比如：工作处理器工具栏、审核组件、父子流程组件等，可以让用户调用。 </li>
-                </ul>
-            </fieldset>
-            <fieldset class="Tips">
-                <legend >说明</legend>
-                <ul >
-                    <li>测试人员: admin, zhoutianjiao, zhoushengyu, yangyilei 密码:123 </li>
-                    <li>登录后需要写入Port_Emp表的列SID里一个随机的guid作为token，来访问ccbpm的服务. </li>
-                    <li>在根目录下 config.js 里，您需要配置提供服务的ccbpm服务器地址。</li>
-                </ul>
-            </fieldset>
-            <fieldset class="Tips">
-                <legend >资源信息</legend>
-                <ul >
-                    <li> <div id="tip"/></li>
-                    <li> 登录用户名：admin 密码:123 </li>
-                </ul>
+    <!--<div style="display:flex;justify-content:center;flex-direction:row;">
+        <fieldset class="Tips">
+            <legend >什么是工具包模式集成?</legend>
+            <ul >
+                <li> 工具包模式就是ccbpm为开发这提供一个文件目录,植入到对方开发架构的一种模式. </li>
+                <li>这个目录通过配置文件与驰骋bpm服务器进行交互，提供一系列的接口函数让开发者调用。 </li>
+                <li>工具包里，包含一些功能页面，比如:发起、待办、在途、草稿等可以让用户绑定到自己的菜单体系上。 </li>
+                <li>工具包里包含流程组件：比如：工作处理器工具栏、审核组件、父子流程组件等，可以让用户调用。 </li>
+            </ul>
+        </fieldset>
+        <fieldset class="Tips">
+            <legend >说明</legend>
+            <ul >
+                <li>测试人员: admin, zhoutianjiao, zhoushengyu, yangyilei 密码:123 </li>
+                <li>登录后需要写入Port_Emp表的列SID里一个随机的guid作为token，来访问ccbpm的服务. </li>
+                <li>在根目录下 config.js 里，您需要配置提供服务的ccbpm服务器地址。</li>
+            </ul>
+        </fieldset>
+        <fieldset class="Tips">
+            <legend >资源信息</legend>
+            <ul >
+                <li> <div id="tip"/></li>
+                <li> 登录用户名：admin 密码:123 </li>
+            </ul>
 
-            </fieldset>
-        </div>-->
+        </fieldset>
+    </div>
+                            <!--</center>-->
+                            <!--<center>
 
-
-
-    </center>
-
-    <center>
-
-        <div class="bottom_address" style="display:flex;justify-content:space-around;width:65%;padding:10px;">
-
-            <!--<div>技术选型：H5-JQuery</div>
+        <div class="bottom_address" style="display:flex;justify-content:space-around;width:65%;padding:10px;">-->
+                            <!--<div>技术选型：H5-JQuery</div>
     <div>官网：<a href="http：//ccflow.org">http://ccflow.org</a> </div>-->
-             <!--<div>地址：济南市.高新区.碧桂园凤凰国际A座F19 电话：0531-82374939、18660153393(微信)</div>-->
-            <div>济南驰骋信息技术有限公司&nbsp;@2003-2023</div>
+                            <!--<div>地址：济南市.高新区.碧桂园凤凰国际A座F19 电话：0531-82374939、18660153393(微信)</div>-->
+                            <!--<div>济南驰骋信息技术有限公司&nbsp;@2003-2023</div>
             <div>地址：济南市.高新区.碧桂园凤凰国际A座F19 </div>
             <div>电话：0531-82374939、18660153393(微信)</div>
         </div>
-    </center>
+    </center>-->
 </body>
 </html>

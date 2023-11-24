@@ -1,22 +1,12 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Data;
-using System.Data.SqlClient;
 using System.Collections;
-using System.IO;
-using System.Net;
 using System.Xml;
 using BP.DA;
 using BP.En;
-using Microsoft.CSharp;
 using BP.Web;
 using BP.Difference;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.UI.WebControls;
-using NetTaste;
 
 namespace BP.Sys
 {
@@ -181,7 +171,7 @@ namespace BP.Sys
         /// <summary>
         /// 缓存分钟数
         /// </summary>
-        public const string CashMinute = "CashMinute";
+        public const string CacheMinute = "CacheMinute";
         /// <summary>
         /// 最近缓存的时间
         /// </summary>
@@ -237,7 +227,7 @@ namespace BP.Sys
             if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
                 apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
 
-            var mysrc = new SFDBSrc(sfDBSrcNo);
+            SFDBSrc mysrc = new SFDBSrc(sfDBSrcNo);
 
             #region  GET 解析路径变量 /{xxx}/{yyy} ? xxx=xxx
             if (requestMethod.ToUpper().Equals("GET") == true)
@@ -325,7 +315,7 @@ namespace BP.Sys
         public DataTable GenerHisDataTable(Hashtable ht = null)
         {
             //创建数据源.
-            SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
+            SFDBSrc src = new SFDBSrc(this.SFDBSrcNo);
 
             #region BP类
             if (this.SrcType == BP.Sys.DictSrcType.BPClass)
@@ -340,14 +330,14 @@ namespace BP.Sys
             //暂只考虑No,Name结构的数据源，2015.10.04，added by liuxc
             if (this.SrcType == DictSrcType.WebServices)
             {
-                var td = this.TableDesc.Split(','); //接口名称,返回类型
-                var ps = (this.SelectStatement ?? string.Empty).Split('&');
-                var args = new ArrayList();
+                string[] td = this.TableDesc.Split(','); //接口名称,返回类型
+                string[] ps = (this.SelectStatement ?? string.Empty).Split('&');
+                ArrayList args = new ArrayList();
                 string[] pa = null;
 
-                foreach (var p in ps)
+                foreach (string p in ps)
                 {
-                    if (string.IsNullOrWhiteSpace(p)) continue;
+                    if (DataType.IsNullOrEmpty(p)) continue;
 
                     pa = p.Split('=');
                     if (pa.Length != 2) continue;
@@ -360,9 +350,9 @@ namespace BP.Sys
                         if (pa[1].Contains("@WebUser.Name"))
                             pa[1] = pa[1].Replace("@WebUser.Name", BP.Web.WebUser.Name);
                         if (pa[1].Contains("@WebUser.FK_DeptName"))
-                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                            pa[1] = pa[1].Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
                         if (pa[1].Contains("@WebUser.FK_Dept"))
-                            pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                            pa[1] = pa[1].Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
                     }
                     catch
                     {
@@ -397,7 +387,7 @@ namespace BP.Sys
                         return BP.Tools.Json.ToDataTable(result as string);
                     //  return dt;
                     case "Xml":
-                        if (result == null || string.IsNullOrWhiteSpace(result.ToString()))
+                        if (result == null || DataType.IsNullOrEmpty(result.ToString()))
                             throw new Exception("@返回的XML格式字符串不正确。");
 
                         var xml = new XmlDocument();
@@ -429,7 +419,7 @@ namespace BP.Sys
             #region WebApi接口
             if (this.SrcType == DictSrcType.WebApi)
             {
-                string postData = Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
+                string postData = Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.SFDBSrcNo, this.SelectStatement);
 
                 // 需要替换的参数
                 string fieldNo = this.GetValStringByKey("FieldNo");
@@ -669,7 +659,7 @@ namespace BP.Sys
         /// <returns></returns>
         public void UpdateData(string No, string Name, string FK_SFTable)
         {
-            var sql = "";
+            string sql = "";
             if (this.SrcType == DictSrcType.SysDict)
                 sql = "UPDATE Sys_SFTableDtl SET Name = '" + Name + "' WHERE MyPK='" + FK_SFTable + "_" + No + "'";
             else
@@ -682,7 +672,7 @@ namespace BP.Sys
         /// <returns></returns>
         public void InsertData(string No, string Name, string FK_SFTable)
         {
-            var sql = "";
+            string sql = "";
             if (this.SrcType == BP.Sys.DictSrcType.SysDict)
                 sql = "insert into  Sys_SFTableDtl(MyPK,FK_SFTable,BH,Name) values('" + FK_SFTable + "_" + No + "','" + FK_SFTable + "','" + No + "','" + Name + "')";
             else
@@ -727,6 +717,7 @@ namespace BP.Sys
                                 break;
                             case DBType.PostgreSQL:
                             case DBType.UX:
+                            case DBType.HGDB:
                                 sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM Sys_SFTableDtl where FK_SFTable='" + table + "'";
                                 break;
                             case DBType.Oracle:
@@ -768,6 +759,7 @@ namespace BP.Sys
                             break;
                         case DBType.PostgreSQL:
                         case DBType.UX:
+                        case DBType.HGDB:
                             sql = "SELECT to_number( MAX(" + field + ") ,'99999999')+1   FROM " + table;
                             break;
                         case DBType.Oracle:
@@ -892,7 +884,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据源
         /// </summary>
-        public string FK_SFDBSrc
+        public string SFDBSrcNo
         {
             get
             {
@@ -903,7 +895,7 @@ namespace BP.Sys
                 this.SetValByKey(SFTableAttr.FK_SFDBSrc, value);
             }
         }
-        public string FK_SFDBSrcT
+        public string SFDBSrcT
         {
             get
             {
@@ -927,15 +919,15 @@ namespace BP.Sys
         /// <summary>
         /// 同步间隔
         /// </summary>
-        public int CashMinute
+        public int CacheMinute
         {
             get
             {
-                return this.GetValIntByKey(SFTableAttr.CashMinute);
+                return this.GetValIntByKey(SFTableAttr.CacheMinute);
             }
             set
             {
-                this.SetValByKey(SFTableAttr.CashMinute, value);
+                this.SetValByKey(SFTableAttr.CacheMinute, value);
             }
         }
 
@@ -1032,7 +1024,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是类
         /// </summary>
-        public bool IsClass
+        public bool ItIsClass
         {
             get
             {
@@ -1045,7 +1037,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是树形实体?
         /// </summary>
-        public bool IsTree
+        public bool ItIsTree
         {
             get
             {
@@ -1086,7 +1078,7 @@ namespace BP.Sys
                 switch (this.SrcType)
                 {
                     case DictSrcType.TableOrView:
-                        if (this.IsClass)
+                        if (this.ItIsClass)
                             return "<img src='/WF/Img/Class.png' width='16px' broder='0' />实体类";
                         else
                             return "<img src='/WF/Img/Table.gif' width='16px' broder='0' />表/视图";
@@ -1188,7 +1180,7 @@ namespace BP.Sys
         {
             get
             {
-                if (this.IsClass)
+                if (this.ItIsClass)
                 {
                     EntitiesNoName ens = (EntitiesNoName)BP.En.ClassFactory.GetEns(this.No);
                     ens.RetrieveAll();
@@ -1309,35 +1301,35 @@ namespace BP.Sys
                 rm.Title = "查看数据";
                 rm.ClassMethodName = this.ToString() + ".DoEdit";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "修改属性";
                 rm.ClassMethodName = this.ToString() + ".DoAttr";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = true;
+                rm.ItIsForEns = true;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "新建字典";
                 rm.ClassMethodName = this.ToString() + ".DoNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = true;
+                rm.ItIsForEns = true;
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "创建Table向导";
                 //rm.ClassMethodName = this.ToString() + ".DoGuide";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.IsForEns = false;
+                //rm.ItIsForEns = false;
                 //map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
                 //rm.Title = "数据源管理";
                 //rm.ClassMethodName = this.ToString() + ".DoMangDBSrc";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.IsForEns = false;
+                //rm.ItIsForEns = false;
                 //map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -1349,21 +1341,11 @@ namespace BP.Sys
         #region 映射方法.
         public string DoAttr()
         {
-            string projectName = HttpContextHelper.Request.Url.Segments[1];
-            if (projectName.Equals("WF/"))
-                projectName = "";
-            else
-                projectName = "/" + projectName;
-            return SystemConfig.HostURLOfBS + projectName + "/WF/Comm/EnOnly.htm?EnName=BP.Sys.SFTable&No=" + this.No;
+            return "../../Comm/EnOnly.htm?EnName=BP.Sys.SFTable&No=" + this.No;
         }
         public string DoNew()
         {
-            string projectName = HttpContextHelper.Request.Url.Segments[1];
-            if (projectName.Equals("WF/"))
-                projectName = "";
-            else
-                projectName = "/" + projectName;
-            return SystemConfig.HostURLOfBS + projectName + "/WF/Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
+           return "../../Admin/FoolFormDesigner/SFTable/Default.htm?DoType=New&FromApp=SL&s=0.3256071044807922";
         }
         /// <summary>
         /// 数据源管理
@@ -1387,7 +1369,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoEdit()
         {
-            if (this.IsClass)
+            if (this.ItIsClass)
             {
 
                 return "../../Comm/Ens.htm?EnsName=" + this.No;
@@ -1448,7 +1430,7 @@ namespace BP.Sys
                 this.Name = en.EnDesc;
 
                 //检查是否是树结构.
-                if (en.IsTreeEntity == true)
+                if (en.ItIsTreeEntity == true)
                     this.CodeStruct = BP.Sys.CodeStruct.Tree;
                 else
                     this.CodeStruct = BP.Sys.CodeStruct.NoName;
@@ -1500,7 +1482,7 @@ namespace BP.Sys
                     sql += "[Name]";
                     sql += (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
                     sql += " AS ";
-                    sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
+                    sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == BP.Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (DataType.IsNullOrEmpty(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 
                     if (BP.Difference.SystemConfig.AppCenterDBType == DBType.MySQL)
                     {
@@ -1580,7 +1562,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string TS_YuanShi_Data_WebApi()
         {
-            return Data_WebApi(null, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
+            return Data_WebApi(null, this.GetValStringByKey("RequestMethod"), this.SFDBSrcNo, this.SelectStatement);
         }
         /// <summary>
         /// 获得原始的数据
@@ -1599,7 +1581,7 @@ namespace BP.Sys
             foreach (SFPara item in ens)
             {
                 //内部参数.
-                if (item.IsSys == 0)
+                if (item.ItIsSys == 0)
                 {
                     if (ht.ContainsKey(item.ParaKey) == false)
                         ht.Add(item.ParaKey, item.ExpVal);
@@ -1615,7 +1597,7 @@ namespace BP.Sys
                     key = ht["Key"].ToString();
                 ht.Add(item.ParaKey, key);
             }
-            return Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.FK_SFDBSrc, this.SelectStatement);
+            return Data_WebApi(ht, this.GetValStringByKey("RequestMethod"), this.SFDBSrcNo, this.SelectStatement);
         }
         /// <summary>
         /// 返回json.
@@ -1694,7 +1676,7 @@ namespace BP.Sys
             foreach (SFPara item in ens)
             {
                 //内部参数.
-                if (item.IsSys == 0)
+                if (item.ItIsSys == 0)
                 {
                     if (ht.ContainsKey(item.ParaKey) == false)
                         ht.Add(item.ParaKey, item.ExpVal);

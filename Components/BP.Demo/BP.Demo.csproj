@@ -33,7 +33,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,33 +49,29 @@
   <ItemGroup>
     <Compile Include="APIDemo\APITester.cs" />
     <Compile Include="APIDemo\ClientAPISAAS.cs" />
-    <Compile Include="BPFramework\DemoBuessUnit.cs" />
-    <Compile Include="BPFramework\BanJi.cs" />
-    <Compile Include="BPFramework\BPUser.cs" />
-    <Compile Include="BPFramework\EmpCent.cs" />
-    <Compile Include="BPFramework\GDZC.cs" />
-    <Compile Include="BPFramework\KeMu.cs" />
-    <Compile Include="BPFramework\Resume.cs" />
-    <Compile Include="BPFramework\School.cs" />
-    <Compile Include="BPFramework\Student.cs" />
-    <Compile Include="BPFramework\StudentKeMu.cs" />
-    <Compile Include="CallCenter\F001.cs" />
-    <Compile Include="DemoCRM\Customer.cs" />
-    <Compile Include="DemoCRM\Product.cs" />
-    <Compile Include="F069.cs" />
+    <Compile Include="F001.cs" />
+    <Compile Include="School\DemoBuessUnit.cs" />
+    <Compile Include="School\BanJi.cs" />
+    <Compile Include="School\BPUser.cs" />
+    <Compile Include="School\KeMu.cs" />
+    <Compile Include="School\Resume.cs" />
+    <Compile Include="School\School.cs" />
+    <Compile Include="School\Student.cs" />
+    <Compile Include="School\StudentKeMu.cs" />
+    <Compile Include="CRM\Customer.cs" />
+    <Compile Include="CRM\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
-      <Project>{8e484457-b3a3-441c-aee3-4e49bb30e203}</Project>
+      <Project>{7a57265f-6ab3-4974-87a6-3b99dcc2d36a}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
     <ProjectReference Include="..\BP.WF\BP.WF.csproj">
-      <Project>{f7f2f45d-937e-4777-87b4-ec9ac5ed03fa}</Project>
+      <Project>{d4574b9b-8076-498d-8e51-b34641132def}</Project>
       <Name>BP.WF</Name>
     </ProjectReference>
   </ItemGroup>

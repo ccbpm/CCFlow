@@ -21,6 +21,7 @@ namespace BP.WF.Template
         /// url
         /// </summary>
         public const string Url = "Url";
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 独立表单树-用于数据解构构造
@@ -47,7 +48,7 @@ namespace BP.WF.Template
         #endregion
 
         #region 属性
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -58,6 +59,18 @@ namespace BP.WF.Template
                 this.SetValByKey(FrmNodeAttr.FK_Flow, value);
             }
         }
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowFormTreeAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(FlowFormTreeAttr.OrgNo, value);
+            }
+        }
+        
         #endregion 属性
 
         #region 构造方法
@@ -96,6 +109,7 @@ namespace BP.WF.Template
 
                 // 隶属的流程编号.
                 map.AddTBString(FlowFormTreeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
+                map.AddTBString(FlowFormTreeAttr.OrgNo, null, "OrgNo", false, false, 0, 100, 40);
 
                 this._enMap = map;
                 return this._enMap;
@@ -123,9 +137,8 @@ namespace BP.WF.Template
            {
                FlowFormTree tree = new FlowFormTree();
                tree.No = "100";
-               tree.FK_Flow = flowNo;
+               tree.FlowNo = flowNo;
                tree.Name = "根目录";
-              // tree.IsDir = false;
                tree.ParentNo = "0";
                tree.Insert();
 

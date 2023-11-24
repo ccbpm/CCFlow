@@ -17,7 +17,7 @@ namespace BP.EnTS
         /// <param name="classID"></param>
         public static bool IsExitMap(string classID)
         {
-            return BP.DA.Cash.IsExitMapTS(classID);
+            return BP.DA.Cache.IsExitMapTS(classID);
         }
         public static void SetMap(string classID, string mapData)
         {
@@ -56,7 +56,7 @@ namespace BP.EnTS
 
                 attr.UITag = dr["UITag"].ToString(); //枚举字段.
 
-                attr.IsSupperText = int.Parse(dr["IsSupperText"].ToString());
+                attr.ItIsSupperText = int.Parse(dr["IsSupperText"].ToString());
                 //.最小长度
                 attr.MinLength = int.Parse(dr["MinLength"].ToString());
                 attr.MaxLength = int.Parse(dr["MaxLength"].ToString()); //.最大长度
@@ -106,15 +106,15 @@ namespace BP.EnTS
                 sn.DefaultSymbol = dr["DefaultSymbol"].ToString(); //  DefaultSymbol || '';
                 sn.DefaultVal = dr["DefaultVal"].ToString(); // defaultValue || '';
                 sn.TBWidth = int.Parse(dr["TBWidth"].ToString()); // tbwidth || 120;
-                sn.IsHidden = Boolean.Parse(dr["IsHidden"].ToString()); // !!isHidden;
+                sn.ItIsHidden = Boolean.Parse(dr["IsHidden"].ToString()); // !!isHidden;
                 myMap.SearchNormals.Add(sn);
             }
             #endregion 查询条件.
 
-            BP.DA.Cash.SetMapTS(classID, myMap);
+            BP.DA.Cache.SetMapTS(classID, myMap);
 
             //移除该en的缓存
-            BP.DA.Cash.ClearSQL(classID);
+            BP.DA.Cache.ClearSQL(classID);
 
         }
         /// <summary>
@@ -129,7 +129,7 @@ namespace BP.EnTS
 
             string caseTsClassID = tsClassID;
 
-            var map = BP.DA.Cash.GetMapTS(caseTsClassID);
+            Map map = BP.DA.Cache.GetMapTS(caseTsClassID);
             if (map != null)
                 return map;
 

@@ -111,6 +111,7 @@ namespace BP.CCBill
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = " SELECT DISTINCT A.FK_Flow,A.FlowName,B.Icon,A.SendDT  FROM WF_GenerWorkFlow A ,WF_Flow B WHERE B.IsCanStart=1 AND B.No=A.FK_Flow AND A.Starter='"+WebUser.No+"'  Order By A.SendDT  limit " + top;
                     break;
                 case DBType.Oracle:
@@ -145,6 +146,7 @@ namespace BP.CCBill
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = " SELECT   No,Name,Icon FROM GPM_Menu WHERE  LEN(MenuModel )  >1 limit " + top;
                     break;
                 case DBType.Oracle:

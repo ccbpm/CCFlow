@@ -105,6 +105,16 @@ namespace BP.CCBill.Sys
             }
         }
         /// <summary>
+        /// 保存SQL
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SaveSQLScript(string sql)
+        {
+            this.MethodDoc_SQL = sql;
+            return "保存成功.";
+        }
+        /// <summary>
         /// 获得该实体的demo.
         /// </summary>
         public string MethodDoc_JavaScript_Demo

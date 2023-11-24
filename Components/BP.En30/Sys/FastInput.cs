@@ -89,7 +89,7 @@ namespace BP.Sys
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -305,31 +305,31 @@ namespace BP.Sys
                 FastInput en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意";
-                en.FK_Emp = WebUser.No;
+                en.EmpNo = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "不同意";
-                en.FK_Emp = WebUser.No;
+                en.EmpNo = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意，请领导批示";
-                en.FK_Emp = WebUser.No;
+                en.EmpNo = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "同意办理";
-                en.FK_Emp = WebUser.No;
+                en.EmpNo = WebUser.No;
                 en.Insert();
 
                 en = new FastInput();
                 en.setMyPK(DBAccess.GenerGUID());
                 en.Vals = "情况属实报领导批准";
-                en.FK_Emp = WebUser.No;
+                en.EmpNo = WebUser.No;
                 en.Insert();
 
                 val = this.Retrieve(FastInputAttr.CfgKey, "CYY",

@@ -4,6 +4,7 @@ using BP.En;
 using BP.Sys;
 using BP.Web;
 using BP.WF;
+using BP.WF.HttpHandler;
 using BP.WF.Template;
 using System;
 using System.Collections;
@@ -17,6 +18,13 @@ namespace CCFlow.DataUser.API.Controllers
     [EnableCors("*", "*", "*")]
     public class APIController : ApiController
     {
+        /// <summary>
+        /// 返回信息格式
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="msg"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static Object Return_Info(int code, string msg, string data)
         {
             Hashtable ht = new Hashtable();
@@ -29,6 +37,28 @@ namespace CCFlow.DataUser.API.Controllers
         }
 
         #region 组织结构接口.
+        /// <summary>
+        /// 切换部门-角色
+        /// </summary>
+        /// <param name="token">密钥</param>
+        /// <param name="deptNo">部门编号</param>
+        /// <param name="staNo">角色编号,可以为空.</param>
+        /// <returns>执行结果</returns>
+        [HttpGet, HttpPost]
+        public Object Port_Change(string token, string deptNo, string staNo = null)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            try
+            {
+                //  Int64 workid = Dev2Interface.Port_CheckUserLogin(flowNo, BP.Web.WebUser.No);
+                return Return_Info(200, "创建WorkID成功", "ZHING");
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "创建WorkID失败", ex.Message);
+            }
+        }
         /// <summary>
         /// 系统登陆
         /// </summary>
@@ -65,8 +95,8 @@ namespace CCFlow.DataUser.API.Controllers
                 Hashtable ht = new Hashtable();
                 ht.Add("No", WebUser.No);
                 ht.Add("Name", WebUser.Name);
-                ht.Add("FK_Dept", WebUser.FK_Dept);
-                ht.Add("FK_DeptName", WebUser.FK_DeptName);
+                ht.Add("FK_Dept", WebUser.DeptNo);
+                ht.Add("FK_DeptName", WebUser.DeptName);
                 ht.Add("OrgNo", WebUser.OrgNo);
                 ht.Add("OrgName", WebUser.OrgName);
                 ht.Add("Token", token);
@@ -477,6 +507,138 @@ namespace CCFlow.DataUser.API.Controllers
             }
         }
         /// <summary>
+        /// 获得流程的信息
+        /// </summary>
+        /// <param name="token">验证码</param>
+        /// <param name="workID">实例ID</param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public Object Flow_WorkInfo(string token, Int64 workID)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+
+            DataSet ds = new DataSet();
+            try
+            {
+                //处理主表.
+                GenerWorkFlow gwf = new GenerWorkFlow(workID);
+                if (gwf.FID != 0)
+                {
+                    workID = gwf.FID;
+                    gwf.WorkID = workID;
+                    gwf.Retrieve();
+                }
+
+                DataTable dt = gwf.ToDataTableField("WF_GenerWorkFlow");
+                dt.Columns.Add("CurrNodeMark"); //增加一个字段.
+
+                DataTable dtMark = Flow_NodesMarkExt(gwf.FlowNo);
+                dt.Rows[0]["CurrNodeMark"] = Flow_NodeMarkExt(gwf.NodeID, dtMark);
+                ds.Tables.Add(dt); //增加到数据源.
+
+                //处理从表.
+                GenerWorkerLists ens = new GenerWorkerLists();
+                QueryObject qo = new QueryObject(ens);
+                qo.AddWhere("WorkID", workID);
+                qo.addOr();
+                qo.AddWhere("FID", workID);
+                qo.addOrderBy("RDT");
+                qo.DoQuery();
+
+                DataTable dtGwls = ens.ToDataTableField("WF_GenerWorkerList");
+                dtGwls.Columns.Add("NodeMark"); //增加一个字段.
+                //转换NodeI.
+                foreach (DataRow item in dtGwls.Rows)
+                {
+                    int nodeID = int.Parse(item["FK_Node"].ToString());
+                    item["NodeMark"] = Flow_NodeMarkExt(nodeID, dtMark);
+                }
+                ds.Tables.Add(dtGwls); //增加到数据源.
+
+                string info = BP.Tools.Json.ToJson(ds);
+                return Return_Info(200, "获取成功", info);
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "创建WorkID失败", ex.Message);
+            }
+        }
+        /// <summary>
+        /// 获得流程下节点的标记.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="flowNo"></param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public Object Flow_NodesMark(string token, string flowNo)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            DataSet ds = new DataSet();
+            try
+            {
+                //执行转换.
+                flowNo = BP.WF.Dev2Interface.Flow_TurnFlowMark2FlowNo(flowNo);
+
+                //获得节点的Mark.
+                string sql = "SELECT NodeID,Name,NodeMark FROM WF_Node WHERE FK_Flow='" + flowNo + "'";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                string info = BP.Tools.Json.ToJson(dt);
+                return Return_Info(200, "获取成功", info);
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "创建WorkID失败", ex.Message);
+            }
+        }
+        /// <summary>
+        /// 获得1个节点的标记.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="nodeID"></param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public Object Flow_NodeMark(string token, int nodeID)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            try
+            {
+                return Return_Info(200, "获取成功", Flow_NodeMarkExt(nodeID));
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "创建WorkID失败", ex.Message);
+            }
+        }
+        private string Flow_NodeMarkExt(int nodeID)
+        {
+            //获得节点的Mark.
+            string sql = "SELECT NodeMark FROM WF_Node WHERE NodeID='" + nodeID + "'";
+            return DBAccess.RunSQLReturnStringIsNull(sql, nodeID.ToString());
+        }
+        private DataTable Flow_NodesMarkExt(string flowNo)
+        {
+            //获得节点的Mark.
+            string sql = "SELECT NodeID,Name FROM WF_Node WHERE FK_Flow='" + flowNo + "'";
+            return DBAccess.RunSQLReturnTable(sql);
+        }
+        private string Flow_NodeMarkExt(int nodeID, DataTable dt)
+        {
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (int.Parse(dr[0].ToString()) == nodeID)
+                {
+                    string str = dr[2].ToString();
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        return nodeID.ToString();
+                    return str;
+                }
+            }
+            throw new Exception("err@没有找到NodeID=" + nodeID + "的mark");
+        }
+        /// <summary>
         /// 是否可以处理当前的工作
         /// </summary>
         /// <param name="token">密钥</param>
@@ -492,7 +654,7 @@ namespace CCFlow.DataUser.API.Controllers
                 GenerWorkFlow gwf = new GenerWorkFlow(workID);
                 string todoEmps = gwf.TodoEmps;
                 bool isCanDo = false;
-                if (gwf.FK_Node.ToString().EndsWith("01") == true)
+                if (gwf.NodeID.ToString().EndsWith("01") == true)
                 {
                     if (gwf.Starter.Equals(BP.Web.WebUser.No) == false)
                         isCanDo = false; //处理开始节点发送后，撤销的情况，第2个节点打开了，第1个节点撤销了,造成第2个节点也可以发送下去.
@@ -534,7 +696,13 @@ namespace CCFlow.DataUser.API.Controllers
                 return Return_Info(500, "设置草稿失败", ex.Message);
             }
         }
-
+        /// <summary>
+        /// 删除指定的会签人
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="workid">流程实例WorkID</param>
+        /// <param name="empNo">人员编号</param>
+        /// <returns></returns>
         [HttpGet, HttpPost]
         public Object Node_HuiQian_Delete(string token, Int64 workid, string empNo)
         {
@@ -586,7 +754,7 @@ namespace CCFlow.DataUser.API.Controllers
             Port_GenerToken(token);
 
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
-            int toNodeID = DealNodeIDStr(toNodeIDStr, gwf.FK_Flow);
+            int toNodeID = DealNodeIDStr(toNodeIDStr, gwf.FlowNo);
 
             try
             {
@@ -693,22 +861,36 @@ namespace CCFlow.DataUser.API.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <param name="workID">工作id</param>
-        /// <param name="paras">要保存的主表数据，格式： @Key1=Val2@Key2=Val2 </param>
+        /// <param name="keyVals">要保存的主表数据，格式： @Key1=Val2@Key2=Val2  @Em=zhangsan@ccflow.org@Tel=18660153393 </param>
+        /// <param name="dtlJSON">从表数据,格式： 多个从表的表名按照与从表控件的ID对应，字段与控件的字段对应。 </param>
+        /// <param name="athJSON">附件数据,格式： 多个附件: 格式 FileName, FileUrl。一定是 FileName 在前，FileUrl 在后。
+        /// 格式： {'Ath1':[{'FileName':'我的附件1.doc','FileUrl':'http://localst:9003:/xxx.docx'},{'FileName':'我的附件2.doc','FileUrl':'http://localst:9003:/xxx.docx'}]} </param>
         /// <returns>执行结果</returns>
-        public Object Node_SaveWork(string token, Int64 workID, string paras)
+        [HttpGet, HttpPost]
+        public Object Node_SaveWork(string token, Int64 workID, string keyVals, string dtlJSON = null, string athJSON = null)
         {
             //根据token登录
+            Port_GenerToken(token);
             try
             {
-                Port_GenerToken(token);
-                AtPara ap = new AtPara(paras);
+                AtPara ap = new AtPara(keyVals);
 
-                BP.WF.Dev2Interface.Node_SaveWork(workID, ap.HisHT);
+                DataSet dsDtls = null;
+                if (dtlJSON != null)
+                    dsDtls = BP.Tools.Json.ToDataSet(dtlJSON);
+
+                DataSet dsAths = null;
+                if (athJSON != null)
+                    dsAths = BP.Tools.Json.ToDataSet(athJSON);
+
+                //执行保存方法.
+                BP.WF.Dev2Interface.Node_SaveWork(workID, ap.HisHT, dsDtls, dsAths);
+
                 return Return_Info(200, "表单主表数据,执行成功.", "");
             }
             catch (Exception ex)
             {
-                return Return_Info(500, "参数保存失败", ex.Message);
+                return Return_Info(500, "工作保存失败", ex.Message);
             }
         }
         /// <summary>
@@ -745,14 +927,43 @@ namespace CCFlow.DataUser.API.Controllers
         /// <param name="checkNote">审核意见:启用了审核组件，就需要填写审核意见,负责不让发送。</param>
         /// <returns>执行结果,可以直接提示给用户.</returns>
         [HttpGet, HttpPost]
+        public Object Node_SendWork_ReJSON(string token, Int64 workID, string toNodeIDStr = "0", string toEmps = "", string paras = "", string checkNote = "")
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            try
+            {
+
+                //保存参数.
+                if (DataType.IsNullOrEmpty(paras) == false)
+                    BP.WF.Dev2Interface.Flow_SaveParas(workID, paras);
+
+                //写入审核意见.
+                if (DataType.IsNullOrEmpty(checkNote) == false)
+                    BP.WF.Dev2Interface.Node_WriteWorkCheck(workID, checkNote, null, null, null);
+
+                //获得流程编号.
+                string flowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_GenerWorkFlow WHERE WorkID=" + workID);
+                int toNodeID = DealNodeIDStr(toNodeIDStr, flowNo); //获得流程标识.
+
+                //执行发送.
+                SendReturnObjs objs = Dev2Interface.Node_SendWork(flowNo, workID, null, null, toNodeID, toEmps);
+                string msg = objs.ToJson();
+                return Return_Info(200, "发送成功", msg);
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "发送失败", ex.Message);
+            }
+        }
+
+        [HttpGet, HttpPost]
         public Object Node_SendWork(string token, Int64 workID, string toNodeIDStr = "0", string toEmps = "", string paras = "", string checkNote = "")
         {
-
             try
             {
                 //根据token登录
                 Port_GenerToken(token);
-
 
                 //保存参数.
                 if (DataType.IsNullOrEmpty(paras) == false)
@@ -763,9 +974,11 @@ namespace CCFlow.DataUser.API.Controllers
                     BP.WF.Dev2Interface.Node_WriteWorkCheck(workID, checkNote, null, null, null);
 
                 string flowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_GenerWorkFlow WHERE WorkID=" + workID);
-                int toNodeID = DealNodeIDStr(toNodeIDStr, flowNo); //@hongyan.
+                int toNodeID = DealNodeIDStr(toNodeIDStr, flowNo);
+
                 //执行发送.
                 SendReturnObjs objs = Dev2Interface.Node_SendWork(flowNo, workID, null, null, toNodeID, toEmps);
+
                 string msg = objs.ToMsgOfText();
                 return Return_Info(200, "发送成功", msg);
             }
@@ -773,6 +986,7 @@ namespace CCFlow.DataUser.API.Controllers
             {
                 return Return_Info(500, "发送失败", ex.Message);
             }
+
         }
 
         /// <summary>
@@ -815,8 +1029,6 @@ namespace CCFlow.DataUser.API.Controllers
         [HttpGet, HttpPost]
         public Object DB_GenerWillReturnNodes(string token, int nodeID, Int64 workID)
         {
-
-
             try
             {
                 //根据token登录
@@ -829,6 +1041,12 @@ namespace CCFlow.DataUser.API.Controllers
                 return Return_Info(500, "获取当前节点可以退回到的节点集合失败", ex.Message);
             }
         }
+        /// <summary>
+        /// 根据节点标记获取节点ID
+        /// </summary>
+        /// <param name="nodeIDStr">节点标记</param>
+        /// <param name="flowNo">流程编号</param>
+        /// <returns></returns>
         private int DealNodeIDStr(string nodeIDStr, string flowNo)
         {
             int returnToNodeID = 0;
@@ -860,8 +1078,8 @@ namespace CCFlow.DataUser.API.Controllers
                 Port_GenerToken(token);
 
                 GenerWorkFlow gwf = new GenerWorkFlow(workID);
-                //获取真实的NodeID. @hongyan.
-                int returnToNodeID = DealNodeIDStr(returnToNodeIDStr, gwf.FK_Flow);
+                //获取真实的NodeID.
+                int returnToNodeID = DealNodeIDStr(returnToNodeIDStr, gwf.FlowNo);
 
                 if (returnToNodeID == 0)
                 {
@@ -870,7 +1088,6 @@ namespace CCFlow.DataUser.API.Controllers
                     {
                         returnToNodeID = Int32.Parse(dt.Rows[0]["No"].ToString());
                         returnToEmp = dt.Rows[0]["Rec"].ToString();
-
                     }
                 }
 
@@ -952,6 +1169,27 @@ namespace CCFlow.DataUser.API.Controllers
         #endregion 节点方法.
 
         #region 流程方法.
+        /// <summary>
+        /// 重新设置流程标题
+        /// </summary>
+        /// <param name="token">密钥</param>
+        /// <param name="workID">重新设置流程标题</param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public Object Flow_ReSetFlowTitle(string token, Int64 workID)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+            try
+            {
+                BP.WF.Dev2Interface.Flow_ReSetFlowTitle(workID);
+                return Return_Info(200, "设置成功", "");
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "删除失败", ex.Message);
+            }
+        }
         /// <summary>
         /// 近期工作
         /// </summary>
@@ -1276,7 +1514,7 @@ namespace CCFlow.DataUser.API.Controllers
                 Flow fl = nd.HisFlow;
                 ds.Tables.Add(nd.ToDataTableField("WF_Node"));
                 string sql = "";
-                if (nd.IsSubThread == true)
+                if (nd.ItIsSubThread == true)
                 {
                     sql = "SELECT a.*, b.Starter,b.StarterName,b.ADT,b.WorkID FROM " + fl.PTable
                               + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
@@ -1328,7 +1566,12 @@ namespace CCFlow.DataUser.API.Controllers
             }
 
         }
-
+        /// <summary>
+        /// 批量处理获取当前到达下一个节点的集合信息
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="nodeID"></param>
+        /// <returns></returns>
         [HttpGet, HttpPost]
         public Object Batch_InitDDL(string token, int nodeID)
         {
@@ -1350,6 +1593,12 @@ namespace CCFlow.DataUser.API.Controllers
             }
 
         }
+        /// <summary>
+        /// 批量发送
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="flowNo"></param>
+        /// <returns></returns>
         [HttpGet, HttpPost]
         public Object WorkCheckModel_Send(string token, string flowNo)
         {
@@ -1368,7 +1617,12 @@ namespace CCFlow.DataUser.API.Controllers
             }
 
         }
-
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="workIDs"></param>
+        /// <returns></returns>
         [HttpGet, HttpPost]
         public Object Batch_Delete(string token, string workIDs)
         {
@@ -1440,7 +1694,7 @@ namespace CCFlow.DataUser.API.Controllers
 
                 //我部门发起的.
                 if (scop.Equals("2") == true)
-                    qo.AddWhere(GenerWorkFlowAttr.FK_Dept, "=", WebUser.FK_Dept);
+                    qo.AddWhere(GenerWorkFlowAttr.FK_Dept, "=", WebUser.DeptNo);
 
 
                 //任何一个为空.
@@ -1453,7 +1707,7 @@ namespace CCFlow.DataUser.API.Controllers
                     qo.addAnd();
                     qo.AddWhere(GenerWorkFlowAttr.RDT, ">=", dtFrom, "dtForm");
                     qo.addAnd();
-                    qo.AddWhere(GenerWorkFlowAttr.RDT, "<=", dtTo,"dtTo");
+                    qo.AddWhere(GenerWorkFlowAttr.RDT, "<=", dtTo, "dtTo");
                 }
 
                 var count = qo.GetCount(); //获得总数.
@@ -1483,6 +1737,10 @@ namespace CCFlow.DataUser.API.Controllers
                 return Return_Info(500, "查询失败", ex.Message);
             }
         }
+        /// <summary>
+        /// 根据Token值登录
+        /// </summary>
+        /// <param name="token"></param>
         private void Port_GenerToken(string token)
         {
             BP.WF.Dev2Interface.Port_LoginByToken(token);
@@ -1490,12 +1748,87 @@ namespace CCFlow.DataUser.API.Controllers
 
         private HttpResponseMessage ReturnMessage(string message)
         {
-
-
             return new HttpResponseMessage { Content = new StringContent(message, System.Text.Encoding.GetEncoding("UTF-8"), "application/json") };
-
         }
         #endregion 其他方法.
+        [HttpGet, HttpPost]
+        public string Search_Emps(string token, string keyword)
+        {
+            //根据token登录
+            Port_GenerToken(token);
+           
+            string sqlTemplate = "";
+            string execSql = "";
+            if (DataType.IsNullOrEmpty(keyword))
+            {
+                return "err@请输入关键字";
+            }
+            if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+            {
+                sqlTemplate = "SELECT A.No,A.Name,B.Name AS DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND ( A.No LIKE '%@Key%' OR A.Name LIKE '%@Key%' OR PinYin LIKE  '%@Key%') AND A.EmpSta = 0 Order By A.Idx LIMIT 20 ";
+                execSql = sqlTemplate.Replace("@Key", keyword);
+                Console.WriteLine(execSql);
+            }
+            else
+            {
+                sqlTemplate = "SELECT A.No,A.Name,B.Name AS DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND ( A.No LIKE '%@Key%' OR A.Name LIKE '%@Key%' OR PinYin LIKE  '%@Key%' AND A.OrgNo='@WebUser.OrgNo') AND A.EmpSta = 0 Order By A.Idx LIMIT 20 ";
+                execSql = sqlTemplate.Replace("@Key", keyword);
+                execSql = sqlTemplate.Replace("@WebUser.OrgNo", WebUser.OrgNo);
+            }
+            DataTable dt = DBAccess.RunSQLReturnTable(execSql);
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["no"].ColumnName = "No";
+                dt.Columns["name"].ColumnName = "Name";
+                dt.Columns["deptname"].ColumnName = "DeptName";
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+
+        #region vsto 组件功能.
+        /// <summary>
+        /// 获取信息
+        /// </summary>
+        /// <param name="token">登陆人员的信息</param>
+        /// <param name="workID">工作ID</param>
+        /// <returns>执行结果</returns>
+        [HttpGet, HttpPost]
+        public Object VSTOWord_GongWen_Init(string token, Int64 workID)
+        {
+            //根据token登录.
+            Port_GenerToken(token);
+            try
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow(workID);
+
+                return Return_Info(200, "执行成功", gwf.ToJson());
+            }
+            catch (Exception ex)
+            {
+                return Return_Info(500, "失败", ex.Message);
+            }
+        }
+        /// <summary>
+        /// 获得文件
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="workID"></param>
+        /// <returns></returns>
+        [HttpGet, HttpPost]
+        public object VSTOWord_GongWen_GetFile(string token, Int64 workID)
+        {
+            return Return_Info(200, "执行成功", "xxxx");
+        }
+        #endregion vsto 组件功能.
 
 
     }

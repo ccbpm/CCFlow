@@ -1,47 +1,31 @@
 <template>
   <div id="Runing">
-    <el-table
-      ref="runTable"
-      :data="tableData"
-      height="80vh"
-      row-key="WorkID"
-      default-expand-all
-      border
-      style="width: 100%; margin-bottom: 20px"
-      :row-class-name="tableRowClassName"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-    >
+    <el-table ref="runTable" :data="tableData" height="80vh" row-key="WorkID" default-expand-all border
+      style="width: 100%; margin-bottom: 20px" :row-class-name="tableRowClassName"
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column label="#" width="50" fixed type="index">
       </el-table-column>
       <el-table-column prop="Title" label="标题" fixed width="350">
         <template slot-scope="scope">
-          <span v-if="scope.row.type != null"><i
-                :class="
-                  scope.row.IsRead === 1
-                    ? 'fas fa-envelope-open iconColor-w'
-                    : 'fas fa-envelope iconColor'
-                "
-              ></i
-              ><span
-                :class="scope.row.IsRead === 1 ? 'pl-5' : 'cellColor pl-5'"
-                >{{ scope.row.Title }}</span></span>
-          <span v-else
-            ><el-link
-              :underline="false"
-              type="primary"
-              @click="sikpMyflow(scope.row)"
-              ><i
-                :class="
-                  scope.row.IsRead === 1
-                    ? 'fas fa-envelope-open iconColor-w'
-                    : 'fas fa-envelope iconColor'
-                "
-              ></i
-              ><span
-                :class="scope.row.IsRead === 1 ? 'pl-5' : 'cellColor pl-5'"
-                >{{ scope.row.Title }}</span></el-link
-            ></span
-          >
+          <span v-if="scope.row.type != null">
+            <i :class="
+              scope.row.IsRead === 1
+                ? 'fas fa-envelope-open iconColor-w'
+                : 'fas fa-envelope iconColor'
+            ">
+            </i>
+            <span :class="scope.row.IsRead === 1 ? 'pl-5' : 'cellColor pl-5'">{{ scope.row.Title }}</span>
+          </span>
+          <span v-else><el-link :underline="false" type="primary" @click="sikpMyflow(scope.row)">
+              <i :class="
+                scope.row.IsRead === 1
+                  ? 'fas fa-envelope-open iconColor-w'
+                  : 'fas fa-envelope iconColor'
+              ">
+              </i>
+              <span :class="scope.row.IsRead === 1 ? 'pl-5' : 'cellColor pl-5'">{{ scope.row.Title }}</span>
+            </el-link>
+          </span>
         </template>
       </el-table-column>
       <el-table-column prop="StarterName" label="发起人/部门" width="140">
@@ -63,23 +47,14 @@
 				</el-table-column>-->
     </el-table>
 
-    <el-pagination
-      background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 10, 15, 20]"
-      :page-size="pageSize"
-      layout="total,sizes, prev, pager, next"
-      :total="total"
-      v-show="total > 0"
-    ></el-pagination>
+    <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
+      layout="total,sizes, prev, pager, next" :total="total" v-show="total > 0"></el-pagination>
   </div>
 </template>
 
 <script>
-import {domain} from "./api/config";
-import {openMyView} from "./api/Dev2Interface";
+import { openMyView } from "./api/Dev2Interface";
 
 export default {
   name: "Runing",
@@ -95,7 +70,7 @@ export default {
     };
   },
 
-  beforeCreate() {},
+  beforeCreate() { },
   created() {
     this.loadData();
   },
@@ -111,7 +86,7 @@ export default {
     // 获取数据
     loadData() {
       let handler = new this.HttpHandler("BP.WF.HttpHandler.WF");
-      handler.AddPara("Domain",domain);
+      handler.AddPara("Domain", process.env.VUE_APP_DOMAIN);
       let data = handler.DoMethodReturnString("Runing_Init");
       if (data.indexOf("err@") != -1) {
         this.$message.error(data);
@@ -121,7 +96,7 @@ export default {
       this.data = JSON.parse(data);
       this.total = this.data.length;
       // eslint-disable-next-line no-mixed-spaces-and-tabs
-	    this.filterData();
+      this.filterData();
       this.paging();
     },
 
@@ -138,22 +113,22 @@ export default {
       this.data.forEach((item) => {
         const ff = item.TodoEmps;
         const arrays = ff.split(";");
-        let nameArry=[];
-        for(let i=0;i<arrays.length;i++){
+        let nameArry = [];
+        for (let i = 0; i < arrays.length; i++) {
           nameArry.push(arrays[i].split(",")[1]);
         }
         item.TodoEmps = nameArry.join(";")
       });
     },
-	// 过滤数据
-	pageData(data) {
-		this.tableData = [];
-		data.forEach((item) => {
-			this.tableData.push(item);
-		});
-	},
+    // 过滤数据
+    pageData(data) {
+      this.tableData = [];
+      data.forEach((item) => {
+        this.tableData.push(item);
+      });
+    },
     // 查询
-    onSubmit() {},
+    onSubmit() { },
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
@@ -173,7 +148,7 @@ export default {
       params.FK_Flow = work.FK_Flow;
       params.FK_Node = work.FK_Node;
       params.FID = work.FID;
-      openMyView(params,this);
+      openMyView(params, this);
     },
   },
 
@@ -186,7 +161,20 @@ export default {
 </script>
 
 <style>
-	.cellColor {color: #545454;}
-	.iconColor {color: #f56c6c;}
-	.iconColor-w {color: #909399;}
+
+.el-table__fixed-body-wrapper {
+    top: 40px !important;
+  }
+
+.cellColor {
+  color: #545454;
+}
+
+.iconColor {
+  color: #f56c6c;
+}
+
+.iconColor-w {
+  color: #909399;
+}
 </style>

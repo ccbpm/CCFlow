@@ -1,0 +1,396 @@
+﻿function numberFormat(obj, decimals) {
+    /*
+    * 参数说明：
+    * number：要格式化的数字
+    * decimals：保留几位小数
+    * roundtag:舍入参数，默认 ‘ceil‘ 向上取,‘floor‘向下取,‘round‘ 四舍五入
+    * */
+    var number = obj.value;
+    //obj不是对象的判断
+    if (number == undefined) {
+        number = obj;
+    }
+    number = (number + "").replace(/[^0-9+-Ee.]/g, "");
+    number = number.replace(/,/g, "");
+    roundtag = "round";  // 四舍五入
+    var n = !isFinite(+number) ? 0 : +number;
+    var prec = !isFinite(+decimals) ? 0 : Math.abs(decimals);
+    var sep = ","; //千分位符号
+    var dec = "."; //小数点符号
+    var s = "";
+    var toFixedFix = function (n, prec) {
+        var k = Math.pow(10, prec);
+
+        return "" + parseFloat(Math[roundtag](parseFloat((n * k).toFixed(prec * 2))).toFixed(prec * 2)) / k
+    }
+    s = (prec ? toFixedFix(n, prec) : "" + Math.round(n)).split(".");
+    var re = /(-?\d+)(\d{3})/;
+    while (re.test(s[0])) {
+        s[0] = s[0].replace(re, "$1" + sep + "$2");
+    }
+
+    if ((s[1] || "").length < prec) {
+        s[1] = s[1] || "";
+        s[1] += new Array(prec - s[1].length + 1).join("0");
+    }
+    //obj不是对象的判断
+    if (obj.value == undefined) {
+        return s.join(dec);
+    }
+    obj.value = s.join(dec);//给原input框重新赋值
+}
+
+
+/**
+* 输入验证firfox, ff浏览器不支持execCommand()
+*/
+function isFF() {
+    return navigator.userAgent.indexOf("Firefox") > 0;
+}
+function valitationBefore(o, validateType) {
+    if (isFF()) {
+        var value = o.value;
+        var flag = false;
+        switch (validateType) {
+            case "int":
+                flag = (!isNaN(value) && value % 1 === 0);
+                break;
+            case "float":
+            case "money":
+                if (value.indexOf("-") == 0 && value.length == 1)
+                    break;
+                else {
+                    flag = !isNaN(value);
+                    break;
+                }
+        }
+        if (flag) {
+            return;
+        }
+    }
+}
+
+var idx = 0;
+var oldCount = 0;
+function valitationAfter(o, validateType) {
+    idx = getCursortPosition(o);
+    oldCount = getStrCount(o.value.toString().substr(0, idx), ',');
+    var value = o.value;
+    value = value.replace(/[^\d.-]/g, "");
+
+    if (isFF()) {
+        var flag = false;
+        switch (validateType) {
+            case "int":
+                flag = (!isNaN(value) && value % 1 === 0);
+                break;
+            case "float":
+            case "money":
+                if (value.indexOf("-") == 0 && value.length == 1)
+                    break;
+                else {
+                    flag = !isNaN(value);
+                    break;
+                }
+        }
+        if (!flag) {
+            o.value = 0;
+        }
+    } else {
+        var flag = false;
+        if (validateType == "int")
+            o.value = value.replace(/[^\d-]/g, "");
+        if (isNaN(value)) execCommand('undo');
+
+    }
+}
+
+/**
+* 输入验证firfox, ff浏览器不支持execCommand()
+*/
+
+function limitLength(obj, length) {
+    obj.value = obj.value.replace(/[^\d.-]/g, "");  //清除“数字”和“.”以外的字符 ;
+    if (length != null && length != "" && length != "undefined") {
+        if (obj.value.indexOf('.') >= 0 && obj.value.split('.')[1].length > length) {
+            obj.value = obj.value.substring(0, obj.value.length - 1);
+            //obj.focus();
+        }
+    }
+}
+
+//类型为Money时输入设置
+function clearNoNum(obj) {
+    //修复第一个字符是小数点 的情况.  
+    if (obj.value != '' && obj.value.substr(0, 1) == '.') {
+        obj.value = 0 + obj.value;
+    }
+    if (obj.value == "")
+        obj.value = 0.00;
+
+    if (!/\./.test(obj.value)) //为整数字符串在末尾添加.00  
+        obj.value += '.00';
+
+    obj.value = obj.value.replace(/^0*(0\.|[1-9])/, '$1'); //解决 粘贴不生效  
+    obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符  
+    obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的       
+    obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数       
+    if (obj.value.indexOf(".") < 0 && obj.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额  
+        if (obj.value.substr(0, 1) == '0' && obj.value.length == 2) {
+            obj.value = obj.value.substr(1, obj.value.length);
+        }
+    }
+}
+
+//设置光标位置
+function setCaretPosition(ctrl, pos) {
+    if (ctrl.setSelectionRange) {
+        ctrl.focus();
+        //ctrl.setSelectionRange(pos, pos);
+    }
+    else if (ctrl.createTextRange) {
+        var range = ctrl.createTextRange();
+        range.collapse(false);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
+}
+
+// 获取光标位置
+function getCursortPosition(ctrl) {
+    var CaretPos = 0;   // IE Support
+    if (document.selection) {
+        ctrl.focus();
+        var Sel = document.selection.createRange();
+        Sel.moveStart('character', -ctrl.value.length);
+        CaretPos = Sel.text.length;
+    }
+    // Firefox support
+    else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+        CaretPos = ctrl.selectionStart;
+    return (CaretPos);
+}
+
+function FormatMoney(obj, precision, separator) {
+  
+}
+
+//统计字符串中特定字符串的个数
+function getStrCount(scrstr, armstr) { //scrstr 源字符串 armstr 特殊字符
+    var count = 0;
+    while (scrstr.indexOf(armstr) >= 1) {
+        scrstr = scrstr.replace(armstr, "")
+        count++;
+    }
+    return count;
+}
+/** 
+* 将数值格式化成金额形式 
+* 
+* @param num 数值(Number或者String) 
+* @param precision 精度，默认不变
+* @param separator 分隔符，默认为逗号
+* @return 金额格式的字符串,如'1,234,567'，默认返回NaN
+* @type String 
+*/
+function formatNumber(num, precision, separator) {
+    if (precision != 2)
+        return num;
+    var parts;
+    // 判断是否为数字
+    if (!isNaN(parseFloat(num)) && isFinite(num)) {
+        // 把类似 .5, 5. 之类的数据转化成0.5, 5, 为数据精度处理做准, 至于为什么
+        // 不在判断中直接写 if (!isNaN(num = parseFloat(num)) && isFinite(num))
+        // 是因为parseFloat有一个奇怪的精度问题, 比如 parseFloat(12312312.1234567119)
+        // 的值变成了 12312312.123456713
+        num = Number(num);
+        // 处理小数点位数
+        num = (typeof precision !== 'undefined' ? (Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)).toFixed(precision) : num).toString();
+        // 分离数字的小数部分和整数部分
+        parts = num.split('.');
+        // 整数部分加[separator]分隔, 借用一个著名的正则表达式
+        parts[0] = parts[0].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + (separator || ','));
+
+        return parts.join('.');
+    }
+    return 0;
+}
+
+
+//身份证信息
+function GetIDCardInfo(obj) {
+    var formData = new FormData();
+    formData.append("file", obj.files[0]);
+    var url = dynamicHandler + "?DoType=HttpHandler&DoMethod=GetIDCardInfo&HttpHandlerName=BP.WF.HttpHandler.CCMobile_CCForm";
+    $.ajax({
+        type: "post",
+        url: url,
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.error_code != undefined) {
+                console.log(data);
+                alert('上传身份证解析错误:' + data.error_code + data.error_msg);
+            } else {
+                //显示给指定的字段赋值
+                $("#TB_IDCardName").val(data.words_result.姓名.words);
+                $("#TB_IDCardNo").val(data.words_result.公民身份号码.words);
+                $("#TB_IDCardAddress").val(data.words_result.住址.words);
+                $("#TB_IDCardName").html(data.words_result.姓名.words);
+                $("#TB_IDCardNo").html(data.words_result.公民身份号码.words);
+                $("#TB_IDCardAddress").html(data.words_result.住址.words);
+                //data.words_result.出生.words   data.words_result.性别.words  data.words_result.民族.words
+                var mianData;
+                if (flowData != null && flowData != undefined)
+                    mianData = flowData;
+                if ((mianData == null || mianData == undefined) && (frmData != null && frmData != undefined))
+                    mianData = frmData;
+                if (mianData != null && mianData != undefined) {
+                    var mapExts = mianData.Sys_MapExt;
+                    var mapAttrs = mianData.Sys_MapAttr;
+                    for (var i = 0; i < mapExts.length; i++) {
+                        var mapExt = mapExts[i];
+                        var mapAttr = null;
+                        for (var j = 0; j < mapAttrs.length; j++) {
+                            if (mapAttrs[j].FK_MapData == mapExt.FK_MapData && mapAttrs[j].KeyOfEn == mapExt.AttrOfOper) {
+                                mapAttr = mapAttrs[j];
+                                break;
+                            }
+                        }
+                        if (mapAttr == null)
+                            continue;
+                        if (mapAttr.UIContralType != 13)
+                            continue;
+                        var DDLFull = GetPara(mapAttr.AtPara, "IsFullData");
+                        if (DDLFull != undefined && DDLFull != "" && DDLFull == "1" && (mapExt.MyPK.indexOf("DDLFullCtrl") != -1)) {
+                            FullIt($("#TB_" + mapExt.AttrOfOper).val(), mapExt.MyPK, "TB_" + mapExt.AttrOfOper);
+                        }
+                    }
+
+                }
+
+            }
+
+        },
+        error: function (e) {
+
+        }
+    });
+
+}
+
+//获取企业微信当前系统所在的位置
+function GetWXFixed(callback) {
+    //获取配置信息
+    if ($("#TB_fixed").length == 0 && $("#TB_JD").attr("disabled") == "disabled") {
+        var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_CCForm");
+        var url = GetHrefUrl().split('#')[0];
+        handler.AddPara("htmlPage", url);
+        var data = handler.DoMethodReturnString("GetWXConfigSetting");
+        if (data.indexOf("err@") != -1) {
+            alert(data);
+            return false;
+        }
+        var pushData = cceval('(' + data + ')');
+
+        var appId = pushData.AppID;
+        var timestamp = pushData.timestamp;
+        var nonceStr = pushData.nonceStr;
+        var signature = pushData.signature;
+        $("#TB_WD").removeAttr("disabled");
+        $("#TB_JD").removeAttr("disabled");
+
+        wx.config({
+            debug: false,
+            appId: appId,
+            timestamp: timestamp,
+            nonceStr: nonceStr,
+            signature: signature,
+            jsApiList: ['openLocation', 'getLocation']
+        });
+        wx.ready(function () {
+            var isCheck = false;
+            wx.checkJsApi({
+                jsApiList: [
+                    'checkJsApi',
+                    'getLocation'
+                ],
+                success: function (res) {
+                    isCheck = res.checkResult.getLocation;
+                }
+            });
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+
+                    $("#TB_WD").val(latitude);
+                    $("#TB_JD").val(longitude);
+                    $("#TB_WD").html(latitude);
+                    $("#TB_JD").html(longitude);
+                    callback();
+                }
+            });
+        });
+        wx.error(function (res) {
+            mui.alert(res.errMsg);
+        });
+    } else {
+        callback();
+    }
+
+}
+function GetFixedInfoByJDWD(JD, WD) {
+    var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_CCForm");
+    var url = GetHrefUrl().split('#')[0];
+    handler.AddPara("htmlPage", url);
+    var data = handler.DoMethodReturnString("GetWXConfigSetting");
+    if (data.indexOf("err") != -1) {
+        alert(data);
+        return false;
+    }
+    var pushData = cceval('(' + data + ')');
+
+    var appId = pushData.AppID;
+    var timestamp = pushData.timestamp;
+    var nonceStr = pushData.nonceStr;
+    var signature = pushData.signature;
+    wx.config({
+        debug: false,
+        appId: appId,
+        timestamp: timestamp,
+        nonceStr: nonceStr,
+        signature: signature,
+        jsApiList: ['openLocation', 'getLocation']
+    });
+    wx.ready(function () {
+        var isCheck = false;
+        wx.checkJsApi({
+            jsApiList: [
+                'checkJsApi',
+                'openLocation'
+            ],
+            success: function (res) {
+                isCheck = res.checkResult.getLocation;
+            }
+        });
+        wx.openLocation({
+            latitude: WD, // 纬度，浮点数，范围为90 ~ -90
+            longitude: JD, // 经度，浮点数，范围为180 ~ -180。
+            name: '', // 位置名
+            address: '', // 地址详情说明
+            scale: 10, // 地图缩放级别,整形值,范围从1~28。默认为16
+        });
+    });
+    wx.error(function (res) {
+        mui.alert(res.errMsg);
+    });
+
+}
+

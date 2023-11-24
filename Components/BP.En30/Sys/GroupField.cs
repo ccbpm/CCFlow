@@ -116,7 +116,7 @@ namespace BP.Sys
         #endregion 权限控制
 
         #region 属性
-        public bool IsUse = false;
+        public bool ItIsUse = false;
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -408,7 +408,7 @@ namespace BP.Sys
                 MapFrame frame = new MapFrame(this.CtrlID);
                 if (this.Lab.Equals(frame.Name) == false)
                 {
-                    frame.setName(this.Lab);
+                    frame.Name= this.Lab;
                     frame.DirectUpdate();
                 }
             }

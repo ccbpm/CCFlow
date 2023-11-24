@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>流程查询</title>
+    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="/DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="/WF/Scripts/config.js"></script>
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+
+        });
+
+        function ThisWeek() {
+
+        }
+
+    </script>
+</head>
+<body>
+
+    关键字:<input type="text" id="TB_Key" />
+    <br />
+    日期从:<input type="text" id="TB_DTFrom" />
+    <br />
+    日期从:<input type="text" id="TB_DTTo" />
+    <br />
+    &nbsp;&nbsp;流程:<select id="DDL_Flows">
+    <option value=""> 全部</option>
+    <option value=""> 请假</option>
+    <option value=""> 申请</option>
+</select>
+    <br />
+    状态:<select>
+        <option value=""> 全部</option>
+        <option value="0"> 运行中</option>
+        <option value="1"> 已完成</option>
+    </select> <button>查询</button>
+    <br />
+    [<a href="javascript:ThisWeek();">本周</a>]
+    [<a href="javascript:PrvWeek();">上周</a>]
+    [<a href="javascript:ThisMonth();">本月</a>]
+    [<a href="javascript:PivMonth();">上月</a>]
+    [<a href="javascript:PivPivMonth();">上上个月</a>]
+    [<a href="javascript:More();">更早</a>]
+    <br />
+
+    <div id="flows"></div>
+
+</body>
+</html>

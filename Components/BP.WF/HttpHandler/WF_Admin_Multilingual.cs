@@ -23,7 +23,7 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
 
-            if (BP.Difference.SystemConfig.IsMultilingual == true)
+            if (BP.Difference.SystemConfig.isMultilingual == true)
                 ht.Add("IsMultilingual", "1");
             else
                 ht.Add("IsMultilingual", "0");

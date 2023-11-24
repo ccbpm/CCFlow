@@ -233,7 +233,7 @@ namespace BP.CCFast.Portal
         /// <summary>
         /// 用户是否可以删除
         /// </summary>
-        public bool IsDel
+        public bool ItIsDel
         {
             get
             {
@@ -247,7 +247,7 @@ namespace BP.CCFast.Portal
         /// <summary>
         /// 是否禁用?
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -670,7 +670,7 @@ namespace BP.CCFast.Portal
             en.Docs = html;
             en.MoreLinkModel = 1;
             en.ColSpan = 2;
-            en.IsDel = true;
+            en.ItIsDel = true;
             en.Insert();
             #endregion 关于我们.
 
@@ -708,8 +708,8 @@ namespace BP.CCFast.Portal
             en.Name = "我的待办";
             en.WinDocModel = WinDocModel.ChartLine; //柱状图.
 
-            html = "SELECT FK_NodeText AS '流程名', COUNT(WorkID) as '数量' ";
-            html += " FROM WF_GenerWorkerlist WHERE FK_Emp = '@WebUser.No' AND IsPass=0 GROUP BY FK_NodeText ";
+            html = "SELECT NodeName AS '流程名', COUNT(WorkID) as '数量' ";
+            html += " FROM WF_GenerWorkerlist WHERE FK_Emp = '@WebUser.No' AND IsPass=0 GROUP BY NodeName ";
             en.Docs = html;
             en.MoreLinkModel = 1;
             en.ColSpan = 4;

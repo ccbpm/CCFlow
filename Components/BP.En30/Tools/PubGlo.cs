@@ -34,15 +34,15 @@ namespace BP.Tools
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.DeptNo);
 
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
 
             if (exp.Contains("@") == false)
                 return exp;
@@ -68,32 +68,26 @@ namespace BP.Tools
                     if (exp.Contains("@" + key))
                     {
                         Attr attr = attrs.GetAttrByKeyOfEn(key);
-                        //是枚举或者外键替换成文本
-                        if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum
-                            || attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
+
+                        //@hongyan.
+                        if (exp.Contains("@" + key))
                         {
-                            exp = exp.Replace("@" + key, row[key + "Text"].ToString());
-                        }
-                        else
-                        {
-                            if (attr.MyDataType == DataType.AppString && attr.UIContralType == UIContralType.DDL && attr.MyFieldType == FieldType.Normal)
+                            if (row.ContainsKey(key + "Text") == true)
+                                exp = exp.Replace("@" + key, row[key + "Text"].ToString());
+                            else if (row.ContainsKey(key + "T") == true)
                                 exp = exp.Replace("@" + key, row[key + "T"].ToString());
                             else
                                 exp = exp.Replace("@" + key, row[key].ToString());
-                            ;
                         }
-
-
                     }
 
                     //不包含@则返回SQL语句
                     if (exp.Contains("@") == false)
                         return exp;
                 }
-
             }
 
-            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -203,7 +197,7 @@ namespace BP.Tools
             request.Timeout = 10000;
             //创建输入流
             Stream dataStream;
-            if (requestMethod.ToLower().Equals("get")==false )
+            if (requestMethod.ToLower().Equals("get") == false)
             {
                 try
                 {
@@ -227,6 +221,62 @@ namespace BP.Tools
             {
                 res = (HttpWebResponse)ex.Response;
             }
+            StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
+            //读取返回消息
+            string data = sr.ReadToEnd();
+            sr.Close();
+            return data;
+        }
+        public static string HttpPostConnect(string serverUrl, Hashtable headerMap, string postData)
+        {
+            var dataArray = Encoding.UTF8.GetBytes(postData);
+            //创建请求
+            var request = (HttpWebRequest)HttpWebRequest.Create(serverUrl);
+            request.Method = "POST";
+            request.ContentLength = dataArray.Length;
+            //设置上传服务的数据格式  设置之后不好使
+            //request.ContentType = "application/x-www-form-urlencoded";
+            //请求的身份验证信息为默认
+            request.Credentials = CredentialCache.DefaultCredentials;
+            // request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json";
+            //  request.ContentType = "application/x-www-form-urlencoded";
+
+            //设置请求头
+            if (headerMap.Count > 0)
+            {
+                foreach (string key in headerMap.Keys)
+                {
+                    request.Headers.Add(key, headerMap[key].ToString());
+                }
+            }
+
+            //请求超时时间
+            request.Timeout = 10000;
+            //创建输入流
+            Stream dataStream;
+            try
+            {
+                dataStream = request.GetRequestStream();
+            }
+            catch (Exception)
+            {
+                return "0";//连接服务器失败
+            }
+            //发送请求
+            dataStream.Write(dataArray, 0, dataArray.Length);
+            dataStream.Close();
+
+            HttpWebResponse res;
+
+            res = (HttpWebResponse)request.GetResponse();
+
+            //}
+            //catch (WebException ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //    //res = (HttpWebResponse)ex.Response;
+            //}
             StreamReader sr = new StreamReader(res.GetResponseStream(), Encoding.UTF8);
             //读取返回消息
             string data = sr.ReadToEnd();

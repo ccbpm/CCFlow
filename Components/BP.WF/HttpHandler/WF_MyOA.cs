@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
 using BP.DA;
-using BP.GPM.WeiXin;
+using BP.Port.WeiXin;
 using BP.Tools;
 using System.Linq;
-using static BP.WF.WeiXin.GZH.WeiXinGZHModel;
+using static BP.Port.WeiXin.Msg.WeiXinGZHModel;
 using System.Collections;
 
 namespace BP.WF.HttpHandler
@@ -99,7 +99,7 @@ namespace BP.WF.HttpHandler
                                 //插入人员表
                                 BP.Port.Emp emp = new BP.Port.Emp();
                                 emp.No = user.UserId;
-                                emp.FK_Dept = item.ToString();
+                                emp.DeptNo = item.ToString();
                                 emp.Name = userEn.name;
                                 emp.Tel = userEn.mobile;
                                 emp.Insert();
@@ -107,8 +107,8 @@ namespace BP.WF.HttpHandler
                                 //插入部门表
                                 BP.Port.DeptEmp deptEmp = new BP.Port.DeptEmp();
                                 deptEmp.MyPK = item + "_" + user.UserId;
-                                deptEmp.FK_Dept = item.ToString();
-                                deptEmp.FK_Emp = user.UserId;
+                                deptEmp.DeptNo = item.ToString();
+                                deptEmp.EmpNo = user.UserId;
                                 deptEmp.Insert();
                             }
                             //执行登录

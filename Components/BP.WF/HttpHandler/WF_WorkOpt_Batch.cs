@@ -31,13 +31,13 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获取节点信息
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             Flow fl = nd.HisFlow;
             ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
             string sql = "";
 
-            if (nd.IsSubThread==true)
+            if (nd.ItIsSubThread==true)
             {
                 sql = "SELECT a.*, b.Starter,b.StarterName,b.ADT,b.WorkID FROM " + fl.PTable
                           + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
@@ -56,7 +56,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //获取按钮权限
-            BtnLab btnLab = new BtnLab(this.FK_Node);
+            BtnLab btnLab = new BtnLab(this.NodeID);
             ds.Tables.Add(btnLab.ToDataTableField("Sys_BtnLab"));
         
             int nodeID = nd.NodeID;
@@ -95,9 +95,9 @@ namespace BP.WF.HttpHandler
         public string BatchToolBar_Init()
         {
             DataSet ds = new DataSet();
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
             //获取按钮权限
-            BtnLab btnLab = new BtnLab(this.FK_Node);
+            BtnLab btnLab = new BtnLab(this.NodeID);
             DataTable dt = new DataTable("ToolBar");
             dt.Columns.Add("No");
             dt.Columns.Add("Name");
@@ -129,7 +129,7 @@ namespace BP.WF.HttpHandler
 
             }
 
-            if (btnLab.EndFlowEnable && nd.IsStartNode == false)
+            if (btnLab.EndFlowEnable && nd.ItIsStartNode == false)
             {
                 dr = dt.NewRow();
                 dr["No"] = "EndFlow";
@@ -165,10 +165,10 @@ namespace BP.WF.HttpHandler
         public string WorkCheckModel_Send()
         {
             //审核批量发送.
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
 
             //获取要批处理数据
-            string sql = string.Format("SELECT WorkID, FID,Title FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.FK_Node);
+            string sql = string.Format("SELECT WorkID, FID,Title FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}'", WebUser.No, this.NodeID);
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = -1;
             string msg = "";
@@ -246,7 +246,7 @@ namespace BP.WF.HttpHandler
                             string checkNote = "";
 
                             //选择的多条记录一个意见框.
-                            var model = nd.GetParaInt("BatchCheckNoteModel", 0);
+                            int model = nd.GetParaInt("BatchCheckNoteModel", 0);
 
                             //多条记录一个意见.
                             if (model == 0)
@@ -282,7 +282,7 @@ namespace BP.WF.HttpHandler
                         }
 
                         wk.Update();
-                        BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FK_Flow, workid, toNode, toEmps);
+                        BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FlowNo, workid, toNode, toEmps);
                         successMsg += "@对工作(" + dr["Title"] + ")处理情况如下";
                         successMsg += objs.ToMsgOfHtml();
                         successMsg += "<br/>";
@@ -302,7 +302,7 @@ namespace BP.WF.HttpHandler
             if (successCout != 0)
                 msg += "@发送成功" + successCout + "条";
             if (errorCount != 0)
-                msg += ",发送失败。" + errorCount + "条";
+                msg += "@发送失败" + errorCount + "条";
             if (successCout != 0)
                 msg += "@发送成功信息如下:" + successMsg;
             if (errorCount != 0)
@@ -317,7 +317,7 @@ namespace BP.WF.HttpHandler
         public string WorkCheckModelVue_Send()
         {
             //审核批量发送.
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             string workIds = this.GetRequestVal("WorkIDs");
             string checkMsg = this.GetRequestVal("CheckMsg");
             string selectItems = this.GetRequestVal("SelectItems");
@@ -327,7 +327,7 @@ namespace BP.WF.HttpHandler
                json = JArray.Parse(selectItems);
             }
             //获取要批处理数据
-            string sql = string.Format("SELECT WorkID, FID,Title FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}' and WorkID IN('"+ workIds.Replace(",","','")+"')", WebUser.No, this.FK_Node);
+            string sql = string.Format("SELECT WorkID, FID,Title FROM WF_EmpWorks WHERE FK_Emp='{0}' and FK_Node='{1}' and WorkID IN('"+ workIds.Replace(",","','")+"')", WebUser.No, this.NodeID);
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             int idx = -1;
             string msg = "";
@@ -401,7 +401,7 @@ namespace BP.WF.HttpHandler
                             string checkNote = "";
 
                             //选择的多条记录一个意见框.
-                            var model = nd.GetParaInt("BatchCheckNoteModel", 0);
+                            int model = nd.GetParaInt("BatchCheckNoteModel", 0);
 
                             //多条记录一个意见.
                             if (model == 0)
@@ -444,7 +444,7 @@ namespace BP.WF.HttpHandler
                         wk.Update();
 
                         //执行工作发送.
-                        BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FK_Flow, workid, toNode, toEmps);
+                        BP.WF.SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(nd.FlowNo, workid, toNode, toEmps);
                         successMsg += "@对工作(" + dr["Title"] + ")处理情况如下";
                         successMsg += objs.ToMsgOfHtml();
                         successMsg += "<br/>";
@@ -497,13 +497,13 @@ namespace BP.WF.HttpHandler
             string FK_Node = GetRequestVal("FK_Node");
 
             //获取节点信息
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             Flow fl = nd.HisFlow;
             ds.Tables.Add(nd.ToDataTableField("WF_Node"));
 
             string sql = "";
 
-            if (nd.IsSubThread == true)
+            if (nd.ItIsSubThread == true)
             {
                 sql = "SELECT a.*, b.Starter,b.ADT,b.WorkID FROM " + fl.PTable
                           + " a , WF_EmpWorks b WHERE a.OID=B.FID AND b.WFState Not IN (7) AND b.FK_Node=" + nd.NodeID
@@ -522,19 +522,19 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //获取按钮权限
-            BtnLab btnLab = new BtnLab(this.FK_Node);
+            BtnLab btnLab = new BtnLab(this.NodeID);
 
             ds.Tables.Add(btnLab.ToDataTableField("Sys_BtnLab"));
 
             //获取报表数据
-            string inSQL = "SELECT WorkID FROM WF_EmpWorks WHERE FK_Emp='" + WebUser.No + "' AND WFState!=7 AND FK_Node=" + this.FK_Node;
+            string inSQL = "SELECT WorkID FROM WF_EmpWorks WHERE FK_Emp='" + WebUser.No + "' AND WFState!=7 AND FK_Node=" + this.NodeID;
             Works wks = nd.HisWorks;
             wks.RetrieveInSQL(inSQL);
 
             ds.Tables.Add(wks.ToDataTableField("WF_Work"));
 
             //获取字段属性
-            MapAttrs attrs = new MapAttrs("ND" + this.FK_Node);
+            MapAttrs attrs = new MapAttrs("ND" + this.NodeID);
 
             //获取实际中需要展示的列
             string batchParas = nd.BatchParas;
@@ -576,7 +576,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Batch_Delete()
         {
-            //BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             string workIDs = this.GetRequestVal("WorkIDs");
             if (DataType.IsNullOrEmpty(workIDs) == true)
                 return "err@没有选择需要处理的工作";
@@ -617,7 +617,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Batch_Return()
         {
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             string workIDs = this.GetRequestVal("WorkIDs");
             if (DataType.IsNullOrEmpty(workIDs) == true)
                 workIDs = this.WorkID.ToString();
@@ -625,7 +625,11 @@ namespace BP.WF.HttpHandler
                 //return "err@没有选择需要处理的工作";
             string msg = "";
 
-            string[] vals = this.GetRequestVal("ReturnToNode").Split('@');
+            string returnToNode = this.GetRequestVal("ReturnToNode");
+            string[] vals = returnToNode.Split(new string[] { "=>" }, StringSplitOptions.None);
+            if (vals.Length < 2)
+                vals = returnToNode.Split('@');
+
             int toNodeID = int.Parse(vals[0]);
 
             string toEmp = vals[1];

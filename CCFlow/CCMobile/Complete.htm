@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">-->
+    <title>已完成</title>
+
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <!--<link href="js/mui/css/mui.indexedlist.css" rel="stylesheet" type="text/css" />-->
+    <script src="./js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/comment/action.js" type="text/javascript"></script>
+    <script src="js/WorkOpt/Start.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <link href="./css/main.css" rel="stylesheet" type="text/css" />
+    <style>
+        h6 {
+            color: #000;
+        }
+    </style>
+    <script type="text/javascript">
+        mui.init();
+        mui.ready(
+            //加载数据
+            function Load_EmpWorks() {
+                var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+                var data = handler.DoMethodReturnString("Complete_Init");
+                if (data.indexOf('err@') == 0) {
+                    mui.alert(data);
+                    return;
+                }
+                $("#LV_Complete").empty();
+
+                var pushData = cceval('(' + data + ')');
+                var _Html = "";
+                var flowNames = "";
+                var wid = document.body.clientWidth - 40;//获取网页可见区域宽
+                //判断是否有数据
+                if (pushData.length == 0) {
+                    mui.alert("记录为空！", function () {
+                        SetHref('./Home.htm?s=' + Math.random());
+                    });
+                }
+
+                for (var k = 0; k < pushData.length; k++) {
+                    if (flowNames.indexOf(pushData[k].FlowName) > -1)
+                        continue;
+                    flowNames += pushData[k].FlowName + ",";
+                }
+
+                var flowName_Arrary = flowNames.split(",");
+                for (var j = 0; j < flowName_Arrary.length; j++) {
+                    if (flowName_Arrary[j] == "")
+                        continue;
+                    _Html += "<li class='mui-table-view-cell mui-collapse mui-active'><a class='mui-navigate-right' href='#'>" + flowName_Arrary[j] + "</a>";
+                    _Html += "<ul class='mui-table-view mui-table-view-chevron'>";
+                    for (var i = 0; i < pushData.length; i++) {
+                        if (pushData[i].FlowName != flowName_Arrary[j])
+                            continue;
+
+                        var en = pushData[i];
+
+                        var fk_flow = en.FK_Flow;
+                        var fk_node = en.FK_Node;
+                        var workid = en.WorkID;
+                        var fid = en.FID;
+                        var isRead = en.IsRead;
+                        var paras = en.AtPara;
+                        if (paras == null || paras == "") {
+                            paras = "";
+                        }
+                        else {
+                            if (paras.indexOf("IsCC=1") > -1) {
+                                paras = "IsCC=1";
+                            } else {
+                                paras = "";
+                            }
+                        }
+
+                        var href = "MyView.htm?FK_Flow=" + fk_flow + "&From=Complete&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid + "&IsRead=0&Paras=" + paras + "&T=" + Math.random();
+
+                        _Html += "<li  class='mui-table-view-cell' style='padding-left:15px'>";
+                        _Html += "   <a href='" + href + "' target='_self'>";
+                        _Html += "      <h5 style=\"white-space:normal;line-height:20px;width:" + wid + "px;word-wrap:break-word; word-break:break-all;color:#096BC1;\">" + en.Title + "</h5>";
+                        _Html += "      <h6  style='float:left' >当前节点：" + en.NodeName + "</h6>";
+                        _Html += "      <h6 style='float:right'>发起人:" + en.StarterName + "</h6>";
+
+                        _Html += "  </a>";
+                        _Html += "</li>";
+                    }
+                    _Html += "  </ul>";
+                    _Html += "</li>";
+                }
+
+                //展显
+                $("#LV_Complete").html("");
+                $("#LV_Complete").append(_Html);
+
+            }
+
+        );
+
+
+        //获取退回消息
+        function Back() {
+            SetHref('../CCMobilePortal/Home.htm?s=' + Math.random());
+            return;
+        }
+    </script>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+		<a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript:Back();"></a>
+		<h1 class="mui-title">已完成</h1>
+	</header>
+    <div class="mui-content">
+        <div class="mui-scroll-wrapper">
+			<div class="mui-scroll">
+                <ul id="LV_Complete" class="mui-table-view mui-table-view-chevron" style="top:46px;height:auto"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    //初始化单页的区域滚动
+    mui('.mui-scroll-wrapper').scroll();
+</script>
+</html>

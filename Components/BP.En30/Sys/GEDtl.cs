@@ -29,13 +29,13 @@ namespace BP.Sys
         #region 构造函数
         public override string ToString()
         {
-            return this.FK_MapDtl;
+            return this.MapDtlNo;
         }
         public override string ClassID
         {
             get
             {
-                return this.FK_MapDtl;
+                return this.MapDtlNo;
             }
         }
         public string RDT
@@ -88,7 +88,7 @@ namespace BP.Sys
         /// <summary>
         /// 行是否锁定
         /// </summary>
-        public bool IsRowLock
+        public bool ItIsRowLock
         {
             get
             {
@@ -127,7 +127,7 @@ namespace BP.Sys
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapDtl = null;
+        public string MapDtlNo = null;
         /// <summary>
         /// 通用从表
         /// </summary>
@@ -140,7 +140,7 @@ namespace BP.Sys
         /// <param name="fk_mapdtl">节点ID</param>
         public GEDtl(string fk_mapdtl)
         {
-            this.FK_MapDtl = fk_mapdtl;
+            this.MapDtlNo = fk_mapdtl;
         }
         /// <summary>
         /// 通用从表
@@ -149,7 +149,7 @@ namespace BP.Sys
         /// <param name="_oid">OID</param>
         public GEDtl(string fk_mapdtl, int _oid)
         {
-            this.FK_MapDtl = fk_mapdtl;
+            this.MapDtlNo = fk_mapdtl;
             this.OID = _oid;
         }
         #endregion
@@ -165,10 +165,10 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                if (this.FK_MapDtl == null)
-                    throw new Exception("没有给" + this.FK_MapDtl + "值，您不能获取它的Map。");
+                if (this.MapDtlNo == null)
+                    throw new Exception("没有给" + this.MapDtlNo + "值，您不能获取它的Map。");
 
-                BP.Sys.MapDtl md = new BP.Sys.MapDtl(this.FK_MapDtl);
+                BP.Sys.MapDtl md = new BP.Sys.MapDtl(this.MapDtlNo);
                 this._enMap = md.GenerMap();
                 return this._enMap;
             }
@@ -180,13 +180,13 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapDtl == null)
+                if (this.MapDtlNo == null)
                     return new GEDtls();
 
-                return new GEDtls(this.FK_MapDtl);
+                return new GEDtls(this.MapDtlNo);
             }
         }
-        public bool IsChange(GEDtl dtl)
+        public bool ItIsChange(GEDtl dtl)
         {
             Attrs attrs = dtl.EnMap.Attrs;
             foreach (Attr attr in attrs)
@@ -209,7 +209,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             // 判断是否有变化的项目，决定是否执行储存。
-            MapAttrs mattrs = new MapAttrs(this.FK_MapDtl);
+            MapAttrs mattrs = new MapAttrs(this.MapDtlNo);
             bool isChange = false;
             foreach (MapAttr mattr in mattrs)
             {
@@ -223,7 +223,7 @@ namespace BP.Sys
                     case "FID":
                         break;
                     default:
-                        if (mattr.IsNum)
+                        if (mattr.ItIsNum)
                         {
                             string s = this.GetValStrByKey(mattr.KeyOfEn);
                             if (DataType.IsNullOrEmpty(s))
@@ -268,7 +268,7 @@ namespace BP.Sys
         /// <summary>
         /// 节点ID
         /// </summary>
-        public string FK_MapDtl = null;
+        public string MapDtlNo = null;
         #endregion
 
         #region 方法
@@ -279,9 +279,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapDtl == null)
+                if (this.MapDtlNo == null)
                     return new GEDtl();
-                return new GEDtl(this.FK_MapDtl);
+                return new GEDtl(this.MapDtlNo);
             }
         }
         /// <summary>
@@ -296,11 +296,11 @@ namespace BP.Sys
         /// <param name="fk_mapdtl"></param>
         public GEDtls(string fk_mapdtl)
         {
-            this.FK_MapDtl = fk_mapdtl;
+            this.MapDtlNo = fk_mapdtl;
         }
         public GEDtls(string fk_mapdtl,object pkval)
         {
-            this.FK_MapDtl = fk_mapdtl;
+            this.MapDtlNo = fk_mapdtl;
         }
         #endregion
 

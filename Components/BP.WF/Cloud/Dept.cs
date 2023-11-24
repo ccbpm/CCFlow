@@ -320,7 +320,7 @@ namespace BP.Cloud
             string name = this.Name;
 
             //根目录不再处理.
-            if (this.IsRoot == true || this.No.Equals("100") == true)
+            if (this.ItIsRoot == true || this.No.Equals("100") == true)
             {
                 this.NameOfPath = name;
                 this.DirectUpdate();
@@ -335,7 +335,7 @@ namespace BP.Cloud
 
             while (true)
             {
-                if (dept.IsRoot || dept.No == "100")
+                if (dept.ItIsRoot || dept.No == "100")
                     break;
 
                 name = dept.Name + "\\" + name;

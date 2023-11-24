@@ -1,0 +1,61 @@
+﻿.ui-table-columntoggle-btn
+{
+    display: none;
+}
+#contentPanel
+{
+    position: absolute;
+    top: 45px;
+    bottom: 1px;
+    width: 100%;
+}
+
+#pullDown, #pullUp
+{
+    background: #fff;
+    height: 40px;
+    line-height: 40px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 14px;
+    color: #888;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon
+{
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    background: url(../image/pull-icon@2x.png) 0 0 no-repeat;
+    -webkit-background-size: 40px 80px;
+    background-size: 40px 80px;
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 250ms;
+}
+#pullDown .pullDownIcon
+{
+    -webkit-transform: rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon
+{
+    -webkit-transform: rotate(-180deg) translateZ(0);
+}
+#pullDown.flip .pullDownIcon
+{
+    -webkit-transform: rotate(-180deg) translateZ(0);
+}
+#pullUp.flip .pullUpIcon
+{
+    -webkit-transform: rotate(0deg) translateZ(0);
+}
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon
+{
+    background-position: 0 100%;
+    -webkit-transform: rotate(0deg) translateZ(0);
+    -webkit-transition-duration: 0ms;
+    -webkit-animation-name: loading;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}

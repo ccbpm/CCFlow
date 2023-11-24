@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>流程查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/themes/classic/theme-classic.css" rel="stylesheet" type="text/css" />
+    <link href="css/Main.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.js" type="text/javascript"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="./js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="Scripts/jquery-1.11.0.min.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="Scripts/config.js"></script>
+    <script type="text/javascript" src="Comm/Gener.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var url = "";
+
+            var _tspan = GetQueryString("TSpan");
+            if (_tspan == undefined || _tspan == null || _tspan == "" || _tspan == "null") {
+                _tspan = "-1";
+            }
+
+            var _flowNo = GetQueryString("FK_Flow");
+            if (_flowNo == undefined || _flowNo == null || _flowNo == "" || _flowNo == "null") {
+                _flowNo = "";
+            }
+
+            if (_flowNo == "" && _tspan == "")
+                _tspan = "-1";
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            handler.AddPara("TSpan", _tspan);
+            handler.AddPara("FK_Flow", _flowNo);
+            var data = handler.DoMethodReturnString("Search_Init");
+
+            var webUser = new WebUser();
+            if (data.indexOf('err@') == 0) {
+                $("#Msg").html(data);
+                return;
+            }
+
+            var data = JSON.parse(data);
+
+            var _tspan = GetQueryString("TSpan");
+            var _flowNo = GetQueryString("FK_Flow");
+
+            //时间段列表. 
+            var tSpans = data['TSpan'];
+            if (_tspan == "-1" )
+                html = "<span onclick=\"TSpan('');\" style='background-color:green' >全部</span>";
+            else
+                html = "<span onclick=\"TSpan('');\"  >全部</span>";
+
+            for (var i = 0; i < tSpans.length; i++) {
+
+                var tSpan = tSpans[i];
+
+                if (_tspan == tSpan.IntKey)
+                    html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" style='background-color:green' >" + tSpan.Lab + "</span>";
+                else
+                    html += "<span onclick=\"TSpan('" + tSpan.IntKey + "');\" >" + tSpan.Lab + "</span>";
+            }
+
+            $("#li-TSpan p").html(html);
+
+            //流程名称列表.
+            var flows = data['Flows'];
+            if (_flowNo == null || _flowNo == "")
+                html = "<span onclick=\"Flows('');\" style='background-color:green' >全部</span>";
+            else
+                html = "<span onclick=\"Flows('');\"  >全部</span>";
+
+            for (var i = 0; i < flows.length; i++) {
+                var en = flows[i];
+
+                if (_flowNo == en.No)
+                    html += "<span onclick=\"Flows('" + en.No + "');\"  style='background-color:green' >" + en.Name + "（" + en.Num + "）</span>";
+                else
+                    html += "<span onclick=\"Flows('" + en.No + "');\" >" + en.Name + "（" + en.Num + "）</span>";
+            }
+            $("#li-Flows p").html(html);
+
+            // 流程实例列表.
+            var ens = data['WF_GenerWorkFlow'],
+                        _Html = "";
+
+            //当前登录人员的编号.
+            var userNo = webUser.No;
+            for (var i = 0; i < ens.length; i++) {
+                var todoEmpsName = "";
+                var en = ens[i];
+
+                var fk_flow = en.FK_Flow,
+                            fk_node = en.FK_Node,
+                            workid = en.WorkID,
+                            fid = en.FID,
+                            isRead = en.IsRead,
+                            paras = en.AtPara;
+
+                if (paras == null || paras == "") {
+                    paras = "";
+                }
+                else {
+                    if (paras.indexOf("IsCC=1") > -1) {
+                        paras = "IsCC=1";
+                    } else {
+                        paras = "";
+                    }
+                }
+
+
+                var href = "";
+                
+                if (en.WFState == 3 || (en.TodoEmps && en.TodoEmps.indexOf(userNo + ',') < 0))
+                    href = "MyView.htm?FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FK_FlowFrom=" + _flowNo + "&TSpanFrom=" + _tspan + "&From=RptSearch&t=" + Math.random();
+                else
+                    href = "MyFlow.htm?FK_Flow=" + fk_flow + "&From=Search&FK_FlowFrom=" + _flowNo + "&TSpanFrom=" + _tspan + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid + "&IsRead=" + isRead + "&Paras=" + paras + "&T=" + Math.random();
+
+                if(en.TodoEmps!=null)
+                    todoEmpsName = en.TodoEmps;
+
+                todoEmpsName = todoEmpsName.substr(todoEmpsName.indexOf(',') + 1);
+
+                var icon = "";
+                if (en.WFState == 3)
+                    icon = "./Img/WFState/Complete.png";  //已经完成.
+                else if (en.WFState == 2)
+                    icon = "./Img/WFState/Runing.png"; //运行中. 
+                else if (en.WFState == 5)
+                    icon = "./Img/WFState/ReturnSta.png"; //退回.
+                else
+                    icon = "./Img/WFState/Etc.png"; //其他.
+
+                _Html += "<li  data-icon='false' >";
+                _Html += "   <a href='" + href + "' target='_self' class='ui-btn'>";
+                _Html += "<table style='width:100%;border-width:0px;padding:0px; margin:0px;'>";
+                _Html += "<tr>";
+                _Html += "<td style='width:10%;padding:0px; margin:0px;'><img src='" + icon + "'  style='float:left;width:30px;height:30px;'  /></td>";
+                _Html += "<td  style='width:90%;padding:0px; margin:0px;'>";
+                _Html += "      <h2 style='color:#096BC1;'>" + en.Title + "</h2>";
+                _Html += "<p>";
+                _Html += "当前:" + en.NodeName + "<font color=green> " + todoEmpsName + "</font>";
+                _Html += "发起:" + en.RDT.substring(5);
+                _Html += "</p>";
+
+                _Html += "</td>";
+                _Html += "</tr>";
+                _Html += "</table>";
+                _Html += "</a>";
+                _Html += "</li>";
+            }
+            $("ul").append(_Html);
+            //$("#LV_Search").listview('refresh');
+        });
+
+
+        function TSpan(tspan) {
+
+            var flowNo = GetQueryString("FK_Flow");
+            if (flowNo == null) {
+                if (tspan == '')
+                    SetHref('?1=1');
+                else
+                    SetHref('?TSpan=' + tspan);
+            }
+            else {
+                if (tspan == '')
+                    SetHref('?FK_Flow=' + flowNo);
+                else
+                    SetHref('?FK_Flow=' + flowNo + '&TSpan=' + tspan);
+            }
+        }
+
+        function Flows(flowNo) {
+            var tspan = GetQueryString("TSpan");
+
+            if (tspan == null) {
+                if (flowNo == "")
+                    SetHref('?1=1');
+                else
+                    SetHref('?FK_Flow=' + flowNo);
+            }
+            else {
+
+                if (flowNo == "")
+                    SetHref('?TSpan=' + GetQueryString("TSpan"));
+                else
+                    SetHref('?FK_Flow=' + flowNo + '&TSpan=' + GetQueryString("TSpan"));
+            }
+        }
+         
+        function ToUrl(pageID) {
+            var url = pageID + ".htm?m=" + Math.random();
+            SetHref(url);
+        }
+
+        function SearchKey() {
+
+            SetHref('SearchKey.htm?s=' + Math.random());
+
+            //var key = promptGener('输入关键字:');
+            //alert(key);
+
+        }
+        function Back1() {
+            SetHref('./Home.htm?s=' + Math.random());
+        }
+
+    </script>
+    <style type="text/css">
+        #li-TSpan, #li-Flows
+        {
+            padding: 1px 0;
+        }
+        
+        #li-TSpan p, #li-Flows p
+        {
+            white-space: normal;
+        }
+        
+        #li-TSpan span, #li-Flows span, #li-Runing span
+        {
+            display: inline-block;
+            padding: 3px 5px;
+            margin: 4px 5px;
+            border: 1px dotted red;
+            cursor: pointer;
+        }
+        
+        li span:hover
+        {
+            color: White;
+            background-color: skyblue;
+        }
+    </style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+		    <a class="mui-icon mui-icon-left-nav mui-pull-left" href="javascript:Back1();"></a>
+		    <h1 class="mui-title">流程查询</h1>
+	    </header>
+    <div class="mui-content" id="page_EmpWorks" data-role="page" data-theme="d">
+
+        
+        <!--<div data-role="header" data-position="fixed" data-tap-toggle="false" data-theme="b"
+            onclick="Back();">
+            <h2 id="H1">
+                流程查询</h2>
+            <a href="javascript:Back()" data-icon="carat-l" data-iconpos="notext"></a>
+        </div>-->
+        <div  data-role="content">
+            <ul id="LV_Search" data-role="listview">
+            
+            <!--<li>关键字:<input type=text  size="2" /><input  type=button  value="查询" />  </li>-->
+
+                <li data-role="list-divider"><div style=" float:left;font-weight:normal"> 时间范围 </div> <div style=" float:right;font-weight:normal "><span onclick="javascript:SearchKey();" >关键字</span></div> </li>
+                <li id="li-TSpan">
+                    <p>
+                    </p>
+                </li>
+                <li data-role="list-divider" style="font-weight:normal">流程范围</li>
+                <li id="li-Flows">
+                    <p>
+                    </p>
+                </li>
+                <li data-role="list-divider" style="font-weight:normal">发起/经办的流程</li>
+            </ul>
+        </div>
+        <div id="Msg">
+        </div>
+</body>
+</html>

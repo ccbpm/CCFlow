@@ -86,7 +86,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否显示图片
         /// </summary>
-        public bool IsPic
+        public bool ItIsPic
         {
             get
             {
@@ -163,7 +163,7 @@ namespace BP.Sys
         /// <summary>
         /// FK_Emp
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -182,7 +182,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
-                    return dt.ToString(DataType.SysDataFormat);
+                    return DataType.SysDataFormat(dt); 
                 }
                 return s.Substring(0, 10);
             }
@@ -199,7 +199,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now;
-                    return dt.ToString(DataType.SysDataFormat);
+                    return DataType.SysDataFormat(dt);
                 }
                 return s.Substring(0, 10);
             }
@@ -253,7 +253,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
-                    return dt.ToString(DataType.SysDateTimeFormat);
+                    return DataType.SysDataFormat(dt); 
                 }
                 return s;
             }
@@ -273,7 +273,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(s))
                 {
                     DateTime dt = DateTime.Now;
-                    return dt.ToString(DataType.SysDateTimeFormat);
+                    return DataType.SysDateTimeFormat(dt);
                 }
                 return s;
             }
@@ -372,7 +372,7 @@ namespace BP.Sys
                 this.SetValByKey("CfgKey", cfgkey);
                 this.SetValByKey("FK_Emp", fk_emp);
                 //this.CfgKey = cfgkey;
-                //this.FK_Emp = fk_emp;
+                //this.EmpNo = fk_emp;
                 this.DirectInsert();
                 // this.DirectInsert();
             }
@@ -435,7 +435,7 @@ namespace BP.Sys
         /// <returns></returns>
         public Dictionary<string, string> GetVals()
         {
-            if (string.IsNullOrWhiteSpace(this.Vals))
+            if (DataType.IsNullOrEmpty(this.Vals))
                 return new Dictionary<string, string>();
 
             string[] arr = null;
@@ -469,7 +469,7 @@ namespace BP.Sys
             UserRegedit ur = new UserRegedit("admin", ensName + "_SearchAttrs");
             string impEmps = new AtPara(ur.Paras).GetValStrByKey("ImpEmpNos");
 
-            if (string.IsNullOrWhiteSpace(impEmps))
+            if (DataType.IsNullOrEmpty(impEmps))
             {
                 return true;
             }
@@ -491,7 +491,7 @@ namespace BP.Sys
             //获取可导入权限
             UserRegedit ur = new UserRegedit("admin", ensName + "_SearchAttrs");
             string impEmps = new AtPara(ur.Paras).GetValStrByKey("ExpEmpNos");
-            if (string.IsNullOrWhiteSpace(impEmps))
+            if (DataType.IsNullOrEmpty(impEmps))
             {
                 return true;
             }

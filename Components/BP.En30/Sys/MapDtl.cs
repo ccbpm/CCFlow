@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Sys.Base;
 
 namespace BP.Sys
 {
@@ -96,6 +97,10 @@ namespace BP.Sys
         /// 是否可以更新
         /// </summary>
         public const string IsUpdate = "IsUpdate";
+        /// <summary>
+        /// 是否可以批量更新
+        /// </summary>
+        public const string IsBatchUpdate = "IsBatchUpdate";
         /// <summary>
         /// 是否启用通过
         /// </summary>
@@ -320,7 +325,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以导入
         /// </summary>
-        public bool IsImp
+        public bool ItIsImp
         {
             get
             {
@@ -334,7 +339,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以导出
         /// </summary>
-        public bool IsExp
+        public bool ItIsExp
         {
             get
             {
@@ -435,7 +440,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用行锁定.
         /// </summary>
-        public bool IsRowLock
+        public bool ItIsRowLock
         {
             get
             {
@@ -480,7 +485,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用Link,在记录的右边.
         /// </summary>
-        public bool IsEnableLink
+        public bool ItIsEnableLink
         {
             get
             {
@@ -573,7 +578,7 @@ namespace BP.Sys
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -782,7 +787,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否显示数量
         /// </summary>
-        public bool IsShowSum
+        public bool ItIsShowSum
         {
             get
             {
@@ -796,7 +801,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否显示Idx
         /// </summary>
-        public bool IsShowIdx
+        public bool ItIsShowIdx
         {
             get
             {
@@ -810,7 +815,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否显示标题
         /// </summary>
-        public bool IsShowTitle
+        public bool ItIsShowTitle
         {
             get
             {
@@ -824,7 +829,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是合流汇总数据
         /// </summary>
-        public bool IsHLDtl
+        public bool ItIsHLDtl
         {
             get
             {
@@ -838,7 +843,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是分流
         /// </summary>
-        public bool IsFLDtl
+        public bool ItIsFLDtl
         {
             get
             {
@@ -852,12 +857,12 @@ namespace BP.Sys
         /// <summary>
         /// 是否只读？
         /// </summary>
-        public bool IsReadonly
+        public bool ItIsReadonly
         {
             get
             {
 
-                if (this.IsInsert == false && this.IsUpdate == false && this.IsDelete == false)
+                if (this.ItIsInsert == false && this.ItIsUpdate == false && this.ItIsDelete == false)
                     return true;
 
                 return this.GetValBooleanByKey(MapDtlAttr.IsReadonly);
@@ -870,7 +875,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以删除？
         /// </summary>
-        public bool IsDelete
+        public bool ItIsDelete
         {
             get
             {
@@ -884,7 +889,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以新增？
         /// </summary>
-        public bool IsInsert
+        public bool ItIsInsert
         {
             get
             {
@@ -898,7 +903,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可见
         /// </summary>
-        public bool IsView
+        public bool ItIsView
         {
             get
             {
@@ -912,7 +917,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以更新？
         /// </summary>
-        public bool IsUpdate
+        public bool ItIsUpdate
         {
             get
             {
@@ -926,7 +931,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用多附件
         /// </summary>
-        public bool IsEnableAthM
+        public bool ItIsEnableAthM
         {
             get
             {
@@ -940,7 +945,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用分组字段
         /// </summary>
-        public bool IsEnableGroupField
+        public bool ItIsEnableGroupField
         {
             get
             {
@@ -954,7 +959,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否起用审核连接
         /// </summary>
-        public bool IsEnablePass
+        public bool ItIsEnablePass
         {
             get
             {
@@ -969,7 +974,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否copy数据？
         /// </summary>
-        public bool IsCopyNDData
+        public bool ItIsCopyNDData
         {
             get
             {
@@ -982,7 +987,7 @@ namespace BP.Sys
         }
 
 
-        public bool IsUse = false;
+        public bool ItIsUse = false;
         /// <summary>
         /// 是否检查人员的权限
         /// </summary>
@@ -1014,16 +1019,16 @@ namespace BP.Sys
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
                 return this.GetValStrByKey(MapDtlAttr.FK_MapData);
             }
-        }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(MapDtlAttr.FK_MapData, val);
+            set
+            {
+                this.SetValByKey(MapDtlAttr.FK_MapData, value);
+            }
         }
         /// <summary>
         /// 从表的模式
@@ -1047,7 +1052,7 @@ namespace BP.Sys
             get
             {
                 //如果不可以插入，就让其返回0.
-                if (this.IsInsert == false)
+                if (this.ItIsInsert == false)
                     return 0;
 
                 return this.GetValIntByKey(MapDtlAttr.RowsOfList);
@@ -1069,7 +1074,7 @@ namespace BP.Sys
                 {
 
                     s = this.No;
-                    if (s.Substring(0, 1) == "0")
+                    if (s.Substring(0, 1).Equals("0"))
                     {
                         return "T" + this.No;
                     }
@@ -1078,7 +1083,7 @@ namespace BP.Sys
                 }
                 else
                 {
-                    if (s.Substring(0, 1) == "0")
+                    if (s.Substring(0, 1).Equals("0"))
                     {
                         return "T" + this.No;
                     }
@@ -1168,11 +1173,11 @@ namespace BP.Sys
         #region 构造方法
         public Map GenerMap()
         {
-            bool isdebug = BP.Difference.SystemConfig.IsDebug;
+            bool isdebug = BP.Difference.SystemConfig.isDebug;
 
             if (isdebug == false)
             {
-                Map m = Cash.GetMap(this.No);
+                Map m = Cache.GetMap(this.No);
                 if (m != null)
                     return m;
             }
@@ -1184,7 +1189,7 @@ namespace BP.Sys
             foreach (MapAttr mapAttr in mapAttrs)
                 map.AddAttr(mapAttr.HisAttr);
 
-            Cash.SetMap(this.No, map);
+            Cache.SetMap(this.No, map);
             return map;
         }
         public GEDtl HisGEDtl
@@ -1197,7 +1202,7 @@ namespace BP.Sys
         }
         public GEEntity GenerGEMainEntity(string mainPK)
         {
-            GEEntity en = new GEEntity(this.FK_MapData, mainPK);
+            GEEntity en = new GEEntity(this.FrmID, mainPK);
             return en;
         }
         /// <summary>
@@ -1246,7 +1251,7 @@ namespace BP.Sys
                 // map.AddDDLSysEnum(MapDtlAttr.DtlVer, 0, "使用版本", true, true, MapDtlAttr.DtlVer, "@0=2017传统版@1=2019EasyUI版本");
 
 
-                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
+                map.AddTBInt(MapDtlAttr.RowsOfList, 0, "初始化行数", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 
@@ -1262,7 +1267,7 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", false, false);
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行", false, false);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", false, false);
-
+                map.AddBoolean(MapDtlAttr.IsBatchUpdate, true, "是否可以批量更新？", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", false, false);
 
@@ -1402,7 +1407,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "OID") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setEditType(EditType.Readonly);
 
                 attr.setKeyOfEn("OID");
@@ -1420,7 +1425,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "RefPK") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setEditType(EditType.Readonly);
 
                 attr.setKeyOfEn("RefPK");
@@ -1442,7 +1447,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setEditType(EditType.Readonly);
 
                 attr.setKeyOfEn("FID");
@@ -1459,7 +1464,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "RDT") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
 
                 attr.setKeyOfEn("RDT");
@@ -1476,7 +1481,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "Rec") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setEditType(EditType.Readonly);
 
                 attr.setKeyOfEn("Rec");
@@ -1495,7 +1500,7 @@ namespace BP.Sys
             if (attrs.Contains(MapAttrAttr.KeyOfEn, "Idx") == false)
             {
                 attr = new BP.Sys.MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setEditType(EditType.Readonly);
 
                 attr.setKeyOfEn("Idx");
@@ -1513,13 +1518,13 @@ namespace BP.Sys
         private void InitExtMembers()
         {
             /* 如果启用了多附件*/
-            if (this.IsEnableAthM == true)
+            if (this.ItIsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 athDesc.setMyPK(this.No + "_AthMDtl");
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
-                    athDesc.setFK_MapData(this.No);
+                    athDesc.FrmID =this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
                     athDesc.DirectInsert();
@@ -1542,7 +1547,7 @@ namespace BP.Sys
             for (int i = 0; i < mypks.Length; i++)
             {
                 string mypk = mypks[i];
-                if (mypk == null || mypk == "")
+                if (mypk == null || mypk.Equals(""))
                     continue;
 
                 string sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + mypk + "' ";
@@ -1554,13 +1559,13 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
 
             GroupField gf = new GroupField();
             if (gf.IsExit(GroupFieldAttr.CtrlID, this.No) == false)
             {
-                gf.FrmID = this.FK_MapData;
+                gf.FrmID = this.FrmID;
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
                 gf.Lab = this.Name;
@@ -1593,7 +1598,7 @@ namespace BP.Sys
                 md.Insert();
             }
 
-            if (this.IsRowLock == true)
+            if (this.ItIsRowLock == true)
             {
                 /*检查是否启用了行锁定.*/
                 MapAttrs attrs = new MapAttrs(this.No);
@@ -1601,7 +1606,7 @@ namespace BP.Sys
                     throw new Exception("您启用了从表单(" + this.Name + ")行数据锁定功能，但是该从表里没IsRowLock字段，请参考帮助文档。");
             }
 
-            if (this.IsEnablePass)
+            if (this.ItIsEnablePass)
             {
                 /*判断是否有IsPass 字段。*/
                 MapAttrs attrs = new MapAttrs(this.No);
@@ -1612,17 +1617,34 @@ namespace BP.Sys
         }
         protected override bool beforeUpdate()
         {
-            if (this.No.Equals(this.FK_MapData) == true)
+            if (this.No.Equals(this.FrmID) == true)
                 throw new Exception("err@从表的No不能与FK_MapData字段相等." + this.No);
 
+            int listShowModel = this.GetValIntByKey(MapDtlAttr.ListShowModel);
+            //判断二维、三维是否增加了IsEnable的字段
+            bool isExist = false;
             MapAttrs mattrs = new MapAttrs(this.No);
-            bool isHaveEnable = false;
             foreach (MapAttr attr in mattrs)
             {
-                if (attr.UIIsEnable && attr.UIContralType == UIContralType.TB)
-                    isHaveEnable = true;
+                if (attr.KeyOfEn.Equals("IsEnable"))
+                {
+                    isExist = true;
+                    break;
+                }
             }
+            if(isExist == false && (listShowModel == 3 || listShowModel == 4 || listShowModel == 5))
+            {
+                MapAttr attr = mattrs[0] as MapAttr;
+                attr.MyPK = attr.FrmID + "_IsEnable";
+                attr.setKeyOfEn("IsEnable");
+                attr.Name = "是否可用";
+                attr.MyDataType = DataType.AppInt;
+                attr.UIContralType = UIContralType.CheckBok;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.Insert();
 
+            }
             this.InitExtMembers();
 
             //更新MapData中的名称
@@ -1630,7 +1652,7 @@ namespace BP.Sys
             md.No = this.No;
 
             //获得事件实体.
-            var febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
+            FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
             if (febd == null)
                 this.FEBD = "";
             else
@@ -1644,7 +1666,7 @@ namespace BP.Sys
                 md.Name = this.Name;
                 md.PTable = this.PTable;
                 //避免在表单库中显示
-                md.FK_FormTree = "";
+                md.FormTreeNo = "";
                 md.Update(); //需要更新到缓存.
             }
 
@@ -1689,8 +1711,8 @@ namespace BP.Sys
             }
 
             //执行清空缓存到的AutoNum.
-            MapData md = new MapData(this.FK_MapData);
-            md.ClearAutoNumCash(true); //更新缓存.
+            MapData md = new MapData(this.FrmID);
+            md.ClearAutoNumCache(true); //更新缓存.
             return base.beforeDelete();
         }
     }

@@ -127,7 +127,7 @@ namespace BP.Port
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -141,7 +141,7 @@ namespace BP.Port
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_DeptText
+        public string DeptText
         {
             get
             {
@@ -155,7 +155,7 @@ namespace BP.Port
         {
             get
             {
-                return DBAccess.RunSQLReturnStringIsNull("SELECT Pass FROM Port_Emp WHERE No='" + this.No + "'", "123");
+                return DBAccess.RunSQLReturnStringIsNull("SELECT Pass FROM Port_Emp WHERE No='" + this.No + "'", null);
             }
             set
             {
@@ -221,24 +221,7 @@ namespace BP.Port
         /// <returns>是否匹配成功</returns>
         public bool CheckPass(string pass)
         {
-            //检查是否与通用密码相符.
-            //string gePass =  BP.Difference.SystemConfig.AppSettings["GenerPass"];
-            //if (gePass == pass && DataType.IsNullOrEmpty(gePass) == false)
-            //    return true;
-            //启用加密
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-            {
-                //pass = BP.Tools.Cryptography.EncryptString(pass);
-                ///*使用数据库校验.*/
-                //if (this.Pass == pass)
-                //    return true;
-                pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
-                /*使用数据库校验.*/
-                if (this.Pass.Equals(pass) == true)
-                    return true;
-            }
-
-            if (this.Pass.Equals(pass) == true)
+            if (this.Pass.ToLower().Equals(pass.ToLower()) == true)
                 return true;
             return false;
         }
@@ -303,7 +286,13 @@ namespace BP.Port
                 if (userID.Equals("admin") == true)
                     this.SetValByKey("No", userID);
                 else
-                    this.SetValByKey("No", BP.Web.WebUser.OrgNo + "_" + userID);
+                {
+                    if (userID.StartsWith(WebUser.OrgNo + "_"))
+                        this.SetValByKey("No", userID);
+                    else
+                        this.SetValByKey("No", BP.Web.WebUser.OrgNo + "_" + userID);
+                }
+                   
             }
             else
             {
@@ -413,12 +402,12 @@ namespace BP.Port
         #region 方法执行.
         public string DoEditMainDept()
         {
-            return  "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return  "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.DeptNo;
         }
 
         public string DoEditLeader()
         {
-            return "../../../GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return "../../../GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.DeptNo;
         }
 
         public string DoEmpDepts()
@@ -435,9 +424,6 @@ namespace BP.Port
 
         protected override bool beforeInsert()
         {
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
-
             //设置orgNo.
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
@@ -446,8 +432,19 @@ namespace BP.Port
                 dept.RetrieveFromDBSources();
                 this.OrgNo = dept.OrgNo;
             }
-
             return base.beforeInsert();
+        }
+        protected override void afterInsert()
+        {
+            string pass = this.Pass;
+            if (DataType.IsNullOrEmpty(pass) == true)
+                pass = SystemConfig.UserDefaultPass;
+
+            if (SystemConfig.isEnablePasswordEncryption)
+                pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
+            this.Pass = pass; //设置密码.
+
+            base.afterInsert();
         }
 
         protected override bool beforeUpdateInsertAction()
@@ -461,7 +458,7 @@ namespace BP.Port
 
                 if (BP.Web.WebUser.No.Equals("admin") == true)
                 {
-                    BP.Port.Dept dept = new Dept(this.FK_Dept);
+                    BP.Port.Dept dept = new Dept(this.DeptNo);
                     this.OrgNo = dept.OrgNo;
                 }
             }
@@ -495,7 +492,7 @@ namespace BP.Port
             foreach (DeptEmpStation item in des)
             {
                 Dept dept = new Dept();
-                dept.No = item.FK_Dept;
+                dept.No = item.DeptNo;
                 if (dept.RetrieveFromDBSources() == 0)
                 {
                     item.Delete();
@@ -506,7 +503,7 @@ namespace BP.Port
                 this.PinYin = this.PinYin + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new BP.Port.Station();
-                sta.No = item.FK_Station;
+                sta.No = item.StationNo;
                 if (sta.RetrieveFromDBSources() == 0)
                 {
                     item.Delete();
@@ -544,14 +541,14 @@ namespace BP.Port
         {
             string sql = "Select Count(*) From WF_Emp Where No='" + this.No + "'";
             int count = DBAccess.RunSQLReturnValInt(sql);
-            if (count == 0)
+            if (count == 0) { 
                 sql = "INSERT INTO WF_Emp (No,Name) VALUES('" + this.No + "','" + this.Name + "')";
-            DBAccess.RunSQL(sql);
-
+                DBAccess.RunSQL(sql);
+            }
             DeptEmp deptEmp = new DeptEmp();
-            deptEmp.FK_Dept = this.FK_Dept;
-            deptEmp.FK_Emp = this.No;
-            deptEmp.setMyPK(this.FK_Dept + "_" + this.No);
+            deptEmp.DeptNo = this.DeptNo;
+            deptEmp.EmpNo = this.No;
+            deptEmp.setMyPK(this.DeptNo + "_" + this.No);
             if (deptEmp.IsExit("MyPK", deptEmp.MyPK) == false)
                 deptEmp.Insert();
 
@@ -589,7 +586,7 @@ namespace BP.Port
             foreach (DeptEmpStation item in des)
             {
                 Dept dept = new Dept();
-                dept.No = item.FK_Dept;
+                dept.No = item.DeptNo;
                 if (dept.RetrieveFromDBSources() == 0)
                 {
                     item.Delete();
@@ -600,7 +597,7 @@ namespace BP.Port
                 py = py + pinyinJX + "/" + DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
 
                 BP.Port.Station sta = new BP.Port.Station();
-                sta.No = item.FK_Station;
+                sta.No = item.StationNo;
                 if (sta.RetrieveFromDBSources() == 0)
                 {
                     item.Delete();
@@ -619,14 +616,14 @@ namespace BP.Port
         /// </summary>
         public void DoUp()
         {
-            this.DoOrderUp(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+            this.DoOrderUp(EmpAttr.FK_Dept, this.DeptNo, EmpAttr.Idx);
         }
         /// <summary>
         /// 向下移动
         /// </summary>
         public void DoDown()
         {
-            this.DoOrderDown(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+            this.DoOrderDown(EmpAttr.FK_Dept, this.DeptNo, EmpAttr.Idx);
         }
 
         public string DoResetpassword(string pass1, string pass2)
@@ -637,8 +634,8 @@ namespace BP.Port
             if (pass1.ToLower().Contains("or") == true || pass1.ToLower().Contains(" ") == true)
                 return "密码格式错误.";
 
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                pass1 = BP.Tools.Cryptography.EncryptString(pass1);
+            if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
+                pass1 = BP.Tools.Cryptography.MD5_Encrypt(pass1);
 
             if (BP.Web.WebUser.IsAdmin == false)
             {
@@ -649,8 +646,7 @@ namespace BP.Port
             if (this.OrgNo.Equals(BP.Web.WebUser.OrgNo) == false)
                 return "err@您不能修改别的组织密码.";
 
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                this.Pass = BP.Tools.Cryptography.EncryptString(this.Pass);
+            this.Pass = pass1;
 
             return "密码设置成功";
         }
@@ -705,9 +701,7 @@ namespace BP.Port
             this.SetValByKey("EmpSta", 1);
             this.Update();
             return this.Name + "已禁用";
-
         }
-
         /// <summary>
         /// 测试
         /// </summary>
@@ -725,8 +719,14 @@ namespace BP.Port
         /// <returns></returns>
         public string ChangePass(string oldpass, string pass1, string pass2)
         {
-            if (BP.Web.WebUser.No.Equals(this.UserID) == false)
-                return "err@sss";
+
+            if (this.CheckPass(oldpass) == false)
+                return "err@旧密码错误.";
+
+            if (pass1.Equals(pass2)==false)
+                return "err@两次密码不一致.";
+
+            DBAccess.RunSQL("UPDATE Port_Emp SET Pass='"+ pass2 + "' WHERE No='"+this.No+"'");
 
             return "执行成功.";
         }

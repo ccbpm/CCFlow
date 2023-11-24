@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using BP.DA;
 using BP.En;
 using BP.Sys;
 using BP.WF.Template;
@@ -43,7 +44,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            string path = this.GetValStrByKey("Path") + "_" + DateTime.Now.ToString("yy年MM月dd日HH时mm分");
+            string path = this.GetValStrByKey("Path") + "_" + DataType.CurrentDateTime;
             if (System.IO.Directory.Exists(path))
                 return "系统正在执行中，请稍后。";
 

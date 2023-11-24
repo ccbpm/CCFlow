@@ -27,7 +27,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {

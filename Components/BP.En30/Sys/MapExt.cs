@@ -5,6 +5,8 @@ using BP.Web;
 using BP.En;
 using System.Data;
 using BP.Difference;
+using Newtonsoft.Json.Linq;
+using BP.Tools;
 
 namespace BP.Sys
 {
@@ -455,7 +457,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据源
         /// </summary>
-        public string FK_DBSrc
+        public string DBSrcNo
         {
             get
             {
@@ -500,7 +502,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否自适应大小
         /// </summary>
-        public bool IsAutoSize
+        public bool ItIsAutoSize
         {
             get
             {
@@ -599,7 +601,7 @@ namespace BP.Sys
                 this.SetValByKey(MapExtAttr.AttrsOfActive, value);
             }
         }
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -622,7 +624,8 @@ namespace BP.Sys
         {
             get
             {
-                string str = this.GetValStrByKey("Doc").Replace("~", "'");
+                string str = this.GetValStrByKey("Doc");
+                str = str.Replace("~~", "\"");
                 str = str.Replace("~", "'");
                 return str;
             }
@@ -636,14 +639,15 @@ namespace BP.Sys
         /// <summary>
         ///  处理自动填充SQL
         /// </summary>
-        /// <param name="ht"></param>
+        /// <param name="htMainEn"></param>
+        /// <param name="htDtlEn"></param>
         /// <returns></returns>
         public string AutoFullDLL_SQL_ForDtl(Hashtable htMainEn, Hashtable htDtlEn)
         {
             string fullSQL = this.Doc.Replace("@WebUser.No", WebUser.No);
             fullSQL = fullSQL.Replace("@WebUser.Name", WebUser.Name);
-            fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            fullSQL = fullSQL.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+            fullSQL = fullSQL.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
+            fullSQL = fullSQL.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
 
             if (fullSQL.Contains("@"))
             {
@@ -694,9 +698,9 @@ namespace BP.Sys
                 string sql = this.Tag;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.FK_DeptNameOfFull);
-                sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
-                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.DeptNameOfFull);
+                sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
+                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
                 return sql;
             }
         }
@@ -708,9 +712,9 @@ namespace BP.Sys
                 string sql = this.Doc;
                 sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                 sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.FK_DeptNameOfFull);
-                sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
-                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sql = sql.Replace("@WebUser.FK_DeptNameOfFull", BP.Web.WebUser.DeptNameOfFull);
+                sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
+                sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
                 return sql;
             }
         }
@@ -718,8 +722,9 @@ namespace BP.Sys
         {
             get
             {
-                string s = this.GetValStrByKey("Tag").Replace("~", "'");
-
+                string s = this.GetValStrByKey("Tag");
+                s = s.Replace("~~", "\"");
+                s = s.Replace("~", "'");
                 s = s.Replace("\\\\", "/");
                 s = s.Replace("\\\\", "/");
 
@@ -736,7 +741,12 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey("Tag1").Replace("~", "'");
+                string str = this.GetValStrByKey("Tag1");
+                str = str.Replace("~~", "\"");
+                str = str.Replace("~", "'");
+                str = str.Replace("‘", "'");
+                str = str.Replace("’", "'");
+                return str;
             }
             set
             {
@@ -747,7 +757,12 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey("Tag2").Replace("~", "'");
+                string str = this.GetValStrByKey("Tag2");
+                str = str.Replace("~~", "\"");
+                str = str.Replace("~", "'");
+                str = str.Replace("‘", "'");
+                str = str.Replace("’", "'");
+                return str;
             }
             set
             {
@@ -758,7 +773,12 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey("Tag3").Replace("~", "'");
+                string str = this.GetValStrByKey("Tag3");
+                str = str.Replace("~~", "\"");
+                str = str.Replace("~", "'");
+                str = str.Replace("‘", "'");
+                str = str.Replace("’", "'");
+                return str;
             }
             set
             {
@@ -769,7 +789,12 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStrByKey("Tag4").Replace("~", "'");
+                string str = this.GetValStrByKey("Tag4");
+                str = str.Replace("~~", "\"");
+                str = str.Replace("~", "'");
+                str = str.Replace("‘", "'");
+                str = str.Replace("’", "'");
+                return str;
             }
             set
             {
@@ -810,7 +835,7 @@ namespace BP.Sys
         /// <summary>
         /// 扩展
         /// </summary>
-        /// <param name="no"></param>
+        /// <param name="mypk"></param>
         public MapExt(string mypk)
         {
             this.setMyPK(mypk);
@@ -874,7 +899,7 @@ namespace BP.Sys
         /// </summary>
         public void InitPK()
         {
-            if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+            if (DataType.IsNullOrEmpty(this.FrmID) == true)
                 return;
             if (DataType.IsNullOrEmpty(this.MyPK) == false)
                 return;
@@ -885,59 +910,59 @@ namespace BP.Sys
                 case MapExtXmlList.FullDataDtl:
                     break;
                 case MapExtXmlList.ActiveDDL:
-                    this.setMyPK(MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.ActiveDDL + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.DDLFullCtrl:
-                    this.setMyPK(MapExtXmlList.DDLFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.DDLFullCtrl + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PopVal:
-                    this.setMyPK(MapExtXmlList.PopVal + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.PopVal + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.TBFullCtrl:
-                    this.setMyPK(MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.TBFullCtrl + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PopFullCtrl:
-                    this.setMyPK(MapExtXmlList.PopFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.PopFullCtrl + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.AutoFull:
-                    this.setMyPK(MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.AutoFull + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.AutoFullDLL:
-                    this.setMyPK(MapExtXmlList.AutoFullDLL + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.AutoFullDLL + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.InputCheck:
-                    this.setMyPK(MapExtXmlList.InputCheck + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.InputCheck + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 case MapExtXmlList.PageLoadFull:
-                    this.setMyPK(MapExtXmlList.PageLoadFull + "_" + this.FK_MapData);
+                    this.setMyPK(MapExtXmlList.PageLoadFull + "_" + this.FrmID);
                     break;
                 case MapExtXmlList.RegularExpression:
-                    this.setMyPK(MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag);
+                    this.setMyPK(MapExtXmlList.RegularExpression + "_" + this.FrmID + "_" + this.AttrOfOper + "_" + this.Tag);
                     break;
                 case MapExtXmlList.BindFunction:
-                    this.setMyPK(MapExtXmlList.BindFunction + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag);
+                    this.setMyPK(MapExtXmlList.BindFunction + "_" + this.FrmID + "_" + this.AttrOfOper + "_" + this.Tag);
                     break;
                 case MapExtXmlList.Link:
-                    this.setMyPK(MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                    this.setMyPK(MapExtXmlList.Link + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
                 default:
                     //这里要去掉，不然组合组主键，会带来错误.
                     if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
-                        this.setMyPK(this.ExtType + "_" + this.FK_MapData);
+                        this.setMyPK(this.ExtType + "_" + this.FrmID);
                     else
-                        this.setMyPK(this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper);
+                        this.setMyPK(this.ExtType + "_" + this.FrmID + "_" + this.AttrOfOper);
                     break;
             }
         }
 
         protected override bool beforeInsert()
         {
-            if (this.MyPK == "")
+            if (this.MyPK.Equals(""))
                 this.setMyPK(DBAccess.GenerGUID());
 
             InitEtcFieldForTSEntity();
 
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
             return base.beforeInsert();
         }
@@ -947,11 +972,11 @@ namespace BP.Sys
         private void InitEtcFieldForTSEntity()
         {
 
-            if (DataType.IsNullOrEmpty(this.FK_MapData) == true && this.MyPK.Contains("_") == true)
+            if (DataType.IsNullOrEmpty(this.FrmID) == true && this.MyPK.Contains("_") == true)
             {
                 string[] strs = this.MyPK.Split('_');
                 //表单ID.
-                this.FK_MapData = strs[0];
+                this.FrmID = strs[0];
 
                 //要操作的字段.
                 if (DataType.IsNullOrEmpty(this.AttrOfOper) == true && strs.Length > 2)
@@ -977,18 +1002,18 @@ namespace BP.Sys
                 //对应的字段包含_
                 if (strs.Length > 3)
                 {
-                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
-                        this.FK_MapData = strs[0];
+                    if (DataType.IsNullOrEmpty(this.FrmID) == true)
+                        this.FrmID = strs[0];
 
                     if (DataType.IsNullOrEmpty(this.ExtModel) == true)
                         this.ExtModel = strs[strs.Length - 1];
                     if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
-                        this.AttrOfOper = this.MyPK.Replace(this.FK_MapData + "_", "").Replace("_" + this.ExtModel, "");
+                        this.AttrOfOper = this.MyPK.Replace(this.FrmID + "_", "").Replace("_" + this.ExtModel, "");
                 }
                 if (strs.Length == 3)
                 {
-                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
-                        this.FK_MapData = strs[0];
+                    if (DataType.IsNullOrEmpty(this.FrmID) == true)
+                        this.FrmID = strs[0];
 
                     if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
                         this.AttrOfOper = strs[1];
@@ -998,8 +1023,8 @@ namespace BP.Sys
                 }
                 if (strs.Length == 2) //主表、从表的装载填充
                 {
-                    if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
-                        this.FK_MapData = strs[0];
+                    if (DataType.IsNullOrEmpty(this.FrmID) == true)
+                        this.FrmID = strs[0];
 
                     if (DataType.IsNullOrEmpty(this.ExtModel) == true)
                         this.ExtModel = strs[1];
@@ -1040,12 +1065,12 @@ namespace BP.Sys
             if (this.ExtType.Equals("MultipleChoiceSmall") == true || this.ExtType.Equals("SingleChoiceSmall") == true)
             {
                 //给该字段增加一个KeyOfEnT
-                string mypk = this.FK_MapData + "_" + this.AttrOfOper + "T";
+                string mypk = this.FrmID + "_" + this.AttrOfOper + "T";
                 MapAttr attrH = new MapAttr();
                 attrH.setMyPK(mypk);
                 if (attrH.RetrieveFromDBSources() == 0)
                 {
-                    MapAttr attr = new MapAttr(this.FK_MapData + "_" + this.AttrOfOper);
+                    MapAttr attr = new MapAttr(this.FrmID + "_" + this.AttrOfOper);
                     attrH.Copy(attr);
                     attrH.setKeyOfEn(attr.KeyOfEn + "T");
                     attrH.setName(attr.Name);
@@ -1055,7 +1080,7 @@ namespace BP.Sys
                     attrH.setMyDataType(DataType.AppString);
                     attrH.setUIVisible(false);
                     attrH.setUIIsEnable(true);
-                    attrH.setMyPK(attrH.FK_MapData + "_" + attrH.KeyOfEn);
+                    attrH.setMyPK(attrH.FrmID + "_" + attrH.KeyOfEn);
                     attrH.Save();
                     attr.SetPara("MultipleChoiceSmall", "1");
                 }
@@ -1075,7 +1100,7 @@ namespace BP.Sys
 
             foreach (MapExt ext in exts)
             {
-                if (ext.ExtType == MapExtXmlList.ActiveDDL)
+                if (ext.ExtType.Equals(MapExtXmlList.ActiveDDL))
                 {
                     if (ext.AttrOfOper.Trim().Length == 0)
                     {
@@ -1090,50 +1115,50 @@ namespace BP.Sys
                         ext.AttrOfOper = attr.KeyOfEn;
                         ext.Delete();
 
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                     }
 
-                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrOfOper)
+                    if (ext.MyPK.Equals(ext.ExtType + "_" + ext.FrmID + "_" + ext.FrmID + "_" + ext.AttrOfOper))
                     {
                         ext.Delete(); //直接删除.
 
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
-                        ext.Save();
-                        continue;
-                    }
-
-                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive)
-                    {
-                        ext.Delete(); //直接删除.
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
 
-                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive + "_" + ext.AttrOfOper)
+                    if (ext.MyPK.Equals(ext.ExtType + "_" + ext.FrmID + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive))
                     {
                         ext.Delete(); //直接删除.
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.Save();
+                        continue;
+                    }
+
+                    if (ext.MyPK.Equals(ext.ExtType + "_" + ext.FrmID + "_" + ext.FrmID + "_" + ext.AttrsOfActive + "_" + ext.AttrOfOper))
+                    {
+                        ext.Delete(); //直接删除.
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
 
 
                     //三个主键的情况.
-                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper)
+                    if (ext.MyPK.Equals(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper))
                     {
                         ext.Delete();
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
 
                     //三个主键的情况.
-                    if (ext.MyPK == ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrsOfActive)
+                    if (ext.MyPK.Equals(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrsOfActive))
                     {
                         ext.Delete();
-                        ext.setMyPK(ext.ExtType + "_" + ext.FK_MapData + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
+                        ext.setMyPK(ext.ExtType + "_" + ext.FrmID + "_" + ext.AttrOfOper + "_" + ext.AttrsOfActive);
                         ext.Save();
                         continue;
                     }
@@ -1142,27 +1167,29 @@ namespace BP.Sys
             }
         }
 
-        public string GetFullData(string paras,string oid)
+        public string GetFullData(string paras, string oid)
         {
             string tag5 = this.GetValStringByKey(MapExtAttr.Tag5);
             string tag6 = this.GetValStringByKey(MapExtAttr.Tag6);
+            if (DataType.IsNullOrEmpty(tag6))
+                tag6 = this.Doc;
             if (tag5.Equals("SFTable"))
             {
                 SFSearch sfs = new SFSearch(tag6);
                 return sfs.GenerDataOfJsonUesingSln(paras, this.MyPK);
             }
-            if(tag5.Equals("Self"))
+            if (tag5.Equals("Self"))
             {
                 GEEntity en = null;
                 if (DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
                 {
                     if (oid.Equals("0"))
-                        en = new GEEntity(this.FK_MapData);
+                        en = new GEEntity(this.FrmID);
                     else
-                        en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+                        en = new GEEntity(this.FrmID, Int64.Parse(oid));
                 }
                 string sql = DealExp(tag6, paras, en);
-                SFDBSrc src = new SFDBSrc(this.FK_DBSrc);
+                SFDBSrc src = new SFDBSrc(this.DBSrcNo);
                 DataTable dt = src.RunSQLReturnTable(sql);
                 return BP.Tools.Json.ToJson(dt);
             }
@@ -1185,12 +1212,12 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
                 {
                     if (oid.Equals("0"))
-                        en = new GEEntity(this.FK_MapData);
+                        en = new GEEntity(this.FrmID);
                     else
-                        en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+                        en = new GEEntity(this.FrmID, Int64.Parse(oid));
                 }
                 string sql = DealExp(this.Doc, paras, en);
-                SFDBSrc src = new SFDBSrc(this.FK_DBSrc);
+                SFDBSrc src = new SFDBSrc(this.DBSrcNo);
                 dt = src.RunSQLReturnTable(sql);
             }
             if (dt != null)
@@ -1228,36 +1255,41 @@ namespace BP.Sys
         /// <param name="paras">参数</param>
         /// <param name="sqlWhere">增加的查询条件的SQL</param>
         /// <returns></returns>
-        public string GetDataTableByField(string field, string paras, string sqlWhere, string oid)
+        public string GetDataTableByField(string field, string paras, string sqlWhere, string oid, string type)
         {
             if (DataType.IsNullOrEmpty(field) == true)
-                return "err@"+this.MyPK+"中"+field+"传参不能为空";
+                return "err@" + this.MyPK + "中" + field + "传参不能为空";
 
             string sql = this.GetValStringByKey(field); //获得SQL.
             if (DataType.IsNullOrEmpty(sql) == true)
-                return "err@字段" + field + "执行的SQL为空,或者没有配置字典.";
+                return "err@字段" + field + "执行的内容为空,或者没有配置字典.";
 
             //判断是不是使用字典表中的数据
-            if (sql.ToLower().Contains("select") == false && sql.ToLower().Contains("@")==false)
+            if (sql.ToLower().Contains("select") == false && sql.ToLower().Contains("@") == false)
             {
                 SFTable sf = new SFTable();
                 sf.No = sql;
                 if (sf.RetrieveFromDBSources() == 1)
                     return sf.GenerJsonByPara(paras);
                 else
-                    throw new Exception("err@字典["+sql+"]不存在.");
+                    throw new Exception("err@字典[" + sql + "]不存在.");
             }
 
-            if (this.DBType.Equals("0") == false)
-                return "err@数据源类型不是按照SQL查询,DBType=" + this.DBType;
-
+           
             if (DBAccess.IsExitsTableCol("Sys_MapExt", field) == false)
                 return "err@传的参数不正确,Field=" + field + "在Sys_MapExt表中不存在";
-    
+
 
             //如果是SQL字典.
             if (sql.ToLower().Contains("SELECT") == false)
             {
+                if (this.DoWay.Equals("Self"))
+                {
+                    sql = DealExp(sql, paras, null);
+                    SFDBSrc dbSrc = new SFDBSrc(this.DBSrcNo);
+                    return BP.Tools.Json.ToJson(dbSrc.RunSQLReturnTable(sql));
+
+                }
                 SFTable dict = new SFTable();
                 dict.No = sql;
                 if (dict.RetrieveFromDBSources() == 1)
@@ -1266,13 +1298,33 @@ namespace BP.Sys
 
             //填充下拉框
             GEEntity en = null;
-            if (DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false)
+            if (DataType.IsNullOrEmpty(oid) == false && oid.Contains("_") == false && type.Contains("Dtl") == false)
             {
                 if (oid.Equals("0"))
-                    en = new GEEntity(this.FK_MapData);
+                    en = new GEEntity(this.FrmID);
                 else
-                    en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+                    en = new GEEntity(this.FrmID, Int64.Parse(oid));
             }
+            string requestMesthod = this.GetParaString("RequestMethod", "Get"); // Get ,Post
+            if (this.DBType.Equals("1") && requestMesthod.ToLower().Equals("post"))
+            {
+                String questbody = this.GetParaString("PostContent", ""); //body
+                questbody = questbody.Replace("'", "\"");
+                questbody = DealExp(questbody, paras, en);
+                String urlCtrl = DealExp(sql, paras, en);
+                string strCtrl = Tools.PubGlo.HttpPostConnect(urlCtrl, questbody, "POST", true);
+                JObject jsonCtrl = strCtrl.ToJObject();
+                //code=0，表示请求成功，否则失败
+                if (jsonCtrl["code"] == null)
+                    return "err@执行URL返回结果失败";
+                if (jsonCtrl["code"].ToString().Equals("0") == false)
+                    return "err@执行URL返回结果失败";
+                string ctrlData = jsonCtrl["data"].ToString();
+                return ctrlData;
+            }
+            if (this.DBType.Equals("0") == false)
+                return "err@数据源类型不是按照SQL查询,DBType=" + this.DBType;
+
             if (this.ExtType == MapExtXmlList.FullData && field.Equals("Tag") == true)
             {
                 string[] strs = sql.Split('$');
@@ -1287,9 +1339,9 @@ namespace BP.Sys
 
                         sql = DealExp(ss[1], paras, en);
                         DataTable dtt = null;
-                        if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+                        if (DataType.IsNullOrEmpty(this.DBSrcNo) == false && this.DBSrcNo.Equals("local") == false)
                         {
-                            SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                            SFDBSrc sfdb = new SFDBSrc(this.DBSrcNo);
                             dtt = sfdb.RunSQLReturnTable(sql);
                         }
                         else
@@ -1331,9 +1383,9 @@ namespace BP.Sys
             sql = DealExp(sql, paras, en);
 
             DataTable dt = null;
-            if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+            if (DataType.IsNullOrEmpty(this.DBSrcNo) == false && this.DBSrcNo.Equals("local") == false)
             {
-                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                SFDBSrc sfdb = new SFDBSrc(this.DBSrcNo);
                 dt = sfdb.RunSQLReturnTable(sql);
             }
             else
@@ -1390,16 +1442,16 @@ namespace BP.Sys
                 return "err@TableSearch设置的查询条件字段" + key + "的SQL查询语句为空";
 
             GEEntity en = null;
-            if (DataType.IsNullOrEmpty(oid) == false)
-                en = new GEEntity(this.FK_MapData, Int64.Parse(oid));
+            if (DataType.IsNullOrEmpty(oid) == false && DataType.IsNumStr(oid))
+                en = new GEEntity(this.FrmID, Int64.Parse(oid));
             sql = DealExp(sql, paras, en);
 
             if (sql.Contains("@") == true)
                 return "err@执行的SQL中" + sql + " 有@符号没有被替换";
             DataTable dt = null;
-            if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+            if (DataType.IsNullOrEmpty(this.DBSrcNo) == false && this.DBSrcNo.Equals("local") == false)
             {
-                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                SFDBSrc sfdb = new SFDBSrc(this.DBSrcNo);
                 dt = sfdb.RunSQLReturnTable(sql);
             }
             else
@@ -1407,61 +1459,110 @@ namespace BP.Sys
 
             return BP.Tools.Json.ToJson(dt);
         }
-
-        public string GetDataTableByTableSearch(string paras)
+        /// <summary>
+        /// 表格查询
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        public string GetDataTableByTableSearch(string paras,string paras1)
         {
-            string sql = this.Tag2;
-            string sqlWhere = "";
+            string sql = this.Tag2; //查询的条件
+            bool isPagination = sql.Contains("PageSize") && sql.Contains("PageIdx") ? true : false;
             if (sql.ToLower().IndexOf("where") == -1)
-                sql += "WHERE 1=1";
-            else
-                sqlWhere = sql.ToLower().Substring(sql.ToLower().IndexOf("where"));
+                sql += " WHERE 1=1";
             if (DataType.IsNullOrEmpty(paras) == false)
             {
                 Newtonsoft.Json.Linq.JObject json = Newtonsoft.Json.Linq.JObject.Parse(paras);
                 foreach (var item in json)
                 {
+                    if(item.Key.Equals("PageSize") || item.Key.Equals("PageIdx"))
+                    {
+                        sql = sql.Replace("@"+item.Key, item.Value.ToString());
+                        continue;
+                    }
                     string val = item.Value != null ? item.Value.ToString() : "";
                     if (item.Key.Equals("Key"))
                     {
                         sql = sql.Replace("@Key", val);
                         continue;
                     }
-
                     if (item.Key.StartsWith("DTFrom_"))
                     {
                         string key = item.Key.Replace("DTFrom_", "");
-                        if (sqlWhere.Contains(key) == false && DataType.IsNullOrEmpty(val) == false)
-                            sql += " AND " + key + " >='" + val + "'";
+                        if(DataType.IsNullOrEmpty(val) == true)
+                        {
+                            if(sql.Contains("@"+ item.Key) == true)
+                            {
+                                sql = sql.Replace(key+">='@" + item.Key + "'", "1=1");
+                                sql = sql.Replace(key + ">'@" + item.Key + "'", "1=1");
+                            }
+                        }
                         else
-                            sql = sql.Replace("@DTFrom_", val);
+                        {
+                            if (sql.Contains("@" + item.Key) == false && isPagination == false)
+                                sql += " AND " + key + " >='" + val + "'";
+                            else
+                                sql = sql.Replace("@"+ item.Key, val);
+                        }
                         continue;
                     }
                     if (item.Key.StartsWith("DTTo_"))
                     {
                         string key = item.Key.Replace("DTTo_", "");
-                        if (sqlWhere.Contains(key) == false && DataType.IsNullOrEmpty(val) == false)
-                            sql += " AND " + key + " <='" + val + " 23:59'";
+                        if (DataType.IsNullOrEmpty(val) == true)
+                        {
+                            if (sql.Contains("@" + item.Key) == true)
+                            {
+                                sql = sql.Replace(key + "<='@" + item.Key + "'", "1=1");
+                                sql = sql.Replace(key + "<'@" + item.Key + "'", "1=1");
+                            }
+                        }
                         else
-                            sql = sql.Replace("@DTFrom_", val);
+                        {
+                            if (sql.Contains("@" + item.Key) == false && isPagination == false)
+                                sql += " AND " + key + " <='" + val + " 23:59'";
+                            else
+                                sql = sql.Replace("@" + item.Key, val);
+                        }
                         continue;
                     }
-                    if (sqlWhere.Contains(item.Key) == false)
+                    //下拉框的解析
+                    if(val.Equals("") && isPagination == true)
                     {
-                        if (DataType.IsNullOrEmpty(val) == false)
+                        sql = sql.Replace(item.Key + "=@" + item.Key, "1=1");
+                        sql = sql.Replace(item.Key + "='@" + item.Key + "'", "1=1");
+                    }
+                    if (val.Equals("")==false)
+                    {
+                        if (sql.Contains("@" + item.Key) == false && isPagination == false)
                             sql += " AND " + item.Key + "='" + val + "'";
                         else
                             sql = sql.Replace("@" + item.Key, val);
                     }
                 }
             }
-
+            if (DataType.IsNullOrEmpty(paras1) == false)
+            {
+                Newtonsoft.Json.Linq.JObject json = Newtonsoft.Json.Linq.JObject.Parse(paras1);
+                foreach (var item in json)
+                {
+                    if (sql.Contains("@") == false)
+                        break;
+                    string val = item.Value != null ? item.Value.ToString() : "";
+                    if (DataType.IsNullOrEmpty(val))
+                        val = "";
+                    if (val.Equals("") == false)
+                    {
+                        sql = sql.Replace("@" + item.Key, val);
+                    }
+                }
+            }
             sql = DealExp(sql, "", null);
 
             DataTable dt = null;
-            if (DataType.IsNullOrEmpty(this.FK_DBSrc) == false && this.FK_DBSrc.Equals("local") == false)
+            if (DataType.IsNullOrEmpty(this.DBSrcNo) == false && this.DBSrcNo.Equals("local") == false)
             {
-                SFDBSrc sfdb = new SFDBSrc(this.FK_DBSrc);
+                SFDBSrc sfdb = new SFDBSrc(this.DBSrcNo);
                 dt = sfdb.RunSQLReturnTable(sql);
             }
             else
@@ -1486,12 +1587,111 @@ namespace BP.Sys
                 if (dt.Columns.Contains("parentno") == true)
                     dt.Columns["parentno"].ColumnName = "ParentNo";
             }
-            return BP.Tools.Json.ToJson(dt);
+            dt.TableName = "SearchData";
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+            sql = this.Tag3; //查询的条件
+            if(DataType.IsNullOrEmpty(sql)== true)
+                return BP.Tools.Json.ToJson(ds);
+            if (sql.ToLower().IndexOf("where") == -1)
+                sql += " WHERE 1=1";
+            if (DataType.IsNullOrEmpty(paras) == false)
+            {
+                Newtonsoft.Json.Linq.JObject json = Newtonsoft.Json.Linq.JObject.Parse(paras);
+                foreach (var item in json)
+                {
+                    if (item.Key.Equals("PageSize") || item.Key.Equals("PageIdx"))
+                    {
+                        sql = sql.Replace("@" + item.Key, item.Value.ToString());
+                        continue;
+                    }
+                    string val = item.Value != null ? item.Value.ToString() : "";
+                    if (item.Key.Equals("Key"))
+                    {
+                        sql = sql.Replace("@Key", val);
+                        continue;
+                    }
+                    if (item.Key.StartsWith("DTFrom_"))
+                    {
+                        string key = item.Key.Replace("DTFrom_", "");
+                        if (DataType.IsNullOrEmpty(val) == true)
+                        {
+                            if (sql.Contains("@" + item.Key) == true)
+                            {
+                                sql = sql.Replace(key + ">='@" + item.Key + "'", "1=1");
+                                sql = sql.Replace(key + ">'@" + item.Key + "'", "1=1");
+                            }
+                        }
+                        else
+                        {
+                            if (sql.Contains("@" + item.Key) == false && isPagination == false)
+                                sql += " AND " + key + " >='" + val + "'";
+                            else
+                                sql = sql.Replace("@" + item.Key, val);
+                        }
+                        continue;
+                    }
+                    if (item.Key.StartsWith("DTTo_"))
+                    {
+                        string key = item.Key.Replace("DTTo_", "");
+                        if (DataType.IsNullOrEmpty(val) == true)
+                        {
+                            if (sql.Contains("@" + item.Key) == true)
+                            {
+                                sql = sql.Replace(key + "<='@" + item.Key + "'", "1=1");
+                                sql = sql.Replace(key + "<'@" + item.Key + "'", "1=1");
+                            }
+                        }
+                        else
+                        {
+                            if (sql.Contains("@" + item.Key) == false && isPagination == false)
+                                sql += " AND " + key + " <='" + val + " 23:59'";
+                            else
+                                sql = sql.Replace("@" + item.Key, val);
+                        }
+                        continue;
+                    }
+                    //下拉框的解析
+                    if (val.Equals("") && isPagination == true)
+                    {
+                        sql = sql.Replace(item.Key + "=@" + item.Key, "1=1");
+                        sql = sql.Replace(item.Key + "='@" + item.Key + "'", "1=1");
+                    }
+                    if (val.Equals("") == false)
+                    {
+                        if (sql.Contains("@" + item.Key) == false && isPagination == false)
+                            sql += " AND " + item.Key + "='" + val + "'";
+                        else
+                            sql = sql.Replace("@" + item.Key, val);
+                    }
+                }
+            }
+
+            sql = DealExp(sql, "", null);
+            int count = 0;
+            if (DataType.IsNullOrEmpty(this.DBSrcNo) == false && this.DBSrcNo.Equals("local") == false)
+            {
+                SFDBSrc sfdb = new SFDBSrc(this.DBSrcNo);
+                count = sfdb.RunSQLReturnInt(sql,0);
+            }
+            else
+                count = DBAccess.RunSQLReturnValInt(sql);
+
+            DataTable dtCount = new DataTable("DTCout");
+            dtCount.TableName = "DTCout";
+            dtCount.Columns.Add("Count", typeof(int));
+            DataRow dr = dtCount.NewRow();
+            dr[0] = count;
+            dtCount.Rows.Add(dr);
+            ds.Tables.Add(dtCount);
+            return BP.Tools.Json.ToJson(ds);
         }
 
         private string DealExp(string exp, string paras, Entity en)
         {
             //替换字符
+            exp = exp.Replace("~~", "\"");
             exp = exp.Replace("~", "'");
 
             if (exp.Contains("@") == false)
@@ -1500,9 +1700,9 @@ namespace BP.Sys
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptNameOfFull;", WebUser.FK_DeptNameOfFull);
-            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull;", WebUser.DeptNameOfFull);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.DeptNo);
             exp = exp.Replace("@WebUser.OrgNo;", WebUser.OrgNo);
             exp = exp.Replace("@WebUser.OrgName;", WebUser.OrgName);
 
@@ -1510,9 +1710,9 @@ namespace BP.Sys
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.DeptNameOfFull);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
             exp = exp.Replace("@WebUser.OrgNo", WebUser.OrgNo);
             exp = exp.Replace("@WebUser.OrgName", WebUser.OrgName);
 
@@ -1528,8 +1728,10 @@ namespace BP.Sys
                     {
                         if (DataType.IsNullOrEmpty(key) == true)
                             continue;
-                        var attrKeyOfEn = key.Split('=')[0];
-                        var val = key.Split('=').Length == 1 ? "" : key.Split('=')[1];
+                        string attrKeyOfEn = key.Split('=')[0];
+                        string val = key.Split('=').Length == 1 ? "" : key.Split('=')[1];
+                        if (DataType.IsNullOrEmpty(val) == false)
+                            val = val.Replace("~", "@");
                         exp = exp.Replace("@" + attrKeyOfEn, val);
                         if (exp.Contains("@") == false)
                             break;
@@ -1576,7 +1778,7 @@ namespace BP.Sys
 
             }
 
-            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)

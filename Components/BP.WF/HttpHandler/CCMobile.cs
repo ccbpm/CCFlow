@@ -10,6 +10,8 @@ using BP.En;
 using BP.WF.Port.Admin2Group;
 using BP.Difference;
 using BP.CCFast.CCMenu;
+using BP.Port.WeiXin.Msg;
+using BP.WF.Port;
 
 namespace BP.WF.HttpHandler
 {
@@ -176,7 +178,7 @@ namespace BP.WF.HttpHandler
                 foreach (BP.WF.Port.Admin2Group.Org org in orgs)
                 {
                     OrgAdminer oa = new OrgAdminer();
-                    oa.FK_Emp = WebUser.No;
+                    oa.EmpNo = WebUser.No;
                     oa.OrgNo = org.No;
                     oa.Save();
                 }
@@ -185,8 +187,8 @@ namespace BP.WF.HttpHandler
 
             //设置他的组织，信息.
             WebUser.No = emp.UserID; //登录帐号.
-            WebUser.FK_Dept = emp.FK_Dept;
-            WebUser.FK_DeptName = emp.FK_DeptText;
+            WebUser.DeptNo = emp.DeptNo;
+            WebUser.DeptName = emp.DeptText;
 
             //执行登录.
             BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
@@ -287,7 +289,7 @@ namespace BP.WF.HttpHandler
                 append.Append("UserIcon:'DefaultBiger.png'");
             }
             append.Append(",UserName:'" + BP.Web.WebUser.Name + "'");
-            append.Append(",UserDeptName:'" + BP.Web.WebUser.FK_DeptName + "'");
+            append.Append(",UserDeptName:'" + BP.Web.WebUser.DeptName + "'");
             append.Append("}");
             return append.ToString();
         }
@@ -332,6 +334,7 @@ namespace BP.WF.HttpHandler
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = "SELECT DISTINCT * From (SELECT  FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.IsCanStart=1 AND F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + (top*2)+ ") A limit " + top;
                     break;
                 case DBType.Oracle:
@@ -345,6 +348,19 @@ namespace BP.WF.HttpHandler
             }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
+            //把列名转化成区分大小写.
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["ICON"].ColumnName = "Icon";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                dt.Columns["fk_flow"].ColumnName = "FK_Flow";
+                dt.Columns["flowname"].ColumnName = "FlowName";
+                dt.Columns["icon"].ColumnName = "Icon";
+            }
             ds.Tables.Add(dt);
             //应用中心
             MySystems systems = new MySystems();
@@ -353,7 +369,7 @@ namespace BP.WF.HttpHandler
             //权限中心.
             BP.CCFast.CCMenu.PowerCenters pcs = new BP.CCFast.CCMenu.PowerCenters();
             pcs.RetrieveAll();
-            string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
+            string mydepts = "" + WebUser.DeptNo + ","; //我的部门.
             string mystas = ""; //我的角色.
             DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
             foreach (DataRow dr in mydeptsDT.Rows)
@@ -367,7 +383,7 @@ namespace BP.WF.HttpHandler
             foreach (MySystem item in systems)
             {
                 //如果被禁用了.
-                if (item.IsEnable == false) continue;
+                if (item.ItIsEnable == false) continue;
 
                 //找到关于系统的控制权限集合.
                 PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, item.No) as PowerCenters;
@@ -430,7 +446,27 @@ namespace BP.WF.HttpHandler
                     }
                 }
             }
-            ds.Tables.Add(systemsCopy.ToDataTableField("Systems"));
+            DataTable sysDt = systemsCopy.ToDataTableField("Systems");
+            //把列名转化成区分大小写.
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+            {
+                sysDt.Columns["NO"].ColumnName = "No";
+                sysDt.Columns["NAME"].ColumnName = "Name";
+                sysDt.Columns["ISENABLE"].ColumnName = "IsEnable";
+                sysDt.Columns["ICON"].ColumnName = "Icon";
+                sysDt.Columns["ORGNO"].ColumnName = "OrgNo";
+                sysDt.Columns["IDX"].ColumnName = "Idx";
+            }
+            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+            {
+                sysDt.Columns["no"].ColumnName = "No";
+                sysDt.Columns["name"].ColumnName = "Name";
+                sysDt.Columns["isenable"].ColumnName = "IsEnable";
+                sysDt.Columns["icon"].ColumnName = "Icon";
+                sysDt.Columns["orgno"].ColumnName = "OrgNo";
+                sysDt.Columns["idx"].ColumnName = "Idx";
+            }
+            ds.Tables.Add(sysDt);
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
@@ -483,7 +519,7 @@ namespace BP.WF.HttpHandler
             string fk_node = this.GetRequestVal("FK_Node");
             string showWhat = this.GetRequestVal("ShowWhat");
             string orderBy = this.GetRequestVal("OrderBy");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node, showWhat,null,null, orderBy);
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.NodeID, showWhat,null,null, orderBy);
             dt.Columns.Add("WFStateLabel");
             foreach (DataRow dr in dt.Rows)
             {
@@ -522,12 +558,20 @@ namespace BP.WF.HttpHandler
         public string DB_GenerReturnWorks()
         {
             /* 如果工作节点退回了*/
-            BP.WF.ReturnWorks rws = new BP.WF.ReturnWorks();
-            rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node, BP.WF.ReturnWorkAttr.WorkID, this.WorkID, BP.WF.ReturnWorkAttr.RDT);
-            StringBuilder append = new StringBuilder();
-            append.Append("[");
-
-            return BP.Tools.Json.ToJson(rws.ToDataTableField());
+            string flowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow From WF_Node WHERE NodeID=" + this.NodeID);
+            string trackTable = "ND" + int.Parse(flowNo) + "Track";
+            string sql = "SELECT NDFrom,NDFromT,EmpFrom,EmpFromT,Msg,RDT From " + trackTable + " WHERE WorkID=" + this.WorkID + " AND NDTo=" + this.NodeID + " Order By RDT";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if(SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
+            {
+                dt.Columns[0].ColumnName = "ReturnNode";
+                dt.Columns[1].ColumnName = "ReturnNodeName";
+                dt.Columns[2].ColumnName = "Returner";
+                dt.Columns[3].ColumnName = "ReturnerName";
+                dt.Columns[4].ColumnName = "BeiZhu";
+                dt.Columns[5].ColumnName = "RDT";
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
 
         public string Start_Init()
@@ -560,9 +604,9 @@ namespace BP.WF.HttpHandler
                 return "err@提示:此工作已经被别人处理或者此流程已删除。";
             }
 
-            BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
+            BP.Port.Emp empOF = new BP.Port.Emp(wl.EmpNo);
             Web.WebUser.SignInOfGener(empOF);
-            return "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
+            return "MyFlow.htm?FK_Flow=" + wl.FlowNo + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.NodeID + "&FID=" + wl.FID;
         }
         /// <summary>
         /// 流程单表单查看.
@@ -632,10 +676,10 @@ namespace BP.WF.HttpHandler
             dtTSpan.TableName = "TSpan";
             ds.Tables.Add(dtTSpan);
 
-            if (this.FK_Flow == null)
+            if (this.FlowNo == null)
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "') AND WFState > 1 " + sqlOrgNoWhere + "  GROUP BY TSpan";
             else
-                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1  " + sqlOrgNoWhere + " GROUP BY TSpan";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FlowNo + "' AND (Emps LIKE '%" + WebUser.No + "%' OR Starter='" + WebUser.No + "')  AND WFState > 1  " + sqlOrgNoWhere + " GROUP BY TSpan";
 
             DataTable dtTSpanNum = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -677,9 +721,9 @@ namespace BP.WF.HttpHandler
                 sqlWhere += "AND (TSpan = '" + tSpan + "') ";
             }
 
-            if (this.FK_Flow != null)
+            if (this.FlowNo != null)
             {
-                sqlWhere += "AND (FK_Flow = '" + this.FK_Flow + "')) ";
+                sqlWhere += "AND (FK_Flow = '" + this.FlowNo + "')) ";
             }
             else
             {
@@ -693,7 +737,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT  TOP 500 ISNULL(WorkID, 0) WorkID,ISNULL(FID, 0) FID ,FK_Flow,FlowName,Title, ISNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,ISNULL(RDT, '2018-05-04 19:29') RDT,ISNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere;
             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                 sql = "SELECT IFNULL(WorkID, 0) WorkID,IFNULL(FID, 0) FID ,FK_Flow,FlowName,Title, IFNULL(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,IFNULL(RDT, '2018-05-04 19:29') RDT,IFNULL(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
-            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX)
+            else if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || SystemConfig.AppCenterDBType == DBType.UX)
                 sql = "SELECT COALESCE(WorkID, 0) WorkID,COALESCE(FID, 0) FID ,FK_Flow,FlowName,Title, COALESCE(WFSta, 0) WFSta,WFState,  Starter, StarterName,Sender,COALESCE(RDT, '2018-05-04 19:29') RDT,COALESCE(FK_Node, 0) FK_Node,NodeName, TodoEmps FROM WF_GenerWorkFlow where " + sqlWhere + " LIMIT 500";
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
 
@@ -789,7 +833,7 @@ namespace BP.WF.HttpHandler
             }
             qo.Top = 50;
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.UX
+            if (SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || SystemConfig.AppCenterDBType == DBType.UX
                 || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
             {
                 qo.DoQuery();
@@ -804,6 +848,66 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion
+        /// <summary>
+        /// 获取公众号登录二维码
+        /// </summary>
+        /// <returns></returns>
+        public string GetTicketCode() {
+            try
+            {
+                string type = this.GetRequestVal("type");
+                string accessToken = BP.Port.WeiXin.WeiXinGZHEntity.getAccessToken().access_token;
+                string ticket = BP.Port.WeiXin.WeiXinGZHEntity.GetTicket(accessToken, type);
+
+                return ticket;
+            }
+            catch (Exception ex) {
+                return ex.Message;
+            }
+        }
+        /// <summary>
+        /// 绑定公众号用户
+        /// </summary>
+        /// <returns></returns>
+        public string Register_User()
+        {
+            string no = this.GetRequestVal("TB_No");
+            string pass = this.GetRequestVal("TB_Pass");
+            string OpenID = this.GetRequestVal("OpenID");
+
+            //先将原来的设置为空
+            BP.Port.WeiXin.Emp emp = new BP.Port.WeiXin.Emp();
+            if (emp.IsExit(BP.Port.WeiXin.EmpAttr.OpenID, OpenID)) {
+                emp.OpenID = "";
+                emp.Update();
+            }
+
+            emp = new BP.Port.WeiXin.Emp(no);
+            if (emp.CheckPass(pass))
+            {
+                emp.OpenID = OpenID;
+                emp.Update();
+                return "绑定成功";
+            }
+            else
+                return "err@用户名或者密码错误";
+        }
+        /// <summary>
+        /// 通过微信公众号，扫码登录
+        /// </summary>
+        /// <returns></returns>
+        public string Snsapi_userLogin() {
+            string ticket = this.GetRequestVal("ticket");
+            WFEmp wFEmp = new WFEmp();
+            if (wFEmp.IsExit(WFEmpAttr.Token, ticket))
+            {
+                BP.WF.Dev2Interface.Port_Login(wFEmp.No);
+                BP.WF.Dev2Interface.Port_GenerToken("PC");
+                return "登录成功";
+            }
+            else
+                return "@err:登录失败";
+        }
 
     }
 }

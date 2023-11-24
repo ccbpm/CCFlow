@@ -4,8 +4,7 @@ using System.Data;
 using BP.DA;
 using BP.Sys;
 using BP.En;
-using BP.WF.Data;
-using BP.Web;
+using BP.Port;
 using BP.Difference;
 
 
@@ -88,6 +87,8 @@ namespace BP.WF.Template
         public const string FK_DBSrc = "FK_DBSrc";
         public const string Tag1 = "Tag1";
         public const string JSFX = "JSFX";
+        public const string FrmID = "FrmID";
+        public const string FrmName = "FrmName";
         #endregion 属性.
 
         #region 属性。
@@ -106,11 +107,66 @@ namespace BP.WF.Template
     /// </summary>
     public class Cond : EntityMyPK
     {
-        #region 参数属性.
-        /// <summary>
-        /// 指定人员方式
-        /// </summary>
-        public SpecOperWay SpecOperWay
+        #region 身份.
+        private WebUserCopy _webUserCopy = null;
+        public WebUserCopy WebUser
+        {
+            get
+            {
+                if (_webUserCopy == null)
+                {
+                    _webUserCopy = new WebUserCopy();
+                    _webUserCopy.LoadWebUser();
+                }
+                return _webUserCopy;
+            }
+            set
+            {
+                _webUserCopy = value;
+            }
+        }
+        private GuestUserCopy _guestUserCopy = null;
+        public GuestUserCopy GuestUser
+        {
+            get
+            {
+                if (_guestUserCopy == null)
+                {
+                    _guestUserCopy = new GuestUserCopy();
+                    _guestUserCopy.LoadWebUser();
+                }
+                return _guestUserCopy;
+            }
+            set
+            {
+                _guestUserCopy = value;
+            }
+        }
+
+        private Node _node = null;
+        public  Node HisNode
+        {
+            get{
+                if (_node == null)
+                {
+                    Node nd = new Node(this.NodeID);
+                    _node = nd;
+                    return _node;
+                }
+                return _node;
+            }
+            set{
+                _node = value;
+            }
+        }
+
+#endregion 身份.
+
+#region 参数属性.
+/// <summary>
+/// 指定人员方式
+/// </summary>
+public SpecOperWay SpecOperWay
         {
             get
             {
@@ -142,14 +198,14 @@ namespace BP.WF.Template
         {
             get
             {
-                var way = this.SpecOperWay;
+                SpecOperWay way = this.SpecOperWay;
                 if (way == SpecOperWay.CurrOper)
                     return BP.Web.WebUser.No;
 
 
                 if (way == SpecOperWay.SpecNodeOper)
                 {
-                    string sql = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE FK_Node=" + this.SpecOperPara + " AND WorkID=" + this.WorkID;
+                    string sql = "SELECT FK_Emp FROM WF_GenerWorkerlist WHERE NodeID=" + this.SpecOperPara + " AND WorkID=" + this.WorkID;
                     string fk_emp = DBAccess.RunSQLReturnStringIsNull(sql, null);
                     if (fk_emp == null)
                         throw new Exception("@您在配置方向条件时错误，求指定的人员的时候，按照指定的节点[" + this.SpecOperPara + "]，作为处理人，但是该节点上没有人员。查询SQL:" + sql);
@@ -264,7 +320,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -292,7 +348,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 数据源
         /// </summary>
-        public string FK_DBSrc
+        public string DBSrcNo
         {
             get
             {
@@ -345,7 +401,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -381,20 +437,20 @@ namespace BP.WF.Template
                     || this.CondType == CondType.Node
                     || this.CondType == CondType.SubFlow)
                 {
-                    Node nd = new Node(this.FK_Node);
-                    this.RefFlowNo = nd.FK_Flow;
+                    Node nd = new Node(this.NodeID);
+                    this.RefFlowNo = nd.FlowNo;
                 }
 
                 if (this.CondType == CondType.Flow)
                 {
-                    this.RefFlowNo = this.FK_Flow;
+                    this.RefFlowNo = this.FlowNo;
                     if (DataType.IsNullOrEmpty(this.RefFlowNo) == true)
-                        throw new Exception("err@流程完成条件设置错误，没有给FK_Flow赋值。");
+                        throw new Exception("err@流程完成条件设置错误，没有给FlowNo赋值。");
                 }
 
                 //for vue版本数据格式.增加一个主从表的标记字段.
                 if (this.CondType == CondType.Dir)
-                    this.RefPKVal = this.FK_Flow + '_' + this.FK_Node + '_' + this.ToNodeID;
+                    this.RefPKVal = this.FlowNo + '_' + this.NodeID + '_' + this.ToNodeID;
             }
             return base.beforeUpdateInsertAction();
         }
@@ -409,14 +465,14 @@ namespace BP.WF.Template
         /// </summary>
         protected override void afterInsertUpdateAction()
         {
-            Flow flow = new Flow(this.FK_Flow);
-            flow.ClearAutoNumCash(true);
+            Flow flow = new Flow(this.FlowNo);
+            flow.ClearAutoNumCache(true);
             base.afterInsertUpdateAction();
         }
         protected override void afterDelete()
         {
-            Flow flow = new Flow(this.FK_Flow);
-            flow.ClearAutoNumCash(true);
+            Flow flow = new Flow(this.FlowNo);
+            flow.ClearAutoNumCache(true);
             base.afterDelete();
         }
         #endregion 重写.
@@ -425,7 +481,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 属性
         /// </summary>
-        public string FK_Attr
+        public string AttrNo
         {
             get
             {
@@ -522,7 +578,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 运算符号
         /// </summary>
-        public string FK_Operator
+        public string OperatorNo
         {
             get
             {
@@ -582,9 +638,9 @@ namespace BP.WF.Template
                     if (s.Equals("@WebUser.Name") == true)
                         return WebUser.Name;
                     if (s.Equals("@WebUser.FK_Dept") == true)
-                        return WebUser.FK_Dept;
+                        return WebUser.DeptNo;
                     if (s.Equals("@WebUser.FK_DeptName") == true)
-                        return WebUser.FK_DeptName;
+                        return WebUser.DeptName;
                 }
                 return s;
             }
@@ -681,17 +737,17 @@ namespace BP.WF.Template
         public void DoDown2020Cond()
         {
             if (this.CondType == CondType.Dir)
-                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
+                this.DoOrderDown(CondAttr.FK_Node, this.NodeID, CondAttr.ToNodeID,
                     this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
 
             if (this.CondType == CondType.Flow)
-                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+                this.DoOrderDown(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
 
             if (this.CondType == CondType.SubFlow)
-                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
+                this.DoOrderDown(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
 
             if (this.CondType == CondType.Node)
-                this.DoOrderDown(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
+                this.DoOrderDown(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
         }
         /// <summary>
         /// 方向条件-上移
@@ -699,17 +755,17 @@ namespace BP.WF.Template
         public void DoUp2020Cond()
         {
             if (this.CondType == CondType.Dir)
-                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID,
+                this.DoOrderUp(CondAttr.FK_Node, this.NodeID, CondAttr.ToNodeID,
                     this.ToNodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.Idx);
 
             if (this.CondType == CondType.Flow)
-                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
+                this.DoOrderUp(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.Flow, CondAttr.Idx);
 
             if (this.CondType == CondType.SubFlow)
-                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
+                this.DoOrderUp(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.SubFlow, CondAttr.Idx);
 
             if (this.CondType == CondType.Node)
-                this.DoOrderUp(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
+                this.DoOrderUp(CondAttr.FK_Node, this.NodeID, CondAttr.CondType, (int)CondType.Node, CondAttr.Idx);
         }
         #endregion
 
@@ -737,7 +793,7 @@ namespace BP.WF.Template
         {
             get
             {
-                Node nd = new Node(this.FK_Node);
+                Node nd = new Node(this.NodeID);
                 if (this.en == null)
                 {
                     #region 实体不存在则进行重新初始化
@@ -767,16 +823,12 @@ namespace BP.WF.Template
 
                     string strs1 = "";
 
-                    BP.Port.DeptEmpStations sts = new BP.Port.DeptEmpStations();
-                    string userNo = this.SpecOper;
-                    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && this.SpecOper.StartsWith(WebUser.OrgNo) == false)
-                        userNo = WebUser.OrgNo + "_" + this.SpecOper;
-                    sts.Retrieve("FK_Emp", userNo);
+                    BP.Port.DeptEmpStations sts = GetCondShengFenStations();
                     foreach (BP.Port.DeptEmpStation st in sts)
                     {
-                        if (strs.Contains("," + st.FK_Station + ",") == true)
+                        if (strs.Contains("," + st.StationNo + ",") == true)
                         {
-                            this.MsgOfCond = "@以角色判断方向，条件为true：角色集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")角色:" + st.FK_Station + st.FK_StationT;
+                            this.MsgOfCond = "@以角色判断方向，条件为true：角色集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")角色:" + st.StationNo + st.StationT;
 
                             //处理计算方向.
                             if (this.JSFX == false)
@@ -784,7 +836,7 @@ namespace BP.WF.Template
                             else
                                 return false;
                         }
-                        strs1 += st.FK_Station + "-" + st.FK_StationT;
+                        strs1 += st.StationNo + "-" + st.StationT;
                     }
 
                     this.MsgOfCond = "@以角色判断方向，条件为false：角色集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")角色:" + strs1;
@@ -805,7 +857,7 @@ namespace BP.WF.Template
 
                     // 需要递归计算.
                     string subDeptStr = "";
-                    if (this.IsSubDept)
+                    if (this.ItIsSubDept)
                     {
                         foreach (string str in strs.Split(','))
                         {
@@ -815,24 +867,13 @@ namespace BP.WF.Template
                     strs += subDeptStr + ",";
 
                     //计算出来当前人员的所有部门.
-                    BP.Port.DeptEmps sts = new BP.Port.DeptEmps();
-                    sts.Retrieve(BP.Port.DeptEmpAttr.FK_Emp, this.SpecOper);
-                    BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
-                    emp.UserID = this.SpecOper;
-                    if (emp.RetrieveFromDBSources() == 1)
-                    {
-                        BP.Port.DeptEmp de = new BP.Port.DeptEmp();
-                        de.FK_Dept = emp.FK_Dept;
-                        sts.AddEntity(de);
-                    }
-
-
+                    BP.Port.DeptEmps sts = GetCondShengFenDepts();
                     string strs1 = "";
                     foreach (BP.Port.DeptEmp st in sts)
                     {
-                        if (strs.Contains("," + st.FK_Dept + ",") == true)
+                        if (strs.Contains("," + st.DeptNo + ",") == true)
                         {
-                            this.MsgOfCond = "@以角色判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.FK_Dept;
+                            this.MsgOfCond = "@以角色判断方向，条件为true：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + st.DeptNo;
 
                             //处理计算方向.
                             if (this.JSFX == false)
@@ -841,9 +882,7 @@ namespace BP.WF.Template
                                 return false;
                         }
 
-
-
-                        strs1 += st.FK_Dept;
+                        strs1 += st.DeptNo;
                     }
 
                     this.MsgOfCond = "@以部门判断方向，条件为false：部门集合" + strs + "，操作员(" + BP.Web.WebUser.No + ")部门:" + strs1;
@@ -859,13 +898,13 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.SQL)
                 {
                     #region 按SQL 计算
-                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
+                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.OperatorNo + ") 判断值:(" + this.OperatorValue.ToString() + ")";
                     string sql = this.OperatorValueStr;
                     sql = sql.Replace("~", "'");
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
-                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sql = sql.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
+                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
 
                     sql = sql.Replace("@WebUser.OrgNo", BP.Web.WebUser.OrgNo);
                     //获取参数值
@@ -878,7 +917,7 @@ namespace BP.WF.Template
                         //sql = sql.Replace("@" + key, urlParams[key]);
                     }
 
-                    if (en.IsOIDEntity == true)
+                    if (en.ItIsOIDEntity == true)
                     {
                         sql = sql.Replace("@WorkID", en.GetValStrByKey("OID"));
                         sql = sql.Replace("@OID", en.GetValStrByKey("OID"));
@@ -895,11 +934,11 @@ namespace BP.WF.Template
 
                     int result = 0;
                     //如果是本地数据源
-                    if (DataType.IsNullOrEmpty(this.FK_DBSrc) == true || this.FK_DBSrc == "local")
+                    if (DataType.IsNullOrEmpty(this.DBSrcNo) == true || this.DBSrcNo.Equals("local"))
                         result = DBAccess.RunSQLReturnValInt(sql, -1);
                     else
                     {
-                        SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
+                        SFDBSrc dbSrc = new SFDBSrc(this.DBSrcNo);
                         result = dbSrc.RunSQLReturnInt(sql, 0);
                     }
                     if (result <= 0)
@@ -912,7 +951,7 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.SQLTemplate)
                 {
                     #region 按SQLTemplate 计算
-                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
+                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.OperatorNo + ") 判断值:(" + this.OperatorValue.ToString() + ")";
                     string fk_sqlTemplate = this.OperatorValueStr;
                     SQLTemplate sqltemplate = new SQLTemplate();
                     sqltemplate.No = fk_sqlTemplate;
@@ -923,9 +962,9 @@ namespace BP.WF.Template
                     sql = sql.Replace("~", "'");
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
 
-                    if (en.IsOIDEntity == true)
+                    if (en.ItIsOIDEntity == true)
                     {
                         sql = sql.Replace("@WorkID", en.GetValStrByKey("OID"));
                         sql = sql.Replace("@OID", en.GetValStrByKey("OID"));
@@ -942,11 +981,11 @@ namespace BP.WF.Template
 
                     int result = 0;
                     //如果是本地数据源
-                    if (DataType.IsNullOrEmpty(this.FK_DBSrc) == true || this.FK_DBSrc == "local")
+                    if (DataType.IsNullOrEmpty(this.DBSrcNo) == true || this.DBSrcNo == "local")
                         result = DBAccess.RunSQLReturnValInt(sql, -1);
                     else
                     {
-                        SFDBSrc dbSrc = new SFDBSrc(this.FK_DBSrc);
+                        SFDBSrc dbSrc = new SFDBSrc(this.DBSrcNo);
                         result = dbSrc.RunSQLReturnInt(sql, 0);
                     }
                     if (result <= 0)
@@ -970,10 +1009,10 @@ namespace BP.WF.Template
                     url = BP.WF.Glo.DealExp(url, this.en, "");
 
                     #region 加入必要的参数.
-                    if (url.Contains("&FK_Flow") == false)
-                        url += "&FK_Flow=" + this.FK_Flow;
-                    if (url.Contains("&FK_Node") == false)
-                        url += "&FK_Node=" + this.FK_Node;
+                    if (url.Contains("&FlowNo") == false)
+                        url += "&FlowNo=" + this.FlowNo;
+                    if (url.Contains("&NodeID") == false)
+                        url += "&NodeID=" + this.NodeID;
 
                     if (url.Contains("&WorkID") == false)
                         url += "&WorkID=" + this.WorkID;
@@ -991,7 +1030,7 @@ namespace BP.WF.Template
                     #endregion 加入必要的参数.
 
                     #region 对url进行处理.
-                    if (BP.Difference.SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.isBSsystem)
                     {
                         /*是bs系统，并且是url参数执行类型.*/
                         string myurl = HttpContextHelper.RequestRawUrl;// BP.Sys.Base.Glo.Request.RawUrl;
@@ -1018,7 +1057,7 @@ namespace BP.WF.Template
                     //替换特殊的变量.
                     url = url.Replace("&?", "&");
 
-                    if (BP.Difference.SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.isBSsystem == false)
                     {
                         /*非bs模式下调用,比如在cs模式下调用它,它就取不到参数. */
                     }
@@ -1027,7 +1066,7 @@ namespace BP.WF.Template
                     if (url.Contains("http") == false)
                     {
                         /*如果没有绝对路径 */
-                        if (BP.Difference.SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.isBSsystem)
                         {
                             /*在cs模式下自动获取*/
                             string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
@@ -1037,7 +1076,7 @@ namespace BP.WF.Template
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
-                        if (BP.Difference.SystemConfig.IsBSsystem == false)
+                        if (BP.Difference.SystemConfig.isBSsystem == false)
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
                             string cfgBaseUrl = BP.Difference.SystemConfig.AppSettings["HostURL"];
@@ -1112,7 +1151,7 @@ namespace BP.WF.Template
                         //参数替换
                         apiParams = BP.WF.Glo.DealExp(apiParams, this.en);
                         //执行POST
-                        postData = BP.WF.Glo.HttpPostConnect(apiHost, apiParams);
+                        postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams,"POST",true);
 
                         if (postData == "true")
                             return true;
@@ -1121,7 +1160,7 @@ namespace BP.WF.Template
                     }
                     else
                     {//如果没有参数，执行GET
-                        postData = BP.WF.Glo.HttpGet(apiUrl);
+                        postData = BP.Tools.PubGlo.HttpGet(apiUrl);
                         if (postData == "true")
                             return true;
                         else
@@ -1134,7 +1173,7 @@ namespace BP.WF.Template
                 if (this.HisDataFrom == ConnDataFrom.WorkCheck)
                 {
                     //获取当前节点的审核组件信息
-                    string tag = BP.WF.Dev2Interface.GetCheckTag(this.FK_Flow, this.WorkID, this.FK_Node, WebUser.No);
+                    string tag = BP.WF.Dev2Interface.GetCheckTag(this.FlowNo, this.WorkID, this.NodeID, WebUser.No);
                     if (tag.Contains("@FWCView=" + this.OperatorValue) == true)
                         return true;
                     return false;
@@ -1153,40 +1192,200 @@ namespace BP.WF.Template
                     if (en.EnMap.Attrs.Contains(this.AttrKey) == false)
                         throw new Exception("err@判断条件方向出现错误：实体：" + nd.EnDesc + " 属性" + this.AttrKey + "已经被删除方向条件判断失败.");
 
-                    this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
+                    this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.OperatorNo + ") 判断值:(" + this.OperatorValue.ToString() + ")";
                     return CheckIsPass(en);
                 }
 
                 //从独立表单里判断.
                 if (this.HisDataFrom == ConnDataFrom.StandAloneFrm)
                 {
-                    MapAttr attr = new MapAttr(this.FK_Attr);
-                    attr.setMyPK(this.FK_Attr);
+                    MapAttr attr = new MapAttr(this.AttrNo);
+                    attr.setMyPK(this.AttrNo);
                     if (attr.RetrieveFromDBSources() == 0)
-                        throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.FK_Attr + ",已经不存在了.");
+                        throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.AttrNo + ",已经不存在了.");
 
-                    GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
+                    GEEntity myen = new GEEntity(attr.FrmID, en.OID);
                     return CheckIsPass(myen);
                 }
                 return false;
             }
         }
+        private DeptEmps GetCondShengFenDepts()
+        {
+
+            int specOperWay = this.GetValIntByKey(CondAttr.SpecOperWay);
+            String specOperPara = this.SpecOperPara;
+            DeptEmps des = new DeptEmps();
+            String userNo = this.SpecOper;
+		    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && this.SpecOper.StartsWith(WebUser.OrgNo) == false)
+			    userNo = WebUser.OrgNo + "_" + this.SpecOper;
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = 0;
+		    switch(specOperWay){
+			    case 0://发送人登录部门
+				    des.Retrieve(DeptEmpAttr.FK_Dept, WebUser.DeptNo,DeptEmpAttr.FK_Emp,userNo);
+				    break;
+			    case 1: //发送人的所有部门
+				    des.Retrieve("FK_Emp", userNo);
+				    break;
+			    case 2: //发送人使用的部门
+			    case 3: //发送人使用部门的父级
+				    int nodeID = this.HisNode.NodeID;
+                    i = gwl.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.FK_Node, nodeID, GenerWorkerListAttr.FK_Emp, this.SpecOper);
+				    if(i == 0)
+					    throw new Exception("err@不可能出现的错误");
+				    if(specOperWay == 2)
+					    des.Retrieve(DeptEmpAttr.FK_Emp, userNo, DeptEmpAttr.FK_Dept, gwl.DeptNo);
+				    if(specOperWay == 3){
+					    Dept dept = new Dept();
+                        dept.setNo(gwl.DeptNo);
+					    if(dept.Retrieve() ==1 )
+						    des.Retrieve(DeptEmpAttr.FK_Emp, userNo, DeptEmpAttr.FK_Dept, dept.No);
+				    }
+
+				    break;
+
+			    case 10://指定节点提交人的使用部门
+			    case 11: //指定节点提交人的所有部门
+			    case 12: //指定节点提交人的主部门
+				    if(DataType.IsNullOrEmpty(specOperPara) == true)
+					    throw new Exception("err@方向条件，人员身份按指定节点提交人计算时请选择节点");
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+                    i = gwls.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.FK_Node, specOperPara);
+				    if(i == 0)
+					    throw new Exception("err@不可能出现的错误");
+                    gwl = (GenerWorkerList) gwls[0];
+				    if(specOperWay == 10)
+					    des.Retrieve("FK_Emp", gwl.EmpNo,"FK_Dept",gwl.DeptNo);
+				    if(specOperWay == 11)
+					    des.Retrieve("FK_Emp", gwl.EmpNo);
+				    if(specOperWay == 13){
+					    Emp emp = new Emp(gwl.EmpNo);
+                        des.Retrieve("FK_Emp", gwl.EmpNo,"FK_Dept",emp.DeptNo);
+				    }
+
+                    break;
+			    case 20: //字段(参数)人员的主部门
+			    case 21: //字段(参数)人员的所有部门
+			    case 22: //字段(参数)就是部门编号
+				    if (DataType.IsNullOrEmpty(specOperPara) == true)
+                        throw new Exception("err@方向条件，人员身份按表单字段人员计算时请选择表单字段");
+                    string val = this.en.GetValStringByKey(specOperPara);
+                    if (DataType.IsNullOrEmpty(val))
+                        throw new Exception("err@方向条件，人员身份按表单字段人员计算时字段[" + specOperPara + "]的值为空");
+                    if (specOperWay == 20)
+                    {
+                        Emp emp = new Emp();
+                        emp.UserID=val;
+                        if (emp.RetrieveFromDBSources() == 0)
+                            throw new Exception("err@方向条件，人员身份按表单字段人员计算时未找到人员编号=[" + val + "]");
+                        des.Retrieve("FK_Emp", val, "FK_Dept", emp.DeptNo);
+                    }
+                    if (specOperWay == 21)
+                    {
+                        des.Retrieve("FK_Emp", val);
+                    }
+                    if (specOperWay == 22)
+                        des.Retrieve("FK_Dept", val);
+                    break;
+			    case 23: //系统(参数)就是部门编号
+				    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    string val1 = gwf.GetParaString(specOperPara);
+                    if (DataType.IsNullOrEmpty(val1))
+                        throw new Exception("err@方向条件，人员身份按表单字段人员计算时字段[" + specOperPara + "]的值为空");
+                    des.Retrieve("FK_Dept", val1);
+                    break;
+                 default:
+				     throw new Exception("err@部门人员身份[" + specOperWay + "]未解析");
+		    }
+		    return des;
+	    }
+        /*
+	     * 岗位人员身份
+	     * @return
+	     * @throws Exception
+	     */
+        private DeptEmpStations GetCondShengFenStations()
+        {
+            int specOperWay = this.GetValIntByKey(CondAttr.SpecOperWay);
+            String specOperPara = this.SpecOperPara;
+            DeptEmpStations sts = new DeptEmpStations();
+            String userNo = this.SpecOper;
+		    if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS && this.SpecOper.StartsWith(WebUser.OrgNo) == false)
+			    userNo = WebUser.OrgNo + "_" + this.SpecOper;
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = 0;
+		    switch(specOperWay){
+			    case 0://发送人登录部门下所有岗位
+			    case 2: //发送人选择部门+岗位
+				    int nodeID = this.HisNode.NodeID;
+                    i = gwl.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.FK_Node, nodeID, GenerWorkerListAttr.FK_Emp, this.SpecOper);
+				    if(i == 0)
+					    throw new Exception("err@不可能出现的错误");
+				    if(specOperWay == 0)
+					    sts.Retrieve("FK_Emp", userNo,"FK_Dept",gwl.DeptNo);
+				    if(specOperWay == 2)
+					    sts.Retrieve("FK_Emp", userNo,"FK_Station",gwl.GetValStrByKey("StaNo"));
+				    break;
+			    case 1: //发送人的所有部门的岗位
+				    sts.Retrieve("FK_Emp", userNo);
+				    break;
+			    case 10://指定节点提交人的使用部门下所有岗位
+			    case 11: //指定节点提交人的所有部门的岗位
+				    if(DataType.IsNullOrEmpty(specOperPara) == true)
+					    throw new Exception("err@方向条件，人员身份按指定节点提交人计算时请选择节点");
+                    GenerWorkerLists gwls = new GenerWorkerLists();
+                    i = gwls.Retrieve(GenerWorkerListAttr.WorkID,this.WorkID, GenerWorkerListAttr.FK_Node, specOperPara);
+				    if(i == 0)
+					    throw new Exception("err@不可能出现的错误");
+                    gwl = (GenerWorkerList) gwls[0];
+				    if(specOperWay == 10)
+					    sts.Retrieve("FK_Emp", gwl.EmpNo,"FK_Dept",gwl.DeptNo);
+				    if(specOperWay == 11)
+					    sts.Retrieve("FK_Emp", gwl.EmpNo);
+				    break;
+			    case 20: //字段(参数)人员的主部门下所有的岗位
+			    case 21: //字段(参数)人员的所有部门的岗位
+			    case 22: //字段(参数)就是岗位编号
+				    if(DataType.IsNullOrEmpty(specOperPara) == true)
+					    throw new Exception("err@方向条件，人员身份按表单字段人员计算时请选择表单字段");
+                    string val = this.en.GetValStringByKey(specOperPara);
+				    if(DataType.IsNullOrEmpty(val))
+					    throw new Exception("err@方向条件，人员身份按表单字段人员计算时字段["+specOperPara+"]的值为空");
+				    if(specOperWay == 20){
+					    Emp emp = new Emp();
+                        emp.UserID=val;
+					    if(emp.RetrieveFromDBSources()==0)
+						    throw new Exception("err@方向条件，人员身份按表单字段人员计算时未找到人员编号=["+val+"]");
+                        sts.Retrieve("FK_Emp", val,"FK_Dept",emp.DeptNo);
+				    }
+				    if(specOperWay == 21){
+					    sts.Retrieve("FK_Emp", val);
+				    }
+                    if (specOperWay == 22)
+                        sts.Retrieve("FK_Station", val);
+                    break;
+                default:
+				    throw new Exception("err@岗位人员身份[" + specOperWay + "]未解析");
+		    }
+		    return sts;
+	    }
         private bool CheckIsPass(Entity en)
         {
-            MapAttr attr = new MapAttr(this.FK_Attr);
-            attr.setMyPK(this.FK_Attr);
+            MapAttr attr = new MapAttr(this.AttrNo);
+            attr.setMyPK(this.AttrNo);
             if (attr.RetrieveFromDBSources() == 0)
-                throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.FK_Attr + ",已经不存在了.");
+                throw new Exception("err@到达【" + this.ToNodeID + "】方向条件设置错误,原来做方向条件的字段:" + this.AttrNo + ",已经不存在了.");
 
             try
             {
-                switch (this.FK_Operator.Trim().ToLower())
+                switch (this.OperatorNo.Trim().ToLower())
                 {
                     case "<>":
                     case "!=":
                     case "budingyu":
                     case "budengyu": //不等于.
-                        if (attr.IsNum == true)
+                        if (attr.ItIsNum == true)
                         {
                             if (en.GetValDoubleByKey(this.AttrKey) != Double.Parse(this.OperatorValue.ToString()))
                                 return true;
@@ -1199,7 +1398,7 @@ namespace BP.WF.Template
                             return false;
                     case "=":  // 如果是 = 
                     case "dengyu":
-                        if (attr.IsNum == true)
+                        if (attr.ItIsNum == true)
                         {
                             if (en.GetValDoubleByKey(this.AttrKey) == Double.Parse(this.OperatorValue.ToString()))
                                 return true;
@@ -1249,14 +1448,29 @@ namespace BP.WF.Template
                             return false;
                         else
                             return true;
+                    case "notlike":
+                        if (en.GetValStringByKey(this.AttrKey).IndexOf(this.OperatorValue.ToString()) == -1)
+                            return true;
+                        else
+                            return false;
+                    case "in":
+                        string value = "," + this.OperatorValue + ",";
+                        if (value.Contains("," + en.GetValStringByKey(this.AttrKey) + ","))
+                            return true;
+                        return false;
+                    case "notin":
+                        string val = "," + this.OperatorValue + ",";
+                        if (val.Contains("," + en.GetValStringByKey(this.AttrKey) + ",")==false)
+                            return true;
+                        return false;
                     default:
-                        throw new Exception("@没有找到操作符号(" + this.FK_Operator.Trim().ToLower() + ").");
+                        throw new Exception("@没有找到操作符号(" + this.OperatorNo.Trim().ToLower() + ").");
                 }
             }
             catch (Exception ex)
             {
-                Node nd23 = new Node(this.FK_Node);
-                throw new Exception("@判断条件:Node=[" + this.FK_Node + "," + nd23.EnDesc + "], 出现错误。@" + ex.Message + "。有可能您设置了非法的条件判断方式。");
+                Node nd23 = new Node(this.NodeID);
+                throw new Exception("@判断条件:Node=[" + this.NodeID + "," + nd23.EnDesc + "], 出现错误。@" + ex.Message + "。有可能您设置了非法的条件判断方式。");
             }
         }
         /// <summary>
@@ -1282,17 +1496,15 @@ namespace BP.WF.Template
                 map.AddTBString(CondAttr.RefFlowNo, null, "流程编号", true, true, 0, 5, 20);
                 map.AddTBInt(CondAttr.FK_Node, 0, "节点ID", true, true);
 
-
                 //@0=节点完成条件@1=流程条件@2=方向条件@3=启动子流程.
                 map.AddTBInt(CondAttr.CondType, 0, "条件类型", true, true);
-                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 4, 20);
+                map.AddTBString(CondAttr.FK_Flow, null, "流程", true, true, 0, 4, 20); 
 
                 //对于启动子流程规则有效. *************************************
                 map.AddTBString(CondAttr.SubFlowNo, null, "子流程编号", true, true, 0, 5, 20);
 
                 //对方向条件有效. *************************************
                 map.AddTBInt(CondAttr.ToNodeID, 0, "ToNodeID（对方向条件有效）", true, true);
-
 
                 //条件字段. *************************************
                 //@0=NodeForm表单数据,1=StandAloneFrm独立表单,2=Stas角色数据,3=Depts,4=按sql计算.
@@ -1311,6 +1523,14 @@ namespace BP.WF.Template
                 map.AddTBAtParas(2000);
                 map.AddTBInt(CondAttr.Idx, 0, "优先级", true, true);
                 map.AddTBInt(CondAttr.JSFX, 0, "计算方向", true, true);
+
+
+                map.AddTBString(CondAttr.FrmID, "", "表单ID", true, true, 0, 100, 20);
+                map.AddTBString(CondAttr.FrmName, "", "表单名称", true, true, 0, 100, 20);
+
+                map.AddTBInt(CondAttr.SpecOperWay, 0, "指定人员方式", false, true);
+               // map.AddTBString(CondAttr.SpecOperWay, null, "指定人员方式", true, true, 0, 10, 20);
+                map.AddTBString(CondAttr.SpecOperPara, null, " 指定人员方式的参数", false, true, 0, 50, 20);
 
                 //用到了UIBindKey的存储.
                 map.AddTBString(CondAttr.Tag1, null, "Tag1", true, true, 0, 100, 20);
@@ -1337,7 +1557,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否递归子部门 - 对部门条件计算有效.
         /// </summary>
-        public bool IsSubDept
+        public bool ItIsSubDept
         {
             get
             {
@@ -1370,12 +1590,16 @@ namespace BP.WF.Template
         {
             get { return new Cond(); }
         }
+        public bool GenerResult(GERpt en, WebUserCopy webUser)
+        {
+            return GenerResult(en, webUser,null);
+        }
         /// <summary>
         /// 执行计算
         /// </summary>
         /// <param name="runModel">模式</param>
         /// <returns></returns>
-        public bool GenerResult(GERpt en = null)
+        public bool GenerResult(GERpt en,WebUserCopy webUser,Node nd)
         {
 
             try
@@ -1390,6 +1614,8 @@ namespace BP.WF.Template
                     {
                         cd.WorkID = en.OID;
                         cd.en = en;
+                        cd.WebUser= webUser;
+                        cd.HisNode = nd;
                     }
                 }
 
@@ -1428,6 +1654,7 @@ namespace BP.WF.Template
                     case DBType.MySQL:
                     case DBType.PostgreSQL:
                     case DBType.UX:
+                    case DBType.HGDB:
                         sql = " SELECT No FROM WF_Emp WHERE " + exp + "    limit 1 ";
                         break;
                     case DBType.Oracle:

@@ -8,6 +8,7 @@ using BP.En;
 using BP.Web;
 using BP.WF.Template;
 using BP.Port;
+using System.Runtime.CompilerServices;
 
 namespace BP.WF
 {
@@ -86,7 +87,12 @@ namespace BP.WF
 
             //如果执行了节点发送成功时间. 
             if (doType.Equals(EventListNode.SendSuccess) == true)
+            {
+                if (wn.HisFlow.ItIsFullSA == true)
+                    DBAccess.RunSQL("UPDATE WF_CCList SET Sta=0,RDT='"+DataType.CurrentDateTime+"' WHERE NodeIDWork=" + wn.HisNode.NodeID + " AND WorkID=" + wn.WorkID);
+
                 WorkNodePlus.SendDraftSubFlow(wn); //执行自动发送子流程草稿.
+            }
 
             #region 增加系统变量.
             if (DataType.IsNullOrEmpty(atPara) == true)
@@ -98,13 +104,13 @@ namespace BP.WF
             if (atPara.Contains("@FK_Node") == false)
                 atPara += "@FK_Node=" + wn.HisNode.NodeID;
             if (atPara.Contains("@FlowNo") == false)
-                atPara += "@FlowNo=" + wn.HisNode.FK_Flow;
+                atPara += "@FlowNo=" + wn.HisNode.FlowNo;
             if (atPara.Contains("@FK_Flow") == false)
-                atPara += "@FK_Flow=" + wn.HisNode.FK_Flow;
+                atPara += "@FK_Flow=" + wn.HisNode.FlowNo;
             #endregion 增加系统变量.
 
             //执行:全局的重写的方法事件.
-            string mymsg1 = BP.WF.OverrideEvent.DoIt(doType, wn, atPara, null,0,null,null);
+            string mymsg1 = BP.WF.OverrideEvent.DoIt(doType, wn, atPara, null, 0, null, null);
             if (mymsg1 != null)
                 return mymsg1;
 
@@ -265,6 +271,11 @@ namespace BP.WF
 
             //执行的参数.
             BP.WF.CCBill_FlowEvent.DoFlow(doType, wn, atPara);
+
+            //执行:全局的重写的方法事件.
+            string mymsg1 = BP.WF.OverrideEvent.DoIt(doType, wn, atPara, null, 0, null, null);
+            if (mymsg1 != null)
+                return mymsg1;
 
             #region 写入消息之前,删除消息,不让其在提醒.
             if (BP.WF.Glo.IsEnableSysMessage == true)

@@ -39,7 +39,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 工作流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -151,7 +151,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {
@@ -165,7 +165,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -403,7 +403,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 当前工作到的节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -425,9 +425,9 @@ namespace BP.WF.Data.AdminGroup
             }
             set
             {
-                if (value == WF.WFState.Complete)
+                if (value == BP.WF.WFState.Complete)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == BP.WF.WFState.Delete)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
@@ -596,7 +596,7 @@ namespace BP.WF.Data.AdminGroup
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 // rm.Icon = "../../WF/Img/Track.png";
                 rm.Icon = "icon-graph";
-                //        rm.IsForEns = true;
+                //        rm.ItIsForEns = true;
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -615,7 +615,7 @@ namespace BP.WF.Data.AdminGroup
                 rm = new RefMethod();
                 rm.Title = "轨迹修改";
                 rm.Icon = "icon-graph";
-                //   rm.IsForEns = false;
+                //   rm.ItIsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -633,7 +633,7 @@ namespace BP.WF.Data.AdminGroup
 
                 rm = new RefMethod();
                 rm.Title = "调整数据";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 rm.Icon = "icon-target";
                 rm.ClassMethodName = this.ToString() + ".DoEditFrm";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -645,7 +645,7 @@ namespace BP.WF.Data.AdminGroup
                 rm.Warning = "您确定要删除吗？包括该流程的所有数据。";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Icon = "icon-close";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -655,13 +655,13 @@ namespace BP.WF.Data.AdminGroup
                 //   rm.Warning = "您确定要删除吗？";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Icon = "icon-close";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Icon = "icon-wrench";
                 rm.Title = "修复数据";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".RepairDataIt";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
@@ -686,7 +686,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoEditFrm()
         {
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
             if (nd.FormType == NodeFormType.SelfForm
                 || nd.FormType == NodeFormType.SDKForm
                 || nd.FormType == NodeFormType.SheetAutoTree
@@ -696,7 +696,7 @@ namespace BP.WF.Data.AdminGroup
                 return "err@当前节点表单类型不同.";
 
             string frmID = nd.NodeFrmID;
-            return "../../Admin/AttrFlow/AdminFrmList.htm?FK_Flow=" + this.FK_Flow + "&FrmID=" + frmID + "&WorkID=" + this.WorkID;
+            return "../../Admin/AttrFlow/AdminFrmList.htm?FK_Flow=" + this.FlowNo + "&FrmID=" + frmID + "&WorkID=" + this.WorkID;
         }
 
         #region 执行功能.
@@ -724,7 +724,7 @@ namespace BP.WF.Data.AdminGroup
         {
             string infos = "";
 
-            Flow fl = new Flow(this.FK_Flow);
+            Flow fl = new Flow(this.FlowNo);
             Node nd = new Node(int.Parse(fl.No + "01"));
             Work wk = nd.HisWork;
 
@@ -850,7 +850,7 @@ namespace BP.WF.Data.AdminGroup
         {
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoRebackWorkFlow(this.FK_Flow, this.WorkID,
+                return BP.WF.Dev2Interface.Flow_DoRebackWorkFlow(this.FlowNo, this.WorkID,
                     int.Parse(nodeID), note);
             }
             catch (Exception ex)
@@ -864,7 +864,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoEditTrack()
         {
-            return "../../Admin/AttrFlow/EditTrack.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrFlow/EditTrack.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 
@@ -872,7 +872,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoTrack()
         {
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 执行移交
@@ -882,7 +882,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoShift(string ToEmp, string Note)
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FlowNo, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -901,7 +901,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoDeleteFlag(string msg)
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FlowNo, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -920,7 +920,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoDelete()
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FlowNo, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -939,7 +939,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoFlowShift()
         {
-            return "../../WorkOpt/Shift.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Shift.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 回滚流程
@@ -947,7 +947,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string Rollback()
         {
-            return "../../WorkOpt/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 执行跳转
@@ -955,7 +955,7 @@ namespace BP.WF.Data.AdminGroup
         /// <returns></returns>
         public string DoFlowSkip()
         {
-            return "../../WorkOpt/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         #endregion
     }

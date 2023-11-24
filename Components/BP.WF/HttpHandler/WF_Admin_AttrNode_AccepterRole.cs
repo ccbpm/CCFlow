@@ -20,7 +20,7 @@ namespace BP.WF.HttpHandler
         /// 清空缓存
         /// </summary>
         /// <returns></returns>
-        public string AccepterRole_ClearStartFlowsCash()
+        public string AccepterRole_ClearStartFlowsCache()
         {
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
@@ -32,7 +32,7 @@ namespace BP.WF.HttpHandler
         /// 清楚所有组织的缓存,用于多组织.
         /// </summary>
         /// <returns></returns>
-        public string AccepterRole_ClearAllOrgStartFlowsCash()
+        public string AccepterRole_ClearAllOrgStartFlowsCache()
         {
             DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows=''");
             return "执行成功 ";

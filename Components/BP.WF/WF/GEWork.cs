@@ -17,26 +17,26 @@ namespace BP.WF
     /// </summary>
     public class GEWork : Work
     {
-        #region 与_SQLCash 操作有关
-        private SQLCash _SQLCash = null;
-        public override SQLCash SQLCash
+        #region 与_SQLCache 操作有关
+        private SQLCache _SQLCache = null;
+        public override SQLCache SQLCache
         {
             get
             {
-                if (_SQLCash == null)
+                if (_SQLCache == null)
                 {
-                    _SQLCash = Cash.GetSQL(this.NodeFrmID.ToString());
-                    if (_SQLCash == null)
+                    _SQLCache = Cache.GetSQL(this.NodeFrmID.ToString());
+                    if (_SQLCache == null)
                     {
-                        _SQLCash = new SQLCash(this);
-                        Cash.SetSQL(this.NodeFrmID.ToString(), _SQLCash);
+                        _SQLCache = new SQLCache(this);
+                        Cache.SetSQL(this.NodeFrmID.ToString(), _SQLCache);
                     }
                 }
-                return _SQLCash;
+                return _SQLCache;
             }
             set
             {
-                _SQLCash = value;
+                _SQLCache = value;
             }
         }
         #endregion
@@ -56,7 +56,7 @@ namespace BP.WF
         {
             this.NodeFrmID = nodeFrmID;
             this.NodeID = nodeid;
-            this.SQLCash = null;
+            this.SQLCache = null;
         }
         /// <summary>
         /// 普通工作
@@ -68,7 +68,7 @@ namespace BP.WF
             this.NodeFrmID = nodeFrmID;
             this.NodeID = nodeid;
             this.OID = _oid;
-            this.SQLCash = null;
+            this.SQLCache = null;
         }
         #endregion
 

@@ -36,7 +36,7 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -99,7 +99,30 @@ namespace BP.WF.Template.SFlow
                 SetValByKey(SubFlowAutoAttr.ExpType, (int)value);
             }
         }
-        public int FK_Node
+        /// <summary>
+        /// 数据源类型0=当前表单数据，仅仅发起一个子流程.
+        /// 1=按数据源启动流程.
+        /// </summary>
+        public int DBSrcType
+        {
+            get
+            {
+                return this.GetValIntByKey(SubFlowAutoAttr.DBSrcType);
+            }
+        }
+        /// <summary>
+        /// 数据源内容
+        /// </summary>
+        public string DBSrcDoc
+        {
+            get
+            {
+                return this.GetValStringByKey(SubFlowAutoAttr.DBSrcDoc);
+            }
+        }
+
+
+        public int NodeID
         {
             get
             {
@@ -158,11 +181,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
-        public bool IsEnableSpecFlowStart
+        public bool ItIsEnableSpecFlowStart
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
                 if (val == false)
                     return false;
 
@@ -181,11 +204,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 指定的流程结束后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
-        public bool IsEnableSpecFlowOver
+        public bool ItIsEnableSpecFlowOver
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
                 if (val == false)
                     return false;
 
@@ -204,11 +227,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 按SQL配置
         /// </summary>
-        public bool IsEnableSQL
+        public bool ItIsEnableSQL
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSQL);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSQL);
                 if (val == false)
                     return false;
 
@@ -230,11 +253,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 指定平级子流程节点结束后启动子流程
         /// </summary>
-        public bool IsEnableSameLevelNode
+        public bool ItIsEnableSameLevelNode
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSameLevelNode);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSameLevelNode);
                 if (val == false)
                     return false;
 
@@ -291,8 +314,9 @@ namespace BP.WF.Template.SFlow
 
                 Map map = new Map("WF_NodeSubFlow", "自动触发子流程");
 
+                #region 基本信息.
+                map.AddGroupAttr("基本信息");
                 map.AddMyPK();
-
                 map.AddTBString(SubFlowAttr.FK_Flow, null, "主流程编号", true, true, 0, 5, 100);
                 map.AddTBInt(SubFlowHandAttr.FK_Node, 0, "节点", false, true);
 
@@ -324,10 +348,12 @@ namespace BP.WF.Template.SFlow
                     "@0=发送时@1=工作到达时");
 
                 map.AddBoolean(SubFlowHandAttr.StartOnceOnly, false, "仅能被调用1次.", true, true, true);
-
                 map.AddBoolean(SubFlowHandAttr.CompleteReStart, false, "该子流程运行结束后才可以重新发起.",
                    true, true, true);
+                #endregion 基本信息.
 
+                #region 启动限制规则.
+                map.AddGroupAttr("启动限制规则");
                 //启动限制规则.
                 map.AddBoolean(SubFlowHandAttr.IsEnableSpecFlowStart, false, "指定的流程启动后,才能启动该子流程(请在文本框配置子流程).",
                  true, true, true);
@@ -341,19 +367,27 @@ namespace BP.WF.Template.SFlow
                 map.AddTBString(SubFlowHandAttr.SpecFlowOver, null, "子流程编号", true, false, 0, 200, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SpecFlowOver, "指定的流程结束后，才能启动该子流程，多个子流程用逗号分开. 001,002");
                 map.AddTBString(SubFlowHandAttr.SpecFlowOverNote, null, "备注", true, false, 0, 500, 150, true);
-
                 //启动限制规则
                 map.AddBoolean(SubFlowHandAttr.IsEnableSQL, false, "按照指定的SQL配置.",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SpecSQL, null, "SQL语句", true, false, 0, 500, 150, true);
-
                 //启动限制规则
                 map.AddBoolean(SubFlowHandAttr.IsEnableSameLevelNode, false, "按照指定平级子流程节点完成后启动.",
                  true, true, true);
                 map.AddTBString(SubFlowHandAttr.SameLevelNode, null, "平级子流程节点", true, false, 0, 500, 150, true);
                 map.SetHelperAlert(SubFlowHandAttr.SameLevelNode, "按照指定平级子流程节点完成后启动，才能启动该子流程，多个平级子流程节点用逗号分开. 001,102;002,206");
+                #endregion 启动限制规则.
 
-                //自动发送方式.
+
+                #region 启动数据源.
+                map.AddGroupAttr("启动数据源");
+                map.AddTBString(SubFlowHandAttr.DBSrcDoc, null, "SQL内容", true, false, 0, 500, 150, true);
+                map.AddDDLSysEnum(SubFlowAttr.DBSrcType, 0, "数据源类型", true, true, SubFlowAttr.DBSrcType, "@0=当前表单数据@1=指定SQL数据源");
+                #endregion 启动数据源.
+
+
+                #region 自动发送方式.
+                map.AddGroupAttr("自动发送方式");
                 map.AddDDLSysEnum(SubFlowHandAttr.SendModel, 0, "自动发送方式", true, true, SubFlowHandAttr.SendModel,
                     "@0=给当前人员设置开始节点待办@1=发送到下一个节点");
                 map.SetHelperAlert(SubFlowHandAttr.SendModel,
@@ -369,8 +403,8 @@ namespace BP.WF.Template.SFlow
 
                 //批量发送后，是否隐藏父流程的待办
                 map.AddBoolean(SubFlowHandGuideAttr.SubFlowHidTodolist, false, "发送后是否隐藏父流程待办", true, true, true);
-
                 map.AddTBInt(SubFlowHandAttr.Idx, 0, "顺序", true, false);
+                #endregion 自动发送方式.
 
                 this._enMap = map;
                 return this._enMap;
@@ -384,7 +418,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_1");
+            this.setMyPK(this.NodeID + "_" + this.SubFlowNo + "_1");
             return base.beforeInsert();
         }
 
@@ -405,8 +439,8 @@ namespace BP.WF.Template.SFlow
             }
 
             //设置主流程ID.
-            Node myNd = new Node(this.FK_Node);
-            this.FK_Flow = myNd.FK_Flow;
+            Node myNd = new Node(this.NodeID);
+            this.FlowNo = myNd.FlowNo;
 
             return base.beforeUpdateInsertAction();
         }
@@ -418,7 +452,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         public string DoUp()
         {
-            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
+            this.DoOrderUp(SubFlowAutoAttr.FK_Node, this.NodeID.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
             return "执行成功";
         }
         /// <summary>
@@ -427,7 +461,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         public string DoDown()
         {
-            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.FK_Node.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
+            this.DoOrderDown(SubFlowAutoAttr.FK_Node, this.NodeID.ToString(), SubFlowAutoAttr.SubFlowType, "1", SubFlowAutoAttr.Idx);
             return "执行成功";
         }
         #endregion 移动.

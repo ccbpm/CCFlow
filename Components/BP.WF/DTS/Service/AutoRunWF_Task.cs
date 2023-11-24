@@ -125,7 +125,7 @@ namespace BP.WF.DTS
                     }
 
                     //创建workid.
-                    workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, BP.Web.WebUser.No);
+                    workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow);
 
                     Node nd = new Node(int.Parse(fk_flow + "01"));
                     Work wk = nd.HisWork;

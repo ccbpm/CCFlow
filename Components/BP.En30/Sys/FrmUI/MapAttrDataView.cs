@@ -17,7 +17,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -187,7 +187,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn+"&T="+DateTime.Now.ToString();
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn+"&T="+DateTime.Now.ToString();
         }
         /// <summary>
         /// 外键表属性
@@ -203,7 +203,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRadioBtns()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置填充其他下拉框
@@ -211,11 +211,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoDDLFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=DDLFullCtrl_" + this.FK_MapData + "_" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=DDLFullCtrl_" + this.FrmID + "_" + this.KeyOfEn;
         }
         public string DoDDLFullCtrl2019()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置下拉框显示过滤
@@ -223,7 +223,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFullDLL()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置级联
@@ -231,7 +231,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion 方法执行.
 
@@ -242,19 +242,19 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "T");
+            attr.setMyPK(this.FrmID + "_" + this.KeyOfEn + "T");
             attr.Delete();
 
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
 
@@ -266,7 +266,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }

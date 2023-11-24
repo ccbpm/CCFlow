@@ -58,7 +58,7 @@ namespace BP.WF
         /// <summary>
         /// 操作员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -67,13 +67,13 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(RememberMeAttr.FK_Emp, value);
-                this.setMyPK(this.FK_Node + "_" + BP.Web.WebUser.No);
+                this.setMyPK(this.NodeID + "_" + BP.Web.WebUser.No);
             }
         }
         /// <summary>
         /// 当前节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -82,7 +82,7 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(RememberMeAttr.FK_Node, value);
-                this.setMyPK(this.FK_Node + "_" + BP.Web.WebUser.No);
+                this.setMyPK(this.NodeID + "_" + BP.Web.WebUser.No);
             }
         }
         /// <summary>
@@ -206,8 +206,8 @@ namespace BP.WF
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.FK_Emp = BP.Web.WebUser.No;
-            this.setMyPK(this.FK_Node + "_" + this.FK_Emp);
+            this.EmpNo = BP.Web.WebUser.No;
+            this.setMyPK(this.NodeID + "_" + this.EmpNo);
             return base.beforeUpdateInsertAction();
         }
     }

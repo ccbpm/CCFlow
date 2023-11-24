@@ -32,6 +32,10 @@ namespace BP.Sys
         /// </summary>
         public const string IsHaveDtl = "IsHaveDtl";
         /// <summary>
+        /// 枚举类型
+        /// </summary>
+        public const string EnumType = "EnumType";
+        /// <summary>
         /// 是否有参数.
         /// </summary>
         public const string AtPara = "AtPara";
@@ -170,7 +174,7 @@ namespace BP.Sys
             {
                 string msg = "错误:下列数据已经引用了枚举您不能删除它。"; // "错误:下列数据已经引用了枚举您不能删除它。";
                 foreach (MapAttr attr in mattrs)
-                    msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FK_MapData;
+                    msg += "\t\n" + attr.Field + "" + attr.Name + " Table = " + attr.FrmID;
 
                 //抛出异常，阻止删除.
                 throw new Exception(msg);
@@ -208,11 +212,13 @@ namespace BP.Sys
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
 
                 map.AddTBInt(SysEnumMainAttr.IsHaveDtl, 0, "是否有子集?", true, false);
+                map.AddDDLSysEnum(SysEnumMainAttr.EnumType, 0, "枚举类型", true, false, "EnumType", "@0=Int类型枚举@1=String类型枚举");
+
 
                 //参数.
                 map.AddTBString(SysEnumMainAttr.AtPara, null, "AtPara", true, false, 0, 200, 8);
 
-                for (var index = 0; index < 30; index++)
+                for (int index = 0; index < 30; index++)
                 {
                     map.AddTBString("Idx" + index, null, "EnumKey", false, false, 0, 50, 8);
                     map.AddTBString("Val" + index, null, "枚举值", false, false, 0, 500, 400);
@@ -259,7 +265,7 @@ namespace BP.Sys
         protected override void afterUpdate()
         {   
             //清除所有的缓存，这个位置会造成拼接SQL错误 case When
-            BP.DA.Cash.ClearCash();
+            BP.DA.Cache.ClearCache();
             base.afterUpdate();
         }
         #endregion
@@ -330,7 +336,7 @@ namespace BP.Sys
                 return base.RetrieveAll();
 
             // 返回他组织下的数据.
-            return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.FK_Dept);
+            return this.Retrieve(SysEnumMainAttr.OrgNo, BP.Web.WebUser.DeptNo);
         }
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

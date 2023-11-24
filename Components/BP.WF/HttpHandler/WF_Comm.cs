@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Org.BouncyCastle.Tsp;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -110,7 +111,7 @@ namespace BP.WF.HttpHandler
                 row["Width"] = attr.UIWidthInt * 2;
                 row["UIContralType"] = attr.UIContralType;
 
-                if (attr.HisAttr.IsFKorEnum)
+                if (attr.HisAttr.ItIsFKorEnum)
                     row["field"] = attr.KeyOfEn + "Text";
                 dt.Rows.Add(row);
             }
@@ -130,7 +131,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -145,9 +146,9 @@ namespace BP.WF.HttpHandler
                 if (val == "all")
                     return;
 
-                if (this.FK_Dept == null)
+                if (this.DeptNo == null)
                 {
-                    this.FK_Dept = value;
+                    this.DeptNo = value;
                     return;
                 }
             }
@@ -166,7 +167,14 @@ namespace BP.WF.HttpHandler
             Entity en = ens.GetNewEntity;
             Map map = en.EnMapInTime;
 
-            MapAttrs attrs = map.Attrs.ToMapAttrs;
+            MapAttrs attrs = new MapAttrs();
+            MapData md = new MapData();
+            md.No = this.EnsName;
+            int count = md.RetrieveFromDBSources();
+            if (count == 0)
+                attrs = map.Attrs.ToMapAttrs;
+            else
+                attrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
 
             //属性集合.
             DataTable dtAttrs = attrs.ToDataTableField();
@@ -268,7 +276,7 @@ namespace BP.WF.HttpHandler
 
         //        if (key == "FK_Dept")
         //        {
-        //            this.FK_Dept = mykey[1];
+        //            this.DeptNo = mykey[1];
         //            continue;
         //        }
 
@@ -315,7 +323,7 @@ namespace BP.WF.HttpHandler
         //                if (key == "FK_Dept" || key == "FK_Unit")
         //                {
         //                    if (key == "FK_Dept")
-        //                        val = WebUser.FK_Dept;
+        //                        val = WebUser.DeptNo;
         //                }
         //                else
         //                {
@@ -347,23 +355,23 @@ namespace BP.WF.HttpHandler
         //        qo.addAnd();
         //    }
 
-        //    if (this.FK_Dept != null && (this.GetRequestVal("FK_Emp") == null
+        //    if (this.DeptNo != null && (this.GetRequestVal("FK_Emp") == null
         //        || this.GetRequestVal("FK_Emp") == "all"))
         //    {
-        //        if (this.FK_Dept.Length == 2)
+        //        if (this.DeptNo.Length == 2)
         //        {
         //            qo.AddWhere("FK_Dept", " = ", "all");
         //            qo.addAnd();
         //        }
         //        else
         //        {
-        //            if (this.FK_Dept.Length == 8)
+        //            if (this.DeptNo.Length == 8)
         //            {
-        //                qo.AddWhere("FK_Dept", " = ", this.FK_Dept);
+        //                qo.AddWhere("FK_Dept", " = ", this.DeptNo);
         //            }
         //            else
         //            {
-        //                qo.AddWhere("FK_Dept", " like ", this.FK_Dept + "%");
+        //                qo.AddWhere("FK_Dept", " like ", this.DeptNo + "%");
         //            }
 
         //            qo.addAnd();
@@ -454,14 +462,14 @@ namespace BP.WF.HttpHandler
                     int num = 0;
                     if (DataType.IsNullOrEmpty(key2) == false && key2.Equals("undefined") == false)
                     {
-                        if(SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
                             num = en.Delete(key1, BP.Sys.Base.Glo.GenerRealType(attrs, key1, val1), key2, BP.Sys.Base.Glo.GenerRealType(attrs, key2, val2));
                         else
                             num = en.Delete(key1, val1, key2, val2);
                     }
                     else
                     {
-                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
                             num = en.Delete(key1, BP.Sys.Base.Glo.GenerRealType(attrs, key1, val1));
                         else
                             num = en.Delete(key1, val1);
@@ -781,7 +789,7 @@ namespace BP.WF.HttpHandler
                     ParameterInfo[] paramInfos = mp.GetParameters();
                     foreach (ParameterInfo paramInfo in paramInfos)
                     {
-                        myparas[idx] = str[idx].Contains("`")==true? str[idx].Replace("`","~"): str[idx];
+                        myparas[idx] = str[idx].Contains("`") == true ? str[idx].Replace("`", "~") : str[idx];
                         try
                         {
                             if (paramInfo.ParameterType.Name.Equals("Single"))
@@ -1273,7 +1281,7 @@ namespace BP.WF.HttpHandler
             foreach (BP.En.Method en in al)
             {
                 if (en.IsCanDo == false
-                    || en.IsVisable == false)
+                    || en.ItIsVisable == false)
                     continue;
 
                 dr = dt.NewRow();
@@ -1326,7 +1334,7 @@ namespace BP.WF.HttpHandler
             //ht.Add("CodeLength", map.CodeLength);
 
             //查询条件.
-            if (map.IsShowSearchKey == true)
+            if (map.ItIsShowSearchKey == true)
                 ht.Add("IsShowSearchKey", 1);
             else
                 ht.Add("IsShowSearchKey", 0);
@@ -1394,7 +1402,7 @@ namespace BP.WF.HttpHandler
                 dr["Name"] = item.HisAttr.Desc;
                 dr["Width"] = item.Width; //下拉框显示的宽度.
                 dr["UIContralType"] = (int)item.HisAttr.UIContralType;
-                if (attr.IsFK && attr.HisFKEn.IsTreeEntity == true)
+                if (attr.ItIsFK && attr.HisFKEn.ItIsTreeEntity == true)
                 {
                     if (attr.Key.Equals("FK_Dept") && WebUser.IsAdmin == false)
                         dr["IsTree"] = 0;
@@ -1411,7 +1419,7 @@ namespace BP.WF.HttpHandler
             foreach (SearchFKEnum item in attrs)
             {
                 attr = item.HisAttr;
-                if (attr.IsEnum == true)
+                if (attr.ItIsEnum == true)
                 {
                     SysEnums ses = new SysEnums(attr.UIBindKey);
                     DataTable dtEnum = ses.ToDataTableField();
@@ -1420,7 +1428,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                if (attr.IsFK == true)
+                if (attr.ItIsFK == true)
                 {
                     Entities ensFK = attr.HisFKEns;
                     ensFK.RetrieveAll();
@@ -1678,7 +1686,7 @@ namespace BP.WF.HttpHandler
             RefMethods rms = map.HisRefMethods;
             foreach (RefMethod item in rms)
             {
-                if (item.IsForEns == false)
+                if (item.ItIsForEns == false)
                     continue;
 
                 if (item.Visable == false)
@@ -1701,7 +1709,7 @@ namespace BP.WF.HttpHandler
                 dr["W"] = item.Width;
                 dr["H"] = item.Height;
                 dr["Icon"] = item.Icon;
-                dr["IsCanBatch"] = item.IsCanBatch;
+                dr["IsCanBatch"] = item.ItIsCanBatch;
                 dr["GroupName"] = item.GroupName;
                 dr["ClassMethodName"] = item.ClassMethodName;
                 dr["IsShowForEnsCondtion"] = item.IsShowForEnsCondtion;
@@ -1729,6 +1737,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(ens);
             bool isFirst = true; //是否第一次拼接SQL
             Attrs attrs = map.Attrs;
+            
             #region 关键字字段.
             if (DataType.IsNullOrEmpty(map.SearchFields) == false)
             {
@@ -1800,12 +1809,12 @@ namespace BP.WF.HttpHandler
             else
             {
 
-                if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
+                if (en.EnMap.ItIsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length >= 1)
                 {
                     Attr attrPK = new Attr();
                     foreach (Attr attr in attrs)
                     {
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                         {
                             attrPK = attr;
                             break;
@@ -2052,11 +2061,12 @@ namespace BP.WF.HttpHandler
             }
 
             List<string> keys = new List<string>();
+
             #region 普通属性
             string opkey = ""; // 操作符号。
             foreach (SearchNormal attr in en.EnMap.SearchNormals)
             {
-                if (attr.IsHidden)
+                if (attr.ItIsHidden)
                 {
                     if (isFirst == false)
                         qo.addAnd();
@@ -2079,9 +2089,9 @@ namespace BP.WF.HttpHandler
                     }
 
                     //获得真实的数据类型.
-                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true &&(attr.DefaultSymbol.Equals("=")|| attr.DefaultSymbol.Equals("!=")))
+                    if (BP.Difference.SystemConfig.AppCenterDBFieldIsParaDBType == true && (attr.DefaultSymbol.Equals("=") || attr.DefaultSymbol.Equals("!=")))
                     {
-                        var valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
+                        object valType = BP.Sys.Base.Glo.GenerRealType(en.EnMap.Attrs,
                             attr.RefAttrKey, attr.DefaultValRun);
                         qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, valType);
                     }
@@ -2127,7 +2137,7 @@ namespace BP.WF.HttpHandler
                         if (opkey == "<=")
                         {
                             DateTime dt = DataType.ParseSysDate2DateTime(date).AddDays(1);
-                            date = dt.ToString(DataType.SysDataFormat);
+                            date = DataType.SysDataFormat(dt);
                         }
                     }
                     catch
@@ -2152,7 +2162,7 @@ namespace BP.WF.HttpHandler
                 if (keys.Contains(str) == false)
                     keys.Add(str);
 
-                var val = ap.GetValStrByKey(str);
+                string val = ap.GetValStrByKey(str);
                 if (DataType.IsNullOrEmpty(val) == true || val.Equals("null") == true)
                     val = "all";
                 if (val.Equals("all"))
@@ -2165,8 +2175,8 @@ namespace BP.WF.HttpHandler
                 isFirst = false;
                 qo.addLeftBracket();
                 Attr attr = attrs.GetAttrByKeyOfEn(str);
-                if (attr != null && attr.IsFK && attr.UIBindKey.Contains(",TS.")==false 
-                    && attr.HisFKEn.IsTreeEntity == true && !(attr.Key.Equals("FK_Dept")&&WebUser.IsAdmin==false))
+                if (attr != null && attr.ItIsFK && attr.UIBindKey.Contains(",TS.") == false
+                    && attr.HisFKEn.ItIsTreeEntity == true && !(attr.Key.Equals("FK_Dept") && WebUser.IsAdmin == false))
                 {
                     //需要获取当前数据选中的数据和子级(先阶段只处理部门信息)
                     DataTable dt = null;
@@ -2190,7 +2200,7 @@ namespace BP.WF.HttpHandler
                 //多选
                 if (val.IndexOf(",") != -1)
                 {
-                    if (attr.IsNum == true)
+                    if (attr.ItIsNum == true)
                     {
                         qo.AddWhere(str, "IN", "(" + val + ")");
                         qo.addRightBracket();
@@ -2202,7 +2212,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                var valType = BP.Sys.Base.Glo.GenerRealType(attrs,
+                object valType = BP.Sys.Base.Glo.GenerRealType(attrs,
                     str, val);
                 qo.AddWhere(str, valType);
                 qo.addRightBracket();
@@ -2210,8 +2220,8 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr attr in map.Attrs)
             {
-                if (1 == 1)
-                    continue;
+                /*if (1 == 1)
+                    continue;*/
 
                 string val = HttpContextHelper.RequestParams(attr.Field);
                 if (DataType.IsNullOrEmpty(val))
@@ -2291,6 +2301,7 @@ namespace BP.WF.HttpHandler
             //qo.AddWhere("FID", "=", fid);
 
             #endregion 获得查询数据.
+
             return qo.DoQueryToTable();
         }
 
@@ -2405,36 +2416,7 @@ namespace BP.WF.HttpHandler
                 qo.addOrderBy(en.PK);
             qo.DoQuery();
             return BP.Tools.Json.ToJson(ens.ToDataTableField());
-            //string name = "数据导出";
-            //MapAttrs mapAttrs = new MapAttrs();
-            //Attrs attrs = null;
-            //MapData md = new MapData();
-            //md.No = this.EnsName;
-            //int count = md.RetrieveFromDBSources();
-            //if (count == 1)
-            //{
-            //    mapAttrs.Retrieve(MapAttrAttr.FK_MapData, this.EnsName, MapAttrAttr.Idx);
-            //    attrs = new Attrs();
-            //    Attr attr = null;
-            //    foreach (MapAttr mapAttr in mapAttrs)
-            //    {
-            //        string searchVisable = mapAttr.atPara.GetValStrByKey("SearchVisable");
-            //        if (searchVisable == "0")
-            //            continue;
-            //        if ((count != 0 && DataType.IsNullOrEmpty(searchVisable)) || (count == 0 && mapAttr.UIVisible == false))
-            //            continue;
-            //        attr = mapAttr.HisAttr;
-            //        attr.UIVisible = true;
-            //        attrs.Add(attr);
 
-            //    }
-
-            //}
-
-            //string filename = name + "_" + DataType.CurrentDateTimeCNOfLong + "_" + WebUser.Name + ".xls";
-            //string filePath = BP.Tools.ExportExcelUtil.ExportDGToExcel(Search_Data(ens, en), en, name, attrs);
-
-            //return filePath;
         }
         /// <summary>
         /// 从表执行导出
@@ -2602,11 +2584,11 @@ namespace BP.WF.HttpHandler
                     else if (v.Equals("@WebUser.Name"))
                         mydrMain[item.KeyOfEn] = Web.WebUser.Name;
                     else if (v.Equals("@WebUser.FK_Dept"))
-                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_Dept;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.DeptNo;
                     else if (v.Equals("@WebUser.FK_DeptName"))
-                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptName;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.DeptName;
                     else if (v.Equals("@WebUser.FK_DeptNameOfFull") || v.Equals("@WebUser.FK_DeptFullName"))
-                        mydrMain[item.KeyOfEn] = Web.WebUser.FK_DeptNameOfFull;
+                        mydrMain[item.KeyOfEn] = Web.WebUser.DeptNameOfFull;
                     else if (v.Equals("@RDT"))
                     {
                         if (item.MyDataType == DataType.AppDate)
@@ -2662,7 +2644,7 @@ namespace BP.WF.HttpHandler
             //加入sql模式的外键.
             foreach (Attr attr in attrs)
             {
-                if (attr.IsRefAttr == true)
+                if (attr.ItIsRefAttr == true)
                     continue;
 
                 if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
@@ -2711,7 +2693,7 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr item in attrs)
             {
-                if (item.IsEnum == false)
+                if (item.ItIsEnum == false)
                     continue;
 
                 SysEnums ses = new SysEnums(item.UIBindKey, item.UITag);
@@ -2779,7 +2761,7 @@ namespace BP.WF.HttpHandler
             #endregion 加入权限信息.
 
             #region 判断主键是否为自增长
-            if (en.IsNoEntity == true && en.EnMap.IsAutoGenerNo)
+            if (en.ItIsNoEntity == true && en.EnMap.ItIsAutoGenerNo)
                 md.SetPara("IsNewRow", "0");
             else
                 md.SetPara("IsNewRow", "1");
@@ -2956,7 +2938,7 @@ namespace BP.WF.HttpHandler
 
                     foreach (Attr attr in map.Attrs)
                     {
-                        if (attr.IsRefAttr == true)
+                        if (attr.ItIsRefAttr == true)
                             continue;
                         if (attr.UIVisible == false || attr.UIIsReadonly == true)
                             continue;
@@ -3001,7 +2983,7 @@ namespace BP.WF.HttpHandler
                 #region 保存新加行.
                 string strs = this.GetRequestVal("NewPKVals");
                 //没有新增行
-                if (this.GetRequestValBoolen("InsertFlag") == false || (en.EnMap.IsAutoGenerNo == true && DataType.IsNullOrEmpty(strs) == true))
+                if (this.GetRequestValBoolen("InsertFlag") == false || (en.EnMap.ItIsAutoGenerNo == true && DataType.IsNullOrEmpty(strs) == true))
                     return "更新成功.";
 
                 string valValue = "";
@@ -3048,9 +3030,9 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-                    if (en.IsNoEntity)
+                    if (en.ItIsNoEntity)
                     {
-                        if (en.EnMap.IsAutoGenerNo)
+                        if (en.EnMap.ItIsAutoGenerNo)
                             en.SetValByKey("No", en.GenerNewNoByKey("No"));
                     }
 
@@ -3113,7 +3095,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("IsHaveFuncPara");
             foreach (RefMethod item in rms)
             {
-                if (item.IsCanBatch == false)
+                if (item.ItIsCanBatch == false)
                     continue;
                 DataRow mydr = dt.NewRow();
                 item.HisEn = en; // 增加上.
@@ -3143,7 +3125,7 @@ namespace BP.WF.HttpHandler
                 dr["W"] = item.Width;
                 dr["H"] = item.Height;
                 dr["Icon"] = item.Icon;
-                dr["IsCanBatch"] = item.IsCanBatch;
+                dr["IsCanBatch"] = item.ItIsCanBatch;
                 dr["GroupName"] = item.GroupName;
                 dr["IsHaveFuncPara"] = item.HisAttrs.Count == 0 ? 0 : 1;
                 dt.Rows.Add(dr);
@@ -3196,9 +3178,9 @@ namespace BP.WF.HttpHandler
                         errCount++;
                     else
                         sucCount++;
-                    if (en.IsNoEntity)
+                    if (en.ItIsNoEntity)
                         msg += "编号:" + en.GetValByKey("No") + ",名称:" + en.GetValByKey("Name") + ",执行结果:" + s + "<br/>";
-                    else if (en.IsOIDEntity)
+                    else if (en.ItIsOIDEntity)
                     {
                         if (DataType.IsNullOrEmpty(en.GetValStringByKey("PrjNo")) == false)
                             msg += "编号:" + en.GetValStringByKey("PrjNo") + " 名称:" + en.GetValStringByKey("PrjName") + " 执行结果:" + s + "<br/>";
@@ -3478,6 +3460,7 @@ namespace BP.WF.HttpHandler
             sql = HttpUtility.UrlDecode(sql, Encoding.UTF8);
 
             string dbSrc = this.GetRequestVal("DBSrc");
+            sql = sql.Replace("~~", "\"");
             sql = sql.Replace("~", "'");
             sql = sql.Replace("[%]", "%");  //防止URL编码
             if (DataType.IsNullOrEmpty(dbSrc) == false && dbSrc.Equals("local") == false)
@@ -3495,6 +3478,12 @@ namespace BP.WF.HttpHandler
         public string DBAccess_RunSQLReturnTable()
         {
             string sql = this.GetRequestVal("SQL");
+
+            //判断是否是标记,没有空格.
+            if (sql.Contains(" ") == false)
+                sql = SQLManager.GenerSQLByMark(sql);
+
+
             sql = HttpUtility.UrlDecode(sql, Encoding.UTF8);
             string dbSrc = this.GetRequestVal("DBSrc");
             sql = sql.Replace("~", "'");
@@ -3502,9 +3491,9 @@ namespace BP.WF.HttpHandler
 
             sql = sql.Replace("@WebUser.No", WebUser.No);  //替换变量.
             sql = sql.Replace("@WebUser.Name", WebUser.Name);  //替换变量.
-            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);  //替换变量.
-            sql = sql.Replace("@WebUser.DeptParentNo)", WebUser.DeptParentNo);  //替换变量.
-
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.DeptNo);  //替换变量.
+            sql = sql.Replace("@WebUser.DeptParentNo", WebUser.DeptParentNo);  //替换变量.
+            sql = sql.Replace("@WebUser.OrgNo", WebUser.OrgNo);  //替换变量.
 
 #warning zhoupeng把这个去掉了. 2018.10.24
 
@@ -3512,6 +3501,8 @@ namespace BP.WF.HttpHandler
 
             sql = sql.Replace("/#", "+"); //为什么？
             sql = sql.Replace("/$", "-"); //为什么？
+            sql = sql.Replace("‘", "'");
+            sql = sql.Replace("’", "'");
 
             if (null == sql || "" == sql)
                 return "err@查询sql为空";
@@ -3536,7 +3527,7 @@ namespace BP.WF.HttpHandler
                 string[] keys = sql.Split(',');
                 foreach (string key in keys)
                 {
-                    var realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
+                    string realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
                     indexAs = realkey.ToUpper().IndexOf("AS");
                     if (indexAs != -1)
                         realkey = realkey.Substring(indexAs + 2);
@@ -3556,7 +3547,7 @@ namespace BP.WF.HttpHandler
                 string[] keys = sql.Split(',');
                 foreach (string key in keys)
                 {
-                    var realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
+                    string realkey = key.Replace("Case", "").Replace("case", "").Replace("CASE", "");
                     indexAs = realkey.ToUpper().IndexOf("AS");
                     if (indexAs != -1)
                         realkey = realkey.Substring(indexAs + 2);
@@ -3564,6 +3555,12 @@ namespace BP.WF.HttpHandler
                         dt.Columns[realkey.ToLower()].ColumnName = realkey;
                 }
 
+            }
+
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                if (dt.Columns.Contains("NO"))
+                    dt.Columns["NO"].ColumnName = "No";
             }
 
             return BP.Tools.Json.ToJson(dt);
@@ -3589,8 +3586,9 @@ namespace BP.WF.HttpHandler
             headerMap.Add("Authorization", WebUser.Token);
 
             string url = this.GetRequestVal("url");
-            string postData = BP.WF.Glo.HttpPostConnect(url, headerMap, null);
-            var res = postData.ToJObject();
+            string postData = BP.Tools.PubGlo.HttpPostConnect(url, headerMap, null);
+
+            JObject res = postData.ToJObject();
             if (res["code"].ToString() == "200")
                 return res["data"].ToString();
             else
@@ -3607,7 +3605,7 @@ namespace BP.WF.HttpHandler
             string httpHandlerName = this.GetRequestVal("HttpHandlerName");
             string methodName = this.GetRequestVal("DoMethod");
 
-            var type = System.Type.GetType(httpHandlerName);
+            Type type = System.Type.GetType(httpHandlerName);
             if (type == null)
             {
                 BP.WF.HttpHandler.DirectoryPageBase obj = ClassFactory.GetHandlerPage(httpHandlerName) as BP.WF.HttpHandler.DirectoryPageBase;
@@ -3655,7 +3653,8 @@ namespace BP.WF.HttpHandler
             string token = this.GetRequestVal("Token");
             if (DataType.IsNullOrEmpty(token) == false)
             {
-                if(DataType.IsNullOrEmpty(WebUser.Token) == false && token.Equals(WebUser.Token) == true){
+                if (DataType.IsNullOrEmpty(WebUser.Token) == false && token.Equals(WebUser.Token) == true)
+                {
 
                 }
                 else
@@ -3678,9 +3677,9 @@ namespace BP.WF.HttpHandler
             //需要同步.
             ht.Add("No", WebUser.No);
             ht.Add("Name", WebUser.Name);
-            ht.Add("FK_Dept", WebUser.FK_Dept);
-            ht.Add("FK_DeptName", WebUser.FK_DeptName);
-            ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+            ht.Add("FK_Dept", WebUser.DeptNo);
+            ht.Add("FK_DeptName", WebUser.DeptName);
+            ht.Add("FK_DeptNameOfFull", WebUser.DeptNameOfFull);
             ht.Add("CustomerNo", BP.Difference.SystemConfig.CustomerNo);
             ht.Add("CustomerName", BP.Difference.SystemConfig.CustomerName);
             ht.Add("IsAdmin", WebUser.IsAdmin == true ? 1 : 0);
@@ -3766,7 +3765,7 @@ namespace BP.WF.HttpHandler
 
             #region 查询条件
             //单据，实体单据
-            if (mapData.RetrieveFromDBSources() != 0 && DataType.IsNullOrEmpty(mapData.FK_FormTree) == false)
+            if (mapData.RetrieveFromDBSources() != 0 && DataType.IsNullOrEmpty(mapData.FormTreeNo) == false)
             {
                 //查询条件.
                 ht.Add("IsShowSearchKey", mapData.GetParaInt("IsSearchKey"));
@@ -3779,7 +3778,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                if (map.IsShowSearchKey == true)
+                if (map.ItIsShowSearchKey == true)
                     ht.Add("IsShowSearchKey", 1);
                 else
                     ht.Add("IsShowSearchKey", 0);
@@ -3840,7 +3839,7 @@ namespace BP.WF.HttpHandler
             foreach (SearchFKEnum item in attrs)
             {
                 Attr attr = item.HisAttr;
-                if (attr.IsEnum == true)
+                if (attr.ItIsEnum == true)
                 {
                     SysEnums ses = new SysEnums(attr.UIBindKey);
                     DataTable dtEnum = ses.ToDataTableField();
@@ -3849,7 +3848,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
 
-                if (attr.IsFK == true)
+                if (attr.ItIsFK == true)
                 {
                     Entities ensFK = item.HisAttr.HisFKEns;
                     ensFK.RetrieveAll();
@@ -3931,7 +3930,7 @@ namespace BP.WF.HttpHandler
             bool contentFlag = false;
             foreach (Attr attr in attrs)
             {
-                if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
+                if (attr.ItIsEnum == true || attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
                 {
                     DataRow dr = dt.NewRow();
                     dr["Field"] = attr.Key;
@@ -4003,7 +4002,7 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr attr in map.Attrs)
             {
-                if (attr.IsPK || attr.IsNum == false)
+                if (attr.ItIsPK || attr.ItIsNum == false)
                     continue;
                 if (attr.UIContralType != UIContralType.TB)
                     continue;
@@ -4013,7 +4012,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 if (attr.MyFieldType == FieldType.Enum)
                     continue;
-                if (attr.Key == "OID" || attr.Key == "WorkID" || attr.Key == "MID")
+                if (attr.Key.Equals("OID") || attr.Key.Equals("WorkID") || attr.Key.Equals("FID") || attr.Key.Equals("FK_Node") || attr.Key.Equals("WFState") || attr.Key.Equals("MID"))
                     continue;
 
 
@@ -4049,7 +4048,7 @@ namespace BP.WF.HttpHandler
                     ddlDr["Selected"] = "true";
                 ddlDt.Rows.Add(ddlDr);
 
-                if (this.IsContainsNDYF)
+                if (this.ItIsContainsNDYF)
                 {
                     ddlDr = ddlDt.NewRow();
                     ddlDr["No"] = "AMOUNT";
@@ -4080,8 +4079,8 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //获取注册信息表
-            UserRegedit ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
-
+            UserRegedit ur = new UserRegedit();
+            ur = new UserRegedit(WebUser.No, this.EnsName + "_Group");
             // 查询出来关于它的活动列配置.
             ActiveAttrs aas = new ActiveAttrs();
             aas.RetrieveBy(ActiveAttrAttr.For, this.EnsName);
@@ -4162,7 +4161,7 @@ namespace BP.WF.HttpHandler
                             throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag + "");
 
                         Sys.SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                        selectSQL += ses.GenerCaseWhenForOracle(en.EnMap.PhysicsTable + ".", attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString().Equals("") == true ? 0 : int.Parse(attr.DefaultVal.ToString())) + ",";
+                        selectSQL += ses.GenerCaseWhenForOracle(en.EnMap.PhysicsTable + ".", attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString().Equals("") == true ? "0" : attr.DefaultVal.ToString()) + ",";
                         continue;
                     }
 
@@ -4208,7 +4207,7 @@ namespace BP.WF.HttpHandler
                             selectSQL += " SUM(" + map.PhysicsTable + "." + strs[0] + ") \"" + strs[0] + "\",";
                         else
                         {
-                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                                 selectSQL += " round ( cast (SUM(" + map.PhysicsTable + "." + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                             else
                                 selectSQL += " round ( SUM(" + map.PhysicsTable + "." + strs[0] + "), 4) \"" + strs[0] + "\",";
@@ -4217,7 +4216,7 @@ namespace BP.WF.HttpHandler
 
                         break;
                     case "AVG":
-                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                             selectSQL += " round ( cast (AVG(" + map.PhysicsTable + "." + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                         else
                             selectSQL += " round (AVG(" + map.PhysicsTable + "." + strs[0] + "), 4)  \"" + strs[0] + "\",";
@@ -4228,7 +4227,7 @@ namespace BP.WF.HttpHandler
                             selectSQL += " SUM(" + map.PhysicsTable + "." + strs[0] + ") \"" + strs[0] + "\",";
                         else
                         {
-                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
                                 selectSQL += " round ( cast (SUM(" + map.PhysicsTable + "." + strs[0] + ") as  numeric), 4)  \"" + strs[0] + "\",";
                             else
                                 selectSQL += " round ( SUM(" + map.PhysicsTable + "." + strs[0] + "), 4) \"" + strs[0] + "\",";
@@ -4296,7 +4295,7 @@ namespace BP.WF.HttpHandler
         }
 
 
-        public bool IsContainsNDYF
+        public bool ItIsContainsNDYF
         {
             get
             {
@@ -4333,13 +4332,13 @@ namespace BP.WF.HttpHandler
                 qo.AddHD();
 
                 qo.addAnd();
-                qo.AddWhere("FK_MapData", "=", FK_MapData);
+                qo.AddWhere(DefValAttr.FrmID, "=", FK_MapData);
                 qo.addAnd();
-                qo.AddWhere("AttrKey", "=", AttrKey);
+                qo.AddWhere(DefValAttr.AttrKey, "=", AttrKey);
                 qo.addAnd();
-                qo.AddWhere("FK_Emp", "=", WebUser.No);
+                qo.AddWhere(DefValAttr.EmpNo, "=", WebUser.No);
                 qo.addAnd();
-                qo.AddWhere("LB", "=", "1");
+                qo.AddWhere(DefValAttr.LB, "=", "1");
 
                 string pageNumber = GetRequestVal("pageNumber");
                 int iPageNumber = string.IsNullOrEmpty(pageNumber) ? 1 : Convert.ToInt32(pageNumber);
@@ -4357,16 +4356,16 @@ namespace BP.WF.HttpHandler
                 qo.DoQuery("MyPK", iPageSize, iPageNumber);
 
 
-                var gg = BP.Tools.Json.ToJson(dvs.ToDataTableField("MainTable"));
+                // string gg = BP.Tools.Json.ToJson(dvs.ToDataTableField("MainTable"));
                 ds.Tables.Add(dvs.ToDataTableField("MainTable")); //把描述加入.
             }
             if (lb == "hisWords")
             {
-                Node nd = new Node(this.FK_Node);
-                string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+                Node nd = new Node(this.NodeID);
+                string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt";
                 if (nd.HisFormType == NodeFormType.SheetTree || nd.HisFormType == NodeFormType.RefOneFrmTree)
                 {
-                    MapData mapData = new MapData(this.FK_MapData);
+                    MapData mapData = new MapData(this.FrmID);
                     rptNo = mapData.PTable;
                 }
 
@@ -4423,7 +4422,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string path = BP.Difference.SystemConfig.PathOfDataUser + "Fastenter/" + FK_MapData + "/" + GetRequestVal("AttrKey"); ;
+                string path = BP.Difference.SystemConfig.PathOfDataUser + "Fastenter/" + this.FrmID + "/" + GetRequestVal("AttrKey"); ;
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 

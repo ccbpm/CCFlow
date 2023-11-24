@@ -1,0 +1,751 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>实体列表</title>
+    <!--jquery-->
+    <script src="../../WF/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <!--公共JS-->
+    <script src="../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <link href="../../WF/Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../WF/Scripts/layui/style/admin.css" rel="stylesheet" />
+    <script src="../../WF/Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <script src="SearchDBList.js" type="text/javascript"></script>
+    <script src="../../WF/Scripts/vue.js" type="text/javascript"></script>
+    <link href="../js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="../js/mui/css/mui.picker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../js/mui/css/mui.dtpicker.css" rel="stylesheet" />
+    <script src="../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <style src="">
+        .layui-label {
+            padding: 6px 0px;
+            min-width: 80px;
+            float: left;
+            display: block;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .search-input {
+            height: 32px;
+            border: none;
+            margin-bottom: 5px;
+            width: 70%;
+        }
+
+        .mui-icon-clear {
+            top: -10px !important
+        }
+
+        .mui-search:before {
+            font-size: 20px;
+            right: auto;
+            left: 5px !important;
+            display: block;
+            margin-right: 0;
+        }
+
+        ul.shaixuan {
+            padding: 0 0.1rem;
+            box-sizing: border-box;
+            height: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .searchDict .layui-form-item {
+            margin-bottom: 10px;
+        }
+
+        .searchDict .layui-this {
+            background-color: #007aff;
+            color: #fff;
+        }
+
+        .searchDict .layui-tab-title, .searchDict .layui-tab-title .layui-this:after {
+            height: 28px;
+        }
+
+            .searchDict .layui-tab-title li {
+                line-height: 28px;
+            }
+
+        .searchDict input, .searchDict select {
+            margin-bottom: 0px;
+        }
+
+        .searchDict .layui-form-item .layui-inline {
+            margin-bottom: 10px;
+        }
+
+        .searchDict select {
+            border: 1px rgba(0,0,0,.2) solid !important;
+        }
+
+        .shaixuan li {
+            width: 25%;
+            height: 100%;
+            line-height: 0.5rem;
+            color: #333;
+            position: relative;
+            font-size: 12px;
+        }
+
+        .mui-icon-arrowdown {
+            font-size: 12px !important;
+        }
+
+        .layui-btn {
+            background-color: #007aff
+        }
+
+        .Search-tab-ahref {
+            padding: 2px 10px;
+            line-height: 20px;
+            display: inline-block;
+            border: 1px solid #007aff;
+            margin: 3px;
+        }
+
+        .Search-tab-active {
+            background: #007aff;
+            color: #fff;
+        }
+
+        .searchbox {
+            display: none;
+            position: fixed;
+            top: 44px;
+            width: 100%;
+            padding: 0 2%;
+            height: 100%;
+            background: rgba(0, 0, 0,0.5)
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="layui-layout layui-layout-admin">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <a class="mui-icon mui-icon-search mui-pull-right" id="searchbtn"></a>
+        </div>
+
+        <div class="layui-fluid" style="top:50px;margin-bottom:44px;">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <table class="laui-table" id="lay_table_dict" lay-filter="dict"></table>
+                    <div id="page"></div>
+                </div>
+            </div>
+        </div>
+        <div class="searchbox">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-row searchDict" style="font-size:14px">
+                        <div id="view"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script id="toolbar" type="text/html">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                {{#  layui.each(d.inputSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.label}}</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="TB_{{=item.key}}" name="TB_{{=item.key}}" value="{{item.value}}" />
+                    </div>
+                </div>
+
+                {{#  }); }}
+            </div>
+            <div class="layui-form-item">
+                {{#  layui.each(d.dateSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.dtFromLabel}}</label>
+                    <div class="layui-input-inline">
+                        <i class="input-icon layui-icon layui-icon-date"></i>
+                        <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtFromKey}}" name="TB_{{=item.dtFromKey}}" value="{{=item.dtFromValue}}" style="padding-left: 40px;" />
+                    </div>
+                    <label class="layui-form-label" style="width:10px">到</label>
+                    <div class="layui-input-inline">
+                        <i class="input-icon layui-icon layui-icon-date"></i>
+                        <input type="text" class="layui-input ccdate" data-info="{{=item.dtType}}" id="TB_{{=item.dtToKey}}" name="TB_{{=item.dtToKey}}" value="{{=item.dtToValue}}" style="padding-left: 40px;" />
+                    </div>
+                </div>
+                {{#  }); }}
+                {{#  layui.each(d.selectSearch, function(index, item){ }}
+                <div class="layui-inline">
+                    <label class="layui-form-label">{{item.label}}</label>
+                    {{# if(item.showWay==0){ }}
+                    <div class="layui-input-inline">
+                        <select class="layui-input" id="DDL_{{=item.key}}" name="DDL_{{=item.key}}" data-info="{{item.ShowWay}}" lay-filter="{{=item.key}}" value="{{item.value}}">
+                            {{#  layui.each(item.operations, function(k, opt){ }}
+                            <option value="{{opt.value}}" selected="{{=opt.selected}}">{{opt.name}}</option>
+                            {{#  }); }}
+                        </select>
+                    </div>
+                    {{# } }}
+
+                    {{# if(item.showWay==1){ }}
+                    <div class="layui-tab" style="width:auto">
+                        <ul class="layui-tab-title" id="Tab_{{=item.key}}" style="margin-left:110px;border:0">
+                            {{#  layui.each(item.operations, function(k, opt){ }}
+                            <li class="layui-input-span {{# if(opt.value==item.value){}} layui-this{{# } }}" id="{{item.key}}_{{opt.value}}" onclick="SearchBySelect('{{item.key}}','{{opt.value}}')">{{opt.name}}</li>
+                            {{#  }); }}
+                        </ul>
+                    </div>
+                    {{# } }}
+                </div>
+                {{#  }); }}
+            </div>
+            <div class="layui-form-item">
+                {{# if(d.dateTabSearch.key!=undefined){}}
+                <div class="layui-form-item">
+
+                    <div class="layui-tab  dateChoose">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别</label>
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" onclick="SearchByDate('month')">月报</li>
+                                <li onclick="SearchByDate('jidu')">季报</li>
+                                <li onclick="SearchByDate('year')">年报</li>
+                            </ul>
+                        </div>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">月份</label>
+                                    {{# layui.each(d.dateTabSearch.Month,function(month_idx,month){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[1]==month){}}layui-a-this{{# } }}" onclick="SearchByDate('month','{{month}}','month',this)" style="margin-right:5px">{{month}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">季度</label>
+                                    {{# layui.each(d.dateTabSearch.JiDu,function(JiDu_idx,jidu){ }}
+                                    <a href="javascript:void(0)" class="{{# if(d.dateTabSearch.value[2]==jidu){}}layui-a-this{{# } }}" onclick="SearchByDate('jidu','{{jidu}}','jidu',this)" style="margin-right:5px">{{jidu}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-inline">
+
+                                    <label class="layui-form-label">年度</label>
+                                    {{# layui.each(d.dateTabSearch.Year,function(year_idx,year){ }}
+                                    <a href="javascript:void(0)" name="{{year}}" class="layui-year {{# if(d.dateTabSearch.value[0]==year){}}layui-a-this{{# } }}" onclick="SearchByDate('year','{{year}}','year',this)" style="margin-right:5px">{{year}}</a>
+                                    {{# }); }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {{# } }}
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-btn-container" style="padding-left: 10px;">
+                        {{#  layui.each(d.btns, function(index, item){ }}
+                        <button type="button" style="min-width:50px" class="layui-btn layui-btn-sm" data-type="{{=item.type}}" data-no="{{=item.no}}" data-source="{{=item.source}}">{{item.label}}</button>
+                        {{#  }); }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </script>
+    <script>
+        var frmID = GetQueryString("FrmID");
+        var ur = null;
+        var webUser = new WebUser();
+        var pageIdx = 1;
+        var pageSize = 10;
+        var orderBy = "";
+        var orderWay = "DESC";
+        var isHaveDelOper = false;
+        var isHaveSeachOper = false;
+
+        var frmDict = new Entity("BP.CCBill.FrmDict", frmID);
+        var mapData = frmDict;
+        var listShowWay = mapData.GetPara("ListShowWay");
+        listShowWay = listShowWay == null || listShowWay == undefined || listShowWay == "" ? "0" : listShowWay;
+        if (listShowWay != "0") {
+            SetHref(GetHrefUrl().replace("SearchDict.htm", "SearchTree.htm"));
+        }
+        layui.use(['table', 'laytpl', 'form', 'laydate'], function () {
+            var table = layui.table,
+                laytpl = layui.laytpl,
+                form = layui.form,
+                laydate = layui.laydate;
+            document.title = frmDict.Name;
+
+            //初始化用户查询信息
+            //当前用户查询信息.
+            ur = new Entity("BP.Sys.UserRegedit");
+            ur.MyPK = webUser.No + frmID + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            //渲染查询条件
+            var getTpl = document.getElementById("toolbar").innerHTML
+                , view = document.getElementById('view');
+            laytpl(getTpl).render(InitToolBar(), function (html) {
+                view.innerHTML = html;
+            });
+            $.each(searchData["selectSearch"], function (i, item) {
+                $("#DDL_" + item.key).val(item.value);
+            })
+
+            if ($(".layui-tab-title").length == 1) {
+                var lis = $(".layui-tab-title li");
+                var width = 0;
+                $.each(lis, function (i, item) {
+                    width += item.offsetWidth;
+                })
+                //设置宽度
+                $(".layui-tab-title").css("width", width + "px");
+            }
+
+            form.render();
+            if (mapExts != null && mapExts != undefined && mapExts.length > 0) {
+                mapExts.forEach(function (mapExt) {
+                    if (mapExt.ExtType == "ActiveDDLSearchCond") {
+                        form.on('select(' + mapExt.AttrOfOper + ')', function (element) {
+                            var ddlParent = $("#DDL_" + mapExt.AttrOfOper);
+                            var showWay = ddlParent.attr("data-info");
+                            var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
+                            if (ddlParent.length == 1 && ddlChild.length == 1)
+                                DDLAnsc(element.value, "DDL_" + mapExt.AttrsOfActive, mapExt, showWay);
+
+
+                        });
+                        var ddlParent = $("#DDL_" + mapExt.AttrOfOper);
+                        var showWay = ddlParent.attr("data-info");
+                        var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
+                        if (ddlParent.length == 1 && ddlChild.length == 1)
+                            DDLAnsc(ddlParent.val(), "DDL_" + mapExt.AttrsOfActive, mapExt, showWay);
+                    }
+
+                })
+            }
+            if ($(".ccdate").length > 0) {
+                $.each($(".ccdate"), function (i, item) {
+                    laydate.render({
+                        elem: '#' + item.id //指定元素
+                        , type: $(item).attr("data-info")
+                    });
+                })
+            }
+            //获取列
+            var cols = GetColoums(frmDict.GetPara("MultiTitle1"), frmDict.GetPara("MultiTitle"), frmDict.ColorSet, frmDict.SortColumns, parseInt(frmDict.RowOpenModel), frmDict.Name, 2, false);
+            if (searchData.dateTabSearch.key != undefined)
+                SearchByDate("month", "1月", "month", null);
+            var tableData = SearchData();
+            //渲染table
+            //主页面数据
+            var vtable = table.render({
+                elem: '#lay_table_dict',
+                id: 'lay_table_dict',
+                data: tableData,
+                title: '数据表',
+                limit: Number.MAX_VALUE,
+                height: $(document).height() - $("#view").height() - 110,
+                cellMinWidth: 120,
+                cols: cols,
+                page: false,
+                done: function (res, curr, count) {
+                    //遍历表格每行代码
+                    var rowColorSet = frmDict.RowColorSet;
+                    if (rowColorSet != null && rowColorSet != undefined && rowColorSet != "") {
+                        $("table tbody tr").each(function (i, item) {
+
+                            var color = res.data[i][rowColorSet];
+                            if (color != null && color != undefined && color != "")
+                                $(this).css("background", color);
+                        })
+                    }
+                }
+            });
+            renderLaypage();
+            //触发行双击事件
+            table.on('rowDouble(dict)', function (obj) {
+                //var row = obj.data;
+                //var pkval = row["OID"];
+
+                //var rowstr = JSON.stringify(row);
+                //rowstr = encodeURIComponent(rowstr);
+                //OpenIt(pkval, 2, row["BillState"], rowstr);
+            });
+
+            table.on('sort(dict)', function (obj) { //注：sort 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                orderBy = obj.field; //当前排序的字段名
+                orderWay = obj.type;//当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+                //尽管我们的 table 自带排序功能，但并没有请求服务端。
+                //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                tableData = SearchData();
+                table.reload('lay_table_dict', tableData);
+
+            });
+
+            //工具栏的操作
+            $('#view .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                switch (type) {
+                    case "Search":
+                        Search();
+                        break;
+
+                    case "New"://新增
+                        var frmID = GetQueryString("FrmID");
+
+                        var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                        handler.AddUrlData();
+
+                        var data = handler.DoMethodReturnString("MyDict_CreateBlankDictID");
+
+                        if (data.indexOf('err@') == 0) {
+                            alert(data);
+                            return;
+                        }
+
+                        OpenIt(data, 2, 0, null, true);
+                        break;
+                    case "Delete"://删除数据
+                        var checkStatus = table.checkStatus(vtable.config.id);
+                        if (checkStatus.data.length == 0) {
+                            layer.alert("请选择删除的行");
+                            return;
+                        }
+                        layer.confirm('确定要删除选择的数据吗?', function (index) {
+                            var workid = "";
+                            for (var i = 0; i < checkStatus.data.length; i++) {
+                                workid += "'" + checkStatus.data[i]["OID"] + "',";
+                            }
+                            workid = workid.substring(0, workid.length - 1);
+                            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                            handler.AddPara("FrmID", GetQueryString("FrmID"));
+                            handler.AddPara("WorkIDs", workid);
+                            var data = handler.DoMethodReturnString("MyDict_Deletes");
+
+                            if (data.indexOf('err@') == 0) {
+                                layer.alert(data);
+                                return;
+                            }
+                            pageIdx = 1;
+                            tableData = SearchData();
+                            table.reload('lay_table_dict', { data: tableData });
+                            renderLaypage();
+                            layui.laypage.render();
+                            layer.close(index);
+
+                        });
+                        break;
+                    case "ImpExcel"://导入
+                        var url = "./Opt/Imp.htm?FrmID=" + GetQueryString("FrmID") + "&EntityType=2";
+                        OpenLayuiDialog(url, "导入模板数据", window.innerWidth / 2, 0, null, true);
+                        break;
+                    case "ExpExcel"://导出
+                        if (plant != 'CCFlow')
+                            downLoadExcel(basePath + "/WF/Export/Search_Exp?type=dict&FrmID=" + GetQueryString("FrmID"));
+                        else {
+                            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+                            handler.AddPara("FrmID", GetQueryString("FrmID"));
+                            //查询集合
+                            var data = handler.DoMethodReturnString("Search_Exp");
+                            if (data.indexOf("err@") != -1) {
+                                layer.alert(data);
+                                return;
+                            }
+                            window.open(data);
+                        }
+                        break;
+                    case "Group"://跳转到分组页面
+                        url = "Group.htm?FrmID=" + GetQueryString("FrmID");
+                        SetHref(url);
+                        break;
+                    case "Link"://链接
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenLink(no, source);
+                        break;
+                    case "Func"://方法
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFunc(no, source);
+                        break;
+                    case "Bill"://方法
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenBill(no, source);
+                        break;
+                    case "FlowEntityBatchStart":
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFlow(no, source);
+                        break;
+                    case "FlowNewEntity":
+                        var no = $(this).data('no');
+                        var source = $(this).data('source');
+                        OpenFlowEntity(no, source);
+                        break;
+                    default:
+                        layer.alert(type + "的方法还没有解析");
+                        break;
+                }
+            });
+
+        });
+        function renderLaypage() {
+            //执行一个laypage实例
+            layui.laypage.render({
+                elem: 'page' //注意，这里的 page 是 ID，不用加 # 号
+                , count: ur.GetPara("RecCount") //数据总数，从服务端得到
+                , limits: [5, 10, 15, 20, 25]
+                //, layout: ['prev', 'page', 'next', 'limit', 'skip', 'count']
+                , jump: function (obj, first) {
+
+                    if (!first) {
+                        pageIdx = obj.curr;
+                        pageSize = obj.limit;
+                        //刷新数据
+                        var tableData = SearchData();
+                        layui.table.reload('lay_table_dict', { data: tableData });
+                    }
+
+                }
+            });
+            $('#page').css('text-align', 'right');  // 分页右对齐
+            $('.layui-table-page').css('text-align', 'right');  //
+
+        }
+        /**
+         * 初始化查询条件按钮功能
+         */
+        var searchData = {};
+        var mapExts;
+        function InitToolBar() {
+            var handler = new HttpHandler("BP.CCBill.WF_CCBill");
+            handler.AddPara("FrmID", frmID);
+            var data = handler.DoMethodReturnString("Search_ToolBar");
+            if (data.indexOf('err@') == 0) {
+                layer.alert(data);
+                console.log(data);
+                return;
+            }
+            var data = JSON.parse(data);
+            //单据表单属性
+            var mapData = data.Sys_MapData;
+            var attrs = data.Attrs;
+            var atPara = mapData[0].AtPara;
+            mapExts = data.Sys_MapExt;
+
+            var inputSearch = [];
+            var dateTabSearch = {};
+            var dateSearch = [];
+            var selectSearch = [];
+            var btns = [];
+            var stringSearchKeys = GetPara(atPara, "StringSearchKeys");
+            //时间查询展示方式 0 时间从到、 1 table表格查询模式
+            var dateShowType = GetPara(atPara, "DTShowWay");
+            dateShowType = dateShowType == null || dateShowType == undefined || dateShowType == "" ? "0" : dateShowType;
+            if (dateShowType == "1" && GetPara(atPara, "DTSearchWay") != "0") {
+                var beginDate = GetPara(atPara, "DateShowYear");
+                var date = new Date(beginDate);
+                var year = date.getFullYear();
+                var currYear = new Date().getFullYear();
+                var years = [];
+                for (currYear; currYear >= year; currYear--)
+                    years.push(currYear);
+                if (years.length == 0)
+                    years.push(currYear);
+                //需要展示开始时间
+                dateTabSearch = {
+                    key: "Date",
+                    DTSearchKey: GetPara(atPara, "DTSearchKey"),
+                    Year: years,
+                    Month: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    JiDu: ["一季度", "二季度", "三季度", "四季度"],
+                    value: ["2021", "1月", "一季度"]
+                }
+            }
+            searchData["dateTabSearch"] = dateTabSearch;
+            if (stringSearchKeys != null && stringSearchKeys != undefined && stringSearchKeys != "") {
+                var strs = stringSearchKeys.split("*");
+                var fieldV = ""
+                $.each(strs, function (i, str) {
+                    if (str != "") {
+                        var item = str.split(",");
+                        fieldV = ur.GetPara(item[0]);
+                        if (fieldV == null || fieldV == undefined)
+                            fieldV = "";
+                        if (item.length == 2) {
+                            inputSearch.push({
+                                key: item[0],
+                                label: item[1],
+                                value: fieldV
+                            })
+                        }
+                    }
+                });
+            } else if (GetPara(atPara, "IsSearchKey") == "1") {
+                var keyLabel = GetPara(atPara, "DTSearchLabel");
+                inputSearch.push({
+                    key: "Key",
+                    label: "关键字",
+                    value: ur.SearchKey
+                })
+            }
+            searchData["inputSearch"] = inputSearch;
+            if (dateShowType == "0" && GetPara(atPara, "DTSearchWay") != "0") {
+                var dtFrom = GetPara(atPara, "DTSearchLabel");
+                if (dtFrom == undefined)
+                    dtFrom = '日期从';
+                dateSearch.push({
+                    dtFromKey: 'DTFrom',
+                    dtToKey: 'DTTo',
+                    dtFromLabel: dtFrom,
+                    dtFromValue: ur.DTFrom,
+                    dtToValue: ur.DTTo,
+                    dtType: GetPara(atPara, "DTSearchWay") == "1" ? "date" : "datetime"
+                })
+            }
+            searchData["dateSearch"] = dateSearch;
+            //格式为: @WFSta=0@FK_Dept=02
+            var json = AtParaToJson(ur.Vals);
+            var ddlShowWays = GetPara(atPara, "DDLShowWays");
+            ddlShowWays = ddlShowWays == null || ddlShowWays == undefined || ddlShowWays == "" ? "" : ddlShowWays;
+            ddlShowWays = ddlShowWays.replace(/[*]/g, "@");
+            ddlShowWays = AtParaToJson(ddlShowWays);
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                var val = json[attr.Field];
+                val = val == null || val == undefined || val == "" || val == "null" ? "all" : val;
+                /**selectSearch.push({
+                    key: attr.Field,
+                    label: attr.Name,
+                    value: val,
+                    showWay: ddlShowWays[attr.Field], //0下拉 1平铺
+                    operations: []
+                });*/
+                selectSearch = InitDDLOperation(data, attr, val, ddlShowWays, selectSearch);
+
+            }
+            searchData["selectSearch"] = selectSearch;
+
+            //获得当前的集合.
+            var frms = data["Frm_Method"];
+            var colls = data["Frm_Collection"];
+            if (frms && frms.length > 0) {
+                $.each(frms, function (index, frm) {
+                    btns.push({
+                        label: frm.Name,
+                        type: frm.MethodModel,
+                        no: frm.No,
+                        source: "Method"
+                    })
+                });
+                isHaveSeachOper = true;
+            }
+
+            /**$.each(menus, function (index, menus) {
+                btns.push({
+                    label: menus.Name,
+                    type: menus.MenuModel,
+                    no: menus.No,
+                    source: "Menu"
+                })
+            })**/
+            if (colls && colls.length > 0) {
+                $.each(colls, function (index, coll) {
+                    if (isHaveSeachOper == false && coll.MethodModel != "FlowNewEntity")
+                        isHaveSeachOper = true;
+                    btns.push({
+                        label: coll.Name,
+                        type: coll.MethodModel,
+                        no: coll.No,
+                        source: "Collection"
+
+                    })
+                });
+            }
+
+
+            searchData["btns"] = btns;
+
+            return searchData;
+        }
+
+    </script>
+    <script>
+
+
+
+        mui.init({
+
+            beforeback: function () {//监听物理返回按键的方法
+                var url = "../../FastMobilePortal/Apps.htm?SystemNo=" + GetQueryString("SystemNo");
+                window.location.href = filterXSS(url);
+                return false;
+            }
+        });
+        $("#searchbtn").click(function () {
+            if ($(".searchbox").css("display") == "none") {
+                $('.searchbox').show();
+            } else {
+                $('.searchbox').hide();
+            }
+
+        })
+        $(".searchbox").click(
+            function () {
+                $("#test").hide();
+            }
+        )
+        $('.searchbox').bind('click', function () {
+            $('.searchbox').hide();
+        });
+
+
+        $('.searchbox .layui-card').bind('click', function (e) {
+            stopPropagation(e);
+        });
+
+        function stopPropagation(e) {
+            if (e.stopPropagation)
+                e.stopPropagation();
+            else
+                e.cancelBubble = true;
+        }
+    </script>
+
+</body>
+</html>

@@ -164,10 +164,10 @@ namespace BP.WF.DTS
                 string compleateTime = row["SDTOfNode"] + "";
                 string starter = row["Starter"] + "";
                 Node node = new Node(fk_node);
-                if (node.IsStartNode)
+                if (node.ItIsStartNode)
                     continue;
                 PushMsgs pushMsgs = new PushMsgs();
-                int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeWarning);
+                int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FlowNo, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeWarning);
                 int maxHour = 0;
                 int minHour = 0;
                 if (count != 0)
@@ -240,10 +240,10 @@ namespace BP.WF.DTS
                 bool isLogin = false;
                 foreach (GenerWorkerList item in gwls)
                 {
-                    if (item.IsEnable == false)
+                    if (item.ItIsEnable == false)
                         continue;
 
-                    BP.Port.Emp emp = new Emp(item.FK_Emp);
+                    BP.Port.Emp emp = new Emp(item.EmpNo);
                     BP.Web.WebUser.SignInOfGener(emp);
                     isLogin = true;
                 }
@@ -257,11 +257,11 @@ namespace BP.WF.DTS
                 try
                 {
                     Node node = new Node(fk_node);
-                    if (node.IsStartNode)
+                    if (node.ItIsStartNode)
                         continue;
                     #region 启动逾期消息设置
                     PushMsgs pushMsgs = new PushMsgs();
-                    int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FK_Flow, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeOverDue);
+                    int count = pushMsgs.Retrieve(PushMsgAttr.FK_Flow, node.FlowNo, PushMsgAttr.FK_Node, node.NodeID, PushMsgAttr.FK_Event, EventListNode.NodeOverDue);
                     int maxDay = 0;
                     int minDay = 0;
                     if (count != 0)

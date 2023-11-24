@@ -221,7 +221,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是超大文本？
         /// </summary>
-        public int IsSupperText
+        public int ItIsSupperText
         {
             get
             {
@@ -247,7 +247,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用二维码？
         /// </summary>
-        public bool IsEnableQrCode
+        public bool ItIsEnableQrCode
         {
             get
             {
@@ -264,7 +264,7 @@ namespace BP.Sys
         /// <summary>
         /// 数值字段是否合计(默认true)
         /// </summary>
-        public bool IsSum
+        public bool ItIsSum
         {
             get
             {
@@ -307,7 +307,7 @@ namespace BP.Sys
         /// <summary>
         /// 在手机端中是否显示
         /// </summary>
-        public bool IsEnableInAPP
+        public bool ItIsEnableInAPP
         {
             get
             {
@@ -321,7 +321,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用高级JS设置
         /// </summary>
-        public bool IsEnableJS
+        public bool ItIsEnableJS
         {
             get
             {
@@ -357,7 +357,7 @@ namespace BP.Sys
                 {
                     SFTable sf = new SFTable(this.UIBindKey);
 
-                    if (sf.FK_SFDBSrc == "local")
+                    if (sf.SFDBSrcNo.Equals("local"))
                     {
                         GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
 
@@ -415,7 +415,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是导入过来的字段
         /// </summary>
-        public bool IsTableAttr
+        public bool ItIsTableAttr
         {
             get
             {
@@ -457,10 +457,10 @@ namespace BP.Sys
                 attr.UIRefKeyText = this.UIRefKeyText;
                 attr.UIVisible = this.UIVisible;
                 attr.MyFieldType = FieldType.Normal; //普通类型的字段.
-                if (this.IsPK)
+                if (this.ItIsPK)
                     attr.MyFieldType = FieldType.PK;
 
-                attr.IsSupperText = this.IsSupperText;
+                attr.ItIsSupperText = this.ItIsSupperText;
 
                 switch (this.LGType)
                 {
@@ -478,7 +478,7 @@ namespace BP.Sys
                         break;
                     default:
 
-                        if (this.IsPK)
+                        if (this.ItIsPK)
                             attr.MyFieldType = FieldType.PK;
 
                         attr.UIIsReadonly = !this.UIIsEnable;
@@ -489,11 +489,11 @@ namespace BP.Sys
                                 attr.UIIsReadonly = this.UIIsEnable;
                                 break;
                             case DataType.AppDate:
-                                if (this.Tag == "1")
+                                if (this.Tag.Equals("1"))
                                     attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             case DataType.AppDateTime:
-                                if (this.Tag == "1")
+                                if (this.Tag.Equals("1"))
                                     attr.DefaultVal = DataType.CurrentDate;
                                 break;
                             default:
@@ -508,7 +508,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否主键
         /// </summary>
-        public bool IsPK
+        public bool ItIsPK
         {
             get
             {
@@ -546,17 +546,15 @@ namespace BP.Sys
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
                 return this.GetValStrByKey(MapAttrAttr.FK_MapData);
             }
-        }
-        public void setFK_MapData(string val)
-        {
-
-            this.SetValByKey(MapAttrAttr.FK_MapData, val);
+            set {
+                this.SetValByKey(MapAttrAttr.FK_MapData, value);
+            }
         }
         /// <summary>
         /// 字段名
@@ -617,7 +615,7 @@ namespace BP.Sys
             this.SetValByKey(MapAttrAttr.Name, val);
         }
 
-        public bool IsNum
+        public bool ItIsNum
         {
             get
             {
@@ -693,27 +691,24 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStrByKey(MapAttrAttr.DefVal);
-                if (this.IsNum)
+                if (this.ItIsNum)
                 {
-                    if (s == "")
+                    if (s.Equals(""))
                         return "0";
                 }
 
                 switch (this.MyDataType)
                 {
                     case DataType.AppDate:
-                        if (this.Tag == "1" || s == "@RDT")
+                        if (this.Tag.Equals("1") || s.Equals("@RDT"))
                             return DataType.CurrentDate;
                         else
                             return "          ";
-                        break;
                     case DataType.AppDateTime:
-                        if (this.Tag == "1" || s == "@RDT")
+                        if (this.Tag.Equals("1") || s.Equals("@RDT"))
                             return DataType.CurrentDateTime;
                         else
                             return "               ";
-                        //return "    -  -    :  ";
-                        break;
                     default:
                         break;
                 }
@@ -728,11 +723,11 @@ namespace BP.Sys
                     case "@webuser.name":
                         return BP.Web.WebUser.Name;
                     case "@webuser.fk_dept":
-                        return BP.Web.WebUser.FK_Dept;
+                        return BP.Web.WebUser.DeptNo;
                     case "@webuser.fk_deptname":
-                        return BP.Web.WebUser.FK_DeptName;
+                        return BP.Web.WebUser.DeptName;
                     case "@webuser.fk_deptfullname":
-                        return BP.Web.WebUser.FK_DeptNameOfFull;
+                        return BP.Web.WebUser.DeptNameOfFull;
                     case "@fk_ny":
                         return DataType.CurrentYearMonth;
                     case "@fk_nd":
@@ -740,28 +735,22 @@ namespace BP.Sys
                     case "@fk_yf":
                         return DataType.CurrentMonth;
                     case "@rdt":
-                        if (this.MyDataType == DataType.AppDate)
-                            return DataType.CurrentDate;
-                        else
-                            return DataType.CurrentDateTime;
                     case "@rd":
                         if (this.MyDataType == DataType.AppDate)
                             return DataType.CurrentDate;
-                        else
-                            return DataType.CurrentDateTime;
+                        return DataType.CurrentDateTime;
                     case "@yyyy年MM月dd日":
                         return DataType.CurrentDateCNOfLong;
                     case "@yyyy年MM月dd日hh时mm分":
-                        return DateTime.Now.ToString("yyyy年MM月dd日HH时mm分");
+                        return DataType.CurrentDateByFormart("yyyy年MM月dd日HH时mm分");
                     case "@yy年MM月dd日":
                         return DataType.CurrentDateCNOfShort;
                     case "@yy年MM月dd日hh时mm分":
-                        return DateTime.Now.ToString("yy年MM月dd日HH时mm分");
+                        return DataType.CurrentDateByFormart("yy年MM月dd日HH时mm分");
                     default:
                         return s;
                         //throw new Exception("没有约定的变量默认值类型" + s);
                 }
-                return this.GetValStrByKey(MapAttrAttr.DefVal);
             }
             set
             {
@@ -915,7 +904,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以为空, 对数值类型的数据有效.
         /// </summary>
-        public bool IsNull
+        public bool ItIsNull
         {
             get
             {
@@ -933,7 +922,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(MapAttrAttr.GroupID);
-                if (str == "无" || str == "")
+                if (str.Equals("无") || str.Equals(""))
                     return 1;
                 return int.Parse(str);
             }
@@ -949,7 +938,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是大块文本？
         /// </summary>
-        public bool IsBigDoc
+        public bool ItIsBigDoc
         {
             get
             {
@@ -1095,7 +1084,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否数字签名
         /// </summary>
-        public bool IsSigan
+        public bool ItIsSigan
         {
             get
             {
@@ -1352,7 +1341,7 @@ namespace BP.Sys
         {
             this.SetValByKey(MapAttrAttr.FK_MapData, fk_mapdata);
             this.SetValByKey(MapAttrAttr.KeyOfEn, key);
-            this.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, this.KeyOfEn);
+            this.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.KeyOfEn, this.KeyOfEn);
         }
         /// <summary>
         /// EnMap
@@ -1409,7 +1398,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
 
                 map.AddTBString(MapAttrAttr.Tag, null, "标识", true, false, 0, 100, 20);
-                map.AddTBString(MapAttrAttr.Tag1, null, "标识1", true, false, 0, 100, 20);
+                map.AddTBString(MapAttrAttr.Tag1, null, "标识1", true, false, 0, 4000, 20);
                 map.AddTBString(MapAttrAttr.Tag2, null, "标识2", true, false, 0, 100, 20);
                 map.AddTBString(MapAttrAttr.Tag3, null, "标识3", true, false, 0, 100, 20);
 
@@ -1426,7 +1415,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.RowSpan, 1, "行数", true, false);
 
                 //显示的分组.
-                map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", false, true, 0, 20, 20);
+                map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", false, true);
 
                 map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
 
@@ -1463,7 +1452,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string SaveBigNoteHtmlText(string text)
         {
-            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FrmID + ".htm";
             //若文件夹不存在，则创建
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) == false)
@@ -1475,7 +1464,7 @@ namespace BP.Sys
         //删除大块文本信息
         public string DeleteBigNoteHtmlText()
         {
-            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FrmID + ".htm";
 
             if (System.IO.File.Exists(file) == true)
                 System.IO.File.Delete(file);
@@ -1492,7 +1481,7 @@ namespace BP.Sys
         public string ReadBigNoteHtmlText()
         {
             string doc = "";
-            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FK_MapData + ".htm";
+            string file = BP.Difference.SystemConfig.PathOfDataUser + "CCForm/BigNoteHtmlText/" + this.FrmID + ".htm";
             string folder = System.IO.Path.GetDirectoryName(file);
             if (System.IO.Directory.Exists(folder) != false)
             {
@@ -1507,18 +1496,18 @@ namespace BP.Sys
         }
         public void DoDownTabIdx()
         {
-            this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);
+            this.DoOrderDown(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
         }
         public void DoUpTabIdx()
         {
-            this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.Idx);
+            this.DoOrderUp(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.Idx);
         }
         public string DoUp()
         {
             this.DoOrderUp(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_Title");
+            attr.setMyPK(this.FrmID + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 //  attr.Idx = -1;
@@ -1532,7 +1521,7 @@ namespace BP.Sys
             this.DoOrderInsertTo(MapAttrAttr.Idx, entityPK, MapAttrAttr.GroupID);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_Title");
+            attr.setMyPK(this.FrmID + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1557,7 +1546,7 @@ namespace BP.Sys
             this.DoOrderDown(MapAttrAttr.GroupID, this.GroupID.ToString(), MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_Title");
+            attr.setMyPK(this.FrmID + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1571,13 +1560,13 @@ namespace BP.Sys
         {
             //规整groupID.
             GroupField gf = new GroupField();
-            gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
-            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+            gf.Retrieve(GroupFieldAttr.FrmID, this.FrmID);
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FrmID + "'");
 
-            this.DoOrderUp(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderUp(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_Title");
+            attr.setMyPK(this.FrmID + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 //  attr.Idx = -1;
@@ -1592,13 +1581,13 @@ namespace BP.Sys
         {
             //规整groupID.
             GroupField gf = new GroupField();
-            gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData);
-            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FK_MapData + "'");
+            gf.Retrieve(GroupFieldAttr.FrmID, this.FrmID);
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.FrmID + "'");
 
-            this.DoOrderDown(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
+            this.DoOrderDown(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.UIVisible, "1", MapAttrAttr.Idx);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_Title");
+            attr.setMyPK(this.FrmID + "_Title");
             if (attr.RetrieveFromDBSources() == 1)
             {
                 attr.Update("Idx", -1);
@@ -1615,7 +1604,7 @@ namespace BP.Sys
         }
         private string DoJumpUp(MapAttr attrTo)
         {
-            string sql = "UPDATE Sys_MapAttr SET Idx=Idx+1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FK_MapData + "' AND GroupID=" + this.GroupID;
+            string sql = "UPDATE Sys_MapAttr SET Idx=Idx+1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FrmID + "' AND GroupID=" + this.GroupID;
             DBAccess.RunSQL(sql);
             this.Idx = attrTo.Idx - 1;
             this.SetValByKey(MapAttrAttr.GroupID, attrTo.GroupID);
@@ -1625,7 +1614,7 @@ namespace BP.Sys
         }
         private string DoJumpDown(MapAttr attrTo)
         {
-            string sql = "UPDATE Sys_MapAttr SET Idx=Idx-1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FK_MapData + "' AND GroupID=" + this.GroupID;
+            string sql = "UPDATE Sys_MapAttr SET Idx=Idx-1 WHERE Idx <=" + attrTo.Idx + " AND FK_MapData='" + this.FrmID + "' AND GroupID=" + this.GroupID;
             DBAccess.RunSQL(sql);
             this.Idx = attrTo.Idx + 1;
             this.SetValByKey(MapAttrAttr.GroupID, attrTo.GroupID);
@@ -1642,18 +1631,18 @@ namespace BP.Sys
 
             //added by liuxc,2016-12-2
             //判断当前属性是否有分组，没有分组，则自动创建一个分组，并关联
-            if (this.GroupID.ToString() == "1")
+            if (this.GroupID.ToString().Equals("1"))
             {
                 //查找分组，查找到的第一个分组，关联当前属性
                 GroupField group = new GroupField();
-                if (group.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData) > 0)
+                if (group.Retrieve(GroupFieldAttr.FrmID, this.FrmID) > 0)
                 {
                     this.SetValByKey(MapAttrAttr.GroupID, group.OID);
 
                 }
                 else
                 {
-                    group.FrmID = this.FK_MapData;
+                    group.FrmID = this.FrmID;
                     group.Lab = "基础信息";
                     group.Idx = 1;
                     group.Insert();
@@ -1664,7 +1653,7 @@ namespace BP.Sys
 
             if (this.LGType == FieldTypeS.Enum && this.UIContralType == UIContralType.RadioBtn)
             {
-                string sql = "UPDATE Sys_FrmRB SET UIIsEnable=" + this.GetValIntByKey(MapAttrAttr.UIIsEnable) + " WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "'";
+                string sql = "UPDATE Sys_FrmRB SET UIIsEnable=" + this.GetValIntByKey(MapAttrAttr.UIIsEnable) + " WHERE FK_MapData='" + this.FrmID + "' AND KeyOfEn='" + this.KeyOfEn + "'";
                 DBAccess.RunSQL(sql);
             }
 
@@ -1690,7 +1679,7 @@ namespace BP.Sys
                 {
                     string sql = "";
                     MapData md = new MapData();
-                    md.No = this.FK_MapData;
+                    md.No = this.FrmID;
                     if (md.RetrieveFromDBSources() == 1)
                     {
                         if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
@@ -1701,7 +1690,10 @@ namespace BP.Sys
                                     sql = "ALTER TABLE " + md.PTable + " ALTER column " + this.Field + " NVARCHAR(" + this.MaxLen + ")";
                                     break;
                                 case DBType.MySQL:
-                                    sql = "ALTER table " + md.PTable + " modify " + this.Field + " NVARCHAR(" + this.MaxLen + ")";
+                                    if (this.MaxLen >= 4000)
+                                        sql = "ALTER table " + md.PTable + " modify " + this.Field + " text";
+                                    else
+                                        sql = "ALTER table " + md.PTable + " modify " + this.Field + " NVARCHAR(" + this.MaxLen + ")";
                                     break;
                                 case DBType.Oracle:
                                 case DBType.DM:
@@ -1709,10 +1701,11 @@ namespace BP.Sys
                                     break;
                                 case DBType.KingBaseR3:
                                 case DBType.KingBaseR6:
-                                    sql = "ALTER table " + md.PTable + " ADD  COLUMN " + this.Field + " Type NVARCHAR2(" + this.MaxLen + ")";
+                                    sql = "ALTER table " + md.PTable + " ALTER COLUMN " + this.Field + " Type NVARCHAR2(" + this.MaxLen + ")";
                                     break;
                                 case DBType.PostgreSQL:
                                 case DBType.UX:
+                                case DBType.HGDB:
                                     sql = "ALTER table " + md.PTable + " alter " + this.Field + " type character varying(" + this.MaxLen + ")";
                                     break;
                                 default:
@@ -1739,10 +1732,10 @@ namespace BP.Sys
                     break;
             }
 
-            if (string.IsNullOrWhiteSpace(this.KeyOfEn))
-                this.setMyPK(this.FK_MapData);
+            if (DataType.IsNullOrEmpty(this.KeyOfEn))
+                this.setMyPK(this.FrmID);
             else
-                this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
+                this.setMyPK(this.FrmID + "_" + this.KeyOfEn);
 
             return base.beforeUpdate();
         }
@@ -1755,7 +1748,7 @@ namespace BP.Sys
             if (DataType.IsNullOrEmpty(this.Name))
                 throw new Exception("@请输入字段名称。");
 
-            if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")
+            if (this.KeyOfEn == null || this.KeyOfEn.Trim().Equals(""))
             {
                 try
                 {
@@ -1764,7 +1757,7 @@ namespace BP.Sys
                     if (this.KeyOfEn.Length > 20)
                         this.SetValByKey(MapAttrAttr.KeyOfEn, CCFormAPI.ParseStringToPinyinField(this.Name, false, true, 20));
 
-                    if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")
+                    if (this.KeyOfEn == null || this.KeyOfEn.Trim().Equals(""))
                         throw new Exception("@请输入字段描述或者字段名称。");
                 }
                 catch (Exception ex)
@@ -1784,20 +1777,20 @@ namespace BP.Sys
                 throw new Exception("@错误:[" + this.KeyOfEn + "]是字段关键字，您不能用它做字段。");
 
             if (this.IsExit(MapAttrAttr.KeyOfEn, this.KeyOfEn,
-                MapAttrAttr.FK_MapData, this.FK_MapData))
+                MapAttrAttr.FK_MapData, this.FrmID))
             {
                 return false;
-                throw new Exception("@在[" + this.MyPK + "]已经存在字段名称[" + this.Name + "]字段[" + this.KeyOfEn + "]");
+               // throw new Exception("@在[" + this.MyPK + "]已经存在字段名称[" + this.Name + "]字段[" + this.KeyOfEn + "]");
             }
 
             if (this.Idx == 0)
-                this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", 0) + 1;
+                this.Idx = DBAccess.RunSQLReturnValInt("SELECT MAX(Idx) FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "'", 0) + 1;
 
             //
             if (this.GroupID == 0)
-                this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'", 0);
+                this.GroupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "'", 0);
 
-            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
+            this.setMyPK(this.FrmID + "_" + this.KeyOfEn);
 
             return base.beforeInsert();
         }
@@ -1826,7 +1819,7 @@ namespace BP.Sys
         protected override void afterUpdate()
         {
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterUpdate();
         }
@@ -1836,13 +1829,13 @@ namespace BP.Sys
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            string sqls = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='" + this.FK_MapData + "')";
+            string sqls = "DELETE FROM Sys_MapExt WHERE (AttrOfOper='" + this.KeyOfEn + "' OR AttrsOfActive='" + this.KeyOfEn + "' ) AND (FK_MapData='" + this.FrmID + "')";
             //删除权限管理字段.
-            sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+            //sqls += "@DELETE FROM Sys_FrmSln WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FrmID + "'";
 
             //如果外部数据，或者ws数据，就删除其影子字段.
             if (this.UIContralType == UIContralType.DDL && this.LGType == FieldTypeS.Normal)
-                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FK_MapData + "'";
+                sqls += "@DELETE FROM Sys_MapAttr WHERE KeyOfEn='" + this.KeyOfEn + "T' AND FK_MapData='" + this.FrmID + "'";
 
             DBAccess.RunSQLs(sqls);
             return base.beforeDelete();

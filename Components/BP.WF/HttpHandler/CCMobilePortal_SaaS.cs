@@ -52,12 +52,12 @@ namespace BP.WF.HttpHandler
         {
             string name = this.GetRequestVal("Name");
 
-            Dept dept = new Dept(WebUser.FK_Dept);
+            Dept dept = new Dept(WebUser.DeptNo);
             dept.Name = name;
             dept.Update();
 
             //更改登录人的名字.
-            BP.Web.WebUser.FK_DeptName = name;
+            BP.Web.WebUser.DeptName = name;
             return "修改成功.";
         }
 
@@ -156,6 +156,7 @@ namespace BP.WF.HttpHandler
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = " SELECT DISTINCT FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + top;
                     break;
                 case DBType.Oracle:
@@ -214,6 +215,7 @@ namespace BP.WF.HttpHandler
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = "SELECT DISTINCT *  From(SELECT   FK_Flow,FlowName,F.Icon FROM WF_GenerWorkFlow G ,WF_Flow F WHERE  F.No=G.FK_Flow AND Starter='" + WebUser.No + "'  Order By SendDT  limit  " + top*2+")A  LIMIT "+top;
                     break;
                 case DBType.Oracle:
@@ -235,7 +237,7 @@ namespace BP.WF.HttpHandler
             string no = this.GetRequestVal("No");
             string name = this.GetRequestVal("Name");
             string note = this.GetRequestVal("Note");
-            var jine = this.GetRequestValFloat("JinE");
+            float jine = this.GetRequestValFloat("JinE");
 
 
             return "学费缴纳成功[" + no + "][" + name + "][" + note + "][" + jine + "]";
@@ -358,7 +360,9 @@ namespace BP.WF.HttpHandler
             string url1 = htmlPage;
             //获取 AccessToken CorpID 
             string url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx5c371647cecd1db2&secret=d9db5f92622436dde57bf254b1664ac3";
-            string res = new HttpWebResponseUtility().HttpResponseGet(url);
+           string res = DataType.ReadURLContext(url); // new HttpWebResponseUtility().HttpResponseGet(url);
+           // string res =  new HttpWebResponseUtility().HttpResponseGet(url);
+
             JsonData jd = JsonMapper.ToObject(res);
             if (res.Contains("errcode") == true)
             {
@@ -371,7 +375,7 @@ namespace BP.WF.HttpHandler
 
             //获取jsapi_ticket
             url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + access_token + "&type=jsapi";
-            res = new HttpWebResponseUtility().HttpResponseGet(url);
+            res = DataType.ReadURLContext(url);  
             jd = JsonMapper.ToObject(res);
             if (res.Contains("errcode") == true)
             {

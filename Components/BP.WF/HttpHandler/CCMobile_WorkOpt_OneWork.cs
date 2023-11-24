@@ -29,7 +29,7 @@ namespace BP.WF.HttpHandler
         {
             //获取撤销到的节点
             int unSendToNode = this.GetRequestValInt("FK_Node");
-            return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID, unSendToNode, this.FID);
+            return BP.WF.Dev2Interface.Flow_DoUnSend(this.FlowNo, this.WorkID, unSendToNode, this.FID);
             //WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork();
             //return en.OP_UnSend();
         }

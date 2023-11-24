@@ -1,0 +1,122 @@
+﻿body
+{
+    font-size: 0.9em;
+    font-family: "Arial" , "Microsoft YaHei" , "黑体" , "宋体" ,sans-serif;
+    background-color: White;
+}
+img
+{
+    border: 0;
+}
+a
+{
+    border:0;
+    text-decoration: none;
+}
+/* timeline */
+#timeline
+{
+    position: relative;
+    margin: 0px auto 0 auto;
+    overflow: auto;
+}
+.title
+{
+    height: 12px;
+    line-height: 12px;
+    text-indent: 10px;
+}
+
+#circle
+{
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    border: 6px solid rgba(0,0,0,0.15);
+    border-radius: 45px;
+    text-indent: 0;
+    text-align: center;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+    transition: all 0.3s linear;
+    background-color: #6bc30d;
+}
+#track-content
+{
+    background: url(../image/vertical.png) repeat-y 10px 0px;
+}
+.list
+{
+    overflow: hidden;
+    position: relative;
+    padding-left: 0px;
+}
+.list li
+{
+    vertical-align: bottom;
+    overflow: hidden;
+    position: relative;
+}
+
+.point
+{
+    margin-top:25px;
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    overflow: hidden;
+}
+.point img
+{
+    width: 26px;
+    height: 26px;
+}
+.point b
+{
+    height: 10px;
+    width: 10px;
+    background: #fff;
+    display: block;
+    margin-left: 5px;
+    border-radius: 18px;
+    border: 2px solid #6bc30d;
+    -webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.actionContent
+{
+    margin-left: 30px;
+    border-bottom:1px solid #6bc30d;
+}
+.actionTitle
+{
+    color:#096BC1;
+    font-size: 1.0em;
+    font-family: "Arial" , "Microsoft YaHei" , "黑体" , "宋体" ,sans-serif;
+}
+.user-head-icon-track
+{
+    width: 45px;
+    height: 45px;
+    background-color: #fff;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 45px 45px;
+    border-radius: 30px;
+    overflow:hidden;
+}
+.flowOver_div
+{
+    color:Red;
+    margin-top:15px;
+    margin-left:50px;
+    height:40px;
+}

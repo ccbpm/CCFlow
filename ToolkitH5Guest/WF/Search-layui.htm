@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo:待办</title>
+
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <link href="../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="Style/skin/layui/css/layui.css" rel="stylesheet" />
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script src="../WF/Dev2Interface.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        /*  $(function () {
+              SearchIt();
+          });*/
+
+        function SearchIt(pageIdx) {
+
+            if (pageIdx == undefined || pageIdx == null)
+                pageIdx = 1;
+
+            var url = ccbpmHostDevelopAPI + "?DoType=Search_Init&Token=" + GetToken();
+
+            var key = $("#TB_Key").val();
+            url += "&Key=" + key;
+
+            url += "&DTFrom=" + $("#TB_DTFrom").val() + "&DTTo" + $("#TB_DTTo").val();
+            url += "&Scop=" + $("#DDL_Scop").val();
+            url += "&PageIdx=" + pageIdx;
+
+            //var strs = RunUrlReturnString(url);
+            // alert(strs);
+
+            var json = RunUrlReturnJSON(url);
+
+            var ens = json["gwls"]; //集合数据.
+            console.log(ens)
+            return ens;
+            /* var countDT = json["count"];
+             var row = countDT[0];
+             var count = row.CC;//总体数量.
+
+             $("#docs").html("条数：" + count + " 数据集合:" + ens)*/
+
+            //根据 集合数据 ens 与总体数量 count 显示表格数据，与分页。
+
+        }
+    </script>
+</head>
+<body>
+    <div style="padding:10px">
+        <div id="demoTable" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input type="text" id="TB_Key" value="" class="layui-input" placeholder="关键字..." />
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select id="DDL_Scop" name="DDL_Scop">
+                            <option value="0" selected="selected">我参与的</option>
+                            <option value="1"> 我发起的</option>
+                            <option value="2">  我部门发起的</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="TB_DTFrom" class="layui-input" placeholder="开始日期" />
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="TB_DTTo" class="layui-input" placeholder="结束日期" />
+                </div>
+                <div class="layui-inline"> <button class="layui-btn" data-type="reload" id="search">搜索</button></div>
+            </div>
+        </div>
+        <table class="layui-hide" id="lists" lay-filter="lists"></table>
+    </div>
+    <!--table>
+    <tr>
+    <th>#</th>
+    <th>标题</th>
+    <th>发起人</th>
+    <th>发起日期</th>
+    <th>流程名称</th>
+    <th>停留节点</th>
+    <th>当前处理人</th>
+    <th>状态</th>
+    </tr>
+    </table>
+
+    <div id="docs"></div>
+    分页:-->
+    <script type="text/html" id="action">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="addTab">{{d.Title}}</a>
+    </script>
+    <script type="text/html" id="states">
+        {{# if(d.WFState=='0'){ }}        草稿      {{# } }}
+        {{# if(d.WFState=='1'){ }}        运行      {{# } }}
+        {{# if(d.WFState=='2'){ }}        完成      {{# } }}
+        {{# if(d.WFState=='3'){ }}        完成      {{# } }}
+        {{# if(d.WFState=='3'){ }}        完成      {{# } }}
+    </script>
+    <script src="Style/skin/layui/layui.js"></script>
+    <script>
+        layui.use(['table', 'laydate'], function () {
+            var table = layui.table, laydate = layui.laydate;
+
+            var tableIn = table.render({
+                elem: '#lists',
+                title: '用户数据表',
+                data: SearchIt(),
+                cols: [[
+                    { field: 'WorkID', title: '#', width: 80, fixed: 'left', unresize: true, sort: true },
+                    { field: 'Title', title: '标题', toolbar: '#action' },
+                    { field: 'StarterName', title: '发起人', width: 80, edit: 'text', sort: true },
+                    { field: 'RDT', title: '发起日期', width: 100 },
+                    { field: 'NodeName', title: '流程名称', width: 120 },
+                    { field: 'experience', title: '停留节点', width: 80, sort: true },
+                    { field: 'ip', title: '当前处理人', width: 120 },
+                    { fixed: 'right', title: '状态', toolbar: '#states', width: 150 }
+                ]],
+                page: true
+            });
+            laydate.render({
+                elem: '#TB_DTFrom'
+            });
+            laydate.render({
+                elem: '#TB_DTTo'
+            });
+            table.on('tool(lists)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'addTab') {
+
+
+                }
+            });
+            $('#search').on('click', function () {
+                var searchdata = SearchIt();
+                tableIn.reload({ data: searchdata });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@ namespace BP.Sys
         /// <summary>
         /// 主表
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FK_MapData";
         /// <summary>
         /// X
         /// </summary>
@@ -79,7 +79,8 @@ namespace BP.Sys
             {
                 return this.GetValStringByKey(FrmImgAthAttr.CtrlID);
             }
-            set {
+            set
+            {
                 this.SetValByKey(FrmImgAthAttr.CtrlID, value);
             }
         }
@@ -122,21 +123,22 @@ namespace BP.Sys
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStrByKey(FrmImgAthAttr.FK_MapData);
+                return this.GetValStrByKey(FrmImgAthAttr.FrmID);
+            }
+            set
+            {
+                this.SetValByKey(FrmImgAthAttr.FrmID, value);
             }
         }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(FrmImgAthAttr.FK_MapData, val);
-        }
+
         /// <summary>
         /// 是否可编辑
         /// </summary>
-        public bool IsEdit
+        public bool ItIsEdit
         {
             get
             {
@@ -150,7 +152,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否必填，2016-11-1
         /// </summary>
-        public bool IsRequired
+        public bool ItIsRequired
         {
             get
             {
@@ -189,14 +191,13 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmImgAth", "图片附件");
-                map.IndexField = FrmImgAttr.FK_MapData;
+                map.IndexField = FrmImgAttr.FrmID;
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
+                map.AddTBString(FrmImgAthAttr.FrmID, null, "表单ID", true, false, 1, 100, 20);
                 map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
-
 
                 map.AddTBInt(FrmImgAthAttr.IsEdit, 1, "是否可编辑", true, true);
                 map.AddTBInt(FrmImgAthAttr.IsRequired, 0, "是否必填项", true, true);
@@ -210,8 +211,7 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_MapData + "_" + this.CtrlID);
-
+            this.MyPK = this.FrmID + "_" + this.CtrlID;
             MapAttr attr = new MapAttr();
             attr.setMyPK(this.MyPK);
             if (attr.RetrieveFromDBSources() == 1)

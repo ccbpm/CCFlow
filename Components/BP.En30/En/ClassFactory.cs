@@ -52,8 +52,8 @@ namespace BP.En
                 SystemConfig.CS_AppSettings.Add(row[key].ToString().Trim(), row[val].ToString().Trim());
             }
             ds.Dispose();
-            SystemConfig.IsBSsystem_Test = false;
-            SystemConfig.IsBSsystem = false;
+            SystemConfig.isBSsystem_Test = false;
+            SystemConfig.isBSsystem = false;
             return true;
         }
         /// <summary>
@@ -71,7 +71,7 @@ namespace BP.En
             {
             }
 
-            SystemConfig.IsBSsystem = false;
+            SystemConfig.isBSsystem = false;
 
             #region 加载 Web.Config 文件配置
             if (!File.Exists(cfgFile))
@@ -337,7 +337,7 @@ namespace BP.En
         /// <summary>
         /// 把class 放在内存中去
         /// </summary>
-        public static void PutClassIntoCash()
+        public static void PutClassIntoCache()
         {
             Entity en = ClassFactory.GetEn("BP.Sys.FAQ");
             Entities ens = ClassFactory.GetEns("BP.Sys.FAQs");
@@ -614,8 +614,10 @@ namespace BP.En
                     return new TSEntitiesWorkID(className);
                 if (map.Attrs.Contains("NodeID"))
                     return new TSEntitiesNodeID(className);
+                if (map.Attrs.Contains("OID"))
+                    return new TSEntitiesOID(className);
 
-                throw new Exception("err@没有判断的类型.");
+                throw new Exception("err@ GetEns 没有判断的类型.");
             }
 
             if (Htable_Ens == null || Htable_Ens.Count == 0)
@@ -647,7 +649,7 @@ namespace BP.En
             }
             Entities ens = Htable_Ens[className] as Entities;
 
-#warning 会清除 cash 中的数据。
+#warning 会清除 Cache 中的数据。
             return ens;
         }
         #endregion

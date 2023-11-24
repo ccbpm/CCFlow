@@ -71,7 +71,7 @@ namespace BP.Sys
                 rm.Title = "查看数据";
                 rm.ClassMethodName = this.ToString() + ".DoEdit";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;

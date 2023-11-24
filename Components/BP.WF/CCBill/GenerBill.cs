@@ -69,6 +69,10 @@ namespace BP.CCBill
         /// </summary>
         public const string Starter = "Starter";
         /// <summary>
+        /// 发起人名称
+        /// </summary>
+        public const string StarterName = "StarterName";
+        /// <summary>
         /// 产生时间
         /// </summary>
         public const string RDT = "RDT";
@@ -100,10 +104,7 @@ namespace BP.CCBill
         /// 单据ID
         /// </summary>
         public const string FID = "FID";
-        /// <summary>
-        /// 发起人名称
-        /// </summary>
-        public const string StarterName = "StarterName";
+      
         /// <summary>
         /// 单据类别
         /// </summary>
@@ -331,7 +332,7 @@ namespace BP.CCBill
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_FrmTree
+        public string FrmTreeNo
         {
             get
             {
@@ -345,7 +346,7 @@ namespace BP.CCBill
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -607,7 +608,7 @@ namespace BP.CCBill
             {
                 //if (value == BillState.)
                 //    SetValByKey(GenerBillAttr.BillSta, (int)BillSta.Complete);
-                //else if (value == WF.BillState.Delete)
+                //else if (value == BP.WF.BillState.Delete)
                 //    SetValByKey(GenerBillAttr.BillSta, (int)BillSta.Etc);
                 //else
                 //    SetValByKey(GenerBillAttr.BillSta, (int)BillSta.Runing);

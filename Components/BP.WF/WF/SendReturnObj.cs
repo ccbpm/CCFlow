@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using BP.DA;
 
 namespace BP.WF
 {
@@ -132,12 +133,13 @@ namespace BP.WF
         /// 消息收听信息
         /// </summary>
         public const string ListenInfo = "ListenInfo";
+
+
+        #region 系统变量
         /// <summary>
         /// 流程是否结束？
         /// </summary>
         public const string IsStopFlow = "IsStopFlow";
-
-        #region 系统变量
         /// <summary>
         /// 工作ID
         /// </summary>
@@ -269,7 +271,7 @@ namespace BP.WF
                         return "分配任务";
                     default:
                         return "信息:" + MsgFlag;
-                    //  throw new Exception("@没有判断的标记...");
+                        //  throw new Exception("@没有判断的标记...");
                 }
             }
         }
@@ -295,7 +297,7 @@ namespace BP.WF
     /// <summary>
     /// 工作发送返回对象集合.
     /// </summary>
-    public class SendReturnObjs:System.Collections.CollectionBase
+    public class SendReturnObjs : System.Collections.CollectionBase
     {
         #region 获取系统变量.
         public Int64 VarWorkID
@@ -310,9 +312,9 @@ namespace BP.WF
                 return 0;
             }
         }
-        public bool IsStopFlow
+        public bool ItIsStopFlow
         {
-             get
+            get
             {
                 foreach (SendReturnObj item in this)
                 {
@@ -339,7 +341,7 @@ namespace BP.WF
                 foreach (SendReturnObj item in this)
                 {
                     if (item.MsgFlag == SendReturnMsgFlag.VarToNodeID)
-                        return int.Parse( item.MsgOfText);
+                        return int.Parse(item.MsgOfText);
                 }
                 return 0;
             }
@@ -384,7 +386,7 @@ namespace BP.WF
                 foreach (SendReturnObj item in this)
                 {
                     if (item.MsgFlag == SendReturnMsgFlag.VarCurrNodeName)
-                        return  item.MsgOfText;
+                        return item.MsgOfText;
                 }
                 return null;
             }
@@ -396,7 +398,7 @@ namespace BP.WF
                 foreach (SendReturnObj item in this)
                 {
                     if (item.MsgFlag == SendReturnMsgFlag.VarCurrNodeID)
-                        return int.Parse( item.MsgOfText);
+                        return int.Parse(item.MsgOfText);
                 }
                 return 0;
             }
@@ -446,7 +448,7 @@ namespace BP.WF
                 return null;
             }
         }
-        
+
         /// <summary>
         /// 分流向子线程发送时产生的子线程的WorkIDs, 多个有逗号分开.
         /// </summary>
@@ -529,7 +531,7 @@ namespace BP.WF
             }
 
             //增加上 text信息。
-            msg += "$MsgOfText^"+(int)SendReturnMsgType.Info +"^" + this.ToMsgOfText();
+            msg += "$MsgOfText^" + (int)SendReturnMsgType.Info + "^" + this.ToMsgOfText();
 
             msg.Replace("@@", "@");
             return msg;
@@ -543,7 +545,7 @@ namespace BP.WF
             string[] strs = text.Split('$');
             foreach (string str in strs)
             {
-                string[] sp=str.Split('^');
+                string[] sp = str.Split('^');
                 this.AddMsg(sp[0], sp[2], null, (SendReturnMsgType)int.Parse(sp[1]));
             }
         }
@@ -566,20 +568,20 @@ namespace BP.WF
                 if (item.MsgFlag == SendReturnMsgFlag.IsStopFlow)
                 {
                     msg += "@" + item.MsgOfHtml;
-                    continue; 
+                    continue;
                 }
 
 
-                if (item.MsgOfText != null   )
+                if (item.MsgOfText != null)
                 {
                     if (item.MsgOfText.Contains("<"))
                     {
 #warning 不应该出现.
-                      //  Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
+                        //  Log.DefaultLogWriteLineWarning("@文本信息里面有html标记:" + item.MsgOfText);
                         continue;
                     }
                     msg += "@" + item.MsgOfText;
-                    continue; 
+                    continue;
                 }
 
             }
@@ -591,6 +593,36 @@ namespace BP.WF
             Hashtable ht = new Hashtable();
             foreach (SendReturnObj item in this)
             {
+                string nodeID = null;
+                if (item.MsgFlag.Equals(SendReturnMsgFlag.VarCurrNodeID))
+                    nodeID = item.MsgOfText;
+                if (item.MsgFlag.Equals(SendReturnMsgFlag.VarToNodeID))
+                    nodeID = item.MsgOfText;
+
+                if (nodeID != null)
+                {
+                    ht.Add(item.MsgFlag, item.MsgOfText);
+                    nodeID = DBAccess.RunSQLReturnStringIsNull("SELECT Mark FROM WF_Node WHERE NodeID=" + nodeID, nodeID);
+                    ht.Add(item.MsgFlag + "NodeMark", nodeID);
+                    continue;
+                }
+
+                if (item.MsgFlag.Equals(SendReturnMsgFlag.VarToNodeIDs))
+                {
+                    ht.Add(item.MsgFlag, item.MsgOfText);
+                    string ids = "";
+                    string[] strs = item.MsgOfText.Split(',');
+                    foreach (string str in strs)
+                    {
+                        ids += DBAccess.RunSQLReturnStringIsNull("SELECT Mark FROM WF_Node WHERE NodeID=" + nodeID, nodeID) + ",";
+                    }
+                    ht.Add(item.MsgFlag + "NodeMark", ids);
+                    continue;
+                }
+
+                if (BP.DA.DataType.IsNullOrEmpty(item.MsgOfText))
+                    continue;
+
                 ht.Add(item.MsgFlag, item.MsgOfText);
             }
             return BP.Tools.Json.ToJson(ht);

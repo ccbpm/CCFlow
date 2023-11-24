@@ -1,0 +1,691 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>实体数据编辑器</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+
+    <!-- 引入MUI -->
+    <script src="../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../js/jquery.form.js" type="text/javascript"></script>
+    <link href="../js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="../js/mui/css/feedback-page.css" rel="stylesheet" type="text/css" />
+    <link href="../js/mui/css/mui.indexedlist.css" rel="stylesheet" type="text/css" />
+    <script src="../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../js/mui/js/mui.view.js" type="text/javascript"></script>
+    <script src="../js/mui/js/mui.picker.min.js" type="text/javascript"></script>
+    <script src="../js/mui/js/mui.dtpicker.js"></script>
+
+    <link href="../js/mui/css/mui.picker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../js/mui/css/mui.dtpicker.css" rel="stylesheet" />
+
+    <!-- 引入通用基础JS -->
+    <script src="../../DataUser/JSLibData/CommonShowConfig.js"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../CCForm/FrmGener.js?version=1.0" type="text/javascript"></script>
+    <script src="../CCForm/FrmEnd.js" type="text/javascript"></script>
+    <script src="../Scripts/commonYangYH.js" type="text/javascript"></script>
+    <script src="../CCForm/Ath.js" type="text/javascript"></script>
+    <script src="../CCForm/FrmDtl.js" type="text/javascript"></script>
+    <script src="../MapAttr.js"></script>
+    <script src="../CCForm/DtlFrm.js"></script>
+
+    <script src="../../DataUser/JSLibData/CCFormRef.js" type="text/javascript"></script>
+    <script src="../../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
+
+    <script src="../js/mui/js/mui.indexedlist.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var viewApi = null;
+        $(function () {
+            mui.init();
+            //初始化单页view
+            viewApi = mui('#app').view({
+                defaultPage: '#main'
+            });
+            var view = viewApi.view;
+            //初始化单页的区域滚动
+            mui('.mui-scroll-wrapper').scroll({
+                bounce: false
+            });
+            //侧滑容器父节点
+            var offCanvasWrapper = mui('#offCanvasWrapper');
+            //主界面容器
+            var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
+            //菜单容器
+            var offCanvasSide = document.getElementById("offCanvasSide");
+
+            //移动效果是否为整体移动
+            var moveTogether = false;
+            //侧滑容器的class列表，增加.mui-slide-in即可实现菜单移动、主界面不动的效果；
+            var classList = offCanvasWrapper[0].classList;
+
+
+
+            //主界面和侧滑菜单界面均支持区域滚动；
+            mui('#offCanvasSideScroll').scroll();
+            mui('#offCanvasContentScroll').scroll();
+            //实现ios平台原生侧滑关闭页面；
+            if (mui.os.plus && mui.os.ios) {
+                mui.plusReady(function () { //5+ iOS暂时无法屏蔽popGesture时传递touch事件，故该demo直接屏蔽popGesture功能
+                    plus.webview.currentWebview().setStyle({
+                        'popGesture': 'none'
+                    });
+                });
+            }
+            (function ($) {
+
+
+                //处理view的后退与webview后退
+                var oldBack = $.back;
+                $.back = function () {
+                    if (viewApi.canBack()) { //如果view可以后退，则执行view的后退
+                        viewApi.back();
+                    } else { //执行webview后退
+                        oldBack();
+                    }
+                };
+                //监听页面切换事件方案1,通过view元素监听所有页面切换事件，目前提供pageBeforeShow|pageShow|pageBeforeBack|pageBack四种事件(before事件为动画开始前触发)
+                //第一个参数为事件名称，第二个参数为事件回调，其中e.detail.page为当前页面的html对象
+                view.addEventListener('pageBeforeShow', function (e) {
+                    //				console.log(e.detail.page.id + ' beforeShow');
+                });
+                view.addEventListener('pageShow', function (e) {
+                    //				console.log(e.detail.page.id + ' show');
+                });
+                view.addEventListener('pageBeforeBack', function (e) {
+                    //				console.log(e.detail.page.id + ' beforeBack');
+                });
+                view.addEventListener('pageBack', function (e) {
+                    //				console.log(e.detail.page.id + ' back');
+                });
+            })(mui);
+
+            getConfigByKey("IsHideMobileBack", true);
+
+        });
+
+
+    </script>
+    <style type="text/css">
+
+        input {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        select {
+            direction: rtl;
+            font-size: 14px !important;
+        }
+
+            select option {
+                direction: rtl;
+                font-size: 14px;
+            }
+
+        /**模态窗口居中*/
+        .modal {
+            display: table;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .modal-dialog {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        /**模态窗口居中*/
+
+        .mui-input-row a {
+            color: #2c2c38;
+        }
+
+        .errorInput {
+            border: 1px solid red !important;
+        }
+
+        .richText {
+            background-color: White;
+            font-color: black;
+            font-weight: bolder;
+        }
+
+        .mui-views,
+        .mui-view,
+        .mui-pages,
+        .mui-page,
+        .mui-page-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 40px;
+            width: 100%;
+            height: 100%;
+            background: #efeff4;
+        }
+
+        .mui-pages {
+            top: 46px;
+            height: auto;
+        }
+
+        .mui-scroll-wrapper {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mui-scroll-wrapper,
+        .mui-scroll {
+            background-color: #efeff4;
+        }
+
+        .mui-page.mui-transitioning {
+            -webkit-transition: -webkit-transform 300ms ease;
+            transition: transform 300ms ease;
+        }
+
+        .mui-page-left {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .mui-ios .mui-page-left {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .mui-navbar {
+            position: fixed;
+            right: 0;
+            left: 0;
+            z-index: 10;
+            height: 44px;
+            background-color: #f7f7f8;
+        }
+
+            .mui-navbar .mui-bar {
+                position: absolute;
+                /* background: transparent; */
+                text-align: center;
+            }
+
+        .mui-android .mui-navbar-inner.mui-navbar-left {
+            opacity: 0;
+        }
+
+        .mui-ios .mui-navbar-left .mui-left,
+        .mui-ios .mui-navbar-left .mui-center,
+        .mui-ios .mui-navbar-left .mui-right {
+            opacity: 0;
+        }
+
+        .mui-navbar .mui-btn-nav {
+            -webkit-transition: none;
+            transition: none;
+            -webkit-transition-duration: .0s;
+            transition-duration: .0s;
+        }
+
+        .mui-navbar .mui-bar .mui-title {
+            display: inline-block;
+            width: auto;
+        }
+
+        .mui-page-shadow {
+            position: absolute;
+            right: 100%;
+            top: 0;
+            width: 16px;
+            height: 100%;
+            z-index: -1;
+            content: '';
+        }
+
+        .mui-page-shadow {
+            background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+            background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+        }
+
+        .mui-navbar-inner.mui-transitioning,
+        .mui-navbar-inner .mui-transitioning {
+            -webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+            transition: opacity 300ms ease, transform 300ms ease;
+        }
+
+        .mui-page {
+            display: none;
+        }
+
+        .mui-pages .mui-page {
+            display: block;
+        }
+
+        .mui-page .mui-table-view:first-child {
+            margin-top: 15px;
+        }
+
+        .mui-page .mui-table-view:last-child {
+            margin-bottom: 30px;
+        }
+
+        .mui-table-view {
+            margin-top: 20px;
+        }
+
+            .mui-table-view span.mui-pull-right {
+                color: #999;
+            }
+
+        .mui-table-view-divider {
+            background-color: #efeff4;
+            font-size: 14px;
+        }
+
+            .mui-table-view-divider:before,
+            .mui-table-view-divider:after {
+                height: 0;
+            }
+
+        .head {
+            height: 40px;
+        }
+
+        #head {
+            line-height: 40px;
+        }
+
+        .head-img {
+            width: 40px;
+            height: 40px;
+        }
+
+        #head-img1 {
+            position: absolute;
+            bottom: 10px;
+            right: 40px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .update {
+            font-style: normal;
+            color: #999999;
+            margin-right: -25px;
+            font-size: 15px
+        }
+
+        .mui-fullscreen {
+            position: fixed;
+            z-index: 20;
+            background-color: #000;
+        }
+
+        .dtl_deleterow {
+            float: right;
+            color: Red;
+            margin-right: 10px;
+        }
+
+        .dtlchild_deleterow {
+            float: right;
+            color: Red;
+            margin-right: 10px;
+        }
+
+        .dtl_deleterow:hover {
+            color: Blue;
+        }
+
+        .dtl_addpanel {
+            text-align: center;
+        }
+
+            .dtl_addpanel a {
+                cursor: pointer;
+                font-size: 0.9em;
+                color: red;
+            }
+
+        .dtlchild_addpanel {
+            text-align: center;
+        }
+
+            .dtlchild_addpanel a {
+                cursor: pointer;
+                font-size: 0.9em;
+                color: red;
+            }
+
+        .dtl_addpanel_b {
+            font-size: larger;
+            color: red;
+        }
+
+        p {
+            color: #000;
+        }
+
+        h3, h4, h5 {
+            color: #000;
+        }
+
+        .mui-bar-tab .mui-tab-item {
+            color: #000;
+        }
+
+        .image-local {
+            width: 35px;
+            font-size: 16px;
+            line-height: 28px;
+            color: #fff;
+            /* background-color: #0073eb; */
+            border: none;
+            display: inline-block;
+            height: 28px;
+            box-sizing: border-box;
+            outline: none;
+            float: right;
+            padding-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!--页面主结构开始-->
+    <div id="app" class="mui-views">
+        <div class="mui-view">
+            <div class="mui-navbar">
+            </div>
+            <div class="mui-pages">
+            </div>
+        </div>
+    </div>
+    <!--页面主结构结束-->
+    <!--单页面开始    MyFlowGener主页面-->
+    <div id="main" class="mui-page">
+        <div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+            <!--侧滑菜单部分-->
+            <aside id="offCanvasSide" class="mui-off-canvas-left">
+                <div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+                    <div   class="mui-scroll">
+                        <ul id="list" class="mui-table-view mui-table-view-chevron"> 
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            <div class="mui-inner-wrap">
+                <!--页面标题栏开始-->
+                <div class="mui-navbar-inner mui-bar mui-bar-nav">
+                    <a href="#offCanvasSide" class="mui-icon mui-action-menu mui-icon-bars mui-pull-left"></a>
+                    <a class="mui-action-back mui-btn mui-btn-link mui-pull-right">关闭</a>
+                    <h1 class="mui-title" id="title"></h1>
+                </div>
+                <div id="offCanvasContentScroll" class="mui-page-content">
+                    <div class="mui-scroll-wrapper">
+                        <div class="mui-scroll">
+                            <form id="divCCForm" method="post" class="mui-input-group" style="margin-bottom:50px">
+                                <!--主表单-->
+                                <div id="CCForm" style="width: 100%;"></div>
+                            </form>
+                        </div>
+                        <nav id="bottomToolBar" class="mui-bar mui-bar-tab"></nav>
+                    </div>
+
+                </div>
+                <div id="Popover" class="mui-popover mui-bar-popover">
+                    <div class="mui-popover-arrow"></div>
+                    <ul class="mui-table-view" id="popoverBar" style="width:96px"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--单页面开始dtl  -->
+    <div id="frmDtl" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="frmDtlTitle" class="mui-center mui-title">从表</h1>
+            <a id='dtlDone' class="mui-btn-link mui-btn-nav mui-pull-right"></a>
+        </div>
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <form id="form_Dtl" action="">
+                        <div id="DtlContent" class="mui-input-group">
+                        </div>
+                        <div id="btn"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="HD_CurDtl_No" />
+    </div>
+
+    <!--单页面开始frmChildDtl  -->
+    <div id="frmChildDtl" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="frmChildDtlTitle" class="mui-center mui-title">从表</h1>
+            <a id='ChildDtlDone' class="mui-btn-link mui-btn-nav mui-pull-right"></a>
+        </div>
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <form id="form_ChildDtl" action="">
+                        <div id="ChildDtlContent" class="mui-input-group">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="HD_CurChildDtl_No" />
+        <input type="hidden" id="HD_CurDtl_OID" />
+    </div>
+    <!--单页面开始 pop BranchesAndLeft  -->
+    <div id="branchesAndLeaf" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="BLTitle" class="mui-center mui-title">页面加载中。。。</h1>
+            <a id='done' class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-right">完成</a>
+        </div>
+
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <div id='list' class="mui-indexed-list" style="height:100%">
+                        <!-- 搜索框 -->
+                        <div class="mui-indexed-list-search mui-input-row mui-search">
+                            <input id="TB_Key" type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="">
+                        </div>
+                        <!-- 搜索索引 -->
+                        <div style="text-align:right;padding:11px 15px">
+                            <a id="LevelIdx" href="#">返回上一级</a>
+                        </div>
+                        <div class="mui-table-view-divider mui-indexed-list-group"></div>
+                        <!-- 列表 -->
+                        <div class="mui-indexed-list-inner">
+                            <div id="alert" class="mui-indexed-list-empty-alert "><span style=" content:'\e466';"></span>未搜索到相关结果</div>
+                            <ul id="treeView" class="mui-table-view" style="margin-top:0px">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--单页面开始 pop Branches  -->
+    <div id="branches" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="BTitle" class="mui-center mui-title">页面加载中。。。</h1>
+            <a id='Bdone' class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-right">完成</a>
+        </div>
+
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll" style="height:100%;top:15px">
+                    <div id='Blist' class="mui-indexed-list" style="height:100%">
+                        <!-- 搜索框 -->
+                        <div class="mui-indexed-list-search mui-input-row mui-search">
+                            <input id="TB_B_Key" type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="">
+                        </div>
+                        <!-- 搜索索引 -->
+                        <div style="text-align:right;padding:11px 15px">
+                            <a id="BLevelIdx" href="#">返回上一级</a>
+                        </div>
+                        <div class="mui-table-view-divider mui-indexed-list-group"></div>
+                        <!-- 列表 -->
+                        <div class="mui-indexed-list-inner">
+                            <div id="Balert" class="mui-indexed-list-empty-alert "><span style=" content:'\e466';"></span>未搜索到相关结果</div>
+                            <ul id="BtreeView" class="mui-table-view" style="margin-top:0px">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--单页面开始 pop 表格展示  -->
+    <div id="tableSearch" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="TSTitle" class="mui-center mui-title">页面加载中。。。</h1>
+            <a id='TSDone' class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-right">完成</a>
+        </div>
+
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll" style="height:100%;top:15px">
+                    <div id='TSlist' class="mui-indexed-list" style="height:100%">
+                        <!-- 搜索框 -->
+                        <div class="mui-indexed-list-search mui-input-row mui-search">
+                            <input id="TB_TS_Key" type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="">
+                        </div>
+
+                        <div class="mui-table-view-divider mui-indexed-list-group"></div>
+                        <!-- 列表 -->
+                        <div>
+                            <div class="col-md-4 col-sm-4" id="viewGrid_Panel" style="width:99%;height:400px;overflow:scroll">
+                                <table id="treeGrid" class="table table-striped  table-border table-hover" style="margin-top:0px"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--单页面开始 文本框自动填充  tbFullCtrl  -->
+    <div id="tbFullCtrl" class="mui-page">
+        <div class="mui-navbar-inner mui-bar mui-bar-nav">
+            <button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+            <h1 id="TBFCTitle" class="mui-center mui-title">文本框自动填充</h1>
+            <a id='TBFCDone' class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-right">完成</a>
+        </div>
+
+        <div class="mui-page-content">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll" style="height:100%;top:15px">
+                    <div id='TBFClist' class="mui-indexed-list" style="height:100%">
+                        <!-- 搜索框 -->
+                        <div class="mui-indexed-list-search mui-input-row mui-search">
+                            <input id="TB_TBFC_Key" type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="">
+                        </div>
+
+                        <div class="mui-table-view-divider mui-indexed-list-group"></div>
+                        <!-- 列表 -->
+                        <div>
+                            <div class="col-md-4 col-sm-4" id="viewGrid_Panel" style="width:99%;height:400px;overflow:scroll">
+                                <table id="TBFCtreeGrid" class="table table-striped  table-border table-hover" style="margin-top:0px"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="MyFrmGener.js?version=1.0" type="text/javascript"></script>
+
+    <script>
+        mui.init({
+
+            beforeback: function () {//监听物理返回按键的方法
+                var url = window.location.href;
+                if (url.indexOf("MyBill.htm") != -1)
+                    window.location.href = "./SearchBill.htm?FrmID=" + GetQueryString("FrmID") + "&SystemNo=" + GetQueryString("SystemNo");
+                else
+                    window.location.href = "./SearchDict.htm?FrmID=" + GetQueryString("FrmID") + "&SystemNo=" + GetQueryString("SystemNo");
+                return false;
+            }
+        });
+
+    </script>
+</body>
+<style type="text/css">
+    .table {
+        border: 1px solid #cad9ea;
+        color: #666;
+        padding: 0;
+        width: 99%;
+        overflow-y: auto;
+        _overflow: auto;
+        word-bread: break-all;
+        word-wrap: break-word;
+    }
+
+        .table th {
+            background-repeat: repeat-x;
+            height: 30px;
+            background-color: #efeff4;
+        }
+
+
+        .table td,
+        .table th {
+            border: 1px solid #cad9ea;
+            padding: 0 1em 0;
+        }
+
+        .table tr.alter {
+            background-color: #efeff4;
+        }
+
+    .success {
+        background-color: rgba(76, 217, 100, 0.05);
+    }
+
+    .mui-bar-popover {
+        width: 30%;
+    }
+</style>
+</html>

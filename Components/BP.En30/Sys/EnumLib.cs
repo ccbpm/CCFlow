@@ -48,6 +48,7 @@ namespace BP.Sys
         public const string KingBaseR3 = "KingBaseR3";
         public const string KingBaseR6 = "KingBaseR6";
         public const string UX = "UX";
+        public const string HGDB = "HGDB";
         public const string WebServices = "WebServices";
         public const string Dubbo = "Dubbo";
         public const string CCFromRef = "CCFromRef";
@@ -222,28 +223,29 @@ namespace BP.Sys
         /// <summary>
         /// 对人员开放
         /// </summary>
-        ForEmp,
+        ForEmp=0,
         /// <summary>
         /// 对工作开放
         /// </summary>
-        ForWorkID,
+        ForWorkID=1,
         /// <summary>
         /// 对流程开放
         /// </summary>
-        ForFID,
+        ForFID=2,
         /// <summary>
         /// 父工作ID
         /// </summary>
-        ForPWorkID,
-
+        ForPWorkID=3,
+        /// <summary>
+        /// 按照workid+人员账号字段.
+        /// </summary>
+        ForWorkIDAndSpecEmpNo=4,
         ForP2WorkID,
-
         ForP3WorkID,
         /// <summary>
         /// 根流程的WorkID
         /// </summary>
         RootFlowWorkID
-
     }
     /// <summary>
     /// 明细表工作方式

@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- 引用通用的js文件. -->
+    <script src="Scripts/jquery-1.11.0.min.js"></script>
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="ToolBar.js"></script>
+    <script src="js/mui/js/mui.min.js" type="text/javascript"></script>
+
+    <!--<script src="/WF/Scripts/layui/layui/layui.js" type="text/javascript"></script>
+    <link href="/WF/Admin/CSS/FoolFrmBody.css" rel="stylesheet" />
+    <script src="/WF/Scripts/layui/LayuiDialog.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="/WF/Scripts/layui/layui/css/layui.css" rel="stylesheet" />-->
+    <style type="text/css">
+        .layui-card {
+            box-shadow: 1px 2px 15px 2px rgba(0,0,0,.05);
+        }
+
+        .mui-table-view-cell div {
+            width: 50%;
+            float: left;
+        }
+
+        .mui-table-view-chevron .mui-table-view-cell {
+            padding-right: 25px;
+        }
+
+        .mui-btn, button {
+            padding: 3px 12px;
+            margin-right: 3px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        var node = null; //公共变量.
+        var pageData = {
+            FK_Node: GetQueryString("FK_Node"),
+            WorkID: GetQueryString("WorkID"),
+            FK_Flow:GetQueryString("FK_Flow"),
+            FID: GetQueryString("FID")
+        };
+        $(function () {
+            InitToolBar("MyFlow");
+            $("#Msg").html('正在加载，请稍候...');
+            var fid = GetQueryString("FID");
+            fid = fid == null || fid == undefined || fid == "" ? 0 : fid;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("ThreadDtl_Init");
+            if (data.indexOf("err@") != -1) {
+                mui.alert(data);
+                return;
+            }
+            if (data.indexOf("url@") != -1) {
+                var url = "./MyFlow.htm?WorkID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FID=0";
+                SetHref(url);
+                return;
+            }
+            data = JSON.parse(data);
+
+            //当前节点的信息
+            node = data.WF_Node[0];
+            $("#title").html(node.Name);
+            var toNodes = data.WF_ThreadNode;
+            var isSameThread = true;
+            if (toNodes.length > 1)
+                isSameThread = false;
+            //子线程的流程实例信息
+            var gwfs = data.WF_GenerWorkFlow;
+            //工作人员列表信息
+            var gwls = data.WF_GenerWorkerlist;
+
+            var rws = data.WF_ReturnWork;
+            //退回的分流节点
+
+            var workIds = "";
+            $.each(rws, function (idx, rw) {
+                if (workIds.indexOf(rw.WorkID + ",") != -1)
+                    return true;
+                workIds += rw.WorkID + ",";
+                var row = "<li class='mui-table-view-cell'>";
+                row += "<div>序号:" + (idx + 1) + "</div>";
+                row += "<div>退回的节点:" + rw.ReturnNodeName + "</div>";
+                row += "<br/>";
+                row += "<div>退回人:" + rw.ReturnerName + "</div>";
+                row += "<div>退回日期:" + rw.RDT + "</div>";
+                row += "<br/>";
+                row += "<div style='width:100%'>退回原因:" + rw.BeiZhu + "</div>";
+                row += "<div><button type='button' class='mui-btn mui-btn-primary' onclick='SendThread(" + rw.WorkID + "," + rw.ReturnToNode + "," + rw.ReturnNode + ")'><span class='mui-icon mui-icon-paperplane'></span>发送</button>";
+                row += "<button type='button' class='mui-btn mui-btn-primary' onclick='DoDelThread(" + rw.WorkID + ")'><span class='mui-icon mui-icon-close'></span>终止</button>";
+                row += "</div>";
+                row += "</li>";
+                $("#returnTable").append(row);
+            });
+
+
+            //异表单，显示异表单的节点，并且可以增加子线程
+            if (isSameThread == false && node.ThreadIsCanAdd == 1) {
+                $("#threadNodeDiv").show();
+                $.each(toNodes, function (idx, nd) {
+                    var row = "<li class='mui-table-view-cell'>";
+                    row += "<div>序号:" + (idx + 1) + "</div>";
+                    row += "<div>节点编号:" + nd.NodeID + "</div>";
+                    row += "<div style='width:100%'>节点名称:" + nd.Name + "</div>";
+                    row += "<br/>";
+                    row += "<div>";
+                    row += "<button type='button' class='mui-btn mui-btn-primary' onclick='AddThread(" + nd.NodeID + ")'><span class='mui-icon mui-icon-plus'></span>增加子线程</button>";
+                    row += "</div>";
+                    row += "</li>";
+                    $("#threadNodeDiv").append(row);
+
+                });
+
+            }
+
+            //获取运行子线程数据
+            var mygwfs = [];
+            $.each(gwfs, function (i, gwf) {
+                if (gwf.WFState == 5)
+                    return true;
+                gwf.Children = [];
+                gwf.Children = $.grep(gwls, function (gwl) {
+                    return gwl.WorkID == gwf.WorkID && gwl.IsPass != -2;
+                });
+                gwf.Type = 0;
+                mygwfs.push(gwf);
+            });
+            gwfs = mygwfs;
+            BindTable(gwfs, fid == 0 ? false : true, isSameThread);
+
+        })
+
+
+
+        var webUser = new WebUser();
+
+
+        function BindTable(gwfs, isThread, isSameThread) {
+
+            //判断有几个子子线程ID, 如果只有一个，就用列表模式展现.
+            var oper = "";
+            $.each(gwfs, function (i, gwf) {
+                var row = "<li class='mui-table-view-cell'>";
+                row += "<div style='width:100%'><div style='width:100%'><font color=green>#" + (i + 1) + "，标题：" + gwf.Title + "</font></div>";
+                row += "<div  style='width:45%;color:#736767fa;margin-right:10px;white-space: nowrap;text-overflow:ellipsis;overflow: hidden;'>" + gwf.TodoEmps + "</div>";
+                row += "<div style='width:30%;color:#736767fa;margin-right:10px'>" + gwf.RDT + "</div>";
+                oper = "";
+                if (node.ThreadIsCanDel == 1)
+                    oper += "<a href=\"javascript:DoDelThread('" + gwf.WorkID + "')\" style='font-weight: 500;'><span class='mui-icon mui-icon-close'style='font-size:20px'></span>终止</a>";
+                row += "<div style='width:15%'>" + oper + "</div></div>";
+                row += GenerHtml(gwf.Children, isThread);
+                row += "</li>";
+                $("#threadTable").append(row);
+            });
+
+
+
+        }
+
+        function GenerHtml(gwls, isThread) {
+
+            var strs = "<ul class='mui-table-view mui-table-view-chevron'style='margin-top:70px;margin-right:0px'>";
+
+
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                if (isThread == true && gwl.FK_Emp == webUser.No)
+                    continue;
+
+                strs += "<li class='mui-table-view-cell'>";
+                strs += "<div>节点:" + gwl.NodeName + "</div>";
+                strs += "<div>处理人:" + gwl.FK_Emp + " " + gwl.EmpName + "</div>";
+
+                var openStr = "";
+                openStr += "<a href=\"javascript:OpenFrm('" + gwl.WorkID + "','" + gwl.FID + "','" + gwl.FK_Flow + "','" + gwl.FK_Node + "')\"><i class='layui-icon'>&#xe63c;</i>表单</a>";
+
+                if (gwl.IsPass == 1) {
+
+                    strs += "<div>状态:已完成</div>";
+                    strs += "<div>应完成日期:" + gwl.SDT + "</div>";
+                    strs += "<div>实际完成日期:" + gwl.RDT + "</div>";
+                } else {
+
+                    if (gwl.IsRead == 0)
+                        strs += "<div>状态:未读 </div>";
+                    else
+                        strs += "<div>状态:已读,未处理 </div>";
+                    strs += "<div>应完成日期:" + gwl.SDT + "</div>";
+                    strs += "<div>实际完成日期:无</div>";
+                }
+                strs += "<div><button type = 'button' class='mui-btn mui-btn-primary' onclick = 'OpenFrm(" + gwl.WorkID + "," + gwl.FID + ",\"" + gwl.FK_Flow + "\"," + gwl.FK_Node + ")'> <span class=mui-icon mui-icon-compose'></span>表单</button></div>";
+
+                strs += "</li>";
+            }
+
+            strs += "</ul>";
+            return strs;
+        }
+
+        function OpenFrm(workID, fid, flowNo, nodeID) {
+
+            var url = "./MyView.htm?FK_Flow=" + flowNo + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid;
+            window.open(url);
+            return;
+
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+
+            handler.AddPara("FromWorkOpt", "1");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("FK_Flow", flowNo);
+            handler.AddPara("FID", fid);
+
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
+
+            data = data.replace('url@./CCForm', 'url@../CCForm');
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+
+                if (data.indexOf('FromWorkOpt') == -1)
+                    data = data + "&FromWorkOpt=1";
+
+                window.open(data);
+                return;
+            }
+
+            alert(data);
+        }
+
+        //删除子线城.
+        function DoDelThread(workID) {
+
+            if (confirm('您确定要终止该子线程吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("ThreadDtl_DelSubThread");
+            if (data.indexOf("url@") == 0) {
+                var url = "./MyView.htm?WorkID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FID=0";
+                SetHref(url)
+            }
+            else
+                Reload();
+        }
+
+        //发送子线程数据
+        function SendThread(workID, nodeID, toNodeID) {
+            //发送之前保存小纸条的功能
+            var gwf = new Entity("BP.WF.GenerWorkFlow");
+            gwf.SetPKVal(workID);
+            gwf.WorkID = workID;
+            var count = gwf.RetrieveFromDBSources();
+            if (count == 0) {
+                mui.alert("该退回的子线程已经取消,不能再发送");
+                Reload();
+                return;
+            }
+
+            var ScripNodeID = gwf.GetPara("ScripNodeID");
+            var msg = gwf.GetPara("ScripMsg");
+            if (ScripNodeID != nodeID)
+                msg = "";
+            if (msg == null || msg == undefined)
+                msg = "";
+            var val = promptGener("请输入要传达的信息,可以为空.", msg);
+            if (val == "")
+                return;
+            if (val != null && val != '') {
+                gwf.SetPara("ScripNodeID", nodeID);
+                gwf.SetPara("ScripMsg", val);
+                gwf.Update();
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("WorkID", workID);
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("ToNodeID", toNodeID);
+            var data = handler.DoMethodReturnString("ThreadDtl_SendSubThread");
+            if (data.indexOf("url@") == 0) {
+                mui.alert("所有退回的子线程处理完成");
+                SetHref("./Todolist.htm");
+            } else {
+                Reload();
+            }
+
+
+        }
+
+        function Save() {
+            return true;
+        }
+
+    </script>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 id="title" class="mui-title"></h1>
+    </header>
+    <nav id="bottomToolBar" class="mui-bar mui-bar-tab"></nav>
+    <div class="mui-content">
+        <div class="mui-card">
+            <div class="mui-card-header">退回当前节点的子线程</div>
+            <ul class="mui-table-view mui-table-view-chevron" id="returnTable">
+            </ul>
+        </div>
+        <div class="mui-card">
+            <div class="mui-card-header">可以发起子线程的节点</div>
+            <ul class="mui-table-view mui-table-view-chevron" id="threadNodeDiv">
+            </ul>
+        </div>
+        <div class="mui-card">
+            <div class="mui-card-header">运行中的子线程</div>
+            <ul class="mui-table-view mui-table-view-chevron" id="threadTable">
+            </ul>
+        </div>
+
+
+
+        <!--<div class="mui-content">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <div id="list" class="mui-indexed-list">
+                    <div class="mui-indexed-list-inner">
+                        <h5>可以发起子线程的节点</h5>
+                        <ul id="threadNodeTable" class="mui-table-view" style="margin-top:50px">
+                            <li id="title" class="mui-table-view-cell">
+                                <div class="XuHao">序号</div><div>节点编码</div><div>节点名称</div><div>操作</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>-->
+
+    </div></body>
+</html>

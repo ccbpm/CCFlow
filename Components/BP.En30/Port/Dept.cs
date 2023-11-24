@@ -120,7 +120,7 @@ namespace BP.Port
                     return this._enMap;
 
                 Map map = new Map("Port_Dept", "部门");
-                map.IsEnableVer = true;
+                map.ItIsEnableVer = true;
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, false, 1, 50, 20);
                 map.AddTBString(DeptAttr.Name, null, "名称", true, false, 0, 100, 30);
@@ -252,7 +252,7 @@ namespace BP.Port
             string name = this.Name;
 
             //根目录不再处理
-            if (this.IsRoot == true)
+            if (this.ItIsRoot == true)
             {
                 this.NameOfPath = name;
                 this.DirectUpdate();
@@ -267,7 +267,7 @@ namespace BP.Port
 
             while (true)
             {
-                if (dept.IsRoot)
+                if (dept.ItIsRoot)
                     break;
 
                 name = dept.Name + "\\" + name;
@@ -284,7 +284,7 @@ namespace BP.Port
             BP.Port.Emps emps = new BP.Port.Emps();
             emps.Retrieve(BP.Port.EmpAttr.FK_Dept, this.No);
             foreach (BP.Port.Emp emp in emps)
-                emp.Update();
+                emp.DirectUpdate();
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace BP.Port
 
             for (int i = 0; i < ids.Length; i++)
             {
-                var id = ids[i];
+                string id = ids[i];
                 if (DataType.IsNullOrEmpty(id) == true)
                     continue;
                 DBAccess.RunSQL("UPDATE Port_Dept SET Idx=" + i + " WHERE No='" + id + "'");
@@ -400,9 +400,9 @@ namespace BP.Port
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 QueryObject qo = new QueryObject(this);
-                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.DeptNo);
                 qo.addOr();
-                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.DeptNo);
                 qo.addOrderBy(DeptAttr.Idx);
                 return qo.DoQuery();
             }

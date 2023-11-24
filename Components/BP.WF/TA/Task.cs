@@ -219,7 +219,7 @@ namespace BP.TA
                 this.SetValByKey(TaskAttr.TaskSta, value);
             }
         }
-        public int IsRead
+        public int ItIsRead
         {
             get
             {

@@ -28,7 +28,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -163,14 +163,14 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             #region 修改默认值.
             //如果没默认值.
             if (DataType.IsNullOrEmpty(this.DefVal)==true)
                 this.DefVal = "0";
             MapData md = new MapData();
-            md.No = this.FK_MapData;
+            md.No = this.FrmID;
             if (md.RetrieveFromDBSources() == 1)
                 BP.DA.DBAccess.UpdateTableColumnDefaultVal(md.PTable, this.KeyOfEn, int.Parse(this.DefVal));
             #endregion 修改默认值.
@@ -184,14 +184,14 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND KeyOfEn='" + this.KeyOfEn + "'";
                 DBAccess.RunSQL(sql);
             }
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
         #endregion
@@ -199,7 +199,7 @@ namespace BP.Sys.FrmUI
         #region 基本功能.
         public string DoGloValStyles()
         {
-            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 绑定函数
@@ -207,7 +207,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn+"&D="+DateTime.Now;
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn+"&D="+DateTime.Now;
         }
         /// <summary>
         /// 高级设置
@@ -216,7 +216,7 @@ namespace BP.Sys.FrmUI
         public  String DoCheckboxs() 
         {
 			
-		    return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+		    return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
     #endregion
 }

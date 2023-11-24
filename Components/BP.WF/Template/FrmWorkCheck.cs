@@ -499,7 +499,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeWorkCheckAttr.FWCDefInfo, "同意", "默认审核信息", true, false, 0, 50, 10);
 
                 map.AddDDLSysEnum(NodeWorkCheckAttr.SigantureEnabel, 0, "签名方式", true, true, NodeWorkCheckAttr.SigantureEnabel, "@0=不签名@1=图片签名@2=写字板@3=电子签名@4=电子盖章@5=电子签名+盖章");
-                map.SetHelperUrl(NodeWorkCheckAttr.SigantureEnabel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
+                map.SetHelperUrl(NodeWorkCheckAttr.SigantureEnabel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=5415110&doc_id=31094");
 
                 map.AddBoolean(NodeWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
               //  map.AddBoolean("WhetherStamp", false, "是否启用盖章", true, true, true);
@@ -554,14 +554,14 @@ namespace BP.WF.Template
                     workCheckAth = new FrmAttachment();
                     /*如果没有查询到它,就有可能是没有创建.*/
                     workCheckAth.setMyPK("ND" + this.NodeID + "_FrmWorkCheck");
-                    workCheckAth.setFK_MapData("ND" + this.NodeID.ToString());
+                    workCheckAth.FrmID ="ND" + this.NodeID.ToString();
                     workCheckAth.NoOfObj = "FrmWorkCheck";
                     workCheckAth.Exts = "*.*";
 
                     //存储路径.
                  //   workCheckAth.SaveTo = "/DataUser/UploadFile/";
-                    workCheckAth.IsNote = false; //不显示note字段.
-                    workCheckAth.IsVisable = false; // 让其在form 上不可见.
+                    workCheckAth.ItIsNote = false; //不显示note字段.
+                    workCheckAth.ItIsVisable = false; // 让其在form 上不可见.
 
                     //位置.
                     workCheckAth.H = (float)150;

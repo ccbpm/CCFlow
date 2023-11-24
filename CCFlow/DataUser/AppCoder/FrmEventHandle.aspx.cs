@@ -33,7 +33,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
             return this.GetVal("WebUserNo");
         }
     }
-    public string FK_MapData
+    public string FrmID
     {
         get
         {
@@ -60,13 +60,13 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
     {
         try
         {
-            switch (this.FK_MapData)
+            switch (this.FrmID)
             {
                 case "ND101":
                     this.ND101();
                     break;
                 default:
-                    throw new Exception("没有对(" + this.FK_MapData + ")处理业务逻辑.");
+                    throw new Exception("没有对(" + this.FrmID + ")处理业务逻辑.");
             }
         }
         catch (Exception ex)
@@ -108,7 +108,7 @@ public partial class DataUser_AppCoder_FrmEventHandle : System.Web.UI.Page
         {
             throw new Exception("");
             /* 当表单保存后. */
-            //GEEntity en = new GEEntity(this.FK_MapData, this.OID);
+            //GEEntity en = new GEEntity(this.FrmID, this.OID);
             //string rdt = en.GetValStrByKey("RDT");
             //string fid = this.GetVal("FID"];
             //string rec = en.GetValStrByKey("Rec");

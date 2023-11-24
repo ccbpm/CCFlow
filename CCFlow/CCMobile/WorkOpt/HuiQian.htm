@@ -1,0 +1,538 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>会签</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js"></script>
+    <link href="../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" />
+
+    <link href="../js/mui/css/mui.css" rel="stylesheet" type="text/css" />
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="../js/mui/js/mui.min.js" type="text/javascript"></script>
+
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script type="text/javascript">
+        var param = {};
+        var huiQianType = GetQueryString("HuiQianType");
+        var webUser = new WebUser();
+        $(function () {
+
+            $("#HelpInfo").show();
+
+            //初始化页面移交页面
+            param = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+
+            $('#Msg').val(param.Message);
+            $(".Msg").hide();
+
+            // 初始化人员.   //开始加载数据.
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FID", GetQueryString("FID"));
+            var data = handler.DoMethodReturnString("HuiQian_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            var data = JSON.parse(data);
+            BindTable(data);
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
+            }
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
+            url += "&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&PageName=HuiQian";
+
+            $('#BtnSelectEmps').bind('click', function () {
+                SetHref(url);
+            });
+        });
+
+        $(function () {
+            //人员选择.
+            $("#TB_Emps").bind('input propertychange', function () {
+                if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                    $("#SelectEmp").hide().html("");
+                    return;
+                } else {
+                    //回去输入内容，查询数据库
+                    var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+                    handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                    handler.AddPara("WorkID", GetQueryString("WorkID"));
+                    handler.AddPara("FID", GetQueryString("FID"));
+                    handler.AddPara("TB_Emps", $("#TB_Emps").val());
+                     handler.AddPara("HuiQianType", huiQianType);
+                    var data = handler.DoMethodReturnString("HuiQian_SelectEmps");
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    var html = "";
+                    for (var i = 0; i < data.length; i++) {
+
+                        html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                    }
+                    $("#SelectEmp").show().html(html);
+
+                }
+            });
+        });
+
+        function BindTable(data) {
+            //判断当前节点是否是第二组长
+            var gwls = data.WF_GenerWorkList;
+            var myGwl = data.My_GenerWorkList[0];
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+                 var zhuChiRen = GetPara(gwl.AtPara, "HuiQianZhuChiRen");
+                var addLeader = GetPara(gwl.AtPara, "HuiQianType");
+                if (gwl.FK_Emp != webUser.No) { //相同即为主持人
+                    if (zhuChiRen != null && zhuChiRen != undefined && zhuChiRen!= webUser.No)
+                    continue;
+
+                   //获取增加组长的信息
+                    if (huiQianType != null && huiQianType != undefined && huiQianType == "AddLeader") {
+                        if (addLeader == null || addLeader != "AddLeader")
+                            continue;
+                    } else {
+                        if (addLeader != null && addLeader == "AddLeader")
+                            continue;
+                    }
+
+                    if (GetPara(myGwl.AtPara, "HuiQianZhuChiRen") == gwl.FK_Emp)
+                        continue;
+
+                } 
+                
+
+                var row = "";
+                row += "<tr>";
+                row += "<td>" + gwl.EmpName + "</td>";
+                row += "<td style='width:40%;'  title='" + gwl.DeptName + "' >" + gwl.DeptName + "</td>";
+                if (gwl.IsPass == -1) {
+                    row += "<td>新增</td>";
+                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                }
+
+                if (gwl.IsPass == 0) {
+                    if (gwl.FK_Emp == webUser.No) {
+                        row += "<td>主持人/未审批</td>";
+                        row += "<td></td>";
+                    } else {
+                         row += "<td>未审批</td>";
+                        row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
+                    } 
+
+                   
+                }
+
+                //当前是主持人
+                if (gwl.IsPass == 100) {
+                    row += "<td>未审批</td>";
+                    row += "<td></td>";
+                }
+
+                //当前自己
+                if (gwl.IsPass == 99) {
+                    row += "<td>您自己</td>";
+                    row += "<td></td>";
+                }
+
+                if (gwl.IsPass == 1) {
+                    if (gwl.FK_Emp == webUser.No)
+                         row += "<td>主持人/已审批</td>";
+                    else
+                        row += "<td>已审批</td>";
+                    row += "<td></td>";
+                }
+
+                row += "</tr>";
+                $("#Table1 tbody").append(row);
+            }
+        }
+
+
+        //移除
+        function DeleteIt(empNo, row) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler.AddPara("FK_Emp", empNo);
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FID", GetQueryString("FID"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("HuiQian_Delete");
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                alert(data);
+                return;
+            }
+
+            //delRow(row); //清空单个table tbody
+            ClearTable();
+
+            // 把返回的结果，重新绑定.
+            var sas = JSON.parse(data);
+            BindTable(sas);
+            return;
+        }
+
+        //确定  执行会签操作
+        function ReturnWork() {
+
+            var emps = this.document.getElementById("TB_Emps").value;
+            if (emps == "") {
+                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
+                return;
+            }
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler.AddPara("AddEmps", emps);
+            handler.AddPara("FK_Flow", param.FK_Flow);
+            handler.AddPara("WorkID", param.WorkID);
+            handler.AddPara("FID", param.FID);
+            handler.AddPara("FK_Node", param.FK_Node);
+            handler.AddPara("HuiQianType", huiQianType);
+            var data = handler.DoMethodReturnString("HuiQian_AddEmps");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('info@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
+
+            // 初始化人员.   //开始加载数据.
+            ClearTable();
+
+            var handler1 = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler1.AddPara("WorkID", param.WorkID);
+            handler1.AddPara("FID", param.FID);
+            handler1.AddPara("FK_Node", param.FK_Node);
+            var data1 = handler1.DoMethodReturnString("HuiQian_Init");
+
+            if (data1.indexOf('err@') == 0) {
+                alert(data1);
+                return;
+            }
+            var gwls = JSON.parse(data1);
+            BindTable(gwls);
+            $(".foot").hide();
+            return;
+        }
+
+        //取消移交
+        function Close() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
+        }
+
+        //删除当前行
+        function delRow(nowTr) {
+
+            $("#Table1 tbody tr:eq(" + nowTr + ")").remove();
+        }
+
+        //得到行对象
+        function ClearTable() {
+            var table = $("#Table1");
+            var tbody = $("#Table1 tbody");
+            var trArr = $("#Table1 tbody tr");
+            tbody.empty();
+        }
+        //保存并关闭.
+        function DoHuiQian() {
+            $("#DoHuiQian").attr("onclick", "");//禁用按钮
+            $("#DoHuiQian").css("color", "#CCCCCC");
+            
+            //需要调用设置会签状态并返回才可以.
+            //var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode") + "&m=" + Math.random();
+            // alert(myurl);
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler.AddPara("ToNode", GetQueryString("ToNode"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("HuiQianType", huiQianType);
+            var data = handler.DoMethodReturnString("HuiQian_SaveAndClose");
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                SetHref(data);
+                return;
+            }
+
+            //如果需要发送,就执行发送.
+            if (data.indexOf('Send@') == 0) {
+                Send();
+                return;
+            }
+
+            //提示信息后关闭窗口.
+            if (data.indexOf('close@') == 0) {
+
+                alert(data.replace('close@', ''));
+                $("#DoHuiQian").attr("onclick", "DoHuiQian()");
+                $("#DoHuiQian").css("color", "#000");
+
+            }
+
+            //提示信息.
+            if (data.indexOf('info@') == 0) {
+                alert(data.replace('info@', ''));
+                return;
+            }
+
+            var url = "../Todolist.htm";
+            SetHref(url);
+            return;
+        }
+
+
+
+        function selectAdd(No) {
+            $("#TB_Emps").val(No);
+
+        }
+
+        //鼠标事件
+        function getFocus(obj) {
+            $(".item").removeClass("addbg");
+            $(obj).addClass("addbg");
+        }
+
+        //选择下拉数据
+        function getCon(no) {
+            $("#TB_Emps").val(no);
+            $("#SelectEmp").hide().html("");
+            ReturnWork();
+            $("#TB_Emps").val("");
+        }
+
+        function Help() {
+            $("#HelpInfo").toggle();
+        }
+
+        function Send() {
+           
+            $("#tablecontext").empty();
+            var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+            handler.AddPara("ToNode", GetQueryString("ToNode"));
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("AccepterOfGener_Send");
+
+            if (data.indexOf('err@') == 0) {
+                mui.alert(data.replace('err@', ''));
+                $("#DoHuiQian").attr("onclick", "DoHuiQian()");
+                $("#DoHuiQian").css("color", "#000");
+                return;
+            }
+
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'UnSend", "'../UnSend");
+
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
+
+            data += " <center><input type='button' value='返回主页' onclick='BackToHome();'  />|<input type='button' value='返回待办' onclick='BackTolist();'  /> </center>";
+
+            backTo = "Todolist";
+
+            $("#Table1").empty();
+            $("#toolbar").empty();
+            $("#Msg").empty();
+            $("#Table1").show();
+            $("#Table1").html(data);
+
+            $("#tablecontext").empty();
+            $("#btns").empty();
+
+            //所有链接 加上 target='_self'，解决链接点击时 卡在 “请稍等。。”
+            $("#Table1 a").attr("target", "_self");
+
+            $("#tablecontext").empty();
+            $("#btns").empty();
+            return;
+        }
+
+        function Back() {
+            var url = "../MyFlowGener.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&ms=" + Math.random();
+            SetHref(url);
+        }
+
+        //返回我的工作.
+        function BackToWork() {
+
+            var url = "../MyFlowGener.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            SetHref(url);
+        }
+        function BackToHome() {
+            SetHref('../../CCMobilePortal/Home.htm?UserNo=' + GetQueryString('UserNo') + "&Token=" + GetQueryString("Token"));
+        }
+        function BackTolist() {
+            var url = "../Todolist.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            SetHref(url);
+        }
+
+
+/**/</script>
+
+    <style type="text/css">
+        body {
+            background: transparent;
+        }
+
+            body div {
+                text-align: left;
+            }
+
+        #Message {
+            width: 100%;
+        }
+
+        #SelectEmp {
+            position: relative;
+            width: 400px;
+            border-top: 0;
+            display: none;
+            margin-top: -7px;
+            /*border: solid 2px #3175af;*/
+        }
+
+        .item {
+            padding: 3px 5px;
+            cursor: pointer;
+            float: left;
+            width: 400px;
+            line-height: 20px;
+            display: inline-block;
+            background-color: #F7F7F7;
+        }
+
+        #next {
+            float: left;
+            position: relative;
+            width: 400px;
+        }
+
+        .addbg {
+            background: #CFCFCF;
+        }
+        .mui-bar-tab .mui-tab-item {
+            color:#000;
+        }
+    </style>
+</head>
+<body>
+    <!--标题-->
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">工作会签</h1>
+    </header>
+    <!--底部按钮-->
+    <nav class="mui-bar mui-bar-tab">
+        <a class="mui-tab-item" href="#" onclick="DoHuiQian()" id="DoHuiQian">执行会签</a>
+        <a class="mui-tab-item" href="#" onclick="BackToWork()">返回我的工作</a>
+        <a class="mui-tab-item" href="#" onclick="BackTolist()">返回待办</a>
+    </nav>
+    <!--页面内容展示-->
+    <div class="mui-content">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <div class="mui-input-row" style="margin-top: 55px;">
+                    <table id="Table1" class="table" style=" width:100%; ">
+                        <thead>
+                            <tr id='title'>
+                                <th>名称</th>
+                                <th>部门</th>
+                                <th>状态</th>
+                                <th style="width:15%;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div>
+                    <div id="labInfo">
+                        输入关键字:
+                        <input type="text" id="TB_Emps" title="查张三,您可输入: zs或zhangs或zhangsan" placeholder="查张三,您可输入:zs或zhangs或zhangsan" name="TB_Emps" value='' style="width: 99%;" />
+                        <div id="SelectEmp"></div>
+                        <button type="button" id="BtnSelectEmps" class="mui-btn mui-btn-success mui-icon mui-icon-plus" style="width:100%;background-color:#4cd9647a;border-color:#4cd9647a">选择会签人</button>
+                        <br /><img src="../Img/Multiplayer.png" style="width:27px;" /><a href="javascript:Help()">帮助</a>
+
+                    </div>
+                    <div id="HelpInfo" style="">
+                        <ul>
+                            <li>会签流程说明 </li>
+                            1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
+                            <br />2、点击“确认并返回”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。
+                            <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。
+                            <br />
+                            <br />
+                            <li>添加会签人员快捷方式 </li>
+                            可以使用人员名称拼音，支持全拼和简拼。
+                            <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+                            <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    //初始化单页的区域滚动
+    mui('.mui-scroll-wrapper').scroll();
+</script>
+</html>

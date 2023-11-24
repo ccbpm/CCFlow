@@ -36,7 +36,7 @@ namespace BP.WF
         /// <param name="userNo">用户编号</param>
         /// <returns>返回dataset</returns>
         public static DataSet GenerWorkNode(string fk_flow, Node nd, Int64 workID, Int64 fid, string userNo, Int64 realWorkID, string fromWorkOpt = "0",
-            bool isView = false)
+            bool isView = false,string pageType="H5")
         {
             DBAccess.RunSQL("DELETE FROM Sys_MapExt WHERE DoWay='0' or DoWay='None'");
             
@@ -101,7 +101,7 @@ namespace BP.WF
 
                 //更换表单的名字.
                 if (DataType.IsNullOrEmpty(nd.NodeFrmID) == false
-                    && (nd.IsNodeFrm))
+                    && (nd.ItIsNodeFrm))
                 {
                     string realName = myds.Tables["Sys_MapData"].Rows[0]["Name"] as string;
                     if (DataType.IsNullOrEmpty(realName) == true)
@@ -114,7 +114,7 @@ namespace BP.WF
                 /*处理表单权限控制方案: 如果是绑定单个表单的时候. */
 
                 //这两个变量在累加表单用到.
-               FrmNode frmNode = new FrmNode();
+                FrmNode frmNode = new FrmNode();
                 Flow flow = new Flow(fk_flow);
                 myds.Tables.Add(flow.ToDataTableField("WF_Flow"));
 
@@ -125,10 +125,10 @@ namespace BP.WF
                     
                      int count = frmNode.Retrieve(FrmNodeAttr.FK_Frm, nd.NodeFrmID, FrmNodeAttr.FK_Node, nd.NodeID);
                     if (count == 0)
-                        frmNode.IsEnableLoadData = true;
-                    if (count!=0 && frmNode.FrmSln != 0)
+                        frmNode.ItIsEnableLoadData = true;
+                    if (count!=0 && frmNode.FrmSln == FrmSln.Self)
                     {
-                        FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.FK_Node);
+                        FrmFields fls = new FrmFields(nd.NodeFrmID, frmNode.NodeID);
                         foreach (FrmField item in fls)
                         {
                             foreach (DataRow dr in myds.Tables["Sys_MapAttr"].Rows)
@@ -137,15 +137,15 @@ namespace BP.WF
                                 if (keyOfEn.Equals(item.KeyOfEn) == false)
                                     continue;
 
-                                if (item.IsSigan == true)
-                                    item.setUIIsEnable(false);
+                                if (item.ItIsSigan == true)
+                                    dr["UIIsEnable"]=false;
 
                                 if (item.UIIsEnable == true)
                                     dr["UIIsEnable"] = 1;
                                 else
                                     dr["UIIsEnable"] = 0;
 
-                                if (item.IsNotNull == true)
+                                if (item.ItIsNotNull == true)
                                     dr["UIIsInput"] = 1;
                                 else
                                     dr["UIIsInput"] = 0;
@@ -155,7 +155,7 @@ namespace BP.WF
                                 else
                                     dr["UIVisible"] = 0;
 
-                                if (item.IsSigan == true)
+                                if (item.ItIsSigan == true)
                                     dr["IsSigan"] = 1;
                                 else
                                     dr["IsSigan"] = 0;
@@ -166,15 +166,15 @@ namespace BP.WF
 
                         //从表权限的设置
                         MapDtls mapdtls = new MapDtls();
-                        mapdtls.Retrieve(MapDtlAttr.FK_MapData, nd.NodeFrmID + "_" + frmNode.FK_Node);
+                        mapdtls.Retrieve(MapDtlAttr.FK_MapData, nd.NodeFrmID + "_" + frmNode.NodeID);
                         foreach (DataRow dr in myds.Tables["Sys_MapDtl"].Rows)
                         {
                             foreach (MapDtl mapDtl in mapdtls)
                             {
-                                string no = dr["No"].ToString() + "_" + frmNode.FK_Node;
+                                string no = dr["No"].ToString() + "_" + frmNode.NodeID;
                                 if (no.Equals(mapDtl.No) == true)
                                 {
-                                    dr["IsView"] = mapDtl.IsView == true ? 1 : 0;
+                                    dr["IsView"] = mapDtl.ItIsView == true ? 1 : 0;
                                     break;
                                 }
 
@@ -184,7 +184,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    frmNode.IsEnableLoadData = true;
+                    frmNode.ItIsEnableLoadData = true;
                 }
                 #endregion 处理表单权限控制方案: 如果是绑定单个表单的时候. 
 
@@ -256,7 +256,7 @@ namespace BP.WF
                 #endregion 没有审核组件分组就增加上审核组件分组.
 
                 #region 增加父子流程组件
-                if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.SFSta != FrmSubFlowSta.Disable)
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree && DataType.IsNullOrEmpty(frmNode.MyPK) == false && frmNode.IsEnableSF ==true)
                 {
                     DataTable gf = myds.Tables["Sys_GroupField"];
 
@@ -291,7 +291,7 @@ namespace BP.WF
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 处理累加表单增加 groupfields
-                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
+                if (nd.FormType == NodeFormType.FoolTruck && nd.ItIsStartNode == false
                     && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
 
@@ -330,7 +330,9 @@ namespace BP.WF
                     {
                         sqlOrder += " ORDER BY INSTR('" + orderMyFrmIDs + "', FrmID ), Idx";
                     }
-                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL 
+                        || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX
+                        || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
                     {
                         sqlOrder += " ORDER BY POSITION(FrmID  IN '" + orderMyFrmIDs + "'), Idx";
                     }
@@ -450,7 +452,7 @@ namespace BP.WF
                         //获取累加表单的权限
                         FrmFields fls = new FrmFields();
                         qo = new QueryObject(fls);
-                        qo.AddWhere(FrmFieldAttr.FK_MapData, " IN ", "(" + nodes + ")");
+                        qo.AddWhere(FrmFieldAttr.FrmID, " IN ", "(" + nodes + ")");
                         qo.addAnd();
                         qo.AddWhere(FrmFieldAttr.EleType, "Field");
                         qo.addAnd();
@@ -473,12 +475,12 @@ namespace BP.WF
                             }
                             if (frmField != null)
                             {
-                                if (frmField.IsSigan)
+                                if (frmField.ItIsSigan)
                                     attr.setUIIsEnable(false);
 
                                 attr.setUIIsEnable(frmField.UIIsEnable);
                                 attr.setUIVisible(frmField.UIVisible);
-                                attr.IsSigan = frmField.IsSigan;
+                                attr.ItIsSigan = frmField.ItIsSigan;
                                 attr.setDefValReal(frmField.DefVal);
                             }
                             mattrs.AddEntity(attr);
@@ -612,7 +614,7 @@ namespace BP.WF
                 if (isView == false)
                 {
                     BP.WF.Dev2Interface.Node_SetWorkRead(nd.NodeID, realWorkID);
-                    if (nd.IsStartNode == false)
+                    if (nd.ItIsStartNode == false)
                     {
                         if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
                         {
@@ -631,7 +633,7 @@ namespace BP.WF
                     wk.ResetDefaultVal(nd.NodeFrmID, fk_flow, nd.NodeID);
 
                 //URL参数替换
-                if (BP.Difference.SystemConfig.IsBSsystem == true && isView == false)
+                if (BP.Difference.SystemConfig.isBSsystem == true && isView == false)
                 {
                     // 处理传递过来的参数。
                     foreach (string k in HttpContextHelper.RequestQueryStringKeys)
@@ -665,23 +667,47 @@ namespace BP.WF
                         throw new Exception("err@错误:" + msg);
 
                     //执行装载填充.
-                    string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
-                    if (frmNode.IsEnableLoadData == true && md.IsPageLoadFull == true)
+                    if (DataType.IsNullOrEmpty(pageType)==false && pageType.Equals("Vue3"))
                     {
-                        me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
-                        
-                        //执行通用的装载方法.
-                        MapAttrs attrs = md.MapAttrs;
-                        MapDtls dtls = md.MapDtls;
-                        wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
+                        if (frmNode.ItIsEnableLoadData == true)
+                        {
+                            MapExts mapExts = new MapExts();
+                           foreach(MapExt mapExt in mes)
+                           {
+                                if (mapExt.DoWay.Equals("0")==false &&(mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullMainTable)
+                                    || mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullDDL)|| mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullDtl)))
+                                    mapExts.AddEntity(mapExt);
+                           }
+                            if (mapExts.Count != 0)
+                            {
+                                //执行通用的装载方法.
+                                MapAttrs attrs = md.MapAttrs;
+                                wk = BP.WF.CCFormAPI.DealPageLoadFullVue(wk, mapExts, attrs) as Work;
+                            }
+                        }
+                         
                     }
+                    else
+                    {
+                        string mypk = MapExtXmlList.PageLoadFull + "_" + md.No;
+                        if (frmNode.ItIsEnableLoadData == true && md.ItIsPageLoadFull == true)
+                        {
+                            me = mes.GetEntityByKey("MyPK", mypk) as MapExt;
+
+                            //执行通用的装载方法.
+                            MapAttrs attrs = md.MapAttrs;
+                            MapDtls dtls = md.MapDtls;
+                            wk = BP.WF.CCFormAPI.DealPageLoadFull(wk, me, attrs, dtls) as Work;
+                        }
+                    }
+                    
                 }
 
                 //如果是累加表单，就把整个rpt数据都放入里面去.
-                if (nd.FormType == NodeFormType.FoolTruck && nd.IsStartNode == false
+                if (nd.FormType == NodeFormType.FoolTruck && nd.ItIsStartNode == false
                   && DataType.IsNullOrEmpty(wk.HisPassedFrmIDs) == false)
                 {
-                    GERpt rpt = new GERpt("ND" + int.Parse(nd.FK_Flow) + "Rpt", workID);
+                    GERpt rpt = new GERpt("ND" + int.Parse(nd.FlowNo) + "Rpt", workID);
                     rpt.Copy(wk);
 
                     DataTable rptdt = rpt.ToDataTableField("MainTable");
@@ -689,6 +715,8 @@ namespace BP.WF
                 }
                 else
                 {
+                    if (wk.Row.Contains("AtPara") == false)
+                        wk.Row.Add("AtPara", DBAccess.RunSQLReturnString("SELECT AtPara From " + wk.EnMap.PhysicsTable + " WHERE OID=" + wk.OID));
                     DataTable mainTable = wk.ToDataTableField("MainTable");
                     myds.Tables.Add(mainTable);
                 }
@@ -730,7 +758,7 @@ namespace BP.WF
                     if (me != null && myds.Tables.Contains(keyOfEn) == false)
                     {
                         string fullSQL = me.Doc.Clone() as string;
-                        if (fullSQL == null)
+                        if (DataType.IsNullOrEmpty(fullSQL) == true)
                             throw new Exception("err@字段[" + keyOfEn + "]下拉框AutoFullDLL，没有配置SQL");
 
                         fullSQL = fullSQL.Replace("~", "'");
@@ -792,7 +820,7 @@ namespace BP.WF
                     nd.WorkID = workID; //为获取表单ID ( NodeFrmID )提供参数.
 
                     //设置单据编号,对于绑定的表单.
-                    if (nd.IsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)
+                    if (nd.ItIsStartNode == true && DataType.IsNullOrEmpty(frmNode.BillNoField) == false)
                     {
                         DataTable dtMain = myds.Tables["MainTable"];
                         if (dtMain.Columns.Contains(frmNode.BillNoField) == true)
@@ -820,6 +848,7 @@ namespace BP.WF
             }
         }
 
+
         public static DataTable GetFlowAlertMsg(GenerWorkFlow gwf,Node nd,string fk_flow, Int64 workID, Int64 fid)
         {
             string sql = "";
@@ -836,7 +865,7 @@ namespace BP.WF
                 case WFState.Runing:
                     drMsg = dtAlert.NewRow();
                     drMsg["Title"] = "挂起信息";
-                    if (sta == 2 && gwf.FK_Node == gwf.GetParaInt("HungupNodeID"))
+                    if (sta == 2 && gwf.NodeID == gwf.GetParaInt("HungupNodeID"))
                     {
                         drMsg["Msg"] = "您的工作挂起被拒绝，拒绝原因:" + gwf.GetParaString("HungupCheckMsg");
                         dtAlert.Rows.Add(drMsg);
@@ -906,7 +935,7 @@ namespace BP.WF
                 case WFState.ReturnSta:
                     /* 如果工作节点退回了*/
 
-                    string trackTable = "ND" + int.Parse(nd.FK_Flow) + "Track";
+                    string trackTable = "ND" + int.Parse(nd.FlowNo) + "Track";
                     sql = "SELECT NDFrom,NDFromT,EmpFrom,EmpFromT,EmpTo,Msg,RDT FROM " + trackTable + " WHERE ActionType IN(2,201) ";
 
                     //ReturnWorks ens = new ReturnWorks();
@@ -936,7 +965,7 @@ namespace BP.WF
                     {
                         if (dr[4].ToString().Contains(WebUser.No) == true)
                         {
-                            msgInfo += "来自节点：" + dr[1].ToString() + "@退回人：" + dr[3].ToString() + "@退回日期：" + dr[6].ToString();
+                            msgInfo += "<span style='color:red'>来自节点：</span>" + dr[1].ToString() + "@<span style='color:red'>退回人：</span>" + dr[3].ToString() + "@退回日期：" + dr[6].ToString();
                             msgInfo += "@退回原因：" + dr[5].ToString();
                             msgInfo += "<hr/>";
                         }
@@ -976,7 +1005,7 @@ namespace BP.WF
                     break;
                 case WFState.Shift:
                     /* 判断移交过来的。 */
-                    string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.FK_Node + "' ORDER BY RDT DESC ";
+                    string sqlshift = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE ACTIONTYPE=3 AND WorkID=" + workID + " AND NDFrom='" + gwf.NodeID + "' ORDER BY RDT DESC ";
                     DataTable dtshift = DBAccess.RunSQLReturnTable(sqlshift);
                     string msg = "";
                     if (dtshift.Rows.Count >= 1)
@@ -1016,7 +1045,7 @@ namespace BP.WF
             }
             //获取催办信息
             PushMsgs pms = new PushMsgs();
-            if (pms.Retrieve(PushMsgAttr.FK_Node, gwf.FK_Node,
+            if (pms.Retrieve(PushMsgAttr.FK_Node, gwf.NodeID,
                 PushMsgAttr.FK_Event, EventListNode.PressAfter) > 0)
             {
                 string sqlPress = "SELECT MobileInfo FROM Sys_SMS WHERE MsgType='DoPress' AND WorkID=" + gwf.WorkID + "  AND IsAlert=0 Order By RDT DESC";
@@ -1047,5 +1076,230 @@ namespace BP.WF
 
             return dtAlert;
         }
+
+        /// <summary>
+        /// 检查流程发起限制
+        /// </summary>
+        /// <param name="flow">流程</param>
+        /// <param name="wk">开始节点工作</param>
+        /// <returns></returns>
+        public static bool CheckIsCanStartFlow_InitStartFlow(Flow flow)
+        {
+            StartLimitRole role = flow.StartLimitRole;
+            if (role == StartLimitRole.None)
+                return true;
+
+            string sql = "";
+            string ptable = flow.PTable;
+
+            try
+            {
+                #region 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
+                DateTime dtNow = DateTime.Now;
+                if (role == StartLimitRole.Day)
+                {
+                    /* 仅允许一天发起一次 */
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentDate + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    {
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true;
+
+                        //判断时间是否在设置的发起范围内. 配置的格式为 @11:00-12:00@15:00-13:45
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DataType.CurrentDate+ " " + timeStrs[0].Trim();
+                            string tTo = DataType.CurrentDate + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && DataType.ParseSysDateTime2DateTime(tTo) >= dtNow)
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                        return false;
+                }
+
+                if (role == StartLimitRole.Week)
+                {
+                    /*
+                     * 1, 找出周1 与周日分别是第几日.
+                     * 2, 按照这个范围去查询,如果查询到结果，就说明已经启动了。
+                     */
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT >= '" + DataType.WeekOfMonday(dtNow) + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    {
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true; /*如果没有时间的限制.*/
+
+                        //判断时间是否在设置的发起范围内. 
+                        // 配置的格式为 @Sunday,11:00-12:00@Monday,15:00-13:45, 意思是.周日，周一的指定的时间点范围内可以启动流程.
+
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+
+                            string weekStr = DateTime.Now.DayOfWeek.ToString().ToLower();
+                            if (str.ToLower().Contains(weekStr) == false)
+                                continue; // 判断是否当前的周.
+
+                            string[] timeStrs = str.Split(',');
+                            string tFrom = DataType.CurrentDate + " " + timeStrs[0].Trim();
+                            string tTo = DataType.CurrentDate + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                        return false;
+                }
+
+                // #warning 没有考虑到周的如何处理.
+
+                if (role == StartLimitRole.Month)
+                {
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentYearMonth + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    {
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true;
+
+                        //判断时间是否在设置的发起范围内. 配置格式: @-01 12:00-13:11@-15 12:00-13:11 , 意思是：在每月的1号,15号 12:00-13:11可以启动流程.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DataType.CurrentDate + " " + timeStrs[0].Trim();
+                            string tTo = DataType.CurrentDate + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                        return false;
+                }
+
+                if (role == StartLimitRole.JD)
+                {
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentAPOfJD + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    {
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true;
+
+                        //判断时间是否在设置的发起范围内.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DataType.CurrentDate + " " + timeStrs[0].Trim();
+                            string tTo = DataType.CurrentDate + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                        return false;
+                }
+
+                if (role == StartLimitRole.Year)
+                {
+                    sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY LIKE '" + DataType.CurrentYear + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                    {
+                        if (DataType.IsNullOrEmpty(flow.StartLimitPara))
+                            return true;
+
+                        //判断时间是否在设置的发起范围内.
+                        string[] strs = flow.StartLimitPara.Split('@');
+                        foreach (string str in strs)
+                        {
+                            if (string.IsNullOrEmpty(str))
+                                continue;
+                            string[] timeStrs = str.Split('-');
+                            string tFrom = DataType.CurrentDate  + " " + timeStrs[0].Trim();
+                            string tTo = DataType.CurrentDate + " " + timeStrs[1].Trim();
+                            if (DataType.ParseSysDateTime2DateTime(tFrom) <= dtNow && dtNow >= DataType.ParseSysDateTime2DateTime(tTo))
+                                return true;
+                        }
+                        return false;
+                    }
+                    else
+                        return false;
+                }
+                #endregion 按照时间的必须是，在表单加载后判断, 不管用户设置是否正确.
+
+
+                //为子流程的时候，该子流程只能被调用一次.
+                if (role == StartLimitRole.OnlyOneSubFlow)
+                {
+
+                    if (BP.Difference.SystemConfig.isBSsystem == true)
+                    {
+
+                        string pflowNo = HttpContextHelper.RequestParams("PFlowNo");
+                        string pworkid = HttpContextHelper.RequestParams("PWorkID");
+
+                        if (pworkid == null)
+                            return true;
+
+                        sql = "SELECT Starter, RDT FROM WF_GenerWorkFlow WHERE PWorkID=" + pworkid + " AND FK_Flow='" + flow.No + "'";
+                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0 || dt.Rows.Count == 1)
+                            return true;
+
+                        //  string title = dt.Rows[0]["Title"].ToString();
+                        string starter = dt.Rows[0]["Starter"].ToString();
+                        string rdt = dt.Rows[0]["RDT"].ToString();
+                        return false;
+                        //throw new Exception(flow.StartLimitAlert + "@该子流程已经被[" + starter + "], 在[" + rdt + "]发起，系统只允许发起一次。");
+                    }
+                }
+
+                // 配置的sql,执行后,返回结果是 0 .
+                if (role == StartLimitRole.ResultIsZero)
+                {
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null);
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
+                        return true;
+                    else
+                        return false;
+                }
+
+                // 配置的sql,执行后,返回结果是 <> 0 .
+                if (role == StartLimitRole.ResultIsNotZero)
+                {
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara) == true)
+                        return true;
+
+                    sql = BP.WF.Glo.DealExp(flow.StartLimitPara, null);
+                    if (DBAccess.RunSQLReturnValInt(sql, 0) != 0)
+                        return true;
+                    else
+                        return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("err@发起限制规则[" + role.ToString() + "]出现错误:" + ex.Message);
+            }
+        }
+
     }
+
+
 }

@@ -143,18 +143,18 @@ namespace BP.WF.Port
             {
                 try
                 {
-                    return new BP.Port.Dept(this.FK_Dept);
+                    return new BP.Port.Dept(this.DeptNo);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("@获取操作员" + this.No + "部门[" + this.FK_Dept + "]出现错误,可能是系统管理员没有给他维护部门.@" + ex.Message);
+                    throw new Exception("@获取操作员" + this.No + "部门[" + this.DeptNo + "]出现错误,可能是系统管理员没有给他维护部门.@" + ex.Message);
                 }
             }
         }
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -165,7 +165,7 @@ namespace BP.WF.Port
                 this.SetValByKey(UserAttr.FK_Dept, value);
             }
         }
-        public string FK_DeptText
+        public string DeptNoText
         {
             get
             {
@@ -257,12 +257,8 @@ namespace BP.WF.Port
         /// <returns>是否匹配成功</returns>
         public bool CheckPass(string pass)
         {
-            //启用加密
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                pass = BP.Tools.Cryptography.EncryptString(pass);
-
             /*使用数据库校验.*/
-            if (this.Pass.Equals(pass) == true)
+            if (this.Pass.ToLower().Equals(pass.ToLower()) == true)
                 return true;
             return false;
         }
@@ -349,7 +345,7 @@ namespace BP.WF.Port
          
         protected override bool beforeInsert()
         {
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
             {
                 if (this.Pass == "")
                 {
@@ -401,7 +397,7 @@ namespace BP.WF.Port
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
 
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
+            if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
                 pass1 = BP.Tools.Cryptography.EncryptString(pass1);
 
             this.Pass = pass1;

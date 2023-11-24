@@ -201,13 +201,13 @@ namespace BP.CCOA.CCBBS
 
             this.SetValByKey(BBSAttr.Rec, BP.Web.WebUser.No);
             this.SetValByKey(BBSAttr.RecName, BP.Web.WebUser.Name);
-            this.SetValByKey(BBSAttr.RecDeptNo, BP.Web.WebUser.FK_Dept);
+            this.SetValByKey(BBSAttr.RecDeptNo, BP.Web.WebUser.DeptNo);
 
             this.SetValByKey(BBSAttr.RDT, DataType.CurrentDateTime); //记录日期.
             this.SetValByKey(BBSAttr.NianYue, DataType.CurrentYearMonth);//隶属年月.
 
             this.SetValByKey(BBSAttr.RelerName, BP.Web.WebUser.Name);
-            this.SetValByKey(BBSAttr.RelDeptName, BP.Web.WebUser.FK_DeptName);
+            this.SetValByKey(BBSAttr.RelDeptName, BP.Web.WebUser.DeptName);
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.SetValByKey(BBSAttr.OrgNo, BP.Web.WebUser.OrgNo);

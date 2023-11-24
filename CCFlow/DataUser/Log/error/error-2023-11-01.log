@@ -1,0 +1,5 @@
+2023-11-01 09:29:28.6353|ERROR|
+Œª÷√£∫BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3163)
+SQL=SELECT RDT FROM WF_GenerWorkerlist WHERE IsPass=0 AND FK_Flow !='' AND FK_Emp='admin' ORDER BY RDT DESC  Exception=Unable to connect to any of the specified MySQL hosts.
+
+

@@ -58,11 +58,15 @@ namespace BP.DA
                 case DBType.MySQL:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
+                case DBType.PostgreSQL:
+                case DBType.UX:
+                case DBType.HGDB:
                     if (defaultVal.GetType() == typeof(int) || defaultVal.GetType() == typeof(float) || defaultVal.GetType() == typeof(decimal))
                         sql = "ALTER TABLE " + table + " ALTER COLUMN " + colName + " SET DEFAULT " + defaultVal.ToString();
                     else
                         sql = "ALTER TABLE " + table + " ALTER COLUMN " + colName + " SET DEFAULT '" + defaultVal.ToString() + "'";
                     break;
+                case DBType.DM:
                 case DBType.Oracle:
                     if (defaultVal.GetType() == typeof(int) || defaultVal.GetType() == typeof(float) || defaultVal.GetType() == typeof(decimal))
                         sql = "ALTER TABLE " + table + " MODIFY " + colName + " DEFAULT " + defaultVal.ToString();
@@ -81,6 +85,10 @@ namespace BP.DA
                         sql = "ALTER TABLE " + table + " ADD DEFAULT " + defaultVal.ToString() + " FOR  " + colName;
                     else
                         sql = "ALTER TABLE " + table + " ADD DEFAULT '" + defaultVal.ToString() + "' FOR  " + colName;
+                    break;
+                
+                   
+
                     break;
                 default:
                     break;
@@ -449,7 +457,7 @@ namespace BP.DA
         {
             //对于特殊的数据库进行判断.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle
-                || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                //|| BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.DM
                 || BP.Difference.SystemConfig.AppCenterDBType==DBType.KingBaseR3
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
@@ -469,7 +477,7 @@ namespace BP.DA
 
             try
             {
-                var i = DBAccess.RunSQL(ps);
+                int i = DBAccess.RunSQL(ps);
                 if (i == 0)
                 {
                     //如果没有该笔数据，执行insert一条.
@@ -560,7 +568,7 @@ namespace BP.DA
                 return "";
             //对于特殊的数据库进行判断.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle
-                || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL
+                //|| BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.DM
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3
                 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
@@ -714,6 +722,68 @@ namespace BP.DA
                 finally
                 {
                     if(dr!= null) { dr.Close(); };
+                    cm.Dispose();
+                    cn.Dispose();
+                }
+            }
+
+            //增加对DM数据库的逻辑 zqp
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+            {
+                DmConnection cn = DBAccess.GetAppCenterDBConn as DmConnection;
+                if (cn.State != ConnectionState.Open)
+                    cn.Open();
+
+                string strSQL = "SELECT " + fileSaveField + " FROM " + tableName + " WHERE " + tablePK + "='" + pkVal + "'";
+
+                DmDataReader dr = null;
+                DmCommand cm = new DmCommand();
+                cm.Connection = cn;
+                cm.CommandText = strSQL;
+                cm.CommandType = CommandType.Text;
+
+
+                // 执行它.
+                try
+                {
+                    dr = (DmDataReader)cm.ExecuteReader();
+                    byte[] byteFile = null;
+                    if (dr.Read())
+                    {
+                        if (dr[0] == null || DataType.IsNullOrEmpty(dr[0].ToString()))
+                            return null;
+
+                        byteFile = (byte[])dr[0];
+                    }
+
+                    return byteFile;
+                }
+                catch (Exception ex)
+                {
+                    if (DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
+                    {
+                        /*如果没有此列，就自动创建此列.*/
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ";
+                        DBAccess.RunSQL(sql);
+                        return null;
+                    }
+                    else
+                    {
+                        //改变类型
+                        DBAccess.RunSQL("ALTER TABLE " + tableName + " RENAME COLUMN " + fileSaveField + " TO " + fileSaveField + "_bak");
+
+                        //添加 remark 字段，类型为 clob
+                        DBAccess.RunSQL("ALTER TABLE " + tableName + " ADD  " + fileSaveField + " blob ");
+
+                        if (isFirst == true)
+                            return GetByteFromDB(tableName, tablePK, pkVal, fileSaveField, false);
+                    }
+                    throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message + "， 请检查该表[" + tableName + "]字段[" + fileSaveField + "]是否是  blob 类型.");
+
+                }
+                finally
+                {
+                    if (dr != null) { dr.Close(); };
                     cm.Dispose();
                     cn.Dispose();
                 }
@@ -873,7 +943,7 @@ namespace BP.DA
                 }
             }
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
             {
                 NpgsqlConnection cn = DBAccess.GetAppCenterDBConn as NpgsqlConnection;
                 if (cn.State != ConnectionState.Open)
@@ -941,7 +1011,7 @@ namespace BP.DA
             //if (BP.Web.WebUser.No == null)
             //    return;
             //SqlConnection conn = new SqlConnection(BP.Difference.SystemConfig.AppCenterDSN);
-            //Cash.SetConn(BP.Web.WebUser.No, conn);
+            //Cache.SetConn(BP.Web.WebUser.No, conn);
             //DBAccess.RunSQL("BEGIN TRANSACTION");
         }
         /// <summary>
@@ -958,7 +1028,7 @@ namespace BP.DA
             //    return;
 
             //DBAccess.RunSQL("Rollback TRANSACTION");
-            //SqlConnection conn = Cash.GetConn(BP.Web.WebUser.No) as SqlConnection;
+            //SqlConnection conn = Cache.GetConn(BP.Web.WebUser.No) as SqlConnection;
             //conn.Close();
             //conn.Dispose();
         }
@@ -1030,10 +1100,12 @@ namespace BP.DA
                 {
                     case DBType.MSSQL:
                     case DBType.PostgreSQL:
+                    case DBType.HGDB:
                     case DBType.UX:
                         DBAccess.RunSQLReturnString("SELECT 1+2 ");
                         break;
                     case DBType.Oracle:
+                    case DBType.DM:
                     case DBType.KingBaseR3:
                     case DBType.KingBaseR6:
                     case DBType.MySQL:
@@ -1278,11 +1350,13 @@ namespace BP.DA
                     case DBType.KingBaseR6:
                         return new KdbndpConnection(connstr);
                     case DBType.Oracle:
-                    case DBType.DM:
                         return new OracleConnection(connstr);
+                    case DBType.DM:
+                        return new DmConnection(connstr);
                     case DBType.MySQL:
                         return new MySqlConnection(connstr);
                     case DBType.PostgreSQL:
+                    case DBType.HGDB:
                         return new Npgsql.NpgsqlConnection(connstr);
                     case DBType.UX:
                         return new Nuxsql.NuxsqlConnection(connstr);
@@ -1478,6 +1552,7 @@ namespace BP.DA
                     sql = "ALTER TABLE " + table + " DROP CONSTRAINT " + pkName;
                     break;
                 case DBType.PostgreSQL:
+                case DBType.HGDB:
                 case DBType.UX:
                     sql = "ALTER TABLE " + table.ToLower() + " DROP CONSTRAINT " + pkName.ToLower();
                     break;
@@ -1506,6 +1581,7 @@ namespace BP.DA
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                 case DBType.PostgreSQL:
+                case DBType.HGDB:
                     sql = "alter table " + table + " rename column " + oldfield + " to " + newfield;
                     break;
                 case DBType.MSSQL:
@@ -1531,7 +1607,7 @@ namespace BP.DA
         /// <param name="pk">主键</param>
         public static void CreatePK(string tab, string pk, DBType db)
         {
-            if (tab == null || tab == "")
+            if (tab == null || tab.Equals(""))
                 return;
             if (DBAccess.IsExitsTabPK(tab) == true)
                 return;
@@ -1563,7 +1639,7 @@ namespace BP.DA
         }
         public static void CreatePK(string tab, string pk1, string pk2, DBType db)
         {
-            if (tab == null || tab == "")
+            if (tab == null || tab.Equals(""))
                 return;
 
             if (DBAccess.IsExitsTabPK(tab) == true)
@@ -1586,7 +1662,7 @@ namespace BP.DA
         }
         public static void CreatePK(string tab, string pk1, string pk2, string pk3, DBType db)
         {
-            if (tab == null || tab == "")
+            if (tab == null || tab.Equals(""))
                 return;
 
             if (DBAccess.IsExitsTabPK(tab) == true)
@@ -1666,10 +1742,12 @@ namespace BP.DA
         public static void RunSQLScript(string sqlOfScriptFilePath, bool isCutDoubleJianHao = true)
         {
             string str = DataType.ReadTextFile(sqlOfScriptFilePath);
+            if (SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                str = str.Replace("Sys_Enum", "Sys_Enums");
             string[] strs = str.Split(';');
             foreach (string s in strs)
             {
-                if (DataType.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
+                if (DataType.IsNullOrEmpty(s) || DataType.IsNullOrEmpty(s))
                     continue;
 
                 if (isCutDoubleJianHao == true && s.Contains("--"))
@@ -1691,7 +1769,7 @@ namespace BP.DA
             string[] strs = str.Split(new String[] { "--GO--" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in strs)
             {
-                if (DataType.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s))
+                if (DataType.IsNullOrEmpty(s) || DataType.IsNullOrEmpty(s))
                     continue;
 
                 if (s.Contains("/**"))
@@ -1756,7 +1834,7 @@ namespace BP.DA
         /// <returns></returns>
         public static int RunSQL(string sql)
         {
-            if (sql == null || sql.Trim() == "")
+            if (sql == null || sql.Trim().Equals(""))
                 return 1;
             Paras ps = new Paras();
             ps.SQL = sql;
@@ -1814,6 +1892,7 @@ namespace BP.DA
                         result = RunSQL_200705_MySQL(sql, paras);
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.HGDB:
                         result = RunSQL_201902_PSQL(sql, paras);
                         break;
                     case DBType.UX:
@@ -2122,7 +2201,7 @@ namespace BP.DA
                 {
                     foreach (Para para in paras)
                     {
-                        DmParameter oraP = new DmParameter(para.ParaName, para.val);
+                        DmParameter oraP = new DmParameter(para.ParaName, para.val.ToString());
                         cmd.Parameters.Add(oraP);
                     }
                 }
@@ -2320,7 +2399,7 @@ namespace BP.DA
                     }
                 }
 
-                if (BP.Difference.SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.isDebug)
                 {
                     string msg = "RunSQL2   SQL=" + sql + ex.Message;
                     //Log.DebugWriteError(msg);
@@ -2787,11 +2866,10 @@ namespace BP.DA
             {
                 foreach (Para para in paras)
                 {
-                    // 2019-8-8 zl 适配postgreSql新版驱动，要求数据类型一致
-                    object valObj = para.val;
 
-                    KdbndpParameter myParameter = new KdbndpParameter(para.ParaName, valObj);
+                    KdbndpParameter myParameter = new KdbndpParameter(para.ParaName, para.DATypeOfOra);
                     myParameter.Size = para.Size;
+                    myParameter.Value = para.val;
                     ada.SelectCommand.Parameters.Add(myParameter);
                 }
             }
@@ -2952,6 +3030,7 @@ namespace BP.DA
                     return RunSQLReturnTable_201612_MySql(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return RunSQLReturnTable_201612_PostgreSQL(sql, pageSize, pageIdx, key, orderKey, orderType);
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
@@ -2963,14 +3042,14 @@ namespace BP.DA
         private static DataTable RunSQLReturnTable_201612_PostgreSQL(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
         {
             string sqlstr = string.Empty;
-            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            orderType = DataType.IsNullOrEmpty(orderType) ? "ASC" : orderType.ToUpper();
 
             if (pageIdx < 1)
                 pageIdx = 1;
             //    limit  A  offset  B;  A就是你需要多少行B就是查询的起点位置
-            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType == "ASC" ? " >= " : " <= ")
+            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType.Equals("ASC") ? " >= " : " <= ")
                      + "(SELECT T2." + key + " FROM (" + sql + ") T2"
-                     + (string.IsNullOrWhiteSpace(orderKey)
+                     + (DataType.IsNullOrEmpty(orderKey)
                             ? string.Empty
                             : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
                      + " LIMIT " + ((pageIdx - 1) * pageSize + 1) + " offset 1) LIMIT " + pageSize;
@@ -2981,14 +3060,14 @@ namespace BP.DA
         private static DataTable RunSQLReturnTable_201612_KingBase(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
         {
             string sqlstr = string.Empty;
-            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            orderType = DataType.IsNullOrEmpty(orderType) ? "ASC" : orderType.ToUpper();
 
             if (pageIdx < 1)
                 pageIdx = 1;
             //    limit  A  offset  B;  A就是你需要多少行B就是查询的起点位置
-            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType == "ASC" ? " >= " : " <= ")
+            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType.Equals("ASC") ? " >= " : " <= ")
                      + "(SELECT T2." + key + " FROM (" + sql + ") T2"
-                     + (string.IsNullOrWhiteSpace(orderKey)
+                     + (DataType.IsNullOrEmpty(orderKey)
                             ? string.Empty
                             : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
                      + " LIMIT " + ((pageIdx - 1) * pageSize + 1) + " offset 1) LIMIT " + pageSize;
@@ -3009,7 +3088,7 @@ namespace BP.DA
         {
             string sqlstr = string.Empty;
 
-            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            orderType = DataType.IsNullOrEmpty(orderType) ? "ASC" : orderType.ToUpper();
 
             if (pageIdx < 1)
                 pageIdx = 1;
@@ -3017,21 +3096,21 @@ namespace BP.DA
             if (pageIdx == 1)
             {
                 sqlstr = "SELECT TOP " + pageSize + " * FROM (" + sql + ") T1" +
-                         (string.IsNullOrWhiteSpace(orderKey)
+                         (DataType.IsNullOrEmpty(orderKey)
                               ? string.Empty
                               : string.Format(" ORDER BY T1.{0} {1}", orderKey, orderType));
             }
             else
             {
                 sqlstr = "SELECT TOP " + pageSize + " * FROM (" + sql + ") T1"
-                         + " WHERE T1." + key + (orderType == "ASC" ? " > " : " < ") + "("
-                         + " SELECT " + (orderType == "ASC" ? "MAX(T3." : "MIN(T3.") + key + ") FROM ("
+                         + " WHERE T1." + key + (orderType.Equals("ASC") ? " > " : " < ") + "("
+                         + " SELECT " + (orderType.Equals("ASC") ? "MAX(T3." : "MIN(T3.") + key + ") FROM ("
                          + " SELECT TOP ((" + pageIdx + " - 1) * 10) T2." + key + "FROM (" + sql + ") T2"
-                         + (string.IsNullOrWhiteSpace(orderKey)
+                         + (DataType.IsNullOrEmpty(orderKey)
                                 ? string.Empty
                                 : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
                          + " ) T3)"
-                         + (string.IsNullOrWhiteSpace(orderKey)
+                         + (DataType.IsNullOrEmpty(orderKey)
                                 ? string.Empty
                                 : string.Format(" ORDER BY T.{0} {1}", orderKey, orderType));
             }
@@ -3056,12 +3135,12 @@ namespace BP.DA
             int start = (pageIdx - 1) * pageSize + 1;
             int end = pageSize * pageIdx;
 
-            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            orderType = DataType.IsNullOrEmpty(orderType) ? "ASC" : orderType.ToUpper();
 
             string sqlstr = "SELECT * FROM ( SELECT T1.*, ROWNUM RN "
                             + "FROM (SELECT * FROM  (" + sql + ") T2 "
                             +
-                            (string.IsNullOrWhiteSpace(orderType)
+                            (DataType.IsNullOrEmpty(orderType)
                                  ? string.Empty
                                  : string.Format("ORDER BY T2.{0} {1}", orderKey, orderType)) + ") T1 WHERE ROWNUM <= " +
                             end + " ) WHERE RN >=" + start;
@@ -3082,14 +3161,14 @@ namespace BP.DA
         private static DataTable RunSQLReturnTable_201612_MySql(string sql, int pageSize, int pageIdx, string key, string orderKey, string orderType)
         {
             string sqlstr = string.Empty;
-            orderType = string.IsNullOrWhiteSpace(orderType) ? "ASC" : orderType.ToUpper();
+            orderType = DataType.IsNullOrEmpty(orderType) ? "ASC" : orderType.ToUpper();
 
             if (pageIdx < 1)
                 pageIdx = 1;
 
-            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType == "ASC" ? " >= " : " <= ")
+            sqlstr = "SELECT * FROM (" + sql + ") T1 WHERE T1." + key + (orderType.Equals("ASC") ? " >= " : " <= ")
                      + "(SELECT T2." + key + " FROM (" + sql + ") T2"
-                     + (string.IsNullOrWhiteSpace(orderKey)
+                     + (DataType.IsNullOrEmpty(orderKey)
                             ? string.Empty
                             : string.Format(" ORDER BY T2.{0} {1}", orderKey, orderType))
                      + " LIMIT " + ((pageIdx - 1) * pageSize) + ",1) LIMIT " + pageSize;
@@ -3124,6 +3203,7 @@ namespace BP.DA
                         dt = RunSQLReturnTable_20191231_DM(sql, paras);
                         break;
                     case DBType.PostgreSQL:
+                    case DBType.HGDB:
                         dt = RunSQLReturnTable_201902_PSQL(sql, paras);
                         break;
                     case DBType.UX:
@@ -3170,6 +3250,7 @@ namespace BP.DA
                     case DBType.DM:
                     case DBType.PostgreSQL:
                     case DBType.UX:
+                    case DBType.HGDB:
                         throw new Exception("err@RunProcReturnTable数据库类型还未处理！");
                         break;
                     default:
@@ -3199,7 +3280,7 @@ namespace BP.DA
 
             try
             {
-                if (obj == null || obj.ToString() == "")
+                if (obj == null || obj.ToString().Equals(""))
                     return val;
                 else
                     return float.Parse(obj.ToString());
@@ -3249,7 +3330,7 @@ namespace BP.DA
         {
             object obj = "";
             obj = DBAccess.RunSQLReturnVal(sql);
-            if (obj == null || obj.ToString() == "" || obj == DBNull.Value)
+            if (obj == null || obj.ToString().Equals("") || obj == DBNull.Value)
                 return IsNullReturnVal;
             else
                 return Convert.ToInt32(obj);
@@ -3259,7 +3340,7 @@ namespace BP.DA
             object obj = "";
 
             obj = DBAccess.RunSQLReturnVal(sql, paras);
-            if (obj == null || obj.ToString() == "")
+            if (obj == null || obj.ToString().Equals(""))
                 return IsNullReturnVal;
             else
                 return Convert.ToInt32(obj);
@@ -3275,7 +3356,7 @@ namespace BP.DA
             try
             {
                 object obj = DBAccess.RunSQLReturnVal(ps);
-                if (obj == null || obj.ToString() == "")
+                if (obj == null || obj.ToString().Equals(""))
                     return IsNullReturnVal;
                 else
                 {
@@ -3465,6 +3546,7 @@ namespace BP.DA
                     dt = DBAccess.RunSQLReturnTable_200705_MySQL(sql, paras);
                     break;
                 case DBType.PostgreSQL:
+                case DBType.HGDB:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, paras);
                     break;
                 case DBType.UX:
@@ -3502,6 +3584,7 @@ namespace BP.DA
                     dt = DBAccess.RunSQLReturnTable_200705_SQL(sql, new Paras());
                     break;
                 case DBType.PostgreSQL:
+                case DBType.HGDB:
                     dt = DBAccess.RunSQLReturnTable_201902_PSQL(sql, new Paras());
                     break;
                 case DBType.UX:
@@ -3583,6 +3666,7 @@ namespace BP.DA
                     break;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = " SELECT ";
                     sql += " pg_constraint.conname AS pk_name ";
                     sql += " FROM ";
@@ -3641,17 +3725,17 @@ namespace BP.DA
                 case DBType.KingBaseR6:
                     sql = "Select count(*) as nm From user_objects Where object_type='VIEW' and object_name=:v";
                     DataTable Oracledt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
-                    if (Oracledt.Rows[0]["nm"].ToString() == "1")
+                    if (Oracledt.Rows[0]["nm"].ToString().Equals("1"))
                         return true;
                     else
                         return false;
                 case DBType.DM:
-                    sql = "SELECT TABTYPE  FROM TAB WHERE UPPER(TNAME)=:v";
+                    sql = "SELECT VIEW_NAME FROM USER_VIEWS WHERE VIEW_NAME=:v";
                     DataTable oradt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
                     if (oradt.Rows.Count == 0)
                         return false;
 
-                    if (oradt.Rows[0][0].ToString().ToUpper().Trim() == "V")
+                    if (oradt.Rows[0][0].ToString().ToUpper().Trim().Equals("V"))
                         return true;
                     else
                         return false;
@@ -3668,6 +3752,7 @@ namespace BP.DA
                         return false;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = "select relkind from pg_class WHERE relname ='" + tabelOrViewName + "'";
                     DataTable dt3 = DBAccess.RunSQLReturnTable(sql);
                     if (dt3.Rows.Count == 0)
@@ -3684,7 +3769,7 @@ namespace BP.DA
                     if (dtaa.Rows.Count == 0)
                         throw new Exception("@表不存在[" + tabelOrViewName + "]");
 
-                    if (dtaa.Rows[0][0].ToString().ToUpper().Trim() == "V")
+                    if (dtaa.Rows[0][0].ToString().ToUpper().Trim().Equals("V"))
                         return true;
                     else
                         return false;
@@ -3694,7 +3779,7 @@ namespace BP.DA
                     if (dt2.Rows.Count == 0)
                         return false;
 
-                    if (dt2.Rows[0][0].ToString().ToUpper().Trim() == "VIEW")
+                    if (dt2.Rows[0][0].ToString().ToUpper().Trim().Equals("VIEW"))
                         return true;
                     else
                         return false;
@@ -3704,7 +3789,7 @@ namespace BP.DA
                     if (dtw.Rows.Count == 0)
                         return false;
 
-                    if (dtw.Rows[0][0].ToString().Trim() == "5")
+                    if (dtw.Rows[0][0].ToString().Trim().Equals("5"))
                         return true;
                     else
                         return false;
@@ -3745,16 +3830,18 @@ namespace BP.DA
             switch (AppCenterDBType)
             {
                 case DBType.Oracle:
-                case DBType.KingBaseR3:
-                case DBType.KingBaseR6:
-                case DBType.DM:
                     if (obj.IndexOf(".") != -1)
                         obj = obj.Split('.')[1];
                     return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + DBAccess.ConnectionUserID.ToUpper() + "' ", ps);
+                case DBType.DM:
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
+                    return IsExits("select object_name from all_objects WHERE  object_name = upper(:obj) and OWNER='" + BP.Difference.SystemConfig.AppCenterDBDatabase.ToUpper() + "' ", ps);
                 case DBType.MSSQL:
                     return IsExits("SELECT name FROM sysobjects WHERE name = '" + obj + "'");
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return IsExits("SELECT relname FROM pg_class WHERE relname = '" + obj.ToLower() + "'");
                 case DBType.Informix:
                     return IsExits("select tabname from systables where tabname = '" + obj.ToLower() + "'");
@@ -3770,6 +3857,12 @@ namespace BP.DA
                 case DBType.Access:
                     //return false ; //IsExits("SELECT * FROM MSysObjects WHERE (((MSysObjects.Name) =  '"+obj+"' ))");
                     return IsExits("SELECT * FROM MSysObjects WHERE Name =  '" + obj + "'");
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
+                    if (obj.IndexOf(".") != -1)
+                        obj = obj.Split('.')[1];
+                    return IsExits("SELECT table_name, table_type FROM information_schema.tables  WHERE  table_name = '" + obj + "'");
+                    break;
                 default:
                     throw new Exception("没有识别的数据库编号");
             }
@@ -3797,6 +3890,7 @@ namespace BP.DA
                     break;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = "SELECT count(*) FROM pg_indexes WHERE  tablename = '" + table.ToLower() + "' ";
                     //string sql1 = "select count(*) from information_schema.statistics where   table_name ='" + table.ToLower() + "' and  index_name='" + indexName.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql);
@@ -3848,6 +3942,7 @@ namespace BP.DA
                     break;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     string sql1 = "select count(*) from information_schema.columns where   table_name ='" + table.ToLower() + "' and  column_name='" + col.ToLower() + "'";
                     i = DBAccess.RunSQLReturnValInt(sql1);
                     break;
@@ -3953,7 +4048,7 @@ namespace BP.DA
             }
             dscfg.Dispose();
 
-            SystemConfig.IsBSsystem = false;
+            SystemConfig.isBSsystem = false;
         }
 
 

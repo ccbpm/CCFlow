@@ -116,7 +116,7 @@ namespace BP.TA
 
                     ta.Title = nd.Name;
                     ta.TaskSta = 0;
-                    ta.IsRead = 0;
+                    ta.ItIsRead = 0;
 
                     //发送人= 任务的下达人.
                     ta.SenderNo = BP.Web.WebUser.No;
@@ -145,6 +145,12 @@ namespace BP.TA
                 }
                 return prj.No;
             }
+
+            if (template.TaskModel.Equals("TaskTree") == true)
+            {
+
+            }
+
             return "err@没有判断的类型:" + template.TaskModel;
         }
         public static string Prj_Start(string prjNo)

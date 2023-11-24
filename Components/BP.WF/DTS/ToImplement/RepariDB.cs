@@ -74,7 +74,7 @@ namespace BP.WF.DTS
                 MapAttr attr = new MapAttr();
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
                 {
-                    attr.setFK_MapData(md.No);
+                    attr.FrmID =md.No;
                     attr.setKeyOfEn("OID");
                     attr.setName("OID");
                     attr.setMyDataType(DataType.AppInt);

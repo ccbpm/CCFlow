@@ -7,12 +7,17 @@ using System.Web.SessionState;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections;
+using BP.Difference.Redis;
 
 namespace BP.Difference
 {
     public static class HttpContextHelper
     {
-
+        public static string GetNameByIdx(int idx)
+        {
+            HttpPostedFile file = HttpContextHelper.RequestFiles(idx);
+            return file.FileName;
+        }
         /// <summary>
         /// 获取当前的HttpContext
         /// </summary>
@@ -56,6 +61,14 @@ namespace BP.Difference
             get
             {
                 return Current.Request;
+            }
+        }
+
+        public static RedisUtils RedisUtils
+        {
+            get
+            {
+                return new RedisUtils();
             }
         }
 
@@ -110,7 +123,7 @@ namespace BP.Difference
 
             // 在Response的Header中设置下载文件的文件名，这样客户端浏览器才能正确显示下载的文件名
             // 注意这里要用HttpUtility.UrlEncode编码文件名，否则有些浏览器可能会显示乱码文件名
-            var contentDisposition = "attachment;" + "filename=" + HttpUtility.UrlEncode(fileName, Encoding.UTF8);
+            string contentDisposition = "attachment;" + "filename=" + HttpUtility.UrlEncode(fileName, Encoding.UTF8);
             // Response.Headers.Add("Content-Disposition", contentDisposition); IIS 7之前的版本可能不支持此写法
             Response.AddHeader("Content-Disposition", contentDisposition);
             Response.AddHeader("Code", "OK");
@@ -369,7 +382,10 @@ namespace BP.Difference
                 }
                 HttpPostedFile f = filelist[0];
                 // 写入文件
-                f.SaveAs(filePath);
+                //f.SaveAs(filePath);
+
+                //2023.8.21,重构调用重载方法 by oppein
+                UploadFile(f, filePath);
             }
             catch (Exception ex)
             {
@@ -380,6 +396,14 @@ namespace BP.Difference
         {
             try
             {
+                //2023.8.21,解决文件文件目录不存在报错的异常，不存在时先创建 by oppein
+                FileInfo saveFileInfo = new FileInfo(filePath);
+                string saveDirectory = saveFileInfo.DirectoryName;
+                if (!Directory.Exists(saveDirectory))
+                {
+                    Directory.CreateDirectory(saveDirectory);
+                }
+
                 // 写入文件
                 file.SaveAs(filePath);
             }

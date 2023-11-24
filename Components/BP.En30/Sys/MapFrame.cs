@@ -20,8 +20,6 @@ namespace BP.Sys
         public const string URL = "URL";
         public const string FrameURL = "FrameURL";
         public const string UrlSrcType = "UrlSrcType";
-        public const string FrmID = "FrmID";
-
         /// <summary>
         /// 高度
         /// </summary>
@@ -68,7 +66,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否自适应大小
         /// </summary>
-        public bool IsAutoSize
+        public bool ItIsAutoSize
         {
             get
             {
@@ -78,34 +76,6 @@ namespace BP.Sys
             {
                 this.SetValByKey(MapFrameAttr.IsAutoSize, value);
             }
-        }
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.GetValStrByKey(MapFrameAttr.Name);
-            }
-        }
-        public void setName(string val)
-        {
-            this.SetValByKey(MapFrameAttr.Name, val);
-        }
-        /// <summary>
-        /// EleID
-        /// </summary>
-        public string FrmID
-        {
-            get
-            {
-                return this.GetValStrByKey(MapFrameAttr.FrmID);
-            }
-        }
-        public void setFrmID(string val)
-        {
-            this.SetValByKey(MapFrameAttr.FrmID, val);
         }
         /// <summary>
         /// EleType
@@ -166,8 +136,8 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.W, value);
             }
         }
-        public bool IsUse = false;
-        public string FK_MapData
+        public bool ItIsUse = false;
+        public string FrmID
         {
             get
             {
@@ -178,9 +148,16 @@ namespace BP.Sys
                 this.SetValByKey(MapFrameAttr.FK_MapData, value);
             }
         }
-        public void setFK_MapData(string val)
+        public string Name
         {
-            this.SetValByKey(MapFrameAttr.FK_MapData, val);
+            get
+            {
+                return this.GetValStrByKey(MapFrameAttr.Name);
+            }
+            set
+            {
+                this.SetValByKey(MapFrameAttr.Name, value);
+            }
         }
         #endregion
 
@@ -247,7 +224,7 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            gf.FrmID = this.FK_MapData;
+            gf.FrmID = this.FrmID;
             gf.CtrlID =  this.MyPK;
             gf.CtrlType = "Frame";
             gf.Lab = this.Name;
@@ -270,7 +247,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
              
             return base.beforeInsert();
         }

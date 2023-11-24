@@ -352,7 +352,7 @@ namespace BP.WF
         {
             if (BP.DA.DataType.IsNullOrEmpty(this.StartRDT) == true)
             {
-                this.StarterName = BP.Web.WebUser.FK_DeptName + "\\" + BP.Web.WebUser.Name;
+                this.StarterName = BP.Web.WebUser.DeptName + "\\" + BP.Web.WebUser.Name;
                 this.StartRDT = BP.DA.DataType.CurrentDateTime;
             }
             return base.beforeUpdateInsertAction();

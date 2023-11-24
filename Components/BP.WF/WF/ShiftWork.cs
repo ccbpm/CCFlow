@@ -5,6 +5,7 @@ using BP.Web;
 using BP.Port;
 using BP.DA;
 using BP.WF.Template;
+using System.Data;
 
 namespace BP.WF
 {
@@ -29,25 +30,56 @@ namespace BP.WF
             int i = 0;
             //人员.
             Emp emp = new Emp(toEmp);
-            Node nd = new Node(gwf.FK_Node);
+            Node nd = new Node(gwf.NodeID);
             Work work = nd.HisWork;
             work.OID = workID;
+            work.RetrieveFromDBSources();
+            DateTime dtOfShould = DateTime.Now;
+
+            if (nd.HisCHWay == CHWay.ByTime)
+            {
+                //按天、小时考核
+                if (nd.GetParaInt("CHWayOfTimeRole") == 0)
+                {
+                    //增加天数. 考虑到了节假日. 
+                    //判断是修改了节点期限的天数
+                    int timeLimit = nd.TimeLimit;
+                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
+                    nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
+                }
+                //按照节点字段设置
+                if (nd.GetParaInt("CHWayOfTimeRole") == 1)
+                {
+                    //获取设置的字段、
+                    string keyOfEn = nd.GetParaString("CHWayOfTimeRoleField");
+                    if (DataType.IsNullOrEmpty(keyOfEn) == true)
+                        nd.HisCHWay = CHWay.None;
+                    else
+                        dtOfShould = DataType.ParseSysDateTime2DateTime(work.GetValByKey(keyOfEn).ToString());
+
+                }
+                
+            }
+            string sdt = "";
+            if (nd.HisCHWay == CHWay.None)
+                sdt = "无";
+            else
+                sdt = DataType.SysDateTimeFormat(dtOfShould);
+            //检查被移交人是否在当前的待办列表里否？
+            GenerWorkerList gwl = new GenerWorkerList();
+            i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.UserID,
+                GenerWorkerListAttr.FK_Node, nd.NodeID,
+                GenerWorkerListAttr.WorkID, workID);
+            if (i == 1)
+                return "err@移交失败，您所移交的人员(" + emp.UserID + " " + emp.Name + ")已经在代办列表里.";
+
             if (nd.TodolistModel == TodolistModel.Order
                 || nd.TodolistModel == TodolistModel.Teamup
                 || nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /*如果是队列模式，或者是协作模式, 就直接把自己的gwl 信息更新到被移交人身上. */
-
-                //检查被移交人是否在当前的待办列表里否？
-                GenerWorkerList gwl = new GenerWorkerList();
-                i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, emp.UserID,
-                    GenerWorkerListAttr.FK_Node, nd.NodeID,
-                    GenerWorkerListAttr.WorkID, workID);
-                if (i == 1)
-                    return "err@移交失败，您所移交的人员(" + emp.UserID + " " + emp.Name + ")已经在代办列表里.";
-
                 //把自己的待办更新到被移交人身上.
-                string sql = "UPDATE WF_GenerWorkerlist SET IsRead=0, FK_Emp='" + emp.UserID + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.FK_Node + " AND WorkID=" + workID;
+                string sql = "UPDATE WF_GenerWorkerlist SET IsRead=0, FK_Emp='" + emp.UserID + "', EmpName='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + gwf.NodeID + " AND WorkID=" + workID;
                 int myNum = DBAccess.RunSQL(sql);
 
                 #region 判断是否是,admin的移交.
@@ -56,25 +88,25 @@ namespace BP.WF
                     //说明移交人是 admin，执行的.
                     GenerWorkerLists mygwls = new GenerWorkerLists();
                     mygwls.Retrieve(GenerWorkerListAttr.WorkID, workID,
-                        GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+                        GenerWorkerListAttr.FK_Node, gwf.NodeID);
                     if (mygwls.Count == 0)
                         throw new Exception("err@系统错误，没有找到待办.");
 
                     //把他们都删除掉.
                     mygwls.Delete(GenerWorkerListAttr.WorkID, workID,
-                        GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+                        GenerWorkerListAttr.FK_Node, gwf.NodeID);
 
                     //取出来第1个，把人员信息改变掉.
                     foreach (GenerWorkerList item in mygwls)
                     {
-                        item.FK_Emp = WebUser.No;
-                        item.FK_EmpText = WebUser.Name;
+                        item.EmpNo = WebUser.No;
+                        item.EmpName = WebUser.Name;
 
-                        item.FK_Dept = WebUser.FK_Dept;
-                        item.DeptName = WebUser.FK_DeptName;
+                        item.DeptNo = WebUser.DeptNo;
+                        item.DeptName = WebUser.DeptName;
 
-                        item.IsRead = false;
-
+                        item.ItIsRead = false;
+                        item.SDT = sdt;
                         item.Insert(); //执行插入.
                         break;
                     }
@@ -82,13 +114,13 @@ namespace BP.WF
                 #endregion 判断是否是,admin的移交.
 
                 //记录日志.
-                Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
+                Glo.AddToTrack(ActionType.Shift, nd.FlowNo, workID, gwf.FID, nd.NodeID, nd.Name,
                     WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
                 //移交后事件
                 string atPara1 = "@SendToEmpIDs=" + emp.UserID;
                 string info = "@" + ExecEvent.DoNode(EventListNode.ShitAfter, nd, work, null, atPara1);
-
+                if (info == null || info.Equals("@null")) info = "";
                 //处理移交后发送的消息事件,发送消息.
                 PushMsgs pms1 = new PushMsgs();
                 pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
@@ -103,26 +135,25 @@ namespace BP.WF
             }
 
             //非协作模式.
-            GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
-            gwls.Delete(GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.WorkID, gwf.WorkID);
-
-            foreach (GenerWorkerList item in gwls)
-            {
-                item.FK_Emp = emp.UserID;
-                item.FK_EmpText = emp.Name;
-                item.IsEnable = true;
-                item.Insert();
-                break;
-            }
+            gwl = new GenerWorkerList();
+            gwl.Retrieve(GenerWorkerListAttr.FK_Node, gwf.NodeID, GenerWorkerListAttr.WorkID, gwf.WorkID, GenerWorkerListAttr.FK_Emp, WebUser.No);
+            //删除当前人的待办
+            gwl.Delete();
+            //增加移交人的待办
+            gwl.EmpNo = emp.UserID;
+            gwl.EmpName = emp.Name;
+            gwl.ItIsEnable = true;
+            gwl.ItIsRead = false;
+            gwl.SDT = sdt;
+            gwl.Insert();
 
             gwf.WFState = WFState.Shift;
             gwf.TodoEmpsNum = 1;
-            gwf.TodoEmps = emp.UserID + "," + emp.Name + ";";
+            gwf.TodoEmps = gwf.TodoEmps.Replace(WebUser.No + "," + WebUser.Name + ";", "") + emp.UserID + "," + emp.Name + ";";
             gwf.Update();
 
             //记录日志.
-            Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
+            Glo.AddToTrack(ActionType.Shift, nd.FlowNo, workID, gwf.FID, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
             string inf1o = "@工作移交成功。@您已经成功的把工作移交给：" + emp.UserID + " , " + emp.Name;
@@ -150,17 +181,48 @@ namespace BP.WF
 
             //定义变量,查询出来当前的人员列表.
             GenerWorkerLists gwls = new GenerWorkerLists();
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node,
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.NodeID,
                         GenerWorkerListAttr.WorkID, workID);
             //定义变量.
-            GenerWorkerList gwl = null;
+            GenerWorkerList gwl = new GenerWorkerList();
 
             int i = 0;
             //人员.
-            Node nd = new Node(gwf.FK_Node);
+            Node nd = new Node(gwf.NodeID);
             Work work = nd.HisWork;
             work.OID = workID;
+            work.RetrieveFromDBSources();
+            DateTime dtOfShould = DateTime.Now;
 
+            if (nd.HisCHWay == CHWay.ByTime)
+            {
+                //按天、小时考核
+                if (nd.GetParaInt("CHWayOfTimeRole") == 0)
+                {
+                    //增加天数. 考虑到了节假日. 
+                    //判断是修改了节点期限的天数
+                    int timeLimit = nd.TimeLimit;
+                    dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, timeLimit,
+                    nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
+                }
+                //按照节点字段设置
+                if (nd.GetParaInt("CHWayOfTimeRole") == 1)
+                {
+                    //获取设置的字段、
+                    string keyOfEn = nd.GetParaString("CHWayOfTimeRoleField");
+                    if (DataType.IsNullOrEmpty(keyOfEn) == true)
+                        nd.HisCHWay = CHWay.None;
+                    else
+                        dtOfShould = DataType.ParseSysDateTime2DateTime(work.GetValByKey(keyOfEn).ToString());
+
+                }
+
+            }
+            string sdt = "";
+            if (nd.HisCHWay == CHWay.None)
+                sdt = "无";
+            else
+                sdt = DataType.SysDateTimeFormat(dtOfShould);
             string info = null;
             string[] strs = toEmps.Split(',');
             string empNames = "";
@@ -188,13 +250,14 @@ namespace BP.WF
 
                     //写入移交数据.
                     gwl = (GenerWorkerList)gwls[0];
-                    gwl.FK_Emp = emp.UserID;
-                    gwl.FK_EmpText = emp.Name;
-                    gwl.IsPassInt = 0;
+                    gwl.EmpNo = emp.UserID;
+                    gwl.EmpName = emp.Name;
+                    gwl.PassInt = 0;
+                    gwl.SDT = sdt;
                     gwl.Insert();
-                     
+
                     //记录日志.
-                    Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
+                    Glo.AddToTrack(ActionType.Shift, nd.FlowNo, workID, gwf.FID, nd.NodeID, nd.Name,
                         WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmp, emp.Name, msg, null);
 
                     //移交后事件
@@ -206,7 +269,7 @@ namespace BP.WF
                     pms1.Retrieve(PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Event, EventListNode.ShitAfter);
                     foreach (PushMsg pm in pms1)
                         pm.DoSendMessage(nd, nd.HisWork, null, null, null, emp.UserID);
-                
+
                     info += "info@成功移交给:" + emp.UserID + "," + emp.Name;
                     continue;
                 }
@@ -214,21 +277,22 @@ namespace BP.WF
                 //非协作模式.
                 //写入移交数据.
                 gwl = (GenerWorkerList)gwls[0];
-                gwl.FK_Emp = emp.UserID;
-                gwl.FK_EmpText = emp.Name;
-                gwl.IsPassInt = 0;
+                gwl.EmpNo = emp.UserID;
+                gwl.EmpName = emp.Name;
+                gwl.PassInt = 0;
+                gwl.SDT = sdt;
                 gwl.Insert();
             }
 
             //重新查询.
-            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.FK_Node,
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwf.NodeID,
                       GenerWorkerListAttr.WorkID, workID);
 
             //工作处理人员.
             string todoEmps = "";
             foreach (GenerWorkerList mygwl in gwls)
             {
-                todoEmps += mygwl.FK_Emp + "," + mygwl.FK_EmpText + ";";
+                todoEmps += mygwl.EmpNo + "," + mygwl.EmpName + ";";
             }
 
             //更新主表信息.
@@ -238,10 +302,10 @@ namespace BP.WF
             gwf.Update();
 
             //删除自己的待办.
-            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE WorkID="+gwf.WorkID+" AND FK_Node="+gwf.FK_Node+" AND FK_Emp='"+WebUser.No+"'");
+            DBAccess.RunSQL("DELETE FROM WF_GenerWorkerList WHERE WorkID=" + gwf.WorkID + " AND FK_Node=" + gwf.NodeID + " AND FK_Emp='" + WebUser.No + "'");
 
             //记录日志.
-            Glo.AddToTrack(ActionType.Shift, nd.FK_Flow, workID, gwf.FID, nd.NodeID, nd.Name,
+            Glo.AddToTrack(ActionType.Shift, nd.FlowNo, workID, gwf.FID, nd.NodeID, nd.Name,
                 WebUser.No, WebUser.Name, nd.NodeID, nd.Name, toEmps, "移交给多个人", msg, null);
 
             //移交后事件.
@@ -259,11 +323,11 @@ namespace BP.WF
 
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+            wls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.NodeID);
             if (wls.Count == 0)
                 return "移交失败没有当前的工作。";
 
-            Node nd = new Node(gwf.FK_Node);
+            Node nd = new Node(gwf.NodeID);
             Work wk1 = nd.HisWork;
             wk1.OID = workid;
             wk1.Retrieve();
@@ -273,50 +337,59 @@ namespace BP.WF
             wn.AddToTrack(ActionType.UnShift, WebUser.No, WebUser.Name, nd.NodeID, nd.Name, "撤消移交");
 
             //删除撤销信息.
-            DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + workid + " AND FK_Node=" + gwf.FK_Node);
-
+            //DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + workid + " AND FK_Node=" + gwf.NodeID);
+            string sql = "";
             //更新流程主表字段信息
             gwf.WFState = WFState.Runing;
-            gwf.Update();
-
             if (wls.Count == 1)
             {
                 GenerWorkerList wl = (GenerWorkerList)wls[0];
-                wl.FK_Emp = WebUser.No;
-                wl.FK_EmpText = WebUser.Name;
-                wl.IsEnable = true;
-                wl.IsPass = false;
-                wl.Update();
+                sql = "UPDATE WF_GenerWorkerList SET " +
+                    "FK_Emp = '" + WebUser.No + "', " +
+                    "EmpName = '" + WebUser.Name + "', " +
+                    "IsEnable = 1, " +
+                    "IsPass = 0 " +
+                    " WHERE WorkID = " + workid + " AND FK_Emp = '" + wl.EmpNo + "' AND FK_Node = " + gwf.NodeID;
+                DBAccess.RunSQL(sql);
+                gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
+                gwf.Update();
                 return "@撤消移交成功。";
             }
 
             GenerWorkerList mywl = null;
-            foreach (GenerWorkerList wl in wls)
+            //获取移交的人员信息
+            string trackTable = "ND" + Int32.Parse(gwf.FlowNo) + "Track";
+            sql = "SELECT EmpTo From " + trackTable + " WHERE ActionType=3 AND WorkID=" + gwf.WorkID + " AND NDFrom=" + gwf.NodeID + " AND EmpFrom='" + WebUser.No + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow dr in dt.Rows)
             {
-                if (wl.FK_Emp == WebUser.No)
+                foreach (GenerWorkerList wl in wls)
                 {
-                    wl.FK_Emp = WebUser.No;
-                    wl.FK_EmpText = WebUser.Name;
-                    wl.IsEnable = true;
-                    wl.IsPass = false;
-                    wl.Update();
-                    mywl = wl;
-                }
-                else
-                {
-                    wl.Delete();
+                    if (wl.EmpNo.Equals(WebUser.No))
+                    {
+                        mywl = wl;
+                        wl.Delete();
+                        continue;
+                    }
+                    if (wl.EmpNo.Equals(dr[0].ToString()))
+                    {
+                        mywl = wl;
+                        wl.Delete();
+                        gwf.TodoEmps = gwf.TodoEmps.Replace(wl.EmpNo + "," + wl.EmpName + ";", "");
+                        break;
+                    }
                 }
             }
-            if (mywl != null)
-                return "@撤消移交成功";
-
-            GenerWorkerList wk = (GenerWorkerList)wls[0];
+            if (mywl == null)
+                return "err@撤消移交失败，没有找到移交人的待办";
+            gwf.TodoEmps += WebUser.No + "," + WebUser.Name + ";";
+            gwf.Update();
             GenerWorkerList wkNew = new GenerWorkerList();
-            wkNew.Copy(wk);
-            wkNew.FK_Emp = WebUser.No;
-            wkNew.FK_EmpText = WebUser.Name;
-            wkNew.IsEnable = true;
-            wkNew.IsPass = false;
+            wkNew.Copy(mywl);
+            wkNew.EmpNo = WebUser.No;
+            wkNew.EmpName = WebUser.Name;
+            wkNew.ItIsEnable = true;
+            wkNew.ItIsPass = false;
             wkNew.Insert();
             return "@撤消移交成功";
         }

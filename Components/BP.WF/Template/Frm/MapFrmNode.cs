@@ -62,7 +62,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否是节点表单?
         /// </summary>
-        public bool IsNodeFrm
+        public bool ItIsNodeFrm
         {
             get
             {
@@ -301,17 +301,7 @@ namespace BP.WF.Template.Frm
 
                 #region 高级设置.
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "重命名字段";
-             //   rm.GroupName = "高级设置";
-                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = "../../WF/Img/ReName.png";
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+           
 
                 rm = new RefMethod();
                 rm.Title = "重命表单ID";
@@ -492,16 +482,16 @@ namespace BP.WF.Template.Frm
         {
             MapAttr attrOld = new MapAttr();
             attrOld.setKeyOfEn(fieldOld);
-            attrOld.setFK_MapData(this.No);
-            attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
+            attrOld.FrmID =this.No;
+            attrOld.setMyPK(attrOld.FrmID + "_" + attrOld.KeyOfEn);
             if (attrOld.RetrieveFromDBSources() == 0)
                 return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
             //检查是否存在该字段？
             MapAttr attrNew = new MapAttr();
             attrNew.setKeyOfEn(newField);
-            attrNew.setFK_MapData(this.No);
-            attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
+            attrNew.FrmID =this.No;
+            attrNew.setMyPK(attrNew.FrmID + "_" + attrNew.KeyOfEn);
             if (attrNew.RetrieveFromDBSources() == 1)
                 return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -511,7 +501,7 @@ namespace BP.WF.Template.Frm
             //copy这个数据,增加上它.
             attrNew.Copy(attrOld);
             attrNew.setKeyOfEn(newField);
-            attrNew.setFK_MapData(this.No);
+            attrNew.FrmID =this.No;
 
             if (newFieldName != "")
                 attrNew.Name = newFieldName;

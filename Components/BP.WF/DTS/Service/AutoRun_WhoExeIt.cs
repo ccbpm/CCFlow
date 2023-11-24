@@ -58,8 +58,8 @@ namespace BP.WF.DTS
                     DateTime dtime = DataType.ParseSysDate2DateTime(delayedData);
                     //获取延期的小时
                     int hours = day * 24 + hour + minute / 60;
-                    string newTime = dtime.AddDays(day).AddHours(hour).AddMinutes(minute).ToString(DataType.SysDateTimeFormat);
-                    string currTime = DateTime.Now.ToString(DataType.SysDateTimeFormat);
+                    string newTime = DataType.SysDateTimeFormat( dtime.AddDays(day).AddHours(hour).AddMinutes(minute));
+                    string currTime =  DataType.CurrentDateTime;
 
                     if (DataType.GetSpanMinute(newTime, currTime) > 0)
                         continue;

@@ -92,7 +92,7 @@ namespace BP.En
         /// <summary>
         /// 是否显示在Ens中?
         /// </summary>
-        public bool IsForEns = false;
+        public bool ItIsForEns = false;
         /// <summary>
         /// 显示位置
         /// </summary>
@@ -134,7 +134,7 @@ namespace BP.En
         /// <summary>
         /// 是否可以批处理
         /// </summary>
-        public bool IsCanBatch = false;
+        public bool ItIsCanBatch = false;
         /// <summary>
         /// 标题
         /// </summary>
@@ -235,7 +235,7 @@ namespace BP.En
         /// <param name="attr">attr</param>
         public void Add(RefMethod en)
         {
-            if (this.IsExits(en))
+            if (this.ItIsExits(en))
                 return;
             en.Index = this.InnerList.Count;
             this.InnerList.Add(en);
@@ -245,7 +245,7 @@ namespace BP.En
         /// </summary>
         /// <param name="en">要检查的RefMethod</param>
         /// <returns>true/false</returns>
-        public bool IsExits(RefMethod en)
+        public bool ItIsExits(RefMethod en)
         {
             foreach (RefMethod dtl in this)
             {

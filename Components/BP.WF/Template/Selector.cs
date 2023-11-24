@@ -6,7 +6,7 @@ using BP.Sys;
 using BP.En;
 using BP.Port;
 using BP.Web;
-using BP.GPM;
+using BP.Port;
 
 namespace BP.WF.Template
 {
@@ -154,7 +154,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否自动装载上一笔加载的数据
         /// </summary>
-        public bool IsAutoLoadEmps
+        public bool ItIsAutoLoadEmps
         {
             get
             {
@@ -168,7 +168,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否单选？
         /// </summary>
-        public bool IsSimpleSelector
+        public bool ItIsSimpleSelector
         {
             get
             {
@@ -182,7 +182,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用部门搜索范围限定
         /// </summary>
-        public bool IsEnableDeptRange
+        public bool ItIsEnableDeptRange
         {
             get
             {
@@ -196,7 +196,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用角色搜索范围限定
         /// </summary>
-        public bool IsEnableStaRange
+        public bool ItIsEnableStaRange
         {
             get
             {
@@ -425,7 +425,7 @@ namespace BP.WF.Template
 
             //string orderByEmp = "";
             //if (DBAccess.IsExitsTableCol("Port_Emp", "Idx"))
-            //    orderByDept = " ORDER BY Port_Emp.FK_Dept, Port_Emp.Idx";
+            //    orderByDept = " ORDER BY Port_Emp.Dept, Port_Emp.Idx";
 
             //部门
             string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept  ";
@@ -556,7 +556,7 @@ namespace BP.WF.Template
 
                 sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
                 sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
-                sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
 
                 sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID"));
                 sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
@@ -671,13 +671,13 @@ namespace BP.WF.Template
 
 
             //部门.
-            string sql = "SELECT No,Name FROM Port_Dept  WHERE No='" + WebUser.FK_Dept + "' ";
+            string sql = "SELECT No,Name FROM Port_Dept  WHERE No='" + WebUser.DeptNo + "' ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
-            sql = " SELECT No,Name,FK_Dept FROM Port_Emp  WHERE FK_Dept='" + WebUser.FK_Dept + "'";
+            sql = " SELECT No,Name,FK_Dept FROM Port_Emp  WHERE FK_Dept='" + WebUser.DeptNo + "'";
 
             DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
@@ -697,14 +697,14 @@ namespace BP.WF.Template
 
             //部门.
             string sql = "";
-            sql = "SELECT d.No,d.Name,d.ParentNo  FROM  Port_DeptEmp  de, Port_Dept as d WHERE de.FK_Dept = d.No and de.FK_Emp = '" + BP.Web.WebUser.No + "'";
+            sql = "SELECT d.No,d.Name,d.ParentNo  FROM  Port_DeptEmp  de, Port_Dept as d WHERE de.FK_Dept = d.No and de.EmpNo = '" + BP.Web.WebUser.No + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
             //人员.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6)
-                sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Dept='" + WebUser.FK_Dept + "' AND b.FK_Node=" + nodeID + ")  ORDER BY A.Idx ";
+                sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND C.FK_Dept='" + WebUser.DeptNo + "' AND b.FK_Node=" + nodeID + ")  ORDER BY A.Idx ";
             else
-                sql = "SELECT distinct a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a." + BP.Sys.Base.Glo.UserNo + "=c.FK_Emp AND C.FK_Dept='" + WebUser.FK_Dept + "' AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
+                sql = "SELECT distinct a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a." + BP.Sys.Base.Glo.UserNo + "=c.FK_Emp AND C.FK_Dept='" + WebUser.DeptNo + "' AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + "  ORDER BY A.Idx";
 
             DataTable dtEmp = DBAccess.RunSQLReturnTable(sql);
             if (dtEmp.Rows.Count > 0)
@@ -781,7 +781,7 @@ namespace BP.WF.Template
             DataTable dtEmp = null;
             Node nd = new Node(nodeID);
             if (sm == SelectorModel.TeamDeptOnly)
-                sql = "SELECT  No,Name FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'";
+                sql = "SELECT  No,Name FROM Port_Dept WHERE No='" + WebUser.DeptNo + "'";
             if (sm == SelectorModel.TeamOnly)
                 sql = "SELECT DISTINCT a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeTeam b, Port_TeamEmp c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Team=c.FK_Team AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + "   ORDER BY A.No,A.Idx";
             if (sm == SelectorModel.TeamOrgOnly)
@@ -793,10 +793,10 @@ namespace BP.WF.Template
 
             //人员.
             if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle ||BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6
-                || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+                || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (sm == SelectorModel.TeamDeptOnly)
-                    sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.FK_Dept + "') ORDER BY FK_Dept,Idx,No";
+                    sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.DeptNo + "') ORDER BY FK_Dept,Idx,No";
                 if (sm == SelectorModel.TeamOrgOnly)
                     sql = "SELECT * FROM (SELECT DISTINCT a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.OrgNo='" + WebUser.OrgNo + "') ORDER BY FK_Dept,Idx,No";
                 if (sm == SelectorModel.TeamOnly)
@@ -805,7 +805,7 @@ namespace BP.WF.Template
             else
             {
                 if (sm == SelectorModel.TeamDeptOnly)
-                    sql = "SELECT DISTINCT a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.FK_Dept + "'  ORDER BY A.Idx";
+                    sql = "SELECT DISTINCT a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.FK_Dept='" + WebUser.DeptNo + "'  ORDER BY A.Idx";
                 if (sm == SelectorModel.TeamOrgOnly)
                     sql = "SELECT DISTINCT a." + BP.Sys.Base.Glo.UserNo + ",a.Name, a.FK_Dept,a.Idx FROM Port_Emp A,  WF_NodeTeam B, Port_TeamEmp C WHERE a." + BP.Sys.Base.Glo.UserNoWhitOutAS + "=c.FK_Emp AND B.FK_Team=C.FK_Team AND B.FK_Node=" + nodeID + " AND A.OrgNo='" + WebUser.OrgNo + "'  ORDER BY A.Idx";
                 if (sm == SelectorModel.TeamOnly)
@@ -834,7 +834,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeTeam b, Port_TeamEmp c WHERE a.No=c.FK_Emp AND B.FK_Group=C.FK_Group AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
@@ -860,7 +860,7 @@ namespace BP.WF.Template
 
             //如果按照上一个节点的操作员身份计算.
             if (ShenFenModel == 0)
-                return ByStationAI(en, BP.Web.WebUser.FK_Dept, WebUser.No);
+                return ByStationAI(en, BP.Web.WebUser.DeptNo, WebUser.No);
 
             //如果按照指定节点的操作员身份计算.
             if (ShenFenModel == 1)
@@ -875,10 +875,10 @@ namespace BP.WF.Template
                 if (dt.Rows.Count == 0)
                 {
                     BP.WF.Node ndSpec = new Node(specNodeID);
-                    if (ndSpec.IsStartNode == false)
+                    if (ndSpec.ItIsStartNode == false)
                         throw new Exception("err@没有找到上一步节点，参数信息: NodeID=" + specNodeID + ",WorkID=" + workID + ", 不应该出现的异常，请联系管理员, 有可能您配置了没有路过的节点，作为指定节点的身份计算了。");
                     empNo = BP.Web.WebUser.No;
-                    deptNo = BP.Web.WebUser.FK_Dept;
+                    deptNo = BP.Web.WebUser.DeptNo;
                 }
                 else
                 {
@@ -895,7 +895,7 @@ namespace BP.WF.Template
             {
                 string empNo = nd.GetParaString("ShenFenVal");
                 BP.Port.Emp emp = new BP.Port.Emp(empNo);
-                return ByStationAI(en, emp.FK_Dept, emp.No);
+                return ByStationAI(en, emp.DeptNo, emp.No);
             }
 
             throw new Exception("err@没有判断的身份模式." + ShenFenModel);
@@ -955,7 +955,7 @@ namespace BP.WF.Template
             //    //首先扫描平级部门.
             //    BP.Port.Depts depts = new GPM.Depts();
             //    depts.Retrieve(BP.Port.DeptAttr.ParentNo, mydept.ParentNo);
-            //    BP.Port.Dept dept = new BP.Port.Dept(WebUser.FK_Dept);
+            //    BP.Port.Dept dept = new BP.Port.Dept(WebUser.DeptNo);
             //    ds = ByStationAI_Ext(nodeID, en, dept.ParentNo, BP.Web.WebUser.No);
             //}
             //return ds;
@@ -987,7 +987,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //查询人员.
-            sql = "SELECT A.No,A.Name, A.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C WHERE C.FK_Node = " + this.NodeID + " AND B.FK_Dept = '" + deptNo + "' AND A.FK_Dept = B.FK_Dept AND B.FK_Station=C.FK_Station AND A.No=b.FK_Emp  ORDER BY A.Idx";
+            sql = "SELECT A.No,A.Name, A.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B, WF_NodeStation C WHERE C.NodeID = " + this.NodeID + " AND B.FK_Dept = '" + deptNo + "' AND A.DeptNo = B.FK_Dept AND B.FK_Station=C.FK_Station AND A.No=b.FK_Emp  ORDER BY A.Idx";
             dtEmp = DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
@@ -1016,7 +1016,7 @@ namespace BP.WF.Template
                 ds.Tables.Add(dt);
 
                 //人员.
-                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+                if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || DBAccess.AppCenterDBType == DBType.UX)
                 {
                     if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                         sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c, WF_PrjEmp d  WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station And a.No=d.FK_Emp And C.FK_Emp=d.FK_Emp AND b.FK_Node=" + nodeID + " AND D.FK_Prj='" + en.GetValStrByKey("PrjNo") + "') ORDER BY FK_Dept,Idx,No";
@@ -1042,7 +1042,7 @@ namespace BP.WF.Template
             ds.Tables.Add(dt);
 
             //人员.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || DBAccess.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR3 || BP.Difference.SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || DBAccess.AppCenterDBType == DBType.UX)
             {
                 if (DBAccess.IsExitsTableCol("Port_Emp", "Idx") == true)
                     sql = "SELECT * FROM (SELECT distinct a.No,a.Name, a.FK_Dept,a.Idx FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID + ") ORDER BY FK_Dept,Idx,No";
@@ -1097,7 +1097,7 @@ namespace BP.WF.Template
 
             apiUrl = BP.WF.Glo.DealExp(apiUrl, en, null);
             //执行POST
-            postData = BP.WF.Glo.HttpPostConnect(apiUrl, headerMap, "");
+            postData = BP.Tools.PubGlo.HttpPostConnect(apiUrl, headerMap, "");
 
             DataTable dt = BP.Tools.Json.ToDataTable(postData);
             dt.TableName = "Emps";

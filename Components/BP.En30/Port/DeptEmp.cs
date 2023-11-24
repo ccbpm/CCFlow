@@ -52,7 +52,7 @@ namespace BP.Port
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -61,13 +61,13 @@ namespace BP.Port
             set
             {
                 SetValByKey(DeptEmpAttr.FK_Emp, value);
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo);
             }
         }
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -76,7 +76,7 @@ namespace BP.Port
             set
             {
                 SetValByKey(DeptEmpAttr.FK_Dept, value);
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo);
             }
         }
         public string OrgNo
@@ -183,17 +183,17 @@ namespace BP.Port
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-			if (BP.Difference.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single &&  DataType.IsNullOrEmpty(this.OrgNo))
+			if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single &&  DataType.IsNullOrEmpty(this.OrgNo))
                 this.OrgNo = BP.Web.WebUser.OrgNo;            
 			if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
-                if (BP.Difference.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+                if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 {
-                    this.setMyPK(this.FK_Dept + "_" + this.FK_Emp.Replace(this.OrgNo+"_",""));
+                    this.setMyPK(this.DeptNo + "_" + this.EmpNo.Replace(this.OrgNo+"_",""));
                 }
                 else
                 {
-                    this.setMyPK(this.FK_Dept + "_" + this.FK_Emp);
+                    this.setMyPK(this.DeptNo + "_" + this.EmpNo);
                 }
                     
             }

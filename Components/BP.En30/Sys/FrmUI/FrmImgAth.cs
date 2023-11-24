@@ -72,21 +72,21 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStrByKey(FrmImgAthAttr.FK_MapData);
+                return this.GetValStrByKey(FrmImgAthAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmImgAthAttr.FK_MapData, value);
+                this.SetValByKey(FrmImgAthAttr.FrmID, value);
             }
         }
         /// <summary>
         /// 是否可编辑
         /// </summary>
-        public bool IsEdit
+        public bool ItIsEdit
         {
             get
             {
@@ -100,7 +100,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 是否必填，2016-11-1
         /// </summary>
-        public bool IsRequired
+        public bool ItIsRequired
         {
             get
             {
@@ -119,7 +119,7 @@ namespace BP.Sys.FrmUI
             get
             {
                 string str = this.GetValStringByKey(FrmImgAthAttr.GroupID);
-                if (str == "无" || str == "")
+                if (str.Equals("无") || str.Equals(""))
                     return 1;
                 return int.Parse(str);
             }
@@ -174,7 +174,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmImgAthAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
+                map.AddTBString(FrmImgAthAttr.FrmID, null, "表单ID", true, true, 1, 100, 20);
                 map.AddTBString(FrmImgAthAttr.CtrlID, null, "控件ID", true, true, 0, 200, 20);
                 map.AddTBString(FrmImgAthAttr.Name, null, "中文名称", true, false, 0, 200, 20);
 
@@ -206,14 +206,14 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeUpdateInsertAction()
         {
-            //this.setMyPK(this.FK_MapData + "_" + this.CtrlID;
+            //this.setMyPK(this.FrmID + "_" + this.CtrlID;
             return base.beforeUpdateInsertAction();
         }
 
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
             BP.Sys.FrmImgAth imgAth = new BP.Sys.FrmImgAth();
             imgAth.setMyPK(this.MyPK);
@@ -221,19 +221,19 @@ namespace BP.Sys.FrmUI
             imgAth.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             MapAttr attr = new MapAttr();
-            attr.setMyPK(this.FK_MapData + "_" + imgAth.CtrlID);
+            attr.setMyPK(this.FrmID + "_" + imgAth.CtrlID);
             if (attr.RetrieveFromDBSources() == 0)
             {
-                attr.setFK_MapData(this.FK_MapData);
+                attr.FrmID =this.FrmID;
                 attr.Name = this.Name;
                 attr.setKeyOfEn(imgAth.CtrlID);
                 attr.setMyDataType(DataType.AppString);
                 attr.setUIContralType(UIContralType.FrmImgAth);
                 attr.GroupID = this.GroupID;
-                attr.IsEnableInAPP = true;
+                attr.ItIsEnableInAPP = true;
                 attr.setUIVisible(true);
                 attr.DirectInsert();
             }
@@ -255,10 +255,10 @@ namespace BP.Sys.FrmUI
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.setMyPK(this.MyPK);
-            attr.setFK_MapData(this.FK_MapData);
+            attr.FrmID =this.FrmID;
             attr.Delete();
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
 
@@ -278,13 +278,10 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 图片附件s
         /// </summary>
-        /// <param name="fk_mapdata">s</param>
-        public FrmImgAths(string fk_mapdata)
+        /// <param name="frmID">s</param>
+        public FrmImgAths(string frmID)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
-                this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
-            else
-                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
+            this.Retrieve(MapAttrAttr.FK_MapData, frmID);
         }
         /// <summary>
         /// 得到它的 Entity

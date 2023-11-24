@@ -2,6 +2,7 @@
 using System.Data;
 using BP.DA;
 using BP.Sys;
+using BP.Sys.FrmUI;
 using BP.Web;
 
 namespace BP.WF.HttpHandler
@@ -24,7 +25,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DataView_Init()
         {
-            var en = new BP.Sys.FrmUI.MapAttrDataView(this.MyPK);
+            MapAttrDataView en = new BP.Sys.FrmUI.MapAttrDataView(this.MyPK);
 
             string sql = en.GetValStringByKey(MapAttrAttr.DefaultVal);
 
@@ -140,8 +141,6 @@ namespace BP.WF.HttpHandler
                 string sql1 = "UPDATE gov_sendfilecopy set OrgNo='" + WebUser.OrgNo + "',OrgName='" + WebUser.OrgName + "' where oid=" + this.OID;
                 DBAccess.RunSQL(sql1);
             }
-        
-
             //转成Json，返回出去.
             return BP.Tools.Json.ToJson(dt);
         }

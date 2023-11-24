@@ -27,6 +27,7 @@ namespace BP.WF.Template
         /// 组织编号
         /// </summary>
         public const string OrgNo = "OrgNo";
+        public const string ShortName = "ShortName";
     }
     /// <summary>
     ///  独立表单树
@@ -37,7 +38,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否是目录
         /// </summary>
-        public bool IsDir
+        public bool ItIsDir
         {
             get
             {
@@ -125,6 +126,8 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 50, 40);
                 map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
+           //     map.AddTBString(SysFormTreeAttr.ShortName, null, "简称", true, false, 0, 100, 30);
+
                 map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点编号", false, false, 0, 100, 40);
                 map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
                 map.AddTBString(SysFormTreeAttr.OrgNo, null, "组织编号", false, false, 0, 50, 30);
@@ -192,7 +195,7 @@ namespace BP.WF.Template
             foreach (SysFormTree item in formTrees)
             {
                 MapData md = new MapData();
-                md.FK_FormTree = item.No;
+                md.FormTreeNo = item.No;
                 md.Delete();
                 DeleteChild(item.No);
             }
@@ -207,13 +210,13 @@ namespace BP.WF.Template
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(BP.Web.WebUser.OrgNo);
                 if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
                 {
                     OAFrmTree oatree = new OAFrmTree();
-                    oatree.FK_Emp = BP.Web.WebUser.No;
+                    oatree.EmpNo = BP.Web.WebUser.No;
                     oatree.OrgNo = BP.Web.WebUser.OrgNo;
-                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.FK_Emp);
+                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.EmpNo);
                     oatree.SetValByKey("FrmTreeNo", en.No);
                     oatree.Insert();
                 }
@@ -231,13 +234,13 @@ namespace BP.WF.Template
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(BP.Web.WebUser.OrgNo);
                 if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
                 {
                     OAFrmTree oatree = new OAFrmTree();
-                    oatree.FK_Emp = BP.Web.WebUser.No;
+                    oatree.EmpNo = BP.Web.WebUser.No;
                     oatree.OrgNo = BP.Web.WebUser.OrgNo;
-                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.FK_Emp);
+                    oatree.SetValByKey("RefOrgAdminer", oatree.OrgNo + "_" + oatree.EmpNo);
                     oatree.SetValByKey("FrmTreeNo", en.No);
                     oatree.Insert();
                 }
@@ -303,7 +306,7 @@ namespace BP.WF.Template
             }
 
             fs = new SysFormTree();
-            fs.Name = "流程树";
+            fs.Name = "表单树";
             fs.No = "100";
             fs.ParentNo = "0";
             fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
@@ -312,13 +315,15 @@ namespace BP.WF.Template
             fs = new SysFormTree();
             fs.setName("办公类");
             fs.setNo("01");
+            fs.SetValByKey("Idx", 1);
             fs.setParentNo("100");
             fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
             fs.Insert();
 
             fs = new SysFormTree();
             fs.setName("公文类");
-            fs.setNo("01");
+            fs.setNo("02");
+            fs.SetValByKey("Idx", 2);
             fs.setParentNo("100");
             fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
             fs.Insert();
@@ -330,10 +335,10 @@ namespace BP.WF.Template
         /// <returns></returns>
         public override int RetrieveAll()
         {
-            if (BP.Web.WebUser.No.Equals("admin") == true)
-                return this.RetrieveAll(FlowSortAttr.Idx);
+            //if (BP.Web.WebUser.No.Equals("admin") == true)
+            //    return this.RetrieveAll(FlowSortAttr.Idx);
 
-            var num = 0;
+            int num = 0;
             if (Glo.CCBPMRunModel == CCBPMRunModel.GroupInc)
                 num = this.Retrieve(FlowSortAttr.OrgNo, BP.Web.WebUser.OrgNo, FlowSortAttr.Idx);
 
@@ -346,7 +351,7 @@ namespace BP.WF.Template
             if (num == 0)
             {
                 InitData();
-                return this.RetrieveAll();
+                return this.RetrieveAll(FlowSortAttr.Idx);
             }
 
             return num;

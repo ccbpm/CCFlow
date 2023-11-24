@@ -205,7 +205,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 工作流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -317,7 +317,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {
@@ -331,7 +331,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -569,7 +569,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 当前工作到的节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -591,9 +591,9 @@ namespace BP.WF.Data
             }
             set
             {
-                if (value == WF.WFState.Complete)
+                if (value == BP.WF.WFState.Complete)
                     SetValByKey(MyStartFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == BP.WF.WFState.Delete)
                     SetValByKey(MyStartFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(MyStartFlowAttr.WFSta, (int)WFSta.Runing);
@@ -732,8 +732,6 @@ namespace BP.WF.Data
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
-                //查询关键字.
-                map.AddTBSKeyWords(4000);
                 #endregion 基本字段.
 
                 #region 查询条件.
@@ -761,7 +759,7 @@ namespace BP.WF.Data
                  rm.ClassMethodName = this.ToString() + ".DoTrack";
                  rm.RefMethodType = RefMethodType.LinkeWinOpen;
                  rm.Icon = "../../WF/Img/Track.png";
-                 rm.IsForEns = true;
+                 rm.ItIsForEns = true;
                  map.AddRefMethod(rm);*/
 
                 rm = new RefMethod();
@@ -769,14 +767,14 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
                 rm.Icon = "../../WF/Img/Form.png";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsForEns = true;
+                rm.ItIsForEns = true;
                 map.AddRefMethod(rm);
 
               /*  rm = new RefMethod();
                 rm.Title = "打印表单";
                 rm.ClassMethodName = this.ToString() + ".DoPrintFrm";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);*/
 
                 this._enMap = map;
@@ -787,13 +785,13 @@ namespace BP.WF.Data
 
         public string DoPrintFrm()
         {
-            return "../../WorkOpt/Packup.htm?FileType=zip,pdf&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&NodeID=" + this.FK_Node + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Packup.htm?FileType=zip,pdf&WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&NodeID=" + this.NodeID + "&FK_Node=" + this.NodeID;
         }
 
         #region 执行诊断
         public string DoTrack()
         {
-            return "../../MyFlowView.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../MyFlowView.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -802,20 +800,20 @@ namespace BP.WF.Data
         public string DoOpenLastForm()
         {
             Paras pss = new Paras();
-            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FlowNo) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
             pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
             pss.Add("WorkID", this.WorkID);
             DataTable dt = DBAccess.RunSQLReturnTable(pss);
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
 
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
 
-            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
     }

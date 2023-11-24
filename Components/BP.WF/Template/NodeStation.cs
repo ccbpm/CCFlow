@@ -42,7 +42,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -53,7 +53,7 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeStationAttr.FK_Node, value);
             }
         }
-        public string FK_StationT
+        public string StationT
         {
             get
             {
@@ -63,7 +63,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 工作角色
         /// </summary>
-        public string FK_Station
+        public string StationNo
         {
             get
             {
@@ -110,7 +110,7 @@ namespace BP.WF.Template
         }
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Node + "_" + this.FK_Station);
+            this.setMyPK(this.NodeID + "_" + this.StationNo);
             return base.beforeUpdateInsertAction();
         }
 
@@ -121,7 +121,7 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             RememberMe remeberMe = new RememberMe();
-            remeberMe.Delete(RememberMeAttr.FK_Node, this.FK_Node);
+            remeberMe.Delete(RememberMeAttr.FK_Node, this.NodeID);
             return base.beforeInsert();
         }
         #endregion

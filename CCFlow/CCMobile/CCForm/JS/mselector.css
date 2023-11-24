@@ -1,0 +1,81 @@
+﻿* {
+	box-sizing: border-box;
+}
+.ccflow-input-span-container {
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	display: inline-block;
+	padding: 2px 4px;
+	color: #555;
+	vertical-align: middle;
+	border-radius: 1px;
+	max-width: 100%;
+	line-height: 30px;
+	min-height:30px;
+}
+.ccflow-input-span-container .ccflow-tag {
+	padding: -2px;
+	font-size: 12px;
+	font-family: serif;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+}
+.ccflow-label {
+	font-size: 10px;
+	padding: 4px 6px;
+	border: none;
+	text-shadow: none;
+	border-radius: 3px;
+	font-weight: 200;
+}
+.ccflow-label-primary
+{
+    background: #0099FF;
+    color: white;
+}
+.ccflow-input-span-container span i[data-role='remove'] {
+	cursor: pointer;
+}
+.ccflow-tag {
+	margin-right: 2px;
+	color: white;
+}
+.ccflow-tag[data-role="remove"] {
+	margin-left: 2px;
+	cursor: pointer;
+}
+input.ccflow-search {
+	border: none;
+	box-shadow: none;
+	outline: none;
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	max-width: inherit;
+}
+.ccflow-block {
+	position: absolute;
+	width: 100px;
+	max-height: 120px;
+	background-color: #fff;
+	overflow: auto;
+	display: none;
+	z-index: 9999;
+}
+.ccflow-ul {
+	text-decoration: none;
+	list-style-type: none;
+	padding-left: 5px;
+}
+.ccflow-ul li {
+	font-size: 14px;
+	padding: 2px 4px;
+}
+/*.ccflow-ul li:hover,*/
+.ccflow-ul li.hover {
+	background-color: #eee;
+}

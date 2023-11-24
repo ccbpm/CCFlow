@@ -12,7 +12,14 @@
 //获得发起列表.
 function DB_Start() {
     var myurl = ccbpmHostDevelopAPI + "DB_Start?token=" + GetToken() + "&domain=" + domain;
-    return RunUrlReturnJSON(myurl);
+    var json = RunUrlReturnJSON(myurl);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -22,25 +29,53 @@ function DB_Start() {
  * */
 function DB_Todolist() {
     var myurl = ccbpmHostDevelopAPI + "DB_Todolist?token=" + GetToken() + "&domain=" + domain + "&t=" + new Date().getTime();
-    return RunUrlReturnJSON(myurl);
+    var json = RunUrlReturnJSON(myurl);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 //获得在途.
 function DB_Runing() {
     var myurl = ccbpmHostDevelopAPI + "DB_Runing?token=" + GetToken() + "&domain=" + domain;
-    return RunUrlReturnJSON(myurl);
+    var json = RunUrlReturnJSON(myurl);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 //获得草稿.
 function DB_Draft() {
     var myurl = ccbpmHostDevelopAPI + "DB_Draft?token=" + GetToken() + "&domain=" + domain;
-    return RunUrlReturnJSON(myurl);
+    var json = RunUrlReturnJSON(myurl);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 //获得流程注册表信息,返回没有完成的数据.
 function DB_GenerWorkFlow(flowNo) {
     var myurl = ccbpmHostDevelopAPI + "DB_GenerWorkFlow?token=" + GetToken() + "&flowNo=" + flowNo;
-    return RunUrlReturnJSON(myurl);
+    var json = RunUrlReturnJSON(myurl);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -54,6 +89,7 @@ function DB_GenerWorkFlow(flowNo) {
 function OpenForm(flowNo, nodeID, workid, fid, paras) {
     var url = GenerFrmUrl(flowNo, nodeID, workid, fid, paras);
     // 打开工作处理器.
+    url = JSON.parse(url).data;
     OpenMyFlow(url);
     //   window.open(url);
 }
@@ -69,7 +105,6 @@ function OpenForm(flowNo, nodeID, workid, fid, paras) {
  */
 function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
 
-    debugger;
     // ccbpmHostDevelopAPI 变量是定义在 /config.js 的服务地址. 访问必须两个参数DoWhat,SID.
     //首先获得表单的URL.
     var myUrl = ccbpmHostDevelopAPI + "GenerFrmUrl?token=" + GetToken() + "&workID=" + workid + "&flowNo=" + flowNo + "&nodeID=" + nodeID + "&fid=" + fid;
@@ -78,8 +113,9 @@ function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
 
     //如果包含了通用的工作处理器.
     if (frmUrl.indexOf("WF/MyFlow.htm") >= 0) {
-        frmUrl = host + frmUrl;
+        frmUrl = host + JSON.parse(frmUrl).data;
     }
+
     return frmUrl;
 }
 
@@ -89,7 +125,6 @@ function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
  * 3. 每个接口都有明确的注释.
  */
 
-
 /**
  * 创建空白的WorkID.
  * @param {校验码(登录时候产生的)} sid
@@ -97,17 +132,38 @@ function GenerFrmUrl(flowNo, nodeID = 0, workid = 0, fid = 0, paras = "") {
  */
 function Node_CreateBlankWorkID(flowNo) {
     var url = ccbpmHostDevelopAPI + "Node_CreateBlankWorkID?token=" + GetToken() + "&flowNo=" + flowNo;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 function Node_SetDraft(flowNo, workID) {
     var url = ccbpmHostDevelopAPI + "Node_SetDraft?token=" + GetToken() + "&flowNo=" + flowNo + "&workID=" + workID;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 function Node_IsCanDealWork(workID) {
     var url = ccbpmHostDevelopAPI + "Node_Node_IsCanDealWork?token=" + GetToken() + "&workID=" + workID;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 /**
  * 保存表单数据到流程实例中
@@ -115,10 +171,16 @@ function Node_IsCanDealWork(workID) {
  * @param {any} paras @Key1=val1@Key2=val2
  */
 function Node_SaveParas(workid, paras) {
-
     //@mhj  这里要对参数格式执行校验,不符合不让保存.
     var url = ccbpmHostDevelopAPI + "Node_SaveParas?token=" + GetToken() + "&paras=" + paras + "&workID=" + workid;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 /**
  * 执行发送
@@ -128,7 +190,6 @@ function Node_SaveParas(workid, paras) {
  * @param {参数，格式为:@Key1=val1@Key2=val2 } paras
  */
 function Node_SendWork(workid, toNodeID, toEmps, paras = "") {
-
     if (paras == null || paras == undefined)
         paras = "";
     paras = paras.replace('@', '&');
@@ -136,7 +197,14 @@ function Node_SendWork(workid, toNodeID, toEmps, paras = "") {
     var url = ccbpmHostDevelopAPI + "Node_SendWork?token=" + GetToken();
     url += "&workID=" + workid + "&toNodeID=" + toNodeID;
     url += "&toEmps=" + toEmps + "&1=2" + paras;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -150,7 +218,14 @@ function DB_GenerWillReturnNodes(flowNo, workid, fid = 0) {
 
     var url = ccbpmHostDevelopAPI + "DB_GenerWillReturnNodes?token=" + GetToken() + "&flowNo=" + flowNo;
     url += "&workID=" + workid + "&fid=" + fid;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -158,34 +233,83 @@ function DB_GenerWillReturnNodes(flowNo, workid, fid = 0) {
  */
 function Batch_Init() {
     var url = ccbpmHostDevelopAPI + "Batch_Init?token=" + GetToken() + "&domain=" + domain;
-    return RunUrlReturnJSON(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 function WorkCheckModel_Init(nodeID) {
     var url = ccbpmHostDevelopAPI + "WorkCheckModel_Init?token=" + GetToken() + "&nodeID=" + nodeID;
-    return RunUrlReturnJSON(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 function Node(nodeID) {
     var url = ccbpmHostDevelopAPI + "En_Node?token=" + GetToken() + "&nodeID=" + nodeID;
-    return RunUrlReturnJSON(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 function Flow(flowNo) {
     var url = ccbpmHostDevelopAPI + "En_Flow?token=" + GetToken() + "&no=" + flowNo;
-    return RunUrlReturnJSON(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 function Batch_InitDDL(nodeID) {
     var url = ccbpmHostDevelopAPI + "Batch_InitDDL?token=" + GetToken() + "&nodeID=" + nodeID;
-    return RunUrlReturnJSON(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 function WorkCheckModel_Send(nodeID, CheckNote, ToNode, ToEmps) {
     var url = ccbpmHostDevelopAPI + "WorkCheckModel_Send?token=" + GetToken() + "&nodeID=" + nodeID + "&toNode=" + ToNode + "&toEmps=" + ToEmps + "&checkNote=" + CheckNote;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 function Batch_Delete(WorkIDs) {
     var url = ccbpmHostDevelopAPI + "Batch_Delete?token=" + GetToken() + "&workIDs=" + WorkIDs;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -208,7 +332,14 @@ function Node_ReturnWork(workid, returnToNodeID, returnToEmp, msg, isBackToThisN
         url += "&IsBackToThisNode=1";
     else
         url += "&IsBackToThisNode=0";
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -220,7 +351,14 @@ function Flow_SetTitle(workID, title) {
     var url = ccbpmHostDevelopAPI + "Flow_SetTitle?token=" + GetToken();
     url += "&workID=" + workID;
     url += "&title=" + title;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -231,7 +369,14 @@ function Flow_DoPress(workidStrs, msg) {
     var url = ccbpmHostDevelopAPI + "Flow_DoPress?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
     url += "&msg=" + msg;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -242,7 +387,14 @@ function Flow_DoUnSend(workidStrs) {
 
     var url = ccbpmHostDevelopAPI + "Flow_DoUnSend?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -259,7 +411,14 @@ function Flow_BatchDeleteByReal(workidStrs, isDeleteSubFlows = true) {
         url += "&IsDeleteSubFlows=0";
     else
         url += "&IsDeleteSubFlows=1";
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 /**
  * 恢复删除
@@ -269,7 +428,14 @@ function Flow_BatchDeleteByFlagAndUnDone(workidStrs) {
 
     var url = ccbpmHostDevelopAPI + "Flow_BatchDeleteByFlagAndUnDone?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -280,7 +446,14 @@ function Flow_DoFlowOver(workidStrs) {
 
     var url = ccbpmHostDevelopAPI + "Flow_DoFlowOver?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -293,7 +466,14 @@ function CC_BatchCheckOver(workidStrs) {
     var url = ccbpmHostDevelopAPI + "CC_BatchCheckOver?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
 
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -304,7 +484,14 @@ function Flow_DeleteDraft(workidStrs) {
 
     var url = ccbpmHostDevelopAPI + "Flow_DeleteDraft?token=" + GetToken();
     url += "&workIDs=" + workidStrs;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -319,7 +506,14 @@ function Node_Shift(workID, toEmpNo, msg) {
     url += "&workID=" + workID;
     url += "&toEmpNo=" + toEmpNo;
     url += "&msg=" + msg;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -332,7 +526,14 @@ function Node_AddTodolist(workID, empID) {
     var url = ccbpmHostDevelopAPI + "Node_AddTodolist?token=" + GetToken();
     url += "&workID=" + workID;
     url += "&empNo=" + empID;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 /**
@@ -344,7 +545,14 @@ function Flow_GenerWorkFlow(workID) {
 
     var url = ccbpmHostDevelopAPI + "Flow_GenerWorkFlow?token=" + GetToken();
     url += "&workID=" + workID;
-    return RunUrlReturnString(url);
+    var json = RunUrlReturnJSON(url);
+    if (json.code == 500) {
+        alert(json.msg);
+        return;
+    }
+    var data = json.data;
+    var information = JSON.parse(data)
+    return information;
 }
 
 

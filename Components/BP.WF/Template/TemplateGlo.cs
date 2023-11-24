@@ -4,14 +4,10 @@ using System.IO;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.Port;
 using System.Data;
-using BP.WF;
 using BP.En;
-using BP.WF.Template;
 using BP.Difference;
 using BP.WF.Template.SFlow;
-using BP.WF.Template.CCEn;
 using BP.WF.Template.Frm;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -121,15 +117,21 @@ namespace BP.WF.Template
                 }
                 fl.SetValByKey(dc.ColumnName, val);
             }
-            fl.FK_FlowSort = fk_flowSort;
+            fl.FlowSortNo = fk_flowSort;
             if (DBAccess.IsExitsObject(fl.PTable) == true)
             {
                 fl.PTable = null;
             }
             //修改成当前登陆人所在的组织
             fl.OrgNo = WebUser.OrgNo;
+            fl.SetValByKey("Creater", WebUser.No);
             if (DataType.IsNullOrEmpty(flowName) == false)
                 fl.Name = flowName;
+            if (fl.FlowDevModel == FlowDevModel.JiJian)
+            {
+                //修改FrmUrl的值
+                fl.FrmUrl="ND" + Int32.Parse(fl.No) + "01";
+            }
             fl.Update();
             //判断该流程是否是公文流程，存在BuessFields、FlowBuessType、FK_DocType=01
             Attrs attrs = fl.EnMap.Attrs;
@@ -237,11 +239,16 @@ namespace BP.WF.Template
                 switch (dt.TableName)
                 {
                     case "WF_Flow": //模版文件。
+                       
                         continue;
                     case "WF_NodeSubFlow": //延续子流程.
                         foreach (DataRow dr in dt.Rows)
                         {
                             SubFlow yg = new SubFlow();
+
+                            //创建实体TS类，预防没有的数据导入.
+                            GEEntity ge = new GEEntity("WF_NodeSubFlow");
+
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -267,8 +274,12 @@ namespace BP.WF.Template
                                         break;
                                 }
                                 yg.SetValByKey(dc.ColumnName, val);
+
+                                //设置字段值.
+                                ge.SetValByKey(dc.ColumnName, val);
                             }
-                            yg.Insert();
+                            yg.Insert(); //插入数据。
+                            ge.Update();  //执行更新数据库补充TS新增的字段.
                         }
                         continue;
                     case "WF_FlowForm": //独立表单。 add 2013-12-03
@@ -441,7 +452,7 @@ namespace BP.WF.Template
                         foreach (DataRow dr in dt.Rows)
                         {
                             FrmNode fn = new FrmNode();
-                            fn.FK_Flow = fl.No;
+                            fn.FlowNo = fl.No;
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -460,21 +471,34 @@ namespace BP.WF.Template
                                     case "fk_flow":
                                         val = fl.No;
                                         break;
+                                    case "fk_frm":
+                                        if (fl.FlowDevModel == FlowDevModel.JiJian)
+                                            val = "ND" + Int32.Parse(fl.No) + "01";
+                                        break;
                                     default:
                                         break;
                                 }
                                 fn.SetValByKey(dc.ColumnName, val);
                             }
                             // 开始插入。
-                            fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node);
-                            fn.Insert();
+                            if (fn.FK_Frm.Equals(""))
+                                continue;
+                            fn.setMyPK(fn.FK_Frm + "_" + fn.NodeID+"_" + fl.No);
+                            try
+                            {
+                                fn.Insert();
+                            }catch(Exception ex)
+                            {
+
+                            }
+                           
                         }
                         break;
                     case "WF_Cond": //Conds.xml。
                         foreach (DataRow dr in dt.Rows)
                         {
                             Cond cd = new Cond();
-                            cd.FK_Flow = fl.No;
+                            cd.FlowNo = fl.No;
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -502,49 +526,12 @@ namespace BP.WF.Template
                                 }
                                 cd.SetValByKey(dc.ColumnName, val);
                             }
-
-                            cd.FK_Flow = fl.No;
+                            cd.RefPKVal=fl.No + "_" + cd.NodeID + "_" + cd.ToNodeID;
+                            cd.FlowNo = fl.No;
                             cd.setMyPK(BP.DA.DBAccess.GenerGUID());
                             cd.DirectInsert();
                         }
                         break;
-                    case "WF_CCDept"://抄送到部门。
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            CCDept cd = new CCDept();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "fk_node":
-                                        if (val.Length < iOldFlowLength)
-                                        {
-                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_CCDept下FK_Node值错误:" + val);
-                                        }
-                                        val = flowID + val.Substring(iOldFlowLength);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                cd.SetValByKey(dc.ColumnName, val);
-                            }
-
-                            //开始插入。
-                            try
-                            {
-                                cd.Insert();
-                            }
-                            catch
-                            {
-                                cd.Update();
-                            }
-                        }
-                        break;
-
                     case "WF_NodeReturn"://可退回的节点。
                         foreach (DataRow dr in dt.Rows)
                         {
@@ -607,7 +594,7 @@ namespace BP.WF.Template
                                 }
                                 dir.SetValByKey(dc.ColumnName, val);
                             }
-                            dir.FK_Flow = fl.No;
+                            dir.FlowNo = fl.No;
                             dir.Insert();
                         }
                         break;
@@ -624,7 +611,7 @@ namespace BP.WF.Template
                                 ln.SetValByKey(dc.ColumnName, val);
                             }
                             idx++;
-                            ln.FK_Flow = fl.No;
+                            ln.FlowNo = fl.No;
                             ln.setMyPK(DBAccess.GenerGUID());
                             ln.DirectInsert();
                         }
@@ -658,7 +645,7 @@ namespace BP.WF.Template
                                 //如果部门不属于本组织的，就要删除.  
                                 if (Glo.CCBPMRunModel != CCBPMRunModel.Single)
                                 {
-                                    BP.WF.Port.Admin2Group.Dept dept = new BP.WF.Port.Admin2Group.Dept(dp.FK_Dept);
+                                    BP.WF.Port.Admin2Group.Dept dept = new BP.WF.Port.Admin2Group.Dept(dp.DeptNo);
                                     if (dept.OrgNo.Equals(WebUser.OrgNo) == false)
                                         continue;
                                 }
@@ -669,13 +656,48 @@ namespace BP.WF.Template
                             }
                         }
                         break;
+                    case "WF_TemplateNode":
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            BP.WF.Template.TemplateNode nd = new BP.WF.Template.TemplateNode();
+                            nd.SetValByKey(NodeAttr.NodeID,int.Parse(flowID + dr[NodeAttr.NodeID].ToString().Substring(iOldFlowLength)));
+                            nd.RetrieveFromDBSources();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                string val = dr[dc.ColumnName] as string;
+                                switch (dc.ColumnName.ToLower())
+                                {
+                                    case "nodeid":
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下nodeid值错误:" + val);
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
+                                        break;
+                                    case "fk_flow":
+                                    case "fk_flowsort":
+                                        continue;
+                                    case "showsheets":
+                                    case "histonds":
+                                    case "groupstands": //去除不必要的替换
+                                        string key = "@" + flowID;
+                                        val = val.Replace(key, "@");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                nd.SetValByKey(dc.ColumnName, val);
+                            }
+                            nd.SetValByKey(NodeAttr.FK_Flow,fl.No);
+                            nd.DirectInsert();
+                        }
+                        break;
                     case "WF_Node": //导入节点信息.
                         foreach (DataRow dr in dt.Rows)
                         {
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
-                            BP.WF.Template.CCEn.CC cc = new CC(); //抄送相关的信息.
                             BP.WF.Template.NodeWorkCheck fwc = new NodeWorkCheck();
-
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 string val = dr[dc.ColumnName] as string;
@@ -704,11 +726,10 @@ namespace BP.WF.Template
                                         break;
                                 }
                                 nd.SetValByKey(dc.ColumnName, val);
-                                cc.SetValByKey(dc.ColumnName, val);
                                 fwc.SetValByKey(dc.ColumnName, val);
                             }
 
-                            nd.FK_Flow = fl.No;
+                            nd.FlowNo = fl.No;
                             nd.FlowName = fl.Name;
                             try
                             {
@@ -721,7 +742,7 @@ namespace BP.WF.Template
 
                                 try
                                 {
-                                    nd.DirectInsert();
+                                    nd.DirectUpdate();
                                 }
                                 catch (Exception ex)
                                 {
@@ -729,14 +750,12 @@ namespace BP.WF.Template
                                 }
 
                                 //把抄送的信息也导入里面去.
-                                cc.DirectUpdate();
                                 fwc.FWCVer = 1;  //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
                                 fwc.DirectUpdate();
                                 DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData='ND" + nd.NodeID + "'");
                             }
                             catch (Exception ex)
                             {
-                                cc.CheckPhysicsTable();
                                 fwc.CheckPhysicsTable();
 
                                 throw new Exception("@导入节点:FlowName:" + nd.FlowName + " nodeID: " + nd.NodeID + " , " + nd.Name + " 错误:" + ex.Message);
@@ -750,7 +769,9 @@ namespace BP.WF.Template
                             Node nd = new Node();
                             nd.NodeID = int.Parse(dr[NodeAttr.NodeID].ToString());
                             nd.RetrieveFromDBSources();
-                            nd.FK_Flow = fl.No;
+                            Node newNode = new Node();
+                            newNode.Copy(nd);
+                            newNode.FlowNo = fl.No;
                             //获取表单类别
                             string formType = dr[NodeAttr.FormType].ToString();
                             foreach (DataColumn dc in dt.Columns)
@@ -791,11 +812,11 @@ namespace BP.WF.Template
                                     default:
                                         break;
                                 }
-                                nd.SetValByKey(dc.ColumnName, val);
+                                newNode.SetValByKey(dc.ColumnName, val);
                             }
-                            nd.FK_Flow = fl.No;
-                            nd.FlowName = fl.Name;
-                            nd.DirectUpdate();
+                            newNode.FlowNo = fl.No;
+                            newNode.FlowName = fl.Name;
+                            newNode.DirectUpdate();
                         }
 
                         //更新 GroupStaNDs . HisToND 
@@ -835,7 +856,7 @@ namespace BP.WF.Template
                                 }
                                 nd.SetValByKey(dc.ColumnName, val);
                             }
-                            nd.FK_Flow = fl.No;
+                            nd.FlowNo = fl.No;
                             nd.DirectUpdate();
                         }
                         break;
@@ -959,10 +980,10 @@ namespace BP.WF.Template
                                 }
                                 ma.SetValByKey(dc.ColumnName, val);
                             }
-                            bool b = ma.IsExit(BP.Sys.MapAttrAttr.FK_MapData, ma.FK_MapData,
+                            bool b = ma.IsExit(BP.Sys.MapAttrAttr.FK_MapData, ma.FrmID,
                                       MapAttrAttr.KeyOfEn, ma.KeyOfEn);
 
-                            ma.setMyPK(ma.FK_MapData + "_" + ma.KeyOfEn);
+                            ma.setMyPK(ma.FrmID + "_" + ma.KeyOfEn);
                             if (b == true)
                                 ma.DirectUpdate();
                             else
@@ -1074,7 +1095,7 @@ namespace BP.WF.Template
                             }
 
                             //设置主键.
-                            en.setMyPK(en.FK_MapData + "_" + en.KeyOfEn);
+                            en.setMyPK(en.FrmID + "_" + en.KeyOfEn);
                             en.Save(); //执行保存.
                         }
                         break;
@@ -1093,7 +1114,7 @@ namespace BP.WF.Template
                                 val = val.Replace("ND" + oldFlowID, "ND" + flowID);
                                 en.SetValByKey(dc.ColumnName, val);
                             }
-                            en.setMyPK(en.FK_MapData + "_" + en.CtrlID);
+                            en.setMyPK(en.FrmID + "_" + en.CtrlID);
                             en.Save();
                             //  en.setMyPK(Guid.NewGuid().ToString());
                         }
@@ -1114,7 +1135,7 @@ namespace BP.WF.Template
                                 en.SetValByKey(dc.ColumnName, val);
                             }
 
-                            en.setMyPK(en.FK_MapData + "_" + en.NoOfObj);
+                            en.setMyPK(en.FrmID + "_" + en.NoOfObj);
                             en.Save();
                         }
                         break;
@@ -1223,6 +1244,37 @@ namespace BP.WF.Template
                             ne.Insert();
                         }
                         break;
+                    case "WF_CCRole": //FAppSets.xml。
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            CCRole ccRole = new CCRole();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                String val = dr[dc.ColumnName] == null ? null : dr[dc.ColumnName].ToString();
+                                if (val == null)
+                                {
+                                    continue;
+                                }
+
+                                switch (dc.ColumnName.ToLower())
+                                {
+                                    case "nodeid":
+                                        if (val.Length < iOldFlowLength)
+                                        {
+                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
+                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_CCRole下NodeID值错误:" + val);
+                                        }
+                                        val = flowID + val.Substring(iOldFlowLength);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                ccRole.SetValByKey(dc.ColumnName, val);
+                            }
+                            ccRole.setMyPK(DBAccess.GenerGUID());
+                            ccRole.Insert();
+                        }
+                        break;
                     case "Sys_GroupField":
                         //foreach (DataRow dr in dt.Rows)
                         //{
@@ -1248,93 +1300,7 @@ namespace BP.WF.Template
                         //    gf.InsertAsOID(gf.OID);
                         //}
                         break;
-                    case "WF_NodeCC":
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            CC cc = new CC();
-                            cc.NodeID = int.Parse(flowID + dr[NodeAttr.NodeID].ToString().Substring(iOldFlowLength));
-                            cc.RetrieveFromDBSources();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                if (dc.ColumnName.ToLower().Equals("nodeid"))
-                                {
-                                    if (val.Length < iOldFlowLength)
-                                    {
-                                        // 节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                        throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_Node下FK_Node值错误:" + val);
-                                    }
-                                    val = flowID + val.Substring(iOldFlowLength);
-                                }
-
-                                cc.SetValByKey(dc.ColumnName, val);
-                            }
-                            cc.SetValByKey("FK_Flow", fl.No);
-                            cc.DirectUpdate();
-                        }
-                        break;
-                    case "WF_CCEmp": // 抄送.
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            CCEmp ne = new CCEmp();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "fk_node":
-                                        if (val.Length < iOldFlowLength)
-                                        {
-                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_CCEmp下FK_Node值错误:" + val);
-                                        }
-                                        val = flowID + val.Substring(iOldFlowLength);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                ne.SetValByKey(dc.ColumnName, val);
-                            }
-                            ne.Insert();
-                        }
-                        break;
-                    case "WF_CCStation": // 抄送.
-                        string mysql = " DELETE FROM WF_CCStation WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + flowID + "')";
-                        DBAccess.RunSQL(mysql);
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            CCStation ne = new CCStation();
-                            foreach (DataColumn dc in dt.Columns)
-                            {
-                                string val = dr[dc.ColumnName] as string;
-                                if (val == null)
-                                    continue;
-
-                                switch (dc.ColumnName.ToLower())
-                                {
-                                    case "fk_node":
-                                        if (val.Length < iOldFlowLength)
-                                        {
-                                            //节点编号长度小于流程编号长度则为异常数据，异常数据不进行处理
-                                            throw new Exception("@导入模板名称：" + oldFlowName + "；节点WF_CCStation下FK_Node值错误:" + val);
-                                        }
-                                        val = flowID + val.Substring(iOldFlowLength);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                ne.SetValByKey(dc.ColumnName, val);
-                            }
-                            ne.Save();
-                        }
-                        break;
+                 
                     default:
                         // infoErr += "Error:" + dt.TableName;
                         break;
@@ -1369,13 +1335,9 @@ namespace BP.WF.Template
             }
 
 
-
-
             if (infoErr == "")
             {
                 infoTable = "";
-
-
                 //写入日志.
                 BP.Sys.Base.Glo.WriteUserLog("导入流程模板：" + fl.Name + " - " + fl.No);
 
@@ -1387,7 +1349,8 @@ namespace BP.WF.Template
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
         }
-        public static Node NewCond(string flowNo, int x, int y)
+
+        public static Node NewEtcNode(string flowNo, int x, int y, NodeType type)
         {
             Flow flow = new Flow(flowNo);
 
@@ -1396,7 +1359,7 @@ namespace BP.WF.Template
             if (idx == 0)
                 idx++;
 
-            var nodeID = 0;
+            int nodeID = 0;
             //设置节点ID.
             while (true)
             {
@@ -1410,217 +1373,209 @@ namespace BP.WF.Template
             if (nd.NodeID > int.Parse(flowNo + "99"))
                 throw new Exception("流程最大节点编号不可以超过100");
 
-            nd.Name = "条件" + nd.NodeID;
-            nd.FK_Flow = flowNo;
-            nd.HisNodeType = NodeType.RouteNode; //路由节点.
+            if (type == NodeType.RouteNode)
+                nd.Name = "条件" + nd.NodeID;
+
+            if (type == NodeType.CCNode)
+                nd.Name = "抄送" + nd.NodeID;
+
+            if (type == NodeType.SubFlowNode)
+                nd.Name = "子流程节点" + nd.NodeID;
+
+            nd.FlowNo = flowNo;
+            nd.HisNodeType = type; //抄送节点.
             nd.X = x;
-            nd.Y = y; //@hongyan
+            nd.Y = y;
             nd.Insert();
             return nd;
-
         }
 
         public static Node NewNode(string flowNo, int x, int y, string icon = null, int runModel = 0, int nodeType = 0)
         {
             Flow flow = new Flow(flowNo);
 
+            NodeSimples nds = new NodeSimples();
+            nds.Retrieve("FK_Flow", flowNo,"Step");
+
             Node nd = new Node();
-            nd.FK_Flow = flowNo;
-            int idx = DBAccess.RunSQLReturnValInt("SELECT COUNT(NodeID) FROM WF_Node WHERE FK_Flow='" + flowNo + "'", 0);
-            if (idx == 0)
-                idx++;
-
-            var nodeID = 0;
-            //设置节点ID.
-            while (true)
+            nd.FlowNo = flowNo;
+            try
             {
-                string strID = flowNo + idx.ToString().PadLeft(2, '0');
-                nd.NodeID = int.Parse(strID);
-                if (nd.IsExits == false)
-                    break;
-                idx++;
-            }
-
-            if (nd.NodeID > int.Parse(flowNo + "99"))
-                throw new Exception("流程最大节点编号不可以超过100");
-
-            nodeID = nd.NodeID;
-
-            //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-            nd.CondModel = DirCondModel.ByDDLSelected; //默认的发送方向.
-            nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
-            nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
-
-            //如果是极简模式.
-            if (flow.FlowDevModel == FlowDevModel.JiJian)
-            {
-                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
-                nd.NodeFrmID = "ND" + int.Parse(flow.No) + "01";
-                nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
-                nd.DirectUpdate();
-                FrmNode fn = new FrmNode();
-                fn.FK_Frm = nd.NodeFrmID;
-                fn.IsEnableFWC = FrmWorkCheckSta.Enable;
-                fn.FK_Node = nd.NodeID;
-                fn.FK_Flow = flowNo;
-                fn.FrmSln = FrmSln.Readonly;
-                fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
-                //执行保存.
-                fn.Save();
-                //MapData md = new MapData();
-                //nd.No = nd.NodeFrmID;
-                //md.HisFrmType = FrmType.FoolForm;
-                //md.Update();
-            }
-
-            //如果是累加.
-            if (flow.FlowDevModel == FlowDevModel.FoolTruck)
-            {
-                nd.FormType = NodeFormType.FoolTruck; //设置为傻瓜表单.
-                nd.NodeFrmID = "ND" + nodeID;
-                nd.FrmWorkCheckSta = FrmWorkCheckSta.Disable;
-                nd.DirectUpdate();
-            }
-
-            //如果是绑定表单库的表单
-            if (flow.FlowDevModel == FlowDevModel.RefOneFrmTree)
-            {
-                nd.FormType = NodeFormType.RefOneFrmTree; //设置为傻瓜表单.
-                nd.NodeFrmID = flow.FrmUrl;
-                nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
-                nd.DirectUpdate();
-                FrmNode fn = new FrmNode();
-                fn.FK_Frm = nd.NodeFrmID;
-                fn.IsEnableFWC = FrmWorkCheckSta.Enable;
-                fn.FK_Node = nd.NodeID;
-                fn.FK_Flow = flowNo;
-                fn.FrmSln = FrmSln.Readonly;
-                fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
-                //执行保存.
-                fn.Save();
-
-            }
-            //如果是Self类型的表单的类型
-            if (flow.FlowDevModel == FlowDevModel.SDKFrmSelfPK || flow.FlowDevModel == FlowDevModel.SDKFrmWorkID)
-            {
-                nd.HisFormType = NodeFormType.SDKForm;
-                nd.FormUrl = flow.FrmUrl;
-                nd.DirectUpdate();
-            }
-
-            //如果是Self类型的表单的类型
-            if (flow.FlowDevModel == FlowDevModel.SelfFrm)
-            {
-                nd.HisFormType = NodeFormType.SelfForm;
-                nd.FormUrl = flow.FrmUrl;
-                nd.DirectUpdate();
-            }
-
-
-
-            nd.FK_Flow = flowNo;
-            nd.Insert();
-
-            //为创建节点设置默认值   部分方法
-            string file = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
-            DataSet ds = new DataSet();
-
-            if (1 == 2 && System.IO.File.Exists(file) == true)
-            {
-                ds.ReadXml(file);
-
-                NodeExt ndExt = new NodeExt(nd.NodeID);
-                DataTable dt = ds.Tables[0];
-                foreach (DataColumn dc in dt.Columns)
+                int nodeID = 0;
+                int idx = 2; //从第2个开始.
+                             //设置节点ID.
+                while (true)
                 {
-                    nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
-                    ndExt.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                    string strID = "";
+                    if (idx.ToString().Length == 3 || idx.ToString().Length == 2)
+                    {
+                        strID = flowNo + idx.ToString();
+                        nd.NodeID = int.Parse(strID);
+                    }
+                    else
+                    {
+                        strID = flowNo + idx.ToString().PadLeft(2, '0');
+                        nd.NodeID = int.Parse(strID);
+                    }
+                    if (nds.Contains("NodeID", nd.NodeID) == false)
+                        break;
+                    idx++;
+                }
+                //if (nd.NodeID > int.Parse(flowNo + "99"))
+                //    throw new Exception("流程最大节点编号不可以超过100");
+                nodeID = nd.NodeID;
+                //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
+                nd.CondModel = DirCondModel.ByDDLSelected; //默认的发送方向.
+                nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
+                nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+                nd.Mark = nodeID.ToString(); //类别.
+                nd.Insert();
+
+                //如果是极简模式.
+                if (flow.FlowDevModel == FlowDevModel.JiJian)
+                {
+                    nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
+                    nd.NodeFrmID = "ND" + int.Parse(flow.No) + "01";
+                    nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
+                    //  nd.DirectUpdate();
+
+                    FrmNode fn = new FrmNode();
+                    fn.FK_Frm = "ND" + int.Parse(flow.No) + "01";
+                    fn.IsEnableFWC = FrmWorkCheckSta.Enable;
+                    fn.NodeID = nd.NodeID;
+                    fn.FlowNo = flowNo;
+                    fn.FrmSln = FrmSln.Readonly;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.NodeID + "_" + fn.FlowNo);
+                    //执行保存.
+                    fn.Save();
                 }
 
-                ndExt.FK_Flow = flowNo;
-                ndExt.NodeID = nodeID;
-                ndExt.DirectUpdate();
+                //如果是累加.
+                if (flow.FlowDevModel == FlowDevModel.FoolTruck)
+                {
+                    nd.FormType = NodeFormType.FoolTruck; //设置为傻瓜表单.
+                    nd.NodeFrmID = "ND" + nodeID;
+                    nd.FrmWorkCheckSta = FrmWorkCheckSta.Disable;
+                }
+
+                //如果是绑定表单库的表单
+                if (flow.FlowDevModel == FlowDevModel.RefOneFrmTree)
+                {
+                    nd.FormType = NodeFormType.RefOneFrmTree; //设置为傻瓜表单.
+                    nd.NodeFrmID = flow.FrmUrl;
+                    nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
+                    nd.DirectUpdate();
+                    FrmNode fn = new FrmNode();
+                    fn.FK_Frm = nd.NodeFrmID;
+                    fn.IsEnableFWC = FrmWorkCheckSta.Enable;
+                    fn.NodeID = nd.NodeID;
+                    fn.FlowNo = flowNo;
+                    fn.FrmSln = FrmSln.Readonly;
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.NodeID + "_" + fn.FlowNo);
+                    //执行保存.
+                    fn.Save();
+
+                }
+                //如果是Self类型的表单的类型
+                if (flow.FlowDevModel == FlowDevModel.SDKFrmSelfPK || flow.FlowDevModel == FlowDevModel.SDKFrmWorkID)
+                {
+                    nd.HisFormType = NodeFormType.SDKForm;
+                    nd.FormUrl = flow.FrmUrl;
+                }
+
+                //如果是Self类型的表单的类型
+                if (flow.FlowDevModel == FlowDevModel.SelfFrm)
+                {
+                    nd.HisFormType = NodeFormType.SelfForm;
+                    nd.FormUrl = flow.FrmUrl;
+                }
+                nd.FlowNo = flowNo;
+
+                //为创建节点设置默认值   部分方法
+                //string file = BP.Difference.SystemConfig.PathOfDataUser + "XML/DefaultNewNodeAttr.xml";
+                //DataSet ds = new DataSet();
+                //if (1 == 2 && System.IO.File.Exists(file) == true)
+                //{
+                //    ds.ReadXml(file);
+                //    NodeExt ndExt = new NodeExt(nd.NodeID);
+                //    DataTable dt = ds.Tables[0];
+                //    foreach (DataColumn dc in dt.Columns)
+                //    {
+                //        nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                //        ndExt.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                //    }
+                //    ndExt.FlowNo = flowNo;
+                //    ndExt.NodeID = nodeID;
+                //    ndExt.DirectUpdate();
+                //}
+                nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
+                nd.NodeID = nodeID;
+                nd.HisDeliveryWay = DeliveryWay.BySelected;
+                nd.X = x;
+                nd.Y = y;
+                nd.Icon = icon;
+                nd.Step = idx;
+
+                //节点类型.
+                nd.HisNodeWorkType = NodeWorkType.Work;
+                nd.Name = "New Node " + idx;
+                nd.HisNodePosType = NodePosType.Mid;
+                nd.FlowNo = flow.No;
+                nd.FlowName = flow.Name;
+
+                //设置审核意见的默认值.
+                nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,
+                    BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
+
+                //设置节点运行模式.
+                nd.HisRunModel = (RunModel)runModel;
+                //设置节点类型
+                nd.HisNodeType = (NodeType)nodeType;
+                nd.Update(); //执行更新. 
+                nd.CreateMap(); //创建节点表单.
+
+                //设置默认值。
+                int state = 0;
+                if (flow.FlowDevModel == FlowDevModel.JiJian)
+                    state = 1;
+
+                //设置审核组件的高度.
+                DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300,SelectorModel=5,FWCSta=" + state + " WHERE NodeID=" + nd.NodeID + "");
+
+                //创建默认的推送消息.
+                CreatePushMsg(nd);
+
+                //写入日志.
+                BP.Sys.Base.Glo.WriteUserLog("创建节点：" + nd.Name + " - " + nd.NodeID);
+                return nd;
             }
-            nd.FWCVer = 1; //设置为2019版本. 2018版是1个节点1个人,仅仅显示1个意见.
-            nd.NodeID = nodeID;
-            nd.HisDeliveryWay = DeliveryWay.BySelected;
-            nd.X = x;
-            nd.Y = y;
-            nd.Icon = icon;
-            nd.Step = idx;
-
-            //节点类型.
-            nd.HisNodeWorkType = NodeWorkType.Work;
-            nd.Name = "New Node " + idx;
-            nd.HisNodePosType = NodePosType.Mid;
-            nd.FK_Flow = flow.No;
-            nd.FlowName = flow.Name;
-
-            //设置审核意见的默认值.
-            nd.SetValByKey(NodeWorkCheckAttr.FWCDefInfo,
-                BP.WF.Glo.DefVal_WF_Node_FWCDefInfo);
-
-            //设置节点运行模式.
-            nd.HisRunModel = (RunModel)runModel;
-            //设置节点类型
-            nd.HisNodeType = (NodeType)nodeType;
-
-
-            nd.Update(); //执行更新. 
-            nd.CreateMap();
-
-            //通用的人员选择器.
-            BP.WF.Template.Selector select = new Selector(nd.NodeID);
-            select.SelectorModel = SelectorModel.GenerUserSelecter;
-            select.Update();
-
-            //设置默认值。
-            int state = 0;
-            if (flow.FlowDevModel == FlowDevModel.JiJian)
-                state = 1;
-
-            //设置审核组件的高度.
-            DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300," + NodeAttr.FWCSta + "=" + state + " WHERE NodeID='" + nd.NodeID + "'");
-
-            //创建默认的推送消息.
-            CreatePushMsg(nd);
-
-            //写入日志.
-            BP.Sys.Base.Glo.WriteUserLog("创建节点：" + nd.Name + " - " + nd.NodeID);
-            return nd;
+            catch (Exception ex)
+            {
+                DeleteNode(nd.NodeID);
+                throw ex; 
+            }
         }
         private static void CreatePushMsg(Node nd)
         {
-            /*创建发送短消息,为默认的消息.*/
+            //删除已经存在的.
             BP.WF.Template.PushMsg pm = new BP.WF.Template.PushMsg();
-            int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListNode.SendSuccess,
-                PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
-            if (i == 0)
-            {
-                pm.FK_Event = EventListNode.SendSuccess;
-                pm.FK_Node = nd.NodeID;
-                pm.FK_Flow = nd.FK_Flow;
+            pm.Delete(PushMsgAttr.FK_Node, nd.NodeID);
 
-                pm.SMSPushWay = 1;  // 发送短消息.
-                pm.SMSPushModel = "Email";
-                pm.setMyPK(DBAccess.GenerGUID());
-                pm.Insert();
-            }
+            pm.FK_Event = EventListNode.SendSuccess;
+            pm.NodeID = nd.NodeID;
+            pm.FlowNo = nd.FlowNo;
+            pm.SMSPushWay = 1;  // 发送短消息.
+            pm.SMSPushModel = "Email";
+            pm.setMyPK(DBAccess.GenerGUID());
+            pm.Insert();
 
-            //设置退回消息提醒.
-            i = pm.Retrieve(PushMsgAttr.FK_Event, EventListNode.ReturnAfter,
-                 PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
-            if (i == 0)
-            {
-                pm.FK_Event = EventListNode.ReturnAfter;
-                pm.FK_Node = nd.NodeID;
-                pm.FK_Flow = nd.FK_Flow;
-
-                pm.SMSPushWay = 1;  // 发送短消息.
-                pm.MailPushWay = 0; //不发送邮件消息.
-                pm.setMyPK(DBAccess.GenerGUID());
-                pm.Insert();
-            }
+            pm.FK_Event = EventListNode.ReturnAfter;
+            pm.NodeID = nd.NodeID;
+            pm.FlowNo = nd.FlowNo;
+            pm.SMSPushWay = 1;  // 发送短消息.
+            pm.MailPushWay = 0; //不发送邮件消息.
+            pm.setMyPK(DBAccess.GenerGUID());
+            pm.Insert();
         }
 
         /// <summary>
@@ -1698,7 +1653,7 @@ namespace BP.WF.Template
             fl.No = flowNo;
             fl.RetrieveFromDBSources();
             fl.FlowMark = flowMark; //更新标记.
-            fl.FK_FlowSort = flowSort; //更新流程目录
+            fl.FlowSortNo = flowSort; //更新流程目录
             fl.Update();
 
             //删除第2个节点信息.
@@ -1895,7 +1850,7 @@ namespace BP.WF.Template
                         int toNodeId = relations[toUserTask];
                         //生成方向.
                         Direction mydir = new Direction();
-                        mydir.FK_Flow = flowNo;
+                        mydir.FlowNo = flowNo;
                         mydir.Node = node.NodeID;
                         mydir.ToNode = toNodeId;
                         //判断如果有描述就添加
@@ -1931,7 +1886,7 @@ namespace BP.WF.Template
 
             //        //生成方向.
             //        Direction mydir = new Direction();
-            //        mydir.FK_Flow = flowNo;
+            //        mydir.FlowNo = flowNo;
             //        mydir.Node = node.NodeID;
             //        mydir.ToNode = nd.NodeID;
             //        mydir.Insert(); //自动生成主键.
@@ -1974,7 +1929,7 @@ namespace BP.WF.Template
                 }
 
                 flow.PTable = ptable;
-                flow.FK_FlowSort = flowSort;
+                flow.FlowSortNo = flowSort;
                 flow.FlowMark = flowMark;
 
                 if (DataType.IsNullOrEmpty(flowMark) == false)
@@ -1989,7 +1944,7 @@ namespace BP.WF.Template
 
                 flow.No = flow.GenerNewNoByKey(FlowAttr.No);
                 flow.Name = flowName;
-                if (string.IsNullOrWhiteSpace(flow.Name))
+                if (DataType.IsNullOrEmpty(flow.Name))
                     flow.Name = "新建流程" + flow.No; //新建流程.
 
                 //if (flow.IsExits == true)
@@ -2024,14 +1979,14 @@ namespace BP.WF.Template
                 nd.NodeID = int.Parse(flow.No + "01");
                 nd.Name = "Start Node";//  "开始节点"; 
                 nd.Step = 1;
-                nd.FK_Flow = flow.No;
+                nd.FlowNo = flow.No;
                 nd.FlowName = flow.Name;
                 nd.HisNodePosType = NodePosType.Start;
                 nd.HisNodeWorkType = NodeWorkType.StartWork;
                 nd.X = 200;
                 nd.Y = 150;
                 nd.NodePosType = NodePosType.Start;
-                nd.HisReturnRole = ReturnRole.CanNotReturn; //不能退回. @hongyan.
+                nd.HisReturnRole = ReturnRole.CanNotReturn; //不能退回.
                 nd.Icon = "前台";
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
@@ -2049,8 +2004,10 @@ namespace BP.WF.Template
 
                     //把本组织加入进去.
                     FlowOrg fo = new FlowOrg();
-                    fo.Delete(FlowOrgAttr.FlowNo, nd.FK_Flow);
-                    fo.FlowNo = nd.FK_Flow;
+                    string mypk = WebUser.OrgNo + "_" + nd.FlowNo;
+                    fo.Delete("MyPK", mypk);
+                    fo.SetValByKey("MyPK", mypk);
+                    fo.FlowNo = nd.FlowNo;
                     fo.OrgNo = WebUser.OrgNo;
                     fo.Insert();
                 }
@@ -2102,7 +2059,7 @@ namespace BP.WF.Template
                 nd.NodeID = int.Parse(flow.No + "02");
                 nd.Name = "Node 2"; // "结束节点";
                 nd.Step = 2;
-                nd.FK_Flow = flow.No;
+                nd.FlowNo = flow.No;
                 nd.FlowName = flow.Name;
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
                 nd.FormType = NodeFormType.FoolForm; //设置为傻瓜表单.
@@ -2147,6 +2104,17 @@ namespace BP.WF.Template
                 {
                     string frmID = "ND" + int.Parse(flow.No + "01");
 
+                    //创建表单ID。
+                    int groupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "'", 0);
+                    if (groupID == 0)
+                    {
+                        GroupField gf = new GroupField();
+                        gf.Lab = "基本信息";
+                        gf.FrmID = frmID;
+                        gf.Insert();
+                        groupID = gf.OID;
+                    }
+
                     MapAttr attr = new MapAttr();
                     attr.setMyPK(frmID + "_SQR");
                     attr.setName("申请人");
@@ -2154,8 +2122,9 @@ namespace BP.WF.Template
                     attr.setDefValReal("@WebUser.Name");
                     attr.setUIVisible(true);
                     attr.setUIIsEnable(false);
-                    attr.setFK_MapData(frmID);
+                    attr.FrmID =frmID;
                     attr.ColSpan = 1;
+                    attr.setGroupID(groupID);
                     attr.Insert();
 
                     attr = new MapAttr();
@@ -2165,9 +2134,10 @@ namespace BP.WF.Template
                     attr.setDefValReal("@RDT");
                     attr.setUIVisible(true);
                     attr.setUIIsEnable(false);
-                    attr.setFK_MapData(frmID);
+                    attr.FrmID =frmID;
                     attr.MyDataType = DataType.AppDateTime;
                     attr.ColSpan = 1;
+                    attr.setGroupID(groupID);
                     attr.Insert();
 
                     attr = new MapAttr();
@@ -2177,8 +2147,9 @@ namespace BP.WF.Template
                     attr.setDefValReal("@WebUser.FK_DeptName");
                     attr.setUIVisible(true);
                     attr.setUIIsEnable(false);
-                    attr.setFK_MapData(frmID);
+                    attr.FrmID =frmID;
                     attr.ColSpan = 3;
+                    attr.setGroupID(groupID);
                     attr.Insert();
                 }
 
@@ -2202,7 +2173,7 @@ namespace BP.WF.Template
 
             //创建连线
             Direction drToNode = new Direction();
-            drToNode.FK_Flow = flow.No;
+            drToNode.FlowNo = flow.No;
             drToNode.Node = int.Parse(int.Parse(flow.No) + "01");
             drToNode.ToNode = int.Parse(int.Parse(flow.No) + "02");
             drToNode.Save();

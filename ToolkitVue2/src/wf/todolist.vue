@@ -1,23 +1,12 @@
 <template>
   <div id="Todolist">
-    <el-form
-        :inline="true"
-        ref="ruleForm"
-        :model="formInline"
-        class="demo-form-inline"
-    >
+    <el-form :inline="true" ref="ruleForm" :model="formInline" class="demo-form-inline">
       <el-form-item label="关键字" prop="keyWord">
         <el-input v-model="formInline.keyWord" placeholder="关键字"></el-input>
       </el-form-item>
       <el-form-item label="发起日期" prop="RageDate">
-        <el-date-picker
-            v-model="formInline.RageDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-        >
+        <el-date-picker v-model="formInline.RageDate" type="daterange" range-separator="至" start-placeholder="开始日期"
+          end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -25,36 +14,18 @@
       </el-form-item>
     </el-form>
 
-    <el-table
-        :data="tableData"
-        height="75vh"
-        ref="topicTable"
-        row-key="WorkID"
-        default-expand-all
-    >
+    <el-table :data="tableData" height="75vh" ref="topicTable" row-key="WorkID" default-expand-all>
       <el-table-column label="#" width="50" fixed type="index">
       </el-table-column>
-      <el-table-column
-          prop="Title"
-          label="标题"
-          fixed
-          min-width="240"
-          max-width="350"
-      >
+      <el-table-column prop="Title" label="标题" fixed min-width="240" max-width="350">
         <template slot-scope="scope">
           <span>
             <el-link :underline="false" @click="sikpMyflow(scope.row)">
-              <i
-                  :class="
-                  scope.row.IsRead === 0
-                    ? 'fas fa-envelope-open iconColor-w'
-                    : 'fas fa-envelope iconColor'
-                "
-              ></i
-              ><span
-                :class="scope.row.IsRead === 0 ? 'pl-5' : 'cellColor pl-5'"
-            >{{ scope.row.Title }}</span
-            >
+              <i :class="
+                scope.row.IsRead === 0
+                  ? 'fas fa-envelope-open iconColor-w'
+                  : 'fas fa-envelope iconColor'
+              "></i><span :class="scope.row.IsRead === 0 ? 'pl-5' : 'cellColor pl-5'">{{ scope.row.Title }}</span>
             </el-link>
           </span>
         </template>
@@ -91,9 +62,7 @@
           <span v-else-if="scope.row.WFState == 2">运行中</span>
           <span v-else-if="scope.row.WFState == 3">已完成</span>
           <span v-else-if="scope.row.WFState == 4">挂起</span>
-          <span v-else-if="scope.row.WFState == 5" style="color: red"
-          >退回</span
-          >
+          <span v-else-if="scope.row.WFState == 5" style="color: red">退回</span>
           <span v-else-if="scope.row.WFState == 6">转发</span>
           <span v-else-if="scope.row.WFState == 7">删除</span>
           <span v-else-if="scope.row.WFState == 8">加签</span>
@@ -111,22 +80,18 @@
       </el-table-column>
     </el-table>
     <div style="margin: 10px 0">
-      <span
-          style="
-          font-weight: 500;
-          font-size: 14px;
-          margin-right: 10px;
-          color: #606266;
-        "
-      >合计： {{ count }}条</span
-      >
+      <span style="
+                  font-weight: 500;
+                  font-size: 14px;
+                  margin-right: 10px;
+                  color: #606266;
+                ">合计： {{ count }}条</span>
     </div>
   </div>
 </template>
 
 <script>
-import {domain} from "./api/config";
-import {openMyFlow} from "./api/Dev2Interface";
+import { openMyFlow } from "./api/Dev2Interface";
 
 export default {
   name: "Todolist",
@@ -145,7 +110,7 @@ export default {
     };
   },
 
-  beforeCreate() {},
+  beforeCreate() { },
   created() {
     this.loadData();
   },
@@ -154,7 +119,7 @@ export default {
     loadData() {
       let handler = new this.HttpHandler("BP.WF.HttpHandler.WF");
       handler.AddUrlData();
-      handler.AddPara("Domain",domain);
+      handler.AddPara("Domain", process.env.VUE_APP_DOMAIN);
       let data = handler.DoMethodReturnString("Todolist_Init");
       if (data.indexOf("err@") != -1) {
         this.$message.error(data);
@@ -194,11 +159,11 @@ export default {
         const passTime = edt.getTime() - date.getTime();
         //判断流程是否逾期
         if (
-            date.getTime() > edt.getTime() &&
-            item.WFState == 2 &&
-            item.FK_Node != parseInt(item.FK_Flow) + "01" &&
-            item.RDT != item.SDT &&
-            paras.indexOf("&IsCC=1") == -1
+          date.getTime() > edt.getTime() &&
+          item.WFState == 2 &&
+          item.FK_Node != parseInt(item.FK_Flow) + "01" &&
+          item.RDT != item.SDT &&
+          paras.indexOf("&IsCC=1") == -1
         ) {
           item.ZT = 2;
         } else {
@@ -226,19 +191,19 @@ export default {
         PWorkID: work.PWorkID,
         Paras: work.AtPara ? work.AtPara : "",
       };
-      openMyFlow(params,this);
+      openMyFlow(params, this);
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const Data = this.parseData.filter((data) => {
             if (
-                data.Title.toLowerCase().includes(
-                    this.formInline.keyWord.toLowerCase())
-                ||data.FlowName.toLowerCase().includes(
-                        this.formInline.keyWord.toLowerCase())
-                || data.NodeName.toLowerCase().includes(
-                        this.formInline.keyWord.toLowerCase())
+              data.Title.toLowerCase().includes(
+                this.formInline.keyWord.toLowerCase())
+              || data.FlowName.toLowerCase().includes(
+                this.formInline.keyWord.toLowerCase())
+              || data.NodeName.toLowerCase().includes(
+                this.formInline.keyWord.toLowerCase())
             ) {
               return data;
             }
@@ -271,9 +236,9 @@ export default {
     formInline: {
       handler(oldval, newval) {
         if (
-            newval.keyWord == "" ||
-            newval.RageDate[0] == "" ||
-            newval.RageDate[1] == ""
+          newval.keyWord == "" ||
+          newval.RageDate[0] == "" ||
+          newval.RageDate[1] == ""
         ) {
           this.tableData = this.parseData;
         }

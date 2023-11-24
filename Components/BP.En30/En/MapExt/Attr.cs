@@ -82,7 +82,7 @@ namespace BP.En
                         attr.setUIContralType(this.UIContralType);
                         attr.setLGType(FieldTypeS.Normal);
 
-                        if (this.IsSupperText == 1)
+                        if (this.ItIsSupperText == 1)
                             attr.TextModel = 3;
 
                         switch (this.MyDataType)
@@ -107,7 +107,7 @@ namespace BP.En
                 return attr;
             }
         }
-        public bool IsFK
+        public bool ItIsFK
         {
             get
             {
@@ -117,7 +117,7 @@ namespace BP.En
                     return false;
             }
         }
-        public bool IsFKorEnum
+        public bool ItIsFKorEnum
         {
             get
             {
@@ -131,7 +131,7 @@ namespace BP.En
                     return false;
             }
         }
-        public bool IsNum
+        public bool ItIsNum
         {
             get
             {
@@ -146,7 +146,7 @@ namespace BP.En
                     return false;
             }
         }
-        public bool IsEnum
+        public bool ItIsEnum
         {
             get
             {
@@ -156,7 +156,7 @@ namespace BP.En
                     return false;
             }
         }
-        public bool IsRefAttr
+        public bool ItIsRefAttr
         {
             get
             {
@@ -168,7 +168,7 @@ namespace BP.En
         /// <summary>
         /// 计算属性是不是PK
         /// </summary>
-        public bool IsPK
+        public bool ItIsPK
         {
             get
             {
@@ -179,7 +179,7 @@ namespace BP.En
             }
         }
         private int _IsKeyEqualField = -1;
-        public bool IsKeyEqualField
+        public bool ItIsKeyEqualField
         {
             get
             {
@@ -292,7 +292,7 @@ namespace BP.En
                         }
 
                     case DataType.AppBoolean:
-                        if (this._defaultVal == null || this._defaultVal.ToString() == "")
+                        if (this._defaultVal == null || this._defaultVal.ToString().Equals(""))
                             return 0;
                         try
                         {
@@ -376,7 +376,7 @@ namespace BP.En
                     case DataType.AppDateTime:
                         return 50;
                     case DataType.AppString:
-                        if (this.IsFK)
+                        if (this.ItIsFK)
                         {
                             return 100;
                         }
@@ -387,7 +387,7 @@ namespace BP.En
                             return this._maxLength;
                         }
                     default:
-                        if (this.IsFK)
+                        if (this.ItIsFK)
                             return 100;
                         else
                         {
@@ -407,7 +407,7 @@ namespace BP.En
         /// <summary>
         /// 是否可以为空, 对数值类型的数据有效.
         /// </summary>
-        public bool IsNull
+        public bool ItIsNull
         {
             get
             {
@@ -464,7 +464,7 @@ namespace BP.En
         public bool UIIsReadonly = false;
         public UIContralType UIContralType = UIContralType.TB;
         public string UIBindKey = null;
-        public int IsSupperText = 0; //是否大文本，还解析了日期格式,这个地方需要修改.
+        public int ItIsSupperText = 0; //是否大文本，还解析了日期格式,这个地方需要修改.
 
         private string _UIBindKeyOfEn = null;
         public bool UIIsDoc
@@ -1020,7 +1020,7 @@ namespace BP.En
 
 
 
-                    if (item.IsSupperText == 1)
+                    if (item.ItIsSupperText == 1)
                         mattr.TextModel = 3;
                     if (item.UIHeight > 10)
                     {
@@ -1056,13 +1056,13 @@ namespace BP.En
             if (isClearGroupName == false)
                 attr.GroupName = this.currGroupAttrName;
 
-            if (attr.Field == null || attr.Field == "")
+            if (attr.Field == null || attr.Field.Equals(""))
             {
                 attr.Field = attr.Key; //@wwh.
                 // throw new Exception("@属性设置错误：您不能设置 key='" + attr.Key + "', " + attr.Desc + ",得字段值为空");
             }
 
-            bool k = attr.IsKeyEqualField;
+            bool k = attr.ItIsKeyEqualField;
             this.Add(attr, true, false, isClearGroupName);
         }
         /// <summary>

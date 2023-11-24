@@ -33,17 +33,13 @@ namespace BP.WF
         /// </summary>
         public const string FK_Emp = "FK_Emp";
         /// <summary>
-        /// 使用的角色
-        /// </summary>
-        public const string UseStation_del = "UseStation";
-        /// <summary>
         /// 使用的部门
         /// </summary>
         public const string FK_Dept = "FK_Dept";
         /// <summary>
         /// 部门名称
         /// </summary>
-        public const string FK_DeptT = "FK_DeptT";
+        public const string DeptName = "DeptName";
         /// <summary>
         /// 应该完成时间
         /// </summary>
@@ -65,14 +61,6 @@ namespace BP.WF
         /// </summary>
         public const string IsEnable = "IsEnable";
         /// <summary>
-        /// 是否自动分配
-        /// </summary>
-        //public const  string IsAutoGener="IsAutoGener";
-        /// <summary>
-        /// 产生时间
-        /// </summary>
-        //public const  string GenerDateTime="GenerDateTime";
-        /// <summary>
         /// IsPass
         /// </summary>
         public const string IsPass = "IsPass";
@@ -83,11 +71,11 @@ namespace BP.WF
         /// <summary>
         /// 人员名称
         /// </summary>
-        public const string FK_EmpText = "FK_EmpText";
+        public const string EmpName = "EmpName";
         /// <summary>
         /// 节点名称
         /// </summary>
-        public const string FK_NodeText = "FK_NodeText";
+        public const string NodeName = "NodeName";
         /// <summary>
         /// 发送人
         /// </summary>
@@ -154,9 +142,10 @@ namespace BP.WF
         /// 顺序号
         /// </summary>
         public const string Idx = "Idx";
-
+        /// <summary>
+        /// 岗位编号
+        /// </summary>
         public const string StaNo = "StaNo";
-
     }
     /// <summary>
     /// 工作者列表
@@ -167,7 +156,7 @@ namespace BP.WF
         /// <summary>
         /// 是否会签
         /// </summary>
-        public bool IsHuiQian
+        public bool ItIsHuiQian
         {
             get
             {
@@ -227,11 +216,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkerListAttr.PressTimes);
+                return this.GetParaInt(GenerWorkerListAttr.PressTimes);
             }
             set
             {
-                SetValByKey(GenerWorkerListAttr.PressTimes, value);
+                SetPara(GenerWorkerListAttr.PressTimes, value);
             }
         }
         /// <summary>
@@ -276,7 +265,7 @@ namespace BP.WF
         /// <summary>
         /// 是否可用(在分配工作时有效)
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -290,7 +279,7 @@ namespace BP.WF
         /// <summary>
         /// 是否通过(对审核的会签节点有效)
         /// </summary>
-        public bool IsPass
+        public bool ItIsPass
         {
             get
             {
@@ -306,7 +295,7 @@ namespace BP.WF
         /// 1=已经通过.
         /// -2=  标志该节点是干流程人员处理的节点，目的为了让分流节点的人员可以看到待办.
         /// </summary>
-        public int IsPassInt
+        public int PassInt
         {
             get
             {
@@ -317,7 +306,7 @@ namespace BP.WF
                 this.SetValByKey(GenerWorkerListAttr.IsPass,value);
             }
         }
-        public bool IsRead
+        public bool ItIsRead
         {
             get
             {
@@ -345,7 +334,7 @@ namespace BP.WF
         /// <summary>
         /// Node
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -363,14 +352,25 @@ namespace BP.WF
         {
             get
             {
-                return this.GetParaString(GenerWorkerListAttr.FK_DeptT);
+                return this.GetParaString(GenerWorkerListAttr.DeptName);
             }
             set
             {
-                this.SetPara(GenerWorkerListAttr.FK_DeptT, value);
+                this.SetPara(GenerWorkerListAttr.DeptName, value);
             }
         }
-        public string FK_Dept
+        public string StaName
+        {
+            get
+            {
+                return this.GetParaString("StaName");
+            }
+            set
+            {
+                this.SetPara("StaName", value);
+            }
+        }
+        public string DeptNo
         {
             get
             {
@@ -399,15 +399,15 @@ namespace BP.WF
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string FK_NodeText
+        public string NodeName
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkerListAttr.FK_NodeText);
+                return this.GetValStrByKey(GenerWorkerListAttr.NodeName);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.FK_NodeText, value);
+                this.SetValByKey(GenerWorkerListAttr.NodeName, value);
             }
         }
         /// <summary>
@@ -431,7 +431,7 @@ namespace BP.WF
         {
             get
             {
-                return new Emp(this.FK_Emp);
+                return new Emp(this.EmpNo);
             }
         }
         /// <summary>
@@ -495,7 +495,7 @@ namespace BP.WF
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -509,21 +509,21 @@ namespace BP.WF
         /// <summary>
         /// 人员名称
         /// </summary>
-        public string FK_EmpText
+        public string EmpName
         {
             get
             {
-                return this.GetValStrByKey(GenerWorkerListAttr.FK_EmpText);
+                return this.GetValStrByKey(GenerWorkerListAttr.EmpName);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.FK_EmpText, value);
+                this.SetValByKey(GenerWorkerListAttr.EmpName, value);
             }
         }
         /// <summary>
         /// 流程编号
         /// </summary>		 
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -595,11 +595,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkerListAttr.HungupTimes);
+                return this.GetParaInt(GenerWorkerListAttr.HungupTimes);
             }
             set
             {
-                this.SetValByKey(GenerWorkerListAttr.HungupTimes, value);
+                this.SetPara(GenerWorkerListAttr.HungupTimes, value);
             }
         }
         #endregion 
@@ -624,8 +624,8 @@ namespace BP.WF
         public GenerWorkerList(Int64 workid, int nodeID, string empNo)
         {
             this.WorkID = workid;
-            this.FK_Node = nodeID;
-            this.FK_Emp = empNo;
+            this.NodeID = nodeID;
+            this.EmpNo = empNo;
             this.Retrieve();
         }
         /// <summary>
@@ -650,18 +650,18 @@ namespace BP.WF
                 //干流程WorkID.
                 map.AddTBInt(GenerWorkerListAttr.FID, 0, "流程ID", true, false);
 
-                map.AddTBString(GenerWorkerListAttr.FK_EmpText, null, "人员名称", true, false, 0, 30, 100);
-                map.AddTBString(GenerWorkerListAttr.FK_NodeText, null, "节点名称", true, false, 0, 100, 100);
+                map.AddTBString(GenerWorkerListAttr.EmpName, null, "人员名称", true, false, 0, 30, 100);
+                map.AddTBString(GenerWorkerListAttr.NodeName, null, "节点名称", true, false, 0, 100, 100);
 
                 map.AddTBString(GenerWorkerListAttr.FK_Flow, null, "流程", true, false, 0, 5, 100);
+                //为tianyu集团，处理工作的岗位编号.
                 map.AddTBString(GenerWorkerListAttr.StaNo, null, "岗位编号", true, false, 0, 100, 100);
+                //为tianyu集团，处理工作的部门编号.
                 map.AddTBString(GenerWorkerListAttr.FK_Dept, null, "部门", true, false, 0, 100, 100);
                 
-
                 //如果是流程属性来控制的就按流程属性来计算。
                 map.AddTBDateTime(GenerWorkerListAttr.SDT, "应完成日期", false, false);
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfWarning, "警告日期", false, false);
-               // map.AddTBFloat(GenerWorkerListAttr.WarningHour, 0, "预警天", true, false);
                 map.AddTBDateTime(GenerWorkerListAttr.RDT, "记录时间(接受工作日期)", false, false);
 
                 //完成日期.
@@ -685,19 +685,15 @@ namespace BP.WF
                 //优先级，2012-06-15 为青岛用户增加。
                 map.AddTBInt(GenerWorkFlowAttr.PRI, 1, "优先级", true, true);
 
-                //催办次数. 为亿阳信通加.
-                map.AddTBInt(GenerWorkerListAttr.PressTimes, 0, "催办次数", true, false);
-
                 // 挂起
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfHungup,null, "挂起时间", false, false);
                 map.AddTBDateTime(GenerWorkerListAttr.DTOfUnHungup,null, "预计解除挂起时间", false, false);
-                map.AddTBInt(GenerWorkerListAttr.HungupTimes, 0, "挂起次数", true, false);
 
                 //外部用户. 203-08-30
                 map.AddTBString(GenerWorkerListAttr.GuestNo, null, "外部用户编号", true, false, 0, 30, 100);
                 map.AddTBString(GenerWorkerListAttr.GuestName, null, "外部用户名称", true, false, 0, 100, 100);
 
-                map.AddTBInt(GenerWorkerListAttr.Idx, 1, "顺序号", true, true);
+                map.AddTBInt(GenerWorkerListAttr.Idx, 1, "Idx", true, true);
 
                 //参数标记 2014-04-05.
                 map.AddTBAtParas(4000); 
@@ -717,18 +713,18 @@ namespace BP.WF
                     this.FID = 0;
             }
 
-            if (this.FK_Emp == "Guest")
+            if (this.EmpNo.Equals("Guest"))
             {
-                this.FK_EmpText = BP.Web.GuestUser.Name;
-                this.GuestName = this.FK_EmpText;
+                this.EmpName = BP.Web.GuestUser.Name;
+                this.GuestName = this.EmpName;
                 this.GuestNo = BP.Web.GuestUser.No;
             }
 
-            if (DataType.IsNullOrEmpty(this.FK_Dept))
-                this.FK_Dept = WebUser.FK_Dept;
+            if (DataType.IsNullOrEmpty(this.DeptNo))
+                this.DeptNo = WebUser.DeptNo;
 
             if (DataType.IsNullOrEmpty(this.DeptName))
-                this.DeptName = WebUser.FK_DeptName;
+                this.DeptName = WebUser.DeptName;
 
             //增加记录日期.
             this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDateTimess);
@@ -737,11 +733,11 @@ namespace BP.WF
         }
         protected override bool beforeUpdate()
         {
-            if (DataType.IsNullOrEmpty(this.FK_Dept))
-                this.FK_Dept = WebUser.FK_Dept;
+            if (DataType.IsNullOrEmpty(this.DeptNo))
+                this.DeptNo = WebUser.DeptNo;
 
             if (DataType.IsNullOrEmpty(this.DeptName))
-                this.DeptName = WebUser.FK_DeptName;
+                this.DeptName = WebUser.DeptName;
 
             return base.beforeUpdate();
 
@@ -827,8 +823,8 @@ namespace BP.WF
                 throw new Exception("@系统错误，工作人员丢失请与管理员联系。NodeID=" + nodeId + " WorkID=" + workId);
 
             RememberMe rm = new RememberMe();
-            rm.FK_Emp = BP.Web.WebUser.No;
-            rm.FK_Node = nodeId;
+            rm.EmpNo = BP.Web.WebUser.No;
+            rm.NodeID = nodeId;
             if (rm.RetrieveFromDBSources() == 0)
                 return;
 
@@ -844,10 +840,10 @@ namespace BP.WF
 
                 GenerWorkerList mywl = new GenerWorkerList();
                 mywl.Copy(wl);
-                mywl.IsEnable = false;
-                mywl.FK_Emp = emp;
+                mywl.ItIsEnable = false;
+                mywl.EmpNo = emp;
                 WF.Port.WFEmp myEmp = new BP.WF.Port.WFEmp(emp);
-                mywl.FK_EmpText = myEmp.Name;
+                mywl.EmpName = myEmp.Name;
                 try
                 {
                     mywl.Insert();

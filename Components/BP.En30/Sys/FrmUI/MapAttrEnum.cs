@@ -17,7 +17,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -133,6 +133,7 @@ namespace BP.Sys.FrmUI
                 {
                     case DBType.MSSQL:
                     case DBType.MySQL:
+                    case DBType.PostgreSQL:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name ";
                         break;
                     case DBType.Oracle:
@@ -140,9 +141,8 @@ namespace BP.Sys.FrmUI
                     case DBType.KingBaseR6:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM DUAL ";
                         break;
-
-                    case DBType.PostgreSQL:
                     case DBType.UX:
+                    case DBType.HGDB:
                     default:
                         sql = "SELECT -1 AS No, '-无(不选择)-' as Name FROM Port_Emp WHERE 1=2 ";
                         break;
@@ -247,7 +247,7 @@ namespace BP.Sys.FrmUI
 
         public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace BP.Sys.FrmUI
             if (DataType.IsNullOrEmpty(this.DefVal)==true)
                 this.DefVal ="0";
             MapData md = new MapData();
-            md.No = this.FK_MapData;
+            md.No = this.FrmID;
             if (md.RetrieveFromDBSources() == 1)
             {
                 //修改默认值.
@@ -298,8 +298,8 @@ namespace BP.Sys.FrmUI
             if (this.UIContralType == UIContralType.CheckBok)
             {
                 mapAttr.setMyDataType(DataType.AppString);
-                MapData mapData = new MapData(this.FK_MapData);
-                GEEntity en = new GEEntity(this.FK_MapData);
+                MapData mapData = new MapData(this.FrmID);
+                GEEntity en = new GEEntity(this.FrmID);
 
                 if(DBAccess.IsExitsTableCol(en.EnMap.PhysicsTable, this.KeyOfEn) == true)
                 {
@@ -349,6 +349,7 @@ namespace BP.Sys.FrmUI
                             break;
                         case DBType.PostgreSQL:
                         case DBType.UX:
+                        case DBType.HGDB:
                             this.RunSQL("ALTER TABLE " + en.EnMap.PhysicsTable + " ALTER column " + this.KeyOfEn + " type character varying(20)");
                             break;
                         default:
@@ -360,7 +361,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
           
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }
@@ -369,16 +370,16 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //删除可能存在的数据.
-            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FrmID + "'");
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND KeyOfEn='" + this.KeyOfEn + "'";
                 DBAccess.RunSQL(sql);
             }
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
 
@@ -389,7 +390,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         #endregion
 
@@ -408,7 +409,7 @@ namespace BP.Sys.FrmUI
 
         public string DoDDLFullCtrl2019()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl2019.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置自动填充
@@ -416,7 +417,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 高级设置
@@ -424,7 +425,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRadioBtns()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         /// <summary>
         /// 设置级联
@@ -432,7 +433,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
 
         #endregion 方法执行.

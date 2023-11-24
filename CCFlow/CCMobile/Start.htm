@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>发起流程</title>
+
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="./js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="js/comment/action.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //页面启动函数.
+        mui.init();
+        mui.ready(
+            //初始化数据.
+            function InitPage() {
+                var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+                var data = handler.DoMethodReturnString("Start_Init");
+                if (data.indexOf('err@') == 0) {
+                    mui.alert(data);
+                    return;
+                }
+
+                data = JSON.parse(data);
+
+                var isPrintedGroup = false;
+                var Sort = data.Sort,
+                    Start = data.Start,
+                    $lv = $("#listview"),
+                    html = "";
+                var wid = document.body.clientWidth - 40;//获取网页可见区域宽
+
+                if (Start.length == 0) {
+                    mui.alert("记录为空！", function () {
+                        SetHref('./Home.htm?s=' + Math.random());
+                    });
+                } else {
+
+
+                    //2、生成html
+                    Sort.forEach(function (sort) {
+                        //检查该类别下是否有流程，没有流程就continue ;.
+                        var isHaveFlow = false;
+                        if (sort.Name == "" || sort.Name == null)
+                            return;
+                        for (var idx = 0; idx < Start.length; idx++) {
+                            var flow = Start[idx];
+                            if (sort.No == flow.FK_FlowSort) {
+                                isHaveFlow = true;
+                                break;
+                            }
+                        }
+                        if (isHaveFlow == false)
+                            return;
+                        var _html = "";
+                        var HaveFlow = false;
+                        Start.forEach(function (item) {
+                            if (item.FK_FlowSort == sort.No && item.IsStartInMobile == "1") {
+                                _html += "<li class='mui-table-view-cell' style='padding-left:15px'>";
+                                _html += "   <a href='MyFlow.htm?FK_Flow=" + item.No + "&From=Start' target='_self'>";
+                                _html += "   <p style='white-space:normal;line-height:20px;width:" + wid + "px;word-wrap:break-word; word-break:break-all;color:#096BC1;'>" + item.Name + "</p>";
+                                _html += "   </a>";
+                                _html += "</li>";
+                                HaveFlow = true;
+
+                            }
+
+                        });
+                        if (HaveFlow) {
+                            html += "<li class='mui-table-view-cell mui-collapse mui-active'><a class='mui-navigate-right' href='#'>" + sort.Name + "</a>";
+                            html += "<ul class='mui-table-view mui-table-view-chevron'>";
+                            html += _html;
+                        }
+                        html += "   </ul>";
+                        html += "</li>";
+                    });
+                }
+                $lv.html("");
+                $lv.append(html);
+            }
+
+
+
+        );
+
+        function Back() {
+            SetHref('./Home.htm?s=' + Math.random());
+            return;
+        }
+
+    </script>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-icon mui-icon-left-nav mui-pull-left back-hideen" href="javascript:Back();"></a>
+        <h1 class="mui-title">发起流程</h1>
+    </header>
+    <div class="mui-content">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <ul id="listview" class="mui-table-view mui-table-view-chevron" style="margin-top:46px"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    mui('.mui-scroll-wrapper').scroll({
+        bounce: false
+    });
+</script>
+</html>

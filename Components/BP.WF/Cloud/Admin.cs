@@ -46,6 +46,15 @@ namespace BP.Cloud.HttpHandler
             return Dev2Interface.Port_CreateOrg(orgNo, orgName);
         }
 
+        public string CheckEncryptEnable()
+        {
+            if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
+            {
+                return "1";
+            }
+            return "0";
+        }
+
 
         /// <summary>
         /// 登录
@@ -122,8 +131,8 @@ namespace BP.Cloud.HttpHandler
             //如果只有一个部门.
             if (depts.Count == 1)
             {
-                var dept = depts[0] as Dept;
-                emp.FK_Dept = dept.No;
+                Dept dept = depts[0] as Dept;
+                emp.DeptNo = dept.No;
                 emp.Update();
                 return "url@/Admin/Portal/Default.htm?Token=" + token + "&UserNo=" + emp.No;
             }
@@ -147,7 +156,7 @@ namespace BP.Cloud.HttpHandler
         {
             string no = this.GetRequestVal("No");
             Emp emp = new Emp(WebUser.No);
-            emp.FK_Dept = no;
+            emp.DeptNo = no;
             emp.Update();
             return "url@Admin/Portal/Default.htm?Token=" + BP.Web.WebUser.Token + "&UserNo=" + emp.No;
         }
@@ -168,7 +177,7 @@ namespace BP.Cloud.HttpHandler
         public string Default_FlowsTree()
         {
             //组织数据源.
-            string sql = "SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo='" + WebUser.FK_Dept +
+            string sql = "SELECT * FROM (SELECT 'F'+No as NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE, -1 DTYPE FROM WF_FlowSort WHERE OrgNo='" + WebUser.DeptNo +
                           "' union  SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) as NAME,IDX,0 ISPARENT,'FLOW' TTYPE, 0 as DTYPE FROM WF_Flow) A  ORDER BY DTYPE, IDX ";
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -202,10 +211,10 @@ namespace BP.Cloud.HttpHandler
         {
             //组织数据源.
             string sqls = "";
-            /* sqls = "SELECT No,ParentNo,Name, Idx FROM Sys_FormTree WHERE OrgNo=" + WebUser.FK_Dept + " ORDER BY Idx ASC ";
+            /* sqls = "SELECT No,ParentNo,Name, Idx FROM Sys_FormTree WHERE OrgNo=" + WebUser.DeptNo + " ORDER BY Idx ASC ";
              sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent  FROM Sys_MapData    ";*/
-            sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo='" + WebUser.FK_Dept + "' ORDER BY Idx ASC ; ";
-            sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree WHERE OrgNo='" + WebUser.FK_Dept + "') ORDER BY Idx ASC";
+            sqls = "SELECT No,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree WHERE OrgNo='" + WebUser.DeptNo + "' ORDER BY Idx ASC ; ";
+            sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData  WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree WHERE OrgNo='" + WebUser.DeptNo + "') ORDER BY Idx ASC";
 
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dtSort = ds.Tables[0]; //类别表.

@@ -30,7 +30,7 @@ namespace BP.WF.Port.Admin2Group
     public class OAFrmTree : EntityMyPK
     {
         #region 属性
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -95,7 +95,7 @@ namespace BP.WF.Port.Admin2Group
             OrgAdminer oa = new OrgAdminer(str);
 
             this.OrgNo = oa.OrgNo;
-            this.FK_Emp = oa.FK_Emp;
+            this.EmpNo = oa.EmpNo;
 
             return base.beforeInsert();
         }
@@ -104,7 +104,7 @@ namespace BP.WF.Port.Admin2Group
             //插入入后更改OrgAdminer中
             string str = "";
             SysFormTrees enTrees = new SysFormTrees();
-            enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
+            enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.EmpNo + "' AND OrgNo='" + this.OrgNo + "'");
             foreach (SysFormTree item in enTrees)
             {
                 str += "(" + item.No + ")" + item.Name + ";";

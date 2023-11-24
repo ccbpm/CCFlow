@@ -56,7 +56,7 @@ namespace BP.WF.Rpt
 				SetValByKey(RptDeptAttr.FK_Rpt,value);
 			}
 		}
-        public string FK_DeptT
+        public string DeptNoT
         {
             get
             {
@@ -66,7 +66,7 @@ namespace BP.WF.Rpt
 		/// <summary>
 		///部门
 		/// </summary>
-		public string FK_Dept
+		public string DeptNo
 		{
 			get
 			{
@@ -96,7 +96,7 @@ namespace BP.WF.Rpt
 		public RptDept(string _empoid,string wsNo)
 		{
 			this.FK_Rpt  = _empoid;
-			this.FK_Dept = wsNo ;
+			this.DeptNo = wsNo ;
 			if (this.Retrieve()==0)
 				this.Insert();
 		}		

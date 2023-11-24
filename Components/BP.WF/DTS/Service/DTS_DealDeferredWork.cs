@@ -58,7 +58,6 @@ namespace BP.WF.DTS
             string dealWorkIDs = "";
             foreach (DataRow dr in dt.Rows)
             {
-
                 string FK_Emp = dr["FK_Emp"].ToString();
                 string fk_flow = dr["FK_Flow"].ToString();
                 int fk_node = int.Parse(dr["FK_Node"].ToString());
@@ -88,8 +87,11 @@ namespace BP.WF.DTS
                     wk.OID = workid;
                     wk.Retrieve();
                     string exp = nd.DoOutTimeCond.Clone() as string;
-                    if (Glo.ExeExp(exp, wk) == false)
+                    if (this.ExeExp(exp, wk) == false)
+                    {
+                      //  msg += "err@条件表达式配置错误:"+exp;
                         continue; // 不能通过条件的设置.
+                    }
                 }
 
                 switch (nd.HisOutTimeDeal)
@@ -137,6 +139,83 @@ namespace BP.WF.DTS
             BP.Web.WebUser.SignInOfGener(emp1);
             return msg;
              
+        }
+
+        /// <summary>
+        /// 计算表达式是否通过(或者是否正确.)
+        /// </summary>
+        /// <param name="exp">表达式</param>
+        /// <param name="en">实体</param>
+        /// <returns>true/false</returns>
+        public   bool ExeExp(string exp, Entity en)
+        {
+            exp = exp.Replace("@WebUser.No", WebUser.No);
+            exp = exp.Replace("@WebUser.Name", WebUser.Name);
+            exp = exp.Replace("@WebUser.FK_DeptNameOfFull", WebUser.DeptNameOfFull);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
+
+            exp = exp.Replace("@RDT", DataType.CurrentDate);
+            exp = exp.Replace("@DateTime", DataType.CurrentDateTime);
+
+
+            string[] strs = exp.Split(' ');
+            bool isPass = false;
+
+            string key = strs[0].Trim();
+            string oper = strs[1].Trim();
+            string val = strs[2].Trim();
+            val = val.Replace("'", "");
+            val = val.Replace("%", "");
+            val = val.Replace("~", "");
+            BP.En.Row row = en.Row;
+            foreach (string item in row.Keys)
+            {
+                if (key != item.Trim())
+                    continue;
+
+                string valPara = row[key].ToString();
+                if (oper == "=")
+                {
+                    if (valPara == val)
+                        return true;
+                }
+
+                if (oper.ToUpper() == "LIKE")
+                {
+                    if (valPara.Contains(val))
+                        return true;
+                }
+
+                if (oper == ">")
+                {
+                    if (float.Parse(valPara) > float.Parse(val))
+                        return true;
+                }
+                if (oper == ">=")
+                {
+                    if (float.Parse(valPara) >= float.Parse(val))
+                        return true;
+                }
+                if (oper == "<")
+                {
+                    if (float.Parse(valPara) < float.Parse(val))
+                        return true;
+                }
+                if (oper == "<=")
+                {
+                    if (float.Parse(valPara) <= float.Parse(val))
+                        return true;
+                }
+
+                if (oper == "!=")
+                {
+                    if (float.Parse(valPara) != float.Parse(val))
+                        return true;
+                }
+                throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
+            }
+            return false;
         }
     }
 }

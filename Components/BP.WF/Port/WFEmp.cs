@@ -136,7 +136,7 @@ namespace BP.WF.Port
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -324,12 +324,12 @@ namespace BP.WF.Port
 
         public void DoUp()
         {
-            this.DoOrderUp("FK_Dept", this.FK_Dept, "Idx");
+            this.DoOrderUp("FK_Dept", this.DeptNo, "Idx");
             return;
         }
         public void DoDown()
         {
-            this.DoOrderDown("FK_Dept", this.FK_Dept, "Idx");
+            this.DoOrderDown("FK_Dept", this.DeptNo, "Idx");
             return;
         }
     }

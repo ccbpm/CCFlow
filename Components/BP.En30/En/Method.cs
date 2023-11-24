@@ -245,7 +245,7 @@ namespace BP.En
         /// <summary>
         /// 是否显示在功能列表里
         /// </summary>
-        public bool IsVisable = true;
+        public bool ItIsVisable = true;
         #endregion
     }
 }

@@ -54,7 +54,7 @@ namespace BP.CCBill.Template
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using BP.Difference;
 
@@ -7,15 +8,26 @@ namespace BP.WF.Difference
 {
     public class WF_File
     {
+        public static void GetFileName(int idx)
+        {
+        }
         /// <summary>
         /// 文件上传
         /// </summary>
         /// <param name="filePath"></param>
         public static void UploadFile(string filePath)
         {
+            //2023.8.21,解决文件文件目录不存在报错的异常，不存在时先创建 by oppein
+            FileInfo saveFileInfo = new FileInfo(filePath);
+            string saveDirectory = saveFileInfo.DirectoryName;
+            if (!Directory.Exists(saveDirectory))
+            {
+                Directory.CreateDirectory(saveDirectory);
+            }
+
             try
             {
-                 var filelist = HttpContextHelper.Current.Request.Files;
+                HttpFileCollection filelist = HttpContextHelper.Current.Request.Files;
                 if (filelist == null || filelist.Count == 0)
                 {
                     throw new NotImplementedException("没有上传文件");
@@ -33,11 +45,11 @@ namespace BP.WF.Difference
         /// 获取文件
         /// </summary>
         /// <returns></returns>
-        public static HttpPostedFile GetUploadFile(int index=0)
+        public static HttpPostedFile GetUploadFile(int index = 0)
         {
             try
             {
-                var filelist = HttpContextHelper.Current.Request.Files;
+                HttpFileCollection filelist = HttpContextHelper.Current.Request.Files;
                 if (filelist == null || filelist.Count == 0)
                 {
                     throw new NotImplementedException("没有上传文件");
@@ -53,7 +65,7 @@ namespace BP.WF.Difference
         {
             try
             {
-                var filelist = HttpContextHelper.Current.Request.Files;
+                HttpFileCollection filelist = HttpContextHelper.Current.Request.Files;
                 if (filelist == null || filelist.Count == 0)
                 {
                     throw new NotImplementedException("没有上传文件");
@@ -65,7 +77,7 @@ namespace BP.WF.Difference
                 throw new NotImplementedException(ex.Message);
             }
         }
-        public static void UploadFile(HttpPostedFile file,string filePath)
+        public static void UploadFile(HttpPostedFile file, string filePath)
         {
             try
             {

@@ -12,7 +12,7 @@ namespace BP.WF
     /// <summary>
     /// 流程实例
     /// </summary>
-    public class GenerWorkFlowAttr:EntityNoNameAttr
+    public class GenerWorkFlowAttr : EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -210,7 +210,7 @@ namespace BP.WF
         /// 耗时
         /// </summary>
         public const string LostTimeHH = "LostTimeHH";
-     
+
         #endregion
     }
     /// <summary>
@@ -254,7 +254,7 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.Domain, value);
             }
         }
-       
+
         public string BuessFields
         {
             get
@@ -270,7 +270,7 @@ namespace BP.WF
         /// <summary>
         /// 工作流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -425,7 +425,7 @@ namespace BP.WF
             get
             {
                 //如果有方向信息，并且方向不包含到达的节点.
-                if (this.HuiQianSendToNodeIDStr.Length > 3 && this.HuiQianSendToNodeIDStr.Contains(this.FK_Node + ",") == false)
+                if (this.HuiQianSendToNodeIDStr.Length > 3 && this.HuiQianSendToNodeIDStr.Contains(this.NodeID + ",") == false)
                     return WF.HuiQianTaskSta.None;
 
                 return (HuiQianTaskSta)this.GetParaInt(GenerWorkFlowAttr.HuiQianTaskSta, 0);
@@ -452,7 +452,7 @@ namespace BP.WF
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {
@@ -480,7 +480,7 @@ namespace BP.WF
         /// <summary>
         /// 发起人部门
         /// </summary>
-		public string FK_Dept
+		public string DeptNo
         {
             get
             {
@@ -536,7 +536,7 @@ namespace BP.WF
         /// <summary>
         /// 年月
         /// </summary>
-        public string FK_NY
+        public string NY
         {
             get
             {
@@ -560,7 +560,7 @@ namespace BP.WF
             set
             {
                 this.SetValByKey(GenerWorkFlowAttr.RDT, value);
-                this.FK_NY = value.Substring(0, 7);
+                this.NY = value.Substring(0, 7);
             }
         }
         public string HungupTime
@@ -817,7 +817,7 @@ namespace BP.WF
         /// <summary>
         /// 当前工作到的节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -827,9 +827,9 @@ namespace BP.WF
             {
                 SetValByKey(GenerWorkFlowAttr.FK_Node, value);
 
-                //设置耗时. @hongyan.
+                //设置耗时. 
                 TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
-                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH,  ts.TotalHours.ToString("0.00"));
+                this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours.ToString("0.00"));
             }
         }
         /// <summary>
@@ -843,16 +843,16 @@ namespace BP.WF
             }
             set
             {
-                if (value == WF.WFState.Complete)
+                if (value == BP.WF.WFState.Complete)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete || value == WF.WFState.Blank)
+                else if (value == BP.WF.WFState.Delete || value == BP.WF.WFState.Blank)
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
 
                 SetValByKey(GenerWorkFlowAttr.WFState, (int)value);
 
-                //设置耗时. @hongyan.
+                //设置耗时.
                 TimeSpan ts = DateTime.Now - this.GetValDate(this.RDT);
                 this.SetValByKey(GenerWorkFlowAttr.LostTimeHH, ts.TotalHours.ToString("0.00"));
             }
@@ -870,7 +870,7 @@ namespace BP.WF
         /// <summary>
         /// 是否可以批处理？
         /// </summary>
-        public bool IsCanBatch
+        public bool ItIsCanBatch
         {
             get
             {
@@ -1200,14 +1200,14 @@ namespace BP.WF
                 this.SetPara("ScripMsg", value);
             }
         }
-        
+
         #endregion 参数属性.
 
         #region 构造函数
         /// <summary>
-		/// 产生的工作流程
-		/// </summary>
-		public GenerWorkFlow()
+        /// 产生的工作流程
+        /// </summary>
+        public GenerWorkFlow()
         {
         }
         /// <summary>
@@ -1329,7 +1329,7 @@ namespace BP.WF
 
                 // 审核组件，签批组件最后一个人的意见填写到这里.
                 map.AddTBString(GenerWorkFlowAttr.FlowNote, null, "流程备注", true, false, 0, 500, 200);
-              //  map.AddTBString(GenerWorkFlowAttr.LostTimeHH, null, "流程备注", true, false, 0, 500, 200);
+                //  map.AddTBString(GenerWorkFlowAttr.LostTimeHH, null, "流程备注", true, false, 0, 500, 200);
                 //  map.AddTBFloat(GenerWorkFlowAttr.LostTimeHH, 0, "耗时", true, true);
 
                 RefMethod rm = new RefMethod();
@@ -1355,6 +1355,78 @@ namespace BP.WF
         }
         #endregion
 
+        #region 业务属性.
+        /// <summary>
+        /// 执行移交.
+        /// </summary>
+        /// <param name="emps">移交给</param>
+        /// <param name="note">移交原因</param>
+        /// <returns>执行信息.</returns>
+        public string Shift(string emps, string note)
+        {
+
+            try
+            {
+                return BP.WF.Dev2Interface.Node_Shift(this.WorkID, emps, note);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+        }
+        /// <summary>
+        /// 增加处理人
+        /// </summary>
+        /// <param name="emps"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        public string AddEmps(string emps, string note)
+        {
+
+            try
+            {
+                BP.WF.Dev2Interface.Node_AddTodolist(this.WorkID, emps);
+                return "增加成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+        }
+        public string RemoveEmps(string empNo, string note)
+        {
+            try
+            {
+                BP.WF.Dev2Interface.Node_AddTodolist(this.WorkID, empNo);
+                return "移除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public string GenerTrackForReback()
+        {
+            string sql = "SELECT * FROM ND" + int.Parse(this.FlowNo) + "Track WHERE WorkID=" + this.WorkID + "  AND ActionType IN("+ ActionType.Start + ","+ActionType.Forward + ") ORDER BY RDT";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string Reback(int nodeID, string msg)
+        {
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoRebackWorkFlow(this.FlowNo, this.WorkID, nodeID, msg);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion 业务属性.
+
+
         #region 重载基类方法
         /// <summary>
         /// 删除后,需要把工作者列表也要删除.
@@ -1374,13 +1446,14 @@ namespace BP.WF
                     break;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist A USING WF_GenerWorkerlist B WHERE A.WorkID = B.WorkID And B.WorkID Not IN(select WorkID from WF_GenerWorkFlow)");
                     break;
                 default: break;
 
             }
 
-            WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID);
+            WorkFlow wf = new WorkFlow(new Flow(this.FlowNo), this.WorkID, this.FID);
             wf.DoDeleteWorkFlowByReal(true); /* 删除下面的工作。*/
             base.afterDelete();
         }
@@ -1406,14 +1479,7 @@ namespace BP.WF
         #endregion
 
         #region 执行诊断
-        /// <summary>
-        /// 生成父子流程的甘特图
-        /// </summary>
-        /// <returns></returns>
-        public string GenerGantt()
-        {
-            return BP.WF.Glo.GenerGanttDataOfSubFlows(this.WorkID);
-        }
+
         /// <summary>
         /// 终止流程
         /// </summary>
@@ -1426,14 +1492,14 @@ namespace BP.WF
 
         public string DoRpt()
         {
-            return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 增加子线程
         /// </summary>
         /// <param name="empStrs">要增加的人员多个用都好分开.</param>
         /// <returns></returns>
-        public string DoSubFlowAddEmps(string empStrs,int toNodeID)
+        public string DoSubFlowAddEmps(string empStrs, int toNodeID)
         {
             //获得当前的干流程的gwf.
             long workID = this.FID;
@@ -1455,7 +1521,7 @@ namespace BP.WF
             if (dt.Rows.Count == 0)
             {
                 /*如果是开始工作节点，就删除它。*/
-                WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID);
+                WorkFlow wf = new WorkFlow(new Flow(this.FlowNo), this.WorkID, this.FID);
                 wf.DoDeleteWorkFlowByReal(true);
                 return "此流程是因为发起工作失败被系统删除。";
             }
@@ -1463,15 +1529,15 @@ namespace BP.WF
             int FK_Node = int.Parse(dt.Rows[0][0].ToString());
 
             Node nd = new Node(FK_Node);
-            if (nd.IsStartNode)
+            if (nd.ItIsStartNode)
             {
                 /*如果是开始工作节点，就删除它。*/
-                WorkFlow wf = new WorkFlow(new Flow(this.FK_Flow), this.WorkID, this.FID);
+                WorkFlow wf = new WorkFlow(new Flow(this.FlowNo), this.WorkID, this.FID);
                 wf.DoDeleteWorkFlowByReal(true);
                 return "此流程是因为发起工作失败被系统删除。";
             }
 
-            this.FK_Node = nd.NodeID;
+            this.NodeID = nd.NodeID;
             this.NodeName = nd.Name;
             this.Update();
 
@@ -1480,18 +1546,18 @@ namespace BP.WF
             wls.Retrieve(GenerWorkerListAttr.FK_Node, FK_Node, GenerWorkerListAttr.WorkID, this.WorkID);
             foreach (GenerWorkerList wl in wls)
             {
-                str += wl.FK_Emp + wl.FK_EmpText + ",";
+                str += wl.EmpNo + wl.EmpName + ",";
             }
 
             return "此流程是因为[" + nd.Name + "]工作发送失败被回滚到当前位置，请转告[" + str + "]流程修复成功。";
         }
         public string DoSelfTestInfo()
         {
-            GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.FK_Flow);
+            GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.FlowNo);
 
             #region  查看一下当前的节点是否开始工作节点。
-            Node nd = new Node(this.FK_Node);
-            if (nd.IsStartNode)
+            Node nd = new Node(this.NodeID);
+            if (nd.ItIsStartNode)
             {
                 /* 判断是否是退回的节点 */
                 Work wk = nd.HisWork;
@@ -1505,7 +1571,7 @@ namespace BP.WF
             bool isHave = false;
             foreach (GenerWorkerList wl in wls)
             {
-                if (wl.FK_Node == this.FK_Node)
+                if (wl.NodeID == this.NodeID)
                     isHave = true;
             }
 

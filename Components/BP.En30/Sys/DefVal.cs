@@ -25,7 +25,7 @@ namespace BP.Sys
         /// <summary>
         /// 节点表编号
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FrmID";
         /// <summary>
         /// 节点对应字段
         /// </summary>
@@ -37,7 +37,7 @@ namespace BP.Sys
         /// <summary>
         /// 人员编号
         /// </summary>
-        public const string FK_Emp = "FK_Emp";
+        public const string EmpNo = "EmpNo";
         /// <summary>
         /// 节点文本
         /// </summary>
@@ -94,15 +94,15 @@ namespace BP.Sys
         /// <summary>
         /// 节点编号
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStringByKey(DefValAttr.FK_MapData);
+                return this.GetValStringByKey(DefValAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(DefValAttr.FK_MapData, value);
+                this.SetValByKey(DefValAttr.FrmID, value);
             }
         }
         /// <summary>
@@ -136,15 +136,15 @@ namespace BP.Sys
         /// <summary>
         /// 人员编号
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
-                return this.GetValStringByKey(DefValAttr.FK_Emp);
+                return this.GetValStringByKey(DefValAttr.EmpNo);
             }
             set
             {
-                this.SetValByKey(DefValAttr.FK_Emp, value);
+                this.SetValByKey(DefValAttr.EmpNo, value);
             }
         }
         /// <summary>
@@ -200,8 +200,8 @@ namespace BP.Sys
                 //map.AddTBInt(DefValAttr.IsParent, 0, "是否父节点", false, false);
                 //map.AddTBString(DefValAttr.HistoryWords, null, "历史词汇", false, false, 0, 2000, 20);
 
-                map.AddTBString(DefValAttr.FK_MapData, null, "实体", false, false, 0, 100, 20);
-                map.AddTBString(DefValAttr.FK_Emp, null, "人员", false, true, 0, 100, 10);
+                map.AddTBString(DefValAttr.FrmID, null, "实体", false, false, 0, 100, 20);
+                map.AddTBString(DefValAttr.EmpNo, null, "人员", false, true, 0, 100, 10);
                 map.AddTBString(DefValAttr.AttrKey, null, "节点对应字段", false, false, 0, 50, 20);
 
                 //map.AddTBInt(DefValAttr.WordsSort, 0, "词汇类型", false, false);//1,2,3... 退回-移交-表单...(暂时)

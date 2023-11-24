@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>登录</title>
+    <!--<link href="css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/themes/classic/theme-classic.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>-->
+    <link href="../CCMobile/js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="../CCMobile/js/mui/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="../CCMobile/js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../CCMobile/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../CCMobile/js/jquery.js" type="text/javascript"></script>
+    <script src="../CCMobile/Scripts/config.js" type="text/javascript"></script>
+    <script src="../CCMobile/Comm/Gener.js" type="text/javascript"></script>
+    <style type="text/css">
+        .area {
+            margin: 20px auto 0px auto;
+        }
+
+        .mui-input-group {
+            margin-top: 10px;
+        }
+
+            .mui-input-group:first-child {
+                margin-top: 20px;
+            }
+
+            .mui-input-group label {
+                width: 22%;
+            }
+
+        .mui-input-row label ~ input, .mui-input-row label ~ select, .mui-input-row label ~ textarea {
+            width: 78%;
+        }
+
+        .mui-checkbox input[type=checkbox], .mui-radio input[type=radio] {
+            top: 6px;
+        }
+
+        .mui-content-padded {
+            margin-top: 25px;
+        }
+
+        .mui-btn {
+            padding: 10px;
+        }
+
+        .link-area {
+            display: block;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .spliter {
+            color: #bbb;
+            padding: 0px 8px;
+        }
+
+        .oauth-area {
+            position: absolute;
+            bottom: 20px;
+            left: 0px;
+            text-align: center;
+            width: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
+
+            .oauth-area .oauth-btn {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                background-size: 30px 30px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                margin: 0px 20px; /*-webkit-filter: grayscale(100%); */
+                border: solid 1px #ddd;
+                border-radius: 25px;
+            }
+
+                .oauth-area .oauth-btn:active {
+                    border: solid 1px #aaa;
+                }
+
+                .oauth-area .oauth-btn.disabled {
+                    background-color: #ddd;
+                }
+    </style>
+    <script type="text/javascript">
+        //        //页面启动函数.
+        //        $(function () {
+
+        //            $("#Msg").html("<img src='./Img/loading.gif' />正在加载,请稍后......");
+
+
+        //            InitPage();
+
+        //            $("#Msg").html("");
+        //        });
+
+        //初始化数据.暂时不用了
+        function Password() {
+
+            //var val = $("#TB_Email").val();
+
+            var msg = "请输入您的注册ID或者E-mail,";
+            msg += "\t\n系统会把密码重置连接发送到您的邮箱.";
+
+            var val = window.prompt(msg);
+            if (val == null || val == false)
+                return;
+
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.App_Portal");
+            handler.AddPara("Email", val);
+            var data = handler.DoMethodReturnString("PasswordReq_Save");
+            alert(data);
+
+            // window.location.href = "Login.html";
+        }
+
+        function GetOrgNo()
+        {
+            var orgNo = GetQueryString("OrgNo");
+
+        }
+
+        function InitPage() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            var data = handler.DoMethodReturnString("Login_Init");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var userNo = data.UserNo;
+            var html = "";
+
+            if (userNo.length == 0) {
+
+                html += "<div class=\"user-head-icon\" style=\"background-image: url(../DataUser/UserIcon/Default.png)\">";
+                html += "</div>";
+                html += "<p class=\"data-ucname\" style=\"font-weight: normal;\">";
+                html += "欢迎登录</p>";
+
+            } else {
+
+                html += "<div class=\"user-head-icon\" style=\"background-image: url(../DataUser/UserIcon/" + data.UserNo + "Biger.png)\">";
+                html += "</div>";
+                html += "<p class=\"data-ucname\">";
+                html += data.UserName;
+                html += "</p>";
+                document.getElementById("TB_No").value = userNo;
+            }
+            $("#header").append(html);
+            $("#footer h5").html("&copy " + data.CustomerName);
+        }
+    </script>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">驰骋工作流</h1>
+    </header>
+    <div class="mui-content">
+        <form id='login-form' class="mui-input-group">
+            <div class="mui-input-row">
+                <label>
+                    账号
+                </label>
+                <input name="TB_No" id="TB_No" type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+            </div>
+            <div class="mui-input-row">
+                <label>
+                    密码
+                </label>
+                <input name="TB_PW" id="TB_PW" type="password" class="mui-input-clear mui-input"
+                       placeholder="请输入密码">
+            </div>
+        </form>
+        <form class="mui-input-group">
+            <ul class="mui-table-view mui-table-view-chevron">
+                <li class="mui-table-view-cell">
+                    自动登录
+                    <div id="autoLogin" class="mui-switch">
+                        <div class="mui-switch-handle">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+        <div class="mui-content-padded">
+            <button id="submit" type="button" data-loading-icon="mui-spinner mui-spinner-custom"
+                    class="mui-btn mui-btn-block mui-btn-primary">
+                登录
+            </button>
+            <div class="link-area">
+                <a id='reg' href="Register.htm">注册企业BPM应用</a> <span class="spliter">|</span><a href="javascript:Password();" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a>
+
+            </div>
+        </div>
+        <div class="mui-content-padded oauth-area">
+        </div>
+    </div>
+    <script src="../CCMobile/js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var btn = document.getElementById("submit");
+        //监听点击事件
+        btn.addEventListener("tap", function () {
+            //1.表单验证
+            var userNo = $("#TB_No").val();
+            if (userNo == null || userNo == '') {
+                mui.toast('请输入用户名！', { duration: 'short', type: 'div' });
+                //                mui.alert("请输入用户名！");
+                return;
+            }
+
+            var pass = $("#TB_PW").val();
+            if (pass == null || pass == '') {
+                mui.toast("请输入密码！", { duration: 'short', type: 'div' });
+                //                mui.alert("请输入密码！");
+                return;
+            }
+
+            //     var handler = HttpHandler("BP.WF.HttpHandler.CCMobile");
+
+            //2.登录提交验证
+            //                var frmData = $("#loginfrm").serialize();
+            var handler = new HttpHandler("BP.Cloud.HttpHandler.Root");
+            handler.AddPara("No", userNo); //复制表单的全部数据必须有name值.
+            handler.AddPara("PassWord", pass);
+            handler.AddPara("isMobile", "1");//标注手机端登录
+            var data = handler.DoMethodReturnString("Login_Submit");
+
+            if (data.indexOf('登录成功') >= 0 || data.indexOf('url@') >= 0) {
+                data = data.replace("url@", "");
+                location.href = data;
+                return;
+            }
+
+            if (data.indexOf('err@') == 0) {
+                mui.toast("用户名或密码错误！" + data, { duration: 'long', type: 'div' });
+                return;
+            }
+
+            //触发submit按钮的点击事件
+            mui.trigger(btn, "tap");
+        });
+
+    </script>
+</body>
+</html>

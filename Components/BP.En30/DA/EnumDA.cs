@@ -98,7 +98,11 @@ namespace BP.DA
         /// <summary>
         /// 优炫
         /// </summary>
-        UX = 10
+        UX = 10,
+        /// <summary>
+        /// 瀚高
+        /// </summary>
+        HGDB =11
     }
     /// <summary>
     /// 保管位置

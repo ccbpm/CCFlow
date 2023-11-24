@@ -63,7 +63,7 @@ namespace BP.WF.Template.Frm
 		/// <summary>
 		/// 是否是节点表单?
 		/// </summary>
-		public bool IsNodeFrm
+		public bool ItIsNodeFrm
 		{
 			get
 			{
@@ -139,36 +139,29 @@ namespace BP.WF.Template.Frm
 				if (this._enMap != null)
 					return this._enMap;
 				Map map = new Map("Sys_MapData", "Excel表单属性");
-				
 
-				#region 基本属性.
+                #region 基本属性.
+                map.AddGroupAttr("基本属性");
                 map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, true, 1, 190, 20);
 				map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 100, 20);
 				map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
-
-				//数据源.
-				map.AddDDLEntities(MapFrmExcelAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
 				map.AddDDLEntities(MapFrmExcelAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
-
 				//表单的运行类型.
 				map.AddDDLSysEnum(MapFrmExcelAttr.FrmType, (int)BP.Sys.FrmType.FoolForm, "表单类型", true, false, MapFrmExcelAttr.FrmType);
-				#endregion 基本属性.
-
-				#region 模版属性。
 				map.AddTBString(MapFrmExcelAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
                 map.AddTBString(MapFrmExcelAttr.DBSave, null, "Excel数据文件存储", true, false, 0, 50, 20);
                 map.SetHelperAlert(MapFrmExcelAttr.DBSave,
                     "二进制的excel文件存储到表的那个字段里面？默认为DBFile, 如果此表对应多个excel文件就会导致二进制excel文件存储覆盖.");
-				#endregion 模版属性。
+                #endregion 模版属性。
 
-				#region 设计者信息.
-				map.AddTBString(MapFrmExcelAttr.Designer, null, "设计者", true, false, 0, 500, 20);
+                #region 设计者信息.
+                map.AddGroupAttr("设计者信息");
+                map.AddTBString(MapFrmExcelAttr.Designer, null, "设计者", true, false, 0, 500, 20);
 				map.AddTBString(MapFrmExcelAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
 				map.AddTBString(MapFrmExcelAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
 				map.AddTBString(MapFrmExcelAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
 				map.AddTBString(MapFrmExcelAttr.Ver, null, "版本号", true, true, 0, 30, 20);
 			//	map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
-
 				map.AddTBStringDoc(MapFrmExcelAttr.Note, null, "备注", true, false, true);
 
 				//增加参数字段.
@@ -184,19 +177,6 @@ namespace BP.WF.Template.Frm
 				#region 方法 - 基本功能.
 				RefMethod rm = new RefMethod();
 
-				/* 2017-04-28 10:52:03
-				 * Mayy
-				 * 去掉此功能（废弃，因在线编辑必须使用ActiveX控件，适用性、稳定性太差）
-				rm = new RefMethod();
-				rm.Title = "编辑Excel表单模版";
-				rm.ClassMethodName = this.ToString() + ".DoEditExcelTemplate";
-				rm.Icon = ../../Img/FileType/xlsx.gif";
-				rm.Visable = true;
-				rm.Target = "_blank";
-				rm.RefMethodType = RefMethodType.RightFrameOpen;
-				map.AddRefMethod(rm);
-				 */
-
 				rm = new RefMethod();
 				rm.Title = "启动傻瓜表单设计器";
 				rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
@@ -206,16 +186,6 @@ namespace BP.WF.Template.Frm
 				rm.RefMethodType = RefMethodType.LinkeWinOpen;
 				map.AddRefMethod(rm);
 
-				//rm = new RefMethod();
-				//rm.Title = "字段维护";
-				//rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
-				//rm.Icon = "../../WF/Img/FileType/xlsx.gif";
-				//// rm.Icon = ../../Admin/CCBPMDesigner/Img/Field.png";
-				//rm.Visable = true;
-				//rm.Target = "_blank";
-				//rm.RefMethodType = RefMethodType.RightFrameOpen;
-				//map.AddRefMethod(rm);
-
 				rm = new RefMethod();
 				rm.Title = "装载填充"; // "设计表单";
 				rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
@@ -224,7 +194,6 @@ namespace BP.WF.Template.Frm
 				rm.RefMethodType = RefMethodType.RightFrameOpen;
 				rm.Target = "_blank";
 				map.AddRefMethod(rm);
-
 
 				rm = new RefMethod();
 				rm.Title = "表单事件"; // "设计表单";
@@ -278,33 +247,10 @@ namespace BP.WF.Template.Frm
 				rm.RefAttrLinkLabel = "导出到xml";
 				rm.Target = "_blank";
 				map.AddRefMethod(rm);
-
-
-			 
-
-				//rm = new RefMethod();
-				//rm.Title = "节点表单组件"; // "设计表单";
-				//rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
-				//rm.Visable = true;
-				//rm.RefAttrLinkLabel = "节点表单组件";
-				//rm.RefMethodType = RefMethodType.RightFrameOpen;
-				//rm.Target = "_blank";
-				//rm.Icon = ../../Img/Components.png";
-				//map.AddRefMethod(rm);
 				#endregion 方法 - 基本功能.
 
 				#region 高级设置.
-
-				//带有参数的方法.
-				rm = new RefMethod();
-				rm.Title = "重命名字段";
-				rm.GroupName = "高级设置";
-				rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-				rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-				rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-				rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-				rm.Icon = "../../WF/Img/ReName.png";
-				map.AddRefMethod(rm);
+ 
 
 				rm = new RefMethod();
 				rm.Title = "手机端表单";
@@ -330,7 +276,6 @@ namespace BP.WF.Template.Frm
                 rm.ClassMethodName = this.ToString() + ".DoOneKeySetReadonly";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
-
 
                 #endregion 高级设置.
 
@@ -407,21 +352,21 @@ namespace BP.WF.Template.Frm
 		/// <param name="fieldOldName">旧名称</param>
 		/// <param name="newField">新字段</param>
 		/// <param name="newFieldName">新字段名称(可以为空)</param>
-		/// <returns></returns>
+		/// <returns>执行结果</returns>
 		public string DoChangeFieldName(string fieldOld, string newField, string newFieldName)
 		{
 			MapAttr attrOld = new MapAttr();
 			attrOld.setKeyOfEn(fieldOld);
-			attrOld.setFK_MapData(this.No);
-			attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
+			attrOld.FrmID =this.No;
+			attrOld.setMyPK(attrOld.FrmID + "_" + attrOld.KeyOfEn);
 			if (attrOld.RetrieveFromDBSources() == 0)
 				return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
 			//检查是否存在该字段？
 			MapAttr attrNew = new MapAttr();
 			attrNew.setKeyOfEn(newField);
-			attrNew.setFK_MapData(this.No);
-			attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
+			attrNew.FrmID =this.No;
+			attrNew.setMyPK(attrNew.FrmID + "_" + attrNew.KeyOfEn);
 			if (attrNew.RetrieveFromDBSources() == 1)
 				return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -431,7 +376,7 @@ namespace BP.WF.Template.Frm
 			//copy这个数据,增加上它.
 			attrNew.Copy(attrOld);
 			attrNew.setKeyOfEn(newField);
-			attrNew.setFK_MapData(this.No);
+			attrNew.FrmID =this.No;
 
 			if (newFieldName != "")
 				attrNew.Name = newFieldName;
@@ -531,7 +476,6 @@ namespace BP.WF.Template.Frm
 			return "../../Comm/Search.htm?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
 		}
 		 
-		 
 		public string DoPageLoadFull()
 		{
 			return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
@@ -556,7 +500,6 @@ namespace BP.WF.Template.Frm
 		{
             return "../../Admin/CCFormDesigner/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
 		}
-		 
 		/// <summary>
 		/// 导出表单
 		/// </summary>

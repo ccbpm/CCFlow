@@ -24,7 +24,7 @@ namespace BP.WF.HttpHandler
         /// 清除缓存
         /// </summary>
         /// <returns></returns>
-        public string PowerCenter_DoClearCash()
+        public string PowerCenter_DoClearCache()
         {
             string ctrlGroup = this.GetRequestVal("CtrlGroup");
 
@@ -49,7 +49,7 @@ namespace BP.WF.HttpHandler
             string[] EnNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < EnNos.Length; i++)
             {
-                var enNo = EnNos[i];
+                string enNo = EnNos[i];
                 string sql = "UPDATE GPM_Module SET Idx=" + i + ", SystemNo='" + sortNo + "' WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
             string[] EnNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < EnNos.Length; i++)
             {
-                var enNo = EnNos[i];
+                string enNo = EnNos[i];
                 string sql = "UPDATE GPM_System SET Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
@@ -76,7 +76,7 @@ namespace BP.WF.HttpHandler
             string[] EnNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < EnNos.Length; i++)
             {
-                var enNo = EnNos[i];
+                string enNo = EnNos[i];
 
                 string sql = "UPDATE GPM_Menu SET Idx=" + i + ", ModuleNo='"+sortNo+"' WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);

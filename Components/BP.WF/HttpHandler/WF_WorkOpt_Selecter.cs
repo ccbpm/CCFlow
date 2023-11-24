@@ -63,9 +63,9 @@ namespace BP.WF.HttpHandler
             selectAccper.setMyPK(FK_Node + "_" + WorkID + "_" + FK_Emp);
             if (selectAccper.RetrieveFromDBSources() == 0)
             {
-                selectAccper.FK_Node =int.Parse(FK_Node);
+                selectAccper.NodeID =int.Parse(FK_Node);
                 selectAccper.WorkID =long.Parse(WorkID);
-                selectAccper.FK_Emp = FK_Emp;
+                selectAccper.EmpNo = FK_Emp;
                 selectAccper.EmpName = EmpName;
                 selectAccper.DeptName = DeptName;
                 selectAccper.Insert();

@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>我发起的</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/themes/classic/theme-classic.css" rel="stylesheet" type="text/css" />
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.js" type="text/javascript"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+    <script src="js/iscroll.js" type="text/javascript"></script>
+    <script src="js/pullToRefresh.js" type="text/javascript" charset="gb2312"></script>
+    <script src="js/comment/action.js" type="text/javascript"></script>
+    <script src="Scripts/QueryString.js"type="text/javascript"></script>
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript" ></script>
+    <script src="./js/mui/js/mui.min.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        body
+        {
+            font-family: "Arial" , "Microsoft YaHei" , "黑体" , "宋体" ,sans-serif;
+        }
+        .listviewcon li a
+        {
+            font-size: 0.90em;
+            font-family: "Arial" , "Microsoft YaHei" , "黑体" , "宋体" ,sans-serif;
+        }
+        .user-head-icon
+        {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            margin-top: 16px;
+            background-color: #fff;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 60px 60px;
+            border-radius: 30px;
+        }
+        .data-ucname
+        {
+            font-weight: normal;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        #msgInfo
+        {
+            font-size: 0.9em;
+            color: Red;
+        }
+        #Panel_UserInfo
+        {
+            min-height: 140px;
+        }
+        /**我发起的流程/我参与的流程**/
+
+		/**圆形*/
+		.circle {
+		  border-radius: 50%;
+		  width: 60px;
+		  height: 60px;
+		  background: #00BE95;
+		  margin:5px 20px 30px 15px;
+		   float:left;
+		}
+		.circle-text{
+		  width: 60px;
+		  height: 60px;
+		  line-height: 60px;
+		  text-align: center;
+		  font-size: 56rpx;
+		  color: #ffffffd1;
+		}
+		
+		/**文本*/
+		.rect {
+		  height: 60px;
+		  margin:5px 0px 30px 0px;
+		  float:left;
+		}
+		.rect-text{
+		
+		  height: 60px;
+		  line-height: 60px;
+		  text-align: center;
+		  font-size: 22pt;
+		  font-weight:Semibold;
+		  color: #ffffff;
+		}
+		
+		/**我发起/我参与选中状态*/
+		.tabSelect
+		{
+		    width:125px;
+		    height:30px;
+		    background-color:#FFFFFF;
+		    border-radius:15px; /* 圆角的大小 */
+		    float:left;
+		    text-align:center;
+		    font-size:18px;
+		    color:#2c364900;
+		}
+		.tabUnSelect
+		{
+		     float:left;
+		     font-size:18px;
+		     color: #ffffffd4;
+		     text-align:center;
+		}
+
+    	.ui-panel-inner{padding:0px;}
+    	.pullDownLabel{display:none;}
+    </style>
+    <script type="text/javascript">
+    	var  _CurPage_Idex = 1;
+    	var ensName="BP.WF.Data.MyStartFlows";
+        $(document).on("pagecreate", "#homePage", function () {
+            var webUser = new WebUser();
+            if(webUser.No == "") {
+                var userNo = GetQueryString("UserNo");
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+                handler.AddPara("DoWhat", "PortLogin");
+                handler.AddPara("UserNo", userNo);
+                handler.AddPara("Token", GetQueryString("Token"));
+                var data = handler.DoMethodReturnString("Port_Init");
+                if (data.indexOf("err@") == 0) {
+                    mui.alert(data);
+                    return;
+                }
+            }
+
+            $("#homePage").on("swiperight", function () {
+                //$("#nav-panel").panel("open");
+            });
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            var data = handler.DoMethodReturnString("GetUserInfo");
+
+            var pushData = cceval('(' + data + ')');
+
+
+            //没有登录
+            if (pushData.err && pushData.err == "nologin") {
+                location.href = "../CCMobilePortal/Login.htm?DoType=nologin";
+                return;
+            }
+
+
+            $("#CleareUpCache").on("tap", function () {
+                UpdateLocalCache();
+            });
+
+            $("#exitApp").on("tap", function () {
+                location.href = "../CCMobilePortal/Login.htm?DoType=Logout";
+            });
+            
+            //绑定下拉
+            //绑定下拉
+		    refresher.init({
+		        id: "ListScroll",
+		        ShowDownLabel: true,
+		        ShowUpLable: true,
+		        pullDownAction: Refresh,
+		        pullUpAction: LoadMore
+		    });
+
+            InitPage();
+           
+        });
+
+     
+      //下拉刷新
+        function Refresh() {
+            setTimeout(function () {
+                $("#LV_FlowData").empty();
+                _CurPage_Idex = 1;
+                InitPage(function (pageIdex, count) {
+                    ListScroll.refresh();
+                });
+            }, 1000);
+        }
+        //上拉加载更多
+        function LoadMore() {
+            setTimeout(function () {
+                _CurPage_Idex++;
+                InitPage(function (pageIdex, count) {
+                    ListScroll.refresh();
+                    if (count == 0) {
+                        MessageShow("加载完毕，没有数据了。", true);
+                    } else {
+                        MessageShow("加载" + count + "条记录 第" + pageIdex + "页", true);
+                    }
+                });
+            }, 1000);
+        }
+
+        function InitData() {
+        	 //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddUrlData()
+            handler.AddPara("PageIdx", _CurPage_Idex);
+            handler.AddPara("PageSize", 6);
+            handler.AddPara("EnsName",ensName);
+
+            //查询集合
+            var data = handler.DoMethodReturnString("Search_SearchIt");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            data = JSON.parse(data);
+			
+            return data["DT"]; 
+        }
+
+		function InitPage(CallBack){
+			var pushData = InitData(ensName);
+			var flowNames = "";
+			var _Html = ""
+
+            for (var i = 0; i < pushData.length; i++) {
+             
+
+                var en = pushData[i];
+
+                var fk_flow = en.FK_Flow;
+                var fk_node = en.FK_Node;
+                var workid = en.WorkID;
+                var fid = en.FID;
+                var isRead = en.IsRead;
+                var paras = en.AtPara;
+                if (paras == null || paras == "") {
+                    paras = "";
+                }
+                else {
+                    if (paras.indexOf("IsCC=1") > -1) {
+                        paras = "IsCC=1";
+                    } else {
+                        paras = "";
+                    }
+                }
+                var href = "FrmView.htm?WorkID=" + en.WorkID + "&FID=" + en.FID + "&FK_Flow=" +en.FK_Flow+ "&FK_Node=" + fk_node +"&IsRead=0&Paras=" + paras + "&T=" + Math.random();
+                var flowName = en.FlowName;
+                if(flowName == undefined)
+                	flowName = en.FK_FlowText;
+				 _Html += "<li class='mui-table-view-cell mui-collapse mui-active' style='background-color:white'><a  href='"+href+"' style='background-color:#eee'>" + flowName + "</a>";
+				 _Html += "<ul class='mui-table-view mui-table-view-chevron'>";
+
+                _Html += "<li  class='mui-table-view-cell'>";
+                _Html += "   <a href='" + href + "' target='_self'>";
+                _Html += "      <p>文件名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style='font-weight:bold;color:#444'>"  + en.Title + "</p>";
+                _Html += "      <p>当前节点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style='font-weight:bold;color:#444'>" + en.NodeName + "</p>";
+				//根据流程状态配置不同颜色
+				var stateColor="";
+				if (en.WFState == "2") {
+					stateColor = "#10b13a";
+				} else if (en.WFState == "5") {
+					stateColor = "#f82712";
+				}
+
+                _Html += "<p>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style=\"color:" + stateColor + ";\">" + en.WFStaText + "</b></p>";             
+
+                _Html += "  </a>";
+                _Html += "</li>";
+                _Html += "</ul>";
+                _Html += "</li>";
+            }
+	         
+	            //展显
+	            $("#LV_MyStartlist").html("");
+	            $("#LV_MyStartlist").append(_Html);
+				if (CallBack) CallBack(_CurPage_Idex, pushData.length);
+	          
+		}
+
+        function UpdateLocalCache() {
+
+            if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                window.applicationCache.update();
+            }
+        }
+        function ToUrl(pageID) {
+
+            var url = pageID + ".htm?m=" + Math.random();
+
+            SetHref(url);
+        }
+
+        function Back() {
+            SetHref('../CCMobilePortal/Home.htm?s=' + Math.random());
+            return;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="homePage" data-role="page" data-theme="d">
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-icon mui-icon-left-nav mui-pull-left back-hideen" href="javascript:Back();"></a>
+            <h1 class="mui-title">我发起的</h1>
+        </header>
+        <div class="ui-content" data-role="main" style="padding: 0px;margin-top:40px;">
+            <div id="ListScroll" class="wrapper" style="background-color:#2C3649">
+                 <ul id="LV_MyStartlist" class="mui-table-view mui-table-view-chevron" style="height:auto;"></ul>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

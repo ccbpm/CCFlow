@@ -118,6 +118,21 @@ namespace BP.CCBill.Template
         /// <summary>
         /// 获得该实体的demo.
         /// </summary>
+        /// 
+        public string MethodDoc_TypeScript_Demo
+        {
+            get
+            {
+                string file = BP.Difference.SystemConfig.CCFlowAppPath + "WF/CCBill/Admin/MethodDoc/MethodDocDemoTS.txt";
+                string doc = DataType.ReadTextFile(file); //读取文件.
+                doc = doc.Replace("/#", "+"); //为什么？
+                doc = doc.Replace("/$", "-"); //为什么？
+
+                doc = doc.Replace("@FrmID", this.FrmID);
+
+                return doc;
+            }
+        }
         public string MethodDoc_JavaScript_Demo
         {
             get
@@ -176,6 +191,16 @@ namespace BP.CCBill.Template
             return this.MethodDoc_SQL;
         }
         /// <summary>
+        /// 保存SQL
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        public string SaveSQLScript(string sql)
+        {
+            this.MethodDoc_SQL = sql;
+            return "保存成功.";
+        }
+        /// <summary>
         /// 获得或者设置js脚本.
         /// </summary>
         public string MethodDoc_JavaScript
@@ -194,6 +219,29 @@ namespace BP.CCBill.Template
             {
 
                 this.SaveBigTxtToDB("JSScript", value);
+
+            }
+        }
+
+        /// <summary>
+        /// 获得或者设置ts脚本.
+        /// </summary>
+        public string MethodDoc_TypeScript
+        {
+            get
+            {
+                string strs = this.GetBigTextFromDB("TSScript");
+                if (DataType.IsNullOrEmpty(strs) == true)
+                    return this.MethodDoc_JavaScript_Demo;
+
+                strs = strs.Replace("/#", "+");
+                strs = strs.Replace("/$", "-");
+                return strs;
+            }
+            set
+            {
+
+                this.SaveBigTxtToDB("TSScript", value);
 
             }
         }

@@ -605,7 +605,7 @@ namespace BP.WF.Template.SFlow
             //清空缓存，重新查数据
             Node nd = new Node(this.NodeID);
             nd.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
+            Cache2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
 
             GroupField gf = new GroupField();
             if (this.SFSta == FrmSubFlowSta.Disable)
@@ -648,10 +648,10 @@ namespace BP.WF.Template.SFlow
         /// <param name="fk_mapdata">s</param>
         public FrmSubFlows(string fk_mapdata)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
                 this.Retrieve("No", fk_mapdata);
             else
-                this.RetrieveFromCash("No", (object)fk_mapdata);
+                this.RetrieveFromCache("No", (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

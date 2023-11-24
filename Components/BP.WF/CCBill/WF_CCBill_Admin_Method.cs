@@ -4,7 +4,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.HttpHandler;
 using BP.CCBill.Template;
-
+using System;
 
 namespace BP.CCBill
 {
@@ -45,14 +45,7 @@ namespace BP.CCBill
                 return str;
             }
         }
-        public string Name
-        {
-            get
-            {
-                string str = this.GetRequestVal("Name");
-                return str;
-            }
-        }
+
         #endregion 属性.
 
 
@@ -61,19 +54,38 @@ namespace BP.CCBill
             string fromFrmID = this.GetRequestVal("DictFrmID");
             string toFrmID = this.GetRequestVal("BillFrmID");
 
-
             //这里仅仅复制主表的字段.
             MapAttrs attrsFrom = new MapAttrs();
             attrsFrom.Retrieve(MapAttrAttr.FK_MapData, fromFrmID);
+
+            GroupField gf = new GroupField();
+            gf.FrmID = toFrmID;
+            gf.Lab = "基础信息.";
+            gf.Insert();
+
             foreach (MapAttr attr in attrsFrom)
             {
                 if (attr.IsExit(MapAttrAttr.FK_MapData, toFrmID, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.setFK_MapData(toFrmID);
-                attr.setMyPK(attr.FK_MapData + "_" +attr.KeyOfEn);
+                attr.FrmID = toFrmID;
+                attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
+                attr.GroupID = gf.OID;
                 attr.Insert();
             }
+
+            FrmBill fd=new FrmBill(toFrmID);
+            fd.CheckEnityTypeAttrsFor_Bill();
+
+            ////设置关联字段.
+            //MapAttr attrRef = new MapAttr();
+            //attrRef.setMyPK(toFrmID + "_RefPK");
+            //attrRef.FrmID = toFrmID;
+            //attrRef.setName("关联单据字段");
+            //attrRef.setKeyOfEn("RefPK");
+            //attrRef.setUIVisible(false);
+            //attrRef.Insert();
+
             return "复制成功.";
 
             ////如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
@@ -83,7 +95,6 @@ namespace BP.CCBill
 
             //return "复制成功.";
         }
-
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -96,7 +107,7 @@ namespace BP.CCBill
         /// </summary>
         /// <returns></returns>
         public string FlowEtc_Save()
-        { 
+        {
             //当前表单的信息
             MapData mapData = new MapData(this.FrmID);
 
@@ -107,7 +118,7 @@ namespace BP.CCBill
 
             //执行更新. 设置为不能独立启动.
             BP.WF.Flow fl = new BP.WF.Flow(flowNo);
-            fl.IsCanStart = false;
+            fl.ItIsCanStart = false;
             fl.Update();
 
             //更新开始节点.
@@ -131,7 +142,7 @@ namespace BP.CCBill
             //   handler.AddPara
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
-            
+
             #endregion 把表单导入到流程上去.
 
             //创建方法.
@@ -152,19 +163,19 @@ namespace BP.CCBill
             en.Insert();
 
 
-         //   //创建查询菜单.放入到与该实体平行的位置.
-         //   BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
-         //   menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
-         //   menu.Name = this.Name;
-         //   menu.Idx = 0;
-         ////   menu.MenuModel = "FlowEtc"; //
-         //   menu.MenuModel = MethodModelClass.FlowEtc; //其他类型的业务流程..
+            //   //创建查询菜单.放入到与该实体平行的位置.
+            //   BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
+            //   menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
+            //   menu.Name = this.Name;
+            //   menu.Idx = 0;
+            ////   menu.MenuModel = "FlowEtc"; //
+            //   menu.MenuModel = MethodModelClass.FlowEtc; //其他类型的业务流程..
 
-         //   menu.Mark = "Search"; //流程查询.
-         //   menu.Tag1 = flowNo; //流程编号.
-         //   menu.No = this.FrmID + "_" + flowNo;
-         //   menu.Icon = "icon-paper-plane";
-         //   menu.Insert();
+            //   menu.Mark = "Search"; //流程查询.
+            //   menu.Tag1 = flowNo; //流程编号.
+            //   menu.No = this.FrmID + "_" + flowNo;
+            //   menu.Icon = "icon-paper-plane";
+            //   menu.Insert();
 
             //返回方法编号。
             return en.No;
@@ -184,21 +195,21 @@ namespace BP.CCBill
         /// <returns></returns>
         public string FlowBaseData_Save()
         {
-           
+
             #region 第1步: 创建一个流程.
             //首先创建流程. 参数都通过 httrp传入了。
             BP.WF.HttpHandler.WF_Admin_CCBPMDesigner_FlowDevModel handler = new WF_Admin_CCBPMDesigner_FlowDevModel();
             string flowNo = handler.FlowDevModel_Save();
 
             //执行更新. 设置为不能独立启动.
-            BP.WF.Flow fl = new WF.Flow(flowNo);
-            fl.IsCanStart = false;
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+            fl.ItIsCanStart = false;
             fl.Update();
 
             //更新开始节点.
             BP.WF.Node nd = new BP.WF.Node(int.Parse(flowNo + "01"));
             nd.Name = this.Name;
-            
+
             nd.Update();
 
             #endregion 创建一个流程.
@@ -206,10 +217,10 @@ namespace BP.CCBill
             #region 第2步 把表单导入到流程上去.
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
             BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp handlerFrm = new BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_ImpExp();
-           
+
             handlerFrm.Imp_CopyFrm("ND" + int.Parse(flowNo + "01"), this.FrmID);
 
-           
+
             #endregion 把表单导入到流程上去.
 
             #region 第3步： 处理流程的业务表单 - 字段增加一个影子字段.
@@ -257,7 +268,7 @@ namespace BP.CCBill
                     mapAttr.setKeyOfEn("bak" + mapAttr.KeyOfEn);
                     mapAttr.setName("(原)" + mapAttr.Name);
 
-                    mapAttr.setMyPK(mapAttr.FK_MapData + "_" + mapAttr.KeyOfEn);
+                    mapAttr.setMyPK(mapAttr.FrmID + "_" + mapAttr.KeyOfEn);
                     mapAttr.setUIIsEnable(false);
                     mapAttr.Idx = idx - 1;
                     mapAttr.DirectInsert();
@@ -278,11 +289,11 @@ namespace BP.CCBill
             en.Mark = "Search"; //发起流程.
             en.Tag1 = flowNo; //标记为空.
             en.MethodID = flowNo; // 就是流程编号.
-            
+
             en.FlowNo = flowNo;
             en.SetPara("EnName", "TS.CCBill.MethodFlowBaseData");
             en.Insert();
-            
+
             ////创建查询菜单.放入到与该实体平行的位置.
             //BP.CCFast.CCMenu.Menu menu = new BP.CCFast.CCMenu.Menu();
             //menu.ModuleNo = this.ModuleNo; //隶属与实体一个模块.
@@ -303,7 +314,7 @@ namespace BP.CCBill
             //   CrateFlowMenu_4_GroupMethod(MethodModelClass.FlowBaseData, flowNo);
         }
 
-        
+
         /// <summary>
         /// 创建方法分组.
         /// </summary>
@@ -374,7 +385,7 @@ namespace BP.CCBill
             //创建该模块下的 菜单:分组.
             BP.CCFast.CCMenu.Module mmodule = new BP.CCFast.CCMenu.Module();
             mmodule.Name = this.Name;
-            mmodule.SystemNo = this.GetRequestVal("SortNo"); // md.FK_FormTree; //设置类别.
+            mmodule.SystemNo = this.GetRequestVal("SortNo"); // md.FormTreeNo; //设置类别.
             mmodule.Idx = 100;
             mmodule.Insert();
 

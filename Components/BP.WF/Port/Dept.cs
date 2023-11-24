@@ -20,7 +20,6 @@ namespace BP.WF.Port
         public const string Leader = "Leader";
         public const string LeaderName = "LeaderName";
         public const string Idx = "Idx";
-
     }
     /// <summary>
     /// 部门(即将弃用)
@@ -130,7 +129,7 @@ namespace BP.WF.Port
                 rm.Title = "设置二级管理员";
                 rm.ClassMethodName = this.ToString() + ".ToSetAdminer";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsCanBatch = false; //是否可以批处理？
+                rm.ItIsCanBatch = false; //是否可以批处理？
                 map.AddRefMethod(rm);
                 this._enMap = map;
                 return this._enMap;
@@ -174,7 +173,7 @@ namespace BP.WF.Port
 
             //设置流程目录、表单目录
             #region 检查流程树.
-            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             fs.No = this.No;
             if (fs.RetrieveFromDBSources() == 0)
             {
@@ -256,9 +255,9 @@ namespace BP.WF.Port
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 QueryObject qo = new QueryObject(this);
-                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+                qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.DeptNo);
                 qo.addOr();
-                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+                qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.DeptNo);
                 return qo.DoQuery();
             }
 

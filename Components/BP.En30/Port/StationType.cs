@@ -139,7 +139,7 @@ namespace BP.Port
                 this.OrgNo = BP.Web.WebUser.OrgNo;
 
             if (BP.Difference.SystemConfig.GroupStationModel == 2)
-                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.DeptNo);
 
             return base.beforeUpdateInsertAction();
         }
@@ -183,6 +183,22 @@ namespace BP.Port
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");
+        }
+        /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
+        public override int RetrieveAll(string idx) 
+        {
+            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                return base.RetrieveAll(idx);
+
+            //集团模式下的角色体系: @0=每套组织都有自己的角色体系@1=所有的组织共享一套岗则体系.
+            if (BP.Difference.SystemConfig.GroupStationModel == 1)
+                return base.RetrieveAll(idx);
+
+            //按照orgNo查询.
+            return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, idx);
         }
         #endregion 查询..
 

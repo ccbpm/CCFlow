@@ -299,8 +299,8 @@ namespace BP.CCBill
             this.SetValByKey(FrmBBSAttr.RecName, BP.Web.WebUser.Name);
             this.SetValByKey(FrmBBSAttr.RDT, DataType.CurrentDateTime);
 
-            this.SetValByKey(FrmBBSAttr.DeptNo, BP.Web.WebUser.FK_Dept);
-            this.SetValByKey(FrmBBSAttr.DeptName, BP.Web.WebUser.FK_DeptName);
+            this.SetValByKey(FrmBBSAttr.DeptNo, BP.Web.WebUser.DeptNo);
+            this.SetValByKey(FrmBBSAttr.DeptName, BP.Web.WebUser.DeptName);
 
             return base.beforeInsert();
         }

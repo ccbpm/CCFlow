@@ -1,13 +1,7 @@
 ﻿import $ from 'jquery'
 let dynamicHandler = '';
-// HttpHandler 用
 let parameters = {};
 let formData;
-import {
-    // uiPlant,
-    plant,
-    basePath,
-} from './config'
 import {
     GetQueryString,
 } from './QueryString'
@@ -51,13 +45,7 @@ const HttpHandler = function (handlerName) {
         }
         return true;
     }
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    dynamicHandler = process.env.VUE_APP_HANDLER;
 }
 
 HttpHandler.prototype = {
@@ -262,13 +250,7 @@ function getParams1(self) {
 
 
 
-if (plant == "CCFlow") {
-    // CCFlow
-    dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-} else {
-    // JFlow
-    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-}
+dynamicHandler = process.env.VUE_APP_HANDLER;
 
 Entity.prototype = {
 
@@ -1256,10 +1238,6 @@ Entities.prototype = {
         if (dynamicHandler == "")
             return;
         let pathRe = "";
-        if (plant == "JFlow" && (basePath == null || basePath == '')) {
-            var rowUrl = window.document.location.href;
-            pathRe = rowUrl.substring(0, rowUrl.indexOf('/SDKFlowDemo') + 1);
-        }
         let self = this;
         $.ajax({
             type: 'post',
@@ -1302,12 +1280,7 @@ const WebUser = function () {
     if (dynamicHandler == "")
         return;
     let json = {};
-    if (plant == "CCFlow") {
-        dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    dynamicHandler = process.env.VUE_APP_HANDLER;
 
     $.ajax({
         type: 'post',
@@ -1348,13 +1321,7 @@ const WebUser = function () {
 function DBAccess() {
 }
 
-if (plant == "CCFlow") {
-    // CCFlow
-    dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-} else {
-    // JFlow
-    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-}
+dynamicHandler = process.env.VUE_APP_HANDLER;
 
 DBAccess.RunSQL = function (sql) {
     if (dynamicHandler == "")
@@ -1623,7 +1590,7 @@ function RunUrlReturnString(url) {
         alert("err@url无效");
         return;
     }
-    url=basePath+url;
+    url='api'+url;
     let str;
     $.ajax({
         type: 'post',
@@ -1641,7 +1608,7 @@ function RunUrlReturnString(url) {
             }
             str = data;
         },
-        error: function (e) {
+        error: function () {
             if (confirm('系统异常:' + url + " 您想打开url查看吗？") == true) {
                 window.open(url);
                 str ="";

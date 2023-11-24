@@ -46,7 +46,7 @@ namespace BP.Sys
         {
             get
             {
-                var uac = new UAC();
+                UAC uac = new UAC();
                 uac.Readonly();
                 return uac;
             }
@@ -178,7 +178,7 @@ namespace BP.Sys
         {
             this.setMyPK(DBAccess.GenerGUID());
             this.RDT = DataType.CurrentDateTime;
-            if (BP.Difference.SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.isBSsystem)
                 this.IP = BP.Difference.Glo.GetIP;
 
             if (DataType.IsNullOrEmpty(this.EmpNo) == true)

@@ -18,7 +18,7 @@ namespace BP.WF.HttpHandler
         /// 清楚缓存
         /// </summary>
         /// <returns></returns>
-        public string Default_ClearCash()
+        public string Default_ClearCache()
         {
             DBAccess.RunSQL("DELETE FROM Sys_UserRegedit WHERE FK_Emp='" + BP.Web.WebUser.No + "' AND OrgNo='" + BP.Web.WebUser.OrgNo + "'");
             return "执行成功，请刷新菜单或者重新进入看看菜单权限是否有变化。";
@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
             emp.Retrieve();
 
             //部门名称.
-            ht.Add("DeptName", emp.FK_DeptText);
+            ht.Add("DeptName", emp.DeptText);
 
 
             BP.Port.DeptEmpStations des = new BP.Port.DeptEmpStations();
@@ -87,23 +87,22 @@ namespace BP.WF.HttpHandler
             foreach (BP.Port.DeptEmpStation item in des)
             {
                 BP.Port.Dept dept = new Dept();
-                dept.No = item.FK_Dept;
+                dept.No = item.DeptNo;
                 int count = dept.RetrieveFromDBSources();
                 if (count != 0)
                     depts += dept.Name + "、";
 
 
-                if (DataType.IsNullOrEmpty(item.FK_Station) == true)
+                if (DataType.IsNullOrEmpty(item.StationNo) == true)
                     continue;
 
-                if (DataType.IsNullOrEmpty(item.FK_Dept) == true)
+                if (DataType.IsNullOrEmpty(item.DeptNo) == true)
                 {
-                    //   item.Delete();
                     continue;
                 }
 
                 BP.Port.Station sta = new Station();
-                sta.No = item.FK_Station;
+                sta.No = item.StationNo;
                 count = sta.RetrieveFromDBSources();
                 if (count != 0)
                     stas += sta.Name + "、";
@@ -143,8 +142,8 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("No", BP.Web.WebUser.No);
             ht.Add("Name", BP.Web.WebUser.Name);
-            ht.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
-            ht.Add("FK_DeptName", BP.Web.WebUser.FK_DeptName);
+            ht.Add("FK_Dept", BP.Web.WebUser.DeptNo);
+            ht.Add("FK_DeptName", BP.Web.WebUser.DeptName);
             return BP.Tools.Json.ToJson(ht);
         }
         public string Siganture_Save()
@@ -261,7 +260,7 @@ namespace BP.WF.HttpHandler
             //设置当前的部门.
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["No"].ToString().Equals(WebUser.FK_Dept) == true)
+                if (dr["No"].ToString().Equals(WebUser.DeptNo) == true)
                     dr["CurrentDept"] = "1";
 
                 if (DataType.IsNullOrEmpty(dr["NameOfPath"].ToString()) == true)
@@ -282,9 +281,9 @@ namespace BP.WF.HttpHandler
             // @honygan.
             DBAccess.RunSQL("UPDATE Port_Emp SET OrgNo='" + dept.OrgNo + "', FK_Dept='" + dept.No + "' WHERE No='" + WebUser.No + "'");
 
-            BP.Web.WebUser.FK_Dept = dept.No;
-            BP.Web.WebUser.FK_DeptName = dept.Name;
-            BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
+            BP.Web.WebUser.DeptNo = dept.No;
+            BP.Web.WebUser.DeptName = dept.Name;
+            BP.Web.WebUser.DeptNameOfFull = dept.NameOfPath;
             BP.Web.WebUser.OrgNo = dept.OrgNo;
 
             BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
@@ -307,7 +306,7 @@ namespace BP.WF.HttpHandler
 
              }*/
 
-            return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
+            return "@执行成功,已经切换到｛" + BP.Web.WebUser.DeptName + "｝部门上。";
         }
         #endregion
 
@@ -336,15 +335,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ChangePassword_Submit()
         {
-            string oldPass = this.GetRequestVal("OldPass");
+            string oldPass = this.GetRequestVal("TB_PW");
             string pass = this.GetRequestVal("Pass");
 
             BP.Port.Emp emp = new Emp(BP.Web.WebUser.No);
             if (emp.CheckPass(oldPass) == false)
                 return "err@旧密码错误.";
 
-            if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                pass = BP.Tools.Cryptography.EncryptString(pass);
+            if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
+                pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
             emp.Pass = pass;
             emp.Update();
 

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Data;
 using BP.DA;
 using BP.En;
 using BP.Web;
 using BP.Sys;
-using BP.WF.Port;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace BP.WF
 {
@@ -263,6 +260,13 @@ namespace BP.WF
         #endregion
 
         #region  邮件属性
+        public string PushModel
+        {
+            get
+            {
+                return this.GetParaString(SMSAttr.PushModel);
+            }
+        }
         /// <summary>
         /// 参数
         /// </summary>
@@ -319,7 +323,7 @@ namespace BP.WF
                 SetValByKey(SMSAttr.SendTo, value);
             }
         }
-        public int IsRead
+        public int ItIsRead
         {
             get
             {
@@ -330,7 +334,7 @@ namespace BP.WF
                 this.SetValByKey(SMSAttr.IsRead, (int)value);
             }
         }
-        public int IsAlert
+        public int ItIsAlert
         {
             get
             {
@@ -477,15 +481,6 @@ namespace BP.WF
             }
         }
         #endregion
-         
-
-        public string PushModel
-        {
-            get
-            {
-                return this.GetParaString(SMSAttr.PushModel);
-            }
-        }
 
         #region 构造函数
         /// <summary>
@@ -547,7 +542,7 @@ namespace BP.WF
                 //其他参数.
                 map.AddTBAtParas(500);
 
-                //map.IsShowSearchKey = false;
+                //map.ItIsShowSearchKey = false;
                 //map.SearchFields="Tel,Addr,"
              
                 this._enMap = map;
@@ -555,7 +550,6 @@ namespace BP.WF
             }
         }
         #endregion
-        
 
         /// <summary>
         /// 发送邮件
@@ -612,7 +606,6 @@ namespace BP.WF
 
                 object userState = myEmail;
                 //调用自带的异步方法
-
                 client.Send(myEmail);
                /* client.SendMailAsync(myEmail);
                 client.SendAsync(myEmail, userState);*/
@@ -622,7 +615,6 @@ namespace BP.WF
                 BP.DA.Log.DebugWriteError(e.Message);
                 return false;
             }
-
             return true;
         }
         /// <summary>
@@ -667,15 +659,11 @@ namespace BP.WF
                 json += " \"Doc\":\"" + this.Doc + " \",";
                 json += " \"Url\":\"" + this.OpenURL + " \"}";
             }
-
-
             //微信
-            if (this.PushModel.Contains("WeiXin") == true)
             {
                 //注册到url里面去.
-                BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
             }
-           
         }
         /// <summary>
         /// 插入之后执行的方法.
@@ -726,11 +714,6 @@ namespace BP.WF
                 #endregion 发送邮件
 
                 #region 发送短消息 调用接口
-                //发送短消息的前提必须是手机号不能为空
-                //if (DataType.IsNullOrEmpty(this.Mobile) == true)
-                //    return;
-                //throw new Exception("发送短消息时接收人的手机号不能为空,否则接受不到消息");
-
                 string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
                 if (DataType.IsNullOrEmpty(messageUrl) == true)
                     return;
@@ -751,21 +734,21 @@ namespace BP.WF
                 if (this.PushModel.Contains("CCMsg") == true)
                 {
                     httpUrl = messageUrl + "?DoType=SendToCCMSG";
-                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
                     //soap.SendToCCMSG(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
                 //短信
                 if (this.PushModel.Contains("SMS") == true)
                 {
                     httpUrl = messageUrl + "?DoType=SMS";
-                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
                     //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,this.Title, this.OpenURL);
                 }
                 //钉钉
                 if (this.PushModel.Contains("DingDing") == true)
                 {
                     httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title=" + this.Title + "&msgConten=" + this.MobileInfo;
-                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
                     //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
 
@@ -773,18 +756,17 @@ namespace BP.WF
                 if (this.PushModel.Contains("WeiXin") == true)
                 {
                     httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo;
-                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
                     //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
                 }
                 //WebService
                 if (this.PushModel.Contains("WS") == true)
                 {
                     httpUrl = messageUrl + "?DoType=SendToWebServices";
-                    BP.WF.Glo.HttpPostConnect(httpUrl, json);
+                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
                     //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
                 }
                 #endregion 发送短消息 调用接口
-
             }
             catch (Exception ex)
             {
@@ -798,7 +780,7 @@ namespace BP.WF
         public void DoRead()
         {
 
-            this.IsRead = 1;
+            this.ItIsRead = 1;
             this.Update();
         }
 

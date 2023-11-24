@@ -1,3 +1,4 @@
+
 module.exports = {
     publicPath: '/', //publicPath取代了baseUrl
     outputDir: 'dist',
@@ -13,12 +14,8 @@ module.exports = {
         open: process.platform === 'darwin',
         proxy: { //可以代理多个项目
             //第一个代理，这里的/api1和/api2就对应了第一步的 baseURL
-            // /api/xxxx
-            // /ccflow/api/start/xxx
             "/api": {
-                target: "http://101.43.52.116:8085/",//https://uatworkflow.mapfarm.com/", //只要是以/api开头的链接都会被代理到 这个target属性所代表的位置（我这里是：http://help.jflow.cn:8081/）
-                //http://101.43.52.116:8085/
-                //target: "http://localhost:2296/",//https://uatworkflow.mapfarm.com/", //只要是以/api开头的链接都会被代理到 这个target属性所代表的位置（我这里是：http://help.jflow.cn:8081/）
+                target: process.env.VUE_APP_API_URL,//https://uatworkflow.mapfarm.com/", //只要是以/api开头的链接都会被代理到 这个target属性所代表的位置（我这里是：http://help.jflow.cn:8081/）
                 ws: false,
                 changeOrigin: true,
                 cookieDomainRewrite: {

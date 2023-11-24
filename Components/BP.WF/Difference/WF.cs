@@ -1,5 +1,6 @@
 ﻿using BP.Sys;
 using BP.WF.HttpHandler;
+using FluentFTP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace BP.WF.Difference
         /// <returns></returns>
         public static List<WSMethod> GetWebServiceMethods(SFDBSrc dbsrc)
         {
-                if (dbsrc == null || string.IsNullOrWhiteSpace(dbsrc.IP))
+                if (dbsrc == null || BP.DA.DataType.IsNullOrEmpty(dbsrc.IP))
                     return new List<WSMethod>();
 
-                var wsurl = dbsrc.IP.ToLower();
+                 string wsurl = dbsrc.IP.ToLower();
                 if (!wsurl.EndsWith(".asmx") && !wsurl.EndsWith(".svc"))
                     throw new Exception("@失败:" + dbsrc.No + " 中WebService地址不正确。");
 
@@ -32,11 +33,11 @@ namespace BP.WF.Difference
                 //var methods = new Dictionary<string, string>(); //名称Name，全称Text
                 List<WSMethod> mtds = new List<WSMethod>();
                 WSMethod mtd = null;
-                var wc = new WebClient();
-                var stream = wc.OpenRead(wsurl);
-                var sd = ServiceDescription.Read(stream);
-                var eles = sd.Types.Schemas[0].Elements.Values.Cast<XmlSchemaElement>();
-                var s = new StringBuilder();
+                WebClient wc = new WebClient();
+                System.IO.Stream stream = wc.OpenRead(wsurl);
+                ServiceDescription sd = ServiceDescription.Read(stream);
+                IEnumerable<XmlSchemaElement> eles = sd.Types.Schemas[0].Elements.Values.Cast<XmlSchemaElement>();
+                StringBuilder s = new StringBuilder();
                 XmlSchemaComplexType ctype = null;
                 XmlSchemaSequence seq = null;
                 XmlSchemaElement res = null;
@@ -45,8 +46,8 @@ namespace BP.WF.Difference
                 {
                     if (ele == null) continue;
 
-                    var resType = string.Empty;
-                    var mparams = string.Empty;
+                    string resType = string.Empty;
+                    string mparams = string.Empty;
 
                     //获取接口返回元素
                     res = eles.FirstOrDefault(o => o.Name == (ele.Name + "Response"));

@@ -16,7 +16,7 @@ namespace BP.En
         {
             // @wanglu
             // deep clone 
-            var serialized = JsonConvert.SerializeObject(this);
+            string serialized = JsonConvert.SerializeObject(this);
             Row newRow = JsonConvert.DeserializeObject<Row>(serialized);
             return newRow;
             /** 
@@ -44,25 +44,25 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppInt:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, int.Parse(attr.DefaultVal.ToString()));
                         break;
                     case DataType.AppFloat:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, float.Parse(attr.DefaultVal.ToString()));
                         break;
                     case DataType.AppMoney:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, decimal.Parse(attr.DefaultVal.ToString()));
                         break;
                     case DataType.AppDouble:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             this.Add(attr.Key, DBNull.Value);
                         else
                             this.Add(attr.Key, double.Parse(attr.DefaultVal.ToString()));

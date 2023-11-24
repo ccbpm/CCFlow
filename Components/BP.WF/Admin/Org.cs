@@ -233,7 +233,6 @@ namespace BP.WF.Admin
                 map.AddRefMethod(rm);
                 #endregion 表单管理.
 
-
                 #region 组织管理.
                 rm = new RefMethod();
                 rm.GroupName = "组织";
@@ -320,11 +319,11 @@ namespace BP.WF.Admin
 
         public string FrmTemplate()
         {
-            return "/WF/Comm/Search.htm?EnsName=BP.WF.Admin.Frms";
+            return "/WF/Comm/Search.htm?EnsName=BP.WF.Template.Frms";
         }
         public string FrmSort()
         {
-            return "/WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FrmSorts";
+            return "/WF/Comm/Ens.htm?EnsName=BP.WF.Template.FrmSorts";
         }
         #endregion 表单.
 
@@ -335,7 +334,7 @@ namespace BP.WF.Admin
         }
         public string FlowSorts()
         {
-            return "/WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FlowSorts";
+            return "/WF/Comm/Ens.htm?EnsName=BP.WF.Template.FlowSorts";
         }
         public string FlowGenerWorkFlowView()
         {

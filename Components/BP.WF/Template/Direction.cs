@@ -37,9 +37,17 @@ namespace BP.WF.Template
         /// </summary>
         public const string GateWay = "GateWay";
         /// <summary>
+        /// 节点类型
+        /// </summary>
+        public const string NodeType = "NodeType";
+        /// <summary>
         /// 顺序
         /// </summary>
         public const string Idx = "Idx";
+        /// <summary>
+        /// 路径点
+        /// </summary>
+        public const string Vertices = "Vertices";
     }
     /// <summary>
     /// 节点方向
@@ -66,7 +74,7 @@ namespace BP.WF.Template
                 this.SetValByKey(DirectionAttr.Node, value);
             }
         }
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -141,14 +149,16 @@ namespace BP.WF.Template
                 map.AddTBInt(DirectionAttr.ToNode, 0, "到节点", false, true);
                 map.AddTBString(DirectionAttr.ToNodeName, null, "到达节点名称", true, true, 0, 300, 300, false);
                 map.AddTBInt(DirectionAttr.GateWay, 0, "网关显示?", true, true);
+                map.AddTBInt(DirectionAttr.NodeType, 0, "ToNode类型0=工作,1=路由,2=抄送,3=子流程,4=结束", true, true);
+                map.AddTBString(DirectionAttr.Vertices, "", "路径数据", false, true, 0, 50, 200);
                 map.AddTBString(DirectionAttr.Des, null, "描述", true, true, 0, 100, 0, false);
-
-                //相关功能。
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),
-                    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                    StationAttr.Name, StationAttr.No, "方向条件与角色");
-                //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
                 map.AddTBInt(DirectionAttr.Idx, 0, "计算优先级顺序", true, true);
+
+                ////相关功能。
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.Port.Stations(),
+                //    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
+                //    StationAttr.Name, StationAttr.No, "方向条件与角色");
+                //map.AddTBInt(DirectionAttr.CondExpModel, 0, "条件计算方式", false, true);
                 //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
                 //DeptAttr.No, "节点部门", Dot2DotModel.TreeDept);
                 this._enMap = map;
@@ -159,7 +169,7 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
+            this.setMyPK(this.FlowNo + "_" + this.Node + "_" + this.ToNode);
             return base.beforeUpdateInsertAction();
         }
         /// <summary>
@@ -168,12 +178,12 @@ namespace BP.WF.Template
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
+            this.setMyPK(this.FlowNo + "_" + this.Node + "_" + this.ToNode);
             return base.beforeInsert();
         }
         protected override bool beforeDelete()
         {
-            this.setMyPK(this.FK_Flow + "_" + this.Node + "_" + this.ToNode);
+            this.setMyPK(this.FlowNo + "_" + this.Node + "_" + this.ToNode);
 
             //删除条件.
             Conds nds = new Conds();
@@ -244,6 +254,9 @@ namespace BP.WF.Template
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(DirectionAttr.Node, NodeID);
+            qo.addAnd();
+            qo.AddWhereIn(DirectionAttr.NodeType, "(0,1)"); //普通节点+路由节点
+
             qo.addOrderBy(DirectionAttr.Idx);  //方向条件的优先级.
             qo.DoQuery();
         }
@@ -267,7 +280,7 @@ namespace BP.WF.Template
         {
             Nodes nds = new Nodes();
             QueryObject qo = new QueryObject(nds);
-            qo.AddWhereInSQL(NodeAttr.NodeID, "SELECT ToNode FROM WF_Direction WHERE Node=" + nodeID);
+            qo.AddWhereInSQL(NodeAttr.NodeID, "SELECT ToNode FROM WF_Direction WHERE Node=" + nodeID+ " AND (NodeType=0 OR NodeType=1) ");
             qo.DoQuery();
             return nds;
         }

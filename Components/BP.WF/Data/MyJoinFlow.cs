@@ -203,7 +203,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 工作流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -315,7 +315,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {
@@ -329,7 +329,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-		public string FK_Dept
+		public string DeptNo
         {
             get
             {
@@ -567,7 +567,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 当前工作到的节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -589,9 +589,9 @@ namespace BP.WF.Data
             }
             set
             {
-                if (value == WF.WFState.Complete)
+                if (value == BP.WF.WFState.Complete)
                     SetValByKey(MyFlowAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == BP.WF.WFState.Delete)
                     SetValByKey(MyFlowAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(MyFlowAttr.WFSta, (int)WFSta.Runing);
@@ -735,8 +735,6 @@ namespace BP.WF.Data
 
                 //隐藏字段.
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
-                //查询关键字.
-                map.AddTBSKeyWords(4000);
                 #endregion 基本字段.
 
 
@@ -747,7 +745,7 @@ namespace BP.WF.Data
                 map.DTSearchWay = DTSearchWay.ByDate;
                 map.AddSearchAttr(MyFlowAttr.WFSta);
                 map.AddHidden(MyStartFlowAttr.FID, "=", "0");
-                //map.IsShowSearchKey = false;
+                //map.ItIsShowSearchKey = false;
                 //增加隐藏的查询条件. 我参与的流程.
                 SearchNormal search = new SearchNormal(MyFlowAttr.Emps, "人员",
                     MyFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%", 0, true);
@@ -761,7 +759,7 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Icon = "../../WF/Img/Track.png";
-                rm.IsForEns = true;
+                rm.ItIsForEns = true;
                 map.AddRefMethod(rm);*/
 
                 rm = new RefMethod();
@@ -769,7 +767,7 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
                 rm.Icon = "../../WF/Img/Form.png";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsForEns = true;
+                rm.ItIsForEns = true;
                 map.AddRefMethod(rm);
                 #endregion 相关功能.
 
@@ -783,8 +781,8 @@ namespace BP.WF.Data
         #region 执行诊断
         public string DoTrack()
         {
-            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "/WF/WFRpt.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo, 900, 800);
+            return "/WF/WFRpt.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -794,19 +792,19 @@ namespace BP.WF.Data
         {
 
             Paras pss = new Paras();
-            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FlowNo) + "Track WHERE ActionType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
             pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
             pss.Add("WorkID", this.WorkID);
             DataTable dt = DBAccess.RunSQLReturnTable(pss);
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "/WF/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
 
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
-            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+            return "/WF/CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
 

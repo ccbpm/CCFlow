@@ -61,7 +61,7 @@ namespace BP.WF.Port.Admin2Group
             }
         }
 
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -155,23 +155,23 @@ namespace BP.WF.Port.Admin2Group
         {
             string str = "";
             BP.WF.Template.FlowSorts ens = new Template.FlowSorts();
-            ens.RetrieveInSQL("SELECT FlowSortNo FROM Port_OrgAdminerFlowSort WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
+            ens.RetrieveInSQL("SELECT FlowSortNo FROM Port_OrgAdminerFlowSort WHERE  FK_Emp='" + this.EmpNo + "' AND OrgNo='" + this.OrgNo + "'");
             foreach (BP.WF.Template.FlowSort item in ens)
                 str += "(" + item.No + ")" + item.Name + ";";
             this.FlowSorts = str;
 
             str = "";
             SysFormTrees enTrees = new SysFormTrees();
-            enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.FK_Emp + "' AND OrgNo='" + this.OrgNo + "'");
+            enTrees.RetrieveInSQL("SELECT FrmTreeNo FROM Port_OrgAdminerFrmTree WHERE  FK_Emp='" + this.EmpNo + "' AND OrgNo='" + this.OrgNo + "'");
             foreach (SysFormTree item in enTrees)
                 str += "(" + item.No + ")" + item.Name + ";";
             this.FrmTrees = str;
 
             if (this.EmpName=="" || this.EmpName ==null)
             {
-                Emp emp = new Emp(this.FK_Emp);
+                Emp emp = new Emp(this.EmpNo);
                 this.EmpName = emp.Name;
-                this.MyPK = this.OrgNo + "_" + this.FK_Emp;
+                this.MyPK = this.OrgNo + "_" + this.EmpNo;
             }
            
 

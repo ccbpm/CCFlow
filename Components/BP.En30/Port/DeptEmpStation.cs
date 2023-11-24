@@ -61,7 +61,7 @@ namespace BP.Port
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -70,13 +70,13 @@ namespace BP.Port
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Emp, value);
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp+"_"+this.FK_Station);
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo + "_"+this.StationNo);
             }
         }
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -85,22 +85,20 @@ namespace BP.Port
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Dept, value);
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo + "_" + this.StationNo);
             }
         }
-        public string FK_StationT
+        public string StationT
         {
             get
             {
-                //return this.GetValRefTextByKey(DeptEmpStationAttr.FK_Station);
-
                 return this.GetValStringByKey(DeptEmpStationAttr.FK_Station);
             }
         }
         /// <summary>
         ///角色
         /// </summary>
-        public string FK_Station
+        public string StationNo
         {
             get
             {
@@ -109,7 +107,7 @@ namespace BP.Port
             set
             {
                 SetValByKey(DeptEmpStationAttr.FK_Station, value);
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo + "_" + this.StationNo);
             }
         }
         #endregion
@@ -142,26 +140,17 @@ namespace BP.Port
             }
         }
         #endregion
-
-        protected override bool beforeDelete()
-        {
-            return base.beforeDelete();
-        }
-        protected override bool beforeInsert()
-        {
-            return base.beforeInsert();
-        }
-
+ 
         /// <summary>
         /// 更新删除前做的事情
         /// </summary>
         /// <returns></returns>
         protected override bool beforeUpdateInsertAction()
         {
-            if(BP.Difference.SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp.Replace(this.OrgNo+"_","") + "_" + this.FK_Station);
-            else
-                this.setMyPK(this.FK_Dept + "_" + this.FK_Emp + "_" + this.FK_Station);
+            //if(BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
+            //    this.setMyPK(this.DeptNo + "_" + this.EmpNo.Replace(this.OrgNo+"_","") + "_" + this.StationNo);
+            //else
+                this.setMyPK(this.DeptNo + "_" + this.EmpNo + "_" + this.StationNo);
             return base.beforeUpdateInsertAction();
         }
     }
@@ -215,6 +204,7 @@ namespace BP.Port
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
+
         #region 删除方法
         public string  DelteNotInEmp()
         {

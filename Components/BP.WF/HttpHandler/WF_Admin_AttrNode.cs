@@ -8,6 +8,7 @@ using BP.WF.Template;
 using BP.Difference;
 using System.IO;
 using BP.Tools;
+using System.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -28,13 +29,13 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                if (this.FK_Node != 0)
+                if (this.NodeID != 0)
                     return "Node";
 
-                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
+                if (this.NodeID == 0 && DataType.IsNullOrEmpty(this.FlowNo) == false && this.FlowNo.Length >= 3)
                     return "Flow";
 
-                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_MapData) == false)
+                if (this.NodeID == 0 && DataType.IsNullOrEmpty(this.FrmID) == false)
                     return "Frm";
 
                 return "Node";
@@ -82,7 +83,7 @@ namespace BP.WF.HttpHandler
             var bytes = DataType.ConvertFileToByte(docTemplate.FilePath);
 
             //保存到数据库里.
-            Flow fl = new Flow(this.FK_Flow);
+            Flow fl = new Flow(this.FlowNo);
             DBAccess.SaveBytesToDB(bytes, fl.PTable, "OID", this.WorkID,
                 "WordFile");
 
@@ -131,7 +132,7 @@ namespace BP.WF.HttpHandler
                 byte[] bytes = DBAccess.GetByteFromDB(tableName, "OID", workId.ToString(), "WordFile");
                 Node node = new Node(nodeId);
 
-                if (!node.IsStartNode)
+                if (!node.ItIsStartNode)
                 {
                     if (bytes == null)
                     {
@@ -207,26 +208,25 @@ namespace BP.WF.HttpHandler
             if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请上传模版.";
 
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
             //上传附件.
-            var file = HttpContextHelper.RequestFiles(0);
-            var fileName = file.FileName;
-            string path =  BP.Difference.SystemConfig.PathOfDataUser + "DocTemplate/" + nd.FK_Flow;
+            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            string fileName = HttpContextHelper.GetNameByIdx(0);
+            string path =  BP.Difference.SystemConfig.PathOfDataUser + "DocTemplate/" + nd.FlowNo;
             string fileFullPath = path + "/" + fileName;
 
             //上传文件.
             if (System.IO.Directory.Exists(path)==false)
                 System.IO.Directory.CreateDirectory(path);
-            HttpContextHelper.UploadFile(file, fileFullPath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), fileFullPath);
 
             //插入模版.
             DocTemplate dt = new DocTemplate();
-            dt.FK_Node = FK_Node;
+            dt.NodeID = this.NodeID;
             dt.No = DBAccess.GenerGUID();
             dt.Name = fileName;
             dt.FilePath = fileFullPath; //路径
-            dt.FK_Node = this.FK_Node;
             dt.Insert();
 
             //保存文件.
@@ -252,11 +252,11 @@ namespace BP.WF.HttpHandler
             msg.RetrieveFromDBSources();
 
             msg.FK_Event = this.FK_Event;
-            msg.FK_Node = this.FK_Node;
+            msg.NodeID = this.NodeID;
 
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
-            msg.FK_Flow = nd.FK_Flow;
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
+            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FlowNo);
+            msg.FlowNo = nd.FlowNo;
 
             //推送方式。
             msg.SMSPushWay = Convert.ToInt32(HttpContextHelper.RequestParams("RB_SMS").Replace("RB_SMS_", ""));
@@ -335,13 +335,13 @@ namespace BP.WF.HttpHandler
             //select * from Sys_MapAttr where FK_MapData='ND102' and LGType = 0 AND MyDataType =1
 
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
-            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + this.FK_Node, "LGType", 0, "MyDataType", 1);
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + this.NodeID, "LGType", 0, "MyDataType", 1);
             ds.Tables.Add(attrs.ToDataTableField("FrmFields"));
 
             //节点 
             //TODO 数据太多优化一下
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
+            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FlowNo);
             ds.Tables.Add(nds.ToDataTableField("Nodes"));
 
             //mypk
@@ -367,7 +367,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             // 当前节点信息.
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
             nd.WorkID = this.WorkID; //为获取表单ID ( NodeFrmID )提供参数.
             nd.NodeFrmID = nd.NodeFrmID;
@@ -376,12 +376,12 @@ namespace BP.WF.HttpHandler
             DataTable mydt = nd.ToDataTableField("WF_Node");
             ds.Tables.Add(mydt);
 
-            BtnLab btn = new BtnLab(this.FK_Node);
+            BtnLab btn = new BtnLab(this.NodeID);
             DataTable dtBtn = btn.ToDataTableField("WF_BtnLab");
             ds.Tables.Add(dtBtn);
 
             //节点s
-            Nodes nds = new Nodes(nd.FK_Flow);
+            Nodes nds = new Nodes(nd.FlowNo);
 
             //节点s
             ds.Tables.Add(nds.ToDataTableField("Nodes"));
@@ -394,9 +394,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string NodeFromWorkModel_Save()
         {
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
-            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.FK_Node);
+            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.NodeID);
 
             //用户选择的表单类型.
             string selectFModel = this.GetValFromFrmByKey("FrmS");
@@ -509,7 +509,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string NodeAttrs_Init()
         {
-            var strFlowId = GetRequestVal("FK_Flow");
+            string strFlowId = GetRequestVal("FK_Flow");
             if (DataType.IsNullOrEmpty(strFlowId))
             {
                 return "err@参数错误！";
@@ -550,7 +550,7 @@ namespace BP.WF.HttpHandler
                 dr["HisDeliveryWayText"] = node.HisDeliveryWayText;
 
                 //接收方数量
-                var intHisDeliveryWayCount = 0;
+                int intHisDeliveryWayCount = 0;
                 if (node.HisDeliveryWay == BP.WF.DeliveryWay.ByStation)
                 {
                     dr["HisDeliveryWayJsFnPara"] = "ByStation";
@@ -628,7 +628,7 @@ namespace BP.WF.HttpHandler
         #region 批量发起规则设置
         public string BatchStartFields_Init()
         {
-            int nodeID = int.Parse(this.FK_Node.ToString());
+            int nodeID = int.Parse(this.NodeID.ToString());
             //获取节点字段集合
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
             //获取节点对象
@@ -650,7 +650,7 @@ namespace BP.WF.HttpHandler
         #region 发送阻塞模式
         public string BlockModel_Save()
         {
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
 
             nd.BlockAlert = this.GetRequestVal("TB_Alert"); //提示信息.
 
@@ -702,10 +702,10 @@ namespace BP.WF.HttpHandler
         public string CanCancelNodes_Save()
         {
             BP.WF.Template.NodeCancels rnds = new BP.WF.Template.NodeCancels();
-            rnds.Delete(BP.WF.Template.NodeCancelAttr.FK_Node, this.FK_Node);
+            rnds.Delete(BP.WF.Template.NodeCancelAttr.FK_Node, this.NodeID);
 
             BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
+            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FlowNo);
 
             int i = 0;
             foreach (BP.WF.Node nd in nds)
@@ -715,7 +715,7 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 NodeCancel nr = new NodeCancel();
-                nr.FK_Node = this.FK_Node;
+                nr.NodeID = this.NodeID;
                 nr.CancelTo = nd.NodeID;
                 nr.Insert();
                 i++;
@@ -733,26 +733,26 @@ namespace BP.WF.HttpHandler
             if (BP.Web.WebUser.No != "admin")
                 return "err@只有管理员有权限进行此项操作！";
 
-            if (string.IsNullOrWhiteSpace(this.FK_MapData))
+            if (DataType.IsNullOrEmpty(this.FrmID))
                 return "err@参数FK_MapData不能为空！";
 
             string msg = string.Empty;
 
             //1.检查字段扩展设置
-            MapExts mes = new MapExts(this.FK_MapData);
-            MapAttrs attrs = new MapAttrs(this.FK_MapData);
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapExts mes = new MapExts(this.FrmID);
+            MapAttrs attrs = new MapAttrs(this.FrmID);
+            MapDtls dtls = new MapDtls(this.FrmID);
             Entity en = null;
             string fieldMsg = string.Empty;
 
             //1.1主表
             foreach (MapExt me in mes)
             {
-                if (!string.IsNullOrWhiteSpace(me.AttrOfOper))
+                if (!DataType.IsNullOrEmpty(me.AttrOfOper))
                 {
                     en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrOfOper);
 
-                    if (en != null && !string.IsNullOrWhiteSpace(me.AttrsOfActive))
+                    if (en != null && !DataType.IsNullOrEmpty(me.AttrsOfActive))
                         en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrsOfActive);
                 }
 
@@ -771,11 +771,11 @@ namespace BP.WF.HttpHandler
 
                 foreach (MapExt me in mes)
                 {
-                    if (!string.IsNullOrWhiteSpace(me.AttrOfOper))
+                    if (!DataType.IsNullOrEmpty(me.AttrOfOper))
                     {
                         en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrOfOper);
 
-                        if (en != null && !string.IsNullOrWhiteSpace(me.AttrsOfActive))
+                        if (en != null && !DataType.IsNullOrEmpty(me.AttrsOfActive))
                             en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrsOfActive);
                     }
 
@@ -789,7 +789,7 @@ namespace BP.WF.HttpHandler
 
             //2.检查字段权限
             FrmFields ffs = new FrmFields();
-            ffs.Retrieve(FrmFieldAttr.FK_MapData, this.FK_MapData);
+            ffs.Retrieve(FrmFieldAttr.FrmID, this.FrmID);
 
             //2.1主表
             foreach (FrmField ff in ffs)
@@ -807,7 +807,7 @@ namespace BP.WF.HttpHandler
             foreach (MapDtl dtl in dtls)
             {
                 ffs = new FrmFields();
-                ffs.Retrieve(FrmFieldAttr.FK_MapData, dtl.No);
+                ffs.Retrieve(FrmFieldAttr.FrmID, dtl.No);
                 attrs = new MapAttrs(dtl.No);
 
                 foreach (FrmField ff in ffs)

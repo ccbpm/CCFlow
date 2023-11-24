@@ -29,8 +29,7 @@ namespace BP.Sys
             en.setMyPK(ctrlID);
             int i = en.RetrieveFromDBSources();
             en.setEleType(eleType);
-            en.setFK_MapData(fk_mapdata);
-            en.setFrmID(ctrlID);
+            en.FrmID =ctrlID;
 
             en.W = w;
             en.H = h;
@@ -56,7 +55,7 @@ namespace BP.Sys
             if (i == 0)
                 return null;
 
-            en.setFK_MapData(fk_mapdata);
+            en.FrmID= fk_mapdata;
 
             en.Update();
             return en.KeyOfEn;
@@ -74,7 +73,7 @@ namespace BP.Sys
         {
             FrmImgAth en = new FrmImgAth();
             en.setMyPK(fk_mapdata + "_" + ctrlID);
-            en.setFK_MapData(fk_mapdata);
+            en.FrmID= fk_mapdata;
             en.CtrlID = ctrlID;
             en.RetrieveFromDBSources();
 
@@ -97,7 +96,7 @@ namespace BP.Sys
         {
             FrmAttachment en = new FrmAttachment();
             en.setMyPK(fk_mapdata + "_" + ctrlID);
-            en.setFK_MapData(fk_mapdata);
+            en.FrmID =fk_mapdata;
             en.NoOfObj = ctrlID;
             en.RetrieveFromDBSources();
 
@@ -110,7 +109,7 @@ namespace BP.Sys
             dtl.No = ctrlID;
             dtl.RetrieveFromDBSources();
 
-            dtl.setFK_MapData(fk_mapdata);
+            dtl.FrmID =fk_mapdata;
             dtl.SetValByKey(MapAttrAttr.UIWidth, w);
             dtl.SetValByKey(MapAttrAttr.UIHeight, h);
             dtl.Update();

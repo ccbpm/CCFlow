@@ -29,10 +29,10 @@ namespace BP.Difference
                 exp = exp.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
             if (exp.Contains("@WebUser.FK_DeptName"))
-                exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                exp = exp.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
 
             if (exp.Contains("@WebUser.FK_Dept"))
-                exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                exp = exp.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
 
             if (exp.Contains("@") == true && ht != null)
             {
@@ -51,7 +51,7 @@ namespace BP.Difference
                 }
             }
 
-            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -100,7 +100,7 @@ namespace BP.Difference
                 foreach (string para in paras)
                 {
                     if (para == null
-                        || para == ""
+                        || para.Equals("")
                         || para.Contains("=") == false)
                         continue;
                     urlExt += "&" + para;

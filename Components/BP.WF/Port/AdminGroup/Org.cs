@@ -32,7 +32,9 @@ namespace BP.WF.Port.AdminGroup
         /// 序号
         /// </summary>
         public const string Idx = "Idx";
-
+        /// <summary>
+        /// 状态
+        /// </summary>
         public const string OrgSta = "OrgSta";
     }
     /// <summary>
@@ -205,7 +207,7 @@ namespace BP.WF.Port.AdminGroup
         /// <returns></returns>
         public string DoCheck()
         {
-            BP.WF.Port.Admin2Group.Org org = new Admin2Group.Org(this.No);
+            BP.WF.Port.Admin2Group.Org org = new BP.WF.Port.Admin2Group.Org(this.No);
             return org.DoCheck();
         }
         /// <summary>
@@ -221,7 +223,7 @@ namespace BP.WF.Port.AdminGroup
                 return "err@admin组织不能取消.";
 
             //流程类别.
-            BP.WF.Template.FlowSorts fss = new Template.FlowSorts();
+            BP.WF.Template.FlowSorts fss = new BP.WF.Template.FlowSorts();
             fss.Retrieve(OrgAdminerAttr.OrgNo, this.No);
             foreach (BP.WF.Template.FlowSort en in fss)
             {
@@ -246,7 +248,7 @@ namespace BP.WF.Port.AdminGroup
             OrgAdminers oas = new OrgAdminers();
             oas.Delete(OrgAdminerAttr.OrgNo, this.No);
 
-            BP.WF.Template.FlowSorts fs = new Template.FlowSorts();
+            BP.WF.Template.FlowSorts fs = new BP.WF.Template.FlowSorts();
             fs.Delete(OrgAdminerAttr.OrgNo, this.No);
 
             fss.Delete(OrgAdminerAttr.OrgNo, this.No); //删除流程目录.
@@ -285,12 +287,12 @@ namespace BP.WF.Port.AdminGroup
 
             //检查超级管理员是否存在？
             OrgAdminer oa = new OrgAdminer();
-            oa.FK_Emp = old;
+            oa.EmpNo = old;
             oa.OrgNo = this.No;
             oa.Delete(OrgAdminerAttr.FK_Emp, old, OrgAdminerAttr.OrgNo, this.No);
 
             //插入到管理员.
-            oa.FK_Emp = emp.UserID;
+            oa.EmpNo = emp.UserID;
             oa.Save();
 
             //检查超级管理员是否存在？

@@ -1,0 +1,42 @@
+﻿/*默认*/
+.color_gray {
+    filter: contrast(0%) brightness(120%);
+}
+
+.color_blue {
+    filter: hue-rotate(200deg) brightness(130%);
+}
+
+.color_blue_b {
+    filter: hue-rotate(260deg) brightness(120%);
+}
+
+.color_red {
+    filter: hue-rotate(90deg) brightness(220%);
+    /*background-color: red !important;*/
+}
+
+.color_yellow {
+    filter: hue-rotate(90deg) brightness(220%);
+    /*background-color: red !important;*/
+}
+
+.color_orange {
+    filter: hue-rotate(60deg) brightness(260%);
+}
+
+.color_green {
+    filter: hue-rotate(90deg) brightness(220%);
+    /*background-color: green !important;*/
+}
+.color_purple {
+    filter: hue-rotate(300deg) brightness(120%);
+}
+
+
+
+
+
+.select_csstemp {
+    background-color: #b7ebd0 !important;
+}

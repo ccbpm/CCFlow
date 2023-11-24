@@ -239,7 +239,7 @@ namespace BP.WF.Port.Admin2Group
         public string AddAdminer(string adminer)
         {
             BP.Port.Emp emp = new BP.Port.Emp();
-            if (SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+            if (SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 emp.No = this.No + "_" + adminer;
             else
                 emp.No = adminer;
@@ -249,14 +249,14 @@ namespace BP.WF.Port.Admin2Group
 
             //检查超级管理员是否存在？
             OrgAdminer oa = new OrgAdminer();
-            oa.FK_Emp = emp.No;
+            oa.EmpNo = emp.No;
             oa.EmpName = emp.Name;
             oa.OrgNo = this.No;
-            oa.MyPK = this.No + "_" + oa.FK_Emp;
+            oa.MyPK = this.No + "_" + oa.EmpNo;
             if (oa.RetrieveFromDBSources() == 1)
                 return "err@管理员已经存在.";
             //插入到管理员.
-            oa.FK_Emp = emp.No;
+            oa.EmpNo = emp.No;
             oa.DirectInsert();
 
             //如果不在同一个组织.就给他一个兼职部门.
@@ -265,8 +265,8 @@ namespace BP.WF.Port.Admin2Group
             if (depts.Count == 0)
             {
                 BP.Port.DeptEmp de = new BP.Port.DeptEmp();
-                de.FK_Dept = this.No;
-                de.FK_Emp = emp.No;
+                de.DeptNo = this.No;
+                de.EmpNo = emp.No;
                 de.MyPK = this.No + "_" + emp.No;
                 de.OrgNo = this.No;
                 de.Save();
@@ -307,7 +307,7 @@ namespace BP.WF.Port.Admin2Group
 
         public string DoCheck()
         {
-            if (SystemConfig.CCBPMRunModel == Sys.CCBPMRunModel.SAAS)
+            if (SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
                 return "err@saas版的检查在开发中..";
 
             string err = "";
@@ -332,7 +332,7 @@ namespace BP.WF.Port.Admin2Group
             #endregion 组织结构信息检查.
 
             #region 检查流程树.
-            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
             fs.No = this.No;
             if (fs.RetrieveFromDBSources() == 1)
             {

@@ -183,7 +183,7 @@ namespace BP.CCOA.WorkLog
             if (this.Count == 0)
             {
                 Emps emps = new Emps();
-                emps.Retrieve(EmpAttr.FK_Dept, WebUser.FK_Dept);
+                emps.Retrieve(EmpAttr.FK_Dept, WebUser.DeptNo);
 
                 foreach (Emp emp in emps)
                 {

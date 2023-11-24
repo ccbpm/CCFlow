@@ -35,7 +35,7 @@ namespace BP.WF.HttpHandler
             string no = this.GetRequestVal("No");
             string name = this.GetRequestVal("Name");
             string note = this.GetRequestVal("Note");
-            var jine = this.GetRequestValFloat("JinE");
+            float jine = this.GetRequestValFloat("JinE");
              
 
             return "学费缴纳成功["+no+"]["+name+"]["+note+"]["+jine+"]";

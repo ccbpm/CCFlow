@@ -69,7 +69,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataVerAttr.Ver, value);
             }
         }
-        public int IsRel
+        public int ItIsRel
         {
             get
             {

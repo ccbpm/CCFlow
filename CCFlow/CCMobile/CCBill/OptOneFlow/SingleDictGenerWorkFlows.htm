@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>业务流程列表</title>
+    <link rel="stylesheet" type="text/css" href="../../Portal/icons/font-icons.min.css" />
+    <!--- 引入代码. -->
+    <script src="../../Scripts/jquery-1.11.0.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <link href="../../js/mui/css/mui.min.css" rel="stylesheet" />
+    <script src="../../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/vue.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-icon mui-icon-left-nav mui-pull-left back-hideen" href="javascript:Back();"></a>
+        <h1 class="mui-title">数据列表</h1>
+    </header>
+    <div id="method"class="mui-content">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <ul class="mui-table-view mui-table-view-chevron" style="top:46px;height:auto">
+                    <li class="mui-table-view-cell mui-collapse mui-active"
+                        v-for="(flow,index) in flows" :key="index" :data-mypk="flow.No"
+                        :data-pid="flow.ParentNo">
+                        <a class="mui-navigate-right" href="#">{{flow.Name}}</a>
+                        <ul class="mui-table-view mui-table-view-chevron">
+                            <li class="mui-table-view-cell" style="padding-left:15px" v-for="(generWorkFlow,idx) in flow.children" :key="idx" :data-pid="flow.No"
+                                :data-id="generWorkFlow.WorkID">
+                                <a @click.stop="OpenMyView(generWorkFlow.FK_Flow,generWorkFlow.WorkID)" target='_self'>
+                                    <h5 style="white-space:normal;line-height:20px;width:90%;word-wrap:break-word; word-break:break-all; color:#096BC1;">{{generWorkFlow.Title}}</h5>
+                                    <h6>发起人：{{generWorkFlow.StarterName}}</h6>
+                                    <h6>发起时间：{{generWorkFlow.RDT}}</h6>
+                                    <h6>停留节点：{{generWorkFlow.NodeName}}</h6>
+                                    <h6>待处理人：{{generWorkFlow.Sender}}</h6>
+                                    <h6>状态：{{generWorkFlow.IconTitle}}</h6>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="SingleDictGenerWorkFlows.js"></script>
+
+</body>
+
+
+</html>

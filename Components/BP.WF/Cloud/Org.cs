@@ -190,7 +190,7 @@ namespace BP.Cloud
         /// <summary>
         /// 该人员是否被禁用.
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -747,7 +747,7 @@ namespace BP.Cloud
                 // map.AddTBString(OrgAttr.SquareLogoUrl, null, "授权方应用方形头像", true, false, 0, 4000, 36);
                 //map.AddTBString(OrgAttr.RoundLogoUl, null, "授权方应用圆形头像", true, false, 0, 4000, 36);
                 #endregion 微信信息
-
+                map.AddTBInt(OrgAttr.OrgSta, 1, "组织状态", true, false);
                 RefMethod rm = new RefMethod();
                 rm.Title = "设置图片签名";
                 rm.ClassMethodName = this.ToString() + ".DoICON";
@@ -867,14 +867,14 @@ namespace BP.Cloud
             dept.DirectInsert();
 
             Emp ep = new Emp(this.No + "_" + this.Adminer);
-            ep.FK_Dept = this.No;
+            ep.DeptNo = this.No;
             ep.OrgNo = this.No; //所在公司.
            
             ep.Update();
 
             //写入Port_OrgAdminer表中，供查询是否是管理员.
             BP.WF.Port.Admin2Group.OrgAdminer orgAdminer = new BP.WF.Port.Admin2Group.OrgAdminer();
-            orgAdminer.FK_Emp = ep.UserID;
+            orgAdminer.EmpNo = ep.UserID;
             orgAdminer.OrgNo = this.No;
             orgAdminer.DirectInsert();
 
@@ -885,9 +885,9 @@ namespace BP.Cloud
             //把这个人员放入到根目录下.
             DeptEmp de = new DeptEmp();
             de.OrgNo = ep.OrgNo;
-            de.FK_Dept = this.No;
-            de.FK_Emp = ep.UserID;
-            de.setMyPK(de.FK_Dept + "_" + de.FK_Emp);
+            de.DeptNo = this.No;
+            de.EmpNo = ep.UserID;
+            de.setMyPK(de.DeptNo + "_" + de.EmpNo);
             de.DirectInsert();
 
             #region 开始创建下级部门.
@@ -911,8 +911,8 @@ namespace BP.Cloud
             //设置主键.
             myde.setMyPK(dept.No + "_" + this.Adminer);
 
-            myde.FK_Dept = dept.No;
-            myde.FK_Emp = this.Adminer;
+            myde.DeptNo = dept.No;
+            myde.EmpNo = this.Adminer;
 
            // myde.EmpNo = this.No + "_" + this.Adminer;
 
@@ -977,9 +977,9 @@ namespace BP.Cloud
 
             //把当前的人员放入到信息部里面去.
             DeptEmpStation des = new DeptEmpStation();
-            des.FK_Dept = myde.FK_Dept;
-            des.FK_Emp = this.Adminer;
-            des.FK_Station = sta.No; //信息部部长.
+            des.DeptNo = myde.DeptNo;
+            des.EmpNo = this.Adminer;
+            des.StationNo = sta.No; //信息部部长.
             des.OrgNo = this.No;
             des.DirectInsert();
 
@@ -1039,7 +1039,7 @@ namespace BP.Cloud
         {
             while (true)
             {
-                string chars = System.Guid.NewGuid().ToString().Substring(0, 4);
+                string chars = DBAccess.GenerGUID().ToString().Substring(0, 4);
                 string str = chars.Substring(0, 1);
                 if (DataType.IsNumStr(str) == true)
                     continue;

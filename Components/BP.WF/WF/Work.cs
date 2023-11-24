@@ -19,7 +19,7 @@ namespace BP.WF
     {
         /// <summary>
         /// 发送人员字段
-        /// 用在节点发送时确定下一个节点接受人员, 类似与发送邮件来选择接受人.
+        /// 用在节点发送时确定下一个节点接受人员, 类似与发送邮件来选择接受人..
         /// 并且在下一个节点属性的 访问规则中选择【按表单SysSendEmps字段计算】有效。
         /// </summary>
         public const string SysSendEmps = "SysSendEmps";
@@ -116,7 +116,7 @@ namespace BP.WF
         /// 检查MD5值是否通过
         /// </summary>
         /// <returns>true/false</returns>
-        public bool IsPassCheckMD5()
+        public bool ItIsPassCheckMD5()
         {
             string md51 = this.GetValStringByKey(WorkAttr.MD5);
             string md52 = Glo.GenerMD5(this);
@@ -153,7 +153,7 @@ namespace BP.WF
         {
             get
             {
-                if (this.HisNode.IsSubThread == false)
+                if (this.HisNode.ItIsSubThread == false)
                     return 0;
                
                 return this.GetValInt64ByKey(WorkAttr.FID);
@@ -161,7 +161,7 @@ namespace BP.WF
             }
             set
             {
-                if (this.HisNode.IsSubThread == false)
+                if (this.HisNode.ItIsSubThread == false)
                     this.SetValByKey(WorkAttr.FID, 0);
                 else
                     this.SetValByKey(WorkAttr.FID, value);
@@ -202,7 +202,7 @@ namespace BP.WF
             int i = qo.DoQuery();
             if (i == 0)
             {
-                if (BP.Difference.SystemConfig.IsDebug == false)
+                if (BP.Difference.SystemConfig.isDebug == false)
                 {
                     this.CheckPhysicsTable();
                     throw new Exception("@节点[" + this.EnDesc + "]数据丢失：WorkID=" + this.OID + " FID=" + this.FID + " sql=" + qo.SQL);

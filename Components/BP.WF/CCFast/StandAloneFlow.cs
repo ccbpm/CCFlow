@@ -139,7 +139,7 @@ namespace BP.CCFast
         protected override bool beforeInsert()
         {
             throw new Exception("err@");
-            return base.beforeInsert();
+          //  return base.beforeInsert();
         }
         #endregion 执行方法.
     }

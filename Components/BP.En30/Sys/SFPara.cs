@@ -1,16 +1,5 @@
-﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Data;
-using System.Data.SqlClient;
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Xml;
-using BP.DA;
+﻿using BP.DA;
 using BP.En;
-using Microsoft.CSharp;
-using Microsoft.Expression.Interactivity.Media;
 
 namespace BP.Sys
 {
@@ -33,7 +22,7 @@ namespace BP.Sys
                 return this.GetValStrByKey("ParaName");
             }
         }
-        public int IsSys
+        public int ItIsSys
         {
             get
             {
@@ -60,10 +49,10 @@ namespace BP.Sys
                     return BP.Web.WebUser.Name;
 
                 if (exp.Equals("@WebUser.FK_Dept"))
-                    return BP.Web.WebUser.FK_Dept;
+                    return BP.Web.WebUser.DeptNo;
 
                 if (exp.Equals("@WebUser.FK_DeptName"))
-                    return BP.Web.WebUser.FK_DeptName;
+                    return BP.Web.WebUser.DeptName;
 
                 if (exp.Equals("@WebUser.OrgNo"))
                     return BP.Web.WebUser.OrgNo;

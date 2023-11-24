@@ -219,7 +219,7 @@ namespace BP.Tools
                     if (attr.Key.Equals("MyNum"))
                         continue;
 
-                    if (attr.IsFKorEnum)
+                    if (attr.ItIsFKorEnum)
                         continue;
 
                     if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
@@ -245,7 +245,7 @@ namespace BP.Tools
                     strLine = "</tr>";
                     foreach (Attr attr in selectedAttrs)
                     {
-                        if (attr.IsFKorEnum)
+                        if (attr.ItIsFKorEnum)
                             continue;
 
                         if (attr.UIVisible == false && attr.MyFieldType != FieldType.RefText)
@@ -276,7 +276,7 @@ namespace BP.Tools
                         else
                         {
                             string text = "";
-                            if (attr.IsFKorEnum || attr.IsFK)
+                            if (attr.ItIsFKorEnum || attr.ItIsFK)
                                 text = dr[attr.Key + "Text"].ToString();
                             else if (dt.Columns.Contains(attr.Key + "T") == true)
                                 text = dr[attr.Key + "T"].ToString();

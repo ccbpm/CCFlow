@@ -347,7 +347,7 @@ namespace BP.WF
         /// <summary>
         /// 隶属年月
         /// </summary>
-        public string FK_NY
+        public string NY
         {
             get
             {
@@ -361,7 +361,7 @@ namespace BP.WF
         /// <summary>
         /// 发起人部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -372,7 +372,7 @@ namespace BP.WF
                 this.SetValByKey(GERptAttr.FK_Dept, value);
             }
         }
-        public string FK_DeptName
+        public string DeptName
         {
             get
             {
@@ -598,7 +598,7 @@ namespace BP.WF
             {
                 this._RptName = value;
 
-                this._SQLCash = null;
+                this._SQLCache = null;
                 this._enMap = null;
                 this.Row = null;
             }

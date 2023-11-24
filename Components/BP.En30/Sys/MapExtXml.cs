@@ -71,6 +71,10 @@ namespace BP.Sys
         /// </summary>
         public const string PageLoadFullDtl = "PageLoadFullDtl";
         /// <summary>
+        /// 下拉框的装载填充
+        /// </summary>
+        public const string PageLoadFullDDL = "PageLoadFullDDL";
+        /// <summary>
         /// 发起流程
         /// </summary>
         public const string StartFlow = "StartFlow";

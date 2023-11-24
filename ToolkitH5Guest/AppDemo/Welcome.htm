@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>SDK模式测试</title>
+    <link href="ccbpm.css" rel="stylesheet" />
+    <!-- 引入常用的JS脚本. -->
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/jquery/jquery.cookie.js"></script>
+
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script src="../WF/config.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        //启动函数
+        $(function () {
+
+        });
+    </script>
+</head>
+<body>
+
+    <fieldset>
+        <legend>SDK模式开发demo</legend>
+
+        <ul>
+            <li>使用sdk模式开发前，您需要了解一些驰骋bpm的基础知识，比如：什么是表单方案、接受人规则，退回规则、权限按钮控制等。</li>
+            <li>SDK模式的开发是一种ccbpm的高级开发模式，需要代码完成更灵活的满足自己业务场景的需求。</li>
+            <li>为了更好的学习、掌握、使用ccbpm的sdk开发，我们特别写这个demo，以及一些开发组件协助开发者快速的完成应用交付.</li>
+            <li>驰骋BPM为您提供的sdk开发组件，节省您大量的开发时间。</li>
+            <li>比如1：获得发起、待办、在途等接口，您不需要在编写代码，直接把/WF/ListAPI.js 引入到您的页面就可以调用方法获得json数据源，生成自己的发起、待办、在途列表.</li>
+            <li>比如2：工作处理器的工具栏组件，您不需要调用发送、退回、移交等接口，您只需要把/WF/Toolbar.js,/WF/WorkCheck.js 的组件引入到您的页面即可。 </li>
+        </ul>
+
+        <legend>系统的部署准备工作。</legend>
+        <ul>
+            <li>第0步:创建一个空白的ccbpm应用，作为驰骋BPM流程应用服务器。</li>
+            <li>第1步:解决自己的系统与ccbpm的组织结构集成的问题, 请参考手册或者百度 ccflow组织集成.</li>
+            <li>第2步:在自己的框架上引入  /WF/ 目录 , 该目录下的文件是ccbpm的客户端开发组件。</li>
+            <li>第3步:修改config.js 文件的配置，指向我们创建的驰骋BPM服务器.</li>
+            <li>第4步:解决登录问题，首先自己开发一个页面比如：\Portal\Login.htm 登录后更新并记录SID到cookies里面.如何开发请参考这个文件代码. </li>
+            <li>第5步:创建生成发起、待办、在途、三大重要的菜单页面。请参考：\AppDemo\Start.htm 发起,Todolist.htm待办,Runing.htm在途三个页面的实现. </li>
+        </ul>
+
+        <legend>请假流程SDK调用模式开发步骤。</legend>
+        <ul>
+            <li>第1步:在自己的系统上创建一个表单，比如：/AppDemo/Frms/F001QingJia.htm </li>
+            <li>第2步:把工作处理器的工具栏组件(/WF/MyFlow.js)引入到您该页面上去。 </li>
+            <li>第3步:创建一个流程在流程服务器上，并且开始节点上点击右键设置表单方案设置为SDK模式的表单，并把url:/AppDemo/Frms/F001QingJia.htm 设置里面去. </li>
+            <li>第4步:在页面上增加一个保存方法Save() 用与保存到自己的数据库里。 </li>
+        </ul>
+
+        <legend>组件目录结构</legend>
+        <table style=" border:1px;">
+            <tr>
+                <th> 目录/文件名 </th>
+                <th> 中文 </th>
+                <th> 说明 </th>
+            </tr>
+            <tr>
+                <td> /WF/Img/*.*  </td>
+                <td> 一些流程处理器的工具栏上的图片文件 </td>
+                <td> 美工根据需要可以自行编辑 </td>
+            </tr>
+
+            <tr>
+                <td> /WF/Script/*.*  </td>
+                <td> bootstrap  jquery 一些组件 </td>
+                <td> 在加载其他组件的时候，根据需要会自动载入。 </td>
+            </tr>
+
+            <tr>
+                <td> /WF/Style/*.*  </td>
+                <td> 风格文件 </td>
+                <td>  </td>
+            </tr>
+
+            <tr>
+                <td> /WF/config.js  </td>
+                <td> 组件配置文件 </td>
+                <td> 配置要调用的驰骋BPM服务器地址. </td>
+            </tr>
+
+            <tr>
+                <td> /WF/Dev2Interface.js  </td>
+                <td> 接口列表 </td>
+                <td> 使用javascript格式的接口,发送，保存，撤销，移交, 这些接口在下面的文件里有demo </td>
+            </tr>
+
+            <tr>
+                <td> /WF/Dev2InterfaceDemo.html  </td>
+                <td> 接口单元测试 </td>
+                <td>  调用 Dev2Interface.js 的接口. </td>
+            </tr>
+
+            <tr>
+                <td> /WF/ToolBar.js  </td>
+                <td> 工作处理器toolbar按钮 </td>
+                <td> 需要在您的页面上增加一个div id命名为ToolBar,系统就会把发送，保存，退回按钮解析到这个div上。</td>
+            </tr>
+
+            <tr>
+                <td> /WF/WorkCheck.js  </td>
+                <td> 审核组件 </td>
+                <td> 需要在您的页面上增加一个div id命名为WorkCheck, 。</td>
+            </tr>
+        </table>
+
+        <legend>流程业务查询</legend>
+        <ul>
+            <li> 流程业务表存储规则要根据用户使用了什么类型的表单. </li>
+            <li> 每个流程业务表都有一个WorkID字段列与工作流引擎的 WF_GenerWorkFlow的对应。 </li>
+            <li> 业务字段与流程引擎字段可以关联查询，生成视图，提供给开发人员进行业务数据的开发查询。 </li>
+        </ul>
+
+    </fieldset>
+
+</body>
+</html>

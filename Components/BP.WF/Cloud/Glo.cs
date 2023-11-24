@@ -63,7 +63,7 @@ namespace BP.Cloud
             {
                 emp.No = userID;
                 emp.Name = userName;
-                emp.FK_Dept = orgNo;
+                emp.DeptNo = orgNo;
              //   emp.Pass = DBAccess.GenerGUID();
                 emp.Insert();
             } 

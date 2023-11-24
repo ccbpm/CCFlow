@@ -138,7 +138,7 @@ namespace BP.WF
                 ps = new Paras();
                 ps.SQL = "UPDATE " + fl.PTable + " SET WFState=" + dbstr + "WFState,FK_Dept=" + dbstr + "FK_Dept,Title=" + dbstr + "Title WHERE OID=" + dbstr + "OID";
                 ps.Add(GERptAttr.WFState, (int)WFState.Blank);
-                ps.Add(GERptAttr.FK_Dept, empStarter.FK_Dept);
+                ps.Add(GERptAttr.FK_Dept, empStarter.DeptNo);
                 ps.Add(GERptAttr.Title, BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk));
                 ps.Add(GERptAttr.OID, wk.OID);
                 DBAccess.RunSQL(ps);
@@ -169,12 +169,12 @@ namespace BP.WF
 
             //将流程信息提前写入wf_GenerWorkFlow,避免查询不到
             gwf.FlowName = fl.Name;
-            gwf.FK_Flow = flowNo;
-            gwf.FK_FlowSort = fl.FK_FlowSort;
+            gwf.FlowNo = flowNo;
+            gwf.FlowSortNo = fl.FlowSortNo;
             gwf.SysType = fl.SysType;
-            gwf.FK_Dept = WebUser.FK_Dept;
-            gwf.DeptName = WebUser.FK_DeptName;
-            gwf.FK_Node = fl.StartNodeID;
+            gwf.DeptNo = WebUser.DeptNo;
+            gwf.DeptName = WebUser.DeptName;
+            gwf.NodeID = fl.StartNodeID;
             gwf.NodeName = nd.Name;
             gwf.WFState = WFState.Runing;
             if (DataType.IsNullOrEmpty(title))
@@ -196,21 +196,21 @@ namespace BP.WF
             //插入待办.
             GenerWorkerList gwl = new GenerWorkerList();
             gwl.WorkID = wk.OID;
-            gwl.FK_Node = nd.NodeID;
-            gwl.FK_Emp = WebUser.No;
+            gwl.NodeID = nd.NodeID;
+            gwl.EmpNo = WebUser.No;
             i = gwl.RetrieveFromDBSources();
 
-            gwl.FK_EmpText = WebUser.Name;
-            gwl.FK_NodeText = nd.Name;
+            gwl.EmpName= WebUser.Name;
+            gwl.NodeName = nd.Name;
             gwl.FID = 0;
-            gwl.FK_Flow = fl.No;
-            gwl.FK_Dept = WebUser.FK_Dept;
-            gwl.DeptName = WebUser.FK_DeptName;
+            gwl.FlowNo = fl.No;
+            gwl.DeptNo = WebUser.DeptNo;
+            gwl.DeptName = WebUser.DeptName;
 
             gwl.SDT = "无";
             gwl.DTOfWarning = DataType.CurrentDateTime;
-            gwl.IsEnable = true;
-            gwl.IsPass = false;
+            gwl.ItIsEnable = true;
+            gwl.ItIsPass = false;
             gwl.PRI = gwf.PRI;
             if (i == 0)
                 gwl.Insert();
@@ -232,8 +232,8 @@ namespace BP.WF
             BP.Web.WebUser.No = guestNo;
             BP.Web.WebUser.Name = guestName;
 
-            BP.Web.WebUser.FK_Dept = "Guest";
-            BP.Web.WebUser.FK_DeptName = "Guest";
+            BP.Web.WebUser.DeptNo = "Guest";
+            BP.Web.WebUser.DeptName = "Guest";
             BP.Web.WebUser.OrgNo = orgNo;
 
             //登陆.

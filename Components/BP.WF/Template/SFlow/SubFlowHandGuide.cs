@@ -59,7 +59,7 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -122,7 +122,7 @@ namespace BP.WF.Template.SFlow
             }
         }
 
-        public bool IsTreeConstruct
+        public bool ItIsTreeConstruct
         {
             get
             {

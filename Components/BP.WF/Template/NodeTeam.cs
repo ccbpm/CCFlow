@@ -45,7 +45,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -103,10 +103,6 @@ namespace BP.WF.Template
                 map.AddDDLEntities(NodeTeamAttr.FK_Team, null, "用户组",
                    new BP.Port.Teams(), true);
 
-                //map.AddTBIntPK(NodeTeamAttr.FK_Node, 0, "节点", false, false);
-                //map.AddDDLEntitiesPK(NodeTeamAttr.FK_Team, null, "用户组",
-                //   new BP.Port.Teams(), true);
-
                 this._enMap = map;
                 return this._enMap;
             }
@@ -114,7 +110,7 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Node + "_" + this.FK_Team);
+            this.setMyPK(this.NodeID + "_" + this.FK_Team);
             return base.beforeUpdateInsertAction();
         }
 
@@ -125,7 +121,7 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             RememberMe remeberMe = new RememberMe();
-            remeberMe.Delete(RememberMeAttr.FK_Node, this.FK_Node);
+            remeberMe.Delete(RememberMeAttr.FK_Node, this.NodeID);
             return base.beforeInsert();
         }
         #endregion

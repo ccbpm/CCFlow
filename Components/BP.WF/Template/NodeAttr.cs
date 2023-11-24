@@ -178,6 +178,11 @@ namespace BP.WF.Template
         /// y
         /// </summary>
         public const string Y = "Y";
+
+        public const string UIWidth = "UIWidth";
+        public const string UIHeight = "UIHeight";
+        public const string UIAngle = "UIAngle";
+
         /// <summary>
         /// 限期小时
         /// </summary>
@@ -356,6 +361,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string AutoJumpExp = "AutoJumpExp";
         /// <summary>
+        /// 自动跳转规则-4
+        /// </summary>
+        public const string AutoJumpRole3 = "AutoJumpRole3";
+        /// <summary>
         /// 跳转事件
         /// </summary>
         public const string SkipTime = "SkipTime";
@@ -452,6 +461,10 @@ namespace BP.WF.Template
 
         public const string NodeEmps = "NodeEmps";
         public const string NodeEmpsT = "NodeEmpsT";
+
+        public const string ARDeptModel ="ARDeptModel";
+	    public const string ARStaModel ="ARStaModel";
+	    public const string ShenFenModel ="ShenFenModel";
         #endregion 对应关系
 
 

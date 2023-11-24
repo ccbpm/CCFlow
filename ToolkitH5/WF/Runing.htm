@@ -64,7 +64,7 @@
             //调用 /WF/Dev2Interface.js 的 DB_Runing() 接口，获得当前人员未处理完的工作列表.
             var db = DB_Runing();
             // db = JSON.parse(db);
-
+            var tablet = "";
             tablet += "<th style='width:50px;'>#</th>";
             //Table1 += "<th>WorkID</th>";
             tablet += "<th style='width:200px;'>标题</th>";
@@ -81,9 +81,8 @@
             //Table1 += "<th>参与人</th>";
 
             tablet += "<th style='width:150px;'>操作</th>";
-            tablet += "</tr>";
             $("#tablet").html(tablet);
-
+            var Table1 = "";
             for (var i = 0; i < db.length; i++) {
                 var en = db[i];
                 Table1 += "<tr>";
@@ -117,15 +116,17 @@
                 Table1 += "</tr>";
                 realCount++;
             }
-            Table1 += "</tbody></table>";
             $("#Table1").html(Table1);
             $("#Table2").html("合计: " + realCount + "条");
         });
         /* 打开表单. */
         function OpenFrm(workid, nodeID, flowNo, fid) {
             var host = ccbpmHostDevelopAPI.replace('/DataUser/DevelopAPI.ashx', '');
+            var localhost = host.split("/");
+            var result = localhost.slice(0, 3).join('/');
+            //debugger;
             //var url = "../WF/MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
-            var url = host + "/WF/MyViewGener.htm?HttpHandlerName=BP.WF.HttpHandler.WF_MyView&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=0&NodeID=" + nodeID + "&Token=" + GetToken();
+            var url = result + "/WF/MyViewGener.htm?HttpHandlerName=BP.WF.HttpHandler.WF_MyView&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=0&NodeID=" + nodeID + "&Token=" + GetToken();
             window.open(url);
             return;
         }
@@ -189,72 +190,6 @@
                     </tr>
                 </thead>
                 <tbody id="Table1">
-                    <tr>
-                        <td scope="row">1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Thornton</td>
-                        <td>Mark</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>@fat</td>
-                        <td>@twitter</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>@fat</td>
-                        <td>@twitter</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>@fat</td>
-                        <td>@twitter</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Jacob</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">3</td>
-                        <td>Thornton</td>
-                        <td>@twitter</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                    </tr>
                 </tbody>
             </table>
             <div class="row">

@@ -72,7 +72,7 @@ namespace BP.WF.HttpHandler
         public string TestFlow_Init()
         {
             //清除缓存.
-            SystemConfig.DoClearCash();
+            SystemConfig.DoClearCache();
 
             if (1 == 2 && BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
@@ -84,11 +84,11 @@ namespace BP.WF.HttpHandler
             {
                 Emp emp = new Emp(this.RefNo);
                 BP.Web.WebUser.SignInOfGener(emp);
-                HttpContextHelper.SessionSet("FK_Flow", this.FK_Flow);
-                return "url@../MyFlow.htm?FK_Flow=" + this.FK_Flow;
+                HttpContextHelper.SessionSet("FK_Flow", this.FlowNo);
+                return "url@../MyFlow.htm?FK_Flow=" + this.FlowNo;
             }
 
-            FlowExt fl = new FlowExt(this.FK_Flow);
+            FlowExt fl = new FlowExt(this.FlowNo);
 
             if (1 == 2 && BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
             {
@@ -123,7 +123,7 @@ namespace BP.WF.HttpHandler
                     DataRow dr = dtEmps.NewRow();
                     dr["No"] = emp.UserID;
                     dr["Name"] = emp.Name;
-                    dr["FK_DeptText"] = emp.FK_DeptText;
+                    dr["FK_DeptText"] = emp.DeptText;
                     dtEmps.Rows.Add(dr);
                 }
                 return BP.Tools.Json.ToJson(dtEmps);
@@ -131,16 +131,16 @@ namespace BP.WF.HttpHandler
 
             //fl.DoCheck();
 
-            int nodeid = int.Parse(this.FK_Flow + "01");
+            int nodeid = int.Parse(this.FlowNo + "01");
             DataTable dt = null;
             string sql = "";
             BP.WF.Node nd = new BP.WF.Node(nodeid);
 
-            if (nd.IsGuestNode)
+            if (nd.ItIsGuestNode)
             {
                 /*如果是guest节点，就让其跳转到 guest登录界面，让其发起流程。*/
                 //这个地址需要配置.
-                return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FK_Flow;
+                return "url@/SDKFlowDemo/GuestApp/Login.htm?FK_Flow=" + this.FlowNo;
             }
 
             try
@@ -150,7 +150,7 @@ namespace BP.WF.HttpHandler
                 {
                     case DeliveryWay.ByStation:
                     case DeliveryWay.ByStationOnly:
-                        sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.FK_Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                        sql = "SELECT Port_Emp.No  FROM Port_Emp LEFT JOIN Port_Dept   Port_Dept_FK_Dept ON  Port_Emp.Dept=Port_Dept_FK_Dept.No  join Port_DeptEmpStation on (fk_emp=Port_Emp.No)   join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         // emps.RetrieveInSQL_Order("select fk_emp from Port_Empstation WHERE fk_station in (select fk_station from WF_NodeStation WHERE FK_Node=" + nodeid + " )", "FK_Dept");
                         break;
                     case DeliveryWay.ByDept:
@@ -165,21 +165,21 @@ namespace BP.WF.HttpHandler
                         else
                             sql = "SELECT No,Name FROM Port_Emp A, WF_NodeEmp B WHERE A.No=B.FK_Emp AND  B.FK_Node=" + nodeid;
 
-                        //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FK_Flow + "01") + " ");
+                        //emps.RetrieveInSQL("select fk_emp from wf_NodeEmp WHERE fk_node=" + int.Parse(this.FlowNo + "01") + " ");
                         break;
                     case DeliveryWay.ByDeptAndStation:
                         //added by liuxc,2015.6.30.
 
-                        sql = "SELECT pdes.FK_Emp AS No"
-                              + " FROM   Port_DeptEmpStation pdes"
-                              + "        INNER JOIN WF_NodeDept wnd"
-                              + "             ON  wnd.FK_Dept = pdes.FK_Dept"
-                              + "             AND wnd.FK_Node = " + nodeid
-                              + "        INNER JOIN WF_NodeStation wns"
-                              + "             ON  wns.FK_Station = pdes.FK_Station"
-                              + "             AND wnd.FK_Node =" + nodeid
-                              + " ORDER BY"
-                              + "        pdes.FK_Emp";
+                      sql = "SELECT pdes.fk_emp AS No"
+                      + " FROM   Port_DeptEmpStation pdes"
+                      + "        INNER JOIN WF_NodeDept wnd"
+                      + "             ON  wnd.fk_dept = pdes.fk_dept"
+                      + "             AND wnd.fk_node = " + nodeid
+                      + "        INNER JOIN WF_NodeStation wns"
+                      + "             ON  wns.FK_Station = pdes.fk_station"
+                      + "             AND wnd.fk_node =" + nodeid
+                      + " ORDER BY"
+                      + "        pdes.fk_emp";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
                         switch (BP.Difference.SystemConfig.AppCenterDBType)
@@ -203,6 +203,14 @@ namespace BP.WF.HttpHandler
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 ";
                                 else
                                     sql = "SELECT  No as FK_Emp FROM Port_Emp limit 0,300 WHERE   OrgNo='" + WebUser.OrgNo + "' ";
+                                break;
+                            case DBType.PostgreSQL:
+                            case DBType.UX:
+                            case DBType.HGDB:
+                                if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp limit 300";
+                                else
+                                    sql = "SELECT  No as FK_Emp FROM Port_Emp limit 300 WHERE   OrgNo='" + WebUser.OrgNo + "' ";
                                 break;
                             default:
                                 return "err@没有判断的数据库类型.";
@@ -257,7 +265,7 @@ namespace BP.WF.HttpHandler
 
                     drNew["No"] = emp.UserID;
                     drNew["Name"] = emp.Name;
-                    drNew["FK_DeptText"] = emp.FK_DeptText;
+                    drNew["FK_DeptText"] = emp.DeptText;
 
                     dtMyEmps.Rows.Add(drNew);
                 }
@@ -281,7 +289,7 @@ namespace BP.WF.HttpHandler
             string userNo = this.GetRequestVal("UserNo");
             BP.WF.Dev2Interface.Port_Login(userNo);
             string sid = BP.WF.Dev2Interface.Port_GenerToken();
-            string url = "../../WF/Port.htm?UserNo=" + userNo + "&Token=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
+            string url = "../../WF/Port.htm?UserNo=" + userNo + "&Token=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FlowNo + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
         }
         #endregion 测试页面.
@@ -303,7 +311,7 @@ namespace BP.WF.HttpHandler
 
                 //判断是不是有.
                 if (DBAccess.IsExitsObject("WF_Flow") == true)
-                    return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='/Portal/Standard/Login.htm' >这里直接登录流程设计器</a>";
+                    return "err@info数据库已经安装上了，您不必在执行安装.";
 
                 Hashtable ht = new Hashtable();
                 ht.Add("CCBPMRunModel", (int)SystemConfig.CCBPMRunModel); //组织结构类型.
@@ -342,12 +350,12 @@ namespace BP.WF.HttpHandler
             }*/
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
-                return "info@单组织版本,系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
+                return "info@单组织版本,系统成功安装.";
 
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc)
-                return "info@集团版本,系统成功安装 点击:<a href='../../Portal/Default.htm' >这里直接登录流程设计器</a>";
+                return "info@集团版本,系统成功安装.";
 
-            return "info@SAAS版本安装成功 点击:<a href='/Portal/SaaS/Admin/Login.htm' >登陆后台, 超级管理员账号:admin,123  演示公司账号:ccs,123 </a>";
+            return "info@SAAS版本安装成功.";
 
             // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
         }
@@ -409,7 +417,7 @@ namespace BP.WF.HttpHandler
 
             string add = "+";
 
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
                 add = "||";
 
             if (templateType == "DDLFullCtrl")

@@ -260,7 +260,6 @@ namespace BP.CCOA.KnowledgeManagement
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
             {
-                qo.addAnd();
                 qo.AddWhere(KnowledgeAttr.OrgNo, " = ", WebUser.OrgNo);
             }
             qo.DoQuery();
@@ -383,12 +382,15 @@ namespace BP.CCOA.KnowledgeManagement
             {
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
+                case DBType.HGDB:
                     sql += " CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "No,'%') OR A.Name like CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "Name,'%'))";
                     break;
                 case DBType.MSSQL:
                     sql += " '%'+" + SystemConfig.AppCenterDBVarStr + "No+'%' OR A.Name like '%'+" + SystemConfig.AppCenterDBVarStr + "Name+'%')";
                     break;
                 case DBType.Oracle:
+                case DBType.KingBaseR3:
+                case DBType.KingBaseR6:
                     sql += " '%'||" + SystemConfig.AppCenterDBVarStr + "No||'%' OR A.Name like '%'||" + SystemConfig.AppCenterDBVarStr + "Name||'%')";
                     break;
                 default:

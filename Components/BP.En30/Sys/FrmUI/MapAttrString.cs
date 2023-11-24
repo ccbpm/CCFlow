@@ -14,7 +14,7 @@ namespace BP.Sys.FrmUI
     public class MapAttrString : EntityMyPK
     {
         #region 文本字段参数属性.
-        public bool IsSupperText
+        public bool ItIsSupperText
         {
             get
             {
@@ -40,7 +40,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -198,7 +198,7 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIWidth, "对自由表单,从表有效,显示文本框的宽度.");
 
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
-                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false); 
+                map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", false, false);
                 //map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件", false, false, MapAttrAttr.UIContralType);
                 //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
@@ -209,9 +209,9 @@ namespace BP.Sys.FrmUI
                 map.SetHelperAlert(MapAttrAttr.UIIsEnable, "不可编辑,让该字段设置为只读.");
 
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-              //  map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
-               // map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
-             //   map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
+                //  map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
+                // map.SetHelperAlert(MapAttrAttr.IsRichText, "以html编辑器呈现或者编写字段.");
+                //   map.AddBoolean(MapAttrAttr.IsSecret, false, "是否保密？", true, true);
 
                 map.AddDDLSysEnum(MapAttrAttr.TextModel, 0, "文本类型", true, true, "TextModel",
                  "@0=普通文本@1=密码框@2=大文本@3=富文本");
@@ -337,7 +337,7 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Icon = "icon-settings";
                 map.AddRefMethod(rm);
-                
+
                 //rm = new RefMethod();
                 //rm.Title = "常用字段";
                 //rm.ClassMethodName = this.ToString() + ".DoGeneralField()";
@@ -382,7 +382,7 @@ namespace BP.Sys.FrmUI
                 rm.Icon = "icon-magnifier";
                 map.AddRefMethod(rm);
 
-              //  map.AddGroupMethod("移动端扫码录入");
+                //  map.AddGroupMethod("移动端扫码录入");
                 rm = new RefMethod();
                 rm.Title = "移动端扫码录入";
                 rm.ClassMethodName = this.ToString() + ".DoQRCode()";
@@ -395,11 +395,11 @@ namespace BP.Sys.FrmUI
                 #region 高级设置.
                 map.AddGroupMethod("高级设置");
                 rm = new RefMethod();
-              //  rm.GroupName = "高级设置";
+                //  rm.GroupName = "高级设置";
                 rm.Title = "字段重命名";
                 rm.ClassMethodName = this.ToString() + ".DoRenameField()";
                 rm.HisAttrs.AddTBString("key1", "@KeyOfEn", "字段重命名为?", true, false, 0, 100, 100);
-               // rm.HisAttrs.AddTBString("k33ey1", "@KeyOfEn", "字段重33命名为?", true, false, 0, 100, 100);
+                // rm.HisAttrs.AddTBString("k33ey1", "@KeyOfEn", "字段重33命名为?", true, false, 0, 100, 100);
 
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "如果是节点表单，系统就会把该流程上的所有同名的字段都会重命名，包括NDxxxRpt表单。";
@@ -407,7 +407,7 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-              //  rm.GroupName = "高级设置";
+                //  rm.GroupName = "高级设置";
                 rm.Title = "字段类型转换";
                 rm.ClassMethodName = this.ToString() + ".DoTurnFieldType()";
                 rm.HisAttrs.AddTBString("key1", "int", "输入类型，格式:int,float,double,date,datetime,boolean", true, false, 0, 100, 100);
@@ -421,7 +421,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-              //  rm.GroupName = "高级设置";
+                //  rm.GroupName = "高级设置";
                 rm.Icon = "icon-calculator";
                 map.AddRefMethod(rm);
 
@@ -461,11 +461,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoQRCode()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/QRCode.htm?FrmID=" + this.FK_MapData + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/QRCode.htm?FrmID=" + this.FrmID + "&MyPK=" + this.MyPK;
         }
         public string DoGloValStyles()
         {
-            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 字段分组查询语句
@@ -491,10 +491,10 @@ namespace BP.Sys.FrmUI
                         sql = "SELECT '' AS No, '默认风格' as Name ";
                         break;
                     case DBType.Oracle:
-                    case DBType.PostgreSQL:
                     case DBType.UX:
                     case DBType.KingBaseR3:
                     case DBType.KingBaseR6:
+                    case DBType.HGDB:
                         sql = "SELECT '' AS No, '默认风格' as Name FROM DUAL ";
                         break;
                     default:
@@ -520,24 +520,24 @@ namespace BP.Sys.FrmUI
                 ath.Delete(FrmAttachmentAttr.MyPK, this.MyPK);
             }
             //删除可能存在的关联属性.
-            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
+            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);
 
             //删除相关的图片信息.
             if (DBAccess.IsExitsTableCol("Sys_FrmImg", "KeyOfEn") == true)
-                sql = "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
+                sql = "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + this.FrmID + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
             DBAccess.RunSQL(sql);
 
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "T' OR KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterDelete();
         }
@@ -551,7 +551,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }
@@ -565,7 +565,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoStyleEditer()
         {
-            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/StyletDfine/GloValStyles.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         public string DoTurnFieldType(string type)
         {
@@ -626,26 +626,26 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRenameField(string newField)
         {
-            
+
             if (this.KeyOfEn.Equals(newField) == true)
                 return "err@与现在的名字相同.";
 
-            MapData md = new MapData(this.FK_MapData);
+            MapData md = new MapData(this.FrmID);
 
             if (DBAccess.IsExitsTableCol(md.PTable, newField) == true)
                 return "err@该字段已经存在数据表:" + md.PTable + ",您不能重命名.";
 
 
-            string sql = "SELECT COUNT(MyPK) as Num FROM Sys_MapAttr WHERE MyPK='" + this.FK_MapData + "_" + newField + "'";
+            string sql = "SELECT COUNT(MyPK) as Num FROM Sys_MapAttr WHERE MyPK='" + this.FrmID + "_" + newField + "'";
             if (DBAccess.RunSQLReturnValInt(sql) >= 1)
                 return "err@该字段已经存在[" + newField + "].";
 
             //修改字段名.
-            sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FK_MapData + "_" + newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FK_MapData + "'";
+            sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "', MyPK='" + this.FrmID + "_" + newField + "'  WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + this.FrmID + "'";
             DBAccess.RunSQL(sql);
 
             //更新处理他的相关业务逻辑.
-            MapExts exts = new MapExts(this.FK_MapData);
+            MapExts exts = new MapExts(this.FrmID);
             foreach (MapExt item in exts)
             {
                 item.MyPK = item.MyPK.Replace("_" + this.KeyOfEn, "_" + newField);
@@ -667,24 +667,22 @@ namespace BP.Sys.FrmUI
             }
 
             //如果是表单库的表单，需要把数据库中的字段重命名
-            if (DataType.IsNullOrEmpty(md.FK_FormTree) == false && this.FK_MapData.StartsWith("ND") == false)
+            if (DataType.IsNullOrEmpty(md.FormTreeNo) == false && this.FrmID.StartsWith("ND") == false)
             {
                 //对数据库中的字段重命名
                 DBAccess.RenameTableField(md.PTable, this.KeyOfEn, newField);
                 return "重名成功,关闭设置页面重新查看表单设计器中字段属性";
             }
 
-
-
             //如果是节点表单，就修改其他的字段.
-            if (this.FK_MapData.IndexOf("ND") != 0)
+            if (this.FrmID.IndexOf("ND") != 0)
                 return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
 
-            string strs = this.FK_MapData.Replace("ND", "");
+            string strs = this.FrmID.Replace("ND", "");
             strs = strs.Substring(0, strs.Length - 2);
             string rptTable = "ND" + strs + "Rpt";
             MapDatas mds = new MapDatas();
-            mds.Retrieve(MapDataAttr.No, rptTable);
+            mds.Retrieve(MapDataAttr.PTable, rptTable);
             if (mds.Count == 0)
             {
                 sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + rptTable + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + rptTable + "'";
@@ -693,11 +691,17 @@ namespace BP.Sys.FrmUI
 
             foreach (MapData item in mds)
             {
-                sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
-                DBAccess.RunSQL(sql);
-                DBAccess.RenameTableField(item.PTable, this.KeyOfEn, newField);
+                try
+                {
+                    sql = "UPDATE Sys_MapAttr SET KeyOfEn='" + newField + "',  MyPK='" + item.No + "_" + newField + "' WHERE KeyOfEn='" + this.KeyOfEn + "' AND FK_MapData='" + item.No + "'";
+                    DBAccess.RunSQL(sql);
+                    DBAccess.RenameTableField(item.PTable, this.KeyOfEn, newField);
+                }
+                catch 
+                {
+                    continue;
+                }
             }
-
 
             //自由表单模板的替换 
             return "重名称成功,如果是自由表单，请关闭表单设计器重新打开.";
@@ -708,7 +712,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string BindFunction()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&T=" + DateTime.Now.ToString();
         }
         /// <summary>
         /// 快速录入
@@ -716,15 +720,15 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoFastEnter()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FastInput.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         public string DoFieldNameLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/FieldNameLink.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         public string DoReadOnlyLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/ReadOnlyLink.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/ReadOnlyLink.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
 
         }
         /// <summary>
@@ -733,7 +737,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPop2019()
         {
-            return "../../Admin/FoolFormDesigner/Pop/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/Pop/Default.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置常用字段
@@ -741,7 +745,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoGeneralField()
         {
-            return "../../Admin/FoolFormDesigner/General/GeneralField.htm?FrmID=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/General/GeneralField.htm?FrmID=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 全局默认值
@@ -749,7 +753,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoDefVal()
         {
-            return "../../Admin/FoolFormDesigner/DefVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/DefVal.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 
@@ -760,7 +764,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string StringJoint()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/StringJoint.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/StringJoint.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 简单列表模式
@@ -768,7 +772,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
         /// <summary>
         /// 多条件查询列表模式
@@ -776,7 +780,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopFullCtrlAdv()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
         #endregion 方法执行 Pop填充自动完成.
 
@@ -797,7 +801,7 @@ namespace BP.Sys.FrmUI
         public string DoSetFlowBBS()
         {
             MapAttrs mapAttrs = new MapAttrs();
-            mapAttrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.UIContralType, (int)UIContralType.FlowBBS);
+            mapAttrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.UIContralType, (int)UIContralType.FlowBBS);
             if (mapAttrs.Count == 0)
             {
                 this.UIContralType = UIContralType.FlowBBS;
@@ -807,7 +811,7 @@ namespace BP.Sys.FrmUI
                 return "设置成功,当前文本框已经是评论组件了,请关闭掉当前的窗口.";
             }
 
-            return "表单中只能存在一个评论组件，表单" + this.FK_MapData + "已经存在评论组件不能再增加";
+            return "表单中只能存在一个评论组件，表单" + this.FrmID + "已经存在评论组件不能再增加";
         }
         /// <summary>
         /// 批处理
@@ -815,8 +819,8 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEleBatch()
         {
-            //return "../../Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
-            return "../../Admin/FoolFormDesigner/EleBatch.htm?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
+            //return "../../Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FrmID;
+            return "../../Admin/FoolFormDesigner/EleBatch.htm?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FrmID;
         }
         /// <summary>
         /// 小范围多选
@@ -824,13 +828,13 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoMultipleChoiceSmall()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall/Default.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
         }
 
 
         public string DSingleChoiceSmall()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/SingleChoiceSmall/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/SingleChoiceSmall/Default.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
 
         }
         /// <summary>
@@ -839,12 +843,12 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoMultipleChoiceSearch()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSearch.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
         }
 
         public string DoFastInput()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/MultipleInputSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleInputSearch.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
 
         }
         /// <summary>
@@ -853,7 +857,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoLink()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/Link.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=Link_" + this.FK_MapData + "_" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/Link.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=Link_" + this.FrmID + "_" + this.KeyOfEn;
         }
         /// <summary>
         /// 设置开窗返回值
@@ -861,7 +865,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=PopVal_" + this.FK_MapData + "_" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=PopVal_" + this.FrmID + "_" + this.KeyOfEn;
         }
         /// <summary>
         /// 正则表达式
@@ -869,7 +873,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRegularExpression()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
 
         /// <summary>
@@ -878,7 +882,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl2019()
         {
-            return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/TBFullCtrl/Default.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + this.MyPK;
         }
 
         /// <summary>
@@ -887,7 +891,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + this.KeyOfEn + "&RefNo=" + this.MyPK + "&DoType=New&ExtType=InputCheck";
+            return "../../Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FrmID + "&OperAttrKey=" + this.KeyOfEn + "&RefNo=" + this.MyPK + "&DoType=New&ExtType=InputCheck";
         }
         /// <summary>
         /// 扩展控件
@@ -895,7 +899,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         /// <summary>
         /// 扩展控件2019
@@ -903,7 +907,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral2019()
         {
-            return "../../Admin/FoolFormDesigner/EditFExtContral/Default.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "../../Admin/FoolFormDesigner/EditFExtContral/Default.htm?FK_MapData=" + this.FrmID + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
         }
         #endregion 方法执行.
 
@@ -934,7 +938,7 @@ namespace BP.Sys.FrmUI
 
                 string sql = "";
                 MapData md = new MapData();
-                md.No = this.FK_MapData;
+                md.No = this.FrmID;
                 if (md.RetrieveFromDBSources() == 1)
                 {
                     if (DBAccess.IsExitsTableCol(md.PTable, this.KeyOfEn) == true)
@@ -953,15 +957,16 @@ namespace BP.Sys.FrmUI
                                 break;
                             case DBType.KingBaseR3:
                             case DBType.KingBaseR6:
-                                sql = "ALTER table " + md.PTable + " ADD  COLUMN " + attr.Field + " Type NVARCHAR2(" + attr.MaxLen + ")";
+                                sql = "ALTER table " + md.PTable + " ALTER COLUMN " + attr.Field + " Type VARCHAR2(" + attr.MaxLen + ")";
                                 break;
                             case DBType.PostgreSQL:
                             case DBType.UX:
+                            case DBType.HGDB:
                                 sql = "ALTER table " + md.PTable + " alter " + attr.Field + " type character varying(" + attr.MaxLen + ")";
                                 break;
                             default:
                                 throw new Exception("err@没有判断的数据库类型.");
-                        }                        
+                        }
                         DBAccess.RunSQL(sql); //如果是oracle如果有nvarchar与varchar类型，就会出错.
                     }
                 }
@@ -972,14 +977,14 @@ namespace BP.Sys.FrmUI
 
             #region 设置默认值.
             MapData mymd = new MapData();
-            mymd.No = this.FK_MapData;
-            if (mymd.RetrieveFromDBSources() == 1 && attr.DefVal.Equals(this.GetValStrByKey("DefVal")) ==false)
+            mymd.No = this.FrmID;
+            if (mymd.RetrieveFromDBSources() == 1 && (attr.TextModel == 0 || attr.TextModel == 1)|| attr.DefVal.Equals(this.GetValStrByKey("DefVal")) == false)
                 BP.DA.DBAccess.UpdateTableColumnDefaultVal(mymd.PTable, attr.Field, this.GetValStrByKey("DefVal"));
             #endregion 设置默认值.
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
+            if (defval.Equals("") || defval.Equals("0"))
             {
                 string defVal = this.GetValStrByKey("DefVal");
                 if (defval.Contains("@") == true)
@@ -993,7 +998,7 @@ namespace BP.Sys.FrmUI
             //执行保存.
             attr.Save();
 
-            if (this.GetValStrByKey("GroupID") == "无")
+            if (this.GetValStrByKey("GroupID").Equals("无"))
                 this.SetValByKey("GroupID", "0");
 
 

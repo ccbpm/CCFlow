@@ -23,7 +23,7 @@ namespace BP.CCFast.CCMenu
     public class GroupDept : EntityMyPK
     {
         #region 属性
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -34,7 +34,7 @@ namespace BP.CCFast.CCMenu
                 this.SetValByKey(GroupDeptAttr.FK_Dept, value);
             }
         }
-        public string FK_Group
+        public string GroupNo
         {
             get
             {
@@ -78,7 +78,7 @@ namespace BP.CCFast.CCMenu
         protected override bool beforeInsert()
         {
             //
-            this.MyPK = this.FK_Group + "_" + this.FK_Dept;
+            this.MyPK = this.GroupNo + "_" + this.DeptNo;
             
             return base.beforeInsert();
         }

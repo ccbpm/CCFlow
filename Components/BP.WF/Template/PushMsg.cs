@@ -150,7 +150,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -192,7 +192,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -795,9 +795,7 @@ namespace BP.WF.Template
             string hostUrl = BP.WF.Glo.HostURL;
 
             string sid = DBAccess.GenerGUID() + "_" + workid + "_{EmpStr}_" + currNode.NodeID;
-
             string openWorkURl = "";
-
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 //openWorkURl = hostUrl + "/App/Portal/GuideWeiXin.aspx?DoType=OpenWork&WorkID=" + workid + "&FK_Flow=" + currNode.FK_Flow + "&GUID=" + WebUser.SID;
@@ -847,7 +845,7 @@ namespace BP.WF.Template
             if (this.SMSPushWay == 0)
                 return "";
 
-            string atParas = "@FK_Flow=" + currNode.FK_Flow + "@WorkID=" + workid + "@NodeID=" + currNode.NodeID + "@FK_Node=" + currNode.NodeID;
+            string atParas = "@FK_Flow=" + currNode.FlowNo + "@WorkID=" + workid + "@NodeID=" + currNode.NodeID + "@FK_Node=" + currNode.NodeID;
             string generAlertMessage = ""; //定义要返回的提示消息.
             string mailTitle = this.MailTitle;// 邮件标题.
             string smsDoc = this.SMSDoc;//消息模板.
@@ -883,9 +881,11 @@ namespace BP.WF.Template
             {
                 //获取退回原因
                 Paras ps = new Paras();
+                if (DataType.IsNullOrEmpty(this.FlowNo))
+                    this.FlowNo = r.GetValStrByKey("FK_Flow");
                 //ps.SQL = "SELECT BeiZhu,ReturnerName,IsBackTracking FROM WF_ReturnWork WHERE WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                ps.SQL = "SELECT Msg,EmpFrom FROM ND"+Int32.Parse(this.FK_Flow)+"Track WHERE (ActionType=2 OR ActionType=201) AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
-                ps.Add(ReturnWorkAttr.WorkID, Int64.Parse(en.PKVal.ToString()));
+                ps.SQL = "SELECT Msg,EmpFrom FROM ND"+Int32.Parse(this.FlowNo)+"Track WHERE (ActionType=2 OR ActionType=201) AND WorkID=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "WorkID  ORDER BY RDT DESC";
+                ps.Add(TrackAttr.WorkID, Int64.Parse(en.PKVal.ToString()));
                 DataTable retunWdt = DBAccess.RunSQLReturnTable(ps);
                 if (retunWdt.Rows.Count != 0)
                 {
@@ -925,7 +925,7 @@ namespace BP.WF.Template
                     if (DataType.IsNullOrEmpty(nodeID) == true)
                         continue;
 
-                    string sql = "SELECT EmpFromT AS Name,EmpFrom AS No FROM ND" + int.Parse(this.FK_Flow) + "Track A  WHERE  A.ActionType=1 AND A.WorkID=" + workid + " AND A.NDFrom=" + nodeID;
+                    string sql = "SELECT EmpFromT AS Name,EmpFrom AS No FROM ND" + int.Parse(this.FlowNo) + "Track A  WHERE  A.ActionType=1 AND A.WorkID=" + workid + " AND A.NDFrom=" + nodeID;
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                         continue;
@@ -948,7 +948,7 @@ namespace BP.WF.Template
                                 smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
                                 openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                                string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
+                                string paras = "@FK_Flow=" + this.FlowNo + "@WorkID=" + workid + "@FK_Node=" + this.NodeID + "_" + empNo;
 
                                 //发送消息.
                                 BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
@@ -983,9 +983,9 @@ namespace BP.WF.Template
                 //替换SQL中的参数
                 bySQL = bySQL.Replace("@WebUser.No", WebUser.No);
                 bySQL = bySQL.Replace("@WebUser.Name", WebUser.Name);
-                bySQL = bySQL.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-                bySQL = bySQL.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-                bySQL = bySQL.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                bySQL = bySQL.Replace("@WebUser.FK_DeptNameOfFull", WebUser.DeptNameOfFull);
+                bySQL = bySQL.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+                bySQL = bySQL.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
                 /*如果仍然有没有替换下来的变量.*/
                 if (bySQL.Contains("@") == true)
                     bySQL = BP.WF.Glo.DealExp(bySQL, en, null);
@@ -1008,7 +1008,7 @@ namespace BP.WF.Template
                             smsDocReal = smsDocReal.Replace("{EmpStr}", empName);
                             openUrl = openUrl.Replace("{EmpStr}", empNo);
 
-                            string paras = "@FK_Flow=" + this.FK_Flow + "@WorkID=" + workid + "@FK_Node=" + this.FK_Node + "_" + empNo;
+                            string paras = "@FK_Flow=" + this.FlowNo + "@WorkID=" + workid + "@FK_Node=" + this.NodeID + "_" + empNo;
 
                             //发送消息
                             BP.WF.Dev2Interface.Port_SendMessage(empNo, smsDocReal, mailTitle, this.FK_Event, "WKAlt" + currNode.NodeID + "_" + workid, BP.Web.WebUser.No, openUrl, this.SMSPushModel, workid, null, atParas);
@@ -1342,7 +1342,7 @@ namespace BP.WF.Template
         }
         protected override bool beforeUpdateInsertAction()
         {
-            //  this.setMyPK(this.FK_Event + "_" + this.FK_Node + "_" + this.PushWay;
+            //  this.setMyPK(this.FK_Event + "_" + this.NodeID + "_" + this.PushWay;
 
 
             //  string sql = "UPDATE WF_PushMsg SET FK_Flow=(SELECT FK_Flow FROM WF_Node WHERE NodeID= WF_PushMsg.FK_Node)";
@@ -1366,7 +1366,7 @@ namespace BP.WF.Template
         /// <param name="flowNo">流程编号</param>
         public PushMsgs(string flowNo)
         {
-            //this.RetrieveFromCash(PushMsgAttr.FK_Flow, flowNo);
+            //this.RetrieveFromCache(PushMsgAttr.FK_Flow, flowNo);
             this.Retrieve(PushMsgAttr.FK_Flow, flowNo);
         }
         /// <summary>
@@ -1375,7 +1375,7 @@ namespace BP.WF.Template
         /// <param name="nodeid">节点ID</param>
         public PushMsgs(int nodeid)
         {
-            // this.RetrieveFromCash(PushMsgAttr.FK_Node, nodeid);
+            // this.RetrieveFromCache(PushMsgAttr.FK_Node, nodeid);
             this.Retrieve(PushMsgAttr.FK_Node, nodeid);
         }
         /// <summary>

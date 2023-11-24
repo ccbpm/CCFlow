@@ -33,7 +33,7 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -96,7 +96,7 @@ namespace BP.WF.Template.SFlow
                 SetValByKey(SubFlowYanXuAttr.ExpType, (int)value);
             }
         }
-        public string FK_Node
+        public string NodeID
         {
             get
             {
@@ -203,7 +203,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_2");
+            this.setMyPK(this.NodeID + "_" + this.SubFlowNo + "_2");
             return base.beforeInsert();
         }
 
@@ -214,7 +214,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         public string DoUp()
         {
-            this.DoOrderUp(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
+            this.DoOrderUp(SubFlowYanXuAttr.FK_Node, this.NodeID, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
             return "执行成功";
         }
         /// <summary>
@@ -223,7 +223,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         public string DoDown()
         {
-            this.DoOrderDown(SubFlowYanXuAttr.FK_Node, this.FK_Node, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
+            this.DoOrderDown(SubFlowYanXuAttr.FK_Node, this.NodeID, SubFlowYanXuAttr.SubFlowType, "2", SubFlowYanXuAttr.Idx);
             return "执行成功";
         }
         #endregion 移动.

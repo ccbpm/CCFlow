@@ -187,7 +187,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -215,7 +215,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -243,7 +243,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 当前节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -313,7 +313,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 人员编号
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -341,7 +341,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程类别
         /// </summary>
-        public string FK_FlowSort
+        public string FlowSortNo
         {
             get
             {
@@ -546,7 +546,7 @@ namespace BP.WF.Data
 
         public string DoOpenTrack()
         {
-            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow;
+            return "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo;
         }
     }
     /// <summary>

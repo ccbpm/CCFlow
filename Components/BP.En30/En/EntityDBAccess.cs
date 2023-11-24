@@ -34,7 +34,7 @@ namespace BP.En
             switch (en.EnMap.EnDBUrl.DBUrlType)
             {
                 case DBUrlType.AppCenterDSN:
-                    return DBAccess.RunSQL(en.SQLCash.Delete, SqlBuilder.GenerParasPK(en));
+                    return DBAccess.RunSQL(en.SQLCache.Delete, SqlBuilder.GenerParasPK(en));
                 default:
                     throw new Exception("@没有设置类型。");
             }
@@ -50,8 +50,8 @@ namespace BP.En
             if (en.EnMap.EnType == EnType.View)
                 return 0;
 
-            var paras = SqlBuilder.GenerParas(en, keys);
-            string sql = en.SQLCash.GetUpdateSQL(en, keys);
+            Paras paras = SqlBuilder.GenerParas(en, keys);
+            string sql = en.SQLCache.GetUpdateSQL(en, keys);
             try
             {
                 switch (en.EnMap.EnDBUrl.DBUrlType)
@@ -68,7 +68,7 @@ namespace BP.En
                             case DBType.KingBaseR6:
                                 return DBAccess.RunSQL(sql, paras);
                             default:
-                                //return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys),
+                                //return DBAccess.RunSQL(en.SQLCache.GetUpdateSQL(en, keys),
                                 //    SqlBuilder.GenerParas(en, keys));
                                 if (keys != null)
                                 {
@@ -85,11 +85,11 @@ namespace BP.En
                                             }
                                         }
                                     }
-                                    return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), ps);
+                                    return DBAccess.RunSQL(en.SQLCache.GetUpdateSQL(en, keys), ps);
                                 }
                                 else
                                 {
-                                    return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys),
+                                    return DBAccess.RunSQL(en.SQLCache.GetUpdateSQL(en, keys),
                                         SqlBuilder.GenerParas(en, keys));
                                 }
                                 break;
@@ -109,7 +109,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                if (BP.Difference.SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.isDebug)
                     en.CheckPhysicsTable();
                 throw ex;
             }
@@ -206,7 +206,7 @@ namespace BP.En
         private static void fullDate(DataTable dt, Entity en, Attrs attrs)
         {
             //判断是否加密.
-            if (en.EnMap.IsJM == false)
+            if (en.EnMap.ItIsJM == false)
             {
                 string parafields = en.EnMap.ParaFields;
                 if (parafields == null)
@@ -232,7 +232,7 @@ namespace BP.En
                     }
 
                     //判断枚举字段是否是参数字段.
-                    if (attr.IsRefAttr == true && dt.Columns.Contains(attr.Key) == false)
+                    if (attr.ItIsRefAttr == true && dt.Columns.Contains(attr.Key) == false)
                     {
                         string key = attr.Key.Replace("Text", "");
                         Attr enumAttr = attrs.GetAttrByKey(key);
@@ -251,9 +251,9 @@ namespace BP.En
             //执行解密.
             foreach (Attr attr in attrs)
             {
-                var val = dt.Rows[0][attr.Key];
+                object val = dt.Rows[0][attr.Key];
 
-                if (attr.IsPK == false && attr.MyDataType == DataType.AppString)
+                if (attr.ItIsPK == false && attr.MyDataType == DataType.AppString)
                     val = val;
 
                 en.Row.SetValByKey(attr.Key, val);

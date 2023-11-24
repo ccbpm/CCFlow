@@ -57,7 +57,7 @@ namespace BP.WF.DTS
                     continue;
 
                 NodeSimples toNDs = item.HisToNodeSimples;
-                var num = 0;
+                int num = 0;
                 foreach (NodeSimple nd in toNDs)
                 {
                     sql = "SELECT * FROM WF_Cond WHERE CondType=2 and FK_Node=" + item.NodeID + " AND ToNodeID=" + nd.NodeID;
@@ -66,7 +66,7 @@ namespace BP.WF.DTS
                         num++;
                 }
                 if (num > 1)
-                    err += "<br>@流程["+item.FK_Flow+","+item.FlowName+"],节点["+item.NodeID+","+item.Name+"]方向条件设置错误,到达的节点有[" + toNDs.Count + "]个，没有设置连接线条件的有["+num+"]个";
+                    err += "<br>@流程["+item.FlowNo+","+item.FlowName+"],节点["+item.NodeID+","+item.Name+"]方向条件设置错误,到达的节点有[" + toNDs.Count + "]个，没有设置连接线条件的有["+num+"]个";
             }
 
 

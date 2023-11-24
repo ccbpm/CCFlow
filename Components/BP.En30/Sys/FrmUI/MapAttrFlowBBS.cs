@@ -17,7 +17,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -161,7 +161,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }

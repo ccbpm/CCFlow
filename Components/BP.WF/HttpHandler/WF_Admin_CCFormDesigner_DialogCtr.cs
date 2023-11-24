@@ -24,7 +24,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Hiddenfielddata()
         {
-            return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
+            return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FrmID);
         }
         /// <summary>
         /// 
@@ -42,67 +42,67 @@ namespace BP.WF.HttpHandler
             {
                 case "Dtl":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                    ps.Add("FK_MapData", this.FK_MapData);
-                    //sql = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "'";
+                    ps.Add("FK_MapData", this.FrmID);
+                    //sql = "SELECT COUNT(*) FROM Sys_MapDtl WHERE FK_MapData='" + this.FrmID + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
-                    ht.Add("No", this.FK_MapData + "Dtl" + num);
+                    ht.Add("No", this.FrmID + "Dtl" + num);
                     ht.Add("Name", "从表" + num);
                     break;
                 case "AthMulti":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                    ps.Add("FK_MapData", this.FK_MapData);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
+                    ps.Add("FK_MapData", this.FrmID);
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FrmID + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "AthMulti" + num);
                     ht.Add("Name", "多附件" + num);
                     break;
                 case "ImgAth":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                    ps.Add("FK_MapData", this.FK_MapData);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "'";
+                    ps.Add("FK_MapData", this.FrmID);
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FrmID + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "ImgAth" + num);
                     ht.Add("Name", "图片附件" + num);
                     break;
                 case "AthSingle":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                    ps.Add("FK_MapData", this.FK_MapData);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
+                    ps.Add("FK_MapData", this.FrmID);
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FrmID + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "AthSingle" + num);
                     ht.Add("Name", "单附件" + num);
                     break;
                 case "AthImg":
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData";
-                    ps.Add("FK_MapData", this.FK_MapData);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "'";
+                    ps.Add("FK_MapData", this.FrmID);
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FrmID + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "AthImg" + num);
                     ht.Add("Name", "图片附件" + num);
                     break;
                 case "HandSiganture": //手写板.
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "EleType";
-                    ps.Add("FK_MapData", this.FK_MapData);
+                    ps.Add("FK_MapData", this.FrmID);
                     ps.Add("EleType", ctrlType);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='"+ctrlType+"'";
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FrmID + "' AND EleType='"+ctrlType+"'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "HandSiganture" + num);
                     ht.Add("Name", "签字板" + num);
                     break;
                 case "iFrame": //框架
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "EleType";
-                    ps.Add("FK_MapData", this.FK_MapData);
+                    ps.Add("FK_MapData", this.FrmID);
                     ps.Add("EleType", ctrlType);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='" + ctrlType + "'";
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FrmID + "' AND EleType='" + ctrlType + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "iFrame" + num);
                     ht.Add("Name", "框架" + num);
                     break;
                 case "Fieldset": //分组
                     ps.SQL = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_MapData" + " AND EleType=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "EleType";
-                    ps.Add("FK_MapData", this.FK_MapData);
+                    ps.Add("FK_MapData", this.FrmID);
                     ps.Add("EleType", ctrlType);
-                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='" + ctrlType + "'";
+                    //sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FrmID + "' AND EleType='" + ctrlType + "'";
                     num = DBAccess.RunSQLReturnValInt(ps) + 1;
                     ht.Add("No", "Fieldset" + num);
                     ht.Add("Name", "分组" + num);
@@ -166,7 +166,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmTextBoxChoseOneField_Init()
         {
-            DataTable mydt = MapData.GetFieldsOfPTableMode2(this.FK_MapData);
+            DataTable mydt = MapData.GetFieldsOfPTableMode2(this.FrmID);
             mydt.TableName = "dt";
             return BP.Tools.Json.ToJson(mydt);
         }

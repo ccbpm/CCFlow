@@ -399,10 +399,10 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public GloVars(string fk_mapdata)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCache(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

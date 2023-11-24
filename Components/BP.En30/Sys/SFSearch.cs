@@ -102,7 +102,7 @@ namespace BP.Sys
 
             if (runObj == null)
                 runObj = string.Empty;
-
+            runObj = runObj.Replace("~~", "\"");
             runObj = runObj.Replace("~", "'");
             runObj = runObj.Replace("/#", "+"); //为什么？
             runObj = runObj.Replace("/$", "-"); //为什么？
@@ -113,10 +113,10 @@ namespace BP.Sys
                 runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
             if (runObj.Contains("@WebUser.FK_DeptName"))
-                runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
 
             if (runObj.Contains("@WebUser.FK_Dept"))
-                runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
 
             if (runObj.Contains("@") == true && ht != null)
             {
@@ -133,7 +133,7 @@ namespace BP.Sys
                         break;
                 }
             }
-            if (runObj.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (runObj.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -183,7 +183,7 @@ namespace BP.Sys
             }
             if (apiUrl.StartsWith("htt") == false)
             {
-                var mysrc = new SFDBSrc(this.FK_SFDBSrc);
+                SFDBSrc mysrc = new SFDBSrc(this.FK_SFDBSrc);
                 apiUrl = mysrc.ConnString + apiUrl;
             }
             #endregion
@@ -237,7 +237,8 @@ namespace BP.Sys
                 map.AddTBDateTime(SFTableAttr.RDT, null, "创建日期", false, false);
                 map.AddTBString(SFTableAttr.OrgNo, null, "组织编号", false, false, 0, 100, 20);
                 map.AddTBString(SFTableAttr.AtPara, null, "AtPara", false, false, 0, 50, 20);
-
+                //是否有参数
+                map.AddTBInt("IsPara", 0, "IsPara", false, false);
                 //查找.
                 map.AddSearchAttr(SFTableAttr.FK_SFDBSrc);
 

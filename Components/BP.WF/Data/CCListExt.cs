@@ -121,15 +121,15 @@ namespace BP.WF.Data
         /// <summary>
         /// 抄送人所在的节点编号
         /// </summary>
-        public int FK_Node
+        public int NodeIDCC
         {
             get
             {
-                return this.GetValIntByKey(CCListAttr.FK_Node);
+                return this.GetValIntByKey(CCListAttr.NodeIDCC);
             }
             set
             {
-                this.SetValByKey(CCListAttr.FK_Node, value);
+                this.SetValByKey(CCListAttr.NodeIDCC, value);
             }
         }
 
@@ -181,16 +181,6 @@ namespace BP.WF.Data
             set
             {
                 this.SetValByKey(CCListAttr.PFlowNo, value);
-            }
-        }
-        /// <summary>
-        /// 流程编号
-        /// </summary>
-        public string FK_FlowT
-        {
-            get
-            {
-                return this.GetValRefTextByKey(CCListAttr.FK_Flow);
             }
         }
         public string FlowName
@@ -253,26 +243,26 @@ namespace BP.WF.Data
         /// <summary>
         /// 抄送对象
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
-                return this.GetValStringByKey(CCListAttr.FK_Flow);
+                return this.GetValStringByKey(CCListAttr.FlowNo);
             }
             set
             {
-                this.SetValByKey(CCListAttr.FK_Flow, value);
+                this.SetValByKey(CCListAttr.FlowNo, value);
             }
         }
-        public string Rec
+        public string RecEmpNo
         {
             get
             {
-                return this.GetValStringByKey(CCListAttr.Rec);
+                return this.GetValStringByKey(CCListAttr.RecEmpNo);
             }
             set
             {
-                this.SetValByKey(CCListAttr.Rec, value);
+                this.SetValByKey(CCListAttr.RecEmpNo, value);
             }
         }
         /// <summary>
@@ -333,49 +323,37 @@ namespace BP.WF.Data
                 Map map = new Map("WF_CCList", "抄送");
 
                 map.AddMyPK(); //组合主键 WorkID+"_"+FK_Node+"_"+FK_Emp 
+                map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", false, true);
+                map.AddTBInt(CCListAttr.NodeIDWork, 0, "节点", false, false);
+                map.AddTBInt(CCListAttr.FID, 0, "FID", false, false);
+                map.AddTBString(CCListAttr.FlowNo, null, "流程编号", false, false, 0, 5, 10, true);
 
                 map.AddTBString(CCListAttr.Title, null, "标题", true, true, 0, 500, 10, true);
-
                 map.AddDDLSysEnum(CCListAttr.Sta, 0, "状态", true, false, "CCSta", "@0=未读@1=已读@2=已回复@3=删除");
 
-                //状态  @0=抄送@1=已读@2=已回复@3=已删除
-                //map.AddTBInt(CCListAttr.Sta, 0, "状态", true, true);
-                //map.AddTBInt(CCListAttr.IsRepaly, 0, "是否回复？", true, true);
-
-                map.AddTBString(CCListAttr.FK_Flow, null, "流程编号", false, false, 0, 5, 10, true);
-                map.AddTBString(CCListAttr.FlowName, null, "流流程", true, true, 0, 200, 10, true);
-
-                map.AddTBInt(CCListAttr.FK_Node, 0, "节点", false, false);
+                map.AddTBString(CCListAttr.FlowName, null, "流程", true, true, 0, 200, 10, true);
                 map.AddTBString(CCListAttr.NodeName, null, "节点", true, true, 0, 500, 10, true);
-
-                map.AddTBInt(CCListAttr.WorkID, 0, "工作ID", false, true);
-                map.AddTBInt(CCListAttr.FID, 0, "FID", false, false);
-
-                map.AddTBString(CCListAttr.Rec, null, "抄送人员", true, false, 0, 50, 10, true);
-                map.AddTBDateTime(CCListAttr.RDT, null, "抄送日期", true, false);
+                map.AddTBString(CCListAttr.RecEmpNo, null, "抄送人", false, false, 0, 50, 10, false);
+                map.AddTBString(CCListAttr.RecEmpName, null, "抄送人", true, false, 0, 50, 10, true);
+                map.AddTBDateTime(CCListAttr.RDT, null, "抄送日期", true, true);
 
                 map.AddTBString(CCListAttr.CCTo, null, "抄送给", false, false, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.CCToName, null, "抄送给(人员名称)", false, false, 0, 50, 10, true);
 
-                //map.AddTBString(CCListAttr.CCToDept, null, "抄送到部门", true, false, 0, 50, 10, true);
-                //map.AddTBString(CCListAttr.CCToDeptName, null, "抄送给部门名称", true, false, 0, 600, 10, true);
-
                 map.AddTBString(CCListAttr.OrgNo, null, "组织", false, false, 0, 50, 10, true);
-
-                map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, false);
-                map.AddTBDateTime(CCListAttr.ReadDT, null, "阅读时间", true, false);
+                map.AddTBDateTime(CCListAttr.CDT, null, "打开时间", true, true);
+                map.AddTBDateTime(CCListAttr.ReadDT, null, "阅读时间", true, true);
 
                 //add by zhoupeng  
                 map.AddTBString(CCListAttr.Domain, null, "Domain", false, true, 0, 50, 10, true);
                 map.AddTBString(CCListAttr.OrgNo, null, "OrgNo", false, true, 0, 50, 10, true);
 
                 #region 查询条件.
-
                 map.DTSearchLabel = "抄送日期";
                 map.DTSearchKey = CCListAttr.RDT;
                 map.DTSearchWay = BP.Sys.DTSearchWay.ByDate;
 
-                map.AddSearchAttr(CCListAttr.Sta);
+                map.AddSearchAttr(CCListAttr.Sta); //按状态.
 
                 //增加隐藏条件.
                 if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.Single
@@ -429,7 +407,7 @@ namespace BP.WF.Data
         public CCListExts(int fk_node, Int64 workid, Int64 fid)
         {
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(CCListAttr.FK_Node, fk_node);
+            qo.AddWhere(CCListAttr.NodeIDWork, fk_node);
             qo.addAnd();
             if (fid != 0)
                 qo.AddWhereIn(CCListAttr.WorkID, "(" + workid + "," + fid + ")");

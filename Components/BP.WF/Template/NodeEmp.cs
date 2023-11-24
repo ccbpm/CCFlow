@@ -33,7 +33,7 @@ namespace BP.WF.Template
 		/// <summary>
 		///节点
 		/// </summary>
-		public int  FK_Node
+		public int  NodeID
 		{
 			get
 			{
@@ -47,7 +47,7 @@ namespace BP.WF.Template
 		/// <summary>
 		/// 到人员
 		/// </summary>
-		public string FK_Emp
+		public string EmpNo
 		{
 			get
 			{
@@ -58,7 +58,7 @@ namespace BP.WF.Template
 				this.SetValByKey(NodeEmpAttr.FK_Emp,value);
 			}
 		}
-        public string FK_EmpT
+        public string EmpName
         {
             get
             {
@@ -104,7 +104,7 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Node + "_" + this.FK_Emp);
+            this.setMyPK(this.NodeID + "_" + this.EmpNo);
             return base.beforeUpdateInsertAction();
         }
 
@@ -112,7 +112,7 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             if (BP.Difference.SystemConfig.CCBPMRunModel == BP.Sys.CCBPMRunModel.SAAS)
-                this.FK_Emp = Web.WebUser.OrgNo + "_" + this.FK_Emp;
+                this.EmpNo = Web.WebUser.OrgNo + "_" + this.EmpNo;
 
             return base.beforeInsert();
         }

@@ -53,7 +53,7 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
             }
         }
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -127,7 +127,7 @@ namespace BP.Sys.FrmUI
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
 
             BP.Sys.FrmImg imgAth = new BP.Sys.FrmImg();
@@ -159,7 +159,7 @@ namespace BP.Sys.FrmUI
             //把相关的字段也要删除.
             MapAttrString attr = new MapAttrString();
             attr.setMyPK(this.MyPK);
-            attr.setFK_MapData(this.FK_MapData);
+            attr.FrmID =this.FrmID;
             attr.Delete();
 
             base.afterDelete();
@@ -185,10 +185,10 @@ namespace BP.Sys.FrmUI
         /// <param name="fk_mapdata">s</param>
         public ExtImgs(string fk_mapdata)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCache(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

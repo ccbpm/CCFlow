@@ -1,0 +1,29 @@
+
+=== 前端文件的更新.
+
+1. 前端代码最新的都在 D:\CCFlowCloud\CCFlow\WF  
+2. 所有版本的前端代码，都是一致的. 更新代码的时候，可以直接覆盖对方版本的wf目录，然后在提交.
+3. 正规的做法是先删除 对方版本 wf 目录然后copy过去，在提交.
+
+
+== Java版本的更新.
+
+4.  所有java的版本最新代码都在 http://svn.ccflow.org:88/svn/JFlow 
+
+5.  每个java版本 后台只有一个目录不同  src\main\java\bp\difference\*.* 
+
+6, 更新java后端代码，就是把spring mvc 下面的 *.java文件（去掉 difference） 进行覆盖就好.
+
+== .net 后端 版本更新。
+1. 目前有 .net4.0, .net4.5.2 .netcore 三个版本. .net4.0 基本不用了.
+
+2.  最新的后端代码 在  D:\CCFlow2021\Components  他是  .net4.5.2 
+
+3. 不同的版本就是 每个工程下有 Difference 不同。
+
+4.  更新同java版本.
+
+
+
+
+ 

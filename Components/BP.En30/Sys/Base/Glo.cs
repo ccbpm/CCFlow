@@ -70,7 +70,7 @@ namespace BP.Sys.Base
         /// <summary>
         /// 处理命名空间.
         /// </summary>
-        /// <param name="name">类名</param>
+        /// <param name="enName">类名</param>
         /// <returns>返回处理后的名字</returns>
         public static string DealClassEntityName(string enName)
         {
@@ -96,7 +96,7 @@ namespace BP.Sys.Base
             MapData md = new MapData();
             md.No = frmID;
             if(md.RetrieveFromDBSources()!=0)
-                md.ClearAutoNumCash(true); //更新缓存.
+                md.ClearAutoNumCache(true); //更新缓存.
         }
 
         /// <summary>
@@ -153,7 +153,6 @@ namespace BP.Sys.Base
                     break;
                 default:
                     throw new Exception();
-                    break;
             }
             return val;
         }
@@ -394,7 +393,7 @@ namespace BP.Sys.Base
             ul.RDT = DataType.CurrentDateTime;
             try
             {
-                if (BP.Difference.SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.isBSsystem)
                     ul.IP = HttpContextHelper.Request.UserHostAddress;
             }
             catch
@@ -413,7 +412,7 @@ namespace BP.Sys.Base
         {
             //求出保存路径.
             string path = en.EnMap.FJSavePath;
-            if (path == "" || path == null || path == string.Empty)
+            if (path == null || path.Equals("") || path == string.Empty)
                 path =  BP.Difference.SystemConfig.PathOfDataUser + en.ToString() + "/";
 
             if (System.IO.Directory.Exists(path) == false)
@@ -482,7 +481,7 @@ namespace BP.Sys.Base
         public static void File_JiaMi(string fileFullPath)
         {
             //南京宝旺达.
-            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("BWDA"))
             {
 
             }
@@ -490,7 +489,7 @@ namespace BP.Sys.Base
         public static void File_JieMi(string fileFullPath)
         {
             //南京宝旺达.
-            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("BWDA"))
             {
 
             }
@@ -503,7 +502,7 @@ namespace BP.Sys.Base
         public static string String_JieMi(string str)
         {
             //南京宝旺达.
-            if (BP.Difference.SystemConfig.CustomerNo == "BWDA")
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("BWDA"))
             {
                 return str;
             }

@@ -141,7 +141,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmImgAthDBAttr.FileExts, value.Replace(".",""));
+                this.SetValByKey(FrmImgAthDBAttr.FileExts, value.Replace(".", ""));
             }
         }
         /// <summary>
@@ -217,7 +217,7 @@ namespace BP.Sys
         /// <summary>
         /// 附件编号
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -228,14 +228,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmImgAthDBAttr.FK_MapData, value);
             }
         }
-        public void setFK_MapData(string val)
-        { 
-                this.SetValByKey(FrmImgAthDBAttr.FK_MapData, val);
-        }
-    /// <summary>
-    /// 文件大小
-    /// </summary>
-    public float FileSize
+        /// <summary>
+        /// 文件大小
+        /// </summary>
+        public float FileSize
         {
             get
             {
@@ -243,7 +239,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmImgAthDBAttr.FileSize, value/1024);
+                this.SetValByKey(FrmImgAthDBAttr.FileSize, value / 1024);
             }
         }
         #endregion
@@ -277,7 +273,7 @@ namespace BP.Sys
                 Map map = new Map("Sys_FrmImgAthDB", "剪切图片附件数据存储");
 
 
-                map.IndexField = FrmImgAthDBAttr.RefPKVal; 
+                map.IndexField = FrmImgAthDBAttr.RefPKVal;
 
 
                 map.AddMyPK();
@@ -342,9 +338,9 @@ namespace BP.Sys
         /// 剪切图片附件数据存储s
         /// </summary>
         /// <param name="fk_mapdata">s</param>
-        public FrmImgAthDBs(string fk_mapdata,string pkval)
+        public FrmImgAthDBs(string fk_mapdata, string pkval)
         {
-            this.Retrieve(FrmImgAthDBAttr.FK_MapData, fk_mapdata, 
+            this.Retrieve(FrmImgAthDBAttr.FK_MapData, fk_mapdata,
                 FrmImgAthDBAttr.RefPKVal, pkval);
         }
         /// <summary>

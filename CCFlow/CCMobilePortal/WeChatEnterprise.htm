@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>驰骋BPM</title>
+    <link href="../Style/skin/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../CCMobile/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../CCMobile/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../CCMobile/Scripts/config.js" type="text/javascript"></script>
+    <script src="../CCMobile/Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function(){
+            var code = GetQueryString("code");
+            var state = GetQueryString("state");
+            if(code!=null && code !=undefined && code !=""){
+                var handler = new HttpHandler("bp.difference.handler.CCMobileHandler");
+                handler.AddPara("dcode",code);
+                handler.AddPara("state",state);
+                var data = handler.DoMethodReturnString("Auto_Login");
+                if(data.indexOf("err@")==0){
+                    alert("登录失效,请重新登录。");
+                    return;
+                }
+                else{
+                    var json=JSON.parse(data);
+                    var url='../CCMobile/'+json.page+'.htm?Token='+json.token;
+                    window.location.href = url;
+                }
+            }
+            //window.location.href ="https://open.weixin.qq.com/connect/oauth2/authorize?appid=CORPID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state=STATE&agentid=AGENTID#wechat_redirect";
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

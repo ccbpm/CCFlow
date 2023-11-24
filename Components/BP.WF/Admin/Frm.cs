@@ -100,7 +100,7 @@ namespace BP.WF.Admin
                 else
                 {
                     map.AddTBString(MapDataAttr.DBSrc, null, "数据源", false, false, 0, 500, 20);
-                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "目录", new FrmSorts(), true);
+                    map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "目录", new BP.WF.Template.SysFormTrees(), true);
                 }
 
                 //表单的运行类型.

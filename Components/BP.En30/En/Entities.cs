@@ -272,6 +272,21 @@ namespace BP.En
         /// <param name="attr"></param>
         /// <param name="val"></param>
         /// <returns></returns>
+        public Entities GetEntitiesByKey(string attr, object val, string attr2, object val2)
+        {
+            Entities ens = this.GetNewEntity.GetNewEntities;
+            ens.Clear();
+            foreach (Entity en in this)
+            {
+                if (en.GetValStrByKey(attr) == val.ToString()
+                    && en.GetValStrByKey(attr2) == val2.ToString())
+                    ens.AddEntity(en);
+            }
+            if (ens.Count == 0)
+                return null;
+            return ens;
+        }
+
         public Entities GetEntitiesByKey(string attr, string val)
         {
             Entities ens = this.GetNewEntity.GetNewEntities;
@@ -338,24 +353,7 @@ namespace BP.En
         #endregion
 
         #region 对集合的操作
-        /// <summary>
-        /// 装载到内存
-        /// </summary>
-        /// <returns></returns>
-        public int FlodInCash()
-        {
-            //this.Clear();
-            QueryObject qo = new QueryObject(this);
-
-            // qo.Top = 2000;
-            int num = qo.DoQuery();
-
-            /* 把查询个数加入内存 */
-            Entity en = this.GetNewEntity;
-            CashEntity.PubEns(en.ToString(), this, en.PK);
-            BP.DA.Log.DebugWriteInfo("成功[" + en.ToString() + "-" + num + "]放入缓存。");
-            return num;
-        }
+    
 
         /// <summary>
         /// 从集合中删除该对象
@@ -1033,7 +1031,7 @@ namespace BP.En
                     if (myen.Row.ContainsKey(attr.Key) == false)
                         continue;
 
-                    var val = myen.Row[attr.Key];
+                    object val = myen.Row[attr.Key];
                     // var val = myen myen.GetValByKey(attr.Key);
                     if (val == null)
                         continue;
@@ -1051,7 +1049,7 @@ namespace BP.En
                         }
                         catch (Exception ex)
                         {
-                            if (attr.IsNum)
+                            if (attr.ItIsNum)
                             {
                                 dr[attr.Key] = 0;
                                 continue;
@@ -1275,23 +1273,23 @@ namespace BP.En
         }
         #endregion
 
-        #region 查询from cash
+        #region 查询from Cache
         /// <summary>
         /// 缓存查询: 根据 in sql 方式进行。
         /// </summary>
-        /// <param name="cashKey">指定的缓存Key，全局变量不要重复。</param>
+        /// <param name="CacheKey">指定的缓存Key，全局变量不要重复。</param>
         /// <param name="inSQL">sql 语句</param>
         /// <returns>返回放在缓存里面的结果集合</returns>
-        public int RetrieveFromCashInSQL(string cashKey, string inSQL)
+        public int RetrieveFromCacheInSQL(string CacheKey, string inSQL)
         {
             this.Clear();
-            Entities ens = Cash.GetEnsDataExt(cashKey) as Entities;
+            Entities ens = Cache.GetEnsDataExt(CacheKey) as Entities;
             if (ens == null)
             {
                 QueryObject qo = new QueryObject(this);
                 qo.AddWhereInSQL(this.GetNewEntity.PK, inSQL);
                 qo.DoQuery();
-                Cash.SetEnsDataExt(cashKey, this);
+                Cache.SetEnsDataExt(CacheKey, this);
             }
             else
             {
@@ -1308,11 +1306,11 @@ namespace BP.En
         /// <param name="orderBy">排序字段</param>
         /// <param name="isDesc"></param>
         /// <returns>返回放在缓存里面的结果集合</returns>
-        public int RetrieveFromCash(string attrKey, object val, int top, string orderBy, bool isDesc)
+        public int RetrieveFromCache(string attrKey, object val, int top, string orderBy, bool isDesc)
         {
-            string cashKey = this.ToString() + attrKey + val + top + orderBy + isDesc;
+            string CacheKey = this.ToString() + attrKey + val + top + orderBy + isDesc;
             this.Clear();
-            Entities ens = Cash.GetEnsDataExt(cashKey);
+            Entities ens = Cache.GetEnsDataExt(CacheKey);
             if (ens == null)
             {
                 QueryObject qo = new QueryObject(this);
@@ -1335,7 +1333,7 @@ namespace BP.En
                 }
 
                 qo.DoQuery();
-                Cash.SetEnsDataExt(cashKey, this);
+                Cache.SetEnsDataExt(CacheKey, this);
             }
             else
             {
@@ -1349,9 +1347,9 @@ namespace BP.En
         /// <param name="attrKey"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public int RetrieveFromCash(string attrKey, object val)
+        public int RetrieveFromCache(string attrKey, object val)
         {
-            return RetrieveFromCash(attrKey, val, 99999, null, true);
+            return RetrieveFromCache(attrKey, val, 99999, null, true);
         }
         /// <summary>
         /// 缓存查询: 根据相关的条件
@@ -1360,9 +1358,9 @@ namespace BP.En
         /// <param name="val"></param>
         /// <param name="orderby"></param>
         /// <returns></returns>
-        public int RetrieveFromCash(string attrKey, object val, string orderby)
+        public int RetrieveFromCache(string attrKey, object val, string orderby)
         {
-            return RetrieveFromCash(attrKey, val, 99999, orderby, true);
+            return RetrieveFromCache(attrKey, val, 99999, orderby, true);
         }
         /// <summary>
         /// 缓存查询: 根据相关的条件
@@ -1371,9 +1369,9 @@ namespace BP.En
         /// <param name="orderBy"></param>
         /// <param name="isDesc"></param>
         /// <returns></returns>
-        public int RetrieveFromCash(string orderBy, bool isDesc, int top)
+        public int RetrieveFromCache(string orderBy, bool isDesc, int top)
         {
-            return RetrieveFromCash(null, null, top, orderBy, isDesc);
+            return RetrieveFromCache(null, null, top, orderBy, isDesc);
         }
         #endregion
 

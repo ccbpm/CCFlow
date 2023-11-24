@@ -102,7 +102,7 @@ namespace BP.En
         /// <param name="attr">attr</param>
         public void Add(EnDtl en)
         {
-            if (this.IsExits(en))
+            if (this.ItIsExits(en))
                 return;
             this.InnerList.Add(en);
         }
@@ -111,7 +111,7 @@ namespace BP.En
         /// </summary>
         /// <param name="en">要检查的EnDtl</param>
         /// <returns>true/false</returns>
-        public bool IsExits(EnDtl en)
+        public bool ItIsExits(EnDtl en)
         {
             foreach (EnDtl dtl in this)
             {

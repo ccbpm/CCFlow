@@ -18,7 +18,7 @@ namespace BP.WF.HttpHandler
 
         public string FlowTrackDateByWorkID()
         {
-            string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string trackTable = "ND" + int.Parse(this.FlowNo) + "Track";
             string sql = "SELECT NDFrom,NDFromT,EmpFrom,EmpFromT,RDT From " + trackTable + " Where WorkID=" + this.WorkID + " AND ActionType IN(0,1,6,7,8,11,27) Order By RDT";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase

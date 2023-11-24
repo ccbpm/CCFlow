@@ -31,6 +31,21 @@ namespace BP.CCFast.CCMenu
         /// </summary>
         public const string UrlExt = "UrlExt";
         /// <summary>
+        /// 连接（pc）
+        /// </summary>
+        public const string UrlPath = "UrlPath";
+
+        /// iframe 打开方式
+        public const string IframeOpenType = "IframeOpenType";
+        /// <summary>
+        /// 连接（pc）
+        /// </summary>
+        public const string path = "path";
+        /// <summary>
+        /// 连接（pc）
+        /// </summary>
+        public const string Alias = "Alias";
+        /// <summary>
         /// 连接（移动端）
         /// </summary>
         public const string MobileUrlExt = "MobileUrlExt";
@@ -205,7 +220,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 是否启用
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -305,7 +320,7 @@ namespace BP.CCFast.CCMenu
                 this.SetValByKey(MenuAttr.MobileUrlExt, value);
             }
         }
-        public bool IsCheck = false;
+        public bool ItIsCheck = false;
         /// <summary>
         /// 标记
         /// </summary>
@@ -394,8 +409,15 @@ namespace BP.CCFast.CCMenu
                 // @0=系统根目录@1=系统类别@2=系统.
                 map.AddDDLSysEnum(MenuAttr.OpenWay, 1, "打开方式", true, true, MenuAttr.OpenWay,
                     "@0=新窗口@1=本窗口@2=覆盖新窗口");
-
-                map.AddTBString(MenuAttr.UrlExt, null, "PC端连接", true, false, 0, 500, 200, true);
+                string PCLinkHelpDocs = "如果是菜单对应的是Vue组件，需要配置此项和Vue文件地址，此项可以自定义，但是需要携带url参数";
+                PCLinkHelpDocs += "\n例如/StudentSearch?EnName=TS.Demo.Student";
+                PCLinkHelpDocs += "\n也支持url连接，以http/https开头，例如https://www.baidu.com";
+                map.AddTBString(MenuAttr.UrlExt, null, "路由配置", true, false, 0, 500, 200, false, PCLinkHelpDocs);
+                map.AddTBString(MenuAttr.UrlPath, null, "Vue文件路径", false, false, 0, 500, 200, false, "此项需要配置连接对应的vue文件地址，仅支持/src/下文件\n例如:/src/WF/Comm/Search.vue");
+                map.AddTBString(MenuAttr.path, null, "path", false, false, 0, 50, 50);
+                map.AddTBString(MenuAttr.Alias, null, "别名", false, false, 0, 500, 300);
+                map.AddDDLStringEnum(MenuAttr.IframeOpenType,"inner","iframe打开方式","@inner=内嵌@outer=外部",true,"iframe打开方式，可以为项目内打开或者新窗口打开,<p style='color:red'>仅当链接为url时有效<p>");
+                //map.AddTBString(MenuAttr.UrlExt, null, "PC端连接", true, false, 0, 500, 200, true);
                 map.AddTBString(MenuAttr.MobileUrlExt, null, "移动端连接", true, false, 0, 500, 200, true);
 
                 map.AddBoolean(MenuAttr.IsEnable, true, "是否启用?", true, true);

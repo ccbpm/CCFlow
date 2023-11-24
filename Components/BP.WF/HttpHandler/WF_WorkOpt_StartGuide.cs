@@ -21,10 +21,10 @@ namespace BP.WF.HttpHandler
             Int64 pworkid = this.GetRequestValInt64("PWorkID");
             GenerWorkFlow gwfP = new GenerWorkFlow(pworkid);
 
-            Flow fl = new Flow(this.FK_Flow);
+            Flow fl = new Flow(this.FlowNo);
             Work wk=fl.NewWork();
 
-            BP.WF.Dev2Interface.SetParentInfo(this.FK_Flow,this.WorkID,pworkid,null,gwfP.FK_Node,false);
+            BP.WF.Dev2Interface.SetParentInfo(this.FlowNo,this.WorkID,pworkid,null,gwfP.NodeID,false);
             return wk.OID.ToString();
         }
 

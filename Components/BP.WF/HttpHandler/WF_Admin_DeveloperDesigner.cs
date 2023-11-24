@@ -27,7 +27,7 @@ namespace BP.WF.HttpHandler
         public string Designer_Init()
         {
             //获取htmlfrom 信息.
-            string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FK_MapData,
+            string htmlCode = DBAccess.GetBigTextFromDB("Sys_MapData", "No", this.FrmID,
                 "HtmlTemplateFile");
 
             if (DataType.IsNullOrEmpty(htmlCode) == true)
@@ -37,7 +37,7 @@ namespace BP.WF.HttpHandler
             string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/";
             if (Directory.Exists(filePath) == false)
                 Directory.CreateDirectory(filePath);
-            filePath = filePath + this.FK_MapData + ".htm";
+            filePath = filePath + this.FrmID + ".htm";
 
             //写入到html 中
             DataType.WriteFile(filePath, htmlCode);
@@ -57,9 +57,9 @@ namespace BP.WF.HttpHandler
             if (htmlCode.Contains("err@") == true)
                 return "err@错误" + htmlCode;
 
-            htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
+           // htmlCode = HttpUtility.UrlDecode(htmlCode, Encoding.UTF8);
             
-            return BP.WF.Dev2Interface.SaveDevelopForm(htmlCode,this.FK_MapData);
+            return BP.WF.Dev2Interface.SaveDevelopForm(htmlCode,this.FrmID);
 
         }
         #endregion
@@ -120,34 +120,33 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Template_GenerHtml()
         {
-            var fileName = this.GetRequestVal("DevTempName");
-            var fielDir= this.GetRequestVal("DevTempDir");
+            string fileName = this.GetRequestVal("DevTempName");
+            string fielDir= this.GetRequestVal("DevTempDir");
             string path =  BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/"+ fielDir+"/";
 
             string filePath = path + fileName;
-
-            Stream stream = new FileStream(filePath, FileMode.Open);
+            string strHtml = DataType.ReadTextFile(filePath);
+            /*Stream stream = new FileStream(filePath, FileMode.Open);
             Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
             StreamReader reader = new StreamReader(stream, encode);
             string strHtml = reader.ReadToEnd();
 
             reader.Close();
-            stream.Close();
+            stream.Close();*/
             return strHtml;
         }
 
         public string Template_Imp()
         {
-            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的流程模版。";
 
             //设置文件名
-            string fileNewName = System.IO.Path.GetFileName(files[0].FileName);// DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
+            string fileNewName = System.IO.Path.GetFileName(HttpContextHelper.GetNameByIdx(0));// DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
             //文件存放路径
             string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "Style/TemplateFoolDevelopDesigner/" + "" + fileNewName;
-            HttpContextHelper.UploadFile(files[0], filePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
 
             Stream stream = new FileStream(filePath, FileMode.Open);
             Encoding encode = System.Text.Encoding.GetEncoding("UTF-8");
@@ -188,18 +187,18 @@ namespace BP.WF.HttpHandler
         public string ResetFrm_Init()
         {
             //删除html
-            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + this.FK_MapData + ".htm";
+            string filePath =  BP.Difference.SystemConfig.PathOfDataUser + "CCForm/HtmlTemplateFile/" + this.FrmID + ".htm";
             if (File.Exists(filePath) == true)
                 File.Delete(filePath);
 
             //删除存储的html代码
-            string sql = "UPDATE Sys_MapData SET HtmlTemplateFile='' WHERE No='" + this.FK_MapData + "'";
+            string sql = "UPDATE Sys_MapData SET HtmlTemplateFile='' WHERE No='" + this.FrmID + "'";
             DBAccess.RunSQL(sql);
             //删除MapAttr中的数据
-            sql = "Delete Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'";
+            sql = "Delete Sys_MapAttr WHERE FK_MapData='" + this.FrmID + "'";
             DBAccess.RunSQL(sql);
             //删除MapExt中的数据
-            sql = "Delete Sys_MapExt WHERE FK_MapData='" + this.FK_MapData + "'";
+            sql = "Delete Sys_MapExt WHERE FK_MapData='" + this.FrmID + "'";
             DBAccess.RunSQL(sql);
 
             return "重置成功";
@@ -255,7 +254,7 @@ namespace BP.WF.HttpHandler
 
             //清空缓存
             toMapData.RepairMap();
-            SystemConfig.DoClearCash();
+            SystemConfig.DoClearCache();
 
 
         }

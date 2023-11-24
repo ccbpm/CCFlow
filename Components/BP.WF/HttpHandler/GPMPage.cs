@@ -9,6 +9,7 @@ using BP.Sys;
 using BP.En;
 using BP.Difference;
 using BP.Port;
+using System.Collections.Generic;
 
 namespace BP.WF.HttpHandler
 {
@@ -38,8 +39,8 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("No", BP.Web.WebUser.No);
             ht.Add("Name", BP.Web.WebUser.Name);
-            ht.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
-            ht.Add("FK_DeptName", BP.Web.WebUser.FK_DeptName);
+            ht.Add("FK_Dept", BP.Web.WebUser.DeptNo);
+            ht.Add("FK_DeptName", BP.Web.WebUser.DeptName);
             return BP.Tools.Json.ToJson(ht);
         }
 
@@ -61,7 +62,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                string tempFile = BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg";
+                string tempFile = BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.EmpNo + ".jpg";
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
 
@@ -76,7 +77,7 @@ namespace BP.WF.HttpHandler
                 return "err@";
             }
 
-            HttpContextHelper.UploadFile(f, BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.FK_Emp + ".jpg");
+            HttpContextHelper.UploadFile(f, BP.Difference.SystemConfig.PathOfWebApp + "DataUser/Siganture/" + this.EmpNo + ".jpg");
             return "上传成功！";
         }
         #endregion
@@ -271,7 +272,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GPM_DB_Menus()
         {
-            var appNo = this.GetRequestVal("AppNo");
+            string appNo = this.GetRequestVal("AppNo");
 
             var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql1 += " FROM V_GPM_EmpMenu ";
@@ -287,7 +288,7 @@ namespace BP.WF.HttpHandler
             var dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
+            string sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '4' ";
@@ -299,7 +300,7 @@ namespace BP.WF.HttpHandler
             sql2 += " AND MenuType = '4' ";
             sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
 
-            var menus = DBAccess.RunSQLReturnTable(sql2);
+            DataTable menus = DBAccess.RunSQLReturnTable(sql2);
             menus.TableName = "Menus"; //获得菜单.
             if (SystemConfig.AppCenterDBFieldCaseModel != FieldCaseModel.None)
             {
@@ -319,68 +320,13 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
-        /// 获得OA菜单数据.
-        /// </summary>
-        /// <returns></returns>
-        public string GPM_OA_Menus()
-        {
-            var appNo = this.GetRequestVal("AppNo");
-
-            Paras ps = new Paras();
-            string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
-            ps.SQL = "SELECT No FROM GPM_Menu WHERE MenuType=" + dbstr + "MenuType AND FK_App=" + dbstr + "FK_App";
-            ps.Add("MenuType", 2);
-            ps.Add("FK_App", appNo);
-
-            string ParentNo = DBAccess.RunSQLReturnString(ps);
-
-            if (string.IsNullOrWhiteSpace(ParentNo))
-                return "[]";
-
-            var sql1 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
-            sql1 += " FROM v_gpm_empmenu ";
-            sql1 += " WHERE FK_Emp = '" + WebUser.No + "' ";
-            sql1 += " AND ParentNo = '" + ParentNo + "' ";
-            sql1 += " AND FK_App = '" + appNo + "' ";
-            sql1 += " UNION ";  //加入不需要权限控制的菜单.
-            sql1 += "SELECT No,Name, No as FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx";
-            sql1 += " FROM GPM_Menu ";
-            sql1 += " WHERE MenuCtrlWay=1 ";
-            sql1 += " AND ParentNo = '" + ParentNo + "' ";
-            sql1 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
-            var dirs = DBAccess.RunSQLReturnTable(sql1);
-            dirs.TableName = "Dirs"; //获得目录.
-
-            var sql2 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
-            sql2 += " FROM v_gpm_empmenu ";
-            sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
-            sql2 += " AND ParentNo != '" + ParentNo + "'  ";
-            sql2 += " AND FK_App = '" + appNo + "' ";
-            sql2 += " UNION ";  //加入不需要权限控制的菜单.
-            sql2 += "SELECT No,Name, No as FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
-            sql2 += " FROM GPM_Menu "; //加入不需要权限控制的菜单.
-            sql2 += " WHERE MenuCtrlWay=1 ";
-            sql2 += " AND ParentNo != '" + ParentNo + "' ";
-            sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
-
-            var menus = DBAccess.RunSQLReturnTable(sql2);
-            menus.TableName = "Menus"; //获得菜单.
-
-            //组装数据.
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dirs);
-            ds.Tables.Add(menus);
-
-            return BP.Tools.Json.ToJson(ds);
-        }
-        /// <summary>
         /// 是否可以执行当前工作
         /// </summary>
         /// <returns></returns>
         public string GPM_IsCanExecuteFunction()
         {
-            var dt = GPM_GenerFlagDB(); //获得所有的标记.
-            var funcNo = this.GetRequestVal("FuncFlag");
+            DataTable dt = GPM_GenerFlagDB(); //获得所有的标记.
+            string funcNo = this.GetRequestVal("FuncFlag");
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr[0].ToString().Equals(funcNo) == true)
@@ -394,8 +340,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public DataTable GPM_GenerFlagDB()
         {
-            var appNo = this.GetRequestVal("AppNo");
-            var sql2 = "SELECT Flag,Idx";
+            string appNo = this.GetRequestVal("AppNo");
+            string sql2 = "SELECT Flag,Idx";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '5' ";
@@ -424,13 +370,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GPM_Search()
         {
-            var searchKey = this.GetRequestVal("searchKey");
+            string searchKey = this.GetRequestVal("searchKey");
             string cloum = "";
             if(SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
             {
                 cloum = "e.userid AS UserID,";
             }
-            var sql = "SELECT e.no AS \"No\"," + cloum + "e.name AS \"Name\",d.No AS FK_Dept,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
+            string sql = "SELECT e.no AS \"No\"," + cloum + "e.name AS \"Name\",d.No AS FK_Dept,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
                 "where d.No=e.FK_Dept AND (e.No LIKE '%" + searchKey + "%' or e.NAME LIKE '%" + searchKey + "%' or d.Name LIKE '%" + searchKey + "%' or e.Tel LIKE '%" + searchKey + "%')";
             if (DataType.IsNullOrEmpty(WebUser.OrgNo) == false)
                 sql += " AND e.OrgNo='" + WebUser.OrgNo + "'";
@@ -459,9 +405,9 @@ namespace BP.WF.HttpHandler
             string filePath = @"D:\ccflow组织结构批量导入模板.xls";
 
             #region 获得数据源.
-            var sheetNameList = BP.DA.DBLoad.GenerTableNames(filePath).ToList();
-            if (sheetNameList.Count < 3 || sheetNameList.Contains("部门$") == false || sheetNameList.Contains("角色$") == false || sheetNameList.Contains("人员$") == false)
-                throw new Exception("excel不符合要求");
+            List<string> sheetNameList = BP.DA.DBLoad.GenerTableNames(filePath).ToList();
+            if (sheetNameList.Count < 3 || sheetNameList.Contains("部门$") == false || sheetNameList.Contains("岗位$") == false || sheetNameList.Contains("人员$") == false)
+                throw new Exception("excel不符合要求，需要包含Sheet(部门、岗位、人员)");
 
             //获得部门数据.
             DataTable dtDept = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, sheetNameList.IndexOf("部门$"));
@@ -474,7 +420,7 @@ namespace BP.WF.HttpHandler
             }
 
             //获得角色数据.
-            DataTable dtStation = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, sheetNameList.IndexOf("角色$"));
+            DataTable dtStation = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, sheetNameList.IndexOf("岗位$"));
             for (int i = 0; i < dtStation.Columns.Count; i++)
             {
                 string name = dtStation.Columns[i].ColumnName;
@@ -499,7 +445,7 @@ namespace BP.WF.HttpHandler
             #region 检查是否有根目录为 0 的数据?
             //检查数据的完整性.
             //1.检查是否有根目录为0的数据?
-            var num = 0;
+            int num = 0;
             bool isHave = false;
             foreach (DataRow dr in dtDept.Rows)
             {
@@ -777,7 +723,7 @@ namespace BP.WF.HttpHandler
                 if (parentDeptName.Equals("0") == true || parentDeptName.Equals("root") == true)
                 {
                     BP.Port.Dept root = new BP.Port.Dept();
-                    root.No = BP.Web.WebUser.FK_Dept;
+                    root.No = BP.Web.WebUser.DeptNo;
                     if (root.RetrieveFromDBSources() == 0)
                         return "err@没有找到根目录节点，请联系管理员。";
 
@@ -848,10 +794,10 @@ namespace BP.WF.HttpHandler
                         return "err@部门名称不存在." + deptName;
 
                     BP.Port.DeptEmp de = new BP.Port.DeptEmp();
-                    de.FK_Dept = dept.No;
-                    de.FK_Emp = empNo;
+                    de.DeptNo = dept.No;
+                    de.EmpNo = empNo;
                     de.OrgNo = WebUser.OrgNo;
-                    de.setMyPK(de.FK_Dept + "_" + de.FK_Emp);
+                    de.setMyPK(de.DeptNo + "_" + de.EmpNo);
                     de.Delete();
                     de.Insert();
                 }
@@ -859,7 +805,7 @@ namespace BP.WF.HttpHandler
                 //插入角色.
                 string[] staNames = stationNames.Split(',');
                 BP.Port.Station sta = new BP.Port.Station();
-                foreach (var staName in staNames)
+                foreach (string staName in staNames)
                 {
                     if (DataType.IsNullOrEmpty(staName) == true)
                         continue;
@@ -869,11 +815,11 @@ namespace BP.WF.HttpHandler
                         return "err@角色名称不存在." + staName;
 
                     BP.Port.DeptEmpStation des = new BP.Port.DeptEmpStation();
-                    des.FK_Dept = dept.No;
-                    des.FK_Emp = empNo;
-                    des.FK_Station = sta.No;
+                    des.DeptNo = dept.No;
+                    des.EmpNo = empNo;
+                    des.StationNo = sta.No;
                     //   des.OrgNo = WebUser.OrgNo;
-                    des.setMyPK(des.FK_Dept + "_" + des.FK_Emp + "_" + des.FK_Station);
+                    des.setMyPK(des.DeptNo + "_" + des.EmpNo + "_" + des.StationNo);
                     des.Delete();
                     des.Insert();
                 }
@@ -882,7 +828,7 @@ namespace BP.WF.HttpHandler
                 emp.No = empNo;
                 //   emp.UserID = empNo;
                 emp.Name = empName;
-                emp.FK_Dept = dept.No;
+                emp.DeptNo = dept.No;
                 // emp.OrgNo = WebUser.OrgNo;
                 emp.Tel = tel;
                 //emp.Email = email;
@@ -902,7 +848,7 @@ namespace BP.WF.HttpHandler
 
         public string EmpDepts_Init()
         {
-            string empNo = this.FK_Emp;
+            string empNo = this.EmpNo;
             if (DataType.IsNullOrEmpty(empNo) == true)
                 return "err@参数FK_Emp不能为空";
             //if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
@@ -921,8 +867,6 @@ namespace BP.WF.HttpHandler
             {
                 //获取当前人员所在的部门及兼职部门
                 sql = "SELECT B.No AS FK_Dept,B.Name AS  FK_DeptText,A.MyPK  From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT B.No AS FK_Dept,B.Name AS FK_DeptText,A.MyPK AS MyPK From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     sql += " AND B.OrgNo='" + emp.OrgNo + "'";
             }
@@ -930,8 +874,6 @@ namespace BP.WF.HttpHandler
             {
                 //获取当前人员所在的部门及兼职部门
                 sql = "SELECT B.No AS FK_Dept,B.Name AS  FK_DeptText,A.MyPK  From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
-                if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT B.No AS FK_Dept,B.Name AS FK_DeptText,A.MyPK AS MyPK From Port_DeptEmp A,Port_Dept B WHERE A.FK_Dept=B.No AND A.FK_Emp='" + empNo + "'";
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                     sql += " AND B.OrgNo='" + emp.OrgNo + "'";
             }
@@ -947,18 +889,18 @@ namespace BP.WF.HttpHandler
             if (dt.Rows.Count == 0)
             {
                 DeptEmp deptEmp = new DeptEmp();
-                deptEmp.FK_Dept = emp.FK_Dept;
-                deptEmp.FK_Emp = emp.No;
+                deptEmp.DeptNo = emp.DeptNo;
+                deptEmp.EmpNo = emp.No;
                 if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                    deptEmp.MyPK = emp.FK_Dept + "_" + emp.UserID;
+                    deptEmp.MyPK = emp.DeptNo + "_" + emp.UserID;
                 else
-                    deptEmp.MyPK = emp.FK_Dept + "_" + emp.No;
+                    deptEmp.MyPK = emp.DeptNo + "_" + emp.No;
 
                 deptEmp.OrgNo = emp.OrgNo;
                 deptEmp.Insert();
                 DataRow dr = dt.NewRow();
-                dr[0] = emp.FK_Dept;
-                dr[1] = emp.FK_DeptText;
+                dr[0] = emp.DeptNo;
+                dr[1] = emp.DeptText;
                 dr[2] = deptEmp.MyPK;
                 dt.Rows.Add(dr);
             }
@@ -966,8 +908,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
             //获取岗位
             sql = "SELECT B.No AS FK_Station,B.Name AS FK_StationText ,A.FK_Dept AS FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp='" + empNo + "'";
-            if (SystemConfig.AppCenterDBType == DBType.PostgreSQL || SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT B.No AS FK_Station,B.Name AS FK_StationText,A.FK_Dept AS FK_Dept From Port_DeptEmpStation A,Port_Station B WHERE A.FK_Station=B.No AND A.FK_Emp='" + empNo + "'";
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
                 sql += " AND B.OrgNo='" + WebUser.OrgNo + "'";
 

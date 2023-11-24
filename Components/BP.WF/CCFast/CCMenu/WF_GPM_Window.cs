@@ -19,7 +19,7 @@ namespace BP.WF.HttpHandler
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE GPM_WindowTemplate SET Idx=" + i + " WHERE No='" + enNo + "'  ";
                 DBAccess.RunSQL(sql);
                 // BP.CCFast.Portal.Window en = new BP.CCFast.Portal.Window(); 
@@ -31,7 +31,7 @@ namespace BP.WF.HttpHandler
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE GPM_MenuDtl SET Idx=" + i + " WHERE No='" + enNo + "'  ";
                 DBAccess.RunSQL(sql);
                 // BP.CCFast.Portal.Window en = new BP.CCFast.Portal.Window(); 

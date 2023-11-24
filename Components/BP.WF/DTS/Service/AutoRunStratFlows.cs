@@ -79,7 +79,7 @@ namespace BP.WF.DTS
                     bool isHave = false; //是否可以执行.
                     foreach (string s in strs)
                     {
-                        if (string.IsNullOrEmpty(s))
+                        if (DataType.IsNullOrEmpty(s) == true)
                             continue;
                         // 去除首尾空格
                         string str = s.Trim().Clone() as string;
@@ -370,7 +370,7 @@ namespace BP.WF.DTS
             if (i == 0)
                 return;
 
-            if (string.IsNullOrEmpty(me.Tag))
+            if (BP.DA.DataType.IsNullOrEmpty(me.Tag))
             {
                 BP.DA.Log.DebugWriteError("没有为流程(" + fl.Name + ")的开始节点设置发起数据,请参考说明书解决.");
                 return;
@@ -451,7 +451,7 @@ namespace BP.WF.DTS
                 string[] dtlSQLs = me.Tag1.Split('*');
                 foreach (string sqlDtl in dtlSQLs)
                 {
-                    if (string.IsNullOrEmpty(sqlDtl))
+                    if (DataType.IsNullOrEmpty(sqlDtl))
                         continue;
 
                     //替换变量.

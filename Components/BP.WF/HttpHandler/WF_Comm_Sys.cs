@@ -7,6 +7,7 @@ using BP.En;
 using System.Collections;
 using System.IO;
 using BP.Difference;
+using System.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -105,14 +106,13 @@ namespace BP.WF.HttpHandler
         public string ImpData_Done()
         {
 
-            var files = HttpContextHelper.RequestFiles(); //context.Request.Files;
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要导入的数据信息。";
 
             string errInfo = "";
 
             string ext = ".xls";
-            string fileName = System.IO.Path.GetFileName(files[0].FileName);
+            string fileName = System.IO.Path.GetFileName(HttpContextHelper.GetNameByIdx(0));
             if (fileName.Contains(".xlsx"))
                 ext = ".xlsx";
 
@@ -122,7 +122,7 @@ namespace BP.WF.HttpHandler
             //文件存放路径
             string filePath = BP.Difference.SystemConfig.PathOfTemp + "/" + fileNewName;
             //files[0].SaveAs(filePath);
-            HttpContextHelper.UploadFile(files[0], filePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
             //从excel里面获得数据表.
             DataTable dt = DBLoad.ReadExcelFileToDataTable(filePath);
 
@@ -139,7 +139,7 @@ namespace BP.WF.HttpHandler
             if (en.PK.Equals("MyPK") == true)
                 return this.ImpData_DoneMyPK(ens, dt);
 
-            if (en.IsNoEntity == false)
+            if (en.ItIsNoEntity == false)
             {
                 return "err@必须是EntityNo或者EntityMyPK实体,才能导入.";
             }
@@ -313,7 +313,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                if (en.IsNoEntity == true)
+                if (en.ItIsNoEntity == true)
                 {
                     if (saveType == 0)
                         en.Insert();
@@ -450,8 +450,17 @@ namespace BP.WF.HttpHandler
                     }
                     if (attr.MyFieldType == FieldType.PKEnum || attr.MyFieldType == FieldType.Enum)
                     {
-                        sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE ENUMKEY='" + attr.UIBindKey + "' )";
-                        dt = DBAccess.RunSQLReturnTable(sql);
+                        //判断字段类型
+                        if(SystemConfig.AppCenterDBType == DBType.HGDB || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                        {
+                            if(attr.ItIsNum)
+                                sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE ENUMKEY='" + attr.UIBindKey + "' )";
+                            else
+                                sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE ENUMKEY='" + attr.UIBindKey + "' )";
+                        }
+                        else
+                           sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey FROM " + BP.Sys.Base.Glo.SysEnum() + " WHERE ENUMKEY='" + attr.UIBindKey + "' )";
+
                         if (dt.Rows.Count == 0)
                             continue;
                         else
@@ -872,7 +881,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             SFDBSrc src = new SFDBSrc();
-            if (!string.IsNullOrWhiteSpace(this.GetRequestVal("No")))
+            if (!DataType.IsNullOrEmpty(this.GetRequestVal("No")))
                 src = new SFDBSrc(No);
             ds.Tables.Add(src.ToDataTableField("SFDBSrc"));
 
@@ -905,7 +914,7 @@ namespace BP.WF.HttpHandler
         //javaScript 脚本上传
         public string javaScriptImp_Done()
         {
-            var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
+            HttpFileCollection files = HttpContextHelper.RequestFiles();  //context.Request.Files;
             if (files.Count == 0)
                 return "err@请选择要上传的流程模版。";
             string fileName = files[0].FileName;
@@ -922,8 +931,7 @@ namespace BP.WF.HttpHandler
 
         public string RichUploadFile()
         {
-            var files = HttpContextHelper.RequestFiles();
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的图片。";
             //获取文件存放目录
             string frmID = this.FrmID;
@@ -942,7 +950,7 @@ namespace BP.WF.HttpHandler
             if (System.IO.Directory.Exists(savePath) == true)
                 System.IO.Directory.Delete(savePath);
 
-            HttpContextHelper.UploadFile(files[0], savePath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), savePath);
             Hashtable ht = new Hashtable();
             ht.Add("code", 0);
             ht.Add("msg", "success");

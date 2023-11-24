@@ -115,7 +115,7 @@ namespace BP.Sys.Base
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -125,7 +125,7 @@ namespace BP.Sys.Base
         /// <summary>
         /// 节点编号
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -214,7 +214,7 @@ namespace BP.Sys.Base
         /// <returns></returns>
         public string GetLastActionTrackID()
         {
-            string sql = "SELECT  MyPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + this.FK_Node + " ORDER BY RDT ";
+            string sql = "SELECT  MyPK FROM ND" + int.Parse(this.FlowNo) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + this.NodeID + " ORDER BY RDT ";
 
             DataTable dt=DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)

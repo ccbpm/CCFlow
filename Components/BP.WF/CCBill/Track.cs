@@ -37,7 +37,7 @@ namespace BP.CCBill
         /// <summary>
         /// 部门No
         /// </summary>
-        public const string DeptNo = "DeptNo";
+        public const string FK_Dept = "FK_Dept";
         /// <summary>
         /// 部门名称
         /// </summary>
@@ -350,11 +350,11 @@ namespace BP.CCBill
         {
             get
             {
-                return this.GetValStringByKey(TrackAttr.DeptNo);
+                return this.GetValStringByKey(TrackAttr.FK_Dept);
             }
             set
             {
-                this.SetValByKey(TrackAttr.DeptNo, value);
+                this.SetValByKey(TrackAttr.FK_Dept, value);
             }
         }
         public string DeptName
@@ -403,7 +403,7 @@ namespace BP.CCBill
                 map.AddTBString(TrackAttr.RecName, null, "名称", true, false, 0, 200, 100);
                 map.AddTBDateTime(TrackAttr.RDT, null, "记录日期时间", true, false);
 
-                map.AddTBString(TrackAttr.DeptNo, null, "部门编号", true, false, 0, 200, 100);
+                map.AddTBString(TrackAttr.FK_Dept, null, "部门编号", true, false, 0, 200, 100);
                 map.AddTBString(TrackAttr.DeptName, null, "名称", true, false, 0, 200, 100);
                 #endregion 基本字段
 

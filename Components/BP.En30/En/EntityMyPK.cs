@@ -162,7 +162,7 @@ namespace BP.En
                 this.SetValByKey("MyFileW", value);
             }
         }
-        public bool IsImg
+        public bool ItIsImg
         {
             get
             {

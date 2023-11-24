@@ -111,12 +111,12 @@ namespace BP.Sys.XML
        
         public int RetrieveByPK(string key, string val)
         {
-            XmlEns ens = Cash.GetObj(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
+            XmlEns ens = Cache.GetObj(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
             if (ens == null)
             {
                 ens = this.GetNewEntities;
                 ens.RetrieveAll();
-                //Cash.SetConn(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
+                //Cache.SetConn(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
             }
 
             int i = 0;
@@ -134,14 +134,14 @@ namespace BP.Sys.XML
 
             if (i > 1)
             {
-               // SystemConfig.DoClearCash();
+               // SystemConfig.DoClearCache();
                 throw new Exception("@XML=[" + this.ToString() + "]中PK=" + val + "不唯一...");
             }
             return 0;
         }
         public int Retrieve(string key, string val, string key1,string val1)
         {
-            XmlEns ens = Cash.GetObj(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
+            XmlEns ens = Cache.GetObj(this.GetNewEntities.ToString(), Depositary.Application) as XmlEns;
             if (ens == null)
             {
                 ens = this.GetNewEntities;
@@ -258,7 +258,7 @@ namespace BP.Sys.XML
 
         private DataTable GetTableTxts(FileInfo[] fis)
         {
-            DataTable cdt = Cash.GetObj(this.Tname, Depositary.Application) as DataTable;
+            DataTable cdt = Cache.GetObj(this.Tname, Depositary.Application) as DataTable;
             if (cdt != null)
                 return cdt;
 
@@ -268,13 +268,13 @@ namespace BP.Sys.XML
                 dt = GetTableTxt(dt, fi);
             }
 
-            Cash.AddObj(this.Tname,
+            Cache.AddObj(this.Tname,
                 Depositary.Application, dt);
             return dt;
         }
         private DataTable GetTableTxt()
         {
-            DataTable cdt = Cash.GetObj(this.Tname, Depositary.Application) as DataTable;
+            DataTable cdt = Cache.GetObj(this.Tname, Depositary.Application) as DataTable;
             if (cdt != null)
                 return cdt;
 
@@ -282,7 +282,7 @@ namespace BP.Sys.XML
             FileInfo fi = new FileInfo(this.File);
             dt = GetTableTxt(dt, fi);
 
-            Cash.AddObj(this.Tname,
+            Cache.AddObj(this.Tname,
                 Depositary.Application, dt);
             return dt;
         }
@@ -354,7 +354,7 @@ namespace BP.Sys.XML
         }
         public DataTable GetTable()
         {
-            DataTable cdt = Cash.GetObj(this.Tname, Depositary.Application) as DataTable;
+            DataTable cdt = Cache.GetObj(this.Tname, Depositary.Application) as DataTable;
             if (cdt != null)
                 return cdt;
 
@@ -371,7 +371,7 @@ namespace BP.Sys.XML
                 if (mdt == null)
                     mdt = new DataTable();
 
-                Cash.AddObj(this.Tname,
+                Cache.AddObj(this.Tname,
                     Depositary.Application, mdt);
 
                 return ds1.Tables[this.TableName];
@@ -461,14 +461,14 @@ namespace BP.Sys.XML
                     throw new Exception("获取数据出现错误:fileName=" + fi.Name + " clasName=" + this.ToString() + " MoreInfo=" + ex.Message);
                 }
             }
-            Cash.AddObj(this.Tname,
+            Cache.AddObj(this.Tname,
                 Depositary.Application,
                 dt);
             return dt;
         }
         public virtual int RetrieveAllFromDBSource()
         {
-            Cash.RemoveObj(this.Tname);
+            Cache.RemoveObj(this.Tname);
             return this.RetrieveAll();
         }
 		/// <summary>
@@ -477,7 +477,7 @@ namespace BP.Sys.XML
         public virtual int RetrieveAll()
         {
             this.Clear(); // 清所有的信息。
-            XmlEns ens = Cash.GetObj(this.ToString(), Depositary.Application) as XmlEns;
+            XmlEns ens = Cache.GetObj(this.ToString(), Depositary.Application) as XmlEns;
             if (ens != null)
             {
                 foreach (XmlEn en in ens)
@@ -495,16 +495,16 @@ namespace BP.Sys.XML
                 this.Add(en);
             }
 
-            Cash.AddObj(this.ToString(), Depositary.Application, this);
+            Cache.AddObj(this.ToString(), Depositary.Application, this);
             return dt.Rows.Count;
         }
-        public void FullEnToCash(string pk)
+        public void FullEnToCache(string pk)
         {
             this.RetrieveAll();
             XmlEn myen = this.GetNewEntity;
             foreach (XmlEn en in this)
             {
-                Cash.AddObj(myen.ToString() + en.GetValByKey(pk),
+                Cache.AddObj(myen.ToString() + en.GetValByKey(pk),
                     Depositary.Application, en);
             }
         }
@@ -623,7 +623,7 @@ namespace BP.Sys.XML
 			return null;
 
 		}
-		public bool IsExits(string key, object val)
+		public bool ItIsExits(string key, object val)
 		{
 			foreach(XmlEn en in this)
 			{

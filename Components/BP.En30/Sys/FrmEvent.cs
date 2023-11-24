@@ -9,7 +9,7 @@ using BP.Port;
 using BP.Web;
 using BP.Difference;
 using BP.Tools;
-
+using Newtonsoft.Json.Linq;
 
 namespace BP.Sys
 {
@@ -181,7 +181,7 @@ namespace BP.Sys
             }
         }
 
-        public string FK_DBSrc
+        public string DBSrcNo
         {
             get
             {
@@ -206,7 +206,7 @@ namespace BP.Sys
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -234,7 +234,7 @@ namespace BP.Sys
         /// <summary>
         /// 流程
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -281,7 +281,7 @@ namespace BP.Sys
         public string MsgOK(Entity en)
         {
             string val = this.GetValStringByKey(FrmEventAttr.MsgOK);
-            if (val.Trim() == "")
+            if (val.Trim().Equals(""))
                 return "";
 
             if (val.IndexOf('@') == -1)
@@ -323,7 +323,7 @@ namespace BP.Sys
         public string MsgError(Entity en)
         {
             string val = this.GetValStringByKey(FrmEventAttr.MsgError);
-            if (val.Trim() == "")
+            if (val.Trim().Equals(""))
                 return null;
 
             if (val.IndexOf('@') == -1)
@@ -336,7 +336,7 @@ namespace BP.Sys
             return val;
         }
 
-        public string FK_Event
+        public string EventNo
         {
             get
             {
@@ -424,7 +424,7 @@ namespace BP.Sys
                 string str = this.GetValStrByKey(FrmEventAttr.MailTitle);
                 if (DataType.IsNullOrEmpty(str) == false)
                     return str;
-                switch (this.FK_Event)
+                switch (this.EventNo)
                 {
                     case EventListNode.SendSuccess:
                         return "新工作@Title,发送人@WebUser.No,@WebUser.Name";
@@ -441,7 +441,7 @@ namespace BP.Sys
                     case EventListFlow.FlowOverAfter:
                         return "流程结束@Title,发送人@WebUser.No,@WebUser.Name";
                     default:
-                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
+                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.EventNo);
                         break;
                 }
                 return str;
@@ -486,7 +486,7 @@ namespace BP.Sys
                 string str = this.GetValStrByKey(FrmEventAttr.MailDoc);
                 if (DataType.IsNullOrEmpty(str) == false)
                     return str;
-                switch (this.FK_Event)
+                switch (this.EventNo)
                 {
                     case EventListNode.SendSuccess:
                         str += "\t\n您好:";
@@ -538,7 +538,7 @@ namespace BP.Sys
                         str += "\t\n    @RDT";
                         break;
                     default:
-                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
+                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.EventNo);
                         break;
                 }
                 return str;
@@ -584,7 +584,7 @@ namespace BP.Sys
                 if (DataType.IsNullOrEmpty(str) == false)
                     return str;
 
-                switch (this.FK_Event)
+                switch (this.EventNo)
                 {
                     case EventListNode.SendSuccess:
                         str = "有新工作@Title需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .";
@@ -602,7 +602,7 @@ namespace BP.Sys
                         str = "工作加签@Title,加签人:@WebUser.No, @WebUser.Name,打开{Url}.";
                         break;
                     default:
-                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.FK_Event);
+                        throw new Exception("@该事件类型没有定义默认的消息模版:" + this.EventNo);
                         break;
                 }
                 return str;
@@ -628,9 +628,9 @@ namespace BP.Sys
         }
         public FrmEvent(string fk_mapdata, string fk_Event)
         {
-            this.FK_Event = fk_Event;
+            this.EventNo = fk_Event;
             this.setFrmID(fk_mapdata);
-            this.setMyPK(this.FrmID + "_" + this.FK_Event);
+            this.setMyPK(this.FrmID + "_" + this.EventNo);
             this.RetrieveFromDBSources();
         }
         /// <summary>
@@ -659,7 +659,7 @@ namespace BP.Sys
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
                 //执行内容. EventDoType 0=SQL,1=URL....  
-                map.AddTBInt(FrmEventAttr.EventDoType, 0, "事件执行类型", true, true);
+                map.AddTBString(FrmEventAttr.EventDoType, null, "事件执行类型", true, true, 0, 100,100);
                 map.AddTBString(FrmEventAttr.FK_DBSrc, "local", "数据源", true, false, 0, 100, 20);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
@@ -700,11 +700,11 @@ namespace BP.Sys
         protected override bool beforeUpdateInsertAction()
         {
             //设置关联的FlowNo编号,以方便流程删除与模版导入导出.
-            if (DataType.IsNullOrEmpty(this.FK_Flow) == false)
-                this.RefFlowNo = this.FK_Flow;
+            if (DataType.IsNullOrEmpty(this.FlowNo) == false)
+                this.RefFlowNo = this.FlowNo;
 
-            if (this.FK_Node != 0)
-                this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + this.FK_Node);
+            if (this.NodeID != 0)
+                this.RefFlowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_Node WHERE NodeID=" + this.NodeID);
 
             if (this.FrmID.StartsWith("ND") == true)
             {
@@ -808,7 +808,7 @@ namespace BP.Sys
             #endregion 执行的是业务单元.
 
             string doc = nev.DoDoc.Trim();
-            if ((doc == null || doc == "") && nev.HisDoType != EventDoType.SpecClass)   //edited by liuxc,2016-01-16,执行DLL文件不需要判断doc为空
+            if ((doc == null || doc.Equals("")) && nev.HisDoType != EventDoType.SpecClass)   //edited by liuxc,2016-01-16,执行DLL文件不需要判断doc为空
                 return null;
 
             #region 处理执行内容
@@ -816,20 +816,20 @@ namespace BP.Sys
             string MsgOK = "";
             string MsgErr = "";
 
-            if (nev.FK_Node != 0)
+            if (nev.NodeID != 0)
             {
-                doc = doc.Replace("@FK_Node",  ""+nev.FK_Node);
-                doc = doc.Replace("@NodeID", "" + nev.FK_Node);
+                doc = doc.Replace("@FK_Node", "" + nev.NodeID);
+                doc = doc.Replace("@NodeID", "" + nev.NodeID);
             }
-            if (DataType.IsNullOrEmpty(nev.FK_Flow) == false)
+            if (DataType.IsNullOrEmpty(nev.FlowNo) == false)
             {
-                doc = doc.Replace("@FlowNo", "" + nev.FK_Flow);
-                doc = doc.Replace("@FK_Flow", "" + nev.FK_Flow);
+                doc = doc.Replace("@FlowNo", "" + nev.FlowNo);
+                doc = doc.Replace("@FK_Flow", "" + nev.FlowNo);
             }
             doc = doc.Replace("~", "'");
             doc = doc.Replace("@WebUser.No", BP.Web.WebUser.No);
             doc = doc.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-            doc = doc.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+            doc = doc.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
             doc = doc.Replace("@FK_Node", nev.FrmID.Replace("ND", ""));
             doc = doc.Replace("@FrmID", nev.FrmID);
             doc = doc.Replace("@FK_MapData", nev.FrmID);
@@ -847,7 +847,7 @@ namespace BP.Sys
                 }
             }
             //替换。
-            if (DataType.IsNullOrEmpty(atPara) == false && doc.Contains("@")==true)
+            if (DataType.IsNullOrEmpty(atPara) == false && doc.Contains("@") == true)
             {
                 AtPara ap = new AtPara(atPara);
                 foreach (string key in ap.HisHT.Keys)
@@ -889,11 +889,11 @@ namespace BP.Sys
 
                 doc += "&UserNo=" + WebUser.No;
                 doc += "&Token=" + WebUser.Token;
-                doc += "&FK_Dept=" + WebUser.FK_Dept;
+                doc += "&FK_Dept=" + WebUser.DeptNo;
                 // doc += "&FK_Unit=" + WebUser.FK_Unit;
                 doc += "&OID=" + en.PKVal;
 
-                if (BP.Difference.SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.isBSsystem)
                 {
                     /*是bs系统，并且是url参数执行类型.*/
                     //2019-07-25 zyt改造
@@ -915,7 +915,7 @@ namespace BP.Sys
                     doc = doc.Replace("&?", "&");
                 }
 
-                if (BP.Difference.SystemConfig.IsBSsystem == false)
+                if (BP.Difference.SystemConfig.isBSsystem == false)
                 {
                     /*非bs模式下调用,比如在cs模式下调用它,它就取不到参数. */
                 }
@@ -923,7 +923,7 @@ namespace BP.Sys
                 if (doc.StartsWith("http") == false)
                 {
                     /*如果没有绝对路径 */
-                    if (BP.Difference.SystemConfig.IsBSsystem)
+                    if (BP.Difference.SystemConfig.isBSsystem)
                     {
                         /*在cs模式下自动获取*/
                         //string host = BP.Sys.Base.Glo.Request.Url.Host;
@@ -935,7 +935,7 @@ namespace BP.Sys
                             doc = "http://" + HttpContextHelper.RequestUrlAuthority + doc;
                     }
 
-                    if (BP.Difference.SystemConfig.IsBSsystem == false)
+                    if (BP.Difference.SystemConfig.isBSsystem == false)
                     {
                         /*在cs模式下它的baseurl 从web.config中获取.*/
                         string cfgBaseUrl = BP.Difference.SystemConfig.HostURL;
@@ -981,9 +981,9 @@ namespace BP.Sys
                             RunSQL(doc);
                             return nev.MsgOK(en);
                         }
-                        if (DataType.IsNullOrEmpty(nev.FK_DBSrc) == false && nev.FK_DBSrc.Equals("local") == false)
+                        if (DataType.IsNullOrEmpty(nev.DBSrcNo) == false && nev.DBSrcNo.Equals("local") == false)
                         {
-                            SFDBSrc sfdb = new SFDBSrc(nev.FK_DBSrc);
+                            SFDBSrc sfdb = new SFDBSrc(nev.DBSrcNo);
                             sfdb.RunSQLs(doc);
 
                         }
@@ -1004,7 +1004,7 @@ namespace BP.Sys
                     string myURL = doc.Clone() as string;
                     if (myURL.Contains("http") == false)
                     {
-                        if (BP.Difference.SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.isBSsystem)
                         {
                             //string host = BP.Sys.Base.Glo.Request.Url.Host;
                             //2019-07-25 zyt改造
@@ -1067,7 +1067,7 @@ namespace BP.Sys
                             && text.Substring(0, 7).ToLower().Contains("err"))
                             throw new Exception(text);
 
-                        if (text == null || text.Trim() == "")
+                        if (text == null || text.Trim().Equals(""))
                             return null;
                         return text;
                     }
@@ -1109,11 +1109,11 @@ namespace BP.Sys
 
                         try
                         {
-                            r.Add("EventSource", nev.FK_Event);
+                            r.Add("EventSource", nev.EventNo);
                         }
                         catch
                         {
-                            r["EventSource"] = nev.FK_Event;
+                            r["EventSource"] = nev.EventNo;
                         }
 
                         if (atPara != null)
@@ -1132,7 +1132,7 @@ namespace BP.Sys
                             }
                         }
 
-                        if (BP.Difference.SystemConfig.IsBSsystem == true)
+                        if (BP.Difference.SystemConfig.isBSsystem == true)
                         {
                             /*如果是bs系统, 就加入外部url的变量.*/
                             //2019 - 07 - 25 zyt改造
@@ -1164,78 +1164,21 @@ namespace BP.Sys
                         throw new Exception("@执行事件(" + ev.Title + ")期间出现错误:" + ex.Message);
                     }
                     break;
-                case EventDoType.WSOfSelf: //执行webservices.. 为石油修改.
-                    string[] strs = doc.Split('@');
-                    string url = "";
-                    string method = "";
-                    Hashtable paras = new Hashtable();
-                    foreach (string str in strs)
-                    {
-                        if (str.Contains("=") && str.Contains("Url"))
-                        {
-                            url = str.Split('=')[2];
-                            continue;
-                        }
-
-                        if (str.Contains("=") && str.Contains("Method"))
-                        {
-                            method = str.Split('=')[2];
-                            continue;
-                        }
-
-                        //处理参数.
-                        string[] paraKeys = str.Split(',');
-
-                        if (paraKeys[3].Equals("Int"))
-                            paras.Add(paraKeys[0], int.Parse(paraKeys[1]));
-
-                        if (paraKeys[3].Equals("String"))
-                            paras.Add(paraKeys[0], paraKeys[1]);
-
-                        if (paraKeys[3].Equals("Float"))
-                            paras.Add(paraKeys[0], float.Parse(paraKeys[1]));
-
-                        if (paraKeys[3].Equals("Double"))
-                            paras.Add(paraKeys[0], double.Parse(paraKeys[1]));
-                    }
-                    return null;
-                    //开始执行webserives.
-                    break;
-                /*case EventDoType.WebApi:
-                    try
-                    {
-                        //接收返回值
-                        string postData = "";
-                        //获取webapi接口地址
-                        string apiUrl = doc.Clone() as string;
-                        if (apiUrl.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
-                            apiUrl = apiUrl.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
-
-                        if (apiUrl.Contains("?") == true)
-                            apiUrl += "&WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&Token=" + WebUser.Token;
-                        else
-                            apiUrl += "?WorkID=" + en.PKVal + "&UserNo=" + BP.Web.WebUser.No + "&Token=" + WebUser.Token;
-
-                        //api接口地址
-                        string apiHost = apiUrl.Split('?')[0];
-                        //api参数
-                        string apiParams = apiUrl.Split('?')[1];
-                        //参数替换
-                        apiParams = BP.Tools.PubGlo.DealExp(apiParams, en);
-                        //执行POST
-                        postData = BP.Tools.PubGlo.HttpPostConnect(apiHost, apiParams);
-                        return postData;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@" + nev.MsgError(en) + " Error:" + ex.Message);
-                    }
-                    break;*/
                 case EventDoType.WebApi:
                     try
                     {
                         string urlExt = doc; //url. 
                         urlExt = BP.Tools.PubGlo.DealExp(urlExt, en);
+
+                        //增加其他的参数.
+                        if (atPara != null && doc.Contains("@") == true)
+                        {
+                            AtPara ap = new AtPara(atPara);
+                            foreach (string s in ap.HisHT.Keys)
+                                urlExt = urlExt.Replace("@" + s, ap.GetValStrByKey(s));
+                        }
+                        if (urlExt.Contains("@WebApiHost"))//可以替换配置文件中配置的webapi地址
+                            urlExt = urlExt.Replace("@WebApiHost", BP.Difference.SystemConfig.AppSettings["WebApiHost"]);
 
                         string urlUodel = nev.GetValStringByKey("PostModel"); //模式. Post,Get
                         int paraMode = nev.GetValIntByKey("ParaModel"); //参数模式. 0=自定义模式， 1=全量模式.
@@ -1252,8 +1195,18 @@ namespace BP.Sys
                         }
                         else
                         {
+                            pdocs = pdocs.Replace("~~", "\"");
                             pdocs = pdocs.Replace("~", "\"");
                             pdocs = BP.Tools.PubGlo.DealExp(pdocs, en);
+
+                            //
+                            if (atPara != null && pdocs.Contains("@") == true)
+                            {
+                                AtPara ap = new AtPara(atPara);
+                                foreach (string s in ap.HisHT.Keys)
+                                    pdocs = pdocs.Replace("@" + s, ap.GetValStrByKey(s));
+                            }
+
                             if (pdocs.Contains("@") == true)
                                 throw new Exception("@_DoEvent参数不完整:" + pdocs);
                         }
@@ -1267,7 +1220,7 @@ namespace BP.Sys
                         if (DataType.IsNullOrEmpty(result) == true)
                             throw new Exception("@执行WebAPI[" + urlExt + "]没有返回结果值");
                         //数据序列化
-                        var jsonData = result.ToJObject();
+                        JObject jsonData = result.ToJObject();
                         //code=200，表示请求成功，否则失败
                         string msg = jsonData["msg"] != null ? jsonData["msg"].ToString() : "";
                         if (!jsonData["code"].ToString().Equals("200"))
@@ -1279,187 +1232,6 @@ namespace BP.Sys
                         throw new Exception("@" + nev.MsgError(en) + " Error:" + ex.Message);
                     }
                     break;
-                case EventDoType.SpecClass:
-                    #region //执行dll文件中指定类的指定方法，added by liuxc,2016-01-16
-                    string evdll = nev.MonthedDLL;
-                    string evclass = nev.MonthedClass;
-                    string evmethod = nev.MonthedName;
-                    string evparams = nev.MonthedParas;
-
-                    if (string.IsNullOrWhiteSpace(evdll) || !System.IO.File.Exists(evdll))
-                        throw new Exception("@DLL文件【MonthedDLL】“" + (evdll ?? string.Empty) + "”设置不正确，请重新设置！");
-
-                    Assembly abl = Assembly.LoadFrom(evdll);
-
-                    //判断类是否是静态类
-                    Type type = abl.GetType(evclass, false);
-
-                    if (type == null)
-                        throw new Exception(@"@DLL文件【MonthedDLL】“" + evdll + "”中的类名【MonthedClass】“" +
-                                            (evclass ?? string.Empty) + "”设置不正确，未检索到此类，请重新设置！");
-
-                    //方法
-                    if (string.IsNullOrWhiteSpace(evmethod))
-                        throw new Exception(@"@DLL文件【MonthedDLL】“" + evdll + "”中类【MonthedClass】“" +
-                                            evclass + "”的方法名【MonthedName】不能为空，请重新设置！");
-
-                    MethodInfo md = null;   //当前方法
-                    ParameterInfo[] pis = null; //方法的参数集合
-                    Dictionary<string, string> pss = new Dictionary<string, string>();  //参数名，参数值类型名称字典，如：Name,String
-                    string mdName = evmethod.Split('(')[0]; //方法名称
-
-                    //获取method对象
-                    if (mdName.Length == evmethod.Length - 2)
-                    {
-                        md = type.GetMethod(mdName);
-                    }
-                    else
-                    {
-                        string[] pssArr = null;
-
-                        //获取设置里的参数信息
-                        foreach (string pstr in evmethod.Substring(mdName.Length + 1, evmethod.Length - mdName.Length - 2).Split(','))
-                        {
-                            pssArr = pstr.Split(' ');
-                            pss.Add(pssArr[1], pssArr[0]);
-                        }
-
-                        //与设置里的参数信息对比，取得MethodInfo对象
-                        foreach (MethodInfo m in type.GetMethods())
-                        {
-                            if (m.Name != mdName) continue;
-
-                            pis = m.GetParameters();
-                            bool isOK = true;
-                            int idx = 0;
-
-                            foreach (KeyValuePair<string, string> ps in pss)
-                            {
-                                if (pis[idx].Name != ps.Key || pis[idx].ParameterType.ToString()
-                                                                   .Replace("System.IO.", "")
-                                                                   .Replace("System.", "")
-                                                                   .Replace("System.Collections.Generic.", "")
-                                                                   .Replace("System.Collections.", "") != ps.Value)
-                                {
-                                    isOK = false;
-                                    break;
-                                }
-
-                                idx++;
-                            }
-
-                            if (isOK)
-                            {
-                                md = m;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (md == null)
-                        throw new Exception(@"@DLL文件【MonthedDLL】“" + evdll + "”中类【MonthedClass】“" +
-                                            evclass + "”的方法名【MonthedName】“" + evmethod + "”设置不正确，未检索到此方法，请重新设置！");
-
-                    //处理参数
-                    object[] pvs = new object[pss.Count];   //invoke，传递的paramaters参数，数组中的项顺序与方法参数顺序一致
-
-                    if (pss.Count > 0)
-                    {
-                        if (string.IsNullOrWhiteSpace(evparams))
-                            throw new Exception(@"@DLL文件【MonthedDLL】“" + evdll + "”中类【MonthedClass】“" +
-                                                evclass + "”的方法【MonthedName】“" + evmethod + "”的参数【MonthedParas】不能为空，请重新设置！");
-
-                        Dictionary<string, string> pds = new Dictionary<string, string>();  //MonthedParas中保存的参数信息集合，格式如：title,@Title
-                        int idx = 0;
-                        int pidx = -1;
-                        string[] pdsArr = evparams.Split(';');
-                        string val;
-
-                        //将参数中的名称与值分开
-                        foreach (string p in pdsArr)
-                        {
-                            pidx = p.IndexOf('=');
-                            if (pidx == -1) continue;
-
-                            pds.Add(p.Substring(0, pidx), p.Substring(pidx + 1));
-                        }
-
-                        foreach (KeyValuePair<string, string> ps in pss)
-                        {
-                            if (!pds.ContainsKey(ps.Key))
-                            {
-                                //设置中没有此参数的值信息，则将值赋为null
-                                pvs[idx] = null;
-                            }
-                            else
-                            {
-                                val = pds[ps.Key];
-
-                                foreach (BP.En.Attr attr in en.EnMap.Attrs)
-                                {
-                                    if (pds[ps.Key] == "`" + attr.Key + "`")
-                                    {
-                                        //表示此参数与该attr的值一致，类型也一致
-                                        pvs[idx] = en.Row[attr.Key];
-                                        break;
-                                    }
-
-                                    //替换@属性
-                                    val = val.Replace("`" + attr.Key + "`", (en.Row[attr.Key] ?? string.Empty).ToString());
-                                }
-
-                                //转换参数类型，从字符串转换到参数的实际类型，NOTE:此处只列出了简单类型的转换，其他类型暂未考虑
-                                switch (ps.Value)
-                                {
-                                    case "String":
-                                        pvs[idx] = val;
-                                        break;
-                                    case "Int32":
-                                        pvs[idx] = int.Parse(val);
-                                        break;
-                                    case "Int64":
-                                        pvs[idx] = long.Parse(val);
-                                        break;
-                                    case "Double":
-                                        pvs[idx] = double.Parse(val);
-                                        break;
-                                    case "Single":
-                                        pvs[idx] = float.Parse(val);
-                                        break;
-                                    case "Decimal":
-                                        pvs[idx] = decimal.Parse(val);
-                                        break;
-                                    case "DateTime":
-                                        pvs[idx] = DateTime.Parse(val);
-                                        break;
-                                    default:
-                                        pvs[idx] = val;
-                                        break;
-                                }
-                            }
-
-                            idx++;
-                        }
-                    }
-
-                    if (type.IsSealed && type.IsAbstract)
-                    {
-                        //静态类
-                        return (md.Invoke(null, pvs) ?? string.Empty).ToString();
-                    }
-
-                    //非静态类
-                    //虚类必须被重写，不能直接使用
-                    if (type.IsAbstract)
-                        return null;
-
-                    //静态方法
-                    if (md.IsStatic)
-                        return (md.Invoke(null, pvs) ?? string.Empty).ToString();
-
-                    //非静态方法
-                    return (md.Invoke(abl.CreateInstance(evclass), pvs) ?? string.Empty).ToString();
-                #endregion
                 case EventDoType.SFProcedure:
                     #region 自定义存储过程
                     SFProcedure procedure = new SFProcedure(doc);

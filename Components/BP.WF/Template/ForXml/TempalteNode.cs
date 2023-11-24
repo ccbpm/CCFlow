@@ -6,7 +6,6 @@ using BP.En;
 using System.Collections;
 using BP.Port;
 using BP.WF.Data;
-using BP.WF.Template.CCEn;
 using BP.WF.Port;
 using System.Collections.Generic;
 using BP.WF.Template.SFlow;
@@ -150,7 +149,7 @@ namespace BP.WF.Template
                 map.AddTBInt(NodeAttr.IsRM, 1, "是否启用投递路径自动记忆功能?", true, true);
                 map.AddTBInt(NodeAttr.IsOpenOver, 0, "是否打开即审批?", true, true);
                 map.AddBoolean(NodeAttr.IsHandOver, false, "是否可以移交", true, true);
-                map.AddTBDecimal(NodeAttr.PassRate, 100, "通过率", true, true);
+                map.AddTBInt(NodeAttr.PassRate, 100, "通过率", true, true);
                 map.AddTBInt(NodeAttr.RunModel, 0, "运行模式(对普通节点有效)", true, true);
                 map.AddTBInt(NodeAttr.BlockModel, 0, "阻塞模式", true, true);
                 map.AddTBString(NodeAttr.BlockExp, null, "阻塞表达式", true, false, 0, 200, 10);
@@ -222,6 +221,11 @@ namespace BP.WF.Template
 
                 map.AddTBString(NodeAttr.NodeDepts, null, "绑定的部门", false, false, 0, 100, 100);
                 map.AddTBString(NodeAttr.NodeDeptsT, null, "绑定的部门t", false, false, 0, 200, 100);
+
+                map.AddTBString(NodeAttr.ARDeptModel, null, "部门集合范围", false, false, 0, 200, 100);
+                map.AddTBString(NodeAttr.ARStaModel, null, "角色集合范围", false, false, 0, 200, 100);
+                map.AddTBInt(NodeAttr.ShenFenModel, 0, "身份规则", false, false);
+
                 #endregion 兼容版本.
 
 
@@ -258,6 +262,11 @@ namespace BP.WF.Template
         public TemplateNodes()
         {
         }
+
+        public TemplateNodes(String fk_flow)
+        {
+		    this.Retrieve(NodeAttr.FK_Flow, fk_flow, NodeAttr.Step);
+	    }
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

@@ -43,7 +43,7 @@ namespace BP.WF.HttpHandler
                     string pkval = item.GetValStringByKey(dtl.PK);
                     foreach (Attr attr in map.Attrs)
                     {
-                        if (attr.IsRefAttr == true)
+                        if (attr.ItIsRefAttr == true)
                             continue;
 
                         if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
@@ -88,8 +88,8 @@ namespace BP.WF.HttpHandler
 
                 #region 保存新加行.
                 int newRowCount = this.GetRequestValInt("NewRowCount");
-                bool isEntityOID = dtl.IsOIDEntity;  //已同步数据.
-                bool isEntityNo = dtl.IsNoEntity;
+                bool isEntityOID = dtl.ItIsOIDEntity;  //已同步数据.
+                bool isEntityNo = dtl.ItIsNoEntity;
                 for (int i = 0; i < newRowCount; i++)
                 {
                     string val = "";
@@ -110,7 +110,7 @@ namespace BP.WF.HttpHandler
                         if (attr.UIContralType == UIContralType.TB && attr.UIIsReadonly == false)
                         {
                             val = this.GetValFromFrmByKey("TB_" + i + "_" + attr.Key);
-                            if (attr.IsNum && val == "")
+                            if (attr.ItIsNum && val == "")
                                 val = "0";
                             dtl.SetValByKey(attr.Key, val);
                             continue;
@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                         continue;
                     }
 
-                    if (isEntityNo == true && dtl.EnMap.IsAutoGenerNo == true)
+                    if (isEntityNo == true && dtl.EnMap.ItIsAutoGenerNo == true)
                     {
                         dtl.PKVal = dtl.GenerNewNoByKey("No");
                         dtl.Insert();
@@ -228,7 +228,7 @@ namespace BP.WF.HttpHandler
 
             foreach (Attr attr in dtl.EnMap.Attrs)
             {
-                if (attr.IsRefAttr == true)
+                if (attr.ItIsRefAttr == true)
                     continue;
 
                 if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
@@ -347,7 +347,7 @@ namespace BP.WF.HttpHandler
             foreach (Entity dt in dtls)
             {
                 string pkval = dt.PKVal.ToString();
-                string ext = string.IsNullOrWhiteSpace(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString();
+                string ext = DataType.IsNullOrEmpty(dt.GetValByKey("MyFileExt") as string) ? "" : dt.GetValByKey("MyFileExt").ToString();
                 if (DataType.IsNullOrEmpty(ext) == true)
                     continue;
                 myFilePath = myFilePath + "/" + pkval + "." + ext;
@@ -422,7 +422,7 @@ namespace BP.WF.HttpHandler
                     en.SetValByKey("RefPKVal", this.RefPKVal);
 
                     //自动生成一个编号.
-                    if (en.IsNoEntity == true && en.EnMap.IsAutoGenerNo == true)
+                    if (en.ItIsNoEntity == true && en.EnMap.ItIsAutoGenerNo == true)
                         en.SetValByKey("No", en.GenerNewNoByKey("No"));
                 }
 
@@ -562,7 +562,7 @@ namespace BP.WF.HttpHandler
                 //加入sql模式的外键.
                 foreach (Attr attr in en.EnMap.Attrs)
                 {
-                    if (attr.IsRefAttr == true)
+                    if (attr.ItIsRefAttr == true)
                         continue;
 
                     if (DataType.IsNullOrEmpty(attr.UIBindKey) || attr.UIBindKey.Length <= 10)
@@ -699,7 +699,7 @@ namespace BP.WF.HttpHandler
                     dr["W"] = item.Width;
                     dr["H"] = item.Height;
                     dr["Icon"] = item.Icon;
-                    dr["IsCanBatch"] = item.IsCanBatch;
+                    dr["IsCanBatch"] = item.ItIsCanBatch;
                     dr["GroupName"] = item.GroupName;
 
                     dtM.Rows.Add(dr); //增加到rows.
@@ -763,8 +763,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string EntityAth_Upload()
         {
-            var files = HttpContextHelper.RequestFiles();
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
 
@@ -786,16 +785,16 @@ namespace BP.WF.HttpHandler
                 return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
 
             //获取文件的名称
-            string fileName = files[0].FileName;
+            string fileName = HttpContextHelper.GetNameByIdx(0);
             if (fileName.IndexOf("/") >= 0)
                 fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
             //文件后缀
-            string ext = System.IO.Path.GetExtension(files[0].FileName);
+            string ext = System.IO.Path.GetExtension(HttpContextHelper.GetNameByIdx(0));
             ext = ext.Replace(".", ""); //去掉点 @李国文
 
             //文件大小
-            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+            float size = HttpContextHelper.RequestFileLength(HttpContextHelper.RequestFiles(0)) / 1024;
 
             //保存位置
             string filepath = "";
@@ -803,7 +802,7 @@ namespace BP.WF.HttpHandler
 
 
             //如果是天业集团则保存在ftp服务器上
-            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.isUploadFileToFTP == true)
             {
                 string guid = DBAccess.GenerGUID();
 
@@ -812,13 +811,13 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
                     //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -871,7 +870,7 @@ namespace BP.WF.HttpHandler
 
                 FileInfo info = new FileInfo(filepath);
                 //files[0].SaveAs(filepath);
-                HttpContextHelper.UploadFile(files[0], filepath);
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filepath);
             }
 
             //需要这样写 @李国文.
@@ -928,11 +927,11 @@ namespace BP.WF.HttpHandler
             string fileName = en.GetValStringByKey("MyFileName");
             string fileExt = en.GetValStringByKey("MyFileExt");
             //获取使用的客存在FTP服务器上
-            if ( BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            if ( BP.Difference.SystemConfig.isUploadFileToFTP == true)
             {
                
                 //临时存储位置
-                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + en.GetValByKey("MyFileExt");
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + DBAccess.GenerGUID() + "." + en.GetValByKey("MyFileExt");
 
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
@@ -960,8 +959,7 @@ namespace BP.WF.HttpHandler
         public string EntityMultiAth_Upload()
         {
             //HttpFileCollection files = context.Request.Files;
-            var files = HttpContextHelper.RequestFiles();
-            if (files.Count == 0)
+            if (HttpContextHelper.RequestFilesCount == 0)
                 return "err@请选择要上传的文件。";
             //获取保存文件信息的实体
 
@@ -983,7 +981,7 @@ namespace BP.WF.HttpHandler
                 return "err@数据[" + this.EnName + "]主键为[" + en.PKVal + "]不存在，或者没有保存。";
 
             //获取文件的名称
-            string fileName = files[0].FileName;
+            string fileName = HttpContextHelper.GetNameByIdx(0);
             if (fileName.IndexOf("/") >= 0)
                 fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
             fileName = fileName.Substring(0, fileName.LastIndexOf('.'));
@@ -993,16 +991,16 @@ namespace BP.WF.HttpHandler
             if (fileManagers.Count != 0)
                 return "err@文件" + fileName + "已经存在";
             //文件后缀
-            string ext = System.IO.Path.GetExtension(files[0].FileName);
+            string ext = System.IO.Path.GetExtension(HttpContextHelper.GetNameByIdx(0));
 
             //文件大小
-            float size = HttpContextHelper.RequestFileLength(files[0]) / 1024;
+            float size = HttpContextHelper.RequestFileLength(HttpContextHelper.RequestFiles(0)) / 1024;
 
             //保存位置
             string filepath = "";
 
             //如果是天业集团则保存在ftp服务器上
-            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            if (BP.Difference.SystemConfig.CustomerNo.Equals("TianYe") || BP.Difference.SystemConfig.isUploadFileToFTP == true)
             {
                 string guid = DBAccess.GenerGUID();
 
@@ -1011,13 +1009,13 @@ namespace BP.WF.HttpHandler
                 try
                 {
                     //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 }
                 catch (Exception ex)
                 {
                     System.IO.File.Delete(temp);
                     //files[0].SaveAs(temp);
-                    HttpContextHelper.UploadFile(files[0], temp);
+                    HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
                 }
 
                 /*保存到fpt服务器上.*/
@@ -1067,7 +1065,7 @@ namespace BP.WF.HttpHandler
                 FileInfo info = new FileInfo(savePath);
 
                 //files[0].SaveAs(filepath);
-                HttpContextHelper.UploadFile(files[0], savePath);
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), savePath);
                 filepath = "/DataUser/" + enName + "/" + this.PKVal + "/" + fileName + ext;
             }
             //保存上传的文件
@@ -1096,12 +1094,12 @@ namespace BP.WF.HttpHandler
                 throw new Exception("没有找到OID=" + oid + "的文件管理数据，请联系管理员");
 
             //获取使用的客户保存在FTP服务器上
-            if (BP.Difference.SystemConfig.IsUploadFileToFTP == true)
+            if (BP.Difference.SystemConfig.isUploadFileToFTP == true)
             {
                 string filePath = fileManager.MyFilePath;
                 string fileName = fileManager.MyFileName;
                 //临时存储位置
-                string tempFile = BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + "." + fileManager.MyFileExt;
+                string tempFile = BP.Difference.SystemConfig.PathOfTemp + DBAccess.GenerGUID() + "." + fileManager.MyFileExt;
                 if (System.IO.File.Exists(tempFile) == true)
                     System.IO.File.Delete(tempFile);
                 //连接FTP服务器
@@ -1129,7 +1127,7 @@ namespace BP.WF.HttpHandler
             SysFileManager fileManager = new SysFileManager(OID);
             //获取上传的附件路径，删除附件
             string filepath = fileManager.MyFilePath;
-            if (BP.Difference.SystemConfig.IsUploadFileToFTP == false)
+            if (BP.Difference.SystemConfig.isUploadFileToFTP == false)
             {
                 if (System.IO.File.Exists(filepath) == true)
                     System.IO.File.Delete(filepath);
@@ -1258,7 +1256,7 @@ namespace BP.WF.HttpHandler
                     dr["W"] = item.Width;
                     dr["H"] = item.Height;
                     dr["Icon"] = item.Icon;
-                    dr["IsCanBatch"] = item.IsCanBatch;
+                    dr["IsCanBatch"] = item.ItIsCanBatch;
                     dr["GroupName"] = item.GroupName;
                     Attrs attrs = item.HisAttrs;
                     if (attrs.Count == 0)
@@ -1282,7 +1280,7 @@ namespace BP.WF.HttpHandler
                         string rootNo = vsM.RootNo;
                         if (rootNo != null && rootNo.Contains("@") == true)
                         {
-                            rootNo = rootNo.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                            rootNo = rootNo.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
                             rootNo = rootNo.Replace("@WebUser.OrgNo", WebUser.OrgNo);
                         }
 
@@ -1530,10 +1528,7 @@ namespace BP.WF.HttpHandler
             }
             qo.DoQuery();
             DataTable dt = ensMen.ToDataTableField();
-            Entity en = ensMen.GetNewEntity;
-            string tableName = en.EnMap.PhysicsTable;
-            if (tableName.Equals("Port_Emp") == true 
-                && dt.Columns.Contains("UserID")==true)
+            if (dt.Columns.Contains("UserID") == true)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -1611,7 +1606,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(rootNo) == true)
                 rootNo = vsM.RootNo;
             if (rootNo.Equals("@WebUser.FK_Dept") || rootNo.Equals("WebUser.FK_Dept"))
-                rootNo = WebUser.FK_Dept;
+                rootNo = WebUser.DeptNo;
             if (rootNo.Equals("@WebUser.OrgNo") || rootNo.Equals("WebUser.OrgNo"))
                 rootNo = WebUser.OrgNo;
 
@@ -1841,11 +1836,21 @@ namespace BP.WF.HttpHandler
             Entities trees = attr.HisFKEns;
             //判断改类是否存在Idx
             Entity tree = trees.GetNewEntity;
-            if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
+            if(DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "ParentNo") == true
+               && tree.EnMap.Attrs.Contains("ParentNo") == true)
+            {
+                if (DBAccess.IsExitsTableCol(tree.EnMap.PhysicsTable, "Idx") == true
                 && tree.EnMap.Attrs.Contains("Idx") == true)
-                trees.Retrieve("ParentNo", rootNo, "Idx");
+                    trees.Retrieve("ParentNo", rootNo, "Idx");
+                else
+                    trees.Retrieve("ParentNo", rootNo);
+            }
             else
-                trees.Retrieve("ParentNo", rootNo);
+            {
+                DataTable dtt = new DataTable();
+                return BP.Tools.Json.ToJson(dtt);
+            }
+            
 
             DataTable dt = trees.ToDataTableField("DBTrees");
             //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
@@ -1855,7 +1860,7 @@ namespace BP.WF.HttpHandler
                 foreach (DataRow dr in dt.Rows)
                     dr["ParentNo"] = rootNo;
             }
-            return BP.Tools.Json.ToJson(dt); ;
+            return BP.Tools.Json.ToJson(dt); 
         }
         #endregion 部门人员模式.
 

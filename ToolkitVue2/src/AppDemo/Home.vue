@@ -1,48 +1,32 @@
 <template>
   <el-container>
     <el-aside :style="isCollapse ? 'width: 64px;' : 'width: 200px;'">
-        
-        <el-menu
-          :default-active="$route.path"
-          :collapse="false"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          :unique-opened="false"
-          active-text-color="#409EFF"
-          :collapse-transition="false"
-          class="el-menu-vertical"
-        >
-          <el-menu-item class="center">
-            <el-image
-              :src="
-                isCollapse
-                  ? require('./Img/slogo.png')
-                  : require('./Img/logoHome.png')
-              "
-            ></el-image>
+      <!-- :default-active="$route.path" :collapse="false" background-color="#304156" text-color="#bfcbd9"
+        :unique-opened="false" active-text-color="#409EFF" :collapse-transition="false" class="el-menu-vertical" -->
+      <el-menu :default-active="$route.path" :collapse="isCollapse" background-color="#304156" text-color="#bfcbd9"
+        :unique-opened="false" active-text-color="#409EFF" :collapse-transition="false" class="el-menu-vertical">
+        <el-menu-item class="center">
+          <el-image :src="
+            isCollapse
+              ? require('./Img/slogo.png')
+              : require('./Img/logoHome.png')
+          " style="display:flex;align-items:center;"></el-image>
+        </el-menu-item>
+        <el-submenu v-for="(item, index) in data" :index="(index + 1).toString()" :key="index">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span slot="title">{{ item.name }}</span>
+          </template>
+          <el-menu-item :index="'/' + itemList.path" v-for="(itemList, indexList) in item.list" :key="indexList"
+            @click="skipClick(itemList.path, itemList.params)">
+            <span class="pull-right side-ladge" v-if="itemList.count">{{
+              itemList.count
+            }}</span>
+            <i :class="itemList.icon"></i>
+            {{ itemList.name }}
           </el-menu-item>
-          <el-submenu
-            v-for="(item, index) in data"
-            :index="(index+1).toString()"
-            :key="index"
-          >
-            <template slot="title">
-              <i :class="item.icon"></i>
-              <span slot="title">{{ item.name }}</span>
-            </template>
-              <el-menu-item
-              :index="'/'+itemList.path"
-              v-for="(itemList, indexList) in item.list" :key="indexList"
-              @click="skipClick(itemList.path, itemList.params)"
-              >
-                <span class="pull-right side-ladge" v-if="itemList.count">{{
-                  itemList.count
-                }}</span>
-                <i :class="itemList.icon"></i>
-                {{ itemList.name }}
-              </el-menu-item>
-          </el-submenu>
-        </el-menu>
+        </el-submenu>
+      </el-menu>
     </el-aside>
     <el-container>
       <el-header>
@@ -66,10 +50,11 @@ export default {
     return {
       isHomePage: false,
       isSystemManage: false,
-      isCollapse: false, //是否拉开
+      // isCollapse: false, //是否拉开
+      isCollapse: true,
       btnIndex: "",
       menuList: "",
-      defaultActive:"-1",
+      defaultActive: "-1",
       data: [
         {
           name: "基础功能",
@@ -156,14 +141,14 @@ export default {
       path: "draft",
       icon: "el-icon-edit-outline",
       // eslint-disable-next-line no-mixed-spaces-and-tabs
-	  count: data.Todolist_Draft,
+      count: data.Todolist_Draft,
     });
     this.data[0].list.push({
       name: "抄送",
       path: "send",
       icon: "el-icon-edit",
       // eslint-disable-next-line no-mixed-spaces-and-tabs
-	  count: data.Todolist_CCWorks,
+      count: data.Todolist_CCWorks,
     });
     this.data[0].list.push({
       name: "批处理",
@@ -171,12 +156,12 @@ export default {
       icon: "el-icon-files",
       count: 0,
     });
-    if(this.$route.name){
-      console.log('路由',this.$route.name);
+    if (this.$route.name) {
+      console.log('路由', this.$route.name);
       this.defaultActive = this.$route.name;
-      this.isCollapse=false;
+      this.isCollapse = false;
     }
-   
+
   },
   methods: {
     // 跳转页面
@@ -191,8 +176,8 @@ export default {
       this.isCollapse = data;
     },
     onMenuChange(ev) {
-      this.$router.push({path: ev})
-    }
+      this.$router.push({ path: ev })
+    },
   },
   components: {
     CommonHeader,
@@ -221,6 +206,13 @@ export default {
 .main-side {
   background: #304156;
   border-right: solid 1px #e6e6e6;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:60px;
 }
 
 .el-menu-vertical-demo i {
@@ -258,21 +250,27 @@ export default {
   padding: 0;
   background-color: #367ea8;
 }
+
 .center {
   text-align: center;
   padding: 0px;
   padding-left: 0px !important;
   background-color: #409eff !important;
 }
+
 .el-menu {
   min-height: 100%;
 }
+
 .el-aside {
   overflow-x: hidden;
+  scrollbar-width: none;
 }
+
 .el-aside::-webkit-scrollbar {
   display: none;
 }
+
 .pull-right {
   float: right !important;
 }

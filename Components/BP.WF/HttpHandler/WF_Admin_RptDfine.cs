@@ -66,7 +66,7 @@ namespace BP.WF.HttpHandler
             string rptNo = this.GetRequestVal("RptNo");
 
             //所有的字段.
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string fk_mapdata = "ND" + int.Parse(this.FlowNo) + "Rpt";
             MapAttrs mattrs = new MapAttrs(fk_mapdata);
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
             md.No = rptNo;
             if (md.RetrieveFromDBSources() == 0)
             {
-                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FlowNo);
 
                 switch (rptNo.Substring(fk_mapdata.Length))
                 {
@@ -104,7 +104,7 @@ namespace BP.WF.HttpHandler
 
             //系统字段.
             MapAttrs mattrsOfSystem = new MapAttrs();
-            var sysFields = BP.WF.Glo.FlowFields;
+            string sysFields = BP.WF.Glo.FlowFields;
             foreach (MapAttr item in mattrs)
             {
                 if (sysFields.Contains(item.KeyOfEn))
@@ -142,7 +142,7 @@ namespace BP.WF.HttpHandler
             mrattrsOfRpt.Delete(MapAttrAttr.FK_MapData, rptNo);
 
             //所有的字段.
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string fk_mapdata = "ND" + int.Parse(this.FlowNo) + "Rpt";
             MapAttrs allAttrs = new MapAttrs(fk_mapdata);
 
             foreach (MapAttr attr in allAttrs)
@@ -151,8 +151,8 @@ namespace BP.WF.HttpHandler
                 if (fields.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
 
-                attr.setFK_MapData(rptNo);
-                attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
+                attr.FrmID =rptNo;
+                attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
 
                 #region 判断特殊的字段.
                 switch (attr.KeyOfEn)
@@ -239,13 +239,13 @@ namespace BP.WF.HttpHandler
                 //如果包含了指定的字段，就执行插入操作.
                 if (fields.Contains("," + attr.KeyOfEn + ",") == true)
                 {
-                    attr.setFK_MapData(rptNo);
-                    attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
+                    attr.FrmID =rptNo;
+                    attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
                     attr.DirectInsert();
                 }
             }
             MapData mapData = new MapData(rptNo);
-            mapData.ClearCash();
+            mapData.ClearCache();
             return "保存成功.";
         }
         #endregion
@@ -264,9 +264,9 @@ namespace BP.WF.HttpHandler
             md.No = rptNo;
             if (md.RetrieveFromDBSources() == 0)
             {
-                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FlowNo);
 
-                switch (rptNo.Substring(("ND" + int.Parse(this.FK_Flow) + "Rpt").Length))
+                switch (rptNo.Substring(("ND" + int.Parse(this.FlowNo) + "Rpt").Length))
                 {
                     case "My":
                         rd.DoReset_MyStartFlow();
@@ -380,9 +380,9 @@ namespace BP.WF.HttpHandler
             md.No = rptNo;
             if (md.RetrieveFromDBSources() == 0)
             {
-                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FlowNo);
 
-                switch (rptNo.Substring(("ND" + int.Parse(this.FK_Flow) + "Rpt").Length))
+                switch (rptNo.Substring(("ND" + int.Parse(this.FlowNo) + "Rpt").Length))
                 {
                     case "My":
                         rd.DoReset_MyStartFlow();
@@ -467,9 +467,9 @@ namespace BP.WF.HttpHandler
 
             string IsSearchKey = this.GetRequestVal("IsSearchKey");
             if (IsSearchKey == "0")
-                md.IsSearchKey = false;
+                md.ItIsSearchKey = false;
             else
-                md.IsSearchKey = true;
+                md.ItIsSearchKey = true;
             md.SetPara("StringSearchKeys", this.GetRequestVal("StringSearchKeys"));
             //查询方式.
             int DTSearchWay = this.GetRequestValInt("DTSearchWay");
@@ -483,7 +483,7 @@ namespace BP.WF.HttpHandler
             md.SetPara("IsSearchNextLeavel", this.GetRequestValBoolen("IsSearchNextLeavel"));
             md.Save();
 
-            Cash.Map_Cash.Remove(this.RptNo);
+            Cache.Map_Cache.Remove(this.RptNo);
             return "保存成功.";
         }
         #endregion

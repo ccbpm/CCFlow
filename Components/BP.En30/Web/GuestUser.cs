@@ -46,9 +46,9 @@ namespace BP.Web
         {
             //2019-07-25 zyt改造
             if (HttpContextHelper.Current == null)
-                SystemConfig.IsBSsystem = false;
+                SystemConfig.isBSsystem = false;
             else
-                SystemConfig.IsBSsystem = true;
+                SystemConfig.isBSsystem = true;
 
             //记录客人信息.
             GuestUser.No = guestNo;
@@ -67,7 +67,7 @@ namespace BP.Web
             }
             BP.Web.WebUser.SignInOfGener(em);
 
-            if (BP.Difference.SystemConfig.IsBSsystem)
+            if (BP.Difference.SystemConfig.isBSsystem)
             {
                 Dictionary<string, string> cookieValues = new Dictionary<string, string>();
                 cookieValues.Add("GuestNo", guestNo);

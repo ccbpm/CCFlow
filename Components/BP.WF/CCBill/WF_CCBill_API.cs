@@ -66,7 +66,7 @@ namespace BP.CCBill
                 sql = "SELECT No,Name,EntityType,FrmType,PTable FROM Sys_MapData M, (" + powerSQL + ") AS B WHERE M.No=B.FrmID AND (M.EntityType=1 OR M.EntityType=2) AND B.IsView=1 ORDER BY M.IDX ";
 
             }
-            else 
+            else
             {
                 powerSQL = "SELECT FrmID," +
              "(CASE WHEN IsEnableAll=1 THEN true " +
@@ -88,7 +88,7 @@ namespace BP.CCBill
             dt.Columns[2].ColumnName = "EntityType";
             dt.Columns[3].ColumnName = "FrmType";
             dt.Columns[4].ColumnName = "PTable";
-            
+
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -133,7 +133,7 @@ namespace BP.CCBill
                     en.Update();
                 }
 
-                if (DataType.IsNullOrEmpty(title) == false && en.GetValStrByKey("Title").Equals(title)==false)
+                if (DataType.IsNullOrEmpty(title) == false && en.GetValStrByKey("Title").Equals(title) == false)
                 {
                     en.SetValByKey("Title", title);
                     en.Update();
@@ -147,7 +147,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string CCFrom_GenerFrmListOfCanOptionBySpecTreeNo()
         {
-          
+
             string treeNo = this.GetRequestVal("TreeNo");
             return null;
         }
@@ -166,44 +166,42 @@ namespace BP.CCBill
                 MapData md = new MapData(this.FrmID);
                 //表单的工具栏权限
                 ToolbarBtn btn = new ToolbarBtn();
-                if (md.EntityType != EntityType.DBList && isReadonly==false)
+
+                btn.FrmID = md.No;
+                btn.BtnID = "New";
+                btn.BtnLab = "新建";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 0);
+                btn.Insert();
+
+
+                btn = new ToolbarBtn();
+                btn.FrmID = md.No;
+                btn.BtnID = "Save";
+                btn.BtnLab = "保存";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 1);
+                btn.Insert();
+
+                if (md.EntityType == EntityType.FrmBill)
                 {
-                    btn.FrmID = md.No;
-                    btn.BtnID = "New";
-                    btn.BtnLab = "新建";
-                    btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                    btn.SetValByKey("Idx", 0);
-                    btn.Insert();
-
-
+                    //单据增加提交的功能
                     btn = new ToolbarBtn();
                     btn.FrmID = md.No;
-                    btn.BtnID = "Save";
-                    btn.BtnLab = "保存";
+                    btn.BtnID = "Submit";
+                    btn.BtnLab = "归档";
                     btn.MyPK = btn.FrmID + "_" + btn.BtnID;
                     btn.SetValByKey("Idx", 1);
                     btn.Insert();
-
-                    if(md.EntityType == EntityType.FrmBill)
-                    {
-                        //单据增加提交的功能
-                        btn = new ToolbarBtn();
-                        btn.FrmID = md.No;
-                        btn.BtnID = "Submit";
-                        btn.BtnLab = "提交";
-                        btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                        btn.SetValByKey("Idx", 1);
-                        btn.Insert();
-                    }
-
-                    btn = new ToolbarBtn();
-                    btn.FrmID = md.No;
-                    btn.BtnID = "Delete";
-                    btn.BtnLab = "删除";
-                    btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                    btn.SetValByKey("Idx", 2);
-                    btn.Insert();
                 }
+
+                btn = new ToolbarBtn();
+                btn.FrmID = md.No;
+                btn.BtnID = "Delete";
+                btn.BtnLab = "删除";
+                btn.MyPK = btn.FrmID + "_" + btn.BtnID;
+                btn.SetValByKey("Idx", 2);
+                btn.Insert();
 
 
                 btn = new ToolbarBtn();
@@ -211,7 +209,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintHtml";
                 btn.BtnLab = "打印Html";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 3);
                 btn.Insert();
 
@@ -220,7 +218,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintPDF";
                 btn.BtnLab = "打印PDF";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 4);
                 btn.Insert();
 
@@ -229,7 +227,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintRTF";
                 btn.BtnLab = "打印RTF";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 5);
                 btn.Insert();
 
@@ -238,7 +236,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintCCWord";
                 btn.BtnLab = "打印CCWord";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 6);
                 btn.Insert();
 
@@ -247,7 +245,7 @@ namespace BP.CCBill
                 btn.BtnID = "ExpZip";
                 btn.BtnLab = "导出Zip包";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 7);
                 btn.Insert();
 
@@ -257,9 +255,9 @@ namespace BP.CCBill
 
             //获取针对按钮设置的操作权限
             PowerCenters pcs = new PowerCenters();
-            pcs.Retrieve(PowerCenterAttr.CtrlObj,this.FrmID, PowerCenterAttr.CtrlGroup,"FrmBtn");
+            pcs.Retrieve(PowerCenterAttr.CtrlObj, this.FrmID, PowerCenterAttr.CtrlGroup, "FrmBtn");
 
-            string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
+            string mydepts = "" + WebUser.DeptNo + ","; //我的部门.
             string mystas = ""; //我的角色.
 
             DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
@@ -273,7 +271,7 @@ namespace BP.CCBill
             string empIds = "";
             foreach (ToolbarBtn btn in btns)
             {
-                if (btn.IsEnable == false)
+                if (btn.ItIsEnable == false)
                     continue;
                 if (isReadonly == true && (btn.BtnID.Equals("New") || btn.BtnID.Equals("Save") || btn.BtnID.Equals("Submit") || btn.BtnID.Equals("Delete")))
                     continue;
@@ -340,16 +338,16 @@ namespace BP.CCBill
             }
             return newBtns;
         }
-            /// <summary>
-            /// 获取单据，实体按钮权限集合
-            /// </summary>
-            /// <returns></returns>
+        /// <summary>
+        /// 获取单据，实体按钮权限集合
+        /// </summary>
+        /// <returns></returns>
         public string CCFrom_ToolBar_Init()
         {
             //获取实体单据的权限
             ToolbarBtns btns = CCFrom_FrmPower();
             return BP.Tools.Json.ToJson(btns.ToDataTableField("Frm_ToolbarBtn"));
-           
+
         }
 
         /// <summary>
@@ -395,7 +393,7 @@ namespace BP.CCBill
             dt.Columns[2].ColumnName = "EntityType";
             dt.Columns[3].ColumnName = "FrmType";
             dt.Columns[4].ColumnName = "PTable";
-           
+
 
             return BP.Tools.Json.ToJson(dt);
         }

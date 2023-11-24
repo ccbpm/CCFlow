@@ -57,7 +57,7 @@ namespace BP.WF.Rpt
                 SetValByKey(RptEmpAttr.FK_Rpt, value);
             }
         }
-        public string FK_EmpT
+        public string EmpName
         {
             get
             {
@@ -67,7 +67,7 @@ namespace BP.WF.Rpt
         /// <summary>
         ///人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -97,7 +97,7 @@ namespace BP.WF.Rpt
         public RptEmp(string _empoid, string wsNo)
         {
             this.FK_Rpt = _empoid;
-            this.FK_Emp = wsNo;
+            this.EmpNo = wsNo;
             if (this.Retrieve() == 0)
                 this.Insert();
         }

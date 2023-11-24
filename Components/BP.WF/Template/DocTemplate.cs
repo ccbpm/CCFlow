@@ -90,7 +90,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -104,7 +104,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {

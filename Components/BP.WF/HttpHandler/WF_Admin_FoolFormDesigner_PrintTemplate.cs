@@ -2,6 +2,7 @@
 using BP.WF.Template;
 using BP.WF.Template.Frm;
 using BP.Difference;
+using System.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -30,19 +31,17 @@ namespace BP.WF.HttpHandler
                 return "err@请上传模版.";
             //上传附件
             string filepath = "";
-            //HttpPostedFile file = HttpContext.Current.Request.Files[0];
             //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
-            var file = HttpContextHelper.RequestFiles(0);
-            string fileName = file.FileName;
+            string fileName = HttpContextHelper.GetNameByIdx(0);
             fileName = fileName.Substring(fileName.IndexOf(this.GetRequestVal("TB_Name")));
             fileName = fileName.ToLower();
 
             filepath =  BP.Difference.SystemConfig.PathOfDataUser + "CyclostyleFile/" + fileName;
             //file.SaveAs(filepath);
-            HttpContextHelper.UploadFile(file, filepath);
+            HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filepath);
 
-            bt.NodeID = this.FK_Node;
-            bt.FrmID = this.FK_MapData;
+            bt.NodeID = this.NodeID;
+            bt.FrmID = this.FrmID;
             bt.MyPK= this.GetRequestVal("TB_No");
 
             if (DataType.IsNullOrEmpty(bt.MyPK))
@@ -67,8 +66,8 @@ namespace BP.WF.HttpHandler
 
             bt.SaveFileToDB("DBFile", filepath); //把文件保存到数据库里. 
 
-            Cash.ClearCash(fileName);
-            Cash.ClearCash(fileName+ "Para");
+            Cache.ClearCache(fileName);
+            Cache.ClearCache(fileName+ "Para");
 
             return "保存成功.";
         }

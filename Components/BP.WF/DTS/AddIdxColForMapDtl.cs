@@ -59,7 +59,7 @@ namespace BP.WF.DTS
                 if (ma.IsExits == true)
                     continue;
 
-                ma.setFK_MapData(item.No);
+                ma.FrmID =item.No;
                 ma.setKeyOfEn("Idx");
                 ma.Name = "Idx";
                 ma.setLGType(FieldTypeS.Normal);

@@ -18,14 +18,7 @@ namespace BP.CCBill
                 return str;
             }
         }
-        public string Name
-        {
-            get
-            {
-                string str = this.GetRequestVal("Name");
-                return str;
-            }
-        }
+     
         #endregion 属性.
 
         /// <summary>
@@ -44,7 +37,7 @@ namespace BP.CCBill
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }

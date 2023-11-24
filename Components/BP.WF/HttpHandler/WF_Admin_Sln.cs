@@ -29,7 +29,7 @@ namespace BP.WF.HttpHandler
         public string BindForm_GetFlowNodeDropList()
         {
             Nodes nodes = new Nodes();
-            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FlowNo, BP.WF.Template.NodeAttr.Step);
 
             if (nodes.Count == 0)
                 return "";
@@ -38,7 +38,7 @@ namespace BP.WF.HttpHandler
             sBuilder.Append("<select id = \"copynodesdll\"  multiple = \"multiple\" style = \"border - style:None; width: 100%; Height: 100%; \">");
 
             foreach (Node node in nodes)
-                sBuilder.Append("<option " + (FK_Node == node.NodeID ? "disabled = \"disabled\"" : "") + " value = \"" + node.NodeID + "\" >" + "[" + node.NodeID + "]" + node.Name + "</ option >");
+                sBuilder.Append("<option " + (this.NodeID == node.NodeID ? "disabled = \"disabled\"" : "") + " value = \"" + node.NodeID + "\" >" + "[" + node.NodeID + "]" + node.Name + "</ option >");
 
             sBuilder.Append("</select>");
 
@@ -59,7 +59,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string node in nodeList)
             {
-                if (string.IsNullOrWhiteSpace(node))
+                if (DataType.IsNullOrEmpty(node))
                     continue;
 
                 int nodeid = int.Parse(node);
@@ -69,25 +69,25 @@ namespace BP.WF.HttpHandler
 
                 foreach (string frm in frmList)
                 {
-                    if (string.IsNullOrWhiteSpace(frm))
+                    if (DataType.IsNullOrEmpty(frm))
                         continue;
 
                     FrmNode fn = new FrmNode();
                     FrmNode frmNode = new FrmNode();
 
-                    if (fn.IsExit("mypk", frm + "_" + this.FK_Node + "_" + this.FK_Flow))
+                    if (fn.IsExit("mypk", frm + "_" + this.NodeID + "_" + this.FlowNo))
                     {
                         frmNode.Copy(fn);
-                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FK_Flow);
-                        frmNode.FK_Flow = this.FK_Flow;
-                        frmNode.FK_Node = nodeid;
+                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FlowNo);
+                        frmNode.FlowNo = this.FlowNo;
+                        frmNode.NodeID = nodeid;
                         frmNode.FK_Frm = frm;
                     }
                     else
                     {
-                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FK_Flow);
-                        frmNode.FK_Flow = this.FK_Flow;
-                        frmNode.FK_Node = nodeid;
+                        frmNode.setMyPK(frm + "_" + nodeid + "_" + this.FlowNo);
+                        frmNode.FlowNo = this.FlowNo;
+                        frmNode.NodeID = nodeid;
                         frmNode.FK_Frm = frm;
                     }
 
@@ -108,7 +108,7 @@ namespace BP.WF.HttpHandler
             {
                 string formNos = HttpContextHelper.RequestParams("formNos"); // this.context.Request["formNos"];
 
-                FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
+                FrmNodes fns = new FrmNodes(this.FlowNo, this.NodeID);
                 //删除已经删除的。
                 foreach (FrmNode fn in fns)
                 {
@@ -130,10 +130,10 @@ namespace BP.WF.HttpHandler
 
                     FrmNode fn = new FrmNode();
                     fn.FK_Frm = s;
-                    fn.FK_Flow = this.FK_Flow;
-                    fn.FK_Node = this.FK_Node;
+                    fn.FlowNo = this.FlowNo;
+                    fn.NodeID = this.NodeID;
 
-                    fn.setMyPK(fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow);
+                    fn.setMyPK(fn.FK_Frm + "_" + fn.NodeID + "_" + fn.FlowNo);
 
                     fn.Save();
                 }
@@ -154,7 +154,7 @@ namespace BP.WF.HttpHandler
             //形成树
             FlowFormTrees appendFormTrees = new FlowFormTrees();
             //节点绑定表单
-            FrmNodes frmNodes = new FrmNodes(this.FK_Flow, this.FK_Node);
+            FrmNodes frmNodes = new FrmNodes(this.FlowNo, this.NodeID);
             //所有表单类别
             SysFormTrees formTrees = new SysFormTrees();
             formTrees.RetrieveAll(SysFormTreeAttr.Idx);
@@ -205,7 +205,7 @@ namespace BP.WF.HttpHandler
                     {
                         BP.WF.Template.FlowFormTree formFolder = new BP.WF.Template.FlowFormTree();
                         formFolder.No = map.No;
-                        formFolder.ParentNo = map.FK_FormTree;
+                        formFolder.ParentNo = map.FormTreeNo;
                         formFolder.Name = map.Name + "[" + map.No + "]";
                         formFolder.NodeType = "form";
                         appendFormTrees.AddEntity(formFolder);
@@ -319,17 +319,17 @@ namespace BP.WF.HttpHandler
             BP.Sys.SysEnums ses = new SysEnums("FrmEnableRole");
 
             string text = "";
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Node nd = new BP.WF.Node(this.NodeID);
 
-            //FrmNodeExt fns = new FrmNodeExt(this.FK_Flow, this.FK_Node);
+            //FrmNodeExt fns = new FrmNodeExt(this.FlowNo, this.NodeID);
 
-            FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
+            FrmNodes fns = new FrmNodes(this.FlowNo, this.NodeID);
 
             #region 如果没有ndFrm 就增加上.
             bool isHaveNDFrm = false;
             foreach (FrmNode fn in fns)
             {
-                if (fn.FK_Frm == "ND" + this.FK_Node)
+                if (fn.FK_Frm == "ND" + this.NodeID)
                 {
                     isHaveNDFrm = true;
                     break;
@@ -339,14 +339,14 @@ namespace BP.WF.HttpHandler
             if (isHaveNDFrm == false)
             {
                 FrmNode fn = new FrmNode();
-                fn.FK_Flow = this.FK_Flow;
-                fn.FK_Frm = "ND" + this.FK_Node;
-                fn.FK_Node = this.FK_Node;
+                fn.FlowNo = this.FlowNo;
+                fn.FK_Frm = "ND" + this.NodeID;
+                fn.NodeID = this.NodeID;
 
                 fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
                 fn.FrmSln = 0;
                 //  fn.IsEdit = true;
-                fn.IsEnableLoadData = true;
+                fn.ItIsEnableLoadData = true;
                 fn.Insert();
                 fns.AddEntity(fn);
             }
@@ -367,7 +367,7 @@ namespace BP.WF.HttpHandler
             }
 
             FrmNodeExts fnes = new FrmNodeExts();
-            fnes.Retrieve(FrmNodeAttr.FK_Flow, this.FK_Flow, FrmNodeAttr.FK_Node, this.FK_Node, FrmNodeAttr.Idx);
+            fnes.Retrieve(FrmNodeAttr.FK_Flow, this.FlowNo, FrmNodeAttr.FK_Node, this.NodeID, FrmNodeAttr.Idx);
 
             //把json数据返回过去.
             return fnes.ToJson();
@@ -384,15 +384,15 @@ namespace BP.WF.HttpHandler
             public string LGTypeT;
             public bool UIVisible;
             public bool UIIsEnable;
-            public bool IsSigan;
+            public bool ItIsSigan;
             public string DefVal;
-            public bool IsNotNull;
+            public bool ItIsNotNull;
             public string RegularExp;
-            public bool IsWriteToFlowTable;
+            public bool ItIsWriteToFlowTable;
             /// <summary>
             ///  add new attr 是否写入流程注册表
             /// </summary>
-            public bool IsWriteToGenerWorkFlow;
+            public bool ItIsWriteToGenerWorkFlow;
         }
         #endregion 字段权限.
 

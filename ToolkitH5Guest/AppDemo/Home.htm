@@ -1,0 +1,386 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="webkit" name="renderer" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="PoweredByJeeSiteV4.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta name="description" content="PoweredByJeeSiteV4.0" />
+    <meta content="no-cache" http-equiv="Pragma" />
+    <meta http-equiv="Expires" content="0" />
+    <meta content="width=device-width, initial-scale=1, user-scalable=1" name="viewport" />
+    <title>股份集团ERP系统</title>
+    <link href="static/favicon.ico" type="image/jpg" rel="shortcut icon">
+    <!--<script src="/js/static/jquery/jquery-1.12.4.min.js"></script>
+    <script src="/js/static/jquery/jquery-migrate-1.4.1.min.js"></script>-->
+    <script src="./static/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
+    <script src="./static/jquery/jquery-migrate-1.4.1.min.js" type="text/javascript"></script>
+    <script src="./static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./static/select2/4.0/select2.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/select2/4.0/i18n/zh_CN.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/layer/3.1/layer.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/my97/WdatePicker.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/wdScrollTab/js/TabPanel.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/wdScrollTab/js/TabPanel.extend.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/common/jeesite.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/common/i18n/jeesite_zh_CN.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/jquery-toastr/2.0/toastr.min.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="./static/jquery-plugins/jquery.slimscroll.js" type="text/javascript"></script>
+    <script src="./static/modules/sys/sysIndex.js?V4.1-03261504" type="text/javascript"></script>
+    <script src="static/global.min.js"></script>
+
+    <link href="./static/fonts/font-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="./static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="./static/select2/4.0/select2.css" rel="stylesheet" type="text/css" />
+    <link href="./static/icheck/1.0/minimal/grey.css" rel="stylesheet" type="text/css" />
+    <link href="./static/adminlte/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
+
+
+    <!--<link href="./static/adminlte/css/skins/skin-blue-light.css" rel="stylesheet" type="text/css" />-->
+    <link href="./static/adminlte/css/skins/skin-green-light.css" rel="stylesheet" type="text/css" />
+    <link href="./static/modules/sys/sysIndex.css" rel="stylesheet" type="text/css" />
+    <link href="./static/jquery-toastr/2.0/toastr.min.css" rel="stylesheet" type="text/css" />
+    <link href="./static/common/jeesite.css" rel="stylesheet" type="text/css" />
+    <link href="./static/wdScrollTab/css/TabPanel.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+
+    <!--<script src="static/adminlte/js/adminlte.js"></script>-->
+    <script src="../WF/Style/skin/layui/layer.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/bootstrap/BootstrapUIDialog.js"></script>
+    <script src="../WF/Scripts/jquery/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/QueryString.js"></script>
+    <script src="../WF/config.js"></script>
+
+    <link href="home.css" rel="stylesheet" />
+    <link href="./static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../WF/Style/skin/layui/css/layui.css" rel="stylesheet" />
+    <link href="../WF/Scripts/layui/layui/css/layui.css" rel="stylesheet" />
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px !important;
+            height: 10px !important;
+            -webkit-appearance: none;
+        }
+
+        .sidebar-collapse {
+            background: #fff;
+        }
+
+        .main-sidebar {
+            background: #fff;
+        }
+
+        .cg_color {
+            color: #555;
+            text-decoration: none;
+        }
+
+            .cg_color:hover, .cg_color:active, .cg_color:focus {
+                color: #000;
+                text-decoration: none;
+                background: #fff
+            }
+    </style>
+    <script type="text/javascript" language="javascript">
+
+        //页面启动函数.
+        $(function () {
+            //获得当前的SID.
+            var sid = $.cookie("MyToken");
+            var userNo = $.cookie("MyUserNo");
+            if (userNo == "") {
+                window.location.href = "Login.htm";
+                return;
+            }
+
+            $("#UserName").append(userNo);
+            return;
+        });
+        //增加一个标签.
+        function AddTab(title, url) {
+            js.addTabPage($("#mainPage"), title, url);
+        }
+        //发起时打开窗口
+        function WinOpenStartFlow(url, title) {
+
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                shadeClose: true, //点击遮罩区域是否关闭页面
+                shade: 0.3,  //遮罩透明度
+                title: title + ' : 发起申请',
+                area: ['80%', '80%'],
+                content: "../WF/" + url
+            });
+
+        }
+        function WinOpenIt(url) {
+            var W = document.body.clientWidth - 200;
+            var H = document.body.clientHeight - 100;
+            OpenBootStrapModal(url, "eudlgframe", "待办", W, H, "icon-property", false, function () { }, null, function () {
+                location.reload();
+            });
+        }
+        function changeShow(id) {
+            if ($("#" + id).is(':hidden'))
+                $("#" + id).show();
+            else
+                $("#" + id).hide();
+        }
+    </script>
+    <!--<link rel="stylesheet" href="/js/static/common/common.css?V4.1-03261504">-->
+</head>
+<!--hold-transition fixed noscroll2 sidebar-mini-->
+<body class="noscroll2 hold-transition flexd sidebar-mini" style="overflow:hidden;">
+    <div class="wrapper">
+        <header class="main-header" style="background: #1951be; height: 50px;">
+            <!--<div style="background-color:#008AFF" class="logo">
+        <b class="logo-lg">ERP子系统演示</b>-->
+            <!--<small>&nbsp; &nbsp;<i class="fa fa-bars"></i></small>-->
+            <!--<span class="logo-mini">1111111111</span>
+    </div>-->
+            <div class="logo">
+                <!--<span class="logo-mini"><b></b></span>-->
+                <span class="logo-lg"><b style="font-size:18px">ERP子系统演示</b></span>
+
+            </div>
+
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <div class="sidebar-toggle" data-toggle="push-menu" role="button"  style="margin-left:-20px;height:50px;line-height:20px; width:50px"></div>
+                <div class="navbar-custom-menu">
+                    <!--<ul>
+            <li><a href="/WF/Start.htm" target='IFRAME'>发起</a></li>
+            <li><a href="/WF/Start.htm" target='IFRAME'>待办</a></li>
+            <li><a href="/WF/Start.htm" target='IFRAME'>在途</a></li>
+        </ul>-->
+                    <ul class="nav navbar-nav">
+
+                        <!--<li>
+        <a data-href="/WF/Start.htm" data-tab-id="welcome" target='IFRAME' title="发起" style="margin-top:-1px;">
+            <i class="fa fa-home">发起</i>
+        </a>
+    </li>
+
+    <li>
+        <a data-href="/WF/Todolist.htm" data-tab-id="welcome" target='IFRAME' title="待办" style="margin-top:-1px;">
+            <i class="fa fa-home">待办</i>
+        </a>
+    </li>
+
+
+    <li>
+        <a data-href="/WF/Running.htm" data-tab-id="welcome" target='IFRAME' title="在途" style="margin-top:-1px;">
+            <i class="fa fa-home">在途</i>
+        </a>
+    </li>
+
+    <li>
+        <a data-href="/WF/Draft.htm" data-tab-id="welcome" target='IFRAME' title="草稿" style="margin-top:-1px;">
+            <i class="fa fa-home">草稿</i>
+        </a>
+    </li>-->
+
+                        <li class="treeview">
+                            <a data-href="/WF/Dev2InterfaceDemo.htm" data-tab-id="welcome" class="a_active" target='IFRAME' title="接口" style="margin-top:-1px;">
+                                <i class="fa fa-home" onclick="API();" style="color:#fff"> 接口</i>
+                            </a>
+                        </li>
+
+                        <!--<li>
+        <a data-href="/CRM/CustomerList.htm" data-tab-id="welcome" target='IFRAME' title="实体流程" style="margin-top:-1px;">
+            <i class="fa fa-home">实体流程</i>
+        </a>
+    </li>-->
+
+                        <li class="treeview">
+                            <a data-href="../WF/Welcome.htm" data-tab-id="welcome" class="a_active" target='IFRAME' title="主页" style="margin-top:-1px;">
+                                <i class="fa fa-home" style="color:#fff">主页</i>
+                            </a>
+                        </li>
+
+                        <li class="dropdown user-menu mr5 treeview">
+                            <a href="javascript:" class="dropdown-toggle a_active" data-toggle="dropdown" data-hover="dropdown" aria-expanded="false" style="margin-top:-1px;">
+
+                                <span class="hidden-xs" id="UserName"></span>
+                                <i class="fa fa-sign-out" style="color:#fff"></i>退出
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li id="exitBar">
+                                    <a href="Login.htm?DoType=logout">
+                                        <i class="fa fa-sign-out"></i> 退出登录
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+
+            <div class="sidebar-collapse">
+
+                <!-- UL 开始 外框. -->
+                <ul class="sidebar-menu" id="sidebar-menu" role="menu" style="overflow-y: auto; height: 100%; padding: 0 8px 0 7px;">
+                    <!--<li>
+                    <a href="#" onclick="changeShow('JCGN')">
+                        <i class="icon iconfont icon-huaban"></i>-->
+                    <!-- 基础功能 -->
+                    <!--<span class="nav-label lang" data-key="jcgn"><b>工具包接口</b></span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul id="JCGN" class="nav nav-second-level">-->
+                    <!-- 流程发起 -->
+                    <!--<li><a title="发起" href="javascript:" data-href="../DemoTools/Start.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">发起</span></a></li>
+                        <li><a title="待办" href="javascript:" data-href="../DemoTools/Todolist.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
+                        <li><a title="在途" href="javascript:" data-href="../DemoTools/Runing.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
+                        <li><a title="草稿" href="javascript:" data-href="../DemoTools/Draft.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">草稿</span><label class="label label-info pull-right" id="Draft"></label> </a></li>
+                        <li><a title="流程查询" href="javascript:" data-href="../DemoTools/Search.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">流程查询</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
+                    </ul>
+                </li>-->
+
+                    <li class="treeview">
+                        <a href="#" onclick="changeShow('JCGN1')" class="cg_color addTabPage">
+                            <i class="fa fa-fw icon-grid"></i>
+                            <!-- 基础功能 -->
+                            <span class="nav-label lang" data-key="jcgn1"><b>流程功能</b></span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            <!--<i class="icon-arrow-down"></i>-->
+                        </a>
+                        <ul id="JCGN1" class="nav nav-second-level treeview-menu">
+
+                            <li class="treeview"><a title="发起" href="javascript:" data-href="../WF/Start.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">发起</span></a></li>
+                            <li class="treeview"><a title="待办" href="javascript:" data-href="../WF/Todolist.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
+                            <li class="treeview"><a title="在途" href="javascript:" data-href="../WF/Runing.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
+                            <li class="treeview"><a title="草稿" href="javascript:" data-href="../WF/Draft.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">草稿</span><label class="label label-info pull-right" id="Draft"></label> </a></li>
+                            <li class="treeview"><a title="批处理" href="javascript:" data-href="../WF/Batch.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">批处理</span><label class="label label-info pull-right" id="Batch"></label> </a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#" onclick="changeShow('URL')" class="cg_color">
+                            <i class="fa fa-fw icon-grid"></i>
+                            <!-- 基础功能 -->
+                            <span class="nav-label lang" data-key="jcgn"><b>功能调用</b></span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            <!--<span class="icon-arrow-down"></span>-->
+                        </a>
+                        <ul id="URL" class="nav nav-second-level treeview-menu">
+                            <!--data-href="../AppDemo/Bill/F026List.htm"-->
+                            <!--data-href="../AppDemo/Bill/F025List.htm"-->
+                            <li class="treeview"><a title="流程设计" href="javascript:DFlow();" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">流程设计</span></a></li>
+                            <li class="treeview"><a title="表单设计" href="javascript:DFrm();" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">表单设计</span></a></li>
+                            <!--<li><a title="发起" href="javascript:UrlStart()" target="_self" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">发起</span></a></li>
+                            <li><a title="待办" href="javascript:UrlTodolist()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
+                            <li><a title="在途" href="javascript:UrlRuning()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
+                            <li><a title="草稿" href="javascript:UrlDraft()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">草稿</span><label class="label label-info pull-right" id="Draft"></label> </a></li>
+                            <li><a title="查询" href="javascript:UrlSearch()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">查询</span><label class="label label-info pull-right" id="Draft"></label> </a></li>-->
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#" onclick="changeShow('API')" class="cg_color">
+                            <i class="fa fa-fw icon-grid"></i>
+                            <span class="nav-label lang" data-key="jcgn"><b>API接口</b></span>
+                            <!--<span class="icon-arrow-down"></span>-->
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul id="API" class="nav nav-second-level treeview-menu">
+                            <li class="treeview"><a title="接口预览" href="javascript:" data-href="../WF/Docs/API.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口预览</span></a></li>
+                            <li class="treeview"><a title="接口测试" href="javascript:" data-href="../WF/Dev2InterfaceDemo.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口测试</span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#" onclick="changeShow('CRM')" class="cg_color">
+                            <i class="fa fa-fw icon-grid"></i>
+                            <span class="nav-label lang" data-key="search">
+                                <b>单据流程</b>
+                            </span>
+                            <!--<span class="icon-arrow-down"></span>-->
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul id="CRM" class="nav nav-second-level treeview-menu">
+
+                            <li class="treeview"><a title="WorkID主键" href="javascript:" data-href="../AppDemo/Bill/F025List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">WorkID主键</span></a></li>
+                            <li class="treeview"><a title="自定义主键" href="javascript:" data-href="../AppDemo/Bill/F026List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">自定义主键</span></a></li>
+
+                            <!--<li><a title="开票记录" href="javascript:" data-href="../AppDemo/CRM/F003_KaiPiao.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">开票记录</span></a></li>
+                        <li><a title="催款记录" href="javascript:" data-href="../AppDemo/CRM/F004_CuiKuan.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">催款记录</span></a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <script type="text/javascript">
+            function API() {
+                var url = '/WF/Dev2InterfaceDemo.htm?DoWhat=Flows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("接口API", url);
+            }
+            function DFlow() {
+                var url = host + '/WF/Port.htm?DoWhat=Flows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("流程设计", url);
+                // window.location.href = url;
+            }
+            function DFrm() {
+                var url = host + '/WF/Port.htm?DoWhat=Frms&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("表单设计", url);
+                // window.location.href = url;
+            }
+            function UrlStart() {
+                var url = host + '/WF/Port.htm?DoWhat=Start&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("发起", url);
+                // window.location.href = url;
+            }
+            function UrlTodolist() {
+                var url = host + '/WF/Port.htm?DoWhat=Todolist&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("待办", url);
+                // window.location.href = url;
+            }
+            function UrlDraft() {
+                var url = host + '/WF/Port.htm?DoWhat=Draft&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("草稿", url);
+                // window.location.href = url;
+            }
+            function UrlRuning() {
+                var url = host + '/WF/Port.htm?DoWhat=Runing&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("在途", url);
+                // window.location.href = url;
+            }
+            function UrlSearch() {
+                var url = host + '/WF/Port.htm?DoWhat=FlowSearch&Token=' + GetToken() + "&UserID=" + GetUserNo();
+                AddTab("查询", url);
+                // window.location.href = url;
+            }
+        </script>
+        <div class="content-wrapper">
+            <div id="tabpanel">
+            </div>
+        </div>
+    </div>
+    <a id="scroll-up" href="#" class="btn btn-sm">
+        <i class="fa fa-angle-double-up"></i>
+    </a>
+    <div class="hide" id="desktopTabPage" data-title="主页" data-url="../WF/Welcome.htm">
+        <!--<div class="hide" id="desktopTabPage1" data-title="主页" data-url="../Portal/Welcome.htm">
+
+        </div>-->
+
+        <div class="hide" id="modifyPasswordTip" data-message="">
+        </div>
+    </div>
+</body>
+</html>

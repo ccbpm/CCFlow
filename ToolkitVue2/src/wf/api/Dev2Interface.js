@@ -30,6 +30,8 @@ export function openMyFlow(params,_this){
         });
         return;
     }
+
+    alert(data);
 }
 
 /**
@@ -72,10 +74,11 @@ export function openMyView(params,_this){
  * @constructor
  */
 export function LoginCCBPM(privateKey,userNo){
-    const url = "/API/Port_Login_Submit?PrivateKey=" + privateKey + "&UserNo="+userNo;
+    const url = process.env.VUE_APP_API+"Port_Login?privateKey=" + privateKey + "&userNo="+userNo;
     const userInfo = RunUrlReturnString(url);
     if(userInfo === undefined || userInfo ==="")
         return "";
     localStorage.setItem("UserInfo",userInfo);
     return JSON.parse(userInfo).Token;
 }
+

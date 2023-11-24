@@ -1,0 +1,75 @@
+/* ---左侧导航部分--- */
+/* 导航主色 */
+.navbar-static-side{background:#ffffff ;}
+
+/* 导航下拉部分颜色 */
+.nav>li>a{color:#555;font-weight: 400;}
+/*.nav>li:active{background:#fff;}*/
+.nav>li:active>a{color:#23508e}
+.nav > li > a:hover i{
+    color: #000;
+}
+.nav > li > a:focus i {
+    color: #3c88f7
+}
+.nav > li:active > .nav > li > a:hover {
+        color: #23508e;
+    }
+
+.icon-arrow-down {
+    margin-left: 50px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+/* .nav>li>a>i:hover{color:#1492FF !important} */
+.navbar-default .nav > li > a:focus, .navbar-default .nav > li > a:hover {
+    background-color: #EDF4FF;
+    color: #1492FF;
+}
+
+
+.navbar-fixed-top, .navbar-static-top {
+    height: 50px;
+    background: #1492FF;
+    background: -webkit-gradient(linear,left bottom,right top,color-stop(0,#1951be),color-stop(1,#2780ec));
+    box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05)
+}
+/* 未缩放左侧头部 */
+.nav-header{background:#1492FF;padding: 0; padding-left: 10px; height: 53px;}
+/* logo */
+.m-t-xs .logo_img{width: 26px;height: 22px;margin:0 10px;}
+.m-t-xs{margin: 12px 0;}
+
+/* 缩放左侧头部 */
+body.mini-navbar .nav-header{padding:0;background-color:#1492FF;}
+.logo-element{text-align:center;font-size:18px;display:none;line-height: 53px;padding: 0;}
+.logo-element .logo_img{width: 26px;height: 22px}
+
+
+/* ---headder部分--- */
+
+.nav .navbar-right>li>a:hover{
+  background-color: green !important;
+}
+.navbar>.navbar-right>li>a{
+  color: #fff;
+}
+.navbar>.navbar-right>li>a>i{
+  color: #fff;
+}
+.navbar>.navbar-right>li>.icon-wo{
+  color: #fff;
+  padding: 0 5px;
+}
+.navbar>.navbar-right>li>#UserName{
+  color: #fff;
+}
+/*btn 切换 */
+
+.btn-info{color:#fff!important;background-color:transparent;border-color:transparent;padding: 0px;}
+.btn-info>.select_img{
+  width: 22px;height: 15px;
+}
+.btn-info.active,.btn-info:active,.btn-info:focus,.btn-info:hover,.open .dropdown-toggle.btn-info{color:#fff!important;background-color:transparent;border-color:transparent;}
+

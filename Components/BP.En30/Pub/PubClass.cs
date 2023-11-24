@@ -62,7 +62,7 @@ namespace BP.Pub
         /// <returns></returns>
         public static string GenerTempFileName(string hz)
         {
-            return Web.WebUser.No + DateTime.Now.ToString("MMddhhmmss") + "." + hz;
+            return Web.WebUser.No + DBAccess.GenerGUID() + "." + hz;
         }
         /// <summary>
         /// 获取datatable.
@@ -316,6 +316,8 @@ namespace BP.Pub
                 switch (en.EnMap.EnDBUrl.DBType)
                 {
                     case DBType.Oracle:
+                    case DBType.KingBaseR3:
+                    case DBType.KingBaseR6:
                         AddCommentForTable_Ora(en);
                         break;
                     case DBType.MySQL:
@@ -543,123 +545,6 @@ namespace BP.Pub
 
             PubClass.AddComment(en);
             return "";
-
-            string msg = "";
-
-            string table = en.EnMap.PhysicsTable;
-            Attrs fkAttrs = en.EnMap.HisFKAttrs;
-            if (fkAttrs.Count == 0)
-                return msg;
-            int num = 0;
-            string sql;
-            //string msg="";
-            foreach (Attr attr in fkAttrs)
-            {
-                if (attr.MyFieldType == FieldType.RefText)
-                    continue;
-
-                string enMsg = "";
-                try
-                {
-                    #region 更新他们，去掉左右空格，因为外键不能包含左右空格。
-                    if (level == DBCheckLevel.Middle || level == DBCheckLevel.High)
-                    {
-                        /*如果是高中级别,就去掉左右空格*/
-                        if (attr.MyDataType == DataType.AppString)
-                        {
-                            DBAccess.RunSQL("UPDATE " + en.EnMap.PhysicsTable + " SET " + attr.Field + " = rtrim( ltrim(" + attr.Field + ") )");
-                        }
-                    }
-                    #endregion
-
-                    #region 处理关联表的情况.
-                    Entities refEns = attr.HisFKEns; // ClassFactory.GetEns(attr.UIBindKey);
-                    Entity refEn = refEns.GetNewEntity;
-
-                    //取出关联的表。
-                    string reftable = refEn.EnMap.PhysicsTable;
-                    //sql="SELECT COUNT(*) FROM "+en.EnMap.PhysicsTable+" WHERE "+attr.Key+" is null or len("+attr.Key+") < 1 ";
-                    // 判断外键表是否存在。
-
-                    sql = "SELECT COUNT(*) FROM  sysobjects  WHERE  name = '" + reftable + "'";
-                    //num=DA.DBAccess.RunSQLReturnValInt(sql,0);
-                    if (DBAccess.IsExitsObject(new DBUrl(DBUrlType.AppCenterDSN), reftable) == false)
-                    {
-                        //报告错误信息
-                        enMsg += "<br>@检查实体：" + en.EnDesc + ",字段 " + attr.Key + " , 字段描述:" + attr.Desc + " , 外键物理表:" + reftable + "不存在:" + sql;
-                    }
-                    else
-                    {
-                        Attr attrRefKey = refEn.EnMap.GetAttrByKey(attr.UIRefKeyValue); // 去掉主键的左右 空格．
-                        if (attrRefKey.MyDataType == DataType.AppString)
-                        {
-                            if (level == DBCheckLevel.Middle || level == DBCheckLevel.High)
-                            {
-                                /*如果是高中级别,就去掉左右空格*/
-                                DBAccess.RunSQL("UPDATE " + reftable + " SET " + attrRefKey.Field + " = rtrim( ltrim(" + attrRefKey.Field + ") )");
-                            }
-                        }
-
-                        Attr attrRefText = refEn.EnMap.GetAttrByKey(attr.UIRefKeyText);  // 去掉主键 Text 的左右 空格．
-
-                        if (level == DBCheckLevel.Middle || level == DBCheckLevel.High)
-                        {
-                            /*如果是高中级别,就去掉左右空格*/
-                            DBAccess.RunSQL("UPDATE " + reftable + " SET " + attrRefText.Field + " = rtrim( ltrim(" + attrRefText.Field + ") )");
-                        }
-
-                    }
-                    #endregion
-
-                    #region 外键的实体是否为空
-                    switch (en.EnMap.EnDBUrl.DBType)
-                    {
-                        case DBType.Oracle:
-                            sql = "SELECT COUNT(*) FROM " + en.EnMap.PhysicsTable + " WHERE " + attr.Field + " is null or length(" + attr.Field + ") < 1 ";
-                            break;
-                        default:
-                            sql = "SELECT COUNT(*) FROM " + en.EnMap.PhysicsTable + " WHERE " + attr.Field + " is null or len(" + attr.Field + ") < 1 ";
-                            break;
-                    }
-
-                    num = DA.DBAccess.RunSQLReturnValInt(sql, 0);
-                    if (num == 0)
-                    {
-                    }
-                    else
-                    {
-                        enMsg += "<br>@检查实体：" + en.EnDesc + ",物理表:" + en.EnMap.PhysicsTable + "出现" + attr.Key + "," + attr.Desc + "不正确,共有[" + num + "]行记录没有数据。" + sql;
-                    }
-                    #endregion
-
-                    #region 是否能够对应到外键
-                    //是否能够对应到外键。
-                    sql = "SELECT COUNT(*) FROM " + en.EnMap.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( SELECT " + refEn.EnMap.GetAttrByKey(attr.UIRefKeyValue).Field + " FROM " + reftable + "	 ) ";
-                    num = DA.DBAccess.RunSQLReturnValInt(sql, 0);
-                    if (num == 0)
-                    {
-                    }
-                    else
-                    {
-                        /*如果是高中级别.*/
-                        string delsql = "DELETE FROM " + en.EnMap.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( SELECT " + refEn.EnMap.GetAttrByKey(attr.UIRefKeyValue).Field + " FROM " + reftable + "	 ) ";
-                        //int i =DBAccess.RunSQL(delsql);
-                        enMsg += "<br>@" + en.EnDesc + ",物理表:" + en.EnMap.PhysicsTable + "出现" + attr.Key + "," + attr.Desc + "不正确,共有[" + num + "]行记录没有关联到数据，请检查物理表与外键表。" + sql + "如果您想删除这些对应不上的数据请运行如下SQL: " + delsql + " 请慎重执行.";
-                    }
-                    #endregion
-                }
-                catch (Exception ex)
-                {
-                    enMsg += "<br>@" + ex.Message;
-                }
-
-                if (enMsg != "")
-                {
-                    msg += "<BR><b>-- 检查[" + en.EnDesc + "," + en.EnMap.PhysicsTable + "]出现如下问题,类名称:" + en.ToString() + "</b>";
-                    msg += enMsg;
-                }
-            }
-            return msg;
         }
         #endregion
 
@@ -753,13 +638,13 @@ namespace BP.Pub
                 if (en.Row.ContainsKey(attrKey) == false)
                     continue; //判断是否存在?
 
-                var val = HttpContextHelper.RequestParams(key);
+                string val = HttpContextHelper.RequestParams(key);
                 Attr attr = attrs.GetAttrByKey(attrKey);
                 if (val == null)
                     val = attr.DefaultVal.ToString(); //如果此值为空,就让其设置默认值.
 
                 //如果是数值类型的值.
-                if (attr.IsNum && DataType.IsNumStr(val.ToString()) == false)
+                if (attr.ItIsNum && DataType.IsNumStr(val.ToString()) == false)
                     throw new Exception("err@[" + en.ToString() + "," + en.EnDesc + "]输入错误:" + attr.Key + "," + attr.Desc + ",应该是数值类型，但是输入了[" + val.ToString() + "]");
 
                 //设置他的属性.
@@ -897,7 +782,7 @@ namespace BP.Pub
                             if (attr.UIContralType == UIContralType.CheckBok)
                             {
                                 string val = HttpContextHelper.RequestParams(myK);
-                                if (val == "on" || val == "1" || val.Contains(",on"))
+                                if (val.Equals("on") || val.Equals("1") || val.Contains(",on"))
                                     en.SetValByKey(attr.Key, 1);
                                 else
                                     en.SetValByKey(attr.Key, 0);

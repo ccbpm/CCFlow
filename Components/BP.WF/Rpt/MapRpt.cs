@@ -251,7 +251,7 @@ namespace BP.WF.Rpt
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -341,7 +341,7 @@ namespace BP.WF.Rpt
         {
             this.No = no;
             this.Retrieve();
-            this.FK_Flow = flowNo;
+            this.FlowNo = flowNo;
         }
         /// <summary>
         /// EnMap

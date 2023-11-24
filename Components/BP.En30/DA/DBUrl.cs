@@ -64,6 +64,8 @@ namespace BP.DA
 					case DBType.KingBaseR6:
                     case DBType.PostgreSQL:
 					case DBType.UX:
+					case DBType.DM:
+					case DBType.HGDB:
 						return ":";
                     case DBType.MySQL:
                     case DBType.MSSQL:

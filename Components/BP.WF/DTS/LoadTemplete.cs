@@ -94,7 +94,7 @@ namespace BP.WF.DTS
                     {
                         MapData md = MapData.ImpMapData(ds);
                       //  md.FK_FrmSort = fs.No;
-                        md.FK_FormTree = fs.No;
+                        md.FormTreeNo = fs.No;
                         md.AppType = "0";
                         md.Update();
                     }

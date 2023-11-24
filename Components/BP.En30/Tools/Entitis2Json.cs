@@ -69,7 +69,7 @@ namespace BP.Tools
         /// <param name="ens">实体集合类</param>
         /// <param name="rootNo">根节点编号</param>
         /// <returns></returns>
-        public static string ConvertEntitis2GenerTree(Entities ens, string rootNo)
+        public static string ConvertEntitis2GenerTree(EntitiesTree ens, string rootNo)
         {
             return Instance.TansEntitiesToGenerTree(ens, rootNo);
         }
@@ -304,7 +304,7 @@ namespace BP.Tools
 
                 if (attr.MyFieldType == FieldType.RefText)
                     continue;
-                if (attr.IsRefAttr || attr.IsFK || attr.IsEnum)
+                if (attr.ItIsRefAttr || attr.ItIsFK || attr.ItIsEnum)
                 {
                     append.Append("{");
                     append.Append(string.Format("field:'{0}',title:'{1}',width:{2},sortable:true", attr.Key + "Text", attr.Desc, attr.UIWidth * 2));
@@ -328,12 +328,12 @@ namespace BP.Tools
                 append.Append("{");
                 foreach (Attr attr in attrs)
                 {
-                    //if (attr.IsRefAttr || attr.UIVisible == false)
+                    //if (attr.ItIsRefAttr || attr.UIVisible == false)
                     //    continue;
                     if (attr.MyFieldType == FieldType.RefText)
                         continue;
 
-                    if (attr.IsRefAttr || attr.IsFK || attr.IsEnum)
+                    if (attr.ItIsRefAttr || attr.ItIsFK || attr.ItIsEnum)
                     {
                         append.Append(attr.Key + "Text:'" + en.GetValRefTextByKey(attr.Key) + "',");
                         continue;
@@ -387,7 +387,7 @@ namespace BP.Tools
                         stringbuilder.Append(",");
                     }
 
-                    if (attr.IsRefAttr || attr.IsFK || attr.IsEnum)
+                    if (attr.ItIsRefAttr || attr.ItIsFK || attr.ItIsEnum)
                     {
                         stringbuilder.Append(attr.Key + "Text:'" + en.GetValRefTextByKey(attr.Key) + "',");
                         continue;
@@ -408,7 +408,7 @@ namespace BP.Tools
         /// <param name="rootNo"></param>
         StringBuilder appendMenus = new StringBuilder();
         StringBuilder appendMenuSb = new StringBuilder();
-        public string TansEntitiesToGenerTree(Entities ens, string rootNo)
+        public string TansEntitiesToGenerTree(EntitiesTree ens, string rootNo)
         {
             appendMenus = new StringBuilder();
             appendMenuSb = new StringBuilder();
@@ -430,7 +430,7 @@ namespace BP.Tools
             return ReplaceIllgalChart(appendMenus.ToString());
         }
 
-        public void AddChildren(EntityTree parentEn, Entities ens)
+        public void AddChildren(EntityTree parentEn, EntitiesTree ens)
         {
             appendMenus.Append(appendMenuSb);
             appendMenuSb.Clear();

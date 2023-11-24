@@ -136,10 +136,6 @@ namespace BP.CCBill
                     str = "@WebUser.FK_DeptName @WebUser.Name @RDT";
                 return str;
             }
-            set
-            {
-                this.SetValByKey(DBListAttr.BillNoFormat, value);
-            }
         }
         /// <summary>
         /// 新建标签
@@ -585,7 +581,7 @@ namespace BP.CCBill
             {
                 /* WorkID */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.setKeyOfEn("OID");
                 attr.Name = "主键ID";
                 attr.setMyDataType(DataType.AppInt);
@@ -601,7 +597,7 @@ namespace BP.CCBill
             {
                 /* 单据编号 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.BillNo);
                 attr.Name = "编号"; //  单据编号
@@ -621,7 +617,7 @@ namespace BP.CCBill
             {
                 /* 名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.Title); // "FlowEmps";
                 attr.Name = "名称"; //   单据模式， ccform的模式.
@@ -640,7 +636,7 @@ namespace BP.CCBill
             {
                 /* 单据状态 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("BillState"); // "FlowEmps";
                 attr.Name = "单据状态"; //  
@@ -660,7 +656,7 @@ namespace BP.CCBill
             {
                 /* 发起人 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("Starter");
                 attr.Name = "创建人"; //  
@@ -679,7 +675,7 @@ namespace BP.CCBill
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("StarterName");
                 attr.setName("创建人名称"); //  
@@ -699,7 +695,7 @@ namespace BP.CCBill
             {
                 /* 参数 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.AtPara);
                 attr.Name = "参数"; // 单据编号
@@ -718,7 +714,7 @@ namespace BP.CCBill
             if (attrs.Contains(this.No + "_RDT") == false)
             {
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("RDT");
                 attr.Name = "创建时间";
@@ -735,7 +731,7 @@ namespace BP.CCBill
             {
                 /* 创建人部门 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("FK_Dept");
                 attr.Name = "创建人部门"; //  
@@ -754,7 +750,7 @@ namespace BP.CCBill
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("OrgNo");
                 attr.Name = "创建人所在的组织"; //  

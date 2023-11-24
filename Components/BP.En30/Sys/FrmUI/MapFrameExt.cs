@@ -16,7 +16,7 @@ namespace BP.Sys.FrmUI
         /// 连接
         /// </summary>
 
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -138,19 +138,19 @@ namespace BP.Sys.FrmUI
             gf.Delete(GroupFieldAttr.CtrlID, this.MyPK);
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
 
         protected override bool beforeUpdateInsertAction()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
             int val = this.GetValIntByKey(MapFrameAttr.UrlSrcType, 0);
             if (val == 1)
             {
-                string sql = "SELECT Url FROM Sys_MapData WHERE No='" + this.GetValStrByKey(MapFrameAttr.FrmID) + "'";
+                string sql = "SELECT Url FROM Sys_MapData WHERE No='" +  this.FrmID + "'";
                 string url = DBAccess.RunSQLReturnStringIsNull(sql, "");
                 this.SetValByKey(MapFrameAttr.FrameURL, url);
                 this.SetValByKey(MapFrameAttr.URL, url);
@@ -162,7 +162,7 @@ namespace BP.Sys.FrmUI
 
             //更新group.
             GroupField gf = new GroupField();
-            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.CtrlID, this.MyPK);
             if (i == 1)
             {
                 gf.Lab = this.Name;
@@ -180,7 +180,7 @@ namespace BP.Sys.FrmUI
             mapframe.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }

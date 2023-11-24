@@ -13,6 +13,7 @@ using System.Xml;
 using BP.Web;
 using BP.Difference;
 using System.Linq;
+using NLog.Time;
 
 namespace BP.DA
 {
@@ -47,12 +48,12 @@ namespace BP.DA
 
             foreach (string str1 in str1s)
             {
-                if (str1 == "" || str1 == null)
+                if (str1 == null || str1.Equals(""))
                     continue;
 
                 foreach (string str2 in str2s)
                 {
-                    if (str2 == "" || str2 == null)
+                    if (str2 == null || str2.Equals(""))
                         continue;
 
                     if (str2.Equals(str1) == true)
@@ -1001,8 +1002,8 @@ namespace BP.DA
 
         public static int SpanHours(string fromday, string today)
         {
-            var span = DateTime.Parse(today) - DateTime.Parse(fromday);
-            var days = span.Days;
+            TimeSpan span = DateTime.Parse(today) - DateTime.Parse(fromday);
+            int days = span.Days;
             return days;
         }
         /// <summary>
@@ -1122,7 +1123,7 @@ namespace BP.DA
                 {
                     isStartRec = false;
 
-                    if (recStr == "")
+                    if (recStr.Equals(""))
                     {
                         isStartRec = false;
                         continue;
@@ -1164,7 +1165,7 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseStringForName(string nameStr, int maxLen)
         {
-            if (string.IsNullOrWhiteSpace(nameStr))
+            if (DataType.IsNullOrEmpty(nameStr))
                 return string.Empty;
 
             string nStr = Regex.Replace(nameStr, RegEx_Replace_OnlyHSZX, "");
@@ -1182,7 +1183,7 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseStringForNo(string noStr, int maxLen)
         {
-            if (string.IsNullOrWhiteSpace(noStr))
+            if (DataType.IsNullOrEmpty(noStr))
                 return string.Empty;
 
             string nStr = Regex.Replace(Regex.Replace(noStr, RegEx_Replace_OnlySZX, ""), RegEx_Replace_FirstXZ, "");
@@ -1199,7 +1200,7 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseStringOnlyIntNumber(string str)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (DataType.IsNullOrEmpty(str))
                 return string.Empty;
 
             return Regex.Replace(str, RegEx_Replace_OnlyIntNum, "");
@@ -1213,7 +1214,7 @@ namespace BP.DA
         /// <returns></returns>
         public static string ParseStringFilterDangerousSymbols(string str)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (DataType.IsNullOrEmpty(str))
                 return string.Empty;
 
             return Regex.Replace(str, RegEx_Replace_FilterDangerousSymbols, "").Replace("<", "&lt;").Replace(">", "&gt;").Replace("&", "&amp;");
@@ -1317,7 +1318,7 @@ namespace BP.DA
             try
             {
                 String _Temp = null;
-                var re = string.Empty;
+                string re = string.Empty;
                 for (int i = 0; i < str.Length; i++)
                 {
                     re = DataType.ParseStringToPinyin(str.Substring(i, 1));
@@ -1337,7 +1338,7 @@ namespace BP.DA
         /// <returns></returns>
         public static decimal ParseExpToDecimal(string exp)
         {
-            if (exp.Trim() == "")
+            if (exp.Trim().Equals(""))
                 throw new Exception("DataType.ParseExpToDecimal要转换的表达式为空。");
 
 
@@ -1363,7 +1364,7 @@ namespace BP.DA
                 return 0;
 
             string val = exp.Substring(0, 1);
-            if (val == "-")
+            if (val.Equals("-"))
                 exp = exp.Substring(1);
 
             //  exp = exp.Replace("*100%", "*100");
@@ -1421,7 +1422,7 @@ namespace BP.DA
                 throw new Exception("表达式(\"" + exp + "\")计算错误：" + ex.Message);
             }
         }
-        public static string ParseFloatToCash(float money)
+        public static string ParseFloatToCache(float money)
         {
             if (money == 0)
                 return "零圆零角零分";
@@ -1451,12 +1452,9 @@ namespace BP.DA
         /// <summary>
         /// 系统定义的时间格式 yyyy-MM-dd .
         /// </summary>
-        public static string SysDataFormat
+        public static string SysDataFormat(DateTime dt)
         {
-            get
-            {
-                return "yyyy-MM-dd";
-            }
+                return dt.ToString("yyyy-MM-dd");
         }
         #region 与周相关.
         /// <summary>
@@ -1491,7 +1489,6 @@ namespace BP.DA
         /// <returns>标准的日期类型</returns>
         public static string FormatDateTime(string dataStr)
         {
-
             return dataStr;
         }
 
@@ -1506,7 +1503,7 @@ namespace BP.DA
         {
             get
             {
-                return DateTime.Now.ToString(DataType.SysDataFormat);
+                return  DataType.SysDataFormat(DateTime.Now);
             }
         }
         public static string CurrentDateTime
@@ -1800,10 +1797,9 @@ namespace BP.DA
         {
             get
             {
-                return DateTime.Now.ToString(DataType.SysDateTimeFormat + ":ss");
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
-
 
         /// <summary>
         /// 把chichengsoft本系统日期格式转换为系统日期格式。
@@ -1872,15 +1868,15 @@ namespace BP.DA
         /// <returns>返回：x天x时x分</returns>
         public static string GetSpanTime(DateTime t1, DateTime t2)
         {
-            var span = t2 - t1;
-            var days = span.Days;
-            var hours = span.Hours;
-            var minutes = span.Minutes;
+            TimeSpan span = t2 - t1;
+            int days = span.Days;
+            int hours = span.Hours;
+            int minutes = span.Minutes;
 
             if (days == 0 && hours == 0 && minutes == 0)
                 minutes = span.Seconds > 0 ? 1 : 0;
 
-            var spanStr = string.Empty;
+            string spanStr = string.Empty;
 
             if (days > 0)
                 spanStr += days + "天";
@@ -1948,12 +1944,9 @@ namespace BP.DA
         /// <summary>
         /// 系统定义日期时间格式 yyyy-MM-dd hh:mm
         /// </summary>
-        public static string SysDateTimeFormat
+        public static string SysDateTimeFormat(DateTime dt)
         {
-            get
-            {
-                return "yyyy-MM-dd HH:mm";
-            }
+            return dt.ToString("yyyy-MM-dd HH:mm");
         }
         public static string SysDataFormatCN
         {
@@ -2320,27 +2313,27 @@ namespace BP.DA
 
         public static bool StringToBoolean(string str)
         {
-            if (str == null || str == "" || str == ",nbsp;")
+            if (str == null || str.Equals("") || str.Equals(",nbsp;"))
                 return false;
 
-            if (str == "0" || str == "1")
+            if (str.Equals("0") || str.Equals("1"))
             {
-                if (str == "0")
+                if (str.Equals("0"))
                     return false;
                 else
                     return true;
             }
-            else if (str == "true" || str == "false")
+            else if (str.Equals("true") || str.Equals("false"))
             {
-                if (str == "false")
+                if (str.Equals("false"))
                     return false;
                 else
                     return true;
 
             }
-            else if (str == "是" || str == "否")
+            else if (str.Equals("是") || str.Equals("否"))
             {
-                if (str == "否")
+                if (str.Equals("否"))
                     return false;
                 else
                     return true;

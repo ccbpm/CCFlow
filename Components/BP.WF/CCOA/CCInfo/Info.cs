@@ -246,13 +246,13 @@ namespace BP.CCOA.CCInfo
 
             this.SetValByKey(InfoAttr.Rec, BP.Web.WebUser.No);
             this.SetValByKey(InfoAttr.RecName, BP.Web.WebUser.Name);
-            this.SetValByKey(InfoAttr.RecDeptNo, BP.Web.WebUser.FK_Dept);
+            this.SetValByKey(InfoAttr.RecDeptNo, BP.Web.WebUser.DeptNo);
 
             this.SetValByKey(InfoAttr.RDT, DataType.CurrentDateTime); //记录日期.
             this.SetValByKey(InfoAttr.NianYue, DataType.CurrentYearMonth);//隶属年月.
 
             this.SetValByKey(InfoAttr.RelerName, BP.Web.WebUser.Name);
-            this.SetValByKey(InfoAttr.RelDeptName, BP.Web.WebUser.FK_DeptName);
+            this.SetValByKey(InfoAttr.RelDeptName, BP.Web.WebUser.DeptName);
 
             if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
                 this.SetValByKey(InfoAttr.OrgNo, BP.Web.WebUser.OrgNo);

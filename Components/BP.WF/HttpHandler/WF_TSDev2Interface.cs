@@ -47,15 +47,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Node_CreateBlankWork()
         {
-            //var en = new TSEntityMyPK();
-            //en.ClassID = "TS.ZH.ND2001Dtl1";
-            //en.MyPK = "xxxx";
-            //en.Retrieve();
-            //string addr = en.GetValByKey("Tel");
-
             string strs = this.Paras;
             AtPara ap = new AtPara(strs);
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, ap.HisHT);
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FlowNo, ap.HisHT);
             return workid.ToString();
         }
         /// <summary>
@@ -65,7 +59,7 @@ namespace BP.WF.HttpHandler
         public string Node_SendWork()
         {
             string toEmps = this.GetRequestVal("ToEmps");
-            return BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, this.ToNodeID, toEmps).ToMsgOfText();
+            return BP.WF.Dev2Interface.Node_SendWork(this.FlowNo, this.WorkID, this.ToNodeID, toEmps).ToMsgOfText();
         }
         public string Flow_DeleteFlow()
         {
@@ -78,7 +72,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Flow_DoDeleteDraft()
         {
-            return BP.WF.Dev2Interface.Flow_DoDeleteDraft(this.FK_Flow, this.WorkID, false);
+            return BP.WF.Dev2Interface.Flow_DoDeleteDraft(this.FlowNo, this.WorkID, false);
         }
         /// <summary>
         /// 执行退回操作
@@ -96,8 +90,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 string fileName = this.GetRequestVal("fileName");
-                var files = HttpContextHelper.RequestFiles();
-                if (files.Count == 0)
+                if (HttpContextHelper.RequestFilesCount == 0)
                     return "err@请选择要上传的文件。";
 
 
@@ -112,7 +105,7 @@ namespace BP.WF.HttpHandler
                     System.IO.File.Delete(filePath);
                 }
                 //这里使用绝对路径来索引
-                HttpContextHelper.UploadFile(files[0], filePath);
+                HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), filePath);
                 return relativePath;
             } catch(IOException ex)
             {

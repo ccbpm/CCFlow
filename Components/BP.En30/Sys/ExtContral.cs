@@ -66,7 +66,7 @@ namespace BP.Sys
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {

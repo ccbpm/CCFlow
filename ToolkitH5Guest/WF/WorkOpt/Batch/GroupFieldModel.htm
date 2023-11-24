@@ -1,0 +1,557 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>驰骋工作流</title>
+    <meta charset="UTF-8" />
+    <!-- 引用通用的js文件. -->
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../Style/skin/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/css/animate.css" rel="stylesheet" type="text/css" />
+    <link href="../../Style/skin/font/iconfont.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+
+        var nodeID = GetQueryString("FK_Node");
+        var node = null;
+        //页面启动函数.
+        $(function () {
+
+            InitPage();
+
+        });
+
+        function InitPage() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Batch");
+            handler.AddPara("FK_Node", nodeID);
+            var data = handler.DoMethodReturnString("WorkCheckModel_Init");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            data = cceval('(' + data + ')');
+
+            var works = data.Works; //数据.
+            var mapAttrs = data.Sys_MapAttr; //要显示的字段.
+
+            node = new Entity("BP.WF.Node", nodeID);
+            var BatchCheckNoteModel = node.GetPara("BatchCheckNoteModel");
+            if (BatchCheckNoteModel == undefined)
+                BatchCheckNoteModel = "0"; //审核意见填写方式,默认为选择的Item一个意见.
+
+            $("#title").html("流程：" + node.FlowName + " => 节点：" + node.Name);
+
+            var thead = ""; // 标题字段
+            var tbody = ""; //内容显示
+
+            thead += "<th>#</th>";
+            thead += "<th><label><input type='checkbox' onclick='CheckAll(this)'/>选择</label></th>";
+            thead += "<th>标题</th>";
+            thead += "<th>发起人</th>";
+            thead += "<th>接收日期</th>";
+            var files = node.GetPara("BatchFields") || "";
+            var editFiles = node.GetPara("EditFields") || "";
+            for (var i = 0; i < mapAttrs.length; i++) {
+                var attr = mapAttrs[i];
+                if (files == "")
+                    continue;
+                if (files.indexOf(attr.KeyOfEn) == -1)
+                    continue;
+                if (attr.Name == "审核意见")
+                    continue;
+                thead += "<th>" + attr.Name + "</th>";
+            }
+
+            //判断该节点是否启用审核组件
+            var sta = node.FWCSta;
+            ////启用审核组件并且可编辑 ，如果是：每个记录后面都有一个意见框.的模式.
+            if (sta == 1 && BatchCheckNoteModel == "1") {
+                thead += "<th>审核意见</th>";
+            }
+
+            //处理要显示数据
+            var batchListCount = node.GetPara("BatchCheckListCount");
+            if (batchListCount == 0)
+                batchListCount = 12;
+
+            for (var i = 0; i < works.length; i++) {
+                if (i + 1 == batchListCount)
+                    break;
+
+                var wk = works[i];
+
+                tbody += "<tr>";
+                tbody += "<td>" + parseInt(i + 1) + "</td>";
+
+                tbody += "<td ><label><input type='checkbox' id='CB_" + wk.WorkID + "' name='CB_" + wk.WorkID + "'/>选择</label></td>";
+                tbody += "<td><a href=\"javascript:To('../../MyFlow.htm?WorkID=" + wk.WorkID + "&FK_Node=" + node.NodeID + "&FK_Flow=" + node.FK_Flow + "');\" >" + wk.Title + "</a></td>";
+                tbody += "<td>" + wk.Starter + "</td>";
+                tbody += "<td>" + wk.ADT + "</td>";
+
+                //增加后台配置的显示的列.
+                for (var idx = 0; idx < mapAttrs.length; idx++) {
+
+                    var mapAttr = mapAttrs[idx];
+                    if (files == undefined)
+                        continue;
+                    if (files.indexOf(attr.KeyOfEn) == -1)
+                        continue;
+                    if (mapAttr.Name == "审核意见")
+                        continue;
+                    if (editFiles.indexOf(mapAttr.KeyOfEn) < 0)
+                        tbody += "<td>" + wk[mapAttr.KeyOfEn] + "</td>";
+                    else
+                        tbody += "<td><input type='text' id='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' name='TB_" + wk.WorkID + "_" + mapAttr.KeyOfEn + "' value='" + wk[mapAttr.KeyOfEn] + "'></td>";
+                }
+
+                // 启用审核组件并且可编辑 ，如果是：每个记录后面都有一个意见框.的模式.
+                if (sta == 1 && BatchCheckNoteModel == "1") {
+                    tbody += "<td><textarea class='form-control'  style='height:50px;width:240px;' name='TB_" + works[i].OID + "_WorkCheck_Doc' id='TB_" + works[i].OID + "_WorkCheck_Doc' type='text'   ></textarea></td>";
+                }
+
+                tbody += "</tr>";
+            } //end for works.
+
+            $("#Table1").append(thead);
+            $("#Table2").append(tbody);
+
+            //处理按钮权限
+            var bar = "";
+            var btns = data.Sys_BtnLab[0];
+            bar += '<button type=button id=Btn_Send onclick="Send()" >' + btns.SendLab + '</button>';
+
+            if (btns.ReturnRole != 0) {
+                bar += '&nbsp;&nbsp;<button type=button onclick="Btn_Return()" id=Btn_Return >' + btns.ReturnLab + '</button>';
+            }
+
+            if (btns.DelEnable != 0) {
+                bar += '&nbsp;&nbsp;<button type=button onclick="Btn_Delete()" id=Btn_Delete >' + btns.DelLab + '</button>';
+            }
+
+            if (btns.EndFlowEnable != 0) {
+                bar += '&nbsp;&nbsp;<button type=button onclick="Btn_EndFlow()" id=EndFlowEnable >' + btns.EndFlowLab + '</button>';
+            }
+
+
+            bar += '&nbsp;&nbsp;<button type=button   onclick="Btn_Back()" >返回</button>';
+
+            $("#btnDiv").append(bar);
+        }
+
+        function To(url) {
+            WinOpen(url);
+            return;
+            SetHref(url);
+            return;
+        }
+
+        //选中/取消所有列表
+        function CheckAll(obj) {
+            if (obj.checked == true)
+                $.each($("input[type='checkbox']"), function (i, o) {
+                    o.checked = true;
+                });
+            else
+                $.each($("input[type='checkbox']"), function (i, o) {
+                    o.checked = false;
+                });
+        }
+
+        function Send() {
+
+            var BatchCheckNoteModel = node.GetPara("BatchCheckNoteModel");
+
+            //如果是 每条记录单独的意见，就提示一下。
+            if (BatchCheckNoteModel == "1") {
+                if (window.confirm('确定要执行吗？') == false)
+                    return;
+            }
+
+            $("#Btn_Send").val("正在执行请稍候...");
+
+            //判断审核组件的状态，如果启用了. 并且审核意见填写模式为一个 统一 的意见.
+            var sta = node.FWCSta;
+            var checkNote = ""; //审核意见.
+            if (sta == 1 && BatchCheckNoteModel == "0") {
+                var checkNote = promptGener('请输入审核意见', "同意");
+                if (checkNote == null || checkNote == '' || checkNote == undefined)
+                    return;
+            }
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Batch");
+            handler.AddFormData();
+            handler.AddPara("FK_Node", nodeID);
+            handler.AddPara("CheckNote", checkNote);
+            var data = handler.DoMethodReturnString("WorkCheckModel_Send");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+
+            $("#batchModal").modal().show();
+            // $("#batchModal").find('.modal-title').text("67");
+            data = data.replace(/@/g, '<br/>@');
+            $("#msgContent").html(data);
+            $('#batchModal').on('hidden.bs.modal', function () {
+
+                $("#Table1").html("");
+                $("#Table2").html("");
+                $("#btnDiv").html("");
+
+                Reload();
+
+            });
+
+            $("#batchModal").modal("hidden");
+
+        }
+
+        function Btn_Group() {
+            if (window.confirm('您确定要执行本次合卷批复操作吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_Batch");
+            handler.AddFormData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("Batch_Group");
+        }
+
+        function Btn_Return() {
+
+            if (window.confirm('您确定要执行本次批处理退回操作吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddFormData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("Batch_Return");
+        }
+
+        function Btn_Delete() {
+            if (window.confirm('您确定要执行本次批处理删除操作吗？') == false)
+                return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF");
+            handler.AddFormData();
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            var data = handler.DoMethodReturnString("Batch_Delete");
+            if (data.indexOf("err@") != -1) {
+                alert(data);
+                return;
+            }
+            $("#batchModal").modal().show();
+            // $("#batchModal").find('.modal-title').text(label);
+            data = data.replace(/@/g, '<br/>@');
+            $("#msgContent").html(data);
+            $('#batchModal').on('hidden.bs.modal', function () {
+                Reload();
+
+            });
+            $("#batchModal").modal("hidden");
+        }
+
+        function Btn_Back() {
+
+            var type = GetQueryString("Type");
+            if (type == 0)
+                SetHref("Batch.htm");
+            if (type == 1)
+                SetHref("Batch.htm?FK_Node=" + GetQueryString("FK_Node"));
+        }
+
+        function InitMapAttr(mapAttr) {
+            alert(mapAttr)
+        }
+
+        function InitMapAttrOfCtrl(mapAttr, dtl, pkval) {
+
+            var str = '';
+            var defValue = ConvertDefVal(mapAttr, dtl);
+            return defValue;
+
+            var isInOneRow = false; //是否占一整行
+            var islabelIsInEle = false; //
+            var eleHtml = '';
+
+            //外部数据源类型.
+            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //外键类型.
+            if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //外部数据类型.
+            if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
+
+                //枚举类型.
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control' id='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            //添加文本框 ，日期控件等
+            //AppString
+            if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
+
+                //  alert(mapAttr.UIWidth);
+
+
+                if (mapAttr.UIHeight <= 40) //普通的文本框.
+                {
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 0)
+                        enableAttr = "disabled='disabled'";
+
+                    return "<input  class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' value='" + defValue + "' style='width:" + mapAttr.UIWidth + "px;height:23px;' type='text'  " + enableAttr + " />";
+                }
+
+                //普通的大块文本.
+                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:" + mapAttr.UIWidth + "px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' id='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " >" + defValue + "</textarea>"
+            }
+
+            //日期类型.
+            if (mapAttr.MyDataType == 6) {
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<input class='form-control' " + enableAttr + " value='" + defValue + "' style='width:105px;' name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' type='text' />";
+            }
+
+            //时期时间类型.
+            if (mapAttr.MyDataType == 7) {
+
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<input class='form-control'  type='text' value='" + defValue + "' style='width:120px;' " + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "' />";
+            }
+
+            // boolen 类型.
+            if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
+
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                //CHECKBOX 默认值
+                var checkedStr = '';
+                if (checkedStr != "true" && checkedStr != '1') {
+                    checkedStr = ' checked="checked" ';
+                }
+
+                checkedStr = "";
+
+                return "<input  " + enableAttr + " value='" + defValue + "' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + pkval + "_" + mapAttr.KeyOfEn + "'  name='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><span for='CB_" + pkval + "_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</span>";
+            }
+
+            //枚举类型.
+            if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+                if (mapAttr.UIIsEnable == 1)
+                    enableAttr = "";
+                else
+                    enableAttr = "disabled='disabled'";
+
+                return "<select  style='width:" + mapAttr.UIWidth * 2 + "px' class='form-control'  name='DDL_" + pkval + "_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+            }
+
+            // AppDouble  AppFloat
+            if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
+
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable != 1)
+                    enableAttr = "disabled='disabled'";
+
+                // alert(mapAttr.KeyOfEn);
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            if ((mapAttr.MyDataType == 2)) { //AppInt
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn == "NodeID") {
+                    enableAttr = "disabled='disabled'";
+                }
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            //AppMoney  AppRate
+            if (mapAttr.MyDataType == 8) {
+                var enableAttr = '';
+                if (mapAttr.UIIsEnable == 1) {
+
+                } else {
+                    enableAttr = "disabled='disabled'";
+                }
+                return "<input class='form-control' style='text-align:right;width:80px;' value='" + defValue + "' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + pkval + "_" + mapAttr.KeyOfEn + "'/>";
+            }
+
+            alert(mapAttr.Name + "的类型没有判断.");
+            return;
+        }
+
+        //填充默认数据
+        function ConvertDefVal(attr, dtl) {
+
+            //通过MAINTABLE返回的参数
+            for (var ele in dtl) {
+                if (attr.KeyOfEn == ele && dtl != '') {
+                    result = dtl[ele];
+                    break;
+                }
+            }
+
+            if (result != undefined && typeof (result) == 'string') {
+                //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
+            }
+            return result = unescape(result);
+        }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(flowData, mapAttr, defVal) {
+
+            var operations = '';
+
+            var data = flowData[mapAttr.KeyOfEn];
+            if (data == undefined)
+                data = flowData[mapAttr.UIBindKey];
+            if (data != undefined) {
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+                return operations;
+            }
+
+            //外键类型.
+            if (mapAttr.LGType == 2) {
+
+                var data = frmData[mapAttr.KeyOfEn];
+                if (data == undefined)
+                    data = frmData[mapAttr.UIBindKey];
+
+                if (data == undefined) {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    return;
+                }
+
+
+                $.each(data, function (i, obj) {
+                    operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                });
+            }
+
+
+            //枚举类型.
+            if (mapAttr.LGType == 1) {
+
+                var enums = frmData.Sys_Enum;
+                enums = $.grep(enums, function (value) {
+                    return value.EnumKey == mapAttr.UIBindKey;
+                });
+
+                $.each(enums, function (i, obj) {
+                    operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+                });
+            }
+
+
+            //外部数据源类型 MyFlowGener.js.InitDDLOperation
+            if (mapAttr.LGType == 0) {
+                var fn;
+                try {
+                    if (mapAttr.UIBindKey) {
+                        fn = cceval(mapAttr.UIBindKey);
+                    }
+                } catch (e) {
+                }
+                if (typeof fn == "function") {
+                    $.each(fn.call(), function (i, obj) {
+                        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+                    });
+                } else if (typeof CommonHandler == "function") {
+                    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+                        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+                    })
+                } else {
+                    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+                    //alert('没有获得约定的数据源.');
+                }
+
+            }
+            return operations;
+        }
+        function ReloadPage() {
+            window.location.reload();
+        }
+    </script>
+</head>
+<body class="gray-bg">
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <h3 id="title">  </h3>
+        <div class="ibox-content">
+            <form id="divCCForm" method="post">
+                <table class="table  table-striped">
+                    <thead id="Table1"></thead>
+                    <br />
+                    <tbody id="Table2"></tbody>
+                </table>
+            </form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="btnDiv"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="batchModal" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius:0px;width:700px; height:600px;text-align:center;">
+                <div class="modal-header">
+                    <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: white; opacity: 1; display: none;">  ×</button>
+                    <h4 class="modal-title" id="modalHeader">批量处理</h4>
+                </div>
+                <div class="modal-body" style="text-align: left; word-wrap: break-word;">
+                    <div style="width:100%; border: 0px; height: 490px;overflow-y:scroll" id="msgContent" name="iframePopModalForm">
+                    </div>
+                    <div style="text-align: right; margin-bottom:10px">
+                        <button type="button" id="BatchOK" class="btn" data-dismiss="modal" onclick="ReloadPage()">
+                            确定
+                        </button>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</body>
+</html>

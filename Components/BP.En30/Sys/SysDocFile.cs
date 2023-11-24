@@ -417,7 +417,7 @@ namespace BP.Sys
                 map.AddTBString("D3", null, "D3", true, true, 0, 4000, 20);
 
 
-                if (map.EnDBUrl.DBType == DBType.Oracle || map.EnDBUrl.DBType == DBType.MSSQL)
+                if (map.EnDBUrl.DBType == DBType.Oracle || map.EnDBUrl.DBType == DBType.KingBaseR3 || map.EnDBUrl.DBType == DBType.KingBaseR6 || map.EnDBUrl.DBType == DBType.MSSQL)
                 {
                     map.AddTBString("D4", null, "D4", true, true, 0, 4000, 20);
                     map.AddTBString("D5", null, "D5", true, true, 0, 4000, 20);

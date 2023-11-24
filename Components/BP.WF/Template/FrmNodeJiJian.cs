@@ -24,7 +24,7 @@ namespace BP.WF.Template
                 return this.GetValStrByKey(FrmNodeAttr.FK_Frm);
             }
         }
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -34,7 +34,7 @@ namespace BP.WF.Template
         /// <summary>
         /// @李国文 
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -201,25 +201,25 @@ namespace BP.WF.Template
         #region 表单元素权限.
         public string DoDtls()
         {
-            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoFields()
         {
-            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoAths()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
 
         public string DoImgAths()
         {
-            return "../../Admin/Sln/ImgAths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/ImgAths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
 
         public string DoCopyFromNode()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoEnableRole()
         {

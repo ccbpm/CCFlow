@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>催款记录</title>
+    <link href="../../Portal/ccbpm.css" rel="stylesheet" />
+    <!-- 引入常用的JS脚本. -->
+    <script src="../../WF/Scripts/QueryString.js"></script>
+    <script src="../../WF/Scripts/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../WF/Scripts/jquery/jquery.cookie.js"></script>
+    <link href="../../WF/Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <!-- 引入配置文件 -->
+    <script src="../../CRM_AppConfig.js"></script>
+
+    <!-- 引入列表文件配置文件 -->
+    <script src="../../WF/config.js"></script>
+    <script src="../../WF/ListAPI.js"></script>
+    <!-- 引入ccbpm 的sdk开发js.  -->
+    <script language="javascript" type="text/javascript">
+
+        //启动函数
+        $(function () {
+
+            $("#docs").html("<img src=../../WF/Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //获得客户列表.
+
+            $.ajax({
+                type: "GET",
+                url: handlerOfCRM + "?DoType=AppDemo_CuiKuanList_Init",
+                dataType: "json",
+                async: true,
+                success: function (db) {
+                    var html = "<table class='table table-bordered table-striped table-hover'>";
+                    html += "<tr>";
+                    html += "<th>序号</th>";
+                    html += "<th>WorkID</th>";
+                    html += "<th>标题</th>";
+                    html += "<th>发起人</th>";
+                    html += "<th>客户名称</th>";
+                    html += "<th>合同名称</th>";
+                    html += "<th >操作</th>";
+                    html += "</tr>";
+
+                    for (var i = 0; i < db.length; i++) {
+                        var en = db[i];
+                        html += "<tr ondblclick=OpenFrm('" + en.OID + "')>";
+                        html += "<td>" + i + "</td>"; //序号
+                        html += "<td>" + en.OID + "</td>"; //.
+                        html += "<td>" + en.Title + "</td>"; //标题
+                        html += "<td>" + en.ShenQingRen + "</td>"; //发起人
+
+                        html += "<td>" + en.KeHuMingChen + "</td>"; //客户名称.
+                        html += "<td>" + en.HeTongBianHao + "</td>"; //合同编号.
+
+                        //调用 /WF/ListAPI.js 里面的 OpenForm 方法打开表单.
+                        html += "<td ><a href=\"javascript:OpenFrm('" + en.OID + "');\" >打开流程</a></td>";
+
+                        html += "</tr>";
+                    }
+                    html += "</table>";
+                    $("#docs").html(html);
+
+
+                }, error: function (e) {
+
+                    alert('登录出现错误status:' + e.status);
+                    return;
+                    //window.alert(e.status );
+                }
+            }); //结束调用.
+
+
+        });
+         /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo) {
+            var host = ccbpmHostDevelopAPI.replace('/DataUser/DevelopAPI.ashx', '');
+            //var url = "../WF/MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid;
+            var url = host +"/WF/MyViewGener.htm?HttpHandlerName=BP.WF.HttpHandler.WF_MyView&WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=0&NodeID=" + nodeID + "&UserNo=" + $.cookie("MyUserNo") + "&Token=" + $.cookie("MyToken");
+            window.open(url);
+            return;
+        }
+        /**
+           * 发起开票申请流程
+           * 1. 开票申请流程是内置表单.
+           * 2. 打开表单后，把客户编号，客户名称带入到开始节点表单里.
+           * @param kehubianhao 客户编号,
+           * @param KeHuMingCheng 客户名称.
+           */
+        function StartFlowKaiPiao(kehubianhao, KeHuMingCheng) {
+
+            //组织传入参数,这些参数带入到开始节点表单里.
+            var paras = "&KeHuBianHao=" + kehubianhao + "&KeHuMingChen=" + KeHuMingCheng;
+
+            //调用ListAPI.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
+            var url = OpenForm("003", 0, 0, 0, paras);
+
+            alert('将要打开的发起流程URL:' + url);
+            window.open(url);
+        }
+
+        /**
+        * 发起催款流程
+        * 1. 开票申请流程是内置表单.
+        * 2. 打开表单后，把客户编号，客户名称带入到开始节点表单里.
+        * @param kehubianhao 客户编号,
+        * @param KeHuMingCheng 客户名称.
+        */
+        function StartFlowCuiKuan(kehubianhao, KeHuMingCheng) {
+
+            //组织传入参数,这些参数带入到开始节点表单里.
+            var paras = "&KeHuBianHao=" + kehubianhao + "&KeHuMingChen=" + KeHuMingCheng;
+
+            //调用ListAPI.js的接口，让其打开表单的url. 把客户编号，客户名称带入到开始节点表单里.
+            var url = OpenForm("004", 0, 0, 0, paras);
+            window.open(url);
+        }
+
+    </script>
+</head>
+<body>
+
+    <h3>催款记录 </h3>
+    <div id="docs"></div>
+
+</body>
+</html>

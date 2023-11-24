@@ -57,15 +57,15 @@ namespace BP.WF.DTS
                 gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
                 foreach (GenerWorkerList gwl in gwls)
                 {
-                    if (todoEmps.Contains(gwl.FK_Emp + ",") == false)
+                    if (todoEmps.Contains(gwl.EmpNo + ",") == false)
                     {
                         if (nodeID.ToString().EndsWith("01") == true)
                             continue;
 
                         GenerWorkFlow gwf = new GenerWorkFlow(workid);
-                        msg += "<br>@流程:" + gwf.FlowName + "节点:" + gwf.FK_Node + "," + gwf.NodeName + " workid: " + workid + "title:" + gwf.Title + " todoEmps:" + gwf.TodoEmps;
-                        msg += "不包含:" + gwl.FK_Emp + "," + gwl.FK_EmpText;
-                        gwf.TodoEmps += gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
+                        msg += "<br>@流程:" + gwf.FlowName + "节点:" + gwf.NodeID + "," + gwf.NodeName + " workid: " + workid + "title:" + gwf.Title + " todoEmps:" + gwf.TodoEmps;
+                        msg += "不包含:" + gwl.EmpNo + "," + gwl.EmpName;
+                        gwf.TodoEmps += gwl.EmpNo + "," + gwl.EmpName + ";";
                        // gwf.Update();
                     }
                 }

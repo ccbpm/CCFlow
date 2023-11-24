@@ -1,24 +1,12 @@
 <template>
   <div id="Complete">
-    <el-form
-      :inline="true"
-      ref="ruleForm"
-      :model="formInline"
-      :rules="rules"
-      class="demo-form-inline"
-    >
+    <el-form :inline="true" ref="ruleForm" :model="formInline" :rules="rules" class="demo-form-inline">
       <el-form-item label="关键字" prop="keyWord">
         <el-input v-model="formInline.keyWord" placeholder="关键字"></el-input>
       </el-form-item>
       <el-form-item label="发起日期" prop="RageDate">
-        <el-date-picker
-          v-model="formInline.RageDate"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          
-        >
+        <el-date-picker v-model="formInline.RageDate" type="daterange" range-separator="至" start-placeholder="开始日期"
+          end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -27,106 +15,60 @@
     </el-form>
 
     <div style="display: flex">
-      <div style="width: 25%">
+      <!-- 没有内容 -->
+      <!-- <div style="width: 25%">
         <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-menu-item
-            v-for="item in dataTree"
-            :key="item.label"
-            @click="handleNodeClick(item.WorkID)"
-          >
+          <el-menu-item v-for="item in dataTree" :key="item.label" @click="handleNodeClick(item.WorkID)">
             <i class="el-icon-paperclip"></i>
             <span slot="title">{{ item.label }}</span>
           </el-menu-item>
         </el-menu>
-      </div>
-      <div style="padding: 0 10px">
-        <el-table
-         :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-          height="75vh"
-          style="flex: 1"
-          row-key="WorkID"
-          default-expand-all
-          :row-class-name="tableRowClassName"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        >
-          <el-table-column prop="Title" label="标题" fixed min-width="250">
+      </div> -->
+      <div style="padding: 0 10px;">
+        <el-table :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)" height="75vh"
+          style="flex: 1" row-key="WorkID" default-expand-all :row-class-name="tableRowClassName"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+          <el-table-column prop="Title" label="标题" fixed min-width="250" width="250" align="center">
             <template slot-scope="scope">
               <span v-if="scope.row.type != null">{{ scope.row.Title }}</span>
               <span v-else>
-                <el-link
-                  :underline="false"
-                  @click="sikpMyflow(scope.row)"
-                  type="primary"
-                >
+                <el-link :underline="false" @click="sikpMyflow(scope.row)" type="primary">
                   {{ scope.row.Title }}
                 </el-link>
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="StarterName"
-            label="发起人/部门"
-            width="140"
-            align="center"
-          >
+          <el-table-column prop="StarterName" label="发起人/部门" width="160" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.StarterName }};{{ scope.row.DeptName }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column prop="FlowName" label="流程类型" width="170" align="center">
+          <el-table-column prop="FlowName" label="流程类型" width="200" align="center">
           </el-table-column>
-          <el-table-column
-            prop="RDT"
-            label="发起时间"
-            width="160"
-            align="center"
-          >
+          <el-table-column prop="RDT" label="发起时间" width="180" align="center">
           </el-table-column>
-          <el-table-column
-            prop="SendDT"
-            label="完成时间"
-            width="160"
-            align="center"
-          >
+          <el-table-column prop="SendDT" label="完成时间" width="180" align="center">
           </el-table-column>
-          <el-table-column label="操作" width="100" align="center">
+          <el-table-column label="操作" width="150" align="center">
             <template slot-scope="scope">
-              <el-button
-                v-show="scope.row.type == null"
-                @click="DialogOpen(scope.row)"
-                type="primary"
-                size="mini"
-                plain
-                >轨迹</el-button
-              >
+              <el-button v-show="scope.row.type == null" @click="DialogOpen(scope.row)" type="primary" size="mini"
+                plain>轨迹</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageSize"
-        layout="total,sizes, prev, pager, next"
-        :total="total"
-        v-show="total > 0"
-      ></el-pagination>
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+          :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
+          layout="total,sizes, prev, pager, next" :total="total" v-show="total > 0"></el-pagination>
       </div>
     </div>
-    <el-dialog
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      :before-close="handleClose"
-    >
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" :before-close="handleClose">
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {openMyView} from "./api/Dev2Interface"; // 轨迹
+import { openMyView } from "./api/Dev2Interface"; // 轨迹
 export default {
   name: "complete",
   data() {
@@ -149,27 +91,27 @@ export default {
     };
   },
 
-  beforeCreate() {},
+  beforeCreate() { },
 
   created() {
     this.loadData();
-	this.timeDefault();
+    this.timeDefault();
   },
 
   methods: {
-	// 默认时间
-	timeDefault () {
-		let date = new Date()
-		// 通过时间戳计算
-		let defalutStartTime = date.getTime() - 30 * 24 * 3600 * 1000 // 转化为时间戳
-		let defalutEndTime = date.getTime()
-		let startDateNs = new Date(defalutStartTime) 
-		let endDateNs = new Date(defalutEndTime)
-		// 月，日 不够10补0
-		defalutStartTime = startDateNs.getFullYear() + '-' + ((startDateNs.getMonth() + 1) >= 10 ? (startDateNs.getMonth() + 1) : '0' + (startDateNs.getMonth() + 1)) + '-' + (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
-		defalutEndTime = endDateNs.getFullYear() + '-' + ((endDateNs.getMonth() + 1) >= 10 ? (endDateNs.getMonth() + 1) : '0' + (endDateNs.getMonth() + 1)) + '-' + (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
-		this.formInline.RageDate = [defalutStartTime, defalutEndTime];
-	},
+    // 默认时间
+    timeDefault() {
+      let date = new Date()
+      // 通过时间戳计算
+      let defalutStartTime = date.getTime() - 30 * 24 * 3600 * 1000 // 转化为时间戳
+      let defalutEndTime = date.getTime()
+      let startDateNs = new Date(defalutStartTime)
+      let endDateNs = new Date(defalutEndTime)
+      // 月，日 不够10补0
+      defalutStartTime = startDateNs.getFullYear() + '-' + ((startDateNs.getMonth() + 1) >= 10 ? (startDateNs.getMonth() + 1) : '0' + (startDateNs.getMonth() + 1)) + '-' + (startDateNs.getDate() >= 10 ? startDateNs.getDate() : '0' + startDateNs.getDate())
+      defalutEndTime = endDateNs.getFullYear() + '-' + ((endDateNs.getMonth() + 1) >= 10 ? (endDateNs.getMonth() + 1) : '0' + (endDateNs.getMonth() + 1)) + '-' + (endDateNs.getDate() >= 10 ? endDateNs.getDate() : '0' + endDateNs.getDate())
+      this.formInline.RageDate = [defalutStartTime, defalutEndTime];
+    },
     tableRowClassName({ row }) {
       if (row.type === null) return "";
 
@@ -229,7 +171,7 @@ export default {
           });
 
           flowNos += item.FK_Flow + ",";
-          
+
         }
       });
     },
@@ -306,7 +248,7 @@ export default {
       params.FK_Node = work.FK_Node;
       params.FID = work.FID;
       params.FromPage = "Complete";
-      openMyView(params,this);
+      openMyView(params, this);
     },
     DialogOpen: function (rowData) {
       this.$store.commit("setData", rowData);

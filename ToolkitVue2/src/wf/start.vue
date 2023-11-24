@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import {domain} from "./api/config.js";
 import {openMyFlow} from "./api/Dev2Interface";
 export default {
   name: "Start",
@@ -41,7 +40,7 @@ export default {
     loadData() {
       let handler = new this.HttpHandler("BP.WF.HttpHandler.WF");
       handler.AddUrlData();
-      handler.AddPara("Domain",domain);
+      handler.AddPara("Domain",process.env.VUE_APP_DOMAIN);
       const data = handler.DoMethodReturnString("Start_Init");
       if(typeof data === 'string' && data.includes('err@')){
         this.$message.error(data);
@@ -49,7 +48,7 @@ export default {
         return;
       }
       const statFlows = JSON.parse(data).Start;
-      this.dataList = statFlows.filter(item=>item.Domain===domain)
+      this.dataList = statFlows.filter(item=>item.Domain===process.env.VUE_APP_DOMAIN)
     },
     //发起流程
     StartFlow(item){

@@ -187,7 +187,7 @@ namespace BP.WF.Data
 		/// <summary>
 		/// 工作流程编号
 		/// </summary>
-		public string  FK_Flow
+		public string  FlowNo
 		{
 			get
 			{
@@ -299,7 +299,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 类别编号
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -313,7 +313,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-		public string  FK_Dept
+		public string  DeptNo
 		{
 			get
 			{
@@ -551,7 +551,7 @@ namespace BP.WF.Data
 		/// <summary>
 		/// 当前工作到的节点
 		/// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -573,9 +573,9 @@ namespace BP.WF.Data
             }
             set
             {
-                if (value == WF.WFState.Complete)
+                if (value == BP.WF.WFState.Complete)
                     SetValByKey(MyDeptTodolistAttr.WFSta, (int)WFSta.Complete);
-                else if (value == WF.WFState.Delete)
+                else if (value == BP.WF.WFState.Delete)
                     SetValByKey(MyDeptTodolistAttr.WFSta, (int)WFSta.Etc);
                 else
                     SetValByKey(MyDeptTodolistAttr.WFSta, (int)WFSta.Runing);
@@ -687,11 +687,8 @@ namespace BP.WF.Data
                 //    false, false, 0, 30, 10);
                 map.AddTBString(MyDeptTodolistAttr.OrgNo, null, "组织编号", false, false, 0, 100, 10);
 
-                map.AddDDLEntities(MyDeptTodolistAttr.FK_Emp, null, "当前处理人", new BP.WF.Data.MyDeptEmps(), false);
+                map.AddDDLEntities(MyDeptTodolistAttr.FK_Emp, null, "当前处理人", new BP.Port.Emps(), false);
                 map.AddTBIntPK(MyDeptTodolistAttr.WorkID, 0, "工作ID", true, true);
-
-                //查询关键字.
-                map.AddTBSKeyWords(4000);
 
                 //查询条件.
                 map.AddSearchAttr(MyDeptTodolistAttr.FK_Flow);
@@ -702,7 +699,7 @@ namespace BP.WF.Data
 
                 ////增加隐藏的查询条件.
                 //SearchNormal search = new SearchNormal(MyDeptTodolistAttr.WorkerDept, "部门",
-                //    MyDeptTodolistAttr.WorkerDept, "=", BP.Web.WebUser.FK_Dept, 0, true);
+                //    MyDeptTodolistAttr.WorkerDept, "=", BP.Web.WebUser.DeptNo, 0, true);
                 //map.SearchNormals.Add(search);
                 if (BP.Difference.SystemConfig.CCBPMRunModel != Sys.CCBPMRunModel.Single)
                 {
@@ -727,7 +724,7 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoComeBack";
                 rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
                 rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
@@ -743,7 +740,7 @@ namespace BP.WF.Data
         #region 执行功能.
         public string DoTrack()
         {
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=";
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=";
         }
         /// <summary>
         /// 执行移交
@@ -753,7 +750,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoShift(string ToEmp, string Note)
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FlowNo, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -772,7 +769,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoDelete()
         {
-            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FK_Flow, this.WorkID) == false)
+            if (BP.WF.Dev2Interface.Flow_IsCanViewTruck(this.FlowNo, this.WorkID) == false)
                 return "您没有操作该流程数据的权限.";
 
             try
@@ -787,7 +784,7 @@ namespace BP.WF.Data
         }
         public string DoSkip()
         {
-            return "../../Admin/FlowDB/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../Admin/FlowDB/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 回滚
@@ -797,7 +794,7 @@ namespace BP.WF.Data
         /// <returns>回滚的结果</returns>
         public string DoComeBack(int nodeid, string note)
         {
-            BP.WF.Template.FlowSheet fl = new BP.WF.Template.FlowSheet(this.FK_Flow);
+            BP.WF.Template.FlowSheet fl = new BP.WF.Template.FlowSheet(this.FlowNo);
             return fl.DoRebackFlowData(this.WorkID, nodeid, note);
         }
         #endregion

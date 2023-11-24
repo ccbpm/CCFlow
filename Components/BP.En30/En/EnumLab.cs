@@ -97,7 +97,7 @@ namespace BP.En
         /// <summary>
         /// 系统定位
         /// </summary>
-        Fixed = 16,
+        Location = 16,
         /// <summary>
         /// 公文正文组件
         /// </summary>
@@ -118,6 +118,10 @@ namespace BP.En
         /// 大块文本Html(说明性文字)
         /// </summary>
         BigText = 60,
+        /// <summary>
+        /// 轨迹图
+        /// </summary>
+        FrmFlowTrack = 62,
         /// <summary>
         /// 评分
         /// </summary>

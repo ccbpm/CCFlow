@@ -1,0 +1,85 @@
+﻿body
+{
+    font-size:large;
+}
+
+
+.TDDay {
+    width: 24%;
+    border-bottom-style: dotted;
+    border-bottom-width: thin;
+    border-bottom-color: #008000;
+    text-align: left;
+    background-color: #f7f7f7;
+    font-weight: normal;
+    padding: 3px 3px 3px 9px;
+}
+
+tr
+{
+    border-bottom-style: dotted;
+    border-bottom-width: thin;
+    border-bottom-color: #008000;
+    font-size: large;
+}
+
+.TDTime
+ {
+   text-align:center;
+    width:24%;
+   vertical-align: middle;
+    border-bottom-style: dotted;
+    border-bottom-width: thin;
+    border-bottom-color: #3399FF;
+    font-weight:normal;
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
+.UserIcon
+{
+    width:50px;
+    height:auto;
+    text-align:center;
+     margin-right:10px;
+}
+
+/*中间数据*/
+.TDBase
+{
+    background-position: right center;
+    text-align: right;
+    width: 2px;
+    background-image: url('../../Img/BlueLine.gif');
+    background-repeat: repeat-y;
+    background-attachment: scroll;
+     margin:139px;
+         vertical-align:middle;
+    border-bottom-style: dotted;
+    border-bottom-width: thin;
+    border-bottom-color: #3399FF;
+}
+
+/* 内容信息 */
+.TDDoc
+{
+    text-align: left;
+    width: auto;
+    vertical-align: top;
+    border-bottom-style: dotted;
+    border-bottom-width: thin;
+    border-bottom-color: #3399FF;
+}
+
+/* 事件图片. */
+.ImgOfAC         
+{
+    width:24px;
+     height:24px;
+     margin:5px;
+}
+
+th
+{
+    background-color: #CCCCFF;
+}

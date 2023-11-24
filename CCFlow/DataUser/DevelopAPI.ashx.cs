@@ -78,8 +78,8 @@ namespace CCFlow.DataUser
                     Hashtable ht = new Hashtable();
                     ht.Add("No", WebUser.No);
                     ht.Add("Name", WebUser.Name);
-                    ht.Add("FK_Dept", WebUser.FK_Dept);
-                    ht.Add("FK_DeptName", WebUser.FK_DeptName);
+                    ht.Add("FK_Dept", WebUser.DeptNo);
+                    ht.Add("FK_DeptName", WebUser.DeptName);
                     ht.Add("OrgNo", WebUser.OrgNo);
                     ht.Add("OrgName", WebUser.OrgName);
                     ht.Add("Token", toke);
@@ -107,7 +107,7 @@ namespace CCFlow.DataUser
                 }
                 if (doType.Equals("En_Node") == true)
                 {
-                    var node = new Node(this.FK_Node);
+                    var node = new Node(this.NodeID);
                     this.ResponseWrite(node.ToJson());
                     return;
                 }
@@ -170,7 +170,7 @@ namespace CCFlow.DataUser
                 if (doType.Equals("Node_CreateBlankWorkID") == true)
                 {
                     //创建workid.
-                    Int64 workid = Dev2Interface.Node_CreateBlankWork(this.FK_Flow, BP.Web.WebUser.No);
+                    Int64 workid = Dev2Interface.Node_CreateBlankWork(this.FlowNo, BP.Web.WebUser.No);
                     this.ResponseWrite(workid.ToString());
                     return;
                 }
@@ -179,7 +179,7 @@ namespace CCFlow.DataUser
                     GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                     string todoEmps = gwf.TodoEmps;
                     bool isCanDo = false;
-                    if (gwf.FK_Node.ToString().EndsWith("01") == true)
+                    if (gwf.NodeID.ToString().EndsWith("01") == true)
                     {
                         if (gwf.Starter.Equals(BP.Web.WebUser.No) == false)
                             isCanDo = false; //处理开始节点发送后，撤销的情况，第2个节点打开了，第1个节点撤销了,造成第2个节点也可以发送下去.
@@ -196,13 +196,13 @@ namespace CCFlow.DataUser
                     return;
 
                 }
-                //@hongyan. 翻译过去.
+                //翻译过去.
                 if (doType.Equals("Node_SetDraft") == true)
                 {
                     BP.WF.Dev2Interface.Node_SetDraft(this.WorkID);
                     return;
                 }
-                //@hongyan.
+                
                 if (doType.Equals("Node_Shift") == true)
                 {
                     string toEmpNo = context.Request.QueryString["ToEmpNo"];
@@ -211,7 +211,7 @@ namespace CCFlow.DataUser
                     return;
                 }
 
-                // 给人员增加待办. //@hongyan.
+                // 给人员增加待办.
                 if (doType.Equals("Node_AddTodolist") == true)
                 {
                     string EmpNo = context.Request.QueryString["EmpNo"];
@@ -220,7 +220,7 @@ namespace CCFlow.DataUser
                     return;
                 }
 
-                //获得流程信息. //@hongyan.
+                //获得流程信息.
                 if (doType.Equals("Flow_GenerWorkFlow") == true)
                 {
                     GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
@@ -234,10 +234,10 @@ namespace CCFlow.DataUser
                     this.ResponseWrite("参数保存成功");
                     return;
                 }
-                //保存参数字段. //@hongyan.
+                //保存参数字段. 
                 if (doType.Equals("Flow_SetTitle") == true)
                 {
-                    BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FK_Flow, this.WorkID, context.Request.QueryString["Title"]);
+                    BP.WF.Dev2Interface.Flow_SetFlowTitle(this.FlowNo, this.WorkID, context.Request.QueryString["Title"]);
                     this.ResponseWrite("标题设置成功.");
                     return;
                 }
@@ -259,7 +259,7 @@ namespace CCFlow.DataUser
                     string toEmps = this.GetValByKey("ToEmps");
                     try
                     {
-                        string flowNo = this.FK_Flow;
+                        string flowNo = this.FlowNo;
                         if (DataType.IsNullOrEmpty(flowNo) == true)
                             flowNo = DBAccess.RunSQLReturnString("SELECT FK_Flow FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
 
@@ -279,7 +279,7 @@ namespace CCFlow.DataUser
                 {
                     GenerWorkFlows gwfs = new GenerWorkFlows();
                     QueryObject qo = new QueryObject(gwfs);
-                    qo.AddWhere("FK_Flow", this.FK_Flow);
+                    qo.AddWhere("FK_Flow", this.FlowNo);
                     qo.addAnd();
                     qo.AddWhere("WFState", ">", 1);
                     //  qo.addAnd();
@@ -451,7 +451,7 @@ namespace CCFlow.DataUser
 
             //我部门发起的.
             if (scop.Equals("2") == true)
-                qo.AddWhere(GenerWorkFlowAttr.FK_Dept, "=", WebUser.FK_Dept);
+                qo.AddWhere(GenerWorkFlowAttr.FK_Dept, "=", WebUser.DeptNo);
 
 
             //任何一个为空.
@@ -523,7 +523,7 @@ namespace CCFlow.DataUser
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -546,7 +546,7 @@ namespace CCFlow.DataUser
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -734,20 +734,20 @@ namespace CCFlow.DataUser
              * 比如: /App/F027QingJia.htm
              */
 
-            int nodeID = this.FK_Node;
+            int nodeID = this.NodeID;
             if (nodeID == 0)
-                nodeID = int.Parse(this.FK_Flow + "01");
+                nodeID = int.Parse(this.FlowNo + "01");
 
             Int64 workid = this.WorkID;
             if (workid == 0)
-                workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, BP.Web.WebUser.No);
+                workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FlowNo, BP.Web.WebUser.No);
 
             string url = "";
             Node nd = new Node(nodeID);
             GenerWorkFlow gwf = new GenerWorkFlow(workid);
             string todoEmps = gwf.TodoEmps;
             bool isCanDo = false;
-            if (gwf.FK_Node.ToString().EndsWith("01") == true)
+            if (gwf.NodeID.ToString().EndsWith("01") == true)
             {
                 if (gwf.Starter.Equals(BP.Web.WebUser.No) == false)
                     isCanDo = false; //处理开始节点发送后，撤销的情况，第2个节点打开了，第1个节点撤销了,造成第2个节点也可以发送下去.
@@ -764,13 +764,13 @@ namespace CCFlow.DataUser
             {
                 url = nd.FormUrl;
                 if (url.Contains("?") == true)
-                    url += "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
+                    url += "&FK_Flow=" + this.FlowNo + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
                 else
-                    url += "?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
+                    url += "?FK_Flow=" + this.FlowNo + "&FK_Node=" + nodeID + "&WorkID=" + workid + "&Token=" + this.SID + "&UserNo=" + BP.Web.WebUser.No;
             }
             else
             {
-                url = "/WF/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&Token=" + this.SID;
+                url = "/WF/MyFlow.htm?FK_Flow=" + this.FlowNo + "&FK_Node=" + nodeID + "&WorkID=" + this.WorkID + "&Token=" + this.SID;
             }
             url += "&IsReadonly=" + (isCanDo == true ? 0 : 1);
             ResponseWrite(url);

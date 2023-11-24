@@ -1,25 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Data;
-using System.IO;
-using System.Collections.Generic;
-using System.Web;
+﻿
 using BP.DA;
 using BP.Sys;
-using BP.Web;
-using BP.En;
-using BP.WF;
-using BP.WF.Data;
 using BP.WF.Template;
-using BP.WF.Template.SFlow;
-using BP.Port;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Configuration;
-using BP.Tools;
 using BP.Difference;
-using BP.WF.Admin;
-using System.Web.UI.WebControls;
 
 namespace BP.WF
 {
@@ -55,20 +38,20 @@ namespace BP.WF
         /// <summary>
         /// 执行发送.
         /// </summary>
-        /// <param name="wn"></param>
+        /// <param name="wn">工作节点</param>
         /// <returns></returns>
         public static string SendSuccess(WorkNode wn)
         {
             if (SystemConfig.CustomerNo.Equals("TianYu") == true)
             {
-                if (wn.HisNode.IsStartNode == false)
+                if (wn.HisNode.ItIsStartNode == false)
                     return null; //如果不是开始节点发送,就不处理.
 
                 //模板目录.
-                string sortNo = wn.HisFlow.FK_FlowSort;
+                string sortNo = wn.HisFlow.FlowSortNo;
 
                 //找到系统编号.
-                Admin.FlowSort fs = new Admin.FlowSort(sortNo);
+                FlowSort fs = new FlowSort(sortNo);
 
                 //子系统:当前目录的上一级目录必定是子系统,系统约定的.
                 SubSystem system = new SubSystem(fs.ParentNo);
@@ -97,11 +80,12 @@ namespace BP.WF
                 if (toNodeID.ToString().EndsWith("01") == false)
                     return null; //如果不是退回的开始节点.
 
+
                 //模板目录.
-                string sortNo = wn.HisFlow.FK_FlowSort;
+                string sortNo = wn.HisFlow.FlowSortNo;
 
                 //找到系统编号.
-                Admin.FlowSort fs = new Admin.FlowSort(sortNo);
+                FlowSort fs = new FlowSort(sortNo);
 
                 //子系统:当前目录的上一级目录必定是子系统,系统约定的.
                 SubSystem system = new SubSystem(fs.ParentNo);
@@ -115,16 +99,20 @@ namespace BP.WF
             }
             return null;
         }
-
+        /// <summary>
+        /// 流程结束事件
+        /// </summary>
+        /// <param name="wn"></param>
+        /// <returns></returns>
         public static string FlowOverAfter(WorkNode wn)
         {
             if (SystemConfig.CustomerNo.Equals("TianYu") == true)
             {
                 //模板目录.
-                string sortNo = wn.HisFlow.FK_FlowSort;
+                string sortNo = wn.HisFlow.FlowSortNo;
 
                 //找到系统编号.
-                Admin.FlowSort fs = new Admin.FlowSort(sortNo);
+                FlowSort fs = new FlowSort(sortNo);
 
                 //子系统:当前目录的上一级目录必定是子系统,系统约定的.
                 SubSystem system = new SubSystem(fs.ParentNo);
@@ -181,7 +169,7 @@ namespace BP.WF
             url = Glo.DealExp(url, wn.rptGe);
 
             //执行post.
-            string data = BP.Tools.PubGlo.HttpPostConnect(url, apiParas, system.RequestMethod, system.IsJson);
+            string data = BP.Tools.PubGlo.HttpPostConnect(url, apiParas, system.RequestMethod, system.ItIsJson);
             return data;
         }
     }

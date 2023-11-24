@@ -196,6 +196,30 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.ThreadEnable);
             }
         }
+        public string TZWorkerLab
+        {
+            get
+            {
+                return this.GetValStringByKey("TZWorkerLab");
+            }
+        }
+        /// <summary>
+        /// 是否启用调整未来处理人
+        /// </summary>
+        public bool TZWorkerEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey("TZWorkerEnable");
+            }
+        }
+        public int TZWorkerRole
+        {
+            get
+            {
+                return this.GetValIntByKey("TZWorkerRole");
+            }
+        }
         /// <summary>
         /// 是否可以删除（当前分流，分合流节点发送出去的）子线程.
         /// </summary>
@@ -832,7 +856,7 @@ namespace BP.WF.Template
             }
         }
         
-        // public int IsCanAddHuiQianer
+        // public int ItIsCanAddHuiQianer
         //{
         //    get
         //    {
@@ -1085,6 +1109,9 @@ namespace BP.WF.Template
                 map.AddTBIntPK(BtnAttr.NodeID, 0, "节点ID", true, true);
                 map.AddTBString(BtnAttr.Name, null, "节点名称", true, true, 0, 200, 10);
 
+                map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 5, 10);
+                map.AddTBString(NodeAttr.FlowName, null, "流程名", false, true, 0, 200, 10);
+
                 #region  功能按钮状态
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SendLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577079&doc_id=31094");
@@ -1099,11 +1126,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.SaveEnable, true, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.SaveLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3577137&doc_id=31094"); //增加帮助
 
-
-                map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(NodeAttr.CCRole, 0, "抄送规则", true, true, NodeAttr.CCRole,
-                    "@0=不能抄送@1=手工抄送@2=自动抄送@3=手工与自动@4=按表单SysCCEmps字段计算@5=在发送前打开抄送窗口");
-                map.SetHelperUrl(BtnAttr.CCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
+                map.AddTBString(BtnAttr.CCLab, "抄送", "抄送按钮标签", false, false, 0, 50, 10);
+                map.AddDDLSysEnum(NodeAttr.CCRole, 0, "抄送规则", false, true, NodeAttr.CCRole,
+                 "@0=不能抄送@1=手工抄送@2=自动抄送@3=手工与自动@4=按表单SysCCEmps字段计算@5=在发送前打开抄送窗口");
+                //map.SetHelperUrl(BtnAttr.CCLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3579867&doc_id=31094"); //增加帮助.
 
                 map.AddTBString(BtnAttr.QRCodeLab, "二维码", "二维码标签", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.QRCodeLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=4275245&doc_id=31094"); //增加帮助.
@@ -1301,6 +1327,10 @@ namespace BP.WF.Template
                 map.AddTBString("SubmitSF", "提交身份", "提交身份", true, false, 0, 50, 10);
                 map.AddBoolean("SubmitSFEnable", false, "是否启用提交身份?", true, true);
 
+                map.AddTBString("TZWorkerLab", "调整未来处理人", "调整未来处理人", true, false, 0, 50, 10);
+                map.AddBoolean("TZWorkerEnable", false, "是否启用调整未来处理人?", true, true);
+                map.AddDDLSysEnum("TZWorkerRole", 0, "调整规则", true, true, BtnAttr.NextRole, "@0=禁用@1=可移除计算的处理人@2=不可移除计算的处理人", false);
+
 
                 map.AddGroupAttr("查看器按钮权限");
                 map.AddBoolean(BtnAttr.ShowParentFormEnableMyView, false, "查看父流程是否启用", true, true);
@@ -1321,7 +1351,6 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ShowParentFormEnableMyCC, false, "查看父流程是否启用", true, true);
                 map.AddBoolean(BtnAttr.TrackEnableMyCC, true, "轨迹是否启用", true, true);
                 map.AddBoolean(BtnAttr.FrmDBVerMyCC, false, "数据版本是否启用", true, true);
-                
                 #endregion  功能按钮状态
 
                 #region 退回处理.
@@ -1403,15 +1432,15 @@ namespace BP.WF.Template
                 #endregion
 
                 #region 会签按钮.
-                map.AddGroupAttr("会签");
-                map.AddTBString(BtnAttr.HuiQianLab, "会签", "按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
+                map.AddGroupAttr("加签");
+                map.AddTBString(BtnAttr.HuiQianLab, "加签", "按钮标签", true, false, 0, 50, 10);
+                map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "加签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
                 map.SetHelperUrl(BtnAttr.HuiQianLab, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3979976&doc_id=31094");
                 //map.AddDDLSysEnum(BtnAttr.IsCanAddHuiQianer, 0, "协作模式被加签的人处理规则", true, true, BtnAttr.IsCanAddHuiQianer,
                 //   "0=不允许增加其他协作人@1=允许增加协作人", false);
-                map.AddTBString(BtnAttr.AddLeaderLab, "加主持人", "加主持人", true, false, 0, 50, 10);
+                map.AddTBString(BtnAttr.AddLeaderLab, "加组长", "加组长", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.AddLeaderEnable, false, "是否启用", true, true);
-                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长会签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送");
+                map.AddDDLSysEnum(BtnAttr.HuiQianLeaderRole, 0, "组长加签规则", true, true, BtnAttr.HuiQianLeaderRole, "0=只有一个组长@1=最后一个组长发送@2=任意组长可以发送");
                 #endregion
 
                 this._enMap = map;

@@ -301,7 +301,6 @@ namespace BP.En
             this.SetValByKey("OID", oid);
             if (this.Update() == 0)
                 this.InsertAsOID(oid);
-
             //         this.SetValByKey("OID",oid);
             // if (this.IsExits==false)
             //	this.InsertAsOID(oid);

@@ -82,7 +82,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -96,7 +96,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 流程
         /// </summary>
-        public string FK_FlowT
+        public string FlowNoT
         {
             get
             {
@@ -124,7 +124,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 操作人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -138,7 +138,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_EmpT
+        public string EmpNoT
         {
             get
             {
@@ -152,7 +152,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -166,7 +166,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 部门名称
         /// </summary>
-        public string FK_DeptT
+        public string DeptNoT
         {
             get
             {
@@ -222,7 +222,7 @@ namespace BP.WF.Data.AdminGroup
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -328,7 +328,7 @@ namespace BP.WF.Data.AdminGroup
                 rm.Title = "详情";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
 
@@ -340,7 +340,7 @@ namespace BP.WF.Data.AdminGroup
 
         public string DoOpen()
         {
-            return "../../MyView.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            return "../../MyView.htm?FK_Flow" + this.FlowNo + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
     /// <summary>

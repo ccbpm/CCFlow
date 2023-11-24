@@ -104,7 +104,7 @@ namespace BP.En
                 }
                 else if (v.Equals("@WebUser.FK_Dept"))
                 {
-                    this.SetValByKey(attr.Key, WebUser.FK_Dept);
+                    this.SetValByKey(attr.Key, WebUser.DeptNo);
                     continue;
                 }
                 else if (v.Equals("@WebUser.DeptLeader"))
@@ -119,19 +119,19 @@ namespace BP.En
                 }
                 else if (v.Equals("@WebUser.FK_DeptName"))
                 {
-                    this.SetValByKey(attr.Key, WebUser.FK_DeptName);
+                    this.SetValByKey(attr.Key, WebUser.DeptName);
                     continue;
                 }
                 else if (v.Equals("@WebUser.FK_DeptNameOfFull")
                     || v.Equals("@WebUser.FK_DeptFullName"))
                 {
-                    this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
+                    this.SetValByKey(attr.Key, WebUser.DeptNameOfFull);
                     continue;
                 }
                 else if (v.Equals("@RDT"))
                 {
                     string dataFormat = "yyyy-MM-dd";
-                    switch (attr.IsSupperText)
+                    switch (attr.ItIsSupperText)
                     {
                         case 0: break;
                         case 1:
@@ -190,7 +190,7 @@ namespace BP.En
             bool isReadonly = true;
             foreach (Attr attr in attrs)
             {
-                if (attr.IsRefAttr)
+                if (attr.ItIsRefAttr)
                     this.SetValRefTextByKey(attr.Key, "");
 
                 string v = attr.DefaultValOfReal as string;
@@ -245,35 +245,35 @@ namespace BP.En
                     case "@WebUser.FK_Dept":
                         if (isReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, WebUser.FK_Dept);
+                            this.SetValByKey(attr.Key, WebUser.DeptNo);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, WebUser.FK_Dept);
+                                this.SetValByKey(attr.Key, WebUser.DeptNo);
                         }
                         continue;
                     case "@WebUser.FK_DeptName":
                         if (isReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, WebUser.FK_DeptName);
+                            this.SetValByKey(attr.Key, WebUser.DeptName);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, WebUser.FK_DeptName);
+                                this.SetValByKey(attr.Key, WebUser.DeptName);
                         }
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
                     case "@WebUser.FK_DeptFullName":
                         if (isReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
+                            this.SetValByKey(attr.Key, WebUser.DeptNameOfFull);
                         }
                         else
                         {
                             if (DataType.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
+                                this.SetValByKey(attr.Key, WebUser.DeptNameOfFull);
                         }
                         continue;
                     case "@WebUser.OrgNo":
@@ -300,7 +300,7 @@ namespace BP.En
                         continue;
                     case "@RDT":
                         string dataFormat = "yyyy-MM-dd";
-                        switch (attr.IsSupperText)
+                        switch (attr.ItIsSupperText)
                         {
                             case 0: break;
                             case 1:
@@ -382,7 +382,7 @@ namespace BP.En
                         }
                         continue;
                     default:
-                        if (BP.Difference.SystemConfig.IsBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
+                        if (BP.Difference.SystemConfig.isBSsystem == true && HttpContextHelper.RequestParamKeys.Contains(v.Replace("@", "")) == true)
                         {
                             if (isReadonly == true)
                             {
@@ -445,14 +445,14 @@ namespace BP.En
             //首先替换加; 的。
             exp = exp.Replace("@WebUser.No;", WebUser.No);
             exp = exp.Replace("@WebUser.Name;", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.FK_Dept);
-            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.FK_DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept;", WebUser.DeptNo);
+            exp = exp.Replace("@WebUser.FK_DeptName;", WebUser.DeptName);
 
             // 替换没有 ; 的 .
             exp = exp.Replace("@WebUser.No", WebUser.No);
             exp = exp.Replace("@WebUser.Name", WebUser.Name);
-            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            exp = exp.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            exp = exp.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+            exp = exp.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
             //  exp = exp.Replace("@WorkID", "0");
 
             if (exp.Contains("@") == false)
@@ -530,7 +530,7 @@ namespace BP.En
                 }
             }
 
-            if (exp.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (exp.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -557,7 +557,7 @@ namespace BP.En
                 if (attr.UIIsReadonly == false && attr.DefaultValOfReal != null)
                     continue;
 
-                if (attr.IsPK)
+                if (attr.ItIsPK)
                     continue;
 
                 string v = attr.DefaultValOfReal as string;
@@ -584,13 +584,13 @@ namespace BP.En
                         this.SetValByKey(attr.Key, WebUser.Name);
                         continue;
                     case "@WebUser.FK_Dept":
-                        this.SetValByKey(attr.Key, WebUser.FK_Dept);
+                        this.SetValByKey(attr.Key, WebUser.DeptNo);
                         continue;
                     case "@WebUser.FK_DeptName":
-                        this.SetValByKey(attr.Key, WebUser.FK_DeptName);
+                        this.SetValByKey(attr.Key, WebUser.DeptName);
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
-                        this.SetValByKey(attr.Key, WebUser.FK_DeptNameOfFull);
+                        this.SetValByKey(attr.Key, WebUser.DeptNameOfFull);
                         continue;
                     case "@RDT":
                         if (attr.MyDataType == DataType.AppDate)
@@ -621,7 +621,7 @@ namespace BP.En
             get
             {
                 if (_tmpEnMap == null)
-                    _tmpEnMap = Cash.GetMap(this.ToString());
+                    _tmpEnMap = Cache.GetMap(this.ToString());
                 return _tmpEnMap;
             }
             set
@@ -633,7 +633,7 @@ namespace BP.En
                 }
 
                 Map mp = (Map)value;
-                if (BP.Difference.SystemConfig.IsDebug)
+                if (BP.Difference.SystemConfig.isDebug)
                 {
 
                 }
@@ -644,7 +644,7 @@ namespace BP.En
                     return;
                 }
 
-                Cash.SetMap(this.ToString(), mp);
+                Cache.SetMap(this.ToString(), mp);
                 _tmpEnMap = mp;
             }
         }
@@ -663,7 +663,7 @@ namespace BP.En
             get
             {
                 _tmpEnMap = null;
-                Cash.SetMap(this.ToString(), null);
+                Cache.SetMap(this.ToString(), null);
                 return this.EnMap;
             }
         }
@@ -681,13 +681,13 @@ namespace BP.En
             {
                 if (this._row == null)
                 {
-                    this._row = BP.DA.Cash.GetRow(this.ToString());
+                    this._row = BP.DA.Cache.GetRow(this.ToString());
                     if (this._row == null)
                     {
                         Row row = new Row();
                         row.LoadAttrs(this.EnMap.Attrs);
-                        BP.DA.Cash.SetRow(this.ToString(), row);
-                        this._row = BP.DA.Cash.GetRow(this.ToString());
+                        BP.DA.Cache.SetRow(this.ToString(), row);
+                        this._row = BP.DA.Cache.GetRow(this.ToString());
                     }
                 }
                 return this._row;
@@ -957,7 +957,7 @@ namespace BP.En
             try
             {
                 string str = this.GetValStrByKey(key);
-                return string.IsNullOrWhiteSpace(str) ? 0 : int.Parse(this.GetValStrByKey(key));
+                return DataType.IsNullOrEmpty(str) ? 0 : int.Parse(this.GetValStrByKey(key));
             }
             catch (Exception ex)
             {
@@ -985,7 +985,7 @@ namespace BP.En
                 if (this.GetValStrByKey(key) == "")
                 {
                     Attr attr = this.EnMap.GetAttrByKey(key);
-                    if (attr.IsNull)
+                    if (attr.ItIsNull)
                         return 567567567;
                     else
                         return int.Parse(attr.DefaultVal.ToString());
@@ -1056,14 +1056,14 @@ namespace BP.En
             try
             {
                 string str = this.Row.GetValByKey(key).ToString();
-                return string.IsNullOrWhiteSpace(str) ? 0 : float.Parse(float.Parse(str).ToString("0.00"));
+                return DataType.IsNullOrEmpty(str) ? 0 : float.Parse(float.Parse(str).ToString("0.00"));
             }
             catch
             {
                 if (this.GetValStringByKey(key) == "")
                 {
                     Attr attr = this.EnMap.GetAttrByKey(key);
-                    if (attr.IsNull)
+                    if (attr.ItIsNull)
                         return 567567567;
                     else
                         return float.Parse(attr.DefaultVal.ToString());
@@ -1108,7 +1108,7 @@ namespace BP.En
         /// <summary>
         /// 是否是空白的实体？
         /// </summary>
-        public bool IsBlank
+        public bool ItIsBlank
         {
             get
             {
@@ -1118,7 +1118,7 @@ namespace BP.En
                 Attrs attrs = this.EnMap.Attrs;
                 foreach (Attr attr in attrs)
                 {
-                    if (attr.UIIsReadonly && attr.IsFKorEnum == false)
+                    if (attr.UIIsReadonly && attr.ItIsFKorEnum == false)
                         continue;
 
                     //日期类型.  这里需要翻译.
@@ -1128,7 +1128,7 @@ namespace BP.En
                     if (attr.DefaultValOfReal != null && attr.DefaultValOfReal.Contains("@") == true)
                         continue;
 
-                    if (attr.IsFK)
+                    if (attr.ItIsFK)
                     {
                         if (this.GetValByKey(attr.Key) == "" || this.GetValByKey(attr.Key) == attr.DefaultValOfReal)
                             continue;
@@ -1138,7 +1138,7 @@ namespace BP.En
                     string str = this.GetValStrByKey(attr.Key);
 
                     //判断是否是数值类型.
-                    if (attr.IsNum == true)
+                    if (attr.ItIsNum == true)
                         if (this.GetValFloatByKey(attr.Key) != float.Parse(attr.DefaultValOfReal))
                             return false;
 
@@ -1209,7 +1209,7 @@ namespace BP.En
         /// <summary>
         /// 是不是OIDEntity
         /// </summary>
-        public bool IsOIDEntity
+        public bool ItIsOIDEntity
         {
             get
             {
@@ -1221,7 +1221,7 @@ namespace BP.En
         /// <summary>
         /// 是不是OIDEntity
         /// </summary>
-        public bool IsNoEntity
+        public bool ItIsNoEntity
         {
             get
             {
@@ -1233,7 +1233,7 @@ namespace BP.En
         /// <summary>
         /// 是否是TreeEntity
         /// </summary>
-        public bool IsTreeEntity
+        public bool ItIsTreeEntity
         {
             get
             {

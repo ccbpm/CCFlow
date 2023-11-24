@@ -102,8 +102,8 @@ namespace BP.Pub
 
                 title = title.Replace("@WebUser.No", BP.Web.WebUser.No);
                 title = title.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                title = title.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                title = title.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                title = title.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
+                title = title.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
                 if (title.Contains("@") == false)
                     return title;
 
@@ -179,7 +179,7 @@ namespace BP.Pub
         /// <summary>
         /// 是否启用table.
         /// </summary>
-        public bool IsEnableTable = true;
+        public bool ItIsEnableTable = true;
         /// <summary>
         /// 柱图显示类型.
         /// </summary>
@@ -198,15 +198,15 @@ namespace BP.Pub
         /// <summary>
         /// 是否显示饼图
         /// </summary>
-        public bool IsEnablePie = true;
+        public bool ItIsEnablePie = true;
         /// <summary>
         /// 是否显示柱图
         /// </summary>
-        public bool IsEnableColumn = true; 
+        public bool ItIsEnableColumn = true; 
         /// <summary>
         /// 是否显示折线图
         /// </summary>
-        public bool IsEnableLine = true;
+        public bool ItIsEnableLine = true;
         /// <summary>
         /// 折线图显示类型.
         /// </summary>
@@ -274,7 +274,7 @@ namespace BP.Pub
                     //获得数据表.
                     // 执行SQL.
                     string sql = this.DBSrc;
-                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     foreach (string k in HttpContextHelper.RequestParamKeys)

@@ -73,7 +73,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintHtml";
                 btn.BtnLab = "打印Html";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 3);
                 btn.Insert();
 
@@ -82,7 +82,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintPDF";
                 btn.BtnLab = "打印PDF";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 4);
                 btn.Insert();
 
@@ -91,7 +91,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintRTF";
                 btn.BtnLab = "打印RTF";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 5);
                 btn.Insert();
 
@@ -100,7 +100,7 @@ namespace BP.CCBill
                 btn.BtnID = "PrintCCWord";
                 btn.BtnLab = "打印CCWord";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 6);
                 btn.Insert();
 
@@ -109,7 +109,7 @@ namespace BP.CCBill
                 btn.BtnID = "ExpZip";
                 btn.BtnLab = "导出Zip包";
                 btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-                btn.IsEnable = false;
+                btn.ItIsEnable = false;
                 btn.SetValByKey("Idx", 7);
                 btn.Insert();
 
@@ -126,7 +126,7 @@ namespace BP.CCBill
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enMyPK = ens[i];
+                string enMyPK = ens[i];
                 if (DataType.IsNullOrEmpty(enMyPK) == true)
                     continue;
                 string sql = "UPDATE Frm_ToolbarBtn SET Idx=" + i + " WHERE MyPK='" + enMyPK + "'";
@@ -185,7 +185,7 @@ namespace BP.CCBill
             string frmID = this.FrmID;
             for (int i = 0; i < ens.Length; i++)
             {
-                var en = ens[i];
+                string en = ens[i];
 
                 string sql = "UPDATE Frm_GroupMethod SET Idx=" + i + " WHERE No='" + en + "' AND FrmID='" + frmID + "'";
                 DBAccess.RunSQL(sql);
@@ -203,7 +203,7 @@ namespace BP.CCBill
             string[] ens = this.GetRequestVal("MethodIDs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE Frm_Method SET GroupID ='" + sortNo + "',Idx=" + i + " WHERE No='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
@@ -314,7 +314,7 @@ namespace BP.CCBill
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 if (DataType.IsNullOrEmpty(enNo) == true)
                     continue;
                 string sql = "UPDATE Frm_Collection SET Idx=" + i + " WHERE No='" + enNo + "'";

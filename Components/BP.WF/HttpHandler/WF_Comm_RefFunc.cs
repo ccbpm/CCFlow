@@ -34,17 +34,17 @@ namespace BP.WF.HttpHandler
             int partcount = 0;
             int nid = 0;
 
-            if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
+            if (DataType.IsNullOrEmpty(nodeid) || int.TryParse(nodeid, out nid) == false)
                 throw new Exception("参数nodeid不正确");
 
-            if (string.IsNullOrWhiteSpace(data))
+            if (DataType.IsNullOrEmpty(data))
                 data = "";
 
             BP.WF.Template.NodeEmps nemps = new BP.WF.Template.NodeEmps();
             string[] empNos = data.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             //提交内容过长时，采用分段式提交
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 nemps.Delete(BP.WF.Template.NodeEmpAttr.FK_Node, nid);
             }
@@ -75,12 +75,12 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 nemp = new BP.WF.Template.NodeEmp();
-                nemp.FK_Node = nid;
-                nemp.FK_Emp = empNo;
+                nemp.NodeID = nid;
+                nemp.EmpNo = empNo;
                 nemp.Insert();
             }
 
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 jr.Msg = "保存成功";
             }
@@ -114,17 +114,17 @@ namespace BP.WF.HttpHandler
             int partcount = 0;
             int nid = 0;
 
-            if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
+            if (DataType.IsNullOrEmpty(nodeid) || int.TryParse(nodeid, out nid) == false)
                 throw new Exception("参数nodeid不正确");
 
-            if (string.IsNullOrWhiteSpace(data))
+            if (DataType.IsNullOrEmpty(data))
                 data = "";
 
             BP.WF.Template.NodeDepts ndepts = new BP.WF.Template.NodeDepts();
             string[] deptNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             //提交内容过长时，采用分段式提交
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 ndepts.Delete(BP.WF.Template.NodeDeptAttr.FK_Node, nid);
             }
@@ -155,12 +155,12 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 nemp = new BP.WF.Template.NodeDept();
-                nemp.FK_Node = nid;
-                nemp.FK_Dept = deptNo;
+                nemp.NodeID = nid;
+                nemp.DeptNo = deptNo;
                 nemp.Insert();
             }
 
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 jr.Msg = "保存成功";
             }
@@ -191,7 +191,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT pd.No,pd.Name,pd1.No DeptNo,pd1.Name DeptName FROM WF_NodeDept wnd "
                          + "  INNER JOIN Port_Dept pd ON pd.No=wnd.FK_Dept "
                          + "  LEFT JOIN Port_Dept pd1 ON pd1.No=pd.ParentNo "
-                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd1.Idx, pd.Name";
+                         + "WHERE wnd.NodeID = " + nid + " ORDER BY pd1.Idx, pd.Name";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
             dt.Columns.Add("Code", typeof(string));
@@ -251,17 +251,17 @@ namespace BP.WF.HttpHandler
             int partcount = 0;
             int nid = 0;
 
-            if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
+            if (DataType.IsNullOrEmpty(nodeid) || int.TryParse(nodeid, out nid) == false)
                 throw new Exception("参数nodeid不正确");
 
-            if (string.IsNullOrWhiteSpace(data))
+            if (DataType.IsNullOrEmpty(data))
                 data = "";
 
             BP.WF.Template.NodeStations nsts = new BP.WF.Template.NodeStations();
             string[] stNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             //提交内容过长时，采用分段式提交
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 nsts.Delete(BP.WF.Template.NodeStationAttr.FK_Node, nid);
             }
@@ -292,12 +292,12 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 nst = new BP.WF.Template.NodeStation();
-                nst.FK_Node = nid;
-                nst.FK_Station = stNo;
+                nst.NodeID = nid;
+                nst.StationNo = stNo;
                 nst.Insert();
             }
 
-            if (string.IsNullOrWhiteSpace(partno))
+            if (DataType.IsNullOrEmpty(partno))
             {
                 jr.Msg = "保存成功";
             }
@@ -328,7 +328,7 @@ namespace BP.WF.HttpHandler
             string sql = null;
             DataTable dt = null;
 
-            if (string.IsNullOrWhiteSpace(parentrootid))
+            if (DataType.IsNullOrEmpty(parentrootid))
                 throw new Exception("参数parentrootid不能为空");
 
             CheckStationTypeIdxExists();
@@ -413,9 +413,9 @@ namespace BP.WF.HttpHandler
             string tp = this.GetRequestVal("stype");    //ST,UNIT
             string ttype = this.GetRequestVal("ttype"); //STROOT,UNITROOT,ST,CST,S
 
-            if (string.IsNullOrWhiteSpace(parentid))
+            if (DataType.IsNullOrEmpty(parentid))
                 throw new Exception("参数parentid不能为空");
-            if (string.IsNullOrWhiteSpace(nid))
+            if (DataType.IsNullOrEmpty(nid))
                 throw new Exception("参数nodeid不能为空");
 
             EasyuiTreeNode node = null;
@@ -558,14 +558,14 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT ps.No,ps.Name,pd.No UnitNo,pd.Name UnitName FROM WF_NodeStation wns "
                              + "  INNER JOIN Port_Station ps ON ps.No=wns.FK_Station "
                              + "  INNER JOIN Port_Dept pd ON pd.No=ps.FK_Unit "
-                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name ASC";
+                             + "WHERE wns.NodeID = " + nid + " ORDER BY ps.Name ASC";
             }
             else
             {
                 sql = "SELECT ps.No,ps.Name,pst.No UnitNo,pst.Name UnitName FROM WF_NodeStation wns "
                              + "  INNER JOIN Port_Station ps ON ps.No=wns.FK_Station "
                              + "  INNER JOIN Port_StationType pst ON pst.No=ps.FK_StationType "
-                             + "WHERE wns.FK_Node = " + nid + " ORDER BY pst." + sortField + " ASC,ps.Name ASC";
+                             + "WHERE wns.NodeID = " + nid + " ORDER BY pst." + sortField + " ASC,ps.Name ASC";
             }
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"

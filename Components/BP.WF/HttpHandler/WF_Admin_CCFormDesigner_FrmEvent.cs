@@ -24,13 +24,13 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                if (this.FK_Node != 0)
+                if (this.NodeID != 0)
                     return "Node";
 
-                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
+                if (this.NodeID == 0 && DataType.IsNullOrEmpty(this.FlowNo) == false && this.FlowNo.Length >= 3)
                     return "Flow";
 
-                if (this.FK_Node == 0 && DataType.IsNullOrEmpty(this.FK_MapData) == false)
+                if (this.NodeID == 0 && DataType.IsNullOrEmpty(this.FrmID) == false)
                     return "Frm";
 
                 return "Node";
@@ -47,7 +47,7 @@ namespace BP.WF.HttpHandler
 
             //事件实体.
             FrmEvents ndevs = new FrmEvents();
-            ndevs.Retrieve(FrmEventAttr.FrmID, this.FK_MapData);
+            ndevs.Retrieve(FrmEventAttr.FrmID, this.FrmID);
 
             DataTable dt = ndevs.ToDataTableField("FrmEvents");
             ds.Tables.Add(dt);
@@ -87,10 +87,10 @@ namespace BP.WF.HttpHandler
             //事件实体.
             FrmEvent en = new FrmEvent();
 
-            en.FK_Node = this.FK_Node;
-            en.FK_Event = this.GetRequestVal("FK_Event"); //事件类型.
+            en.NodeID = this.NodeID;
+            en.EventNo = this.GetRequestVal("FK_Event"); //事件类型.
             en.HisDoTypeInt = this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
-            en.setMyPK(this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt); //组合主键.
+            en.setMyPK(this.NodeID + "_" + en.EventNo + "_" + en.HisDoTypeInt); //组合主键.
             en.RetrieveFromDBSources();
 
             en.MsgOKString = this.GetValFromFrmByKey("MsgOK"); //成功的消息.

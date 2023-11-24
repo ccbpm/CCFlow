@@ -169,6 +169,14 @@ namespace BP.WF.Template.SFlow
         /// 位置y
         /// </summary>
         public const string Y = "Y";
+        /// <summary>
+        /// 数据源类型
+        /// </summary>
+        public const string DBSrcType = "DBSrcType";
+        /// <summary>
+        /// 数据源内容
+        /// </summary>
+        public const string DBSrcDoc = "DBSrcDoc";
     }
     /// <summary>
     /// 子流程.
@@ -244,7 +252,7 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 主流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -258,7 +266,7 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 主流程NodeID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -293,11 +301,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 指定的流程启动后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
-        public bool IsEnableSpecFlowStart
+        public bool ItIsEnableSpecFlowStart
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowStart);
                 if (val == false)
                     return false;
 
@@ -320,11 +328,11 @@ namespace BP.WF.Template.SFlow
         /// <summary>
         /// 指定的流程结束后,才能启动该子流程(请在文本框配置子流程).
         /// </summary>
-        public bool IsEnableSpecFlowOver
+        public bool ItIsEnableSpecFlowOver
         {
             get
             {
-                var val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
+                bool val = this.GetValBooleanByKey(SubFlowAutoAttr.IsEnableSpecFlowOver);
                 if (val == false)
                     return false;
 
@@ -510,7 +518,7 @@ namespace BP.WF.Template.SFlow
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            this.setMyPK(this.FK_Node + "_" + this.SubFlowNo + "_" + (int)this.SubFlowType);
+            this.setMyPK(this.NodeID + "_" + this.SubFlowNo + "_" + (int)this.SubFlowType);
             return base.beforeInsert();
         }
     }

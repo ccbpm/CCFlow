@@ -82,8 +82,8 @@ namespace BP.WF.HttpHandler
         public string NewHidF()
         {
             MapAttr mdHid = new MapAttr();
-            mdHid.setMyPK(this.FK_MapData + "_" + this.KeyOfEn);
-            mdHid.setFK_MapData(this.FK_MapData);
+            mdHid.setMyPK(this.FrmID + "_" + this.KeyOfEn);
+            mdHid.FrmID = this.FrmID;
             mdHid.setKeyOfEn(this.KeyOfEn);
             mdHid.Name = this.Name;
             mdHid.MyDataType = int.Parse(this.GetRequestVal("FieldType"));
@@ -166,9 +166,6 @@ namespace BP.WF.HttpHandler
             md.Name = this.GetRequestVal("TB_Name");
 
             md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
-            if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.SAAS)
-                md.No = md.No + "_" + BP.Web.WebUser.OrgNo;
-
             //表单类型.
             md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
             md.EntityType = EntityType.DBList;
@@ -176,7 +173,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(sort) == true)
                 sort = this.GetRequestVal("DDL_FrmTree");
 
-            md.FK_FormTree = sort;
+            md.FormTreeNo = sort;
 
             //类型.
             md.AppType = "100";//独立表单.
@@ -195,7 +192,6 @@ namespace BP.WF.HttpHandler
             MapAttr mapAttr = new MapAttr(md.No + "_OID");
             mapAttr.setMyDataType(DataType.AppString);
             mapAttr.Update();
-
 
             BP.CCBill.FrmDict entityDict = new FrmDict(md.No);
             entityDict.CheckEnityTypeAttrsFor_EntityNoName();
@@ -222,7 +218,6 @@ namespace BP.WF.HttpHandler
             db.Update();
             #endregion  初始化数据.
 
-
             return "创建成功...";
         }
         /// <summary>
@@ -235,11 +230,12 @@ namespace BP.WF.HttpHandler
 
             string no = this.GetRequestVal("TB_No");
             string name = this.GetRequestVal("TB_Name");
-
+            if (DataType.IsNullOrEmpty(no) == true)
+                no = DataType.ParseStringForNo(no, 100);
             try
             {
                 md.Name = name;
-                md.No = DataType.ParseStringForNo(no, 100);
+                md.No =no;
                 md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
                 string ptable = this.GetRequestVal("TB_PTable");
 
@@ -253,10 +249,13 @@ namespace BP.WF.HttpHandler
                     sort = this.GetRequestVal("DDL_FrmTree");
 
                 if (DataType.IsNullOrEmpty(sort) == true)
-                    return "err@没有采集到表单存放目录.";
+                {
+                    sort = "";
+                    //return "err@没有采集到表单存放目录.";
+                }
 
                 //    md.FK_FrmSort = sort;
-                md.FK_FormTree = sort;
+                md.FormTreeNo = sort;
                 md.SetValByKey("Ver", DataType.CurrentDateTime);  //创建日期.
 
                 md.AppType = "0";//独立表单
@@ -307,7 +306,7 @@ namespace BP.WF.HttpHandler
                     bool isHavePFrmID = false;
                     if (DataType.IsNullOrEmpty(this.GetRequestVal("FrmID")) == false)
                         isHavePFrmID = true;
-                    bill.CheckEnityTypeAttrsFor_Bill(isHavePFrmID);
+                    bill.CheckEnityTypeAttrsFor_Bill();
                     bill.InsertToolbarBtns();
                 }
                 #endregion 如果是单据.
@@ -357,7 +356,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 创建表单.
 
-
         #region 表格处理.
         public string Tables_Init()
         {
@@ -401,8 +399,6 @@ namespace BP.WF.HttpHandler
 
         #endregion
 
-
-
         #region 复制表单
 
         public void DoCopyFrm()
@@ -435,7 +431,7 @@ namespace BP.WF.HttpHandler
             //清空缓存
 
             toMapData.RepairMap();
-            BP.Difference.SystemConfig.DoClearCash();
+            BP.Difference.SystemConfig.DoClearCache();
 
 
         }

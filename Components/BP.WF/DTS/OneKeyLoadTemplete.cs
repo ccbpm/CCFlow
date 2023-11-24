@@ -242,7 +242,7 @@ namespace BP.WF.DTS
                         ds.ReadXml(f);
 
                         MapData md = MapData.ImpMapData(ds);
-                        md.FK_FormTree = fs.No;
+                        md.FormTreeNo = fs.No;
                         md.Update();
                     }
                     catch (Exception ex)

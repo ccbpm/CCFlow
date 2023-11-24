@@ -87,7 +87,7 @@ namespace BP.CCFast.CCMenu
                 this.SetValByKey(ModuleAttr.Idx, value);
             }
         }
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {

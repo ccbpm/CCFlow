@@ -79,7 +79,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 标签的事务编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {

@@ -77,7 +77,7 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MixedMinimumRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -107,6 +107,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OSS, Version=2.13.0.0, Culture=neutral, PublicKeyToken=0ad4175f0dac0b9b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\Aliyun.OSS.dll</HintPath>
+    </Reference>
     <Reference Include="FluentFTP">
       <HintPath>..\..\RefDLL\FluentFTP.dll</HintPath>
     </Reference>
@@ -176,9 +180,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Admin\FrmSort.cs" />
+    <Compile Include="Admin\Flow.cs" />
     <Compile Include="Admin\Frm.cs" />
-    <Compile Include="Admin\FlowSort.cs" />
+    <Compile Include="Admin\Org.cs" />
     <Compile Include="CCBill\Sys\Func.cs" />
     <Compile Include="CCBill\Template\ToolBarBtn.cs" />
     <Compile Include="CCFast\CCMenu\MenuDept.cs" />
@@ -188,6 +192,10 @@
     <Compile Include="CCFast\CCMenu\SearchAttr.cs" />
     <Compile Include="CCFast\Portal\WindowExt\ChartZZT.cs" />
     <Compile Include="CCFast\Portal\WindowExt\Info.cs" />
+    <Compile Include="CCOA\HttpHandler\CCOA_Knowledge.cs" />
+    <Compile Include="Data\GenerWorkFlowExt.cs" />
+    <Compile Include="HttpHandler\WF_Rpt.cs" />
+    <Compile Include="HttpHandler\WF_SSO.cs" />
     <Compile Include="OverrideEvent.cs" />
     <Compile Include="CCOA\CCBBS\BBSExt.cs" />
     <Compile Include="CCOA\CCBBS\BBS.cs" />
@@ -231,14 +239,6 @@
     <Compile Include="CCBill\WF_CCBill_Admin_Method.cs" />
     <Compile Include="CCBill\WF_CCBill_OptComponents.cs" />
     <Compile Include="CCBill\WF_CCBill_OptOneFlow.cs" />
-    <Compile Include="Cloud\Admin.cs" />
-    <Compile Include="Cloud\Dept.cs" />
-    <Compile Include="Cloud\Dev2Interface.cs" />
-    <Compile Include="Cloud\Emp.cs" />
-    <Compile Include="Cloud\Glo.cs" />
-    <Compile Include="Cloud\HttpHandler\Portal_SaaSOption.cs" />
-    <Compile Include="Cloud\Org.cs" />
-    <Compile Include="Cloud\HttpHandler\Portal_SaaS.cs" />
     <Compile Include="Data\Admin2Group\CHExt.cs" />
     <Compile Include="Data\Admin2Group\GenerWorkFlowView.cs" />
     <Compile Include="Data\AdminGroup\CHExt.cs" />
@@ -254,30 +254,6 @@
     <Compile Include="Difference\WF.cs" />
     <Compile Include="Difference\WF_DynamicWebService.cs" />
     <Compile Include="Difference\WF_File.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\AccessToken.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Analyze.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\CacheItem.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ConstVars.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ErrCodeEnum.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ICacheProvider.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\JSTicket.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Keys.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\RequestHelper.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\ResultPackage.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SignPackage.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SignPackageHelper.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\TimeStamp.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\TokenResult.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DDSDK\Urls.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DingDing.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DingFlowMessage.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DingModel.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DingTalk_Message.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_Ding.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_DingIcreMent.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
-    <Compile Include="IntegratedSystem\DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="DTS\AddIdxColForMapDtl.cs" />
     <Compile Include="DTS\CheckErr\CheckDirCondModel.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
@@ -290,7 +266,6 @@
     <Compile Include="DTS\CheckErr\Tool_RepairCHAtPara.cs" />
     <Compile Include="DTS\DTSAutoRpt.cs" />
     <Compile Include="DTS\UpdateEmpDeptNo.cs" />
-    <Compile Include="FixFieldNames.cs" />
     <Compile Include="CCBill\Dev2Interface.cs" />
     <Compile Include="CCBill\EnumLab.cs" />
     <Compile Include="CCBill\FrmAttr.cs" />
@@ -318,8 +293,6 @@
     <Compile Include="Data\MyStartFlow.cs" />
     <Compile Include="Data\MyDeptFlow.cs" />
     <Compile Include="Data\MyJoinFlow.cs" />
-    <Compile Include="Data\Monitor.cs" />
-    <Compile Include="Data\MyDeptEmp.cs" />
     <Compile Include="Data\CH.cs" />
     <Compile Include="Data\CHExt.cs" />
     <Compile Include="Dev2InterfaceGuest.cs">
@@ -452,7 +425,6 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner2018.cs" />
     <Compile Include="HttpHandler\GPMPage.cs" />
     <Compile Include="HttpHandler\WF_Admin_Multilingual.cs" />
-    <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="CCFast\CCMenu\Menu.cs" />
     <Compile Include="CCFast\CCMenu\Module.cs" />
     <Compile Include="CCFast\CCMenu\MySystem.cs" />
@@ -467,10 +439,45 @@
     <Compile Include="Port\AdminGroup\Org.cs" />
     <Compile Include="Port\Dept.cs" />
     <Compile Include="Port\DeptFlowSearch.cs" />
-    <Compile Include="Admin\Org.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\AccessToken.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\Analyze.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\CacheItem.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\ConstVars.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\ErrCodeEnum.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\ICacheProvider.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\JSTicket.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\Keys.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\RequestHelper.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\ResultPackage.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\SignPackage.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\SignPackageHelper.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\SimpleCacheProvider.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\TimeStamp.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\TokenResult.cs" />
+    <Compile Include="Port\DINGTalk\DDSDK\Urls.cs" />
+    <Compile Include="Port\DINGTalk\DingDing.cs" />
+    <Compile Include="Port\DINGTalk\DingFlowMessage.cs" />
+    <Compile Include="Port\DINGTalk\DingModel.cs" />
+    <Compile Include="Port\DINGTalk\DingTalk_Message.cs" />
+    <Compile Include="Port\DINGTalk\DTS\OrgInit_Ding.cs" />
+    <Compile Include="Port\DINGTalk\DTS\OrgInit_DingIcreMent.cs" />
+    <Compile Include="Port\DINGTalk\DTS\OrgInit_DingUserIcon.cs" />
+    <Compile Include="Port\DINGTalk\Utility\HttpWebResponseUtility.cs" />
     <Compile Include="Port\EmpSetting.cs" />
     <Compile Include="Port\OrganizationAPI.cs" />
     <Compile Include="Port\User.cs" />
+    <Compile Include="Port\WeiXin\Dept.cs" />
+    <Compile Include="Port\WeiXin\DTS\DTSOrganization.cs" />
+    <Compile Include="Port\WeiXin\DTS\DTSUserIcon.cs" />
+    <Compile Include="Port\WeiXin\Emp.cs" />
+    <Compile Include="Port\WeiXin\Glo.cs" />
+    <Compile Include="Port\WeiXin\Msg\MsgBase.cs" />
+    <Compile Include="Port\WeiXin\Msg\WeinXinModel.cs" />
+    <Compile Include="Port\WeiXin\Msg\WeiXinGZHModel.cs" />
+    <Compile Include="Port\WeiXin\User.cs" />
+    <Compile Include="Port\WeiXin\WeiXinEntity.cs" />
+    <Compile Include="Port\WeiXin\WeiXinGZHEntity.cs" />
+    <Compile Include="Port\WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="Rpt\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -479,7 +486,6 @@
     <Compile Include="Rpt\RptEmp.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptStation.cs" />
-    <Compile Include="Admin\Flow.cs" />
     <Compile Include="TA\EnumLab.cs" />
     <Compile Include="TA\TaskAPI.cs" />
     <Compile Include="TA\Template\Node.cs" />
@@ -490,10 +496,9 @@
     <Compile Include="TA\Task.cs" />
     <Compile Include="TA\Project.cs" />
     <Compile Include="TA\TA_App.cs" />
-    <Compile Include="Template\CCEn\CCRole2022.cs" />
+    <Compile Include="Template\CCRole.cs" />
     <Compile Include="Template\ForXml\TemplateFlow.cs" />
     <Compile Include="Template\ForXml\TempalteNode.cs" />
-    <Compile Include="Template\FlowTab.cs" />
     <Compile Include="Template\CondEnum.cs" />
     <Compile Include="Template\EnumLab.cs" />
     <Compile Include="Template\FlowOrg.cs" />
@@ -551,18 +556,6 @@
     </Compile>
     <Compile Include="Template\FoolTruckNodeFrm.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Dept.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\DTS\DTSOrganization.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\DTS\DTSUserIcon.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Emp.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Glo.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Msg\MsgBase.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Msg\WeiXinGZHModel.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\User.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\Msg\WeinXinModel.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\WeiXinEntity.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\WeiXinGZHEntity.cs" />
-    <Compile Include="IntegratedSystem\WeiXin\WXBizMsgCrypt.cs" />
     <Compile Include="WF\CCBill_FlowEvent.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\UpTrack.cs" />
@@ -608,9 +601,6 @@
     <Compile Include="DTS\PackAutoErrFields.cs" />
     <Compile Include="DTS\GenerSiganture.cs" />
     <Compile Include="DTS\OneKeyBackCCFlow.cs" />
-    <Compile Include="Template\CCEn\CCDept.cs" />
-    <Compile Include="Template\CCEn\CCEmp.cs" />
-    <Compile Include="Template\CCEn\CCStation.cs" />
     <Compile Include="WF\CCList.cs" />
     <Compile Include="Template\Cond.cs" />
     <Compile Include="Template\BtnLab.cs">
@@ -626,7 +616,6 @@
     <Compile Include="Template\BtnAttr.cs" />
     <Compile Include="Template\Task.cs" />
     <Compile Include="Template\FrmNode.cs" />
-    <Compile Include="Template\CCEn\CC.cs" />
     <Compile Include="Template\NodeCancel.cs" />
     <Compile Include="WF\EnumLab.cs" />
     <Compile Include="WF\ExecEvent.cs" />
@@ -647,6 +636,7 @@
     <Compile Include="Template\PushMsg.cs" />
     <Compile Include="WF\Auth.cs" />
     <Compile Include="WF\ShiftWork.cs" />
+    <Compile Include="SQLManager.cs" />
     <Compile Include="WF\TransferCustom.cs" />
     <Compile Include="WF.cs" />
     <Compile Include="WF\GenerWorkFlow.cs" />
@@ -656,14 +646,12 @@
     <Compile Include="WF\GERpt.cs" />
     <Compile Include="DTS\ToImplement\RepariDB.cs" />
     <Compile Include="WF\SendReturnObj.cs" />
+    <Compile Include="WF\WorkCC.cs" />
     <Compile Include="WF\WorkCheck.cs" />
     <Compile Include="WF\WorkFlow.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\WorkNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WF\ReturnWork.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WF\Track.cs">
@@ -683,11 +671,10 @@
     <Compile Include="WF\WorkReturn.cs" />
     <Compile Include="WF\WorkUnSend.cs" />
     <Compile Include="WF\WorkFlowDeleteLog.cs" />
-    <Compile Include="WorkFlowBuessRole.cs" />
+    <Compile Include="WF\WorkFlowBuessRole.cs" />
     <Compile Include="Xml\AdminMenu.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Dev2InterfaceAnonymous.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -723,11 +710,7 @@
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cloud\OrgSetting\" />
-    <Folder Include="Cloud\Port\" />
-    <Folder Include="Cloud\SaaSOption\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -101,7 +101,7 @@ namespace BP.CCBill.Template
                 this.SetValByKey(ToolbarBtnAttr.BtnLab, value);
             }
         }
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {

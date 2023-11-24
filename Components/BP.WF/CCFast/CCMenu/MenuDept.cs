@@ -29,7 +29,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 菜单
         /// </summary>
-        public string FK_Menu
+        public string MenuNo
         {
             get
             {
@@ -43,7 +43,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -105,7 +105,7 @@ namespace BP.CCFast.CCMenu
         protected override bool beforeInsert()
         {
             //@wwh.
-            this.MyPK = this.FK_Menu + "_" + this.FK_Dept;
+            this.MyPK = this.MenuNo + "_" + this.DeptNo;
             return base.beforeInsert();
         }
     }

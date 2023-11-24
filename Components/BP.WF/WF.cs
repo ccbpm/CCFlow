@@ -78,10 +78,31 @@ namespace BP.WF
         public const string Emps = "Emps";
         public const string EmpWorks = "EmpWorks";
         public const string MyFlow = "MyFlow";
+        public const string MyCC = "MyCC";
+        public const string CCList = "CCList";
+        public const string Complete = "Complete";
+        public const string StartEarlyer = "StartEarlyer";
+        public const string Watchdog = "Watchdog";
+        public const string DistributedOfMy = "DistributedOfMy";
+        public const string SearchDataGrid = "SearchDataGrid";
+        public const string SearchDelays = "SearchDelays";
+        public const string HuiQianList = "HuiQianList";
+        public const string TeamupList = "TeamupList";
+        public const string AuthorList = "AuthorList";
+        public const string AuthorTodolist2019 = "AuthorTodolist2019";
+        public const string TaskPoolSharing = "TaskPoolSharing";
+        public const string TaskPoolApply = "TaskPoolApply";
+        public const string FutureTodolist = "FutureTodolist";
+        public const string MySetting = "MySetting";
+        public const string MyFocus = "MyFocus";
+        public const string HungupList = "HungupList";
         public const string FlowFX = "FlowFX";
         public const string DealWork = "DealWork";
         public const string Bill = "Bill";
         public const string Home = "Home";
+		public const string MyStartFlows = "MyStartFlows";
+        public const string MyJoinFlows = "MyJoinFlows";
+        public const string GenerWorkFlowViews = "GenerWorkFlowViews";
         /// <summary>
         /// 处理消息连接
         /// </summary>
@@ -90,7 +111,9 @@ namespace BP.WF
         public const string ToolsSmall = "ToolsSmall";
         public const string Runing = "Runing";
         public const string Draft = "Draft";
-
+        /// <summary>
+        /// 打开iu成
+        /// </summary>
         public const string Flows = "Flows";
         public const string Frms = "Frms";
         /// <summary>

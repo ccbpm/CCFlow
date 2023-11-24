@@ -92,19 +92,19 @@ namespace BP.Sys
         }
         public override string ToString()
         {
-            return this.FK_MapData;
+            return this.FrmID;
         }
         public override string ClassID
         {
             get
             {
-                return this.FK_MapData;
+                return this.FrmID;
             }
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         /// <summary>
         /// 通用实体
         /// </summary>
@@ -117,7 +117,7 @@ namespace BP.Sys
         /// <param name="nodeid">节点ID</param>
         public GEEntityExcelFrm(string fk_mapdata)
         {
-            this.FK_MapData=fk_mapdata;
+            this.FrmID=fk_mapdata;
         }
         /// <summary>
         /// 通用实体
@@ -126,7 +126,7 @@ namespace BP.Sys
         /// <param name="_oid">OID</param>
         public GEEntityExcelFrm(string fk_mapdata, int oid)
         {
-            this.FK_MapData= fk_mapdata;
+            this.FrmID= fk_mapdata;
             this.OID = oid;
             int i =this.RetrieveFromDBSources();
         }
@@ -143,10 +143,10 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                if (this.FK_MapData == null)
-                    throw new Exception("没有给" + this.FK_MapData + "值，您不能获取它的Map。");
+                if (this.FrmID == null)
+                    throw new Exception("没有给" + this.FrmID + "值，您不能获取它的Map。");
 
-                this._enMap = BP.Sys.MapData.GenerHisMap(this.FK_MapData);
+                this._enMap = BP.Sys.MapData.GenerHisMap(this.FrmID);
                 return this._enMap;
             }
         }
@@ -157,9 +157,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntityExcelFrms();
-                return new GEEntityExcelFrms(this.FK_MapData);
+                return new GEEntityExcelFrms(this.FrmID);
             }
         }
         #endregion
@@ -185,12 +185,12 @@ namespace BP.Sys
         #region 重载基类方法
         public override string ToString()
         {
-            return this.FK_MapData;
+            return this.FrmID;
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         #endregion
 
         #region 方法
@@ -201,12 +201,12 @@ namespace BP.Sys
         {
             get
             {
-                //if (this.FK_MapData == null)
+                //if (this.FrmID == null)
                 //    throw new Exception("@没有能 FK_MapData 给值。");
 
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntity();
-                return new GEEntity(this.FK_MapData);
+                return new GEEntity(this.FrmID);
             }
         }
         /// <summary>
@@ -221,7 +221,7 @@ namespace BP.Sys
         /// <param name="fk_mapdtl"></param>
         public GEEntityExcelFrms(string fk_mapdata)
         {
-            this.FK_MapData= fk_mapdata;
+            this.FrmID= fk_mapdata;
         }
         #endregion
 

@@ -61,16 +61,16 @@ namespace BP.WF.DTS
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
 
                 //查询出来当前流程的Track.
-                sql = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workid + " ORDER BY RDT ";
+                sql = "SELECT * FROM ND" + int.Parse(gwf.FlowNo) + "Track WHERE WorkID=" + workid + " ORDER BY RDT ";
                 DataTable tarck = DBAccess.RunSQLReturnTable(sql);
 
                 //查询出来节点.
-                Nodes nds = new Nodes(gwf.FK_Flow);
+                Nodes nds = new Nodes(gwf.FlowNo);
 
                 //遍历节点.
                 foreach (Node nd in nds)
                 {
-                    if (this.IsHaveStation(nd) == false)
+                    if (this.ItIsHaveStation(nd) == false)
                         continue;
 
                     //求节点与角色的集合.
@@ -79,7 +79,7 @@ namespace BP.WF.DTS
                         continue;
 
                     //找到处理当前工作的人员集合.
-                    sql = "SELECT EmpFrom FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + workid + " AND NDFrom=" + nd.NodeID + " ORDER BY RDT ";
+                    sql = "SELECT EmpFrom FROM ND" + int.Parse(gwf.FlowNo) + "Track WHERE WorkID=" + workid + " AND NDFrom=" + nd.NodeID + " ORDER BY RDT ";
                     DataTable dtTarck = DBAccess.RunSQLReturnTable(sql);
 
                     foreach (DataRow drTrack in dtTarck.Rows)
@@ -113,7 +113,7 @@ namespace BP.WF.DTS
             return "调度完成..";
         }
 
-        public bool IsHaveStation(Node nd)
+        public bool ItIsHaveStation(Node nd)
         {
             if (nd.HisDeliveryWay == DeliveryWay.ByDeptAndStation)
                 return true;

@@ -98,7 +98,7 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeAttr.HisToNDs, value);
             }
         }
-        public bool IsResetAccepter
+        public bool ItIsResetAccepter
         {
             get
             {

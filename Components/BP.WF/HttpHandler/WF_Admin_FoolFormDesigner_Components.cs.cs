@@ -14,7 +14,7 @@ namespace BP.WF.HttpHandler
         }
 
         #region  界面 .
-        public string AccepterRole_ClearStartFlowsCash()
+        public string AccepterRole_ClearStartFlowsCache()
         {
             return null;
         }

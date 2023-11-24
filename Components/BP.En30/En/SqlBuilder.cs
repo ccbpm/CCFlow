@@ -1,5 +1,6 @@
 ﻿using System;
 using BP.DA;
+using BP.Difference;
 using BP.Sys;
 
 
@@ -184,7 +185,7 @@ namespace BP.En
             {
                 case "OID":
                     attr1 = attrs.GetAttrByKey("OID");
-                    if (attr1.IsNum)
+                    if (attr1.ItIsNum)
                         paras.Add("OID", en.GetValIntByKey("OID"));
                     else
                         paras.Add("OID", en.GetValStrByKey("OID"));
@@ -200,7 +201,7 @@ namespace BP.En
                     return paras;
                 case "WorkID":
                     attr1 = attrs.GetAttrByKey("WorkID");
-                    if (attr1.IsNum)
+                    if (attr1.ItIsNum)
                         paras.Add("WorkID", en.GetValIntByKey("WorkID"));
                     else
                         paras.Add("WorkID", en.GetValStrByKey("WorkID"));
@@ -369,9 +370,11 @@ namespace BP.En
                     break;
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = SqlBuilder.SelectSQLOfPostgreSQL(en, 1) + " AND " + SqlBuilder.GenerWhereByPK(en, "@");
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     sql = SqlBuilder.SelectSQLOfOra(en, 1) + "AND (" + SqlBuilder.GenerWhereByPK(en, ":") + " )";
@@ -595,7 +598,7 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                             sql += "[" + attr.Field + "]  NVARCHAR (" + attr.MaxLength + ") NOT NULL,";
                         else
                         {
@@ -620,7 +623,7 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                         {
                             //说明这个是自动增长的列.
                             if (attr.UIBindKey == "1")
@@ -671,7 +674,7 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                             sql += attr.Field + "  VARCHAR (" + attr.MaxLength + ") NOT NULL,";
                         else
                         {
@@ -691,7 +694,7 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                         {
                             //说明这个是自动增长的列.
                             if (attr.UIBindKey == "1")
@@ -841,14 +844,14 @@ namespace BP.En
                     case DataType.AppString:
                         if (attr.MaxLength <= 254)
                         {
-                            if (attr.IsPK)
+                            if (attr.ItIsPK)
                                 sql += "[" + attr.Field + "]  varchar (" + attr.MaxLength + ") NOT NULL,";
                             else
                                 sql += "[" + attr.Field + "]  varchar (" + attr.MaxLength + ") NULL,";
                         }
                         else
                         {
-                            if (attr.IsPK)
+                            if (attr.ItIsPK)
                                 sql += "[" + attr.Field + "]  text  NOT NULL,";
                             else
                                 sql += "[" + attr.Field + "] text,";
@@ -864,7 +867,7 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                             sql += "[" + attr.Field + "] int NOT NULL,";
                         else
                             sql += "[" + attr.Field + "] int  NULL,";
@@ -890,6 +893,7 @@ namespace BP.En
                     return GenerCreateTableSQLOfOra(en);
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return GenerCreateTableSQLOfPostgreSQL(en);
                 case DBType.Informix:
                     return GenerCreateTableSQLOfInfoMix(en);
@@ -923,7 +927,7 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                             sql += attr.Field + " varchar (" + attr.MaxLength + ") NOT NULL,";
                         else
                         {
@@ -945,10 +949,13 @@ namespace BP.En
                     case DataType.AppBoolean:
                     case DataType.AppInt:
 
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                         {
                             if (attr.UIBindKey == "1")
-                                sql += attr.Field + " int  primary key identity(1,1),";
+                                if(SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6)
+                                    sql += attr.Field + " INT GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1) PRIMARY KEY,";
+                                else
+                                    sql += attr.Field + " int  primary key identity(1,1),";
                             else
                                 sql += attr.Field + " int NOT NULL,";
                         }
@@ -985,14 +992,14 @@ namespace BP.En
                     case DataType.AppString:
                         if (attr.MaxLength >= 255)
                         {
-                            if (attr.IsPK)
+                            if (attr.ItIsPK)
                                 sql += attr.Field + " lvarchar (" + attr.MaxLength + "),";
                             else
                                 sql += attr.Field + " lvarchar (" + attr.MaxLength + "),";
                         }
                         else
                         {
-                            if (attr.IsPK)
+                            if (attr.ItIsPK)
                                 sql += attr.Field + " varchar (" + attr.MaxLength + ") NOT NULL,";
                             else
                                 sql += attr.Field + " varchar (" + attr.MaxLength + "),";
@@ -1010,7 +1017,7 @@ namespace BP.En
                     case DataType.AppBoolean:
                     case DataType.AppInt:
                         //说明这个是自动增长的列.
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                         {
                             if (attr.UIBindKey == "1")
                                 sql += attr.Field + "  Serial not null,";
@@ -1054,7 +1061,7 @@ namespace BP.En
                 switch (attr.MyDataType)
                 {
                     case DataType.AppString:
-                        if (attr.IsPK)
+                        if (attr.ItIsPK)
                             sql += attr.Field + " NVARCHAR (" + attr.MaxLength + ") NOT NULL COMMENT '" + attr.Desc + "',";
                         else
                         {
@@ -1079,7 +1086,7 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
-                        if (attr.IsPK && attr.Key == "OID")
+                        if (attr.ItIsPK && attr.Key == "OID")
                         {
                             if (attr.UIBindKey == "1")
                                 sql += attr.Field + " INT(4) primary key not null auto_increment COMMENT '" + attr.Desc + "',";
@@ -1170,7 +1177,7 @@ namespace BP.En
             MapAttr mapAttr = null;
             foreach (Attr attr in fkAttrs)
             {
-                if (attr.IsFK == false)
+                if (attr.ItIsFK == false)
                     continue;
 
                 if (attr.MyFieldType == FieldType.RefText)
@@ -1379,10 +1386,18 @@ namespace BP.En
                     case DataType.AppString:
                         if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                         {
-                            if (attr.IsKeyEqualField)
-                                val = val + ", " + mainTable + attr.Field;
+                            if (attr.Field == "Domain")
+                            {
+                                if (en.EnMap.EnDBUrl.DBType == DBType.DM)
+                                    val = val + ", " + mainTable + "\"" + attr.Field + "\"";
+                            }
                             else
-                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                            {
+                                if (attr.ItIsKeyEqualField)
+                                    val = val + ", " + mainTable + attr.Field;
+                                else
+                                    val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                            }
                         }
                         else
                         {
@@ -1407,6 +1422,15 @@ namespace BP.En
                                 val = val + ", T" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
                             }
                         }
+                        if ((attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) && attr.UIContralType != UIContralType.CheckBok)
+                        {
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
+                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag);
+
+                            SysEnums ses = new SysEnums(attr.UIBindKey, attr.UITag);
+                            val = val + "," + ses.GenerCaseWhenForOracle(en.ToString(), mainTable, attr.Key, attr.Field, attr.UIBindKey,
+                                attr.DefaultVal.ToString());
+                        }
                         break;
                     case DataType.AppInt:
                         if (attr.DefValType == 0)
@@ -1421,7 +1445,7 @@ namespace BP.En
 
                             SysEnums ses = new SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(en.ToString(), mainTable, attr.Key, attr.Field, attr.UIBindKey,
-                                int.Parse(attr.DefaultVal.ToString()));
+                                attr.DefaultVal.ToString());
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
@@ -1505,7 +1529,7 @@ namespace BP.En
                     case DataType.AppString:
                         if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                         {
-                            if (attr.IsKeyEqualField)
+                            if (attr.ItIsKeyEqualField)
                                 val = val + ", " + mainTable + attr.Field;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
@@ -1544,7 +1568,7 @@ namespace BP.En
 
                             SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
                             val = val + "," + ses.GenerCaseWhenForOracle(en.ToString(), mainTable, attr.Key, attr.Field, attr.UIBindKey,
-                                int.Parse(attr.DefaultVal.ToString()));
+                                attr.DefaultVal.ToString());
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
@@ -1597,10 +1621,12 @@ namespace BP.En
                     return SqlBuilder.SelectSQLOfMySQL(en, topNum);
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return SqlBuilder.SelectSQLOfPostgreSQL(en, topNum);
                 case DBType.Access:
                     return SqlBuilder.SelectSQLOfOLE(en, topNum);
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     return SqlBuilder.SelectSQLOfOra(en, topNum);
@@ -1756,10 +1782,31 @@ namespace BP.En
                     case DataType.AppString:
                         if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                         {
-                            if (attr.IsKeyEqualField)
-                                val = val + ", " + mainTable + attr.Field;
+                            if (attr.ItIsKeyEqualField)
+                            {
+                                if (attr.Key == "Domain")
+                                {
+                                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                                        val = val + ", " + mainTable + " \"" + attr.Field + "\"";
+                                    else
+                                        val = val + ", " + mainTable + attr.Field;
+                                }
+                                else
+                                    val = val + ", " + mainTable + attr.Field;
+
+                            }
                             else
-                                val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                            {
+                                if (attr.Key == "Domain")
+                                {
+                                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                                        val = val + ", " + mainTable + " \"" + attr.Field + "\" " + attr.Key;
+                                    else
+                                        val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                                }
+                                else
+                                    val = val + "," + mainTable + attr.Field + " " + attr.Key;
+                            }
                         }
                         else
                         {
@@ -1800,9 +1847,21 @@ namespace BP.En
 
 
                         }
+                        if ((attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) && attr.UIContralType != UIContralType.CheckBok)
+                        {
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey) == true)
+                                throw new Exception("@系统严重异常:" + en.ToString() + " Key=" + attr.Key + " UITag=" + attr.UITag + ", UIBindKey 无数据，请描述该字段的设计过程，反馈给开发人员。");
+
+#warning 20111-12-03 不应出现异常。
+                            if (attr.UIBindKey.Contains(".") == true)
+                                throw new Exception("@系统异常:" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
+
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
+                        }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull || attr.DefValType == 0)
+                        if (attr.ItIsNull || attr.DefValType == 0)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",ISNULL(" + mainTable + attr.Field + "," + attr.DefaultVal + ")   " + attr.Key + "";
@@ -1817,7 +1876,7 @@ namespace BP.En
                                 throw new Exception("@系统异常:" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
                             SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -1840,7 +1899,7 @@ namespace BP.En
                     case DataType.AppFloat:
                     case DataType.AppDouble:
                     case DataType.AppMoney:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key;
                         else //不处理
                             val = val + ", ISNULL( " + mainTable + attr.Field + " ," + attr.DefaultVal.ToString() + ") AS  " + attr.Key;
@@ -1929,7 +1988,7 @@ namespace BP.En
                     case DataType.AppString:
                         if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                         {
-                            if (attr.IsKeyEqualField)
+                            if (attr.ItIsKeyEqualField)
                                 val = val + ", " + mainTable + attr.Field;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
@@ -1970,9 +2029,21 @@ namespace BP.En
                                     val = val + ", '' AS " + attr.Key + "Text";
                             }
                         }
+                        if ((attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) && attr.UIContralType != UIContralType.CheckBok)
+                        {
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
+                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + " UITag=" + attr.UITag + "");
+
+#warning 20111-12-03 不应出现异常。
+                            if (attr.UIBindKey.Contains("."))
+                                throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
+
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
+                        }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull || attr.DefValType == 0)
+                        if (attr.ItIsNull || attr.DefValType == 0)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key + "";
                         else
                             val = val + ",COALESCE(" + mainTable + attr.Field + "," + attr.DefaultVal + ")  AS " + attr.Key + "";
@@ -1987,7 +2058,7 @@ namespace BP.En
                                 throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
                             SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -2010,7 +2081,7 @@ namespace BP.En
                     case DataType.AppFloat:
                     case DataType.AppDouble:
                     case DataType.AppMoney:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                             val = val + "," + mainTable + attr.Field + " " + attr.Key;
                         else //不处理
                             val = val + ", COALESCE( " + mainTable + attr.Field + " ," + attr.DefaultVal.ToString() + ") AS  " + attr.Key;
@@ -2064,7 +2135,7 @@ namespace BP.En
                     case DataType.AppString:
                         if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                         {
-                            if (attr.IsKeyEqualField)
+                            if (attr.ItIsKeyEqualField)
                                 val = val + ", " + mainTable + attr.Field;
                             else
                                 val = val + "," + mainTable + attr.Field + " " + attr.Key;
@@ -2090,6 +2161,18 @@ namespace BP.En
                                 val = val + ", " + mapFK.PhysicsTable + "_" + attr.Key + "." + mapFK.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
                             }
                         }
+                        if ((attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum) && attr.UIContralType != UIContralType.CheckBok)
+                        {
+                            if (DataType.IsNullOrEmpty(attr.UIBindKey))
+                                throw new Exception("@" + en.ToString() + " key=" + attr.Key + "绑定的枚举 UIBindKey为空");
+
+#warning 2011-12-03 不应出现异常。
+                            if (attr.UIBindKey.Contains("."))
+                                throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
+
+                            SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
+                        }
                         break;
                     case DataType.AppInt:
                         if (attr.DefValType == 0)
@@ -2108,7 +2191,7 @@ namespace BP.En
                                 throw new Exception("@" + en.ToString() + " &UIBindKey=" + attr.UIBindKey + " @Key=" + attr.Key);
 
                             SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
+                            val = val + "," + ses.GenerCaseWhenForOracle(mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
                         }
 
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
@@ -2155,7 +2238,7 @@ namespace BP.En
                     case DataType.AppDateTime:
                         if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true)
                         {
-                            string format = GetDataTypeFormt(attr.IsSupperText);
+                            string format = GetDataTypeFormt(attr.ItIsSupperText);
 
                             if (DataType.IsNullOrEmpty(attr.DefaultVal as string))
                                 val = val + ",IFNULL(DATE_FORMAT(" + mainTable + attr.Field + ",'" + format + "'),DATE_FORMAT(now(),'" + format + "')) " + attr.Key;
@@ -2238,7 +2321,7 @@ namespace BP.En
                         if (attr.MyFieldType == FieldType.Enum || attr.MyFieldType == FieldType.PKEnum)
                         {
                             SysEnums ses = new BP.Sys.SysEnums(attr.UIBindKey, attr.UITag);
-                            val = val + "," + ses.GenerCaseWhenForOracle(enName, mainTable, attr.Key, attr.Field, attr.UIBindKey, int.Parse(attr.DefaultVal.ToString()));
+                            val = val + "," + ses.GenerCaseWhenForOracle(enName, mainTable, attr.Key, attr.Field, attr.UIBindKey, attr.DefaultVal.ToString());
                         }
                         if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
                         {
@@ -2319,7 +2402,7 @@ namespace BP.En
                         }
                         break;
                     case DataType.AppInt:
-                        if (attr.IsNull)
+                        if (attr.ItIsNull)
                         {
                             /*如果允许为空*/
                             val = val + ", " + mainTable + attr.Field + " AS [" + attr.Key + "]";
@@ -2382,7 +2465,7 @@ namespace BP.En
         }
         public static Paras GenerParas(Entity en, string[] keys)
         {
-            bool IsEnableNull = BP.Difference.SystemConfig.IsEnableNull;
+            bool IsEnableNull = BP.Difference.SystemConfig.isEnableNull;
             string mykeys = "@";
             if (keys != null)
                 foreach (string key in keys)
@@ -2405,7 +2488,7 @@ namespace BP.En
                     {
                         if (mykeys.Contains("@" + attr.Key + "@") == false)
                         {
-                            if (attr.IsPK == false)
+                            if (attr.ItIsPK == false)
                                 continue;
                         }
                     }
@@ -2416,9 +2499,9 @@ namespace BP.En
                     {
                         case DataType.AppString:
 #warning 替换掉',是因为在直接使用SQL中查询条件是该值的时候会出现SQL错误
-                            var val = en.GetValStrByKey(attr.Key).Replace('\'', '~');
+                            string val = en.GetValStrByKey(attr.Key).Replace('\'', '~');
                             //对存储的数据进行加密.
-                            if (en.EnMap.IsJM && attr.IsPK == false && DataType.IsNullOrEmpty(val) == false)
+                            if (en.EnMap.ItIsJM && attr.ItIsPK == false && DataType.IsNullOrEmpty(val) == false)
                             {
 
                             }
@@ -2507,7 +2590,7 @@ namespace BP.En
                             string da = en.GetValStrByKey(attr.Key);
                             if (BP.Difference.SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(da) == true)
                             {
-                                da = GetDefValByDataType(attr.IsSupperText);
+                                da = GetDefValByDataType(attr.ItIsSupperText);
                             }
                             ps.Add(attr.Key, da);
 
@@ -2516,7 +2599,7 @@ namespace BP.En
                             string datime = en.GetValStrByKey(attr.Key);
                             if (BP.Difference.SystemConfig.DateType.Equals("datetime") && DataType.IsNullOrEmpty(datime) == true)
                             {
-                                datime = GetDefValByDataType(attr.IsSupperText);
+                                datime = GetDefValByDataType(attr.ItIsSupperText);
                             }
                             ps.Add(attr.Key, datime);
                             break;
@@ -2560,7 +2643,7 @@ namespace BP.En
             string val = "";
             foreach (Attr attr in map.Attrs)
             {
-                if (attr.MyFieldType == FieldType.RefText || attr.IsPK)
+                if (attr.MyFieldType == FieldType.RefText || attr.ItIsPK)
                     continue;
                 if (map.ParaFields != null && map.ParaFields.Contains(attr.Key + ",") == true)
                     continue;
@@ -2570,9 +2653,30 @@ namespace BP.En
                         continue;
 
                 if (dbVarStr == "?")
-                    val = val + "," + attr.Field + "=" + dbVarStr;
+                {
+                    if (attr.Key == "Domain")
+                    {
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                            val = val + ",\"" + attr.Field + "\"=" + dbVarStr;
+                        else
+                            val = val + "," + attr.Field + "=" + dbVarStr;
+                    }
+                    else
+                        val = val + "," + attr.Field + "=" + dbVarStr;
+                }
+
                 else
-                    val = val + "," + attr.Field + "=" + dbVarStr + attr.Key;
+                {
+                    if (attr.Key == "Domain")
+                    {
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                            val = val + ",\"" + attr.Field + "\"=" + dbVarStr + attr.Key;
+                        else
+                            val = val + "," + attr.Field + "=" + dbVarStr + attr.Key;
+                    }
+                    else
+                        val = val + "," + attr.Field + "=" + dbVarStr + attr.Key;
+                }
             }
             if (DataType.IsNullOrEmpty(val))
             {
@@ -2585,7 +2689,15 @@ namespace BP.En
                         if (mykey.Contains("@" + attr.Key + ",") == false)
                             continue;
 
-                    val = val + "," + attr.Field + "=" + attr.Field;
+                    if (attr.Key == "Domain")
+                    {
+                        if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                            val = val + ",\"" + attr.Field + "\"=" + attr.Field;
+                        else
+                            val = val + "," + attr.Field + "=" + attr.Field;
+                    }
+                    else
+                        val = val + "," + attr.Field + "=" + attr.Field;
                 }
                 //   throw new Exception("@生成SQL出现错误:" + map.EnDesc + "，" + en.ToString() + "，要更新的字段为空。");
             }
@@ -2599,6 +2711,7 @@ namespace BP.En
                 case DBType.MySQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val +
                         " WHERE " + SqlBuilder.GenerWhereByPK(en, "@");
                     break;
@@ -2607,6 +2720,7 @@ namespace BP.En
                         " WHERE " + SqlBuilder.GenerWhereByPK(en, "?");
                     break;
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     sql = "UPDATE " + en.EnMap.PhysicsTable + " SET " + val +
@@ -2634,7 +2748,7 @@ namespace BP.En
             string dbstr = en.HisDBVarStr;
 
             bool isInnkey = false;
-            if (en.IsOIDEntity)
+            if (en.ItIsOIDEntity)
             {
                 EntityOID myen = en as EntityOID;
                 isInnkey = false; // myen.IsInnKey;
@@ -2657,11 +2771,29 @@ namespace BP.En
                     if (attr.Key == "OID")
                         continue;
                 }
-                
 
-                key = attr.Key;
-                field = field + ",[" + attr.Field + "]";
-                val = val + "," + dbstr + attr.Key;
+
+                if (attr.Key == "Domain")
+                {
+                    if (BP.Difference.SystemConfig.AppCenterDBType == DBType.DM)
+                    {
+                        key = attr.Key;
+                        field = field + ",[\"" + attr.Field + "\"]";
+                        val = val + "," + dbstr + attr.Key;
+                    }
+                    else
+                    {
+                        key = attr.Key;
+                        field = field + ",[" + attr.Field + "]";
+                        val = val + "," + dbstr + attr.Key;
+                    }
+                }
+                else
+                {
+                    key = attr.Key;
+                    field = field + ",[" + attr.Field + "]";
+                    val = val + "," + dbstr + attr.Key;
+                }
             }
             string sql = "INSERT INTO " + en.EnMap.PhysicsTable + " (" +
                 field.Substring(1) + " ) VALUES ( " + val.Substring(1) + ")";
@@ -2740,7 +2872,7 @@ namespace BP.En
                         string da = en.GetValStringByKey(attr.Key);
                         if (BP.Difference.SystemConfig.DateType.Equals("datetime") == true && DataType.IsNullOrEmpty(da) == true)
                         {
-                            da = GetDefValByDataType(attr.IsSupperText);
+                            da = GetDefValByDataType(attr.ItIsSupperText);
                         }
 
                         if (da.IndexOf("_DATE") == -1)
@@ -2779,6 +2911,7 @@ namespace BP.En
                     return " IFNULL(" + expression + "," + isNullBack + ")";
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return " COALESCE(" + expression + "," + isNullBack + ")";
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");

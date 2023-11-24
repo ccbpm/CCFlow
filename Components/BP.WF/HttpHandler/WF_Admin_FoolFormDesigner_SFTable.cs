@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
                     DataRow dr = dt.NewRow();
                     dr["No"] = ens.ToString();
 
-                    if (en.IsTreeEntity)
+                    if (en.ItIsTreeEntity)
                         dr["Name"] = en.EnMap.EnDesc + "(树结构) " + ens.ToString();
                     else
                         dr["Name"] = en.EnMap.EnDesc + " " + ens.ToString();
@@ -105,10 +105,10 @@ namespace BP.WF.HttpHandler
             string src = this.GetRequestVal("src");
             string table = this.GetRequestVal("table");
 
-            if (string.IsNullOrWhiteSpace(src))
+            if (BP.DA.DataType.IsNullOrEmpty(src))
                 throw new Exception("err@参数不正确");
 
-            if (string.IsNullOrWhiteSpace(table))
+            if (BP.DA.DataType.IsNullOrEmpty(table))
             {
                 return "[]";
             }
@@ -118,7 +118,7 @@ namespace BP.WF.HttpHandler
 
             foreach (DataRow r in dt.Rows)
             {
-                r["Name"] = r["No"] + (r["Name"] == null || r["Name"] == DBNull.Value || string.IsNullOrWhiteSpace(r["Name"].ToString()) ? "" : string.Format("[{0}]", r["Name"]));
+                r["Name"] = r["No"] + (r["Name"] == null || r["Name"] == DBNull.Value || BP.DA.DataType.IsNullOrEmpty(r["Name"].ToString()) ? "" : string.Format("[{0}]", r["Name"]));
             }
 
             return BP.Tools.Json.ToJson(dt);
@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
                 return "err@标记:" + sf.No + "已经存在.";
 
             sf.Name = this.GetValFromFrmByKey("Name");
-            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+            sf.SFDBSrcNo = this.GetValFromFrmByKey("FK_DBSrc");
             sf.SrcTable = this.GetValFromFrmByKey("SrcTable");
             sf.CodeStruct = (CodeStruct) this.GetValIntFromFrmByKey("CodeStruct");
             sf.ColumnValue = this.GetValFromFrmByKey("ColumnValue");

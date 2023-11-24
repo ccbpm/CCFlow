@@ -56,8 +56,8 @@
             var db = DB_Todolist();
             // console.log(db);
             // db = JSON.parse(db);
-            var html = "<table class='table table-bordered table-striped table-hover '>";
-            html += "<thead><tr>";
+            var tablet = "<table class='table table-bordered table-striped table-hover '>";
+            tablet += "<thead><tr>";
             tablet += "<th>#</th>";
             //html += "<th>WorkID</th>";
             tablet += "<th>标题</th>";
@@ -75,6 +75,7 @@
             // html += "<th>操作</th>";
             tablet += "</tr>";
             $("#tablet").html(tablet);
+            var Table1 = "";
             for (var i = 0; i < db.length; i++) {
                 var en = db[i];
                 Table1 += "<tr>";

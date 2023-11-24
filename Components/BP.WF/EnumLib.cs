@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace BP.WF
@@ -972,7 +971,18 @@ namespace BP.WF
         /// <summary>
         /// 按表单选择人员
         /// </summary>
-        ByPreviousNodeFormEmpsField = 5,
+        ByPreviousNodeFormEmpsField = 5, //字段是主表.
+        ByPreviousNodeFormEmpsFrmDtl = 501, //字段是从表.
+        ByPreviousNodeFormEmpsTeam = 502, // 字段是权限组.
+        ByPreviousNodeFormDepts = 503, //字段是部门编号
+        /// <summary>
+        /// 按照角色计算
+        /// </summary>
+        ByPreviousNodeFormStationsAI = 53,
+        /// <summary>
+        /// 智能计算
+        /// </summary>
+        ByPreviousNodeFormStationsOnly = 54,
         /// <summary>
         /// 与上一节点的人员相同
         /// </summary>
@@ -1090,18 +1100,7 @@ namespace BP.WF
         /// 外部用户
         /// </summary>
         ByGuest = 51,
-        /// <summary>
-        /// 按照部门计算
-        /// </summary>
-        ByPreviousNodeFormDepts = 52,
-        /// <summary>
-        /// 按照角色计算
-        /// </summary>
-        ByPreviousNodeFormStationsAI = 53,
-        /// <summary>
-        /// 智能计算
-        /// </summary>
-        ByPreviousNodeFormStationsOnly = 54,
+     
         /// <summary>
         /// 选择其他组织的联络员
         /// </summary>
@@ -1279,7 +1278,15 @@ namespace BP.WF
         /// <summary>
         /// 路由节点
         /// </summary>
-        RouteNode=1
+        RouteNode=1,
+        /// <summary>
+        /// 抄送节点
+        /// </summary>
+        CCNode = 2,
+        /// <summary>
+        /// 子流程节点
+        /// </summary>
+        SubFlowNode = 3,
     }
     /// <summary>
     /// 流程状态(详)

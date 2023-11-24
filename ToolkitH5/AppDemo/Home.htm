@@ -33,7 +33,7 @@
     <link href="./static/fonts/font-icons.min.css" rel="stylesheet" type="text/css" />
     <link href="./static/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="./static/select2/4.0/select2.css" rel="stylesheet" type="text/css" />
-    <link href="./static/icheck/1.0/minimal/grey.css" rel="stylesheet" type="text/css" />
+    <!--<link href="./static/icheck/1.0/minimal/grey.css" rel="stylesheet" type="text/css" />-->
     <link href="./static/adminlte/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
 
 
@@ -89,6 +89,82 @@
             //获得当前的SID.
             var sid = $.cookie("MyToken");
             var userNo = $.cookie("MyUserNo");
+            //流程设计=Flows
+            var flowUrl = host + '/WF/Port.htm?DoWhat=Flows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //表单设计=Frms
+            var frmsUrl = host + '/WF/Port.htm?DoWhat=Frms&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //抄送列表=CCList;
+            var urlApi = host + '/WF/Port.htm?DoWhat=CCList&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //已完成=Complete;
+            urlApi = host + '/WF/Port.htm?DoWhat=Complete&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //最近发起=StartEarlyer;
+            //urlApi = host + '/WF/Port.htm?DoWhat=StartEarlyer&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //监控=Watchdog（EnsName=BP.WF.Data.MyStartFlows）;
+            urlApi = host + '/WF/Port.htm?DoWhat=Watchdog&EnsName=BP.WF.Data.MyStartFlows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我发起的=MyStartFlows;
+            urlApi = host + '/WF/Port.htm?DoWhat=MyStartFlows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我审批的=MyJoinFlows；
+            urlApi = host + '/WF/Port.htm?DoWhat=MyJoinFlows&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我的流程分布=DistributedOfMy；
+            urlApi = host + '/WF/Port.htm?DoWhat=DistributedOfMy&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我的流程=SearchDataGrid
+            urlApi = host + '/WF/Port.htm?DoWhat=SearchDataGrid&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //综合查询=FlowSearch；
+            urlApi = host + '/WF/Port.htm?DoWhat=FlowSearch&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //流程监控=Watchdog；
+            urlApi = host + '/WF/Port.htm?DoWhat=Watchdog&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //逾期流程=SearchDelays；
+            urlApi = host + '/WF/Port.htm?DoWhat=SearchDelays&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //会签主持人待办=HuiQianList；
+            urlApi = host + '/WF/Port.htm?DoWhat=HuiQianList&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //协作待办=TeamupList；
+            urlApi = host + '/WF/Port.htm?DoWhat=TeamupList&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //授权待办=AuthorList；
+            urlApi = host + '/WF/Port.htm?DoWhat=AuthorList&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //工作委托2019=AuthorTodolist2019
+            urlApi = host + '/WF/Port.htm?DoWhat=AuthorTodolist2019&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //共享任务=TaskPoolSharing；
+            urlApi = host + '/WF/Port.htm?DoWhat=TaskPoolSharing&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //申请下来的任务=TaskPoolApply；
+            urlApi = host + '/WF/Port.htm?DoWhat=TaskPoolApply&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //未来任务=FutureTodolist
+            urlApi = host + '/WF/Port.htm?DoWhat=FutureTodolist&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我的设置=MySetting
+            urlApi = host + '/WF/Port.htm?DoWhat=MySetting&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //我的关注=MyFocus
+            urlApi = host + '/WF/Port.htm?DoWhat=MyFocus&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+            //挂起的工作=HungupList
+            urlApi = host + '/WF/Port.htm?DoWhat=HungupList&Token=' + GetToken() + "&UserID=" + GetUserNo();
+
+
+            //data-href路径跳转
+            var html = "";
+            html += "<li class='treeview'><a title='流程设计' href='javascript:;' data-href='" + flowUrl + "' class='J_menuItem addTabPage'>&nbsp;&nbsp;&nbsp;&nbsp;<i class='icon iconfont icon-faqi'></i><span class='lang'>流程设计</span></a></li>  "
+            html += "<li class='treeview'><a title='表单设计' href='javascript:;' data-href='" + frmsUrl + "' class='J_menuItem addTabPage'>&nbsp;&nbsp;&nbsp;&nbsp;<i class='icon iconfont icon-daiban'></i><span class='lang'>表单设计</span></a></li >  "
+            //html += "<li class='treeview'><a title='抄送' href='javascript:;' data-href='" + ccListUrl + "' class='J_menuItem addTabPage'>&nbsp;&nbsp;&nbsp;&nbsp;<i class='icon iconfont icon-daiban'></i><span class='lang'>抄送</span></a></li >  "
+            $("#URL").html(html);
             if (userNo == "") {
                 window.location.href = "Login.htm";
                 return;
@@ -96,6 +172,7 @@
 
             $("#UserName").append(userNo);
             return;
+
         });
         //增加一个标签.
         function AddTab(title, url) {
@@ -136,10 +213,10 @@
     <div class="wrapper">
         <header class="main-header" style="background: #1951be; height: 50px;">
             <!--<div style="background-color:#008AFF" class="logo">
-        <b class="logo-lg">ERP子系统演示</b>-->
+            <b class="logo-lg">ERP子系统演示</b>-->
             <!--<small>&nbsp; &nbsp;<i class="fa fa-bars"></i></small>-->
             <!--<span class="logo-mini">1111111111</span>
-    </div>-->
+            </div>-->
             <div class="logo">
                 <!--<span class="logo-mini"><b></b></span>-->
                 <span class="logo-lg"><b style="font-size:18px">ERP子系统演示</b></span>
@@ -148,39 +225,39 @@
 
             <nav class="navbar navbar-static-top" role="navigation">
                 <!-- Sidebar toggle button-->
-                <div class="sidebar-toggle" data-toggle="push-menu" role="button"  style="margin-left:-20px;height:50px;line-height:20px; width:50px"></div>
+                <div class="sidebar-toggle" data-toggle="push-menu" role="button" style="margin-left:-20px;height:50px;line-height:20px; width:50px"></div>
                 <div class="navbar-custom-menu">
                     <!--<ul>
-            <li><a href="/WF/Start.htm" target='IFRAME'>发起</a></li>
-            <li><a href="/WF/Start.htm" target='IFRAME'>待办</a></li>
-            <li><a href="/WF/Start.htm" target='IFRAME'>在途</a></li>
-        </ul>-->
+                        <li><a href="/WF/Start.htm" target='IFRAME'>发起</a></li>
+                        <li><a href="/WF/Start.htm" target='IFRAME'>待办</a></li>
+                        <li><a href="/WF/Start.htm" target='IFRAME'>在途</a></li>
+                    </ul>-->
                     <ul class="nav navbar-nav">
 
                         <!--<li>
-        <a data-href="/WF/Start.htm" data-tab-id="welcome" target='IFRAME' title="发起" style="margin-top:-1px;">
-            <i class="fa fa-home">发起</i>
-        </a>
-    </li>
+                            <a data-href="/WF/Start.htm" data-tab-id="welcome" target='IFRAME' title="发起" style="margin-top:-1px;">
+                                <i class="fa fa-home">发起</i>
+                            </a>
+                        </li>
 
-    <li>
-        <a data-href="/WF/Todolist.htm" data-tab-id="welcome" target='IFRAME' title="待办" style="margin-top:-1px;">
-            <i class="fa fa-home">待办</i>
-        </a>
-    </li>
+                        <li>
+                            <a data-href="/WF/Todolist.htm" data-tab-id="welcome" target='IFRAME' title="待办" style="margin-top:-1px;">
+                                <i class="fa fa-home">待办</i>
+                            </a>
+                        </li>
 
 
-    <li>
-        <a data-href="/WF/Running.htm" data-tab-id="welcome" target='IFRAME' title="在途" style="margin-top:-1px;">
-            <i class="fa fa-home">在途</i>
-        </a>
-    </li>
+                        <li>
+                            <a data-href="/WF/Running.htm" data-tab-id="welcome" target='IFRAME' title="在途" style="margin-top:-1px;">
+                                <i class="fa fa-home">在途</i>
+                            </a>
+                        </li>
 
-    <li>
-        <a data-href="/WF/Draft.htm" data-tab-id="welcome" target='IFRAME' title="草稿" style="margin-top:-1px;">
-            <i class="fa fa-home">草稿</i>
-        </a>
-    </li>-->
+                        <li>
+                            <a data-href="/WF/Draft.htm" data-tab-id="welcome" target='IFRAME' title="草稿" style="margin-top:-1px;">
+                                <i class="fa fa-home">草稿</i>
+                            </a>
+                        </li>-->
 
                         <li class="treeview">
                             <a data-href="/WF/Dev2InterfaceDemo.htm" data-tab-id="welcome" class="a_active" target='IFRAME' title="接口" style="margin-top:-1px;">
@@ -189,10 +266,10 @@
                         </li>
 
                         <!--<li>
-        <a data-href="/CRM/CustomerList.htm" data-tab-id="welcome" target='IFRAME' title="实体流程" style="margin-top:-1px;">
-            <i class="fa fa-home">实体流程</i>
-        </a>
-    </li>-->
+                            <a data-href="/CRM/CustomerList.htm" data-tab-id="welcome" target='IFRAME' title="实体流程" style="margin-top:-1px;">
+                                <i class="fa fa-home">实体流程</i>
+                            </a>
+                        </li>-->
 
                         <li class="treeview">
                             <a data-href="../WF/Welcome.htm" data-tab-id="welcome" class="a_active" target='IFRAME' title="主页" style="margin-top:-1px;">
@@ -230,17 +307,17 @@
                         <i class="icon iconfont icon-huaban"></i>-->
                     <!-- 基础功能 -->
                     <!--<span class="nav-label lang" data-key="jcgn"><b>工具包接口</b></span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul id="JCGN" class="nav nav-second-level">-->
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul id="JCGN" class="nav nav-second-level">-->
                     <!-- 流程发起 -->
                     <!--<li><a title="发起" href="javascript:" data-href="../DemoTools/Start.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">发起</span></a></li>
-                        <li><a title="待办" href="javascript:" data-href="../DemoTools/Todolist.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
-                        <li><a title="在途" href="javascript:" data-href="../DemoTools/Runing.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
-                        <li><a title="草稿" href="javascript:" data-href="../DemoTools/Draft.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">草稿</span><label class="label label-info pull-right" id="Draft"></label> </a></li>
-                        <li><a title="流程查询" href="javascript:" data-href="../DemoTools/Search.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">流程查询</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
-                    </ul>
-                </li>-->
+                            <li><a title="待办" href="javascript:" data-href="../DemoTools/Todolist.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
+                            <li><a title="在途" href="javascript:" data-href="../DemoTools/Runing.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
+                            <li><a title="草稿" href="javascript:" data-href="../DemoTools/Draft.htm?IsContainFuture=1" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">草稿</span><label class="label label-info pull-right" id="Draft"></label> </a></li>
+                            <li><a title="流程查询" href="javascript:" data-href="../DemoTools/Search.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">流程查询</span><label class="label label-info pull-right" id="Todolist_Complete"></label></a></li>
+                        </ul>
+                    </li>-->
 
                     <li class="treeview">
                         <a href="#" onclick="changeShow('JCGN1')" class="cg_color addTabPage">
@@ -276,8 +353,6 @@
                         <ul id="URL" class="nav nav-second-level treeview-menu">
                             <!--data-href="../AppDemo/Bill/F026List.htm"-->
                             <!--data-href="../AppDemo/Bill/F025List.htm"-->
-                            <li class="treeview"><a title="流程设计" href="javascript:DFlow();" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">流程设计</span></a></li>
-                            <li class="treeview"><a title="表单设计" href="javascript:DFrm();" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">表单设计</span></a></li>
                             <!--<li><a title="发起" href="javascript:UrlStart()" target="_self" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqi"></i><span class="lang">发起</span></a></li>
                             <li><a title="待办" href="javascript:UrlTodolist()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-daiban"></i><span class="lang">待办</span><label class="label label-warning pull-right" id="Todolist_EmpWorks"></label></a></li>
                             <li><a title="在途" href="javascript:UrlRuning()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zaitu-"></i><span class="lang">在途</span><label class="label label-info pull-right" id="Todolist_Runing"></label> </a></li>
@@ -285,7 +360,6 @@
                             <li><a title="查询" href="javascript:UrlSearch()" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">查询</span><label class="label label-info pull-right" id="Draft"></label> </a></li>-->
                         </ul>
                     </li>
-
                     <li class="treeview">
                         <a href="#" onclick="changeShow('API')" class="cg_color">
                             <i class="fa fa-fw icon-grid"></i>
@@ -296,31 +370,42 @@
                             </span>
                         </a>
                         <ul id="API" class="nav nav-second-level treeview-menu">
-                            <li class="treeview"><a title="接口预览" href="javascript:" data-href="../WF/Docs/API.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口预览</span></a></li>
-                            <li class="treeview"><a title="接口测试" href="javascript:" data-href="../WF/Dev2InterfaceDemo.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口测试</span></a></li>
+                            <li class="treeview"><a title="流程API" href="javascript:" data-href="../WF/Docs/API.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口预览</span></a></li>
+                            <li class="treeview"><a title="API测试" href="javascript:" data-href="../WF/Dev2InterfaceDemo.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">接口测试</span></a></li>
                         </ul>
                     </li>
 
                     <li class="treeview">
-                        <a href="#" onclick="changeShow('CRM')" class="cg_color">
+                        <a href="#" onclick="changeShow('Frm')" class="cg_color">
                             <i class="fa fa-fw icon-grid"></i>
-                            <span class="nav-label lang" data-key="search">
-                                <b>单据流程</b>
-                            </span>
-                            <!--<span class="icon-arrow-down"></span>-->
+                            <span class="nav-label lang" data-key="frm"><b>表单API</b></span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul id="CRM" class="nav nav-second-level treeview-menu">
-
-                            <li class="treeview"><a title="WorkID主键" href="javascript:" data-href="../AppDemo/Bill/F025List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">WorkID主键</span></a></li>
-                            <li class="treeview"><a title="自定义主键" href="javascript:" data-href="../AppDemo/Bill/F026List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">自定义主键</span></a></li>
-
-                            <!--<li><a title="开票记录" href="javascript:" data-href="../AppDemo/CRM/F003_KaiPiao.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">开票记录</span></a></li>
-                        <li><a title="催款记录" href="javascript:" data-href="../AppDemo/CRM/F004_CuiKuan.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">催款记录</span></a></li>-->
+                        <ul id="Frm" class="nav nav-second-level treeview-menu">
+                            <li class="treeview"><a title="表单API" href="javascript:" data-href="../WF/Docs/FrmAPI.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-caogao"></i><span class="lang">表单API</span></a></li>
                         </ul>
                     </li>
+
+                    <!--<li class="treeview">
+                    <a href="#" onclick="changeShow('CRM')" class="cg_color">
+                        <i class="fa fa-fw icon-grid"></i>
+                        <span class="nav-label lang" data-key="search">
+                            <b>单据流程</b>
+                        </span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul id="CRM" class="nav nav-second-level treeview-menu">
+
+                        <li class="treeview"><a title="WorkID主键" href="javascript:" data-href="../AppDemo/Bill/F025List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">WorkID主键</span></a></li>
+                        <li class="treeview"><a title="自定义主键" href="javascript:" data-href="../AppDemo/Bill/F026List.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-faqiliucheng"></i><span class="lang">自定义主键</span></a></li>-->
+                    <!--<li><a title="开票记录" href="javascript:" data-href="../AppDemo/CRM/F003_KaiPiao.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">开票记录</span></a></li>
+                    <li><a title="催款记录" href="javascript:" data-href="../AppDemo/CRM/F004_CuiKuan.htm" class="J_menuItem addTabPage">&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon iconfont icon-zonghechaxun"></i><span class="lang">催款记录</span></a></li>-->
+                    <!--</ul>
+                    </li>-->
                 </ul>
             </div>
         </aside>
@@ -330,15 +415,15 @@
                 var url = '/WF/Dev2InterfaceDemo.htm?DoWhat=Flows&Token=' + GetToken() + "&UserID=" + GetUserNo();
                 AddTab("接口API", url);
             }
+
             function DFlow() {
                 var url = host + '/WF/Port.htm?DoWhat=Flows&Token=' + GetToken() + "&UserID=" + GetUserNo();
                 AddTab("流程设计", url);
-                // window.location.href = url;
             }
             function DFrm() {
                 var url = host + '/WF/Port.htm?DoWhat=Frms&Token=' + GetToken() + "&UserID=" + GetUserNo();
                 AddTab("表单设计", url);
-                // window.location.href = url;
+                console.log(url)
             }
             function UrlStart() {
                 var url = host + '/WF/Port.htm?DoWhat=Start&Token=' + GetToken() + "&UserID=" + GetUserNo();
@@ -378,7 +463,6 @@
         <!--<div class="hide" id="desktopTabPage1" data-title="主页" data-url="../Portal/Welcome.htm">
 
         </div>-->
-
         <div class="hide" id="modifyPasswordTip" data-message="">
         </div>
     </div>

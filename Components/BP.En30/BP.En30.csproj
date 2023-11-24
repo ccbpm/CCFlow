@@ -110,14 +110,22 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliyun.OSS, Version=2.13.0.0, Culture=neutral, PublicKeyToken=0ad4175f0dac0b9b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\Aliyun.OSS.dll</HintPath>
+    </Reference>
     <Reference Include="DmProvider">
       <HintPath>..\..\RefDLL\DmProvider.dll</HintPath>
     </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>
-    <Reference Include="Kdbndp">
+    <Reference Include="Kdbndp, Version=4.0.7.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RefDLL\Kdbndp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Expression.Interactions">
@@ -152,8 +160,21 @@
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\..\RefDLL\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
-    <Reference Include="Renci.SshNet.Async, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Renci.SshNet.Async.1.4.0\lib\net40\Renci.SshNet.Async.dll</HintPath>
+    <Reference Include="ServiceStack.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -168,6 +189,9 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.6.0.0\lib\net461\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.EnterpriseServices">
@@ -175,19 +199,24 @@
       <HintPath>..\..\WF\bin\System.EnterpriseServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Management" />
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\CCFlowCloud\packages\System.Memory.4.5.4\lib\netstandard1.1\System.Memory.dll</HintPath>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
@@ -210,14 +239,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DA\AtPara.cs" />
-    <Compile Include="DA\Cash.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DA\Cache.cs" />
+    <Compile Include="DA\Cache2019.cs" />
+    <Compile Include="DA\CacheFrmTemplate.cs" />
     <Compile Include="DA\DBLoad.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DA\Cash2019.cs" />
-    <Compile Include="DA\CashFrmTemplate.cs" />
+    <Compile Include="Difference\Redis\RedisConfigInfo.cs" />
+    <Compile Include="Difference\Redis\RedisManager.cs" />
+    <Compile Include="Difference\Redis\RedisOperatorBase.cs" />
+    <Compile Include="Difference\Redis\RedisUtils.cs" />
     <Compile Include="Difference\SystemConfig.cs" />
     <Compile Include="EnTS\Glo.cs" />
     <Compile Include="EnTS\TSEntityMyPK.cs" />
@@ -232,7 +263,9 @@
     <Compile Include="Port\DeptEmp.cs" />
     <Compile Include="Port\DeptEmpStation.cs" />
     <Compile Include="Port\Glo.cs" />
+    <Compile Include="Port\GuestUserCopy.cs" />
     <Compile Include="Port\Token.cs" />
+    <Compile Include="Port\WebUserCopy.cs" />
     <Compile Include="Pub\Current.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -262,6 +295,7 @@
     <Compile Include="Sys\BuessUnitDemo.cs" />
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
+    <Compile Include="Sys\FrmEleDB.cs" />
     <Compile Include="Sys\SFColumn.cs" />
     <Compile Include="Sys\SFColumnSln.cs" />
     <Compile Include="Sys\SFPara.cs" />
@@ -415,7 +449,6 @@
     <Compile Include="Tools\LitJson\JsonWriter.cs" />
     <Compile Include="Tools\LitJson\Lexer.cs" />
     <Compile Include="Tools\LitJson\ParserToken.cs" />
-    <Compile Include="Tools\Luban.cs" />
     <Compile Include="Tools\NLogUtil.cs" />
     <Compile Include="Tools\NPinyin\Pinyin.cs" />
     <Compile Include="Tools\NPinyin\PyCode.cs" />
@@ -423,6 +456,7 @@
     <Compile Include="Tools\DealString.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\OSSUtil.cs" />
     <Compile Include="Tools\PubGlo.cs" />
     <Compile Include="Tools\SecurityDES.cs" />
     <Compile Include="Tools\StringExpressionCalculate.cs">
@@ -455,7 +489,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sys\FrmImgAthDB.cs" />
-    <Compile Include="Sys\FrmEleDB.cs" />
     <Compile Include="En\GETree.cs" />
     <Compile Include="Sys\RptTemplate.cs">
       <SubType>Code</SubType>
@@ -472,7 +505,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="En\EntityMyPK.cs" />
-    <Compile Include="En\SQLCash.cs" />
+    <Compile Include="En\SQLCache.cs" />
     <Compile Include="En\ClassFactory.cs">
       <SubType>Code</SubType>
     </Compile>

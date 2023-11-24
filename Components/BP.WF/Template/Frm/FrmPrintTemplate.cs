@@ -274,7 +274,7 @@ namespace BP.WF.Template.Frm
                     "PrintOpenModel", "@0=下载本地@1=在线打开");
 
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "实例的保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
-               "@0=保存到web服务器@1=保存到数据库Sys_FrmPrintDB@2=ftp服务器");
+               "@0=保存到web服务器@1=保存到数据库@2=ftp服务器@3=保存到对象存储OSS");
 
 
                 map.AddDDLSysEnum(FrmPrintTemplateAttr.QRModel, 0, "二维码生成方式", true, false,

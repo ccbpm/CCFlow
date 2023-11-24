@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link href="../../js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../js/mui/css/mui.picker.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../js/mui/css/mui.dtpicker.css" rel="stylesheet" />
+    <link href="../../js/mui/css/mui.indexedlist.css" rel="stylesheet" type="text/css" />
+    <script src="../../js/jquery.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.view.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.picker.min.js" type="text/javascript"></script>
+    <script src="../../js/mui/js/mui.dtpicker.js"></script>
+
+    <!-- 引入通用基础JS -->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/commonYangYH.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../CCFlowEnum.js" type="text/javascript"></script>>
+    <script src="../../MapAttr.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var mapData = null;//从表对应类的属性
+        var frmData = null;
+        var newRowIdx = -1;//新增行数
+        $(function () {
+            InitPage();
+            //初始工具栏.
+            InitToolbar();
+            $("#headTitle").html(mapData.Name);
+        });
+        function InitPage() {
+            newRowIdx = -1;
+            //初始化标题和表单数据
+            var httpHandler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            httpHandler.AddUrlData();  //增加参数属性.
+
+            var data = httpHandler.DoMethodReturnString("Dtl_Init");
+            if (data.indexOf('err@') == 0) {
+                mui.alert(data);
+                return;
+            }
+            frmData = JSON.parse(data);
+            mapData = frmData["Sys_MapData"][0];
+            mapData = new Entity("BP.Sys.MapData", mapData); //把他转化成entity.
+            //绑定数据.
+            BindDtls();
+        }
+        /**
+         * 初始化按钮权限
+         **/
+        function InitToolbar() {
+            var bottombar = $('#bottomToolBar');
+            //权限控制.
+            if (mapData.GetPara("IsInsert") == 1)
+                bottombar.append("<a class='mui-tab-item' id='Btn_New' name='Btn_New' href='#' >新建</ a>");
+
+            if (mapData.GetPara("IsUpdate") == 1)
+                bottombar.append("<a class='mui-tab-item' id='Btn_Save' name='Btn_Save' href='#' >保存</ a>");
+            //现在不处理
+           // if (mapData.GetPara("IsImp") == 1)
+            //    bottombar.append("<a class='mui-tab-item' id='Btn_Imp' name='Btn_Imp' href='#' >导入</ a>");
+
+            bottombar.append("<a class='mui-tab-item' id='Btn_Exp' name='Btn_Exp' href='#' >导出</ a>");
+
+            $("#Btn_New").on("tap", function () {
+               NewEn();
+
+            });
+            $("#Btn_Save").on("tap", function () {
+               SaveEns();
+
+            });
+            //导入
+            $("#Btn_Imp").on("tap", function () {
+               ImpEns();
+
+            });
+            //导出
+            $("#Btn_Exp").on("tap", function () {
+                var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+                handler.AddPara("EnsName", GetQueryString("EnsName"));
+                handler.AddPara("RefKey", GetQueryString("RefKey"));
+                handler.AddPara("RefVal", GetQueryString("RefVal"));
+                //查询集合
+                var data = handler.DoMethodReturnString("Dtl_Exp");
+                var url = "";
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                }
+                data = basePath + "/" + data;
+               
+                window.open(data);
+
+            });
+        }
+
+        function BindDtls() {
+            var mapAtrrs = frmData.Sys_MapAttr; //从表字段属性
+            var dtls = frmData.Dtls;//从表数据
+
+            var _Html = "";
+            //判断是否有数据
+            if (dtls.length == 0) {
+                _Html = "<div class='mui-indexed-list-inner empty'>";
+                _Html += " <div class='mui-indexed-list-empty-alert'>没有数据</div>";
+                _Html += "</div>";
+                $('#DtlContent').append(_Html);
+                return;
+            }
+         
+            //加载表单元素\数据
+            var dtl_Idx = 1;
+            for (var j = 0; j < dtls.length; j++) {
+                _Html += "<ul class='mui-table-view'>";
+                _Html += "  <li class='mui-table-view-divider'>序号:" + dtl_Idx;
+                if (mapData.GetPara("IsDelete") == "1") {
+                    _Html += "   <div class='dtl_deleterow' id='" + dtls[j].OID + "'>删除</div>";
+                }
+                _Html += "	</li>";
+                _Html += InitDtlMapAttr(mapAtrrs, null, frmData, false, "dtls", dtls[j].OID);
+                _Html += "</ul>";
+                dtl_Idx++;
+            }
+            $('#DtlContent').html("").append(_Html);
+             //为元素赋值
+            LoadDtlsData();
+
+           
+            ReRenderForm();
+        }
+        /**
+         * 删除
+         * @param pkval
+         */
+        function Delete(pkval) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var ensName = GetQueryString("EnsName");
+            var enName = ensName.substring(0, ensName.length - 1);
+
+            //执行删除.
+            var en = new Entity(enName);
+            en.SetPKVal(pkval);
+            en.Delete();
+            var div = $("#" + pkval).parent().parent();
+            if (div.hasClass("mui-table-view") == true)
+                div.remove();
+        }
+        //新增
+        function NewEn() {
+            $(".empty").hide();
+            var _Html = "";
+            newRowIdx++;
+            var dtl_Idx = frmData.Dtls.length + newRowIdx+1;
+            _Html += "<ul class='mui-table-view'>";
+            _Html += "  <li class='mui-table-view-divider'>序号:" + dtl_Idx;
+             _Html += "   <div class='dtl_removerow' id='" + newRowIdx + "'>移除</div>";
+           
+            _Html += "	</li>";
+            _Html += InitDtlMapAttr(frmData.Sys_MapAttr, null, frmData, false, "dtls", newRowIdx);
+            _Html += "</ul>";
+            $('#DtlContent').append(_Html);
+            //删除事件
+            ReRenderForm();
+
+        }
+        //保存
+        function SaveEns() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CommEntity");
+            handler.AddUrlData();  //增加参数属性.
+            handler.AddFormData();
+            handler.AddPara("NewRowCount", newRowIdx+1);
+            var data = handler.DoMethodReturnString("Dtl_Save");
+            if (data.indexOf("err@") == 0) {
+                alert(data);
+                return;
+            }
+            InitPage();
+        }
+       
+        function LoadDtlsData() {
+            //设置默认值
+            $.each(frmData.Dtls, function (i, dtl) {
+                for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
+
+                    var mapAttr = frmData.Sys_MapAttr[j];
+
+                    //添加 label
+                    //如果是整行的需要添加  style='clear:both'.
+                    var defValue = ConvertDefVal(dtl, mapAttr.DefVal, mapAttr.KeyOfEn);
+                    //if (mapAttr.DefValType == 0 && mapAttr.DefVal == "10002" && (defValue == "10002" || defValue == "10002.0000"))
+                    //    defValue = "";
+
+                    if ($('#TB_' + dtl.OID + "_" + mapAttr.KeyOfEn).length == 1) {
+                        $('#TB_' + dtl.OID + "_" + mapAttr.KeyOfEn ).val(defValue);
+                        $('#TB_' + dtl.OID + "_" + mapAttr.KeyOfEn).html(defValue);//只读大文本放到div里
+                        if (mapAttr.MyDataType == FormDataType.AppDate || mapAttr.MyDataType == FormDataType.AppDateTime)
+                            $('#LAB_' + dtl.OID + "_" + mapAttr.KeyOfEn).html(defValue);
+                    }
+
+                    if ($('#DDL_' + dtl.OID + "_" + mapAttr.KeyOfEn).length == 1) {
+                        // 判断下拉框是否有对应option, 若没有则追加
+                        if ($("option[value='" + defValue + "']", '#DDL_' + dtl.OID + "_" + mapAttr.KeyOfEn).length == 0) {
+                            var mainTable = frmData.MainTable[0];
+                            var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                            //@浙商银行
+                            if (selectText == undefined)
+                                selectText = mainTable[mapAttr.FKText];
+                            if (selectText == undefined)
+                                selectText = "";
+                            $('#DDL_' + dtl.OID + "_" +mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                        }
+                        //
+                        $('#DDL_' + dtl.OID + "_" + mapAttr.KeyOfEn ).val(defValue);
+                    }
+
+                    if ($('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn ).length == 1) {
+                        if (defValue == "1") {
+                            $('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn).attr("checked", true);
+                            $('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn).val(1);
+                            //判断是否存在mui-active这个类
+                            if ($("#SW_" + dtl.OID + "_" + mapAttr.KeyOfEn).hasClass("mui-active") == false)
+                                $("#SW_" + dtl.OID + "_" +mapAttr.KeyOfEn).addClass("mui-active");
+                        } else {
+                            $('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn).attr("checked", false);
+                            $('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn).val(0);
+                            //判断是否存在mui-active这个类
+                            if ($("#SW_" + dtl.OID + "_" + mapAttr.KeyOfEn).hasClass("mui-active") == true)
+                                $("#SW_" + dtl.OID + "_" + mapAttr.KeyOfEn).removeClass("mui-active");
+                        }
+                    }
+
+                    if (mapAttr.UIIsEnable == "0") {
+
+                        $('#TB_' + dtl.OID + "_" + mapAttr.KeyOfEn).attr('disabled', true);
+                        $('#DDL_' + dtl.OID + "_" + mapAttr.KeyOfEn).attr('disabled', true);
+                        $('#CB_' + dtl.OID + "_" + mapAttr.KeyOfEn).attr('disabled', true);
+                    }
+                }
+            });
+            
+        }
+
+        //填充默认数据
+        function ConvertDefVal(MainTable, defVal, keyOfEn) {
+            var result = defVal;
+            //通过MAINTABLE返回的参数
+            for (var ele in MainTable) {
+                if (keyOfEn == ele) {
+                    result = MainTable[ele];
+                    break;
+                }
+            }
+            return result = unescape(result);
+        }
+
+        function ReRenderForm() {
+            mui(".mui-switch").switch();
+
+
+            //监听开关事件
+            var SW = $('.mui-switch');
+            $.each(SW, function (i, obj) {
+                var KeyOfEn = $(obj).attr("id");
+
+                document.getElementById(KeyOfEn).addEventListener("toggle", function (event) {
+                    KeyOfEn = KeyOfEn.substring(3);
+                    if (event.detail.isActive) {
+                        $("#CB_" + KeyOfEn).val("1");
+                    } else {
+                        $("#CB_" + KeyOfEn).val("0");
+                    }
+                })
+            });
+            //初始化复选下拉框
+            var selectPicker = $('.selectpicker');
+            $.each(selectPicker, function (i, selectObj) {
+                var defVal = $(selectObj).attr('data-val');
+                var defValArr = defVal.split(',');
+                $(selectObj).selectpicker('val', defValArr);
+            });
+
+            //删除事件
+            $(".dtl_deleterow").on("click", function () {
+                var target = $(this);
+                var oid = target.attr("id");
+                Delete(oid);
+
+            });
+
+            $(".dtl_removerow").on("click", function () {
+                var target = $(this);
+                var oid = target.attr("id");
+                var div = $("#" + oid).parent().parent();
+                if (div.hasClass("mui-table-view") == true)
+                    div.remove();
+
+            });
+            var pickdates = $("#en_mainInfo .ccformdate");
+            pickdates.each(function (i, pickdate) {
+                var id = this.getAttribute('id');
+                if ($("#" + id).html() == '') {
+                    $("#" + id).html("<p>请选择时间<p>");
+                }
+                pickdate.addEventListener('tap', function () {
+                    var _self = this;
+                    var optionsJson = this.getAttribute('data-options') || '{}';
+                    var options = JSON.parse(optionsJson);
+                    if (options.type == 0) {
+                        options.type = "date";//yyyy-MM-dd
+                    } else if (options.type == 1) {
+                        options.type = "date-time";//yyyy-MM-dd HH:mm
+                    } else if (options.type == 2) {
+                        options.type = "datetime";//yyyy-MM-dd HH:mm:ss
+                    } else if (options.type == 3) {
+                        options.type = "month";//yyyy-MM
+                    } else if (options.type == 4) {
+                        options.type = "time-min";//HH:mm
+                    } else if (options.type == 5) {
+                        options.type = "time";//HH:mm:ss
+                    } else if (options.type == 6) {
+                        options.type = "month-day";//MM-dd
+                    } else if (options.type == 7) {
+                        options.type = "year";//yyyy
+                    }
+
+                    var id = this.getAttribute('id');
+                    /*
+                        * 首次显示时实例化组件
+                        * 示例为了简洁，将 options 放在了按钮的 dom 上
+                        * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                        */
+                    _self.picker = new mui.DtPicker(options);
+                    _self.picker.show(function (rs) {
+                        /*
+                            * rs.value 拼合后的 value
+                            * rs.text 拼合后的 text
+                            * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                            * rs.m 月，用法同年
+                            * rs.d 日，用法同年
+                            * rs.h 时，用法同年
+                            * rs.i 分（minutes 的第二个字母），用法同年
+                            */
+
+                        /* 
+                            * 返回 false 可以阻止选择框的关闭
+                            * return false;
+                            */
+                        /*
+                            * 释放组件资源，释放后将将不能再操作组件
+                            * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                            * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                            * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                            */
+                        $("#" + id).html(rs.text);
+                        $("#TB_" + id.substr(4)).val(rs.text);
+                        _self.picker.dispose();
+                        _self.picker = null;
+                    });
+                }, false);
+            });
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title" id="headTitle">基础信息</h1>
+        </header>
+
+        <div class="mui-content" id="DtlContent">
+            <div class="mui-card">
+                <ul class="mui-table-view" id="entree"></ul>
+                <ul class="mui-table-view mui-table-view-chevron" id="dtmtree"></ul>
+            </div>
+
+        </div>
+        <nav id="bottomToolBar" class="mui-bar mui-bar-tab"></nav>
+    </form>
+</body>
+</html>

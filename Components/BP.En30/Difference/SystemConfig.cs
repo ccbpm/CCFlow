@@ -116,7 +116,7 @@ namespace BP.Difference
         /// <summary>
         /// 附件上传加密
         /// </summary>
-        public static bool IsEnableAthEncrypt
+        public static bool isEnableAthEncrypt
         {
             get
             {
@@ -126,7 +126,7 @@ namespace BP.Difference
         /// <summary>
         /// 附件上传位置
         /// </summary>
-        public static bool IsUploadFileToFTP
+        public static bool isUploadFileToFTP
         {
             get
             {
@@ -237,6 +237,32 @@ namespace BP.Difference
                 return int.Parse(s);
             }
         }
+        public static string UserDefaultPass
+        {
+            get
+            {
+                string str = AppSettings["UserDefaultPass"];
+                if (DataType.IsNullOrEmpty(str))
+                    str = "123";
+                return str;
+            }
+        }
+
+        /// <summary>
+        /// rtf打印单条审核信息展示 
+        /// 0相关审核信息展示到同一个地方，
+        /// 1按配置的审核标签展示(默认为1).
+        /// </summary>
+        public static int WorkCheckShow
+        {
+            get
+            {
+                string s = AppSettings["WorkCheckShow"];
+                if (s == null)
+                    return 0;
+                return int.Parse(s);
+            }
+        }
         /// <summary>
         /// 系统语言（）
         /// 对多语言的系统有效。
@@ -279,7 +305,7 @@ namespace BP.Difference
         {
             get
             {
-                if (BP.Difference.SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.isBSsystem)
                 {
                     return System.Configuration.ConfigurationManager.AppSettings;
                 }
@@ -300,7 +326,7 @@ namespace BP.Difference
         {
             get
             {
-                if (BP.Difference.SystemConfig.IsBSsystem && HttpContextHelper.Current != null)
+                if (BP.Difference.SystemConfig.isBSsystem && HttpContextHelper.Current != null)
                     return HttpContextHelper.PhysicalApplicationPath;
                 else
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
@@ -320,7 +346,7 @@ namespace BP.Difference
         {
             get
             {
-                if (BP.Difference.SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.isBSsystem)
                 {
                     string path1 = HttpContextHelper.PhysicalApplicationPath + "/../";
                     System.IO.DirectoryInfo info1 = new DirectoryInfo(path1);
@@ -476,7 +502,7 @@ namespace BP.Difference
         {
             get
             {
-                if (BP.Difference.SystemConfig.IsBSsystem)
+                if (BP.Difference.SystemConfig.isBSsystem)
                     return HttpContextHelper.PhysicalApplicationPath;
 
                 return AppDomain.CurrentDomain.BaseDirectory + "../../";
@@ -485,7 +511,7 @@ namespace BP.Difference
         #endregion
 
         #region 共同变量。
-        public static bool IsBSsystem_Test = true;
+        public static bool isBSsystem_Test = true;
         /// <summary>
         /// 是不是BS系统结构。
         /// </summary>
@@ -493,7 +519,7 @@ namespace BP.Difference
         /// <summary>
         /// 是不是BS系统结构。
         /// </summary>
-        public static bool IsBSsystem
+        public static bool isBSsystem
         {
             get
             {
@@ -505,7 +531,7 @@ namespace BP.Difference
                 SystemConfig._IsBSsystem = value;
             }
         }
-        public static bool IsCSsystem
+        public static bool isCSsystem
         {
             get
             {
@@ -515,19 +541,16 @@ namespace BP.Difference
         #endregion
 
         #region 系统配置信息
-        /// <summary>
-        /// 执行清空
-        /// </summary>
-        public static void DoClearCash()
+        public static void DoClearCache()
         {
             // HttpRuntime.UnloadAppDomain();
-            Cash.Map_Cash.Clear();
-            Cash.SQL_Cash.Clear();
-            Cash.EnsData_Cash.Clear();
-            Cash.EnsData_Cash_Ext.Clear();
-            Cash.BS_Cash.Clear();
-            Cash.Bill_Cash.Clear();
-            CashEntity.DCash.Clear();
+            Cache.Map_Cache.Clear();
+            Cache.SQL_Cache.Clear();
+            Cache.EnsData_Cache.Clear();
+            Cache.EnsData_Cache_Ext.Clear();
+            Cache.BS_Cache.Clear();
+            Cache.Bill_Cache.Clear();
+            CacheEntity.DCache.Clear();
         }
         /// <summary>
         /// 系统编号
@@ -551,7 +574,7 @@ namespace BP.Difference
             }
         }
 
-         
+
         public static string UserLockTimeSeconds
         {
             get
@@ -631,7 +654,7 @@ namespace BP.Difference
         /// <summary>
         /// 是否启用CCIM?
         /// </summary>
-        public static bool IsEnableCCIM
+        public static bool isEnableCCIM
         {
             get
             {
@@ -642,7 +665,7 @@ namespace BP.Difference
             }
         }
 
-        public static bool IsEnableNull
+        public static bool isEnableNull
         {
             get
             {
@@ -655,7 +678,7 @@ namespace BP.Difference
         /// <summary>
         /// 是否 debug 状态
         /// </summary>
-        public static bool IsDebug
+        public static bool isDebug
         {
             get
             {
@@ -665,7 +688,7 @@ namespace BP.Difference
                     return false;
             }
         }
-        public static bool IsDisHelp
+        public static bool isDisHelp
         {
             get
             {
@@ -674,11 +697,11 @@ namespace BP.Difference
                 return false;
             }
         }
-        
+
         /// <summary>
         /// 是否启用密码加密
         /// </summary>
-        public static bool IsEnablePasswordEncryption
+        public static bool isEnablePasswordEncryption
         {
             get
             {
@@ -704,7 +727,7 @@ namespace BP.Difference
         /// <summary>
         /// 是否多语言？
         /// </summary>
-        public static bool IsMultilingual
+        public static bool isMultilingual
         {
             get
             {
@@ -760,7 +783,7 @@ namespace BP.Difference
         /// <summary>
         /// 当前的 TempCash 是否失效了
         /// </summary>
-        public static bool IsTempCashFail
+        public static bool isTempCashFail
         {
             get
             {
@@ -877,6 +900,76 @@ namespace BP.Difference
         }
         #endregion
 
+        #region OSS服务相关配置信息
+        /// <summary>
+        /// 附件保存方式的默认值
+        /// </summary>
+        public static int AthSaveWayDefault
+        {
+            get
+            {
+                return GetValByKeyInt("AthSaveWayDefault", 0);
+            }
+        }
+        /// <summary>
+        /// OSS服务器的Endpoint
+        /// </summary>
+        public static string OSSEndpoint
+        {
+            get
+            {
+                string str = BP.Difference.SystemConfig.AppSettings["OSSEndpoint"];
+                return BP.Sys.Base.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
+        /// OSS服务器的AccessKeyId
+        /// </summary>
+        public static string OSSAccessKeyId
+        {
+            get
+            {
+                string str = BP.Difference.SystemConfig.AppSettings["OSSAccessKeyId"];
+                return BP.Sys.Base.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
+        /// OSS服务器的AccessKeySecret
+        /// </summary>
+        public static string OSSAccessKeySecret
+        {
+            get
+            {
+                string str = BP.Difference.SystemConfig.AppSettings["OSSAccessKeySecret"];
+                return BP.Sys.Base.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
+        /// OSS服务器的BucketName
+        /// </summary>
+        public static string OSSBucketName
+        {
+            get
+            {
+                string str = BP.Difference.SystemConfig.AppSettings["OSSBucketName"];
+                return BP.Sys.Base.Glo.String_JieMi(str);
+            }
+        }
+        /// <summary>
+        /// Bucket子目录路径配置
+        /// </summary>
+        public static string BucketSubPath
+        {
+            get
+            {
+                string str = BP.Difference.SystemConfig.AppSettings["BucketSubPath"];
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = "/";
+                return BP.Sys.Base.Glo.String_JieMi(str);
+            }
+        }
+        #endregion OSS服务相关配置信息
+
         #region 微信相关配置信息
         /// <summary>
         /// 企业标识
@@ -886,6 +979,13 @@ namespace BP.Difference
             get
             {
                 return AppSettings["CorpID"];
+            }
+        }
+        public static string SuitAccessToken
+        {
+            get
+            {
+                return AppSettings["SuitAccessToken"];
             }
         }
         /// <summary>
@@ -986,6 +1086,26 @@ namespace BP.Difference
             get
             {
                 return AppSettings["WXGZH_AppSecret"];
+            }
+        }
+        /// <summary>
+        /// 公众号消息模版
+        /// </summary>
+        public static string WeiXinGZHMessageID
+        {
+            get
+            {
+                return AppSettings["WeiXinGZHMessageID"];
+            }
+        }
+        /// <summary>
+        /// 公众号消息回调地址
+        /// </summary>
+        public static string GZH_redirect_uri
+        {
+            get
+            {
+                return AppSettings["GZH_redirect_uri"];
             }
         }
         /// <summary>
@@ -1116,7 +1236,7 @@ namespace BP.Difference
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        private static NameValueCollection GetConfig(string key)
+        public static NameValueCollection GetConfig(string key)
         {
             Hashtable ht = (Hashtable)System.Configuration.ConfigurationManager.GetSection("NestedNamesSection");
             return (NameValueCollection)ht[key];
@@ -1224,13 +1344,13 @@ namespace BP.Difference
         {
             try
             {
-                DataTable dt = Cash.GetObj("TConfigEns", Depositary.Application) as DataTable;
+                DataTable dt = Cache.GetObj("TConfigEns", Depositary.Application) as DataTable;
                 if (dt == null)
                 {
                     DataSet ds = new DataSet("dss");
                     ds.ReadXml(BP.Difference.SystemConfig.PathOfXML + "Ens/ConfigEns.xml");
                     dt = ds.Tables[0];
-                    Cash.AddObj("TConfigEns", Depositary.Application, dt);
+                    Cache.AddObj("TConfigEns", Depositary.Application, dt);
                 }
 
                 foreach (DataRow dr in dt.Rows)
@@ -1478,7 +1598,6 @@ namespace BP.Difference
                     case "MySQL":
                         return DBType.MySQL;
                     case "PostgreSQL":
-                    case "PGSQL":
                         return DBType.PostgreSQL;
                     case "DM":
                         return DBType.DM;
@@ -1532,6 +1651,19 @@ namespace BP.Difference
                         //if (connOra.State != ConnectionState.Open)
                         //    connOra.Open();
                         //_AppCenterDBDatabase = connOra.Database;
+                        break;
+                    case DA.DBType.DM:
+                        string[] strsDM = BP.Difference.SystemConfig.AppCenterDSN.Split(';');
+                        foreach (string str in strsDM)
+                        {
+
+                            if (str.ToLower().Contains("database") == false)
+                                continue;
+
+                            string[] mystrs = str.Split('=');
+                            return mystrs[1];
+
+                        }
                         break;
                     case DBType.KingBaseR3:
                     case DBType.KingBaseR6:
@@ -1699,7 +1831,72 @@ namespace BP.Difference
                 return BP.Difference.SystemConfig.GetValByKey("DateType", "varchar");
             }
         }
-        #endregion xx
+        /// <summary>
+        /// 放在 Temp 中的Cache 多少时间失效。
+        /// 0, 表示永久不失效。
+        /// </summary>
+        private static int CacheFail
+        {
+            get
+            {
+                try
+                {
+                    return int.Parse(AppSettings["CacheFail"]);
+                }
+                catch
+                {
+                    return 0;
+                }
+            }
+        }
+        public static DateTime _CacheFailDateTime;
+        /// <summary>
+        /// 当前的 TempCache 是否失效了
+        /// </summary>
+        public static bool isTempCacheFail
+        {
+            get
+            {
+                if (BP.Difference.SystemConfig.CacheFail == 0)
+                    return false;
 
+                if (_CacheFailDateTime == null)
+                {
+                    _CacheFailDateTime = DateTime.Now;
+                    return true;
+                }
+                else
+                {
+                    TimeSpan ts = DateTime.Now - _CacheFailDateTime;
+                    if (ts.Minutes >= BP.Difference.SystemConfig.CacheFail)
+                    {
+                        _CacheFailDateTime = DateTime.Now;
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        }
+        #endregion xx
+        public static string DEFAULT_CACHE_KEY_PREFIX = "";
+        /// <summary>
+        /// session 存储redis的ID
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string RedisCacheKey(String key)
+        {
+            if (DataType.IsNullOrEmpty(DEFAULT_CACHE_KEY_PREFIX))
+                DEFAULT_CACHE_KEY_PREFIX = SystemConfig.GetValByKey("RedisCacheKeyPrefix", "ccflow:redisCache:");
+            return DEFAULT_CACHE_KEY_PREFIX + key;
+        }
+        /// <summary>
+        /// 是否启用redis
+        /// </summary>
+        /// <returns></returns>
+        public static bool RedisIsEnable()
+        {
+            return SystemConfig.GetValByKeyBoolen("RedisIsEnable", false);
+        }
     }
 }

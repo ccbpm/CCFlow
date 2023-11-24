@@ -79,7 +79,7 @@ namespace BP.Sys
 
             if (runObj == null)
                 runObj = string.Empty;
-
+            runObj = runObj.Replace("~~", "\"");
             runObj = runObj.Replace("~", "'");
             runObj = runObj.Replace("/#", "+"); //为什么？
             runObj = runObj.Replace("/$", "-"); //为什么？
@@ -90,10 +90,10 @@ namespace BP.Sys
                 runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
 
             if (runObj.Contains("@WebUser.FK_DeptName"))
-                runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.FK_DeptName);
+                runObj = runObj.Replace("@WebUser.FK_DeptName", BP.Web.WebUser.DeptName);
 
             if (runObj.Contains("@WebUser.FK_Dept"))
-                runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.DeptNo);
 
             if (runObj.Contains("@") == true && ht != null)
             {
@@ -110,7 +110,7 @@ namespace BP.Sys
                         break;
                 }
             }
-            if (runObj.Contains("@") && BP.Difference.SystemConfig.IsBSsystem == true)
+            if (runObj.Contains("@") && BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -216,7 +216,7 @@ namespace BP.Sys
             {
                 sql = Glo.DealExp(sql, ht); //处理sql.
 
-                var num = src.RunSQL(sql);
+                int num = src.RunSQL(sql);
                 if (num == 0)
                     return "执行失败:" + this.GetValStrByKey("MsgOfErr") + "，返回结果为0";
                 return "执行成功:" + this.GetValStrByKey("MsgOfOK") + "，返回结果为" + num;

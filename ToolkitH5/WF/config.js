@@ -1,11 +1,11 @@
 ﻿
 //访问的ccbpm服务器地址.
 //var host = "http://101.43.55.81:8022"; //演示服务器. h5登陆地址: http://vue3.ccbpm.cn
-var host = "http://localhost:2296";
+var host = "http://localhost:2296";  //BPM服务器.
 
 // 流程域名 , 默认为空. 比如:CRM, ERP, OA 等等。 该域名配置流程表单树的属性上， 如果要获取全部的就保留为空.
 // 表示该目录下所有的流程都属于这个域里.
-var domain = "ERP"; //可以为空，则表示获取全部的.
+var domain = ""; //可以为空，则表示获取全部的, 也可认为是系统编号.
 var plant = "CCFlow"; //For.net 请设置ccflow, forJava请设置JFlow.
 
 //私钥. 这里明文定义到这里了, 为了安全需要写入到后台.
@@ -32,18 +32,26 @@ function GetHrefUrl() {
 function LoginCCBPM(privateKey, userNo) {
 
     //url 地址。
-    var url = ccbpmHostDevelopAPI + "Portal_Login?privateKey=" + privateKey + "&userNo=" + userNo;
+    var url = ccbpmHostDevelopAPI + "Port_Login?privateKey=" + privateKey + "&userNo=" + userNo;
     var str = RunUrlReturnString(url);
 
     var json = JSON.parse(str);
-    localStorage.setItem('UserInfoJson', str);
+    if (json.code == 500) {
+        alert(json.data);
+    }
+    var jsonStr = json.data;
+    localStorage.setItem('UserInfoJson', jsonStr);
 
     UserNo = userNo;
-    return json.Token;
+
+
+    var myjson = JSON.parse(jsonStr);
+    //debugger; 
+    return myjson.Token;
 }
 function LoginByToken(token) {
     //url 地址。
-    var url = ccbpmHostDevelopAPI + "Portal_LoginByToken?privateKey=" + privateKey + "&userNo=" + userNo;
+    var url = ccbpmHostDevelopAPI + "Port_LoginByToken?privateKey=" + privateKey + "&userNo=" + userNo;
     var str = RunUrlReturnString(url);
 
     var json = JSON.parse(str);
@@ -69,7 +77,7 @@ function GetWebUser() {
 function LoginOut() {
 
     //url 地址。
-    var url = ccbpmHostDevelopAPI + "Portal_LoginOut?Token=" + GetWebUser().Token;
+    var url = ccbpmHostDevelopAPI + "Port_LoginOut?Token=" + GetWebUser().Token;
     var token = RunUrlReturnString(url);
     //赋值给公共变量
     UserNo = "";
@@ -87,7 +95,8 @@ function GetUserNo() {
  * 获得token.
  * */
 function GetToken() {
-    return localStorage.Token;// GetWebUser().Token;
+    return GetWebUser().Token;
+    //return localStorage.Token;// GetWebUser().Token;
 }
 
 /**

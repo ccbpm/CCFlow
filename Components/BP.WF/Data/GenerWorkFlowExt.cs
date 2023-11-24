@@ -606,7 +606,7 @@ namespace BP.WF.Data
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 // rm.Icon = "../../WF/Img/Track.png";
                 rm.Icon = "icon-graph";
-                //        rm.IsForEns = true;
+                //        rm.ItIsForEns = true;
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -626,7 +626,7 @@ namespace BP.WF.Data
                 ////rm.Icon = "../../WF/Img/Btn/CC.gif";
                 //rm.Icon = "icon-social-tumblr";
                 //rm.Title = "跳转";
-                //rm.IsForEns = false;
+                //rm.ItIsForEns = false;
                 //rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
@@ -636,7 +636,7 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Title = "轨迹修改";
                 rm.Icon = "icon-graph";
-                //   rm.IsForEns = false;
+                //   rm.ItIsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoEditTrack";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -655,7 +655,7 @@ namespace BP.WF.Data
 
                 rm = new RefMethod();
                 rm.Title = "调整数据";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 rm.Icon = "icon-target";
                 rm.ClassMethodName = this.ToString() + ".DoEditFrm";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -667,7 +667,7 @@ namespace BP.WF.Data
                 rm.Warning = "您确定要删除吗？包括该流程的所有数据。";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Icon = "icon-close";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -677,7 +677,7 @@ namespace BP.WF.Data
                 //   rm.Warning = "您确定要删除吗？";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Icon = "icon-close";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -686,7 +686,7 @@ namespace BP.WF.Data
                 rm.Title = "修复数据";
                 //  rm.Title = "修复该流程数据实例";
 
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".RepairDataIt";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
@@ -706,7 +706,7 @@ namespace BP.WF.Data
                 rm.HisAttrs.AddTBString("Note", null, "催办信息", true, false, 0, 500, 200);
                 //   rm.Warning = "您确定要删除吗？";
                 // rm.Icon = "../../WF/Img/Btn/Delete.gif";
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
 

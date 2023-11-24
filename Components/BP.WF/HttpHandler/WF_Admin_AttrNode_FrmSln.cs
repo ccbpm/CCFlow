@@ -26,8 +26,8 @@ namespace BP.WF.HttpHandler
         public string RefOneFrmTree_SetAllNodeFrmUseThisSln()
         {
             string nodeID = GetRequestVal("FK_Node");
-            Node currNode = new Node(this.FK_Node);
-            string flowNo = currNode.FK_Flow;
+            Node currNode = new Node(this.NodeID);
+            string flowNo = currNode.FlowNo;
             Nodes nds = new Nodes();
             nds.Retrieve("FK_Flow", flowNo);
 
@@ -42,7 +42,7 @@ namespace BP.WF.HttpHandler
          //   attrOfCommpents.Retrieve(MapAttrAttr.FK_MapData,
            // currNode.)
 
-            for (var i = 0; i < nds.Count; i++)
+            for (int i = 0; i < nds.Count; i++)
             {
 
                 Node jsNode = nds[i] as Node;
@@ -62,7 +62,7 @@ namespace BP.WF.HttpHandler
 
                 //是不是该frmNode已经存在？
                 var isHave = false;
-                for (var idx = 0; idx < ens.Count; idx++)
+                for (int idx = 0; idx < ens.Count; idx++)
                 {
                     FrmNode en = ens[idx] as FrmNode;
                     if (en.FK_Frm != currNode.NodeFrmID)
@@ -77,9 +77,9 @@ namespace BP.WF.HttpHandler
                     continue; //已经存在就不处理.
 
                 FrmNode frmNode = new FrmNode();
-                frmNode.setMyPK(jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FK_Flow);
-                frmNode.FK_Node = jsNode.NodeID;
-                frmNode.FK_Flow = jsNode.FK_Flow;
+                frmNode.setMyPK(jsNode.NodeFrmID + "_" + jsNode.NodeID + "_" + jsNode.FlowNo);
+                frmNode.NodeID = jsNode.NodeID;
+                frmNode.FlowNo = jsNode.FlowNo;
                 frmNode.FK_Frm = jsNode.NodeFrmID;
 
                 //判断是否为开始节点
@@ -100,10 +100,10 @@ namespace BP.WF.HttpHandler
                 {
                     ff.setUIVisible(true);
                     ff.setKeyOfEn(attr.KeyOfEn);
-                    ff.FK_Flow = currNode.FK_Flow;
-                    ff.FK_Node = jsNode.NodeID;
-                    ff.setFK_MapData(jsNode.NodeFrmID); //表单ID.
-                    ff.setMyPK(ff.FK_MapData + "_" + ff.FK_Node + "_" + ff.KeyOfEn);
+                    ff.FlowNo = currNode.FlowNo;
+                    ff.NodeID = jsNode.NodeID;
+                    ff.FrmID =jsNode.NodeFrmID; //表单ID.
+                    ff.setMyPK(ff.FrmID + "_" + ff.NodeID + "_" + ff.KeyOfEn);
                     if (ff.IsExits == false)
                         ff.Insert();
                 }
@@ -178,7 +178,7 @@ namespace BP.WF.HttpHandler
                 sql += "Sys_MapData A, ";
                 sql += "Sys_FormTree B ";
                 sql += " WHERE ";
-                sql += " A.FK_FormTree = B.NO ";
+                sql += " A.FK_FormTree = B.No ";
                 sql += " AND B.OrgNo = '" + WebUser.OrgNo + "' ";
                 if (DataType.IsNullOrEmpty(key) == false)
                     sql += " AND A.Name like '%" + key + "%'";

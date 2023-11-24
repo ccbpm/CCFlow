@@ -1,0 +1,51 @@
+2023-11-20 10:35:52.4774|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT    NodeID, Name, FWCSta, CASE FWCSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN 2 THEN '只读' WHEN NULL THEN '禁用' END "FWCStaText",IFNULL(FWCLab, '审核信息') FWCLab, FWCType, CASE FWCType WHEN 0 THEN '审核组件' WHEN 1 THEN '日志组件' WHEN 2 THEN '周报组件' WHEN 3 THEN '月报组件' WHEN NULL THEN '审核组件' END "FWCTypeText", FWCNodeName, FWCAth, CASE FWCAth WHEN 0 THEN '不启用' WHEN 1 THEN '多附件' WHEN 2 THEN '单附件(暂不支持)' WHEN 3 THEN '图片附件(暂不支持)' WHEN NULL THEN '不启用' END "FWCAthText",IFNULL(FWCOpLabel, '审核') FWCOpLabel, FWCDefInfo, SigantureEnabel, CASE SigantureEnabel WHEN 0 THEN '不签名' WHEN 1 THEN '图片签名' WHEN 2 THEN '写字板' WHEN 3 THEN '电子签名' WHEN 4 THEN '电子盖章' WHEN 5 THEN '电子签名+盖章' WHEN NULL THEN '不签名' END "SigantureEnabelText", IFNULL(FWCIsFullInfo,1) FWCIsFullInfo, FWCFields, FK_Flow, Step, FWCVer, CASE FWCVer WHEN 0 THEN '1个节点1个人保留1个意见' WHEN 1 THEN '保留节点历史意见(默认)' WHEN NULL THEN '保留节点历史意见(默认)' END "FWCVerText", TimeShowRole, CASE TimeShowRole WHEN 0 THEN '仅日期' WHEN 1 THEN '日期时间' WHEN NULL THEN '日期时间' END "TimeShowRoleText", NodeFrmID, CheckField, CheckFieldT, FWCView, FWCShowModel, CASE FWCShowModel WHEN 0 THEN '表格方式' WHEN 1 THEN '自由模式' WHEN NULL THEN '表格方式' END "FWCShowModelText", IFNULL( FWC_H ,300) AS  FWC_H, IFNULL(FWCTrackEnable,1) FWCTrackEnable, IFNULL(FWCListEnable,1) FWCListEnable, IFNULL( FWCIsShowTruck,0) FWCIsShowTruck, IFNULL( FWCIsShowReturnMsg,0) FWCIsShowReturnMsg, FWCOrderModel, CASE FWCOrderModel WHEN 0 THEN '按审批时间先后排序' WHEN 1 THEN '按照接受人员列表先后顺序(官职大小)' WHEN NULL THEN '按审批时间先后排序' END "FWCOrderModelText", IFNULL( FWCIsShowAllStep,0) FWCIsShowAllStep, FWCMsgShow, CASE FWCMsgShow WHEN 0 THEN '都显示' WHEN 1 THEN '仅显示自己的意见' WHEN NULL THEN '都显示' END "FWCMsgShowText" FROM WF_Node WHERE (1=1)  AND WF_Node.NodeID=@NodeID Exception=Unknown column 'TimeShowRole' in 'field list'
+
+
+2023-11-20 10:36:57.2028|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT MyPK, RefPKVal, EventSource, RefFlowNo, EventID, EventName, EventDoType, DoDoc, DoDocT, FK_DBSrc, FrmID, FK_Flow, FK_Node, AtPara FROM Sys_FrmEvent WHERE (1=1) AND ( ( Sys_FrmEvent.RefPKVal =@RefPKVal) )  Exception=Unknown column 'RefPKVal' in 'field list'
+
+
+2023-11-20 10:36:58.9316|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT MyPK, RefPKVal, FlowNo, NodeID, EventNo, EventName, PushWayNo, PushWayName, PushWayExp1, PushWayExp2, IFNULL(IsEnableSMS,1) IsEnableSMS, SMSDoc, IFNULL(IsEnableEmail,1) IsEnableEmail, MailTitle, MailDoc, IFNULL(DD,1) DD, IFNULL(WeChat,1) WeChat, IFNULL(Msg,1) Msg, IFNULL(WebServices,1) WebServices, AtPara FROM WF_PushMsg WHERE (1=1) AND ( ( WF_PushMsg.RefPKVal =@RefPKVal) )  Exception=Unknown column 'RefPKVal' in 'field list'
+
+
+2023-11-20 10:37:37.6830|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7712)
+   在 BP.Sys.GEEntity.InsertAsOID(Int64 oid) 位置 D:\CCFlowCloud\Components\BP.En30\Sys\GEEntity.cs:行号 342
+   在 BP.WF.WorkNode.NodeSend_24_UnSameSheet(Nodes toNDs) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2454
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3778
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7407
+
+
+2023-11-20 10:37:41.6091|ERROR|
+位置：BP.WF.WorkNode.NodeSend(D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:7712)
+   在 BP.Sys.GEEntity.InsertAsOID(Int64 oid) 位置 D:\CCFlowCloud\Components\BP.En30\Sys\GEEntity.cs:行号 342
+   在 BP.WF.WorkNode.NodeSend_24_UnSameSheet(Nodes toNDs) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 2454
+   在 BP.WF.WorkNode.NodeSend_Send_5_5() 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 3778
+   在 BP.WF.WorkNode.NodeSend(Node jumpToNode, String jumpToEmp, Boolean IsReturnNode) 位置 D:\CCFlowCloud\Components\BP.WF\WF\WorkNode.cs:行号 7407
+
+
+2023-11-20 10:44:32.6109|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT    NodeID, Name, FrmSummaryNames, SheetTreeModel, CASE SheetTreeModel WHEN 0 THEN '表单树' WHEN 1 THEN '为1个表单的时候,按绑定表单库的表单计算' WHEN 2 THEN 'Tab标签页' WHEN NULL THEN '表单树' END "SheetTreeModelText", AtPara FROM WF_Node WHERE (1=1)  AND WF_Node.NodeID=@NodeID Exception=Unknown column 'FrmSummaryNames' in 'field list'
+
+
+2023-11-20 10:44:34.0728|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT MyPK, FK_Node, FK_Frm, FrmNameShow, IFNULL( IsPrint,0) IsPrint, IFNULL( IsEnableLoadData,0) IsEnableLoadData, IFNULL( IsEnableFWC,0) IsEnableFWC, IFNULL( IsEnableSF,0) IsEnableSF, IFNULL( IsCloseEtcFrm,0) IsCloseEtcFrm, WhoIsPK, CASE WhoIsPK WHEN 0 THEN 'WorkID是主键' WHEN 1 THEN 'FID是主键(干流程的WorkID)' WHEN 2 THEN '父流程ID是主键' WHEN 3 THEN '延续流程ID是主键' WHEN 4 THEN 'P2WorkID是主键' WHEN 5 THEN 'P3WorkID是主键' WHEN NULL THEN 'WorkID是主键' END "WhoIsPKText", BillNoField, BillNoFieldT, IFNULL( Is1ToN,0) Is1ToN, HuiZong, TempleteFile, CheckField, CheckFieldT, SFSta, CASE SFSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN 2 THEN '只读' WHEN NULL THEN '禁用' END "SFStaText", Idx, FK_Flow, AtPara FROM WF_FrmNode WHERE (1=1) AND ( ( WF_FrmNode.FK_Node =@FK_Node) ) ORDER BY Idx Exception=Unknown column 'CheckFieldT' in 'field list'
+
+
+2023-11-20 14:39:20.2689|ERROR|
+位置：BP.En.Entity.Retrieve(D:\CCFlowCloud\Components\BP.En30\En\Entity.cs:1286)
+@没有[枚举注册  Sys_EnumMain, 类[TS.FrmUI.SysEnumMain], 物理表[Sys_EnumMain] 实例。PK = 
+
+
+2023-11-20 14:45:23.6470|ERROR|
+位置：BP.DA.DBAccess.RunSQLReturnTable(D:\CCFlowCloud\Components\BP.En30\DA\DBAccess.cs:3226)
+SQL= SELECT NodeID, Name, FK_Flow, FWCSta, CASE FWCSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN 2 THEN '只读' WHEN NULL THEN '禁用' END "FWCStaText", GovDocSta, CASE GovDocSta WHEN 0 THEN '禁用' WHEN 1 THEN '启用' WHEN 2 THEN '只读' WHEN NULL THEN '禁用' END "GovDocStaText" FROM WF_Node WHERE (1=1) AND ( ( WF_Node.FK_Flow =@FK_Flow) )  Exception=Unknown column 'GovDocSta' in 'field list'
+
+

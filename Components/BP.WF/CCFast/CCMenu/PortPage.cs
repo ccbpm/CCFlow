@@ -114,9 +114,9 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public string GPM_DB_Menus()
         {
-            var appNo = this.GetRequestVal("AppNo");
+            string appNo = this.GetRequestVal("AppNo");
 
-            var sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
+            string sql1 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql1 += " FROM V_GPM_EmpMenu ";
             sql1 += " WHERE FK_Emp = '" + WebUser.No + "' ";
             sql1 += " AND MenuType = '3' ";
@@ -127,10 +127,10 @@ namespace BP.CCFast.CCMenu
             sql1 += " WHERE MenuCtrlWay=1 ";
             sql1 += " AND MenuType = '3' ";
             sql1 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
-            var dirs = DBAccess.RunSQLReturnTable(sql1);
+            DataTable dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
+            string sql2 = "SELECT No,Name,FK_Menu,ParentNo,UrlExt,Icon,Idx ";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '4' ";
@@ -142,7 +142,7 @@ namespace BP.CCFast.CCMenu
             sql2 += " AND MenuType = '4' ";
             sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
 
-            var menus = DBAccess.RunSQLReturnTable(sql2);
+            DataTable menus = DBAccess.RunSQLReturnTable(sql2);
             menus.TableName = "Menus"; //获得菜单.
 
             //组装数据.
@@ -158,7 +158,7 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public string GPM_OA_Menus()
         {
-            var appNo = this.GetRequestVal("AppNo");
+            string appNo = this.GetRequestVal("AppNo");
 
             Paras ps = new Paras();
             string dbstr =  BP.Difference.SystemConfig.AppCenterDBVarStr;
@@ -168,10 +168,10 @@ namespace BP.CCFast.CCMenu
 
             string ParentNo = DBAccess.RunSQLReturnString(ps);
 
-            if (string.IsNullOrWhiteSpace(ParentNo))
+            if (DataType.IsNullOrEmpty(ParentNo))
                 return "[]";
 
-            var sql1 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
+            string sql1 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx ";
             sql1 += " FROM v_gpm_empmenu ";
             sql1 += " WHERE FK_Emp = '" + WebUser.No + "' ";
             sql1 += " AND ParentNo = '" + ParentNo + "' ";
@@ -182,10 +182,10 @@ namespace BP.CCFast.CCMenu
             sql1 += " WHERE MenuCtrlWay=1 ";
             sql1 += " AND ParentNo = '" + ParentNo + "' ";
             sql1 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
-            var dirs = DBAccess.RunSQLReturnTable(sql1);
+            DataTable dirs = DBAccess.RunSQLReturnTable(sql1);
             dirs.TableName = "Dirs"; //获得目录.
 
-            var sql2 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
+            string sql2 = "SELECT No,Name,FK_Menu,MenuType,ParentNo,Url,UrlExt,Tag1,Tag2,Tag3,WebPath,Icon,Idx,openway ";
             sql2 += " FROM v_gpm_empmenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND ParentNo != '" + ParentNo + "'  ";
@@ -197,7 +197,7 @@ namespace BP.CCFast.CCMenu
             sql2 += " AND ParentNo != '" + ParentNo + "' ";
             sql2 += " AND FK_App = '" + appNo + "' ORDER BY Idx ";
 
-            var menus = DBAccess.RunSQLReturnTable(sql2);
+            DataTable menus = DBAccess.RunSQLReturnTable(sql2);
             menus.TableName = "Menus"; //获得菜单.
 
             //组装数据.
@@ -213,8 +213,8 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public string GPM_IsCanExecuteFunction()
         {
-            var dt = GPM_GenerFlagDB(); //获得所有的标记.
-            var funcNo = this.GetRequestVal("FuncFlag");
+            DataTable dt = GPM_GenerFlagDB(); //获得所有的标记.
+            string funcNo = this.GetRequestVal("FuncFlag");
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr[0].ToString().Equals(funcNo) == true)
@@ -228,8 +228,8 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public DataTable GPM_GenerFlagDB()
         {
-            var appNo = this.GetRequestVal("AppNo");
-            var sql2 = "SELECT Flag,Idx";
+            string appNo = this.GetRequestVal("AppNo");
+            string sql2 = "SELECT Flag,Idx";
             sql2 += " FROM V_GPM_EmpMenu ";
             sql2 += " WHERE FK_Emp = '" + WebUser.No + "'";
             sql2 += " AND MenuType = '5' ";
@@ -249,7 +249,7 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public string GPM_AutoHidShowPageElement()
         {
-            var dt = GPM_GenerFlagDB(); //获得所有的标记.
+            DataTable dt = GPM_GenerFlagDB(); //获得所有的标记.
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
@@ -258,11 +258,11 @@ namespace BP.CCFast.CCMenu
         /// <returns></returns>
         public string GPM_Search()
         {
-            var searchKey = this.GetRequestVal("searchKey");
+            string searchKey = this.GetRequestVal("searchKey");
             //var SearchDept = this.GetRequestVal("SearchDept");
             //var SearchEmp = this.GetRequestVal("SearchEmp");
             //var SearchTel = this.GetRequestVal("SearchTel");
-            var sql = "SELECT e.No AS No,e.Name AS Name,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
+            string sql = "SELECT e.No AS No,e.Name AS Name,d.Name AS deptName,e.Email AS Email,e.Tel AS Tel from Port_Dept d,Port_Emp e " +
                 "where d.No=e.FK_Dept AND (e.No LIKE '%" + searchKey + "%' or e.NAME LIKE '%" + searchKey + "%' or d.Name LIKE '%" + searchKey + "%' or e.Tel LIKE '%" + searchKey + "%')";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);

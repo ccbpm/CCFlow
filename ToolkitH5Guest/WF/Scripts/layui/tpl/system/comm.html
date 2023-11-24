@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    
+    <script type="text/html" template lay-done="layui.data.done(d.params)">
+
+        <iframe src="" frameborder="0" style="height:99%;width:99%" scrolling="auto"  id="commFrame"></iframe>
+    </script>
+   <script>
+       layui.data.done = function (params) {
+           var url = params.url;
+           for (var key in params) {
+               if (key != "url") {
+                   if (url.indexOf("?") == -1)
+                       url += "?" + key + "=" + params[key];
+                   else
+                       url += "&" + key + "=" + params[key];
+               } 
+           }
+           $("#commFrame").attr("src", url);
+       }
+   </script>
+</head>
+<body>
+   
+</body>
+</html>

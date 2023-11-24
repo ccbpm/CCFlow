@@ -16,15 +16,15 @@ namespace BP.WF.HttpHandler
         {
             //分组.
             GroupFields gfs = new GroupFields();
-            gfs.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.Idx);
+            gfs.Retrieve(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
 
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, GroupFieldAttr.Idx);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FrmID, GroupFieldAttr.Idx);
 
             MapDtls mapDtls = new MapDtls();
-            mapDtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData);
+            mapDtls.Retrieve(MapDtlAttr.FK_MapData, this.FrmID);
 
-            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+            FrmAttachments aths = new FrmAttachments(this.FrmID);
 
             DataSet ds = new DataSet();
 
@@ -50,23 +50,23 @@ namespace BP.WF.HttpHandler
             #region 获取数据
             MapDatas mapdatas = new MapDatas();
             QueryObject qo = new QueryObject(mapdatas);
-            qo.AddWhere(MapDataAttr.No, "Like", FK_MapData + "%");
+            qo.AddWhere(MapDataAttr.No, "Like", this.FrmID + "%");
             qo.addOrderBy(MapDataAttr.Idx);
             qo.DoQuery();
 
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapDtlAttr.FK_MapData, FK_MapData, MapAttrAttr.EditType, 0,
+            attrs.Retrieve(MapDtlAttr.FK_MapData, this.FrmID, MapAttrAttr.EditType, 0,
                 GroupFieldAttr.Idx);
 
-            FrmBtns btns = new FrmBtns(this.FK_MapData);
+            FrmBtns btns = new FrmBtns(this.FrmID);
 
-            FrmAttachments athMents = new FrmAttachments(this.FK_MapData);
+            FrmAttachments athMents = new FrmAttachments(this.FrmID);
 
             MapDtls dtls = new MapDtls();
-            dtls.Retrieve(MapDtlAttr.FK_MapData, FK_MapData, GroupFieldAttr.Idx);
+            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FrmID, GroupFieldAttr.Idx);
 
             GroupFields groups = new GroupFields();
-            groups.Retrieve(GroupFieldAttr.FrmID, FK_MapData, GroupFieldAttr.Idx);
+            groups.Retrieve(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.Idx);
             #endregion
 
             DataSet ds = new DataSet();
@@ -82,7 +82,7 @@ namespace BP.WF.HttpHandler
 
             //控制页面按钮需要的
             MapDtl tdtl = new MapDtl();
-            tdtl.No = FK_MapData;
+            tdtl.No = this.FrmID;
             if (tdtl.RetrieveFromDBSources() == 1)
             {
                 ds.Tables.Add(tdtl.ToDataTableField("tdtl"));
@@ -100,7 +100,7 @@ namespace BP.WF.HttpHandler
             Nodes nodes,
             DataSet ds)
         {
-            MapData mapdata = mapdatas.GetEntityByKey(FK_MapData) as MapData;
+            MapData mapdata = mapdatas.GetEntityByKey(this.FrmID) as MapData;
             DataTable dtAttrs = attrs.ToDataTableField("dtAttrs");
             DataTable dtDtls = dtls.ToDataTableField("dtDtls");
             DataTable dtGroups = groups.ToDataTableField("dtGroups");
@@ -134,7 +134,7 @@ namespace BP.WF.HttpHandler
                     {
                         group = new GroupField();
                         group.Lab = mapDtl.Name;
-                        group.FrmID = mapDtl.FK_MapData;
+                        group.FrmID = mapDtl.FrmID;
                         group.CtrlType = GroupCtrlType.Dtl;
                         group.CtrlID = mapDtl.No;
                         group.Insert();
@@ -149,7 +149,7 @@ namespace BP.WF.HttpHandler
                     {
                         group = new GroupField();
                         group.Lab = athMent.Name;
-                        group.EnName = athMent.FK_MapData;
+                        group.EnName = athMent.FrmID;
                         group.CtrlType = GroupCtrlType.Ath;
                         group.CtrlID = athMent.MyPK;
                         group.Insert();
@@ -168,7 +168,7 @@ namespace BP.WF.HttpHandler
                     {
                         group = new GroupField();
                         group.Lab = fbtn.Lab;
-                        group.FrmID = fbtn.FK_MapData;
+                        group.FrmID = fbtn.FrmID;
                         group.CtrlType = GroupCtrlType.Btn;
                         group.CtrlID = fbtn.MyPK;
                         group.Insert();
@@ -197,31 +197,31 @@ namespace BP.WF.HttpHandler
                 DataRow tddr = isDtl.NewRow();
 
                 MapDtl tdtl = new MapDtl();
-                tdtl.No = FK_MapData;
+                tdtl.No = this.FrmID;
                 if (tdtl.RetrieveFromDBSources() == 1)
                 {
                     tddr["tdDtl"] = 1;
-                    tddr["FK_MapData"] = tdtl.FK_MapData;
+                    tddr["FK_MapData"] = tdtl.FrmID;
                     tddr["No"] = tdtl.No;
                 }
                 else
                 {
                     tddr["tdDtl"] = 0;
-                    tddr["FK_MapData"] = FK_MapData;
+                    tddr["FK_MapData"] = this.FrmID;
                     tddr["No"] = tdtl.No;
                 }
                 isDtl.Rows.Add(tddr.ItemArray);
                 #endregion
 
                 #region 增加节点信息
-                if (DataType.IsNullOrEmpty(FK_Flow) == false)
+                if (DataType.IsNullOrEmpty(this.FlowNo) == false)
                 {
                     nodes = new Nodes();
-                    nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+                    nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FlowNo, BP.WF.Template.NodeAttr.Step);
 
                     if (nodes.Count == 0)
                     {
-                        string nodeid = FK_MapData.Replace("ND", "");
+                        string nodeid = this.FrmID.Replace("ND", "");
                         string flowno = string.Empty;
 
                         if (nodeid.Length > 2)
@@ -286,24 +286,24 @@ namespace BP.WF.HttpHandler
         public string Default_From_Save()
         {
             //获取需要显示的字段集合
-            var atts = this.GetRequestVal("attrs");
+            string atts = this.GetRequestVal("attrs");
             try
             {
-                MapAttrs mattrs = new MapAttrs(FK_MapData);
+                MapAttrs mattrs = new MapAttrs(this.FrmID);
                 MapAttr att = null;
                 //更新每个字段的显示属性
                 foreach (MapAttr attr in mattrs)
                 {
-                    att = mattrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+                    att = mattrs.GetEntityByKey(MapAttrAttr.FK_MapData, this.FrmID, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
                     if (atts.Contains("," + attr.KeyOfEn + ","))
-                        att.IsEnableInAPP = true;
+                        att.ItIsEnableInAPP = true;
                     else
-                        att.IsEnableInAPP = false;
+                        att.ItIsEnableInAPP = false;
                     att.Update();
                 }
                 //获取附件
                 FrmAttachments aths = new FrmAttachments();
-                aths.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.FK_Node, 0);
+                aths.Retrieve(FrmAttachmentAttr.FK_MapData, this.FrmID, FrmAttachmentAttr.FK_Node, 0);
                 foreach (FrmAttachment ath in aths)
                 {
                     if (atts.Contains("," + ath.MyPK + ",") == true)
@@ -331,25 +331,25 @@ namespace BP.WF.HttpHandler
 
                 MapDatas mapdatas = new MapDatas();
                 QueryObject obj = new QueryObject(mapdatas);
-                obj.AddWhere(MapDataAttr.No, "Like", FK_MapData + "%");
+                obj.AddWhere(MapDataAttr.No, "Like", this.FrmID + "%");
                 obj.addOrderBy(MapDataAttr.Idx);
                 obj.DoQuery();
 
                 MapAttrs mattrs = new MapAttrs();
                 obj = new QueryObject(mattrs);
-                obj.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
+                obj.AddWhere(MapAttrAttr.FK_MapData, this.FrmID);
                 obj.addAnd();
                 obj.AddWhere(MapAttrAttr.UIVisible, true);
                 obj.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
                 obj.DoQuery();
 
-                FrmBtns btns = new FrmBtns(this.FK_MapData);
-                FrmAttachments athMents = new FrmAttachments(this.FK_MapData);
-                MapDtls dtls = new MapDtls(this.FK_MapData);
+                FrmBtns btns = new FrmBtns(this.FrmID);
+                FrmAttachments athMents = new FrmAttachments(this.FrmID);
+                MapDtls dtls = new MapDtls(this.FrmID);
 
                 GroupFields groups = new GroupFields();
                 obj = new QueryObject(groups);
-                obj.AddWhere(GroupFieldAttr.FrmID, FK_MapData);
+                obj.AddWhere(GroupFieldAttr.FrmID, this.FrmID);
                 obj.addOrderBy(GroupFieldAttr.Idx);
                 obj.DoQuery();
 
@@ -434,7 +434,7 @@ namespace BP.WF.HttpHandler
                     foreach (MapAttr attr in mattrs)
                     {
                         //排除主键
-                        if (attr.IsPK == true)
+                        if (attr.ItIsPK == true)
                             continue;
 
                         tattr = tattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
@@ -480,7 +480,7 @@ namespace BP.WF.HttpHandler
                     foreach (MapAttr attr in mattrs)
                     {
                         //排除主键
-                        if (attr.IsPK == true)
+                        if (attr.ItIsPK == true)
                             continue;
                         if (idxAttrs.Contains(attr.KeyOfEn))
                             continue;
@@ -498,7 +498,7 @@ namespace BP.WF.HttpHandler
 
                     foreach (MapDtl dtl in dtls)
                     {
-                        dtlIdx = dtl.No.Replace(dtl.FK_MapData + "Dtl", "");
+                        dtlIdx = dtl.No.Replace(dtl.FrmID + "Dtl", "");
                         tdtl = tdtls.GetEntityByKey(MapDtlAttr.No, tmd + "Dtl" + dtlIdx) as MapDtl;
 
                         if (tdtl == null)
@@ -514,7 +514,7 @@ namespace BP.WF.HttpHandler
                         {
                             group = new GroupField();
                             group.Lab = tdtl.Name;
-                            group.FrmID = tdtl.FK_MapData;
+                            group.FrmID = tdtl.FrmID;
                             group.CtrlType = GroupCtrlType.Dtl;
                             group.CtrlID = tdtl.No;
                             group.Idx = groupidx;
@@ -672,7 +672,7 @@ namespace BP.WF.HttpHandler
                         {
                             tgroup = new GroupField();
                             tgroup.Lab = tdtl.Name;
-                            tgroup.FrmID = tdtl.FK_MapData;
+                            tgroup.FrmID = tdtl.FrmID;
                             tgroup.CtrlType = GroupCtrlType.Dtl;
                             tgroup.CtrlID = tdtl.No;
                             tgroup.Idx = maxDtlIdx;
@@ -713,9 +713,9 @@ namespace BP.WF.HttpHandler
         }
         public string Default_Save()
         {
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
-            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.FK_Node);
+            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.NodeID);
 
             //用户选择的表单类型.
             string selectFModel = this.GetValFromFrmByKey("FrmS");
@@ -824,7 +824,7 @@ namespace BP.WF.HttpHandler
             {
                 MapAttrs mattrs = new MapAttrs();
                 QueryObject qo = new QueryObject(mattrs);
-                qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);//添加查询条件
+                qo.AddWhere(MapAttrAttr.FK_MapData, this.FrmID);//添加查询条件
                 qo.addAnd();
                 qo.AddWhere(MapAttrAttr.UIVisible, true);
                 //qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);

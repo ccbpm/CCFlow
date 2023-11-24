@@ -31,7 +31,7 @@ namespace BP.Port
             if (BP.Difference.SystemConfig.CCBPMRunModel != BP.Sys.CCBPMRunModel.Single)
             {
                 AtPara ap = new AtPara(keyVals);
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 org.Name = name;
                 org.Adminer = adminer;
@@ -47,7 +47,7 @@ namespace BP.Port
                 BP.WF.Port.Admin2Group.OrgAdminer oa = new BP.WF.Port.Admin2Group.OrgAdminer();
                 oa.setMyPK(orgNo + "_" + adminer);
                 oa.OrgNo = orgNo;
-                oa.FK_Emp = adminer;
+                oa.EmpNo = adminer;
                 oa.EmpName = adminerName;
                 msg = oa.Insert();
             }
@@ -79,7 +79,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;
@@ -105,7 +105,7 @@ namespace BP.Port
                 if (emp.RetrieveFromDBSources() == 0)
                 {
                     emp.Name = userName;
-                    emp.FK_Dept = deptNo;
+                    emp.DeptNo = deptNo;
                     emp.OrgNo = orgNo;
                     emp.Insert();
                 }
@@ -117,7 +117,7 @@ namespace BP.Port
                         continue;
                     emp.SetValByKey(key, ap.GetValStrByKey(key));
                 }
-                emp.FK_Dept = deptNo;
+                emp.DeptNo = deptNo;
                 emp.Name = userName;
                 emp.OrgNo = orgNo;
                 emp.Update();
@@ -135,11 +135,11 @@ namespace BP.Port
 
                 //插入部门.
                 BP.Port.DeptEmp de = new BP.Port.DeptEmp();
-                de.FK_Dept = deptNo;
-                de.FK_Emp = userNo;
+                de.DeptNo = deptNo;
+                de.EmpNo = userNo;
                 de.OrgNo = orgNo;
                 de.DeptName = dept.Name;
-                de.MyPK = de.FK_Dept + "_" + userNo;
+                de.MyPK = de.DeptNo + "_" + userNo;
 
                 //更新角色.
                 if (stats == null)
@@ -161,11 +161,11 @@ namespace BP.Port
 
                     //插入部门.
                     DeptEmpStation des = new DeptEmpStation();
-                    des.FK_Dept = deptNo;
-                    des.FK_Emp = userNo;
-                    des.FK_Station = str;
+                    des.DeptNo = deptNo;
+                    des.EmpNo = userNo;
+                    des.StationNo = str;
                     des.OrgNo = orgNo;
-                    des.MyPK = de.FK_Dept + "_" + des.FK_Emp + "_" + des.FK_Station;
+                    des.MyPK = de.DeptNo + "_" + des.EmpNo + "_" + des.StationNo;
                     des.DirectInsert();
                 }
 
@@ -230,7 +230,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;
@@ -324,7 +324,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;
@@ -412,7 +412,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;
@@ -477,7 +477,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org(orgNo);
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(orgNo);
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;
             }
@@ -544,7 +544,7 @@ namespace BP.Port
                 if (DataType.IsNullOrEmpty(orgNo) == true)
                     return "err@组织编号不能为空.";
 
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org();
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org();
                 org.No = orgNo;
                 if (org.RetrieveFromDBSources() == 0)
                     return "err@组织编号错误:" + orgNo;

@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>在途</title>
+    <!--<link href="./css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="./css/themes/classic/theme-classic.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="./css/Main.css" rel="stylesheet" type="text/css" />-->
+    <link href="js/mui/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="./js/mui/js/mui.min.js" type="text/javascript"></script>
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <script src="./Comm/Gener.js" type="text/javascript"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <style type="text/css">
+    </style>
+    <style>
+        h6 {
+            color: #000;
+        }
+    </style>
+    <script type="text/javascript">
+        mui.init();
+        mui.ready(
+            function onLoadPage() {
+
+                Load_Runing();
+            }
+        );
+
+
+
+        //弹出消息
+        function MessageShow(msg, autoClose) {
+            if (autoClose == true) {
+                $.mobile.loading().loader("show", "c", msg, true);
+                _MsgDialogT = setTimeout("MsgHidenLoader()", 2000);
+            } else {
+                $.mobile.loading().loader("show", "c", "", false);
+                //最长15秒自动隐藏
+                _MsgDialogT = setTimeout("MsgHidenLoader()", 15000);
+            }
+        }
+        var RunModel = { "Ordinary": 0, "HL": 1, "FL": 2, "FHL": 3, "SubThread": 4 };
+        var isContainFuture = GetQueryString("IsContainFuture");
+        //加载数据
+        function Load_Runing() {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile");
+            handler.AddPara("IsContainFuture", isContainFuture);
+            var scorp = handler.DoMethodReturnString("Runing_Init");
+
+            if (scorp.indexOf('err@') == 0) {
+                alert(scorp);
+                return;
+            }
+
+            var pushData = cceval('(' + scorp + ')');
+            var _Html = "";
+            var flowNames = "";
+            var wid = document.body.clientWidth - 40;//获取网页可见区域宽
+            $("#LV_Runing").empty();
+            //判断是否有数据
+            if (pushData.length == 0) {
+                mui.alert("记录为空！", function () {
+                    SetHref('./Home.htm?s=' + Math.random());
+                });
+            }
+            for (var k = 0; k < pushData.length; k++) {
+                if (flowNames.indexOf(pushData[k].FlowName) > -1)
+                    continue;
+                flowNames += pushData[k].FlowName + ",";
+            }
+
+            var flowName_Arrary = flowNames.split(",");
+            for (var j = 0; j < flowName_Arrary.length; j++) {
+                if (flowName_Arrary[j] == "")
+                    continue;
+                _Html += "<li class='mui-table-view-cell mui-collapse mui-active'><a class='mui-navigate-right' href='#'>" + flowName_Arrary[j] + "</a>";
+                _Html += "<ul class='mui-table-view mui-table-view-chevron'>";
+                for (var i = 0; i < pushData.length; i++) {
+                    if (pushData[i].FlowName != flowName_Arrary[j])
+                        continue;
+
+                    var en = pushData[i];
+
+                    var fk_flow = en.FK_Flow;
+                    var fk_node = en.FK_Node;
+                    var workid = en.WorkID;
+                    var fid = en.FID;
+                    var isRead = en.IsRead;
+                    var paras = en.AtPara;
+                    if (paras == null || paras == "") {
+                        paras = "";
+                    }
+                    var todoEmps = en.TodoEmps;
+                    var emp = "";
+                    var todoEmp = todoEmps.split(";");
+                    for (n = 0; n < todoEmp.length; n++) {
+                        if (todoEmp[n] == '' || todoEmp[n] == null || todoEmp[n] == undefined)
+                            continue;
+                        if (todoEmp[n].indexOf(',') != -1) {
+                            var aa = todoEmp[n].split(",")[1] + "、";
+                            emp += aa;
+
+                        } else {
+                            emp += todoEmp[n] + "、";
+                        }
+
+                    }
+                    emp = emp.substring(0, emp.lastIndexOf("、"));
+                    var currNodeId = en.CurrNode;
+                    var currNodeName = en.CurrNodeName;
+                    if (currNodeName == "")
+                        currNodeName = en.NodeName
+
+
+                    _Html += "<li  class='mui-table-view-cell' style='padding-left:15px'>";
+
+                    _Html += "   <a href='javaScript:void()' onclick='OpenFrm(" + workid + "," + en.CurrNode + ",\"" + fk_flow + "\"," + fid + ")' target='_self'>";
+                    _Html += "      <h5 style='white-space:normal;line-height:20px;width:" + wid + "px;word-wrap:break-word; word-break:break-all;color:#096BC1;'>" + en.Title + "</h5>";
+                    _Html += "      <h6  style='float:left' >当前：" + en.NodeName + " - " + emp + "</h6><br\>";
+                    _Html += "      <h6 style='float:right'>发起:" + en.RDT + "</h6>";
+                    _Html += "  </a>";
+
+                    //  _Html += "      <a style='float:right' onclick='UnSend(" + fk_node + "," + fk_flow + "," + fid + "," + workid + ")' ><h6 style='float:right'>撤回</h6></a>";
+
+                    _Html += "</li>";
+                }
+                _Html += "  </ul>";
+                _Html += "</li>";
+            }
+
+            //展显
+            $(_Html).appendTo('#LV_Runing');
+            //刷新
+            // $("#LV_Runing").trigger("create");
+            // $("#LV_Runing").listview('refresh');
+            // MsgHidenLoader();
+
+        }
+
+        /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo, fid) {
+            var url = "MyView.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "&FK_Node=" + nodeID + "&FID=" + fid + "&From=Runing";
+            SetHref(url);
+
+        }
+
+
+        function OpenRightPanel(workid, nodeid, flowNo) {
+            //var url = "WFRpt.htm?From=Runing&FK_Flow=" + flowNo + "&WorkID=" + workid;
+            var url = "MyView.htm?FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&From=Runing&t=" + Math.random();
+            SetHref(url);
+        }
+
+        //关闭消息
+        function MsgHidenLoader() {
+            $.mobile.loading().loader('hide');
+            if (_MsgDialogT != null) {
+                clearTimeout(_MsgDialogT);
+            }
+        }
+
+        function Back() {
+            SetHref('./Home.htm?s=' + Math.random());
+            return;
+        }
+
+        function UnSend(nodeID, flowNo, fid, myWorkID) {
+
+            mui.confirm('您确定要撤销发送吗？', function (e) {
+                if (e.index == 1) {
+                    //加载标签页
+                    var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt_OneWork");
+                    handler.AddPara("FK_Node", nodeID);
+                    handler.AddPara("FK_Flow", flowNo);
+                    handler.AddPara("WorkID", myWorkID);
+                    handler.AddPara("FID", fid);
+                    var data = handler.DoMethodReturnString("TimeBase_UnSend");
+
+                    if (data.indexOf('err@') == 0) {
+                        mui.alert(data);
+                        return;
+                    }
+
+                    var url = "MyFlow.htm?FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&t=" + Math.random();
+                    SetHref(url);
+                }
+            })
+
+
+        }
+    </script>
+</head>
+<body>
+
+    <div id="page_Runing" data-role="page" data-theme="d">
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-icon mui-icon-left-nav mui-pull-left back-hideen" href="javascript:Back();"></a>
+            <h1 class="mui-title">在途</h1>
+        </header>
+        <div class="mui-content" style="margin-bottom:5px">
+            <div class="mui-scroll-wrapper">
+                <div class="mui-scroll">
+                    <ul id="LV_Runing" class="mui-table-view mui-table-view-chevron" style="top:46px;height:auto"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="HD_WorkID" />
+    <input type="hidden" id="HD_FID" />
+    <input type="hidden" id="HD_FK_Flow" />
+</body>
+<script type="text/javascript">
+    //初始化单页的区域滚动
+    mui('.mui-scroll-wrapper').scroll();
+</script>
+</html>

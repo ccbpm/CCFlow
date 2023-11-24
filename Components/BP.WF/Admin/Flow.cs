@@ -8,79 +8,15 @@ using BP.Web;
 using BP.Sys;
 using BP.WF.Data;
 using BP.WF.Template.Frm;
-
+using BP.WF.Template;
 
 namespace BP.WF.Admin
-{
-    public class FlowAttr : BP.WF.Template.FlowAttr
-    {
-
-    }
+{ 
     /// <summary>
     /// 流程
     /// </summary>
     public class Flow : EntityNoName
     {
-        #region 属性.
-        /// <summary>
-        /// 存储表
-        /// </summary>
-        public string PTable
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.PTable);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.PTable, value);
-            }
-        }
-        /// <summary>
-        /// 流程类别
-        /// </summary>
-        public string FK_FlowSort
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.FK_FlowSort);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.FK_FlowSort, value);
-            }
-        }
-
-        /// <summary>
-        /// 是否可以独立启动
-        /// </summary>
-        public bool IsCanStart
-        {
-            get
-            {
-                return this.GetValBooleanByKey(FlowAttr.IsCanStart);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.IsCanStart, value);
-            }
-        }
-        /// <summary>
-        /// 流程事件实体
-        /// </summary>
-        public string FlowEventEntity
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.FlowEventEntity);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.FlowEventEntity, value);
-            }
-        }
-        #endregion 属性.
-
         #region 构造方法
         /// <summary>
         /// UI界面上的访问控制
@@ -121,7 +57,7 @@ namespace BP.WF.Admin
                 string sql = "";
                 if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
                 {
-                    map.AddDDLEntities(FlowAttr.FK_FlowSort, null, "类别", new FlowSorts(), true);
+                    map.AddDDLEntities(Template.FlowAttr.FK_FlowSort, null, "类别", new BP.WF.Template.FlowSorts(), true);
                 }
                 else
                 {
@@ -171,8 +107,6 @@ namespace BP.WF.Admin
                 //查询.
                 map.AddSearchAttr(FlowAttr.FK_FlowSort);
                 map.AddSearchAttr(FlowAttr.IsCanStart);
-
-
 
                 #region 流程模版管理.
                 RefMethod rm = new RefMethod();
@@ -273,12 +207,10 @@ namespace BP.WF.Admin
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
-
-                //@hongyan.
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Title = "删除模板"; // "删除数据";
-                rm.IsCanBatch = true;
+                rm.ItIsCanBatch = true;
                 rm.ClassMethodName = this.ToString() + ".DeleteIt";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
@@ -321,12 +253,13 @@ namespace BP.WF.Admin
         /// </summary>
         /// <param name="FlowSort">流程类别</param>
         /// <param name="IsCountInLifeCycle">是不是计算在生存期间内 true 查询出来全部的 </param>
-        public void Retrieve(string FlowSort)
+        public int Retrieve(string FlowSort)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(BP.WF.Template.FlowAttr.FK_FlowSort, FlowSort);
             qo.addOrderBy(BP.WF.Template.FlowAttr.No);
             qo.DoQuery();
+            return this.Count;
         }
         #endregion
 

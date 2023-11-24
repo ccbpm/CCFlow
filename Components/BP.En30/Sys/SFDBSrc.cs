@@ -12,6 +12,8 @@ using BP.DA;
 using BP.En;
 using MySql.Data.MySqlClient;
 using System.Threading;
+using Kdbndp;
+using System.Data.Common;
 
 namespace BP.Sys
 {
@@ -59,8 +61,31 @@ namespace BP.Sys
                         return FieldCaseModel.UpperCase;
                     case BP.Sys.DBSrcType.PostgreSQL:
                     case BP.Sys.DBSrcType.UX:
+                    case BP.Sys.DBSrcType.HGDB:
                         return FieldCaseModel.Lowercase;
                         break;
+                    case BP.Sys.DBSrcType.KingBaseR6:
+                        return FieldCaseModel.UpperCase;
+                    case BP.Sys.DBSrcType.KingBaseR3:
+                        String sql = "show case_sensitive;";
+                        String caseSen = "";
+                        try
+                        {
+                            caseSen = this.RunSQLReturnString(sql);
+                        }
+                        catch (Exception ex)
+                        {
+                            sql = "show enable_ci;";
+                            caseSen = this.RunSQLReturnString(sql);
+                            if ("on".Equals(caseSen))
+                                return FieldCaseModel.None;
+                            else
+                                return FieldCaseModel.UpperCase;
+                        }
+                        if ("on".Equals(caseSen))
+                            return FieldCaseModel.UpperCase;
+                        else
+                            return FieldCaseModel.None;
                     default:
                         return FieldCaseModel.None;
                 }
@@ -80,7 +105,7 @@ namespace BP.Sys
                 this.SetValByKey(SFDBSrcAttr.DBSrcType, value);
             }
         }
-       
+
         public string DBName
         {
             get
@@ -129,6 +154,8 @@ namespace BP.Sys
                         return DBType.Informix;
                     case Sys.DBSrcType.PostgreSQL:
                         return DBType.PostgreSQL;
+                    case Sys.DBSrcType.HGDB:
+                        return DBType.HGDB;
                     default:
                         throw new Exception("err@HisDBType没有判断的数据库类型.");
                 }
@@ -189,6 +216,7 @@ namespace BP.Sys
                         mysql = sql + " LIMIT " + pageSize * (pageIdx - 1) + "," + pageSize;
                         break;
                     case Sys.DBSrcType.PostgreSQL:
+                    case Sys.DBSrcType.HGDB:
                     case Sys.DBSrcType.UX:
                     case Sys.DBSrcType.MSSQL:
                     default:
@@ -198,7 +226,7 @@ namespace BP.Sys
                         //mysql = countSql;
                         //mysql = mysql.Substring(mysql.ToUpper().IndexOf("FROM "));
                         // mysql = "SELECT  "+ mainTable+pk + " "  + mysql;
-                        string pks = this.GenerPKsByTableWithPara(pk, attr.IsNum, expPageSize, pageSize * (pageIdx - 1), max, null);
+                        string pks = this.GenerPKsByTableWithPara(pk, attr.ItIsNum, expPageSize, pageSize * (pageIdx - 1), max, null);
 
                         if (pks == null)
                             mysql = sql + " AND 1=2 ";
@@ -386,6 +414,29 @@ namespace BP.Sys
                             connOra.Close();
                         if (cmdOra != null)
                             cmdOra.Dispose();
+                        throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
+                    }
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
+                    KdbndpConnection connKdb = new KdbndpConnection(this.ConnString);
+                    KdbndpCommand cmdKdb = null;
+
+                    try
+                    {
+                        connKdb.Open();
+                        cmdKdb = new KdbndpCommand(sql, connKdb);
+                        cmdKdb.CommandType = CommandType.Text;
+                        i = cmdKdb.ExecuteNonQuery();
+                        cmdKdb.Dispose();
+                        connKdb.Close();
+                        return i;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (connKdb.State == ConnectionState.Open)
+                            connKdb.Close();
+                        if (cmdKdb != null)
+                            cmdKdb.Dispose();
                         throw new Exception("RunSQL 错误，SQL=" + sql + " ex=" + ex.Message);
                     }
                 case Sys.DBSrcType.MySQL:
@@ -583,6 +634,43 @@ namespace BP.Sys
                                 oracleConn.Close();
                             throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
                         }
+                    case Sys.DBSrcType.KingBaseR3:
+                    case Sys.DBSrcType.KingBaseR6:
+                        KdbndpConnection kdbbdpConn = new KdbndpConnection(ConnString);
+                        KdbndpDataAdapter kdbbdpAda = null;
+                        KdbndpParameter myParameterKdb = null;
+
+                        try
+                        {
+                            kdbbdpConn.Open();
+                            kdbbdpAda = new KdbndpDataAdapter(runObj, kdbbdpConn);
+                            kdbbdpAda.SelectCommand.CommandType = CommandType.Text;
+
+                            if (ps != null)
+                            {
+                                // 加入参数
+                                foreach (Para para in ps)
+                                {
+                                    myParameterKdb = new KdbndpParameter(para.ParaName, para.val);
+                                    myParameterKdb.Size = para.Size;
+                                    kdbbdpAda.SelectCommand.Parameters.Add(myParameterKdb);
+                                }
+                            }
+
+                            DataTable kdbbdpTb = new DataTable("otb");
+                            kdbbdpAda.Fill(kdbbdpTb);
+                            kdbbdpAda.Dispose();
+                            kdbbdpConn.Close();
+                            return kdbbdpTb;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (kdbbdpAda != null)
+                                kdbbdpAda.Dispose();
+                            if (kdbbdpConn.State == ConnectionState.Open)
+                                kdbbdpConn.Close();
+                            throw new Exception("SQL=" + runObj + " Exception=" + ex.Message);
+                        }
                     case Sys.DBSrcType.MySQL:
                         MySqlConnection mysqlConn = new MySqlConnection(ConnString);
                         MySqlDataAdapter mysqlAda = null;
@@ -684,6 +772,30 @@ namespace BP.Sys
                             oracleConn.Close();
                         throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
                     }
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
+                    KdbndpConnection kdbndpConn = new KdbndpConnection(ConnString);
+                    KdbndpDataAdapter kdbndpAda = null;
+
+                    try
+                    {
+                        kdbndpConn.Open();
+                        kdbndpAda = new KdbndpDataAdapter(sql, kdbndpConn);
+                        kdbndpAda.SelectCommand.CommandType = CommandType.Text;
+                        DataTable kdbndpTb = new DataTable("otb");
+                        kdbndpAda.Fill(startRecord, recordCount, kdbndpTb);
+                        kdbndpAda.Dispose();
+                        kdbndpConn.Close();
+                        return kdbndpTb;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (kdbndpAda != null)
+                            kdbndpAda.Dispose();
+                        if (kdbndpConn.State == ConnectionState.Open)
+                            kdbndpConn.Close();
+                        throw new Exception("SQL=" + sql + " Exception=" + ex.Message);
+                    }
                 case Sys.DBSrcType.MySQL:
                     MySqlConnection mysqlConn = new MySqlConnection(ConnString);
                     MySqlDataAdapter mysqlAda = null;
@@ -760,6 +872,11 @@ namespace BP.Sys
                     sql = GetIsExitsSQL(DBType.Oracle, objName, this.DBName);
                     dt = RunSQLReturnTable(sql);
                     break;
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
+                    sql = GetIsExitsSQL(DBType.KingBaseR3, objName, this.DBName);
+                    dt = RunSQLReturnTable(sql);
+                    break;
                 case Sys.DBSrcType.MySQL:
                     sql = GetIsExitsSQL(DBType.MySQL, objName, this.DBName);
                     dt = RunSQLReturnTable(sql);
@@ -789,6 +906,7 @@ namespace BP.Sys
                 case DBType.MSSQL:
                 case DBType.PostgreSQL:
                 case DBType.UX:
+                case DBType.HGDB:
                     return string.Format("SELECT (CASE s.xtype WHEN 'U' THEN 'TABLE' WHEN 'V' THEN 'VIEW' WHEN 'P' THEN 'PROCEDURE' ELSE 'OTHER' END) OTYPE FROM sysobjects s WHERE s.name = '{0}'", objName);
                 case DBType.Oracle:
                 case DBType.KingBaseR3:
@@ -838,7 +956,8 @@ namespace BP.Sys
             }
             catch (Exception ex)
             {
-                if (no.Equals("local")==true)
+                this.CheckPhysicsTable();
+                if (no.Equals("local") == true)
                 {
                     this.Name = no;
                     this.DBSrcType = no;
@@ -871,7 +990,7 @@ namespace BP.Sys
 
                 map.AddDDLStringEnum(SFDBSrcAttr.DBSrcType, "local", "类型", cfg1, true, null, false);
                 map.AddTBString(SFDBSrcAttr.DBName, null, "数据库名称/Oracle保持为空", true, false, 0, 30, 20);
-                map.AddTBString(SFDBSrcAttr.ConnString, null, "连接串/URL", true, false, 0, 200, 20,true);
+                map.AddTBString(SFDBSrcAttr.ConnString, null, "连接串/URL", true, false, 0, 200, 20, true);
                 map.AddTBAtParas(200);
 
                 RefMethod rm = new RefMethod();
@@ -949,6 +1068,22 @@ namespace BP.Sys
                     return ex.Message;
                 }
             }
+            if (this.DBSrcType == BP.Sys.DBSrcType.KingBaseR3 || this.DBSrcType == BP.Sys.DBSrcType.KingBaseR6)
+            {
+                try
+                {
+                    KdbndpConnection conn = new KdbndpConnection();
+                    conn.ConnectionString = this.ConnString;
+                    conn.Open();
+                    conn.Close();
+                    return "恭喜您，该(" + this.Name + ")连接配置成功。";
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+
 
             if (this.DBSrcType == BP.Sys.DBSrcType.MySQL)
             {
@@ -990,7 +1125,7 @@ namespace BP.Sys
                 try
                 {
                     string data = DataType.ReadURLContext(url, 10000);
-                    return "链接信息:"+data;
+                    return "链接信息:" + data;
                 }
                 catch (Exception ex)
                 {
@@ -1005,8 +1140,8 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable GetAllTablesWithoutViews()
         {
-            var sql = new StringBuilder();
-            var dbType = this.DBSrcType;
+            StringBuilder sql = new StringBuilder();
+            string dbType = this.DBSrcType;
             if (dbType == BP.Sys.DBSrcType.local)
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
@@ -1035,6 +1170,9 @@ namespace BP.Sys
                     case DBType.KingBaseR6:
                         dbType = BP.Sys.DBSrcType.KingBaseR6;
                         break;
+                    case DBType.HGDB:
+                        dbType = BP.Sys.DBSrcType.HGDB;
+                        break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
                 }
@@ -1051,6 +1189,8 @@ namespace BP.Sys
                     sql.AppendLine("       Name");
                     break;
                 case Sys.DBSrcType.Oracle:
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
                     sql.AppendLine("SELECT uo.OBJECT_NAME No,");
                     sql.AppendLine("       uo.OBJECT_NAME Name");
                     sql.AppendLine("  FROM user_objects uo");
@@ -1073,6 +1213,7 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.PostgreSQL:
                 case Sys.DBSrcType.UX:
+                case Sys.DBSrcType.HGDB:
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    table_name No,");
                     sql.AppendLine("    table_name Name");
@@ -1094,8 +1235,8 @@ namespace BP.Sys
             }
             else
             {
-                var dsn = this.ConnString;
-                var conn = GetConnection(dsn);
+                string dsn = this.ConnString;
+                DbConnection conn = GetConnection(dsn);
                 try
                 {
                     conn.Open();
@@ -1115,15 +1256,15 @@ namespace BP.Sys
         /// <returns></returns>
         public DataTable GetTables(bool isCutFlowTables = false)
         {
-            var sql = new StringBuilder();
+            StringBuilder sql = new StringBuilder();
             sql.AppendFormat("SELECT ss.SrcTable FROM Sys_SFTable ss WHERE ss.FK_SFDBSrc = '{0}'", this.No);
 
-            var allTablesExist = DBAccess.RunSQLReturnTable(sql.ToString());
+            DataTable allTablesExist = DBAccess.RunSQLReturnTable(sql.ToString());
 
             sql.Clear();
 
-            var dbType = this.DBSrcType;
-            if (dbType == BP.Sys.DBSrcType.local)
+            string dbType = this.DBSrcType;
+            if (dbType.Equals(BP.Sys.DBSrcType.local))
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -1150,6 +1291,9 @@ namespace BP.Sys
                         break;
                     case DBType.KingBaseR6:
                         dbType = BP.Sys.DBSrcType.KingBaseR6;
+                        break;
+                    case DBType.HGDB:
+                        dbType = BP.Sys.DBSrcType.HGDB;
                         break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
@@ -1175,6 +1319,8 @@ namespace BP.Sys
                     sql.AppendLine("       NAME");
                     break;
                 case Sys.DBSrcType.Oracle:
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
                     sql.AppendLine("SELECT uo.OBJECT_NAME AS No,");
                     sql.AppendLine("       '[' || (CASE uo.OBJECT_TYPE");
                     sql.AppendLine("         WHEN 'TABLE' THEN");
@@ -1229,6 +1375,7 @@ namespace BP.Sys
                     break;
                 case Sys.DBSrcType.PostgreSQL:
                 case Sys.DBSrcType.UX:
+                case Sys.DBSrcType.HGDB:
                     sql.AppendLine("SELECT ");
                     sql.AppendLine("    table_name AS No,");
                     sql.AppendLine("    CONCAT('[',");
@@ -1291,8 +1438,8 @@ namespace BP.Sys
             }
             else
             {
-                var dsn = this.ConnString;
-                var conn = GetConnection(dsn);
+                string dsn = this.ConnString;
+                DbConnection conn = GetConnection(dsn);
                 try
                 {
                     conn.Open();
@@ -1305,13 +1452,13 @@ namespace BP.Sys
             }
 
             //去除已经使用的表
-            var filter = string.Empty;
+            string filter = string.Empty;
             foreach (DataRow dr in allTablesExist.Rows)
                 filter += string.Format("No='{0}' OR ", dr[0]);
 
             if (filter != "")
             {
-                var deletedRows = allTables.Select(filter.TrimEnd(" OR ".ToCharArray()));
+                DataRow[] deletedRows = allTables.Select(filter.TrimEnd(" OR ".ToCharArray()));
                 foreach (DataRow dr in deletedRows)
                 {
                     allTables.Rows.Remove(dr);
@@ -1355,8 +1502,8 @@ namespace BP.Sys
         {
             System.Data.Common.DbConnection conn = null;
 
-            var dbType = this.DBSrcType;
-            if (dbType == BP.Sys.DBSrcType.local)
+            string dbType = this.DBSrcType;
+            if (dbType.Equals(  BP.Sys.DBSrcType.local))
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -1378,6 +1525,15 @@ namespace BP.Sys
                     case DBType.KingBaseR6:
                         dbType = BP.Sys.DBSrcType.KingBaseR6;
                         break;
+                    case DBType.PostgreSQL:
+                        dbType = BP.Sys.DBSrcType.PostgreSQL;
+                        break;
+                    case DBType.HGDB:
+                        dbType = BP.Sys.DBSrcType.HGDB;
+                        break;
+                    case DBType.UX:
+                        dbType = BP.Sys.DBSrcType.UX;
+                        break;
                     default:
                         throw new Exception("没有涉及到的连接测试类型...");
                 }
@@ -1389,16 +1545,15 @@ namespace BP.Sys
                     conn = new System.Data.SqlClient.SqlConnection(dsn);
                     break;
                 case Sys.DBSrcType.Oracle:
-                    //conn = new System.Data.OracleClient.OracleConnection(dsn);
                     conn = new OracleConnection(dsn);
                     break;
                 case Sys.DBSrcType.MySQL:
                     conn = new MySql.Data.MySqlClient.MySqlConnection(dsn);
                     break;
-                    // from Zhou 删除IBM
-                    //case Sys.DBSrcType.Informix:
-                    //    conn = new System.Data.OleDb.OleDbConnection(dsn);
-                    //    break;
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
+                    conn = new KdbndpConnection(dsn);
+                    break;
             }
             return conn;
         }
@@ -1420,11 +1575,11 @@ namespace BP.Sys
 
             if (conn is MySqlConnection)
             {
-                var mySqlConn = (MySqlConnection)conn;
+                MySqlConnection mySqlConn = (MySqlConnection)conn;
                 if (mySqlConn.State != ConnectionState.Open)
                     mySqlConn.Open();
 
-                var ada = new MySqlDataAdapter(sql, mySqlConn);
+                MySqlDataAdapter ada = new MySqlDataAdapter(sql, mySqlConn);
                 ada.SelectCommand.CommandType = CommandType.Text;
                 try
                 {
@@ -1457,8 +1612,8 @@ namespace BP.Sys
         /// <param name="tableName">修改列名称时，列所属的表名称</param>
         public void Rename(string objType, string oldName, string newName, string tableName = null)
         {
-            var dbType = this.DBSrcType;
-            if (dbType == BP.Sys.DBSrcType.local)
+            string dbType = this.DBSrcType;
+            if (dbType.Equals( BP.Sys.DBSrcType.local))
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -1558,8 +1713,8 @@ namespace BP.Sys
         /// <returns></returns>
         public string GetIsNullInSQL(string expression, string isNullBack)
         {
-            var dbType = this.DBSrcType;
-            if (dbType == BP.Sys.DBSrcType.local)
+            string dbType = this.DBSrcType;
+            if (dbType.Equals(BP.Sys.DBSrcType.local))
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -1595,7 +1750,11 @@ namespace BP.Sys
                     return " IFNULL(" + expression + "," + isNullBack + ")";
                 case Sys.DBSrcType.PostgreSQL:
                 case Sys.DBSrcType.UX:
+                case Sys.DBSrcType.HGDB:
                     return " COALESCE(" + expression + "," + isNullBack + ")";
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
+                    return " ISNULL(" + expression + "," + isNullBack + ")";
                 default:
                     throw new Exception("GetIsNullInSQL未涉及的数据库类型");
             }
@@ -1609,10 +1768,10 @@ namespace BP.Sys
         public DataTable GetColumns(string tableName)
         {
             //SqlServer数据库
-            var sql = new StringBuilder();
+            StringBuilder sql = new StringBuilder();
 
-            var dbType = this.DBSrcType;
-            if (dbType == BP.Sys.DBSrcType.local)
+            string dbType = this.DBSrcType;
+            if (dbType.Equals(BP.Sys.DBSrcType.local))
             {
                 switch (BP.Difference.SystemConfig.AppCenterDBType)
                 {
@@ -1664,6 +1823,8 @@ namespace BP.Sys
                     sql.AppendLine(string.Format("WHERE  sc.id = OBJECT_ID('dbo.{0}')", tableName));
                     break;
                 case Sys.DBSrcType.Oracle:
+                case Sys.DBSrcType.KingBaseR3:
+                case Sys.DBSrcType.KingBaseR6:
                     sql.AppendLine("SELECT utc.COLUMN_NAME AS No,");
                     sql.AppendLine("       utc.DATA_TYPE   AS DBType,");
                     sql.AppendLine("       utc.CHAR_LENGTH AS DBLength,");
@@ -1705,9 +1866,8 @@ namespace BP.Sys
             }
 
 
-            var dsn = this.ConnString;
-            var conn = GetConnection(dsn);
-
+            string dsn = this.ConnString;
+            DbConnection conn = GetConnection(dsn);
             try
             {
                 //System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection();

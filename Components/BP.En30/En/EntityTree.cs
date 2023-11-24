@@ -45,7 +45,7 @@ namespace BP.En
     abstract public class EntityTree : Entity
     {
         #region 属性
-        public bool IsRoot
+        public bool ItIsRoot
         {
             get
             {
@@ -189,7 +189,7 @@ namespace BP.En
         /// <returns></returns>
         protected override bool beforeInsert()
         {
-            if (this.EnMap.IsAllowRepeatName == false)
+            if (this.EnMap.ItIsAllowRepeatName == false)
             {
                 if (this.PKCount == 1)
                 {
@@ -205,7 +205,7 @@ namespace BP.En
         }
         protected override bool beforeUpdate()
         {
-            if (this.EnMap.IsAllowRepeatName == false)
+            if (this.EnMap.ItIsAllowRepeatName == false)
             {
                 if (this.PKCount == 1)
                 {

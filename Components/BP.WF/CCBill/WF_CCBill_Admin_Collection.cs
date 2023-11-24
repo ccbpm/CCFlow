@@ -45,14 +45,6 @@ namespace BP.CCBill
                 return str;
             }
         }
-        public string Name
-        {
-            get
-            {
-                string str = this.GetRequestVal("Name");
-                return str;
-            }
-        }
         #endregion 属性.
 
         /// <summary>
@@ -77,7 +69,7 @@ namespace BP.CCBill
 
             //执行更新. 设置为不能独立启动.
             BP.WF.Flow fl = new BP.WF.Flow(flowNo);
-            fl.IsCanStart = false;
+            fl.ItIsCanStart = false;
             fl.TitleRole = "@WebUser.No 在@RDT 发起【@DictName】";
             fl.Update();
 
@@ -111,7 +103,7 @@ namespace BP.CCBill
             attr.setKeyOfEn("DictName");
             attr.setName("名称");
             attr.setUIVisible(true);
-            attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
+            attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
             attr.DirectInsert();
 
 
@@ -172,9 +164,9 @@ namespace BP.CCBill
 
             //创建从表
             MapDtl mapDtl = new MapDtl();
-            mapDtl.setFK_MapData(toFrmID);
+            mapDtl.FrmID =toFrmID;
             mapDtl.No = toFrmID + "Dtl1";
-            mapDtl.FK_Node = 0;
+            mapDtl.NodeID = 0;
             mapDtl.Name = "从表";
             mapDtl.PTable = mapDtl.No;
             mapDtl.H = 300;
@@ -192,13 +184,13 @@ namespace BP.CCBill
                 if (attr.IsExit(MapAttrAttr.FK_MapData, mapDtl.No, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.setFK_MapData(mapDtl.No);
-                attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
+                attr.FrmID =mapDtl.No;
+                attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
                 attr.Insert();
             }
             //增加一个关联的实体字段的OID
             MapAttr mapAttr = new BP.Sys.MapAttr();
-            mapAttr.setFK_MapData(mapDtl.No);
+            mapAttr.FrmID =mapDtl.No;
             mapAttr.setEditType(EditType.Readonly);
             mapAttr.setKeyOfEn("DictOID");
             mapAttr.setName("关联实体的OID");
@@ -226,8 +218,8 @@ namespace BP.CCBill
             string flowNo = handler.FlowDevModel_Save();
 
             //执行更新. 设置为不能独立启动.
-            BP.WF.Flow fl = new WF.Flow(flowNo);
-            fl.IsCanStart = false;
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+            fl.ItIsCanStart = false;
             fl.Update();
             #endregion 创建一个流程.
 
@@ -235,9 +227,9 @@ namespace BP.CCBill
             //如果是发起流程的方法，就要表单的字段复制到，流程的表单上去.
             string frmID = "ND" + int.Parse(fl.No) + "01";
             MapDtl mapDtl = new MapDtl();
-            mapDtl.setFK_MapData(frmID);
+            mapDtl.FrmID =frmID;
             mapDtl.No = frmID + "Dtl1";
-            mapDtl.FK_Node = 0;
+            mapDtl.NodeID = 0;
             mapDtl.Name = "从表";
             mapDtl.PTable = mapDtl.No;
             mapDtl.H = 300;
@@ -256,13 +248,13 @@ namespace BP.CCBill
                 if (attr.IsExit(MapAttrAttr.FK_MapData, mapDtl.No, MapAttrAttr.KeyOfEn, attr.KeyOfEn) == true)
                     continue;
 
-                attr.setFK_MapData(mapDtl.No);
-                attr.setMyPK(attr.FK_MapData + "_" + attr.KeyOfEn);
+                attr.FrmID =mapDtl.No;
+                attr.setMyPK(attr.FrmID + "_" + attr.KeyOfEn);
                 attr.Insert();
             }
             //增加一个关联的实体字段的OID
             MapAttr mapAttr = new BP.Sys.MapAttr();
-            mapAttr.setFK_MapData(mapDtl.No);
+            mapAttr.FrmID =mapDtl.No;
             mapAttr.setEditType(EditType.Readonly);
             mapAttr.setKeyOfEn("DictOID");
             mapAttr.setName("关联实体的OID");

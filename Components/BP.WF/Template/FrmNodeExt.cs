@@ -26,7 +26,7 @@ namespace BP.WF.Template
                 return this.GetValStrByKey(FrmNodeAttr.FK_Frm);
             }
         }
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -36,7 +36,7 @@ namespace BP.WF.Template
         /// <summary>
         /// @李国文 
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -156,8 +156,7 @@ namespace BP.WF.Template
                 //map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件？", true, true, true);
 
                 //单据编号对应字段
-                map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",
-                    Glo.SQLOfBillNo, true);
+                map.AddDDLSQL(NodeWorkCheckAttr.BillNoField, null, "单据编号对应字段",Glo.SQLOfBillNo, true);
 
 
                 map.AddTBString(FrmNodeAttr.FrmNameShow, null, "表单显示名字", true, false, 0, 100, 20);
@@ -183,16 +182,12 @@ namespace BP.WF.Template
                 #endregion 基本信息.
 
                 #region 组件属性.
-                map.AddDDLSysEnum(FrmNodeAttr.IsEnableFWC, (int)FrmWorkCheckSta.Disable, "审核组件状态",
-             true, true, NodeWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");
+                map.AddBoolean(FrmNodeAttr.IsEnableFWC, false, "是否启用审核组件?", true, true, true);
                 map.SetHelperAlert(FrmNodeAttr.IsEnableFWC, "控制该表单是否启用审核组件？如果启用了就显示在该表单上;");
-
+                map.AddBoolean(FrmNodeAttr.IsEnableSF, false, "是否启用父子流程组件?", true, true, true);
                 //签批字段
-                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",
-                    Glo.SQLOfCheckField, true);
+                map.AddDDLSQL(NodeWorkCheckAttr.CheckField, null, "签批字段",Glo.SQLOfCheckField, true);
 
-                map.AddDDLSysEnum(FrmSubFlowAttr.SFSta, (int)FrmSubFlowSta.Disable, "父子流程组件状态",
-                true, true, FrmSubFlowAttr.SFSta, "@0=禁用@1=启用@2=只读");
                 #endregion
 
                 #region 隐藏字段.
@@ -297,9 +292,9 @@ namespace BP.WF.Template
 
         public string DoBatchSetting()
         {
-            //return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+            //return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
            
-            return "../../Admin/AttrNode/FrmSln/BatchEditSln.htm?NodeID=" + this.FK_Node + "&MyPK=" + this.MyPK+"&FrmID="+this.FK_Frm;
+            return "../../Admin/AttrNode/FrmSln/BatchEditSln.htm?NodeID=" + this.NodeID + "&MyPK=" + this.MyPK+"&FrmID="+this.FK_Frm;
 
         }
         /// <summary>
@@ -308,7 +303,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrm()
         {
-            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 打开绑定表单
@@ -316,7 +311,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBindFrms()
         {
-            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/Sln/BindFrms.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
 
         /// <summary>
@@ -325,7 +320,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeWorkCheck()
         {
-            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.FK_Node + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDateTime;
+            return "../../Comm/EnOnly.htm?EnName=BP.WF.Template.FrmWorkCheck&PKVal=" + this.NodeID + "&CheckField=" + this.CheckField + "&FK_Frm=" + this.FK_Frm + "&t=" + DataType.CurrentDateTime;
         }
 
         /// <summary>
@@ -347,7 +342,7 @@ namespace BP.WF.Template
         protected override void afterInsertUpdateAction()
         {
             Node node = new Node();
-            node.NodeID = this.FK_Node;
+            node.NodeID = this.NodeID;
             int i = node.RetrieveFromDBSources();
             if (i != 0 && (node.HisFormType == NodeFormType.RefOneFrmTree
             || node.HisFormType == NodeFormType.FoolTruck))
@@ -356,7 +351,7 @@ namespace BP.WF.Template
                 node.SetValByKey("CheckField", this.CheckField);
                 node.Update();
             }
-            FrmSubFlow frmSubFlow = new FrmSubFlow(this.FK_Node);
+            FrmSubFlow frmSubFlow = new FrmSubFlow(this.NodeID);
             frmSubFlow.SFSta = this.SFSta;
             base.afterInsertUpdateAction();
         }
@@ -364,30 +359,30 @@ namespace BP.WF.Template
         #region 表单元素权限.
         public string DoDtls()
         {
-            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoFields()
         {
-            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
 
         public string DoComponents()
         {
-            return "../../Admin/Sln/Components.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Components.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoAths()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
 
         public string DoImgAths()
         {
-            return "../../Admin/Sln/ImgAths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/ImgAths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
 
         public string DoCopyFromNode()
         {
-            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&DoType=Field";
         }
         public string DoEnableRole()
         {

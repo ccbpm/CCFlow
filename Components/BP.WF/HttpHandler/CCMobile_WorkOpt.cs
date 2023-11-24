@@ -148,9 +148,9 @@ namespace BP.WF.HttpHandler
             //计算出来曾经抄送过的人.
             Paras ps = new Paras();
             ps.SQL = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node AND WorkID=" +BP.Difference.SystemConfig.AppCenterDBVarStr +"WorkID";
-            ps.Add("FK_Node",this.FK_Node);
+            ps.Add("FK_Node",this.NodeID);
             ps.Add("WorkID",this.WorkID);
-            //string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
+            //string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.NodeID + " AND WorkID=" + this.WorkID;
             
             DataTable mydt = DBAccess.RunSQLReturnTable(ps);
             string toAllEmps = "";
@@ -225,7 +225,7 @@ namespace BP.WF.HttpHandler
             string doc = this.GetRequestVal("TB_Doc");
 
             //调用抄送接口执行抄送.
-            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.FK_Node, this.WorkID, title, doc, emps, depts, stations, groups);
+            string ccRec = BP.WF.Dev2Interface.Node_CC_WriteTo_CClist(this.NodeID, this.WorkID, title, doc, emps, depts, stations, groups);
 
             if (ccRec == "")
                 return "没有抄送到任何人。";

@@ -141,7 +141,7 @@ namespace BP.WF.DTS
             foreach (Flow fl in fls)
             {
                 FlowSort fs = new FlowSort();
-                fs.No = fl.FK_FlowSort;
+                fs.No = fl.FlowSortNo;
                 fs.RetrieveFromDBSources();
 
                 string pathDir = path + "/Flow/" + fs.No + "." + fs.Name+"/";
@@ -157,11 +157,11 @@ namespace BP.WF.DTS
             mds.RetrieveAllFromDBSource();
             foreach (MapData md in mds)
             {
-                if (md.FK_FormTree.Length < 2)
+                if (md.FormTreeNo.Length < 2)
                     continue;
 
                 SysFormTree fs = new SysFormTree();
-                fs.No = md.FK_FormTree;
+                fs.No = md.FormTreeNo;
                 fs.RetrieveFromDBSources();
 
                 string pathDir = path + "/Form/" + fs.No + "." + fs.Name;

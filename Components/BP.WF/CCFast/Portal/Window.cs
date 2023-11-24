@@ -48,7 +48,7 @@ namespace BP.CCFast.Portal
         }
 
         #region 属性
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -241,7 +241,7 @@ namespace BP.CCFast.Portal
             //检查是否有新增的？
             foreach (WindowTemplate en in templates)
             {
-                if (en.IsEnable == false)
+                if (en.ItIsEnable == false)
                     continue; //如果是不启用的.
 
                 //从实例里面获取window..
@@ -253,16 +253,16 @@ namespace BP.CCFast.Portal
                     window.setMyPK(en.No + "_" + BP.Web.WebUser.No);
                     window.EmpNo = BP.Web.WebUser.No;
                     window.WindowTemplateNo = en.No;
-                    window.IsEnable = true;
+                    window.ItIsEnable = true;
                     window.Insert();
                     continue;
                 }
 
                 //如果 个人设置 他是启用的.
-                if (window.IsEnable == true)
+                if (window.ItIsEnable == true)
                     en.Idx = window.Idx; //就给他顺序号.
                 else
-                    en.IsEnable = false;
+                    en.ItIsEnable = false;
             }
 
 

@@ -24,7 +24,7 @@ namespace BP.WF.HttpHandler
         public string ChapterFrmDB_Init()
         {
             DataSet ds = new DataSet();
-            var en = new GEEntity(this.FrmID);
+            GEEntity en = new GEEntity(this.FrmID);
             en.OID = this.OID;
             if (en.RetrieveFromDBSources() == 0)
                 en.InsertAsOID(this.OID);
@@ -318,10 +318,10 @@ namespace BP.WF.HttpHandler
 
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(frmID);
             //现在版本不是主版本的情况
-            if (frmID.Equals(this.FK_MapData) == false)
+            if (frmID.Equals(this.FrmID) == false)
             {
                 DataTable mddt = ds.Tables["Sys_MapData"];
-                mddt.Rows[0]["AtPara"] = mddt.Rows[0]["AtPara"] + "@MainFrmID=" + this.FK_MapData;
+                mddt.Rows[0]["AtPara"] = mddt.Rows[0]["AtPara"] + "@MainFrmID=" + this.FrmID;
                 //如果是傻瓜表单
                 if (md.HisFrmType == FrmType.FoolForm)
                 {

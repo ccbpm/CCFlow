@@ -7,7 +7,6 @@ using System.Collections;
 using BP.Port;
 using System.IO;
 using BP.WF.Template.SFlow;
-using BP.WF.Template.CCEn;
 
 namespace BP.WF.Template
 {
@@ -162,7 +161,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -211,7 +210,7 @@ namespace BP.WF.Template
                 return this.GetValBooleanByKey(BtnAttr.ReturnRole);
             }
         }
-        public bool IsYouLiTai
+        public bool ItIsYouLiTai
         {
             get
             {
@@ -221,7 +220,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否是返回节点?
         /// </summary>
-        public bool IsSendBackNode
+        public bool ItIsSendBackNode
         {
             get
             {
@@ -310,7 +309,7 @@ namespace BP.WF.Template
                 map.DepositaryOfEntity = Depositary.Application;
                 map.DepositaryOfMap = Depositary.Application;
                 map.IndexField = NodeAttr.FK_Flow;
-                map.IsEnableVer = true; //启动日志.
+                map.ItIsEnableVer = true; //启动日志.
 
                 #region  基本信息
                 map.AddGroupAttr("基本信息");
@@ -400,7 +399,7 @@ namespace BP.WF.Template
                     true, false, NodeAttr.RunModel, "@0=普通@1=合流@2=分流@3=分合流@4=同表单子线程@5=异表单子线程");
                 map.SetHelperUrl(NodeAttr.RunModel, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661853&doc_id=31094"); //增加帮助.
 
-                map.AddTBDecimal(NodeAttr.PassRate, 100, "完成通过率", true, false);
+                map.AddTBFloat(NodeAttr.PassRate, 100, "完成通过率", true, false);
                 map.SetHelperUrl(NodeAttr.PassRate, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3661856&doc_id=31094"); //增加帮助.
 
                 //增加对退回到合流节点的 子线城的处理控制.
@@ -427,6 +426,7 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.AutoJumpRole0, "https://gitee.com/opencc/JFlow/wikis/pages/preview?sort_id=3980077&doc_id=31094"); //增加帮助
 
                 map.AddBoolean(NodeAttr.AutoJumpRole1, false, "处理人已经出现过", true, true, true);
+                map.AddBoolean(NodeAttr.AutoJumpRole3, false, "未来节点处理人已经出现过(只针对计算未来处理人的节点使用)", true, true, true);
                 map.AddBoolean(NodeAttr.AutoJumpRole2, false, "处理人与上一步相同", true, true, true);
                 map.AddBoolean(NodeAttr.WhenNoWorker, false, "(是)找不到人就跳转,(否)提示错误.", true, true, true);
 
@@ -815,13 +815,13 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
 
-                rm = new RefMethod();
-                rm.Title = "抄送人规则";
-                //rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
-                rm.Icon = "icon-people";
-                rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
-                rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "抄送人规则";
+                ////rm.Icon = "../../WF/Admin/AttrNode/Img/CC.png";
+                //rm.Icon = "icon-people";
+                //rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
+                //rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "设置提示信息";
@@ -868,7 +868,7 @@ namespace BP.WF.Template
         public string DoCHOvertimeRole()
         {
             //return "../../Admin/AttrNode/CHOvertimeRole.htm?FK_Node=" + this.NodeID; 
-            return "../../Admin/AttrNode/OvertimeRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/OvertimeRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         #endregion 考核规则.
 
@@ -879,7 +879,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return "../../Admin/AttrNode/BatchRole/Default.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BatchRole/Default.htm?s=d34&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 批量修改节点属性
@@ -887,7 +887,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAttrs()
         {
-            return "../../Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 表单方案
@@ -895,11 +895,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSheet()
         {
-            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/FrmSln/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         public string DoSheetOld()
         {
-            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
 
         /// <summary>
@@ -908,11 +908,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepterRoleNew()
         {
-            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/AccepterRole/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         public string DoTodolistModel()
         {
-            return "../../Admin/AttrNode/TodolistModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/TodolistModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
 
         /// <summary>
@@ -921,7 +921,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/BlockModel/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 发送后转向规则
@@ -929,8 +929,8 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            // return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            return "../../Admin/AttrNode/TurnTo/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            // return "../../Admin/AttrNode/TurnTo/0.TurntoDefault.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
+            return "../../Admin/AttrNode/TurnTo/Default.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
 
         }
         /// <summary>
@@ -939,7 +939,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCer()
         {
-            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/CCRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 加载提示信息
@@ -947,7 +947,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoHelpRole()
         {
-            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/FoolFormDesigner/HelpRole.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         #endregion
 
@@ -990,7 +990,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSpecFieldsSpecUsers()
         {
-            return "../../Admin/AttrNode/SepcFiledsSepcUsers.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/AttrNode/SepcFiledsSepcUsers.htm?FK_Flow=" + this.FlowNo + "&FK_MapData=ND" +
                    this.NodeID + "&FK_Node=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
         }
         /// <summary>
@@ -999,7 +999,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/MobileFrmDesigner/Default.htm?FK_Flow=" + this.FlowNo + "&FK_MapData=ND" +
                    this.NodeID + "&FK_Node=" + this.NodeID + "&t=" + DataType.CurrentDateTime;
         }
         #endregion 表单相关.
@@ -1022,7 +1022,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSelfParas()
         {
-            return "../../Admin/AttrNode/SelfParas.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/SelfParas.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 自定义参数（自定义）
@@ -1039,7 +1039,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAppType()
         {
-            return "../../Admin/AttrNode/NodeAppType.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/NodeAppType.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&tk=" + new Random().NextDouble();
         }
         #endregion
 
@@ -1101,12 +1101,12 @@ namespace BP.WF.Template
             Node nd = new Node();
             nd.NodeID=this.NodeID;
             nd.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
+            Cache2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
 
             NodeSimple nodeSimple = new NodeSimple();
             nodeSimple.NodeID = this.NodeID;
             nodeSimple.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
+            Cache2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
             return "执行成功";
         }
         /// <summary>
@@ -1131,19 +1131,19 @@ namespace BP.WF.Template
             Node nd = new Node();
             nd.NodeID = this.NodeID;
             nd.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
+            Cache2019.UpdateRow(nd.ToString(), this.NodeID.ToString(), nd.Row);
 
             NodeSimple nodeSimple = new NodeSimple();
             nodeSimple.NodeID = this.NodeID;
             nodeSimple.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
+            Cache2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
             return "执行成功";
         }
 
 
         public string DoTurn()
         {
-            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
             //, "节点完成转向处理", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
@@ -1154,7 +1154,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DocTemp()
         {
-            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/DocTemp.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 抄送规则
@@ -1162,7 +1162,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return "../../Comm/En.htm?EnName=BP.WF.Template.CCEn.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CCEn.CC&PKVal=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 个性化接受人窗口
@@ -1178,7 +1178,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoActiveFlows()
         {
-            return "../../Admin/ConditionSubFlow.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/ConditionSubFlow.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 退回节点
@@ -1186,7 +1186,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanReturnNodes()
         {
-            return "../../Admin/AttrNode/CanReturnNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/CanReturnNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 撤销发送的节点
@@ -1194,7 +1194,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanCancelNodes()
         {
-            return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
 
         /// <summary>
@@ -1203,7 +1203,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCondFlow()
         {
-            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 节点完成条件
@@ -1211,7 +1211,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCondNode()
         {
-            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Node + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
+            return "../../Admin/Cond2020/List.htm?CondType=" + (int)CondType.Node + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 设计傻瓜表单
@@ -1227,7 +1227,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormFree()
         {
-            return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FlowNo;
         }
         /// <summary>
         /// 绑定独立表单
@@ -1235,7 +1235,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormTree()
         {
-            return "../../Admin/Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
+            return "../../Admin/Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&Lang=CH";
         }
 
         public string DoMapData()
@@ -1247,11 +1247,11 @@ namespace BP.WF.Template
             switch (type)
             {
                 case NodeFormType.Develop:
-                    return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+                    return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FlowNo;
                     break;
                 default:
                 case NodeFormType.FoolForm:
-                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+                    return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID + "&FK_Flow=" + this.FlowNo;
                     break;
             }
             return null;
@@ -1263,7 +1263,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMessage()
         {
-            return "../../Admin/AttrNode/PushMessage.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/PushMessage.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 事件
@@ -1271,7 +1271,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return "../../Admin/AttrNode/Action.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/Action.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo + "&tk=" + new Random().NextDouble();
         }
 
         /// <summary>
@@ -1310,23 +1310,23 @@ namespace BP.WF.Template
         }
         public string DtlOfReturn()
         {
-            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks" + "&For=BP.WF.ReturnWorks&FK_Flow=" + this.FK_Flow;
+            string url = "../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapDtl=BP.WF.ReturnWorks" + "&For=BP.WF.ReturnWorks&FK_Flow=" + this.FlowNo;
             return url;
         }
         protected override bool beforeUpdate()
         {
             //检查设计流程权限,集团模式下，不是自己创建的流程，不能设计流程.
-            BP.WF.Template.TemplateGlo.CheckPower(this.FK_Flow);
+            BP.WF.Template.TemplateGlo.CheckPower(this.FlowNo);
 
             //更新流程版本
-            Flow.UpdateVer(this.FK_Flow);
+            Flow.UpdateVer(this.FlowNo);
 
             #region 处理节点数据.
             Node nd = new Node(this.NodeID);
-            if (nd.IsStartNode == true)
+            if (nd.ItIsStartNode == true)
             {
                 //开始节点不能设置游离状态
-                if (this.IsYouLiTai == true)
+                if (this.ItIsYouLiTai == true)
                     throw new Exception("当前节点是开始节点不能设置游离状态");
                 if (this.HuiQianRole != WF.HuiQianRole.None)
                     throw new Exception("当前节点是开始节点不能启用会签按钮操作");
@@ -1335,19 +1335,19 @@ namespace BP.WF.Template
             }
 
             //是否是发送返回节点？
-            nd.IsSendBackNode = this.IsSendBackNode;
+            nd.ItIsSendBackNode = this.ItIsSendBackNode;
 
-            if (nd.IsSendBackNode == true)
+            if (nd.ItIsSendBackNode == true)
             {
                 //强制设置按照连接线控制.
                 nd.CondModel = DirCondModel.ByLineCond;
             }
             nd.DirectUpdate(); //直接更新.
 
-            if (this.IsSendBackNode == true)
+            if (this.ItIsSendBackNode == true)
             {
                 if (nd.HisToNDNum != 0)
-                    this.IsSendBackNode = false;
+                    this.ItIsSendBackNode = false;
 
                 //    throw new Exception("err@您设置当前节点为【发送自动返回节点】，但是该节点配置到到达节点，是不正确的。");
             }
@@ -1361,10 +1361,10 @@ namespace BP.WF.Template
             //如果启动了会签,并且是抢办模式,强制设置为队列模式.或者组长模式.
             if (this.HuiQianRole != WF.HuiQianRole.None)
             {
-                if (this.HuiQianRole == WF.HuiQianRole.Teamup)
+                if (this.HuiQianRole == BP.WF.HuiQianRole.Teamup)
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.Teamup + "  WHERE NodeID=" + this.NodeID);
 
-                if (this.HuiQianRole == WF.HuiQianRole.TeamupGroupLeader)
+                if (this.HuiQianRole == BP.WF.HuiQianRole.TeamupGroupLeader)
                 {
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
                     if (this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne && this.AddLeaderEnable == true)
@@ -1424,14 +1424,14 @@ namespace BP.WF.Template
                     workCheckAth = new FrmAttachment();
                     /*如果没有查询到它,就有可能是没有创建.*/
                     workCheckAth.setMyPK("ND" + this.NodeID + "_FrmWorkCheck");
-                    workCheckAth.setFK_MapData("ND" + this.NodeID.ToString());
+                    workCheckAth.FrmID ="ND" + this.NodeID.ToString();
                     workCheckAth.NoOfObj = "FrmWorkCheck";
                     workCheckAth.Exts = "*.*";
 
                     //存储路径.
                     // workCheckAth.SaveTo = "/DataUser/UploadFile/";
-                    workCheckAth.IsNote = false; //不显示note字段.
-                    workCheckAth.IsVisable = false; // 让其在form 上不可见.
+                    workCheckAth.ItIsNote = false; //不显示note字段.
+                    workCheckAth.ItIsVisable = false; // 让其在form 上不可见.
 
                     //位置.
 
@@ -1470,13 +1470,13 @@ namespace BP.WF.Template
             btnLab.RetrieveFromDBSources();
 
             //如果是合流. 就启用按钮.
-            if (nd.IsHL == true)
+            if (nd.ItIsHL == true)
             {
                 this.SetValByKey(BtnAttr.ThreadEnable, true);
             }
 
             //清除所有的缓存.
-            Cash.ClearCash(this.ToString());
+            Cache.ClearCache(this.ToString());
 
             return base.beforeUpdate();
         }
@@ -1485,7 +1485,7 @@ namespace BP.WF.Template
             Node fl = new Node();
             fl.NodeID = this.NodeID;
             fl.RetrieveFromDBSources();
-            if (this.IsYouLiTai == true)
+            if (this.ItIsYouLiTai == true)
                 fl.SetPara("IsYouLiTai", 1);
             else
                 fl.SetPara("IsYouLiTai", 0);
@@ -1494,54 +1494,50 @@ namespace BP.WF.Template
             BtnLab btnLab = new BtnLab();
             btnLab.NodeID = this.NodeID;
             btnLab.RetrieveFromDBSources();
-            Cash2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
-            Cash.ClearCash(btnLab.ToString());
+            Cache2019.UpdateRow(btnLab.ToString(), this.NodeID.ToString(), btnLab.Row);
+            Cache.ClearCache(btnLab.ToString());
 
-            CC cc = new CC();
-            cc.NodeID = this.NodeID;
-            cc.RetrieveFromDBSources();
-            Cash2019.UpdateRow(cc.ToString(), this.NodeID.ToString(), cc.Row);
 
             FrmNodeComponent frmNodeComponent = new FrmNodeComponent();
             frmNodeComponent.NodeID = this.NodeID;
             frmNodeComponent.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmNodeComponent.ToString(), this.NodeID.ToString(), frmNodeComponent.Row);
+            Cache2019.UpdateRow(frmNodeComponent.ToString(), this.NodeID.ToString(), frmNodeComponent.Row);
 
 
             FrmTrack frmTrack = new FrmTrack();
             frmTrack.NodeID = this.NodeID;
             frmTrack.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmTrack.ToString(), this.NodeID.ToString(), frmTrack.Row);
+            Cache2019.UpdateRow(frmTrack.ToString(), this.NodeID.ToString(), frmTrack.Row);
 
             FrmTransferCustom frmTransferCustom = new FrmTransferCustom();
             frmTransferCustom.NodeID = this.NodeID;
             frmTransferCustom.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmTransferCustom.ToString(), this.NodeID.ToString(), frmTransferCustom.Row);
+            Cache2019.UpdateRow(frmTransferCustom.ToString(), this.NodeID.ToString(), frmTransferCustom.Row);
 
             NodeWorkCheck frmWorkCheck = new NodeWorkCheck();
             frmWorkCheck.NodeID = this.NodeID;
             frmWorkCheck.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmWorkCheck.ToString(), this.NodeID.ToString(), frmWorkCheck.Row);
+            Cache2019.UpdateRow(frmWorkCheck.ToString(), this.NodeID.ToString(), frmWorkCheck.Row);
 
             NodeSheet nodeSheet = new NodeSheet();
             nodeSheet.NodeID = this.NodeID;
             nodeSheet.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nodeSheet.ToString(), this.NodeID.ToString(), nodeSheet.Row);
+            Cache2019.UpdateRow(nodeSheet.ToString(), this.NodeID.ToString(), nodeSheet.Row);
 
             NodeSimple nodeSimple = new NodeSimple();
             nodeSimple.NodeID = this.NodeID;
             nodeSimple.RetrieveFromDBSources();
-            Cash2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
+            Cache2019.UpdateRow(nodeSimple.ToString(), this.NodeID.ToString(), nodeSimple.Row);
 
             FrmSubFlow frmSubFlow = new FrmSubFlow();
             frmSubFlow.NodeID = this.NodeID;
             frmSubFlow.RetrieveFromDBSources();
-            Cash2019.UpdateRow(frmSubFlow.ToString(), this.NodeID.ToString(), frmSubFlow.Row);
+            Cache2019.UpdateRow(frmSubFlow.ToString(), this.NodeID.ToString(), frmSubFlow.Row);
 
             //GetTask getTask = new GetTask();
             //getTask.NodeID = this.NodeID;
             //getTask.RetrieveFromDBSources();
-            //Cash2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
+            //Cache2019.UpdateRow(getTask.ToString(), this.NodeID.ToString(), getTask.Row);
 
             //如果是组长会签模式，通用选择器只能单项选择
             if (this.HuiQianRole == HuiQianRole.TeamupGroupLeader && this.HuiQianLeaderRole == HuiQianLeaderRole.OnlyOne)
@@ -1549,7 +1545,7 @@ namespace BP.WF.Template
                 Selector selector = new Selector();
                 selector.NodeID = this.NodeID;
                 selector.RetrieveFromDBSources();
-                selector.IsSimpleSelector = true;
+                selector.ItIsSimpleSelector = true;
                 selector.Update();
 
             }

@@ -10,6 +10,7 @@ using ThoughtWorks.QRCode.Codec;
 using System.Drawing;
 using System.Drawing.Imaging;
 using BP.WF;
+using System.Web;
 
 namespace BP.CCBill
 {
@@ -382,17 +383,19 @@ namespace BP.CCBill
                 return "err@获取附件信息有误.";
             //上传附件
             string filepath = "";
-            var file = BP.Difference.HttpContextHelper.RequestFiles(0);
+            //HttpPostedFile file = BP.Difference.HttpContextHelper.RequestFiles(0);
+
+            string fileName = BP.Difference.HttpContextHelper.GetNameByIdx(0);
             filepath = BP.Difference.SystemConfig.PathOfDataUser + "UploadFile/FrmBBS/" + DataType.CurrentYearMonth;
             if (System.IO.Directory.Exists(filepath) == false)
                 System.IO.Directory.CreateDirectory(filepath);
-            filepath = filepath + "/" + DBAccess.GenerGUID() + file.FileName;
-            BP.Difference.HttpContextHelper.UploadFile(file, filepath);
+            filepath = filepath + "/" + DBAccess.GenerGUID() + fileName;
+            BP.Difference.HttpContextHelper.UploadFile(BP.Difference.HttpContextHelper.RequestFiles(0), filepath);
             BP.CCBill.FrmBBS bbs = new BP.CCBill.FrmBBS(this.No);
-            string fileName = file.FileName.Substring(0, file.FileName.LastIndexOf("."));
-            bbs.SetValByKey("MyFileName", fileName);
+            string myFileName = fileName.Substring(0, fileName.LastIndexOf("."));
+            bbs.SetValByKey("MyFileName", myFileName);
             bbs.SetValByKey("MyFilePath", filepath);
-            bbs.SetValByKey("MyFileExt", file.FileName.Replace(fileName, ""));
+            bbs.SetValByKey("MyFileExt", fileName.Replace(fileName, ""));
             bbs.Update();
             return "附件保存成功";
         }

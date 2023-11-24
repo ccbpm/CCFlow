@@ -53,7 +53,7 @@ namespace BP.WF.DTS
             {
                 if (attr.UIHeightInt > 50 && attr.MaxLen < 1000 )
                 {
-                    strs += " @ 类:" + attr.FK_MapData + " 字段:" + attr.KeyOfEn + " , " + attr.Name + " "; 
+                    strs += " @ 类:" + attr.FrmID + " 字段:" + attr.KeyOfEn + " , " + attr.Name + " "; 
                     attr.setMaxLen(1000);
                     attr.Update();
                 }

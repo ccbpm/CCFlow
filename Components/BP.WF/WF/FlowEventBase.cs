@@ -118,7 +118,7 @@ namespace BP.WF
         /// <summary>
         /// 是否停止流程？
         /// </summary>
-        public bool IsStopFlow = false;
+        public bool ItIsStopFlow = false;
         #endregion 在发送前的事件里可以改变参数
 
         #region 系统参数
@@ -479,7 +479,7 @@ namespace BP.WF
             this.JumpToEmps = toEmps;
             this.JumpToNodeID = jumpToNodeID;
             this.SysPara = null;
-            this.IsStopFlow = false;
+            this.ItIsStopFlow = false;
 
             #region 处理参数.
             Row r = en.Row;
@@ -506,7 +506,7 @@ namespace BP.WF
                 }
             }
 
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in HttpContextHelper.RequestParamKeys)
@@ -555,11 +555,11 @@ namespace BP.WF
                     return this.SaveBefore();
                 case EventListNode.SendWhen: // 节点事件 - 发送前。
 
-                    this.IsStopFlow = false;
+                    this.ItIsStopFlow = false;
 
                     string str = this.SendWhen();
 
-                    if (this.IsStopFlow == true)
+                    if (this.ItIsStopFlow == true)
                         return "@Info=" + str + "@IsStopFlow=1";
 
                     if (this.JumpToNodeID == 0 && this.JumpToEmps == null)

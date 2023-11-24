@@ -68,7 +68,7 @@ namespace BP.CCBill.Template
                 this.SetValByKey(FrmStationDeptAttr.FK_Station, value);
             }
         }
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {

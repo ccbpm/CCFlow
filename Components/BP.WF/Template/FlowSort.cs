@@ -133,13 +133,13 @@ namespace BP.WF.Template
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(BP.Web.WebUser.OrgNo);
                 if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
                 {
                     OAFlowSort oaSort = new OAFlowSort();
-                    oaSort.FK_Emp = BP.Web.WebUser.No;
+                    oaSort.EmpNo = BP.Web.WebUser.No;
                     oaSort.OrgNo = BP.Web.WebUser.OrgNo;
-                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.FK_Emp);
+                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.EmpNo);
                     oaSort.SetValByKey("FlowSortNo", en.No);
                     oaSort.Insert();
                 }
@@ -163,13 +163,13 @@ namespace BP.WF.Template
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.GroupInc && SystemConfig.GroupStationModel == 2)
             {
                 //如果当前人员不是部门主要管理员
-                BP.WF.Admin.Org org = new BP.WF.Admin.Org(BP.Web.WebUser.OrgNo);
+                BP.WF.Port.AdminGroup.Org org = new BP.WF.Port.AdminGroup.Org(BP.Web.WebUser.OrgNo);
                 if (BP.Web.WebUser.No.Equals(org.Adminer) == false)
                 {
                     OAFlowSort oaSort = new OAFlowSort();
-                    oaSort.FK_Emp = BP.Web.WebUser.No;
+                    oaSort.EmpNo = BP.Web.WebUser.No;
                     oaSort.OrgNo = BP.Web.WebUser.OrgNo;
-                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.FK_Emp);
+                    oaSort.SetValByKey("RefOrgAdminer", oaSort.OrgNo + "_" + oaSort.EmpNo);
                     oaSort.SetValByKey("FlowSortNo", en.No);
                     oaSort.Insert();
                 }
@@ -263,7 +263,7 @@ namespace BP.WF.Template
                 fs.setNo(BP.Web.WebUser.OrgNo);
                 fs.setParentNo("100");
                 fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
-                fs.Save(); //@hongyan.
+                fs.Save(); 
 
                 fs = new FlowSort();
                 fs.setName("公文类");
@@ -291,13 +291,15 @@ namespace BP.WF.Template
             fs = new FlowSort();
             fs.setName("办公类");
             fs.setNo("01");
+            fs.SetValByKey("Idx", 1);
             fs.setParentNo("100");
             fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
             fs.Insert();
 
             fs = new FlowSort();
             fs.setName("公文类");
-            fs.setNo("01");
+            fs.setNo("02");
+            fs.SetValByKey("Idx", 2);
             fs.setParentNo("100");
             fs.SetValByKey("OrgNo", BP.Web.WebUser.OrgNo);
             fs.Insert();
@@ -322,7 +324,7 @@ namespace BP.WF.Template
             //}
 
 
-            var num = 0;
+            int num = 0;
             if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 num = this.Retrieve(FlowSortAttr.Idx);
 
@@ -335,7 +337,7 @@ namespace BP.WF.Template
             if (num == 0)
             {
                 InitData();
-                return this.RetrieveAll();
+                return this.RetrieveAll(FlowSortAttr.Idx);
             }
 
             return num;

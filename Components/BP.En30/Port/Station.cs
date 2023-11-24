@@ -169,7 +169,7 @@ namespace BP.Port
 
             //每个部门都有自己的角色体系.
             if (BP.Difference.SystemConfig.GroupStationModel == 2)
-                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                this.SetValByKey(StationAttr.FK_Dept, BP.Web.WebUser.DeptNo);
 
 
             BP.Sys.Base.Glo.WriteUserLog("新建/修改角色:" + this.ToJson(), "组织数据操作");
@@ -235,7 +235,7 @@ namespace BP.Port
                 return base.Retrieve(StationAttr.OrgNo, BP.Web.WebUser.OrgNo);
 
             if (BP.Difference.SystemConfig.GroupStationModel == 2)
-                return base.Retrieve(StationAttr.FK_Dept, BP.Web.WebUser.FK_Dept);
+                return base.Retrieve(StationAttr.FK_Dept, BP.Web.WebUser.DeptNo);
 
             //按照orgNo查询.
             return this.Retrieve("OrgNo", BP.Web.WebUser.OrgNo, "Idx");

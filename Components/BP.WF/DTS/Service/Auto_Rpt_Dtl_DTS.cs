@@ -119,18 +119,18 @@ namespace BP.WF.DTS
                     string agentId = BP.Difference.SystemConfig.WX_AgentID ?? null;
                     if (agentId != null)
                     {
-                        string accessToken = BP.GPM.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
+                        string accessToken = BP.Port.WeiXin.WeiXinEntity.getAccessToken();//获取 AccessToken
 
                         BP.Port.Emp emp = new BP.Port.Emp(empNo);
-                        BP.GPM.WeiXin.MsgText msgText = new BP.GPM.WeiXin.MsgText();
+                        BP.Port.WeiXin.Msg.MsgText msgText = new BP.Port.WeiXin.Msg.MsgText();
                         msgText.content = docs;
                         msgText.Access_Token = accessToken;
                         msgText.agentid = BP.Difference.SystemConfig.WX_AgentID;
                         msgText.touser = emp.No;
                         msgText.safe = "0";
 
-                        //执行发送
-                        BP.GPM.WeiXin.Glo.PostMsgOfText(msgText);
+                        //执行发送 
+                        BP.Port.WeiXin.Glo.PostMsgOfText(msgText);
                     }
                 }
                 #endregion 求出可以发起的人员.并执行发送

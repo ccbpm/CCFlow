@@ -80,7 +80,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 是否启用
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -184,7 +184,6 @@ namespace BP.CCFast.CCMenu
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("GPM_System", "系统");
-                map.DepositaryOfEntity = Depositary.None;
 
                 map.AddTBStringPK(MySystemAttr.No, null, "编号", true, false, 2, 100, 100);
                 map.AddTBString(MySystemAttr.Name, null, "名称", true, false, 0, 300, 150, true);
@@ -455,7 +454,7 @@ namespace BP.CCFast.CCMenu
             if (BP.Difference.SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
 
-                var i = this.Retrieve(MySystemAttr.IsEnable, 1, "Idx");
+                int i = this.Retrieve(MySystemAttr.IsEnable, 1, "Idx");
                 if (i != 0)
                     return i;
 
@@ -476,7 +475,7 @@ namespace BP.CCFast.CCMenu
                     en.No = dr["No"].ToString();
                     en.Name = dr["Name"].ToString();
                     en.Icon = dr["Icon"].ToString();
-                    en.IsEnable = true;
+                    en.ItIsEnable = true;
                     en.Insert();
                 }
 
@@ -798,7 +797,7 @@ namespace BP.CCFast.CCMenu
 
             //执行导入
             BP.WF.Flow flow = BP.WF.Template.TemplateGlo.LoadFlowTemplate(mysystem.No, path, model, null);
-            flow.FK_FlowSort = mysystem.No;
+            flow.FlowSortNo = mysystem.No;
             flow.DoCheck(); //要执行一次检查.
 
             return flow.No;
@@ -807,7 +806,7 @@ namespace BP.CCFast.CCMenu
             //Hashtable ht = new Hashtable();
             //ht.Add("FK_Flow", flow.No); //流程编号.
             //ht.Add("FlowName", flow.Name); //名字.
-            //ht.Add("FK_FlowSort", flow.FK_FlowSort); //类别.
+            //ht.Add("FK_FlowSort", flow.FlowSortNo); //类别.
             //ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name);
             //return BP.Tools.Json.ToJson(ht);
         }

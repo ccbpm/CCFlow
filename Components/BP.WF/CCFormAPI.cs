@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
-using BP.WF;
 using BP.DA;
-using BP.Port;
 using BP.Web;
-using BP.WF.Template;
 using BP.En;
 using BP.Sys;
 using BP.Difference;
 using BP.WF.Template.Frm;
 using System.Text.RegularExpressions;
+using BP.Tools;
+using Newtonsoft.Json.Linq;
 
 namespace BP.WF
 {
@@ -32,7 +29,7 @@ namespace BP.WF
         public static DataTable GenerPopData2022(string pk, string fieldName)
         {
             //判断该字段是否启用了pop返回值？
-           string  sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + pk + " AND EleID='" + fieldName + "'";
+            string sql = "SELECT  Tag1 AS VAL FROM Sys_FrmEleDB WHERE RefPKVal=" + pk + " AND EleID='" + fieldName + "'";
             string emps = "";
             DataTable dtVals = DBAccess.RunSQLReturnTable(sql);
 
@@ -69,7 +66,7 @@ namespace BP.WF
             emps = emps.Replace("，", ",");
             emps = emps.Replace("、", ",");
             emps = emps.Replace("@", ",");
-             
+
             // 把它加入接受人员列表中.
             string[] myemps = emps.Split(',');
             foreach (string s in myemps)
@@ -84,31 +81,6 @@ namespace BP.WF
             return dt;
         }
         /// <summary>
-        /// 生成报表
-        /// </summary>
-        /// <param name="templeteFilePath">模版路径</param>
-        /// <param name="ds">数据源</param>
-        /// <returns>生成单据的路径</returns>
-        public static void Frm_GenerBill(string templeteFullFile, string saveToDir, string saveFileName,
-            PrintFileType fileType, DataSet ds, string fk_mapData)
-        {
-            MapData md = new MapData(fk_mapData);
-            GEEntity entity = md.GenerGEEntityByDataSet(ds);
-
-            BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
-            rtf.HisEns.Clear();
-            rtf.EnsDataDtls.Clear();
-
-            rtf.HisEns.AddEntity(entity);
-            var dtls = entity.Dtls;
-
-            foreach (var item in dtls)
-                rtf.EnsDataDtls.Add(item);
-
-            rtf.MakeDoc(templeteFullFile, saveToDir, saveFileName);
-        }
-
-        /// <summary>
         /// 仅获取表单数据
         /// </summary>
         /// <param name="enName"></param>
@@ -120,7 +92,6 @@ namespace BP.WF
         {
             DataSet myds = new DataSet();
 
-            // 创建实体..
             #region 主表
 
             Entity en = BP.En.ClassFactory.GetEn(enName);
@@ -131,7 +102,7 @@ namespace BP.WF
 
 
             //设置外部传入的默认值.
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 // 处理传递过来的参数。
                 //2019-07-25 zyt改造
@@ -347,14 +318,6 @@ namespace BP.WF
                 Entity myen = ens.GetNewEntity;
                 myen.DTSMapToSys_MapData();
                 return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
-
-                //上面这行代码的解释（2017-04-25）：
-                //若不加上这行，代码执行到“ MapData md = new MapData(frmID); ”会报错：
-                //@没有找到记录[表单注册表  Sys_MapData, [ 主键=No 值=BP.LI.BZQX ]记录不存在,请与管理员联系, 或者确认输入错误.@在Entity(BP.Sys.MapData)查询期间出现错误@   在 BP.En.Entity.Retrieve() 位置 D:\ccflow\Components\BP.En30\En\Entity.cs:行号 1051
-                //即使加上：
-                //frmID = frmID.Substring(0, frmID.Length - 1);
-                //也会出现该问题
-                //2017-04-25 15:26:34：new MapData(frmID)应传入“BZQX”，但考虑到 GenerDBForVSTOExcelFrmModelOfEntity()运行稳定，暂不采用『统一执行下方代码』的方案。
             }
 
             //数据容器,就是要返回的对象.
@@ -374,7 +337,7 @@ namespace BP.WF
                 if (wk.RetrieveFromDBSources() == 0)
                     wk.Insert();
 
-                ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, wk, null);
+                ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, wk, null);
 
                 en = wk;
             }
@@ -386,7 +349,7 @@ namespace BP.WF
                 wk.setMyPK(pkval.ToString());
                 if (wk.RetrieveFromDBSources() == 0)
                     wk.Insert();
-                ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, wk, null);
+                ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, wk, null);
                 en = wk;
             }
 
@@ -398,7 +361,7 @@ namespace BP.WF
                 AtPara ap = new AtPara(atParas);
                 foreach (string key in ap.HisHT.Keys)
                 {
-                    switch(key)
+                    switch (key)
                     {
                         case "FrmID":
                         case "FK_MapData":
@@ -462,19 +425,19 @@ namespace BP.WF
                 //明细表的主表描述
                 sql = "SELECT * FROM Sys_MapDtl WHERE No='" + item.No + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Sys_MapDtl_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
+                dt.TableName = "Sys_MapDtl_For_" + (DataType.IsNullOrEmpty(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dt);
 
                 //明细表的表单描述
                 sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + item.No + "'";
                 dtMapAttr = DBAccess.RunSQLReturnTable(sql);
-                dtMapAttr.TableName = "Sys_MapAttr_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
+                dtMapAttr.TableName = "Sys_MapAttr_For_" + (DataType.IsNullOrEmpty(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dtMapAttr);
 
                 //明细表的配置信息.
                 sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + item.No + "'";
                 dt = DBAccess.RunSQLReturnTable(sql);
-                dt.TableName = "Sys_MapExt_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
+                dt.TableName = "Sys_MapExt_For_" + (DataType.IsNullOrEmpty(item.Alias) ? item.No : item.Alias);
                 myds.Tables.Add(dt);
 
                 #region 从表的 外键表/枚举
@@ -487,7 +450,7 @@ namespace BP.WF
                         continue;
 
                     string uiBindKey = dr["UIBindKey"].ToString();
-                    var mypk = dr["MyPK"].ToString();
+                    string mypk = dr["MyPK"].ToString();
 
                     #region 枚举字段
                     if (lgType.Equals("1"))
@@ -517,6 +480,8 @@ namespace BP.WF
                     if (me != null) //有范围限制时
                     {
                         string fullSQL = me.Doc.Clone() as string;
+                        if (DataType.IsNullOrEmpty(fullSQL) == true)
+                            throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK + ",原始的配置SQL为:" + me.Doc);
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
@@ -545,7 +510,7 @@ namespace BP.WF
             #endregion 表单模版信息.（含主、从表的，以及从表的枚举/外键相关数据）.
 
             #region 主表数据
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -555,7 +520,7 @@ namespace BP.WF
             }
 
             // 执行表单事件..
-            string msg = ExecEvent.DoFrm(md,EventListFrm.FrmLoadBefore, en);
+            string msg = ExecEvent.DoFrm(md, EventListFrm.FrmLoadBefore, en);
             if (DataType.IsNullOrEmpty(msg) == false)
                 throw new Exception("err@错误:" + msg);
 
@@ -569,7 +534,7 @@ namespace BP.WF
                 //执行通用的装载方法.
                 MapAttrs attrs = new MapAttrs(frmID);
                 MapDtls dtls = new MapDtls(frmID);
-                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                en = DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
             }
 
             //增加主表数据.
@@ -612,7 +577,7 @@ namespace BP.WF
                                 qo.AddWhere(GEDtlAttr.RefPK, pkval);
                                 break;
                             case DtlOpenType.ForPWorkID: // 按工作ID来控制
-                                qo.AddWhere(GEDtlAttr.RefPK, DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID="+ pkval) );
+                                qo.AddWhere(GEDtlAttr.RefPK, DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pkval));
                                 break;
                             case DtlOpenType.ForFID: // 按流程ID来控制.
                                 qo.AddWhere(GEDtlAttr.FID, pkval);
@@ -631,7 +596,7 @@ namespace BP.WF
                 }
 
                 //条件过滤.
-                if ( DataType.IsNullOrEmpty( dtl.FilterSQLExp)==false)
+                if (DataType.IsNullOrEmpty(dtl.FilterSQLExp) == false)
                 {
                     string[] strs = dtl.FilterSQLExp.Split('=');
                     qo.addAnd();
@@ -639,7 +604,7 @@ namespace BP.WF
                 }
 
                 //排序.
-                if (DataType.IsNullOrEmpty(dtl.OrderBySQLExp)==false)
+                if (DataType.IsNullOrEmpty(dtl.OrderBySQLExp) == false)
                 {
                     qo.addOrderBy(dtl.OrderBySQLExp);
                 }
@@ -660,7 +625,7 @@ namespace BP.WF
                         dr[attr.KeyOfEn] = attr.DefVal;
                 }
 
-                dtDtl.TableName = string.IsNullOrWhiteSpace(dtl.Alias) ? dtl.No : dtl.Alias; //edited by liuxc,2017-10-10.如果有别名，则使用别名，没有则使用No
+                dtDtl.TableName = DataType.IsNullOrEmpty(dtl.Alias) ? dtl.No : dtl.Alias; //edited by liuxc,2017-10-10.如果有别名，则使用别名，没有则使用No
                 myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
             }
             #endregion 从表数据
@@ -706,6 +671,8 @@ namespace BP.WF
                 if (me != null)
                 {
                     string fullSQL = me.Doc.Clone() as string;
+                    if (DataType.IsNullOrEmpty(fullSQL) == true)
+                        throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK + ",原始的配置SQL为:" + me.Doc);
                     fullSQL = fullSQL.Replace("~", ",");
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
                     dt = DBAccess.RunSQLReturnTable(fullSQL);
@@ -721,7 +688,6 @@ namespace BP.WF
             }
             #endregion 主表的 外键表/枚举
 
-
             string name = "";
             foreach (DataTable item in myds.Tables)
             {
@@ -731,6 +697,560 @@ namespace BP.WF
             return myds;
         }
         /// <summary>
+        /// 执行PageLoad装载数据
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="en"></param>
+        /// <param name="mattrs"></param>
+        /// <param name="dtls"></param>
+        /// <returns></returns>
+        public static Entity DealPageLoadFull(Entity en, MapExt item, MapAttrs mattrs, MapDtls dtls, bool isSelf = false, int nodeID = 0, long workID = 0)
+        {
+            if (item == null)
+                return en;
+
+            DataTable dt = null;
+            string sql = item.Doc;
+            /* 如果有填充主表的sql  */
+            sql = Glo.DealExp(sql, en, null);
+            string fk_dbSrc = item.DBSrcNo;
+            //填充方式，0=sql，1=url,2=CCFromRef.js , 3=webapi
+            string doWay = item.DoWay;
+
+            SFDBSrc sfdb = null;
+            //如果是sql方式填充
+            if (doWay.Equals("0") || doWay.Equals("None"))
+            {
+                if (DataType.IsNullOrEmpty(fk_dbSrc) == false && fk_dbSrc.Equals("local") == false)
+                    sfdb = new SFDBSrc(fk_dbSrc);
+                if (string.IsNullOrEmpty(sql) == false)
+                {
+                    if (string.IsNullOrEmpty(sql) == false)
+                    {
+                        int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                        if (num == 1)
+                        {
+                            string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                            sqlext = sql.Substring(sqlext.Length + 1);
+                            if (sqlext.Contains("@"))
+                                throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                        }
+                        if (num > 1 && sql.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                        if (sfdb != null)
+                            dt = sfdb.RunSQLReturnTable(sql);
+                        else
+                            dt = DBAccess.RunSQLReturnTable(sql);
+
+                        Attrs attrs = en.EnMap.Attrs;
+
+                        if (dt.Rows.Count == 1)
+                        {
+                            DataRow dr = dt.Rows[0];
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                //去掉一些不需要copy的字段.
+                                switch (dc.ColumnName)
+                                {
+                                    case WorkAttr.OID:
+                                    case WorkAttr.FID:
+                                    case WorkAttr.Rec:
+                                    case WorkAttr.MD5:
+                                    case GERptAttr.FlowEnder:
+                                    case GERptAttr.FlowEnderRDT:
+                                    case GERptAttr.AtPara:
+                                    case GERptAttr.PFlowNo:
+                                    case GERptAttr.PWorkID:
+                                    case GERptAttr.PNodeID:
+                                    case GERptAttr.BillNo:
+                                    case GERptAttr.FlowDaySpan:
+                                    case "RefPK":
+                                    case WorkAttr.RecText:
+                                        continue;
+                                    default:
+                                        break;
+                                }
+
+                                //如果不包含数据库.
+                                if (attrs.Contains(dc.ColumnName) == false)
+                                    continue;
+
+                                //开始赋值.
+                                if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0" || en.GetValStringByKey(dc.ColumnName).Contains("0.0"))
+                                {
+                                    en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                    continue;
+                                }
+
+                                //获取attr
+                                Entity entity = mattrs.GetEntityByKey("KeyOfEn", dc.ColumnName);
+                                if (entity != null)
+                                {
+                                    MapAttr attr = (MapAttr)entity;
+                                    if (attr.LGType == FieldTypeS.Enum && en.GetValStringByKey(dc.ColumnName).Equals("-1"))
+                                    {
+                                        en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                        continue;
+                                    }
+                                    continue;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            //如果是webapi方式填充
+            else if (doWay.Equals("3"))
+            {
+                //请求地址
+                string apiUrl = sql;
+                //设置请求头
+                Hashtable headerMap = new Hashtable();
+
+                //设置返回值格式
+                headerMap.Add("Content-Type", "application/json");
+                //设置token，用于接口校验
+                headerMap.Add("Authorization", WebUser.Token);
+
+                try
+                {
+                    //post方式请求数据
+                    string postData = BP.Tools.PubGlo.HttpPostConnect(apiUrl, headerMap, "");
+                    //数据序列化
+                    JObject jsonData = postData.ToJObject();
+                    //code=200，表示请求成功，否则失败
+                    if (!jsonData["code"].ToString().Equals("200"))
+                        return en;
+
+                    //获取返回的数据
+                    JObject data = jsonData["data"].ToString().ToJObject();
+                    //获取主表数据
+                    string mainTable = data["mainTable"].ToString();
+                    dt = Json.ToDataTable(mainTable);
+
+                    //获取全部附件数据
+                    JObject athsJSON = jsonData["aths"].ToString().ToJObject();
+                    for (int i = 0; i < athsJSON.Count; i++)
+                    {
+                        //获取附件
+                        JToken athDatas = athsJSON[i];
+                        //获取附件组件ID
+                        string FK_FrmAttachment = athDatas["attachmentid"].ToString();
+                        //获取当前组件中的附件数据
+                        JObject athArryData = athDatas["attachmentdbs"].ToString().ToJObject();
+                        //填充附件数据
+                        for (int k = 0; k < athArryData.Count; k++)
+                        {
+                            JToken athData = athArryData[k];
+                            //生成mypk主键值
+                            string guid = DBAccess.GenerGUID();
+                            FrmAttachment attachment = new FrmAttachment(FK_FrmAttachment);
+
+                            //是否要先删除掉原有附件？根据实际需求，再做调整
+                            //FrmAttachmentDBs attachmentDBs = new FrmAttachmentDBs();
+                            //attachmentDBs.Retrieve(FrmAttachmentDBAttr.RefPKVal, workID, FrmAttachmentDBAttr.FK_MapData, attachment.FrmID);
+                            //attachmentDBs.Delete();
+
+                            //插入数据
+                            FrmAttachmentDB attachmentDB = new FrmAttachmentDB();
+                            attachmentDB.setMyPK(guid);
+                            attachmentDB.FK_FrmAttachment = FK_FrmAttachment;
+                            attachmentDB.FrmID = attachment.FrmID;
+                            attachmentDB.RefPKVal = workID.ToString();
+                            attachmentDB.FID = 0;//先默认为0
+                            attachmentDB.Rec = athData["rec"].ToString();//执行人
+                            attachmentDB.FileFullName = athData["fileFullName"].ToString();//附件全路径
+                            attachmentDB.FileName = athData["fileName"].ToString();//附件名称
+                            attachmentDB.FileExts = athData["fileExts"].ToString();//文件类型
+                            attachmentDB.Sort = athData["sort"].ToString();//附件类型
+                            attachmentDB.DeptNo = athData["fk_dept"].ToString();//上传人所在部门
+                            attachmentDB.DeptName = athData["fk_deptName"].ToString();//上传人所在部门名称
+                            attachmentDB.RecName = athData["recName"].ToString();//上传人名称
+                            attachmentDB.RDT = athData["rdt"].ToString();//上传时间
+                            attachmentDB.UploadGUID = guid;
+                            attachment.Insert();
+                        }
+                    }
+
+                    //获取从表数据
+                    JObject dtlJSON = jsonData["dtls"].ToString().ToJObject();
+                    for (int i = 0; i < dtlJSON.Count; i++)
+                    {
+                        JToken dtlDatas = dtlJSON[i];
+                        //获取从表编号
+                        string dtlNo = dtlDatas["dtlNo"].ToString();
+                        //定义map
+                        MapDtl dtl = new MapDtl(dtlNo);
+                        //插入之前判断
+                        GEDtls gedtls = null;
+                        try
+                        {
+                            gedtls = new GEDtls(dtl.No);
+                            if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                            {
+                                if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                                    continue;
+                            }
+                            else
+                            {
+                                //如果存在数据，默认先删除
+                                if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                                    gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            (gedtls.GetNewEntity as GEDtl).CheckPhysicsTable();
+                        }
+                        //获取从表数据
+                        JObject dtlArryData = dtlDatas["dtl"].ToString().ToJObject();
+                        for (int k = 0; k < dtlArryData.Count; k++)
+                        {
+                            //获取一条数据
+                            JToken dtlData = dtlArryData[k];
+                            //从表数据
+                            string dtlDataStr = dtlData["dtlData"].ToString();
+                            //从表附件数据
+                            JObject dtlAthData = dtlData["dtlAths"].ToString().ToJObject();
+                            //从表数据字符串，转换成datatable
+                            DataTable dtlDt = Json.ToDataTable(dtlDataStr);
+                            //执行数据插入
+                            foreach (DataRow dr in dtlDt.Rows)
+                            {
+                                GEDtl gedtl = gedtls.GetNewEntity as GEDtl;
+                                foreach (DataColumn dc in dt.Columns)
+                                {
+                                    gedtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                }
+
+                                switch (dtl.DtlOpenType)
+                                {
+                                    case DtlOpenType.ForEmp:  // 按人员来控制.
+                                        gedtl.RefPK = en.PKVal.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                    case DtlOpenType.ForWorkID: // 按工作ID来控制
+                                        gedtl.RefPK = en.PKVal.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                    case DtlOpenType.ForFID: // 按流程ID来控制.
+                                        gedtl.RefPK = workID.ToString();
+                                        gedtl.FID = long.Parse(en.PKVal.ToString());
+                                        break;
+                                }
+                                gedtl.RDT = DataType.CurrentDateTime;
+                                gedtl.Rec = WebUser.No;
+                                gedtl.Insert();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("接口请求失败,message:" + ex.Message.ToString());
+                }
+            }
+            if (string.IsNullOrEmpty(item.Tag1)
+                || item.Tag1.Length < 15)
+                return en;
+
+            // 填充从表.
+            foreach (MapDtl dtl in dtls)
+            {
+                //如果有数据，就不要填充了.
+
+                string[] sqls = item.Tag1.Split('$');
+                foreach (string mysql in sqls)
+                {
+                    if (string.IsNullOrEmpty(mysql))
+                        continue;
+                    if (mysql.Contains(dtl.No + ":") == false)
+                        continue;
+                    if (mysql.Equals(dtl.No + ":") == true)
+                        continue;
+
+                    #region 处理sql.
+                    sql = Glo.DealSQLExp(mysql.Replace(dtl.No + ":", "").ToString(), en, null);
+                    #endregion 处理sql.
+
+                    if (string.IsNullOrEmpty(sql))
+                        continue;
+
+                    int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
+                    if (num == 1)
+                    {
+                        string sqlext = sql.Substring(0, sql.ToUpper().IndexOf("WHERE"));
+                        sqlext = sql.Substring(sqlext.Length + 1);
+                        if (sqlext.Contains("@"))
+                            throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+                    }
+                    if (num > 1 && sql.Contains("@"))
+                        throw new Exception("设置的sql有错误可能有没有替换的变量:" + sql);
+
+                    if (isSelf == true)
+                    {
+                        MapDtl mdtlSln = new MapDtl();
+                        mdtlSln.No = dtl.No + "_" + nodeID;
+                        int result = mdtlSln.RetrieveFromDBSources();
+                        if (result != 0)
+                        {
+                            dtl.DtlOpenType = mdtlSln.DtlOpenType;
+                        }
+                    }
+
+
+
+                    GEDtls gedtls = null;
+
+                    try
+                    {
+                        gedtls = new GEDtls(dtl.No);
+                        if (dtl.DtlOpenType == DtlOpenType.ForFID)
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, workID) > 0)
+                                continue;
+                        }
+                        else
+                        {
+                            if (gedtls.RetrieveByAttr(GEDtlAttr.RefPK, en.PKVal) > 0)
+                                continue;
+                        }
+
+
+                        //gedtls.Delete(GEDtlAttr.RefPK, en.PKVal);
+                    }
+                    catch (Exception ex)
+                    {
+                        (gedtls.GetNewEntity as GEDtl).CheckPhysicsTable();
+                    }
+
+                    sql = sql.StartsWith(dtl.No + "=") ? sql.Substring((dtl.No + "=").Length) : sql;
+                    if (sfdb != null)
+                        dt = sfdb.RunSQLReturnTable(sql);
+                    else
+                        dt = DBAccess.RunSQLReturnTable(sql);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        GEDtl gedtl = gedtls.GetNewEntity as GEDtl;
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            gedtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                        }
+
+                        switch (dtl.DtlOpenType)
+                        {
+                            case DtlOpenType.ForEmp:  // 按人员来控制.
+                                gedtl.RefPK = en.PKVal.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                            case DtlOpenType.ForWorkID: // 按工作ID来控制
+                                gedtl.RefPK = en.PKVal.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                            case DtlOpenType.ForFID: // 按流程ID来控制.
+                                gedtl.RefPK = workID.ToString();
+                                gedtl.FID = long.Parse(en.PKVal.ToString());
+                                break;
+                        }
+                        gedtl.RDT = DataType.CurrentDateTime;
+                        gedtl.Rec = WebUser.No;
+                        gedtl.Insert();
+                    }
+                }
+            }
+            return en;
+        }
+
+        /// <summary>
+        /// 执行PageLoad装载数据
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="en"></param>
+        /// <param name="mattrs"></param>
+        /// <returns></returns>
+        public static Entity DealPageLoadFullVue(Entity en, MapExts mapExts, MapAttrs mattrs)
+        {
+            DataTable dt = null;
+            string sql = "";
+            string paras = "";
+            foreach (string key in en.Row.Keys)
+            {
+                paras += "@" + key + "=" + en.GetValByKey(key);
+            }
+            foreach (MapExt mapExt in mapExts)
+            {
+                //填充主表
+                if (mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullMainTable))
+                {
+
+                    string data = mapExt.GetFullData(paras, en.GetValStringByKey("OID"));
+                    if (DataType.IsNullOrEmpty(data) == true)
+                        throw new Exception("主表填充失败:没有获取到数据");
+                    //data转换成JSON
+                    dt = BP.Tools.Json.ToDataTable(data);
+                    if (dt.Rows.Count == 1)
+                    {
+                        DataRow dr = dt.Rows[0];
+                        foreach (DataColumn dc in dt.Columns)
+                        {
+                            //去掉一些不需要copy的字段.
+                            switch (dc.ColumnName)
+                            {
+                                case WorkAttr.OID:
+                                case WorkAttr.FID:
+                                case WorkAttr.Rec:
+                                case WorkAttr.MD5:
+                                case GERptAttr.FlowEnder:
+                                case GERptAttr.FlowEnderRDT:
+                                case GERptAttr.AtPara:
+                                case GERptAttr.PFlowNo:
+                                case GERptAttr.PWorkID:
+                                case GERptAttr.PNodeID:
+                                case GERptAttr.BillNo:
+                                case GERptAttr.FlowDaySpan:
+                                case "RefPK":
+                                case WorkAttr.RecText:
+                                    continue;
+                                default:
+                                    break;
+                            }
+
+                            //如果不包含数据库.
+                            bool isHave = false;
+                            foreach (MapAttr attr in mattrs)
+                            {
+                                if (attr.KeyOfEn.Equals(dc.ColumnName))
+                                {
+                                    isHave = true;
+                                    break;
+                                }
+                            }
+                            if (isHave == false)
+                                continue;
+
+                            //开始赋值.
+                            if (string.IsNullOrEmpty(en.GetValStringByKey(dc.ColumnName)) || en.GetValStringByKey(dc.ColumnName) == "0" || en.GetValStringByKey(dc.ColumnName).Contains("0.0"))
+                            {
+                                en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                continue;
+                            }
+
+                            //获取attr
+                            Entity entity = mattrs.GetEntityByKey("KeyOfEn", dc.ColumnName);
+                            if (entity != null)
+                            {
+                                MapAttr attr = (MapAttr)entity;
+                                if (attr.LGType == FieldTypeS.Enum && en.GetValStringByKey(dc.ColumnName).Equals("-1"))
+                                {
+                                    en.SetValByKey(dc.ColumnName, dr[dc.ColumnName].ToString());
+                                    continue;
+                                }
+                                continue;
+                            }
+
+                        }
+                    }
+
+                }
+                //填充从表
+                if (mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullDtl))
+                {
+                    mapExt.GetFullDataDtl(paras, en.GetValStringByKey("OID"));
+                }
+                //填充下拉框
+                if (mapExt.ExtModel.Equals(MapExtXmlList.PageLoadFullDDL))
+                {
+
+                }
+            }
+
+            return en;
+        }
+        /// <summary>
+        /// 获取上传附件集合信息
+        /// </summary>
+        /// <param name="athDesc"></param>
+        /// <param name="pkval"></param>
+        /// <param name="FK_FrmAttachment"></param>
+        /// <param name="workid"></param>
+        /// <param name="fid"></param>
+        /// <param name="pworkid"></param>
+        /// <param name="isContantSelf"></param>
+        /// <param name="fk_node"></param>
+        /// <param name="fk_mapData"></param>
+        /// <returns></returns>
+        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment,
+           Int64 workid = 0, Int64 fid = 0, Int64 pworkid = 0, bool isContantSelf = true, int fk_node = 0, string fk_mapData = null)
+        {
+            if (pkval == null)
+                pkval = "0"; //解决预览的时候的错误.
+
+            BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+            //查询使用的workId
+            string ctrlWayId = "";
+            if (FK_FrmAttachment.Contains("AthMDtl") == true || athDesc.GetParaBoolen("IsDtlAth") == true)
+                ctrlWayId = pkval;
+            else
+            {
+                MapData mapData = new MapData(athDesc.FrmID);
+                if (mapData.EntityType == EntityType.FrmDict || mapData.EntityType == EntityType.FrmBill)
+                    ctrlWayId = pkval;
+                else
+                    ctrlWayId = BP.WF.Dev2Interface.GetAthRefPKVal(workid, pworkid, fid, fk_node, fk_mapData, athDesc);
+            }
+
+
+            //如果是空的，就返回空数据结构. @lizhen.
+            if (ctrlWayId.Equals("0") == true)
+                return dbs;
+
+            BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+            //从表附件
+            if (FK_FrmAttachment.Contains("AthMDtl") || athDesc.GetParaBoolen("IsDtlAth") == true)
+            {
+                /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                qo.DoQuery();
+                return dbs;
+            }
+            if (athDesc.HisCtrlWay == AthCtrlWay.MySelfOnly || athDesc.HisCtrlWay == AthCtrlWay.PK)
+            {
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment);
+                if (isContantSelf == false)
+                {
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+                }
+                qo.addOrderBy("Idx,RDT");
+                qo.DoQuery();
+                return dbs;
+            }
+
+            /* 继承模式 */
+            if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, ctrlWayId);
+            else
+                qo.AddWhereIn(FrmAttachmentDBAttr.RefPKVal, "('" + ctrlWayId + "','" + pkval + "')");
+
+            qo.addAnd();
+            qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+
+            if (isContantSelf == false)
+            {
+                qo.addAnd();
+                qo.AddWhere(FrmAttachmentDBAttr.Rec, "!=", WebUser.No);
+            }
+            qo.addOrderBy("Idx,RDT");
+            qo.DoQuery();
+            return dbs;
+        }
+        /// <summary>
         /// 获取从表数据，用于显示dtl.htm 
         /// </summary>
         /// <param name="frmID">表单ID</param>
@@ -738,7 +1258,7 @@ namespace BP.WF
         /// <param name="atParas">参数</param>
         /// <param name="specDtlFrmID">指定明细表的参数，如果为空就标识主表数据，否则就是从表数据.</param>
         /// <returns>数据</returns>
-        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas,string dtlRefPKVal,Int64 fid)
+        public static DataSet GenerDBForCCFormDtl(string frmID, MapDtl dtl, int pkval, string atParas, string dtlRefPKVal, Int64 fid)
         {
             //数据容器,就是要返回的对象.
             DataSet myds = new DataSet();
@@ -768,7 +1288,7 @@ namespace BP.WF
                     }
                 }
             }
-            if (BP.Difference.SystemConfig.IsBSsystem == true)
+            if (BP.Difference.SystemConfig.isBSsystem == true)
             {
                 // 处理传递过来的参数。
                 foreach (string k in HttpContextHelper.RequestParamKeys)
@@ -799,13 +1319,13 @@ namespace BP.WF
             #endregion 加载从表表单模版信息.
 
             #region 把从表的- 外键表/枚举 加入 DataSet.
-            
+
             MapExt me = null;
             DataTable ddlTable = new DataTable();
             ddlTable.Columns.Add("No");
             foreach (MapAttr attr in attrs)
             {
-               
+
                 //没有绑定外键
                 string uiBindKey = attr.UIBindKey;
                 if (DataType.IsNullOrEmpty(uiBindKey) == true)
@@ -842,11 +1362,14 @@ namespace BP.WF
                     fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
 
                     if (DataType.IsNullOrEmpty(fullSQL) == true)
-                        throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK+",原始的配置SQL为:"+me.Doc);
+                        throw new Exception("err@没有给AutoFullDLL配置SQL：MapExt：=" + me.MyPK + ",原始的配置SQL为:" + me.Doc);
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
-                    dt.TableName = uiBindKey;
+                    if (uiBindKey.ToLower().Equals("blank"))
+                        dt.TableName = keyOfEn;
+                    else
+                        dt.TableName = uiBindKey;
 
                     if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
                     {
@@ -880,8 +1403,9 @@ namespace BP.WF
                     continue;
 
                 // 获得数据.
-                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey,en.Row);
-
+                DataTable mydt = BP.Pub.PubClass.GetDataTableByUIBineKey(uiBindKey, en.Row);
+                if (uiBindKey.ToLower().Equals("blank"))
+                    mydt.TableName = keyOfEn;
                 if (mydt == null)
                 {
                     DataRow ddldr = ddlTable.NewRow();
@@ -899,7 +1423,7 @@ namespace BP.WF
             #endregion 把从表的- 外键表/枚举 加入 DataSet.
 
             #region 把主表数据放入.
-           
+
             //重设默认值.
             en.ResetDefaultVal();
 
@@ -911,7 +1435,7 @@ namespace BP.WF
             #endregion 把主表数据放入.
 
             #region  把从表的数据放入.
-            DataTable dtDtl = GetDtlInfo(dtl,en, dtlRefPKVal);
+            DataTable dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
             //从表集合为空时填充从表的情况
             if (dtDtl.Rows.Count == 0)
             {
@@ -920,7 +1444,7 @@ namespace BP.WF
                 if (DataType.IsNullOrEmpty(dtl.InitDBAttrs) == false)
                 {
                     string[] keys = dtl.InitDBAttrs.Split(',');
-                   
+
                     MapAttr attr = null;
                     foreach (string keyOfEn in keys)
                     {
@@ -954,7 +1478,7 @@ namespace BP.WF
                 }
                 //2.从表装载填充
                 me = mes.GetEntityByKey("ExtModel", MapExtXmlList.PageLoadFullDtl) as MapExt;
-                if (me != null && me.DoWay.Equals("1") && DataType.IsNullOrEmpty(me.Doc) ==false)
+                if (me != null && me.DoWay.Equals("1") && DataType.IsNullOrEmpty(me.Doc) == false)
                 {
                     string sql = Glo.DealSQLExp(me.Doc, en, null);
                     int num = Regex.Matches(sql.ToUpper(), "WHERE").Count;
@@ -984,7 +1508,7 @@ namespace BP.WF
                     }
                 }
 
-               dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
+                dtDtl = GetDtlInfo(dtl, en, dtlRefPKVal);
             }
 
 
@@ -1002,7 +1526,7 @@ namespace BP.WF
 
                 foreach (DataRow dr in dtDtl.Rows)
                 {
-                    if(dr[attr.KeyOfEn] == null || DataType.IsNullOrEmpty(dr[attr.KeyOfEn].ToString())==true)
+                    if (dr[attr.KeyOfEn] == null || DataType.IsNullOrEmpty(dr[attr.KeyOfEn].ToString()) == true)
                         dr[attr.KeyOfEn] = attr.DefVal;
                 }
             }
@@ -1011,18 +1535,15 @@ namespace BP.WF
             myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
             #endregion 把从表的数据放入.
 
-
             //放入一个空白的实体，用与获取默认值.
             GEDtl dtlBlank = new GEDtl(dtl.No);
             dtlBlank.ResetDefaultVal();
 
             myds.Tables.Add(dtlBlank.ToDataTableField("Blank"));
 
-           //  myds.WriteXml("c:/xx.xml");
-
             return myds;
         }
-        public static  DataTable GetDtlInfo(MapDtl dtl,GEEntity en,string dtlRefPKVal,bool isReload=false)
+        public static DataTable GetDtlInfo(MapDtl dtl, GEEntity en, string dtlRefPKVal, bool isReload = false)
         {
             QueryObject qo = null;
             GEDtls dtls = new GEDtls(dtl.No);
@@ -1037,12 +1558,20 @@ namespace BP.WF
                         qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
                         break;
                     case DtlOpenType.ForWorkID: // 按工作ID来控制
-
+                    case DtlOpenType.ForPWorkID:
                         qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
 
                         break;
                     case DtlOpenType.ForFID: // 按工作ID来控制
                         qo.AddWhere(GEDtlAttr.FID, dtlRefPKVal);
+                        break;
+                    case DtlOpenType.ForWorkIDAndSpecEmpNo: // 按工作ID来控制
+                        qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
+                        qo.addAnd();
+                        string attr = dtl.GetParaString("DtlOpenPara");
+                        if (DataType.IsNullOrEmpty(attr) == true)
+                            throw new Exception("err@当前数据显示规则按照ForWorkIDAndSpecEmpNo计算，但是您没有设置人员账号字段名称,");
+                        qo.AddWhere(attr, WebUser.No);
                         break;
                     default:
                         qo.AddWhere(GEDtlAttr.RefPK, dtlRefPKVal);
@@ -1073,24 +1602,35 @@ namespace BP.WF
                 }
 
                 qo.DoQuery();
-               
+                //放入一个空白的实体，用与获取默认值.
+                GEDtl dtlBlank = new GEDtl(dtl.No);
+                dtlBlank.ResetDefaultVal();
+                if (dtls.Count == 0 && dtl.RowsOfList != 0 && dtl.ItIsInsert == true)
+                {
+                    for (int i = 0; i < dtl.RowsOfList; i++)
+                    {
+                        GEDtl geDtl = new GEDtl(dtl.No);
+                        geDtl.Copy(dtlBlank);
+                        dtls.AddEntity(geDtl);
+                    }
+                }
                 return dtls.ToDataTableField();
             }
             catch (Exception ex)
             {
                 dtl.IntMapAttrs();
-                dtl.CheckPhysicsTable();
-                CashFrmTemplate.Remove(dtl.No);
-                Cash.SetMap(dtl.No, null);
-                Cash.SQL_Cash.Remove(dtl.No);
+                dtls.GetNewEntity.CheckPhysicsTable();
+                CacheFrmTemplate.Remove(dtl.No);
+                Cache.SetMap(dtl.No, null);
+                Cache.SQL_Cache.Remove(dtl.No);
                 if (isReload == false)
                     return GetDtlInfo(dtl, en, dtlRefPKVal, true);
                 else
                     throw new Exception("获取从表[" + dtl.Name + "]失败,错误:" + ex.Message);
             }
- 
+
         }
     }
 
-    
+
 }

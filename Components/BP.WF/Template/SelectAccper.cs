@@ -20,6 +20,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FK_Node = "FK_Node";
         /// <summary>
+        /// 节点名称
+        /// </summary>
+        public const string NodeName = "NodeName";
+        /// <summary>
         /// 到人员
         /// </summary>
         public const string FK_Emp = "FK_Emp";
@@ -75,6 +79,10 @@ namespace BP.WF.Template
         /// 应完成日期(计划)
         /// </summary>
         public const string PlanSDT = "SDT";
+        /// <summary>
+        /// 节点顺序
+        /// </summary>
+        public const string NodeIdx = "NodeIdx";
     }
 	/// <summary>
 	/// 选择接受人
@@ -114,7 +122,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -125,11 +133,39 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectAccperAttr.FK_Node, value);
             }
         }
-       
+        /// <summary>
+        /// 节点名称
+        /// </summary>
+        public string NodeName
+        {
+            get
+            {
+                return this.GetValStringByKey(SelectAccperAttr.NodeName);
+            }
+            set
+            {
+                this.SetValByKey(SelectAccperAttr.NodeName, value);
+            }
+        }
+        /// <summary>
+        /// 节点步骤-
+        /// </summary>
+        public int NodeIdx
+        {
+            get
+            {
+                return this.GetValIntByKey(SelectAccperAttr.NodeIdx);
+            }
+            set
+            {
+                this.SetValByKey(SelectAccperAttr.NodeIdx, value);
+            }
+        }
+
         /// <summary>
         /// 到人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -163,7 +199,7 @@ namespace BP.WF.Template
             {
                 string s= this.GetValStringByKey(SelectAccperAttr.EmpName);
                 if (DataType.IsNullOrEmpty(s) == true)
-                    s = this.FK_Emp;
+                    s = this.EmpNo;
                 return s;
             }
             set
@@ -216,7 +252,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否记忆
         /// </summary>
-        public bool IsRemember
+        public bool ItIsRemember
         {
             get
             {
@@ -301,7 +337,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 工作应完成日期(计划)
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -339,12 +375,11 @@ namespace BP.WF.Template
 
                 Map map = new Map("WF_SelectAccper", "选择接受/抄送人信息");
                 map.AddMyPK();
-
                 map.AddTBInt(SelectAccperAttr.FK_Node, 0, "接受人节点", true, false);
-                
+                map.AddTBString(SelectAccperAttr.NodeName, null, "接受人节点名称", true, true, 0, 60, 10);
                 map.AddTBInt(SelectAccperAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBString(SelectAccperAttr.FK_Emp, null, "FK_Emp", true, false, 0, 100, 10);
-                map.AddTBString(SelectAccperAttr.EmpName, null, "EmpName", true, false, 0, 60, 10);
+                map.AddTBString(SelectAccperAttr.EmpName, null, "接收人名称", true, false, 0, 60, 10);
                 map.AddTBString(SelectAccperAttr.FK_Dept, null, "部门编号", true, false, 0, 400, 10);
                 map.AddTBString(SelectAccperAttr.DeptName, null, "部门名称", true, false, 0, 400, 10);
                 map.AddTBInt(SelectAccperAttr.AccType, 0, "类型(@0=接受人@1=抄送人)", true, false);
@@ -364,9 +399,14 @@ namespace BP.WF.Template
                 map.AddTBInt(SelectAccperAttr.TimeLimit, 0, "时限-天", true, false);
                 map.AddTBFloat(SelectAccperAttr.TSpanHour, 0, "时限-小时", true, false);
 
+                map.AddTBInt(SelectAccperAttr.NodeIdx, 0, "节点的顺序", true, false);
+
+
                 //应该完成日期，为了自动计算未来的日期.
                 map.AddTBDateTime(SelectAccperAttr.PlanADT, null, "到达日期(计划)", true, false);
                 map.AddTBDateTime(SelectAccperAttr.PlanSDT, null, "应完成日期(计划)", true, false);
+
+                map.AddTBAtParas();
 
                 this._enMap = map;
                 return this._enMap;
@@ -376,12 +416,12 @@ namespace BP.WF.Template
 
         public string DoUp()
         {
-            this.DoOrderUp(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.FK_Node, SelectAccperAttr.Idx);
+            this.DoOrderUp(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.NodeID, SelectAccperAttr.Idx);
             return "";
         }
         public string DoDown()
         {
-            this.DoOrderDown(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.FK_Node, SelectAccperAttr.Idx);
+            this.DoOrderDown(SelectAccperAttr.WorkID, this.WorkID, SelectAccperAttr.FK_Node, this.NodeID, SelectAccperAttr.Idx);
             return "";
         }
 
@@ -395,9 +435,9 @@ namespace BP.WF.Template
         public void ResetPK()
         {
             //注释掉了.
-            // this.setMyPK(this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp+"_"+this.Idx;
-            this.setMyPK(this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp);
-            this.Idx = DBAccess.RunSQLReturnValInt("SELECT Max(idx) +1 FROM WF_SelectAccper WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID, 1);
+            // this.setMyPK(this.NodeID + "_" + this.WorkID + "_" + this.EmpNo+"_"+this.Idx;
+            this.setMyPK(this.NodeID + "_" + this.WorkID + "_" + this.EmpNo);
+            this.Idx = DBAccess.RunSQLReturnValInt("SELECT Max(idx) +1 FROM WF_SelectAccper WHERE FK_Node=" + this.NodeID + " AND WorkID=" + this.WorkID, 1);
         }
         protected override bool beforeUpdateInsertAction()
         {
@@ -406,12 +446,12 @@ namespace BP.WF.Template
                 bool isHavePathName = DBAccess.IsExitsTableCol("Port_Dept", "NameOfpath");
                 if (isHavePathName == true)
                 {
-                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.NameOfPath from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.NameOfPath from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.EmpNo + "'", "无");
                     if (this.DeptName == "无")
-                        this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                        this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.EmpNo + "'", "无");
                 }
                 else
-                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,Port_Emp b where a.No=b.fk_dept and b.no='" + this.EmpNo + "'", "无");
             }
 
             this.ResetPK();
@@ -427,7 +467,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否记忆下次选择
         /// </summary>
-        public bool IsSetNextTime
+        public bool ItIsSetNextTime
         {
             get
             {
@@ -436,8 +476,8 @@ namespace BP.WF.Template
 
                 foreach (SelectAccper item in this)
                 {
-                    if (item.IsRemember == true)
-                        return item.IsRemember;
+                    if (item.ItIsRemember == true)
+                        return item.ItIsRemember;
                 }
                 return false;
             }
@@ -499,7 +539,7 @@ namespace BP.WF.Template
                 Emps ens = new Emps();
                 foreach (SelectAccper ns in this)
                 {
-                    ens.AddEntity(new Emp(ns.FK_Emp));
+                    ens.AddEntity(new Emp(ns.EmpNo));
                 }
                 return ens;
             }
@@ -514,7 +554,7 @@ namespace BP.WF.Template
                 Nodes ens = new Nodes();
                 foreach (SelectAccper ns in this)
                 {
-                    ens.AddEntity(new Node(ns.FK_Node));
+                    ens.AddEntity(new Node(ns.NodeID));
                 }
                 return ens;
             }

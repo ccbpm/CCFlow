@@ -53,19 +53,19 @@ namespace BP.Sys
         /// <returns></returns>
         public override string ToString()
         {
-            return this.FK_MapData;
+            return this.FrmID;
         }
         public override string ClassID
         {
             get
             {
-                return this.FK_MapData;
+                return this.FrmID;
             }
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         /// <summary>
         /// 通用OID实体
         /// </summary>
@@ -78,7 +78,7 @@ namespace BP.Sys
         /// <param name="nodeid">节点ID</param>
         public GEEntity(string fk_mapdata)
         {
-            this.FK_MapData = fk_mapdata;
+            this.FrmID = fk_mapdata;
             this._enMap = null;
         }
         /// <summary>
@@ -88,7 +88,7 @@ namespace BP.Sys
         /// <param name="pk"></param>
         public GEEntity(string frmID, object pk)
         {
-            this.FK_MapData = frmID; 
+            this.FrmID = frmID; 
             this.PKVal = pk;
             this._enMap = null;
             this.Retrieve();
@@ -106,10 +106,10 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
 
-                if (this.FK_MapData == null)
-                    throw new Exception("没有给[" + this.FK_MapData + "]值，您不能获取它的Map。");
+                if (this.FrmID == null)
+                    throw new Exception("没有给[" + this.FrmID + "]值，您不能获取它的Map。");
 
-                this._enMap = BP.Sys.MapData.GenerHisMap(this.FK_MapData);
+                this._enMap = BP.Sys.MapData.GenerHisMap(this.FrmID);
                 return this._enMap;
             }
         }
@@ -120,9 +120,9 @@ namespace BP.Sys
         {
             get
             {
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntitys();
-                return new GEEntitys(this.FK_MapData);
+                return new GEEntitys(this.FrmID);
             }
         }
         #endregion
@@ -142,12 +142,12 @@ namespace BP.Sys
             this.OID = oldOID;
 
             //复制从表数据.
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapDtls dtls = new MapDtls(this.FrmID);
 
             //被copy的明细集合.
-            MapDtls dtlsFrom = new MapDtls(en.FK_MapData);
+            MapDtls dtlsFrom = new MapDtls(en.FrmID);
 
-            if (dtls.Count != dtls.Count)
+            if (dtls.Count != dtlsFrom.Count)
                 throw new Exception("@复制的两个表单从表不一致...");
 
             //序号.
@@ -176,12 +176,12 @@ namespace BP.Sys
             }
 
             //复制附件数据.
-            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
-            FrmAttachments athsFrom = new FrmAttachments(en.FK_MapData);
+            FrmAttachments aths = new FrmAttachments(this.FrmID);
+            FrmAttachments athsFrom = new FrmAttachments(en.FrmID);
             foreach (FrmAttachment ath in aths)
             {
                 //删除数据,防止copy重复
-                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='"+this.FK_MapData+"' AND RefPKVal='" + this.OID + "'");
+                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='"+this.FrmID+"' AND RefPKVal='" + this.OID + "'");
                 
                 foreach (FrmAttachment athFrom in athsFrom)
                 {
@@ -193,7 +193,7 @@ namespace BP.Sys
                     foreach (FrmAttachmentDB athDBFrom in athDBsFrom)
                     {
                         athDBFrom.setMyPK(DBAccess.GenerGUID());
-                        athDBFrom.setFK_MapData(this.FK_MapData);
+                        athDBFrom.FrmID= this.FrmID;
                         athDBFrom.FK_FrmAttachment = ath.MyPK;
                         athDBFrom.RefPKVal = this.OID.ToString();
                         athDBFrom.Insert();
@@ -214,7 +214,7 @@ namespace BP.Sys
             this.Save();
 
             //复制从表数据.
-            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapDtls dtls = new MapDtls(this.FrmID);
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
@@ -234,20 +234,20 @@ namespace BP.Sys
             }
 
             //复制附件数据.
-            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+            FrmAttachments aths = new FrmAttachments(this.FrmID);
             foreach (FrmAttachment ath in aths)
             {
                 //删除可能存在的新oid数据。
-                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + this.FK_MapData + "' AND RefPKVal='" + this.OID + "'");
+                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + this.FrmID + "' AND RefPKVal='" + this.OID + "'");
 
                 //找出旧数据.
-                FrmAttachmentDBs athDBs = new FrmAttachmentDBs(this.FK_MapData, oidOID.ToString());
+                FrmAttachmentDBs athDBs = new FrmAttachmentDBs(this.FrmID, oidOID.ToString());
                 foreach (FrmAttachmentDB athDB in athDBs)
                 {
                     FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                     athDB_N.Copy(athDB);
 
-                    athDB_N.setFK_MapData(this.FK_MapData);
+                    athDB_N.FrmID =this.FrmID;
                     athDB_N.RefPKVal =this.OID.ToString();
 
                     if (athDB_N.HisAttachmentUploadType == AttachmentUploadType.Single)
@@ -368,14 +368,14 @@ namespace BP.Sys
         #region 重载基类方法
         public override string ToString()
         {
-            //if (this.FK_MapData == null)
+            //if (this.FrmID == null)
             //    throw new Exception("@没有能 FK_MapData 给值。");
-            return this.FK_MapData;
+            return this.FrmID;
         }
         /// <summary>
         /// 主键
         /// </summary>
-        public string FK_MapData = null;
+        public string FrmID = null;
         #endregion
 
         #region 方法
@@ -386,12 +386,12 @@ namespace BP.Sys
         {
             get
             {
-                //if (this.FK_MapData == null)
+                //if (this.FrmID == null)
                 //    throw new Exception("@没有能 FK_MapData 给值。");
 
-                if (this.FK_MapData == null)
+                if (this.FrmID == null)
                     return new GEEntity();
-                return new GEEntity(this.FK_MapData);
+                return new GEEntity(this.FrmID);
             }
         }
         /// <summary>
@@ -402,7 +402,7 @@ namespace BP.Sys
         }
         public GEEntitys(string frmID)
         {
-            this.FK_MapData = frmID;
+            this.FrmID = frmID;
         }
         #endregion
 

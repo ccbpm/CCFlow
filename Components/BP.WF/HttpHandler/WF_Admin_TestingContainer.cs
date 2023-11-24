@@ -35,10 +35,27 @@ namespace BP.WF.HttpHandler
                     BP.WF.Dev2Interface.Port_Login(testerNo);
                 else
                     BP.WF.Dev2Interface.Port_Login(testerNo, BP.Web.WebUser.OrgNo);
+                
+                BP.WF.Dev2Interface.Port_GenerToken(testerNo);
             }
 
-            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, testerNo);
-            return workid.ToString();
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FlowNo, testerNo);
+            Flow flow = new Flow(this.FlowNo);
+            String testSysPara = flow.GetValStringByKey("TestSysPara", "");
+            String testFrmPara = flow.GetValStringByKey("TestFrmPara", "");
+            if (DataType.IsNullOrEmpty(testSysPara) == false)
+            {
+                testSysPara = testSysPara.Replace(" ", "");
+                Dev2Interface.Flow_SaveParas(workid, testSysPara);
+            }
+            if (DataType.IsNullOrEmpty(testFrmPara) == false)
+            {
+                testFrmPara = testFrmPara.Replace(" ", "");
+                AtPara atPara = new AtPara(testFrmPara);
+                Dev2Interface.Node_SaveWork(workid, atPara.HisHT);
+            }
+
+            return workid.ToString()+"@"+WebUser.Token;
         }
         /// <summary>
         /// 数据库信息
@@ -60,7 +77,7 @@ namespace BP.WF.HttpHandler
 
 
             //获得Track数据.
-            string table = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string table = "ND" + int.Parse(this.FlowNo) + "Track";
             string sql = "SELECT * FROM " + table + " WHERE WorkID=" + this.WorkID;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Track";
@@ -92,7 +109,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             //获得NDRpt表
-            string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string rpt = "ND" + int.Parse(this.FlowNo) + "Rpt";
             GEEntity en = new GEEntity(rpt);
             en.PKVal = this.WorkID;
             en.RetrieveFromDBSources();
@@ -112,7 +129,7 @@ namespace BP.WF.HttpHandler
             qo.AddWhere("WorkID", this.WorkID);
             qo.addOr();
             qo.AddWhere("FID", this.WorkID);
-            qo.addOrderBy(" FK_Node,RDT,CDT ");
+            qo.addOrderBy(" RDT,CDT,FK_Node ");
             qo.DoQuery();
 
             return ens.ToJson();
@@ -158,7 +175,7 @@ namespace BP.WF.HttpHandler
                 string SID = this.GetRequestVal("Token");
                 try
                 {
-                    BP.WF.Dev2Interface.Port_Login(this.FK_Emp);
+                    BP.WF.Dev2Interface.Port_Login(this.EmpNo);
                     string token = Dev2Interface.Port_GenerToken();
                     return token;
                 }
@@ -170,7 +187,7 @@ namespace BP.WF.HttpHandler
 
             try
             {
-                BP.WF.Dev2Interface.Port_Login(this.FK_Emp, this.OrgNo);
+                BP.WF.Dev2Interface.Port_Login(this.EmpNo, this.OrgNo);
                 string token = Dev2Interface.Port_GenerToken();
                 return token;
             }
@@ -192,7 +209,7 @@ namespace BP.WF.HttpHandler
             string testerNo = this.GetRequestVal("TesterNo");
             string orgNo = this.GetRequestVal("OrgNo");//@lyc
 
-            FlowExt fl = new FlowExt(this.FK_Flow);
+            FlowExt fl = new FlowExt(this.FlowNo);
             fl.Tester = testerNo;
             fl.Update();
 
@@ -204,7 +221,7 @@ namespace BP.WF.HttpHandler
             int model = (int)SystemConfig.CCBPMRunModel;
 
             //组织url发起该流程.
-            string url = "Default.html?RunModel="+ model + "&FK_Flow=" + this.FK_Flow + "&TesterNo=" + testerNo;
+            string url = "Default.html?RunModel="+ model + "&FK_Flow=" + this.FlowNo + "&TesterNo=" + testerNo;
             url += "&OrgNo=" + WebUser.OrgNo;
             url += "&UserNo=" + this.GetRequestVal("UserNo");
             url += "&Token=" + token;
@@ -217,15 +234,15 @@ namespace BP.WF.HttpHandler
         public string TestFlow2020_Init()
         {
             //清除缓存.
-            BP.Difference.SystemConfig.DoClearCash();
+            BP.Difference.SystemConfig.DoClearCache();
 
             if (BP.Web.WebUser.IsAdmin == false)
                 return "err@您不是管理员，无法执行该操作.";
 
-            FlowExt fl = new FlowExt(this.FK_Flow);
+            FlowExt fl = new FlowExt(this.FlowNo);
 
             #region 检查.
-            int nodeid = int.Parse(this.FK_Flow + "01");
+            int nodeid = int.Parse(this.FlowNo + "01");
             DataTable dt = null;
             BP.WF.Node nd = new BP.WF.Node(nodeid);
             #endregion 测试人员.
@@ -258,7 +275,7 @@ namespace BP.WF.HttpHandler
                         DataRow dr = dtEmps.NewRow();
                         dr["No"] = emp.UserID;
                         dr["Name"] = emp.Name;
-                        dr["FK_DeptText"] = emp.FK_DeptText;
+                        dr["FK_DeptText"] = emp.DeptText;
                         dtEmps.Rows.Add(dr);
                     }
                     return BP.Tools.Json.ToJson(dtEmps);
@@ -281,7 +298,7 @@ namespace BP.WF.HttpHandler
                     case DeliveryWay.ByStationOnly:
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                         {
-                            sql += " Port_Emp.No AS No,Port_Emp.Name AS Name,Port_Dept.Name AS FK_DeptText  FROM Port_Emp LEFT JOIN Port_Dept ON  Port_Emp.FK_Dept=Port_Dept.No  join Port_DeptEmpStation ON (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
+                            sql += " Port_Emp.No AS No,Port_Emp.Name AS Name,Port_Dept.Name AS FK_DeptText  FROM Port_Emp LEFT JOIN Port_Dept ON  Port_Emp.Dept=Port_Dept.No  join Port_DeptEmpStation ON (fk_emp=Port_Emp.No) join WF_NodeStation on (WF_NodeStation.fk_station=Port_DeptEmpStation.fk_station) WHERE (1=1) AND  FK_Node=" + nd.NodeID;
                         }
                         else
                         {
@@ -312,7 +329,7 @@ namespace BP.WF.HttpHandler
                             sql += "  A." +BP.Sys.Base.Glo.UserNo + ",A.Name,B.Name AS FK_DeptText FROM Port_Emp A,Port_Dept B  WHERE A.FK_Dept=B.No AND A." +BP.Sys.Base.Glo.UserNo + " in (SELECT FK_Emp from WF_NodeEmp where FK_Node='" + nodeid + "') ";
                         break;
                     case DeliveryWay.ByDeptAndStation:
-                        sql += "  pdes.FK_Emp AS No,A.Name AS Name,B.Name AS FK_DeptText  FROM  Port_DeptEmpStation pdes, WF_NodeDept wnd,WF_NodeStation wns,Port_Emp A,Port_Dept B WHERE pdes.FK_Emp=A.No AND pdes.FK_Dept=B.No AND A.FK_Dept=B.NO AND  wnd.FK_Dept = pdes.FK_Dept  AND wnd.FK_Node = " + nodeid + " AND  wns.FK_Station = pdes.FK_Station  AND wnd.FK_Node =" + nodeid + " ORDER BY" + "  pdes.FK_Emp";
+                        sql += "  pdes.EmpNo AS No,A.Name AS Name,B.Name AS FK_DeptText  FROM  Port_DeptEmpStation pdes, WF_NodeDept wnd,WF_NodeStation wns,Port_Emp A,Port_Dept B WHERE pdes.EmpNo=A.No AND pdes.FK_Dept=B.No AND A.FK_Dept=B.NO AND  wnd.FK_Dept = pdes.FK_Dept  AND wnd.NodeID = " + nodeid + " AND  wns.FK_Station = pdes.StationNo  AND wnd.NodeID =" + nodeid + " ORDER BY" + "  pdes.EmpNo";
                         break;
                     case DeliveryWay.BySelected: //所有的人员多可以启动, 2016年11月开始约定此规则.
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
@@ -331,7 +348,7 @@ namespace BP.WF.HttpHandler
                         if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                             return "err@非集团版本，不能设置启用此模式.";
                         sql += "  A." +BP.Sys.Base.Glo.UserNo + ",A.Name,C.Name as FK_DeptText FROM Port_Emp A, WF_FlowOrg B, Port_Dept C ";
-                        sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '" + this.FK_Flow + "' AND A.FK_Dept = c.No ";
+                        sql += " WHERE A.OrgNo = B.OrgNo AND B.FlowNo = '" + this.FlowNo + "' AND A.FK_Dept = c.No ";
                         break;
                     case DeliveryWay.BySQL:
                         if (DataType.IsNullOrEmpty(nd.DeliveryParas))
@@ -340,7 +357,7 @@ namespace BP.WF.HttpHandler
                     default:
                         break;
                 }
-                if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL)
+                if (SystemConfig.AppCenterDBType == DBType.MySQL || SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB)
                     sql += " Limit 500";
                 dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)

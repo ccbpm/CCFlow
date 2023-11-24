@@ -42,13 +42,13 @@ namespace BP.WF.HttpHandler
             string sql = "";
             DataTable dt;
 
-            if (this.FK_Flow != null)
+            if (this.FlowNo != null)
             {
                 //加入节点表单. 如果没有流程参数.
 
                 Paras ps = new Paras();
                 ps.SQL = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY NODEID ";
-                ps.Add("FK_Flow", this.FK_Flow);
+                ps.Add("FK_Flow", this.FlowNo);
                 dt = DBAccess.RunSQLReturnTable(ps);
 
                 dt.TableName = "WF_Node";
@@ -70,10 +70,8 @@ namespace BP.WF.HttpHandler
             }
 
             #region 加入表单库目录.
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT NO as No ,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
-            else
-                sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+
+            sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
             dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
@@ -166,16 +164,16 @@ namespace BP.WF.HttpHandler
                 //创建临时文件.
                 string temp =  BP.Difference.SystemConfig.PathOfTemp + Guid.NewGuid() + ".xml";
                 HttpContextHelper.UploadFile(HttpContextHelper.RequestFiles(0), temp);
-                string fk_mapData = this.FK_MapData;
+                string fk_mapData = this.FrmID;
                 MapData mapData = new MapData(fk_mapData);
                 DataSet ds = new DataSet();
                 ds.ReadXml(temp);
 
                 //执行装载.
                 MapData.ImpMapData(fk_mapData, ds);
-                if (this.FK_Node != 0)
+                if (this.NodeID != 0)
                 {
-                    Node nd = new Node(this.FK_Node);
+                    Node nd = new Node(this.NodeID);
                     nd.RepareMap(nd.HisFlow);
                 }
                 //清空缓存
@@ -211,7 +209,7 @@ namespace BP.WF.HttpHandler
                     entityDict.Update();
                     entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                 }
-                SystemConfig.DoClearCash();
+                SystemConfig.DoClearCache();
                 return "执行成功.";
             }
             catch (Exception ex)
@@ -220,7 +218,7 @@ namespace BP.WF.HttpHandler
                 //所以再执行一次导入
                 try
                 {
-                    string fk_mapData = this.FK_MapData;
+                    string fk_mapData = this.FrmID;
 
                     //读取上传的XML 文件.
                     DataSet ds = new DataSet();
@@ -230,9 +228,9 @@ namespace BP.WF.HttpHandler
                     //执行装载.
                     MapData.ImpMapData(fk_mapData, ds);
 
-                    if (this.FK_Node != 0)
+                    if (this.NodeID != 0)
                     {
-                        Node nd = new Node(this.FK_Node);
+                        Node nd = new Node(this.NodeID);
                         nd.RepareMap(nd.HisFlow);
                     }
                     //清空缓存
@@ -269,7 +267,7 @@ namespace BP.WF.HttpHandler
                         entityDict.Update();
                         entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                     }
-                    SystemConfig.DoClearCash();
+                    SystemConfig.DoClearCache();
                     return "执行成功.";
                 }
                 catch (Exception newex)
@@ -286,7 +284,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Imp_CopyFromFlow()
         {
-            string ndfrm = "ND" + int.Parse(this.FK_Flow) + "01";
+            string ndfrm = "ND" + int.Parse(this.FlowNo) + "01";
             return Imp_CopyFrm(null, ndfrm);
         }
         public string Imp_FrmEnsName()
@@ -299,12 +297,12 @@ namespace BP.WF.HttpHandler
             Attrs attrs = en.EnMap.Attrs;
             foreach (Attr item in attrs)
             {
-                if (item.IsPK == true)
+                if (item.ItIsPK == true)
                     continue;
 
                 MapAttr mapAttr = item.ToMapAttr;
                 mapAttr.setMyPK(this.FrmID + "_" + item.Key);
-                mapAttr.setFK_MapData(this.FrmID);
+                mapAttr.FrmID =this.FrmID;
                 mapAttr.Save();
             }
 
@@ -333,7 +331,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 if (toFrmID == null)
-                    toFrmID = this.FK_MapData;
+                    toFrmID = this.FrmID;
 
 
                 string fromMapData = fromFrmID;
@@ -345,7 +343,7 @@ namespace BP.WF.HttpHandler
 
                 //首先初始化本部门的.
                 MapData mymd = new MapData(toFrmID);
-                string frmSort = mymd.FK_FormTree; //表单类别,防止表单类别冲掉,导致表单树看不到他.
+                string frmSort = mymd.FormTreeNo; //表单类别,防止表单类别冲掉,导致表单树看不到他.
 
 
                 MapData mdFrom = new MapData(fromMapData);
@@ -369,7 +367,7 @@ namespace BP.WF.HttpHandler
 
                     //设置节点ID.
                     mymd.Name = nd.Name;
-                    mymd.FK_FormTree = "";
+                    mymd.FormTreeNo = "";
                     mymd.Update();
 
                     //如果包含ND，就保持附件的从表一致.
@@ -383,7 +381,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    mymd.FK_FormTree = frmSort;
+                    mymd.FormTreeNo = frmSort;
                     mymd.Update();
 
                 }
@@ -420,7 +418,7 @@ namespace BP.WF.HttpHandler
                     entityDict.Update();
                     entityDict.CheckEnityTypeAttrsFor_EntityNoName();
                 }
-                SystemConfig.DoClearCash();
+                SystemConfig.DoClearCache();
                 return "执行成功.";
                 #endregion
 
@@ -455,7 +453,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             //01.当前节点表单已经存在的列
-            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            MapAttrs attrs = new MapAttrs(this.FrmID);
             ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
 
             //02.数据源表中的列
@@ -502,7 +500,7 @@ namespace BP.WF.HttpHandler
             string[] fields = hidImpFields.TrimEnd(',').Split(',');
 
             MapData md = new MapData();
-            md.No = this.FK_MapData;
+            md.No = this.FrmID;
             md.RetrieveFromDBSources();
 
 
@@ -515,11 +513,11 @@ namespace BP.WF.HttpHandler
                 MapAttr ma = new MapAttr();
                 ma.setKeyOfEn(colname);
                 ma.Name = this.GetRequestVal("TB_Desc_" + colname);
-                ma.setFK_MapData(this.FK_MapData);
+                ma.FrmID =this.FrmID;
                 ma.MyDataType = int.Parse(this.GetRequestVal("DDL_DBType_" + colname));
                 ma.setMaxLen(int.Parse(this.GetRequestVal("TB_Len_" + colname)));
                 ma.UIBindKey = this.GetRequestVal("TB_BindKey_" + colname);
-                ma.setMyPK(this.FK_MapData + "_" + ma.KeyOfEn);
+                ma.setMyPK(this.FrmID + "_" + ma.KeyOfEn);
                 ma.LGType = BP.En.FieldTypeS.Normal;
 
                 if (ma.UIBindKey != "")

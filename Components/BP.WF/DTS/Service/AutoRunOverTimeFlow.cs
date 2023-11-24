@@ -73,10 +73,10 @@ namespace BP.WF.DTS
                 bool isLogin = false;
                 foreach (GenerWorkerList item in gwls)
                 {
-                    if (item.IsEnable == false)
+                    if (item.ItIsEnable == false)
                         continue;
 
-                    BP.Port.Emp emp = new Emp(item.FK_Emp);
+                    BP.Port.Emp emp = new Emp(item.EmpNo);
                     BP.Web.WebUser.SignInOfGener(emp);
                     isLogin = true;
                 }
@@ -91,7 +91,7 @@ namespace BP.WF.DTS
                 try
                 {
                     Node node = new Node(fk_node);
-                    if (node.IsStartNode)
+                    if (node.ItIsStartNode)
                         continue;
 
                     //获得该节点的处理内容.

@@ -19,7 +19,7 @@ namespace BP.DA
                 {
                     case System.Data.DbType.String:
                     case System.Data.DbType.Object:
-                        if (this.IsBigText)
+                        if (this.ItIsBigText)
                             return Oracle.ManagedDataAccess.Client.OracleDbType.Clob;
                         else
                             return Oracle.ManagedDataAccess.Client.OracleDbType.Varchar2;
@@ -42,7 +42,7 @@ namespace BP.DA
         /// <summary>
         /// 是否是大文本?
         /// </summary>
-        public bool IsBigText = false;
+        public bool ItIsBigText = false;
         #endregion
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace BP.DA
         /// <param name="obj">参数值</param>
         public void Add(string _name, object obj)
         {
-            if (_name == "abc")
+            if (_name.Equals("abc"))
                 return;
 
             if (obj == null)
@@ -216,7 +216,7 @@ namespace BP.DA
                 en.Size = 0;
             else
                 en.Size = _val.Length;
-            en.IsBigText = isBigTxt; //是否是大块文本.
+            en.ItIsBigText = isBigTxt; //是否是大块文本.
             this.Add(en);
         }
         /// <summary>

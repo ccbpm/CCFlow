@@ -22,6 +22,10 @@ namespace BP.Sys
         /// </summary>
         public Int64 WorkID = 0;
         /// <summary>
+        /// 从表编号
+        /// </summary>
+        public String DtlNo = "";
+        /// <summary>
         /// 标题
         /// </summary>
         abstract public string Title

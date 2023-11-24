@@ -21,7 +21,15 @@ namespace BP.Sys
         /// <summary>
         /// ftp
         /// </summary>
-        FTPServer
+        FTPServer,
+        /// <summary>
+        /// OSS
+        /// </summary>
+        OSS,
+        /// <summary>
+        /// 保存链接
+        /// </summary>
+        SaveLink
     }
     /// <summary>
     /// 运行模式

@@ -20,6 +20,68 @@ namespace BP.WF.HttpHandler
         }
 
         #region 节点相关 Nodes
+        public string CreateCCNode()
+        {
+            try
+            {
+                string x = this.GetRequestVal("X");
+                string y = this.GetRequestVal("Y");
+                string icon = this.GetRequestVal("icon");
+
+                int iX = 20;
+                int iY = 20;
+
+                if (DataType.IsNullOrEmpty(x) == false)
+                    iX = (int)double.Parse(x);
+
+                if (DataType.IsNullOrEmpty(y) == false)
+                    iY = (int)double.Parse(y);
+
+                Node node = BP.WF.Template.TemplateGlo.NewEtcNode(this.FlowNo, iX, iY, NodeType.CCNode);
+
+                Hashtable ht = new Hashtable();
+                ht.Add("NodeID", node.NodeID);
+                ht.Add("Name", node.Name);
+                ht.Add("NodeType", 2); // 抄送节点.
+
+                return BP.Tools.Json.ToJsonEntityModel(ht);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public string CreateSubFlowNode()
+        {
+            try
+            {
+                string x = this.GetRequestVal("X");
+                string y = this.GetRequestVal("Y");
+                string icon = this.GetRequestVal("icon");
+
+                int iX = 20;
+                int iY = 20;
+
+                if (DataType.IsNullOrEmpty(x) == false)
+                    iX = (int)double.Parse(x);
+
+                if (DataType.IsNullOrEmpty(y) == false)
+                    iY = (int)double.Parse(y);
+
+                Node node = BP.WF.Template.TemplateGlo.NewEtcNode(this.FlowNo, iX, iY, NodeType.SubFlowNode);
+
+                Hashtable ht = new Hashtable();
+                ht.Add("NodeID", node.NodeID);
+                ht.Add("Name", node.Name);
+                ht.Add("NodeType", 3); // 子流程节点.
+
+                return BP.Tools.Json.ToJsonEntityModel(ht);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 创建流程节点并返回编号
         /// </summary>
@@ -42,13 +104,14 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(y) == false)
                     iY = (int)double.Parse(y);
 
-                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FK_Flow, iX, iY, icon, nodeModel);
+                Node node = BP.WF.Template.TemplateGlo.NewNode(this.FlowNo, iX, iY, icon, nodeModel);
 
 
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);
                 ht.Add("Name", node.Name);
                 ht.Add("RunModel", (int)node.HisRunModel);
+                ht.Add("NodeType", 0); //用户节点。
 
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }
@@ -57,6 +120,10 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+        /// <summary>
+        /// 创建条件
+        /// </summary>
+        /// <returns></returns>
         public string CreateCond()
         {
             try
@@ -64,7 +131,6 @@ namespace BP.WF.HttpHandler
                 string x = this.GetRequestVal("X");
                 string y = this.GetRequestVal("Y");
                 string icon = this.GetRequestVal("icon");
-                int nodeModel = this.GetRequestValInt("NodeModel");
 
                 int iX = 20;
                 int iY = 20;
@@ -75,7 +141,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(y) == false)
                     iY = (int)double.Parse(y);
 
-                Node node = BP.WF.Template.TemplateGlo.NewCond(this.FK_Flow, iX, iY);
+                Node node = BP.WF.Template.TemplateGlo.NewEtcNode(this.FlowNo, iX, iY, NodeType.RouteNode);
 
                 Hashtable ht = new Hashtable();
                 ht.Add("NodeID", node.NodeID);
@@ -98,11 +164,11 @@ namespace BP.WF.HttpHandler
             try
             {
                 BP.WF.Node node = new BP.WF.Node();
-                node.NodeID = this.FK_Node;
+                node.NodeID = this.NodeID;
                 if (node.RetrieveFromDBSources() == 0)
                     return "err@删除失败,没有删除到数据，估计该节点已经别删除了.";
 
-                if (node.IsStartNode == true)
+                if (node.ItIsStartNode == true)
                     return "err@开始节点不允许被删除。";
 
                 node.Delete();
@@ -165,37 +231,6 @@ namespace BP.WF.HttpHandler
 
             return "err@修改节点失败，请确认该节点是否存在？";
         }
-        ///// <summary>
-        ///// 修改节点运行模式
-        ///// </summary>
-        ///// <returns></returns>
-        //public string Node_ChangeRunModel()
-        //{
-        //    string runModel = GetValFromFrmByKey("RunModel");
-        //    BP.WF.Node node = new BP.WF.Node(this.FK_Node);
-        //    //节点运行模式
-        //    switch (runModel)
-        //    {
-        //        case "NodeOrdinary":
-        //            node.HisRunModel = BP.WF.RunModel.Ordinary;
-        //            break;
-        //        case "NodeFL":
-        //            node.HisRunModel = BP.WF.RunModel.FL;
-        //            break;
-        //        case "NodeHL":
-        //            node.HisRunModel = BP.WF.RunModel.HL;
-        //            break;
-        //        case "NodeFHL":
-        //            node.HisRunModel = BP.WF.RunModel.FHL;
-        //            break;
-        //        case "NodeSubThread":
-        //            node.HisRunModel = BP.WF.RunModel.SubThread;
-        //            break;
-        //    }
-        //    node.Update();
-
-        //    return "设置成功.";
-        //}
         #endregion end Node
 
         /// <summary>
@@ -207,7 +242,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 Directions di = new Directions();
-                di.Retrieve(DirectionAttr.FK_Flow, this.FK_Flow, DirectionAttr.Node, this.FK_Node, DirectionAttr.ToNode, this.GetValFromFrmByKey("ToNode"));
+                di.Retrieve(DirectionAttr.FK_Flow, this.FlowNo, DirectionAttr.Node, this.NodeID, DirectionAttr.ToNode, this.GetValFromFrmByKey("ToNode"));
                 foreach (Direction direct in di)
                 {
                     direct.Delete();
@@ -223,7 +258,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
+                string pk = this.FlowNo + "_" + this.NodeID + "_" + this.GetValFromFrmByKey("ToNode");
 
                 Direction dir = new Direction();
                 dir.setMyPK(pk);
@@ -248,7 +283,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string pk = this.FK_Flow + "_" + this.FK_Node + "_" + this.GetValFromFrmByKey("ToNode");
+                string pk = this.FlowNo + "_" + this.NodeID + "_" + this.GetValFromFrmByKey("ToNode");
 
                 Direction dir = new Direction();
                 dir.setMyPK(pk);
@@ -258,7 +293,6 @@ namespace BP.WF.HttpHandler
                     dir.Des = this.GetValFromFrmByKey("Des");
                     dir.DirectUpdate();
                 }
-
                 return "@保存成功！";
             }
             catch (Exception ex)
@@ -278,23 +312,23 @@ namespace BP.WF.HttpHandler
 
                 //获取当前流程已经存在的数量
                 LabNotes labNotes = new LabNotes();
-                int num = labNotes.Retrieve(LabNoteAttr.FK_Flow, this.FK_Flow);
+                int num = labNotes.Retrieve(LabNoteAttr.FK_Flow, this.FlowNo);
 
                 string Name = this.GetValFromFrmByKey("LabName");
                 int x = int.Parse(this.GetValFromFrmByKey("X"));
                 int y = int.Parse(this.GetValFromFrmByKey("Y"));
 
-                lb.setMyPK(this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1));
+                lb.setMyPK(this.FlowNo + "_" + x + "_" + y + "_" + (num + 1));
                 lb.Name = Name;
-                lb.FK_Flow = this.FK_Flow;
+                lb.FlowNo = this.FlowNo;
                 lb.X = x;
                 lb.Y = y;
 
                 lb.DirectInsert();
 
                 Hashtable ht = new Hashtable();
-                ht.Add("MyPK", this.FK_Flow + "_" + x + "_" + y + "_" + (num + 1));
-                ht.Add("FK_Flow", this.FK_Flow);
+                ht.Add("MyPK", this.FlowNo + "_" + x + "_" + y + "_" + (num + 1));
+                ht.Add("FK_Flow", this.FlowNo);
 
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }

@@ -85,7 +85,7 @@ namespace BP.Tools
                 {
                     _code = BP.Tools.chs2py.convert(str[i].ToString());
 
-                    if (string.IsNullOrWhiteSpace(_code))
+                    if (DataType.IsNullOrEmpty(_code))
                         continue;
 
                     _Temp = _Temp + _code.Substring(0, 1);

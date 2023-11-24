@@ -102,7 +102,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 工具栏的事务编号
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -168,7 +168,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 显示在工具栏中
         /// </summary>
-        public bool IsMyFlow
+        public bool ItIsMyFlow
         {
             get
             {
@@ -180,7 +180,7 @@ namespace BP.WF.Template
             }
         }
         //显示在流程树中
-        public bool IsMyTree
+        public bool ItIsMyTree
         {
             get
             {
@@ -192,7 +192,7 @@ namespace BP.WF.Template
             }
         }
         //显示在工作查看器
-        public bool IsMyView
+        public bool ItIsMyView
         {
             get
             {
@@ -205,7 +205,7 @@ namespace BP.WF.Template
         }
         
         //显示在抄送工具栏中
-        public bool IsMyCC
+        public bool ItIsMyCC
         {
             get
             {

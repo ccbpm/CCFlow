@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import { PrivateKey } from '../wf/api/config.js';
 import { LoginCCBPM } from "@/wf/api/Dev2Interface";
 import { devServer } from '../../vue.config';
 export default {
@@ -133,7 +132,7 @@ export default {
 			}*/
 
 			//第2步: 根据私钥执行登陆,为了安全期间私约保存好,不能明文.
-			const result = LoginCCBPM(PrivateKey, this.ruleForm2.username);
+			const result = LoginCCBPM(process.env.VUE_APP_PRIVATEKEY, this.ruleForm2.username);
 			if (result == "") {
 				this.$message.error("登录失败");
 				return;
@@ -178,7 +177,7 @@ export default {
 	margin: auto;
 	margin-top: 20vh;
 	width: 100vw;
-	height: 75vh;
+	height: 70vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;

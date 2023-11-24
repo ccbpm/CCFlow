@@ -111,15 +111,15 @@ namespace BP.Cloud.HttpHandler
                 ep.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
 
                 ep.OrgName = this.GetRequestVal("TB_OrgName");
-                ep.FK_Dept = org.No;
+                ep.DeptNo = org.No;
                 ep.OrgNo = org.No;
                 ep.No = ep.OrgNo + "_" + tel;
                 ep.DirectInsert();
 
                 // 密码加密。
                 string pass = this.GetRequestVal("TB_PassWord2");
-                if (BP.Difference.SystemConfig.IsEnablePasswordEncryption == true)
-                    pass = BP.Tools.Cryptography.EncryptString(pass);
+                if (BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
+                    pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
                 DBAccess.RunSQL("UPDATE Port_Emp SET Pass='" + pass + "' WHERE No='" + ep.No + "'");
 
                 //初始化数据.

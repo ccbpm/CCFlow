@@ -15,23 +15,23 @@ namespace BP.WF.Template
     {
         #region 基本属性
         /// <summary>
-        /// WebHost
+        /// 系统根路径
         /// </summary>
         public const string WebHost = "WebHost";
         /// <summary>
-        /// 流程
+        /// 系统私钥
         /// </summary>
         public const string TokenPiv = "TokenPiv";
         /// <summary>
-        /// 参数
+        /// 系统公钥
         /// </summary>
         public const string TokenPublie = "TokenPublie";
         /// <summary>
-        /// 任务状态
+        /// 系统回调审批态的url全路径
         /// </summary>
         public const string CallBack = "CallBack";
         /// <summary>
-        /// Msg
+        /// 请求模式
         /// </summary>
         public const string RequestMethod = "RequestMethod";
         /// <summary>
@@ -114,7 +114,7 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(SubSystemAttr.WebHost);
             }
         }
-        public bool IsJson
+        public bool ItIsJson
         {
             get
             {

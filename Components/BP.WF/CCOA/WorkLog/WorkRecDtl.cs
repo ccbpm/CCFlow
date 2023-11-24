@@ -153,7 +153,7 @@ namespace BP.CCOA.WorkLog
                 Map map = new Map("OA_WorkRecDtl", "工作内容");
 
 
-                map.AddTBStringPK("No", null, "编号", false, false, 0, 40, 10);
+                map.AddTBStringPK("MyPK", null, "编号", false, false, 0, 40, 10);
 
                 map.AddTBString(WorkRecDtlAttr.RefPK, null, "RefPK", false, false, 0, 40, 10);
 

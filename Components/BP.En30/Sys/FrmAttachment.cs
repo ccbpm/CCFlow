@@ -202,7 +202,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可见？
         /// </summary>
-        public bool IsVisable
+        public bool ItIsVisable
         {
             get
             {
@@ -323,7 +323,7 @@ namespace BP.Sys
         /// <summary>
         /// 节点编号
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -365,7 +365,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以上传
         /// </summary>
-        public bool IsUpload
+        public bool ItIsUpload
         {
             get
             {
@@ -379,7 +379,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以下载
         /// </summary>
-        public bool IsDownload
+        public bool ItIsDownload
         {
             get
             {
@@ -408,7 +408,7 @@ namespace BP.Sys
         /// <summary>
         /// 自动控制大小
         /// </summary>
-        public bool IsAutoSize
+        public bool ItIsAutoSize
         {
             get
             {
@@ -422,7 +422,7 @@ namespace BP.Sys
         /// <summary>
         /// IsShowTitle
         /// </summary>
-        public bool IsShowTitle
+        public bool ItIsShowTitle
         {
             get
             {
@@ -436,7 +436,7 @@ namespace BP.Sys
         /// <summary>
         /// 备注列
         /// </summary>
-        public bool IsNote
+        public bool ItIsNote
         {
             get
             {
@@ -451,7 +451,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用扩张列
         /// </summary>
-        public bool IsExpCol
+        public bool ItIsExpCol
         {
             get
             {
@@ -529,15 +529,15 @@ namespace BP.Sys
             {
                 if (this.AthSaveWay == BP.Sys.AthSaveWay.IISServer)
                 {
-                    return BP.Difference.SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FK_MapData + "/";
+                    return BP.Difference.SystemConfig.PathOfDataUser + @"/UploadFile/" + this.FrmID + "/";
                 }
 
                 if (this.AthSaveWay == BP.Sys.AthSaveWay.FTPServer)
                 {
-                    return @"//" + this.FK_MapData + "//";
+                    return @"//" + this.FrmID + "//";
                 }
 
-                return this.FK_MapData;
+                return this.FrmID;
             }
         }
         /// <summary>
@@ -548,7 +548,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(FrmAttachmentAttr.DataRefNoOfObj);
-                if (str == "")
+                if (str.Equals(""))
                     str = this.NoOfObj;
                 return str;
             }
@@ -642,7 +642,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否是合流汇总多附件？
         /// </summary>
-        public bool IsHeLiuHuiZong
+        public bool ItIsHeLiuHuiZong
         {
             get
             {
@@ -656,7 +656,7 @@ namespace BP.Sys
         /// <summary>
         /// 该附件是否汇总到合流节点上去？
         /// </summary>
-        public bool IsToHeLiuHZ
+        public bool ItIsToHeLiuHZ
         {
             get
             {
@@ -698,17 +698,17 @@ namespace BP.Sys
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
                 return this.GetValStrByKey(FrmAttachmentAttr.FK_MapData);
             }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.FK_MapData, value);
+            }
 
-        }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(FrmAttachmentAttr.FK_MapData, val);
         }
         #endregion
 
@@ -779,7 +779,8 @@ namespace BP.Sys
 
                 //for渔业厅增加.
                 map.AddTBInt(FrmAttachmentAttr.AthRunModel, 0, "运行模式", false, false);
-                map.AddTBInt(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", false, false);
+                //for oppein欧派 BP.Difference.SystemConfig.AthSaveWayDefault
+                map.AddTBInt(FrmAttachmentAttr.AthSaveWay, BP.Difference.SystemConfig.AthSaveWayDefault, "保存方式", false, false);
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 200, 20);
@@ -843,34 +844,34 @@ namespace BP.Sys
         }
         #endregion
 
-        public bool IsUse = false;
+        public bool ItIsUse = false;
         protected override bool beforeUpdateInsertAction()
         {
-            if (this.FK_Node == 0)
+            if (this.NodeID == 0)
             {
                 //适应设计器新的规则 by dgq 
-                if (!DataType.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FK_MapData))
+                if (!DataType.IsNullOrEmpty(this.NoOfObj) && this.NoOfObj.Contains(this.FrmID))
                     this.setMyPK(this.NoOfObj);
                 else
-                    this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
+                    this.setMyPK(this.FrmID + "_" + this.NoOfObj);
             }
             else
-                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
+                this.setMyPK(this.FrmID + "_" + this.NoOfObj + "_" + this.NodeID);
 
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeInsert()
         {
             //在属性实体集合插入前，clear父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
-            if (this.FK_Node == 0)
-                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj);
+            if (this.NodeID == 0)
+                this.setMyPK(this.FrmID + "_" + this.NoOfObj);
             else
-                this.setMyPK(this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node);
+                this.setMyPK(this.FrmID + "_" + this.NoOfObj + "_" + this.NodeID);
 
             //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
-            if (this.FK_Node != 0 && this.HisCtrlWay == AthCtrlWay.PK)
+            if (this.NodeID != 0 && this.HisCtrlWay == AthCtrlWay.PK)
                 this.HisCtrlWay = AthCtrlWay.WorkID;
 
             return base.beforeInsert();
@@ -881,11 +882,11 @@ namespace BP.Sys
         protected override void afterInsert()
         {
             GroupField gf = new GroupField();
-            if (this.FK_Node == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
+            if (this.NodeID == 0 && gf.IsExit(GroupFieldAttr.CtrlID, this.MyPK) == false)
             {
                 if (this.GetParaBoolen("IsFieldAth") == true)
                     gf.SetPara("IsFieldAth", 1);
-                gf.FrmID = this.FK_MapData;
+                gf.FrmID = this.FrmID;
                 gf.CtrlID = this.MyPK;
                 gf.CtrlType = "Ath";
                 gf.Lab = this.Name;
@@ -921,10 +922,10 @@ namespace BP.Sys
         /// <summary>
         /// 附件s
         /// </summary>
-        /// <param name="fk_mapdata">s</param>
-        public FrmAttachments(string fk_mapdata)
+        /// <param name="frmID">s</param>
+        public FrmAttachments(string frmID)
         {
-            this.Retrieve(FrmAttachmentAttr.FK_MapData, fk_mapdata, FrmAttachmentAttr.FK_Node, 0);
+            this.Retrieve(FrmAttachmentAttr.FK_MapData, frmID, FrmAttachmentAttr.FK_Node, 0);
         }
         /// <summary>
         /// 得到它的 Entity

@@ -1,0 +1,476 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>人员选择器</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+
+    <link href="../js/mui/css/mui.css" rel="stylesheet" type="text/css" />
+    <script src="../js/jquery.js" type="text/javascript"></script>
+    <script src="../js/mui/js/mui.min.js" type="text/javascript"></script>
+
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <script src="../Scripts/bootstrap/js/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Scripts/commonYangYH.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
+    <script src="../Scripts/bootstrap/js/jstree.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/jsTree.ddl.js" type="text/javascript"></script>
+    <!-- 导入配置文件. -->
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <style type="text/css">
+        #TB_Doc {
+            height: 132px;
+            width: 433px;
+        }
+
+        .mui-bar-tab .mui-tab-item {
+            color: #000;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(function () {
+
+            InitTreeData();
+            bindTest();
+            $("#SelectEmps").on("tap", function () {
+                SelectEmps();
+            });
+            $("#Close").on("tap", function () {
+                Close();
+            });
+
+        });
+
+        //确定 人员选择
+        function SelectEmps() {
+
+            GetSelectedEmpsReturnVal();
+            //No  是返回到别的页面的值
+            if (returnVal.No == undefined || returnVal.No == '') {
+                mui.alert("未选择人员");
+                return;
+            }
+
+            if (GetQueryString("PageName") == "Askfor") {
+                SetHref("Askfor.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&Select_No=" + returnVal.No + "&Select_Name=" + returnVal.Name);
+                return;
+            }
+            if (GetQueryString("PageName") == "Shift") {
+                SetHref("Shift.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&Select_No=" + returnVal.No + "&Select_Name=" + returnVal.Name + "&PageFrom=" + GetQueryString("PageFrom"));
+                return;
+            }
+            if (GetQueryString("PageName") == "CC") {
+                DoCC(returnVal.No);
+                SetHref("CC.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+                return;
+            }
+            if (GetQueryString("PageName") == "HuiQian") {
+                DoHuiQian(returnVal.No);
+                SetHref("HuiQian.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+                return;
+            }
+            if (GetQueryString("PageName") == "Forward") {
+                SetHref("Forward.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&Select_No=" + returnVal.No + "&Select_Name=" + returnVal.Name);
+                return;
+            }
+
+            if (GetQueryString("PageName") == "TransferCustom") {
+                var mypk = GetQueryString("ToNode") + "_" + GetQueryString("WorkID");
+                var en = new Entity("BP.WF.TransferCustom", mypk);
+                en.Worker = en.Worker + "," + returnVal.No + ",";
+                en.WorkerName = en.WorkerName + "," + returnVal.Name + ",";
+                en.Update();
+                SetHref("TransferCustom.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+                return;
+            }
+
+            AddEmpsExt(returnVal.No);
+        }
+
+        //确定  执行抄送操作
+        function DoCC(empStr) {
+
+            var workID = GetQueryString("WorkID");
+
+            var webUser = new WebUser();
+
+
+            var empNo = empStr;
+            if (webUser.CCBPMRunModel == 2)
+                empNo = webUser.OrgNo + "_" + empStr;
+
+            var emp = new Entity("BP.Port.Emp", empNo);
+
+            var empName = emp.Name;
+            var empDeptNo = emp.FK_Dept;
+            var empDeptName = emp.FK_DeptText;
+
+            var gwf = new Entity("BP.WF.GenerWorkFlow", workID);
+
+            var title = gwf.Title;
+            var nodeName = gwf.NodeName;
+            var flowName = gwf.FlowName;
+
+            var cc = new Entity("BP.WF.CCList");
+
+            //当前人员的信息.
+            cc.Rec = webUser.No;
+            cc.RecName = webUser.Name;
+
+            //抄送给人员的信息.
+            cc.CCTo = empStr;
+            cc.CCToName = empName;
+
+            cc.FK_Node = GetQueryString("FK_Node");
+            cc.WorkID = GetQueryString("WorkID");
+
+            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+
+            if (cc.IsExits() == true) {
+                alert('该人员[' + cc.CCToName + ']已经存在.');
+                return;
+            }
+
+            //抄送给部门的信息.
+            cc.CCToDept = empDeptNo;
+            cc.CCToDeptName = empDeptName;
+
+            cc.WorkID = GetQueryString("WorkID");
+            cc.FK_Node = GetQueryString("FK_Node");
+
+            cc.NodeName = nodeName;
+            cc.FK_Flow = GetQueryString("FK_Flow");
+            cc.FlowName = flowName;
+            cc.Title = title;
+            cc.MyPK = cc.WorkID + "_" + cc.FK_Node + "_" + cc.CCTo;
+
+            if (cc.IsExits() == true) {
+                alert('该人员已经存在.');
+                return;
+            }
+
+            cc.Insert();
+
+        }
+
+        //确定  执行会签操作
+        function DoHuiQian(emps) {
+
+
+
+            //执行数据初始化工作.
+            var hand = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            hand.AddUrlData();
+            hand.AddPara("AddEmps", emps);
+            var data = hand.DoMethodReturnString("HuiQian_AddEmps");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+        }
+
+        function AddEmpsExt(emps) {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            handler.AddUrlData();
+            handler.AddPara("AddEmps", emps);
+            var data = handler.DoMethodReturnString("AccepterOfGener_AddEmps");
+
+            if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                mui.alert(data);
+                return;
+            }
+
+            SetHref("AccepterOfGener.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode"));
+        }
+        //取消人员选择
+        function Close() {
+            if (GetQueryString("PageName") == "Askfor") {
+                SetHref("Askfor.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+            } else if (GetQueryString("PageName") == "CC") {
+                SetHref("CC.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+            } else if (GetQueryString("PageName") == "HuiQian") {
+                SetHref("HuiQian.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+            } else if (GetQueryString("PageName") == "Forward") {
+                SetHref("Forward.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+            } else if (GetQueryString("PageName") == "TransferCustom") {
+
+                SetHref("TransferCustom.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node"));
+                return;
+            } else {
+                SetHref("AccepterOfGener.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode"));
+            }
+
+        }
+
+        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore') == "1" ? true : false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
+        var returnVal = {};
+        var isFirst = true;
+        //初始化树  接收人
+        function InitTreeData() {
+            $('#OrgJSTree').css('display', 'block');
+
+            var url = '';
+
+            //初始化Tree
+            var plugins = [];
+            if (pageData.IsSelectMore == true) { //多选
+                plugins = [
+                    "checkbox",
+                    "state",
+                    "conditionalselect"
+                ];
+            }
+            //返回节点数组
+            var initNodeData = function (data, fk_dept2) {
+                data = cceval('(' + data + ')');
+                var fk_dept = fk_dept2;//pageData.FK_Dept;
+                var parentNo = undefined;
+                var fkDeptObj = $.grep(data.Depts, function (value) {
+                    return value.No == fk_dept;
+                });
+                if (fkDeptObj != undefined && fkDeptObj.length == 1) {
+                    parentNo = fkDeptObj[0].ParentNo;
+                }
+                pageData.FK_Dept = parentNo;
+                //本节点
+                var instance = $('#OrgJSTree').jstree(true);
+                var depts = $.grep(data.Depts, function (value) {
+                    return value.ParentNo == parentNo;
+                })
+
+                //if (instance.)
+                //子部门
+                var childDepts = $.grep(data.Depts, function (value) {
+                    return value.ParentNo == fk_dept;
+                })
+                //人员
+                var emps = data.Emps;
+
+                var itemArr = [];
+                $.each(depts, function (i, dept) {
+                    var deptNode = {
+                        "text": dept.Name,
+                        "id": dept.No,
+                        "children": true,
+                        "data": dept
+                    };
+
+                    if (dept.No == fk_dept) {  //是本部门时加载子部门和人员
+                        var children = [];
+                        if (childDepts.length > 0) {
+                            $.each(childDepts, function (i, childDept) {
+                                var childDeptNode = {
+                                    "text": childDept.Name,
+                                    "id": childDept.No,
+                                    "children": true,
+                                    "data": childDept
+                                };
+
+                                children.push(childDeptNode);
+                            });
+                        }
+                        if (emps.length > 0) {
+                            $.each(emps, function (i, emp) {
+                                var empNode = {
+                                    "text": emp.Name,
+                                    "id": emp.No,
+                                    "children": false,
+                                    "data": emp,
+                                    "icon": "jstree-file"
+                                };
+                                children.push(empNode);
+                            });
+                        }
+                        //deptNode.children = children;
+                        deptNode.data.childrenData = children;
+                    }
+
+                    itemArr.push(deptNode);
+                });
+
+                if (instance == false || instance.get_node(fk_dept) == false) {
+                    pageData.ParentDept = parentNo;
+                }
+                else {
+                    itemArr = itemArr[0].data.childrenData;
+                }
+                return itemArr;
+            };
+
+            $('#OrgJSTree').jstree({
+                'core': {
+                    'data': function (node, cb) {
+
+                        //初始化根节点
+                        if (node.id == "#") {
+
+                            var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+                            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                            if (pageData.FK_Dept != undefined)
+                                handler.AddPara("FK_Dept", pageData.FK_Dept);
+                            var data = handler.DoMethodReturnString("SelectEmps_Init");
+                            if (data.indexOf('err@') == 0) {
+                                alert(data);
+                                return;
+                            }
+
+                            var fk_dept2 = pageData.FK_Dept;
+                            cb(initNodeData(data, fk_dept2));
+
+
+                        }
+                        else {
+                            if (node.data != undefined && node.data.childrenData != undefined && node.data.childrenData.length > 0) {
+                                var fk_dept2 = node.id;
+                                cb(node.data.childrenData, fk_dept2);
+                            }
+                            else {
+                                pageData.FK_Dept = node.id;
+                                var handler = new HttpHandler("BP.WF.HttpHandler.CCMobile_WorkOpt");
+                                handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+                                handler.AddPara("FK_Dept", node.id);
+                                var data = handler.DoMethodReturnString("SelectEmps_Init");
+
+                                if (data.indexOf('err@') == 0) {
+                                    alert(data);
+                                    return;
+                                }
+
+                                var fk_dept2 = node.id;
+                                cb(initNodeData(data, fk_dept2));
+                            }
+                        }
+                    }
+                },
+                "plugins": plugins
+            }).on('changed.jstree', function (node, cb) {
+                GetSelectedEmpsReturnVal();
+            }).bind("loaded.jstree", function (event, data) {
+                data.instance.open_all();
+            }).bind("select_node.jstree", function (e, data) { //点击事件
+                //触发toggle_node 事件 就行了
+                //if (isFirst == true)
+                //    isFirst = false;
+                //else
+                $('#OrgJSTree').jstree("toggle_node", data.node);
+
+            }).on("loaded.jstree", function (event, data) {
+                if (typeof data.instance.clear_state === "function")
+                    data.instance.clear_state(); // <<< 这句清除jstree保存的选中状态
+            });
+        }
+        //弹出树
+        function bindTest() {
+            $('#test').bind('click', function () {
+                if ($('#OrgJSTree').css('display') == "none") {
+                    $('#OrgJSTree').css('display', 'block');
+                    var instance = $('#OrgJSTree').jstree(true);
+                    if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
+                        instance.select_node($('#orgTxt').val());
+                    }
+                }
+                else {
+                    $('#OrgJSTree').css('display', 'none');
+                }
+            });
+
+            $('#toPrevDept').bind('tap', function () {
+                if (pageData.ParentDept == 'null' || pageData.ParentDept == 0) {
+                    if (webUser.CCBPMRunModel == 2) {
+                        if (pageData.ParentDept == "100") {
+                            alert("已到第一级机构");
+                            return;
+                        }
+                    } else {
+                        alert("已到第一级机构");
+                        return;
+                    }
+                }
+                else {
+                    pageData.FK_Dept = pageData.ParentDept;
+                    $('#OrgJSTree').jstree(true).refresh();
+                }
+            });
+        }
+        //获取树选中的值
+        function GetSelectedEmpsReturnVal() {
+
+            var instance = $('#OrgJSTree').jstree(true);
+
+            var selectedIdArr = instance.get_selected();
+            var selectedNodes = [];
+            var nameArrs = [];
+            var noArr = [];
+            var nameArr = [];
+            $.each(selectedIdArr, function (i, selectedId) {
+                selectedNodes.push(instance.get_node(selectedId));
+            });
+
+            $.each(selectedNodes, function (i, selectedNode) {
+                if (selectedNodes[i].icon != true) {
+                    nameArrs.push(selectedNode.data);
+                }
+            });
+
+            if (nameArrs.length > 0) {
+                for (var property in nameArrs[0]) {
+                    returnVal[property] = [];
+                }
+            }
+            $.each(nameArrs, function (i, selected) {
+                for (var property in returnVal) {
+                    var val = selected[property];
+                    if (property == "No")
+                        val = val.replace("Emp_", "");
+                    returnVal[property].push(val);
+                }
+            });
+            for (var property in nameArrs[0]) {
+                returnVal[property] = returnVal[property].join(",");
+            }
+
+
+        }
+    </script>
+    <style type="text/css">
+        a {
+            text-decoration: none;
+            font-size: 17px;
+        }
+    </style>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">选择接受人</h1>
+    </header>
+    <nav class="mui-bar mui-bar-tab">
+        <a class="mui-tab-item" href="#" id="SelectEmps">确定</a>
+        <a class="mui-tab-item" href="#" id="Close" )=)>取消</a>
+        <a class="mui-tab-item" href="#" id="toPrevDept" )=)>上一级</a>
+    </nav>
+    <div class="mui-content" style="background-color:white">
+        <div class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default" style="margin-top:50px"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    //初始化单页的区域滚动
+    mui('.mui-scroll-wrapper').scroll();
+</script>
+
+</html>

@@ -12,7 +12,7 @@ namespace BP.Sys
         /// <summary>
         /// 主表
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FK_MapData";
         /// <summary>
         /// KeyOfEn
         /// </summary>
@@ -141,29 +141,30 @@ namespace BP.Sys
         {
             this.SetValByKey(FrmRBAttr.KeyOfEn, val);
         }
-        public int IntKey
+        public string IntKey
         {
             get
             {
-                return this.GetValIntByKey(FrmRBAttr.IntKey);
+                return this.GetValStrByKey(FrmRBAttr.IntKey);
             }
         }
-        public void setIntKey(int val)
+        public void setIntKey(string val)
         {
             this.SetValByKey(FrmRBAttr.IntKey, val);
         }
 
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStrByKey(FrmRBAttr.FK_MapData);
+                return this.GetValStrByKey(FrmRBAttr.FrmID);
+            }
+            set
+            {
+                this.SetValByKey(FrmRBAttr.FrmID, value);
             }
         }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(FrmRBAttr.FK_MapData, val);
-        }
+       
         public string EnumKey
         {
             get
@@ -210,14 +211,14 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmRB", "单选框");
-                map.IndexField = FrmRBAttr.FK_MapData;
+                map.IndexField = FrmRBAttr.FrmID;
 
                 map.AddMyPK();
-                map.AddTBString(FrmRBAttr.FK_MapData, "", "表单ID", true, false, 0, 200, 20);
+                map.AddTBString(FrmRBAttr.FrmID, "", "表单ID", true, false, 0, 200, 20);
                 map.AddTBString(FrmRBAttr.KeyOfEn, "", "字段", true, false, 0, 200, 20);
                 map.AddTBString(FrmRBAttr.EnumKey, "", "枚举值", true, false, 0, 30, 20);
                 map.AddTBString(FrmRBAttr.Lab, "", "标签", true, false, 0, 500, 20);
-                map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
+                map.AddTBString(FrmRBAttr.IntKey, "0", "IntKey", true, false, 0, 500, 20);
                 map.AddTBInt(MapAttrAttr.UIIsEnable, 0, "是否启用", true, false);
 
                 //要执行的脚本.
@@ -236,13 +237,13 @@ namespace BP.Sys
 
         protected override bool beforeInsert()
         {
-            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey);
+            this.setMyPK(this.FrmID + "_" + this.KeyOfEn + "_" + this.IntKey);
             return base.beforeInsert();
         }
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn + "_" + this.IntKey);
+            this.setMyPK(this.FrmID + "_" + this.KeyOfEn + "_" + this.IntKey);
             return base.beforeUpdateInsertAction();
         }
     }

@@ -2,6 +2,7 @@
 using BP.DA;
 using BP.En;
 using BP.Sys;
+using BP.Sys.Base;
 
 namespace BP.WF.Template.Frm
 {
@@ -35,7 +36,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可以导出
         /// </summary>
-        public bool IsImp
+        public bool ItIsImp
         {
             get
             {
@@ -49,7 +50,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可以导入
         /// </summary>
-        public bool IsExp
+        public bool ItIsExp
         {
             get
             {
@@ -122,7 +123,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否启用行锁定.
         /// </summary>
-        public bool IsRowLock
+        public bool ItIsRowLock
         {
             get
             {
@@ -167,7 +168,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否启用Link,在记录的右边.
         /// </summary>
-        public bool IsEnableLink
+        public bool ItIsEnableLink
         {
             get
             {
@@ -265,7 +266,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -447,7 +448,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否显示数量
         /// </summary>
-        public bool IsShowSum
+        public bool ItIsShowSum
         {
             get
             {
@@ -461,7 +462,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否显示Idx
         /// </summary>
-        public bool IsShowIdx
+        public bool ItIsShowIdx
         {
             get
             {
@@ -475,7 +476,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否显示标题
         /// </summary>
-        public bool IsShowTitle
+        public bool ItIsShowTitle
         {
             get
             {
@@ -489,7 +490,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否是合流汇总数据
         /// </summary>
-        public bool IsHLDtl
+        public bool ItIsHLDtl
         {
             get
             {
@@ -503,7 +504,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否是分流
         /// </summary>
-        public bool IsFLDtl
+        public bool ItIsFLDtl
         {
             get
             {
@@ -515,7 +516,7 @@ namespace BP.WF.Template.Frm
             }
         }
         public int _IsReadonly = 2;
-        public bool IsReadonly
+        public bool ItIsReadonly
         {
             get
             {
@@ -527,7 +528,7 @@ namespace BP.WF.Template.Frm
                         return false;
                 }
 
-                if (this.IsDelete || this.IsInsert || this.IsUpdate)
+                if (this.ItIsDelete || this.ItIsInsert || this.ItIsUpdate)
                 {
                     _IsReadonly = 0;
                     return false;
@@ -539,7 +540,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可以删除？
         /// </summary>
-        public bool IsDelete
+        public bool ItIsDelete
         {
             get
             {
@@ -553,7 +554,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可以新增？
         /// </summary>
-        public bool IsInsert
+        public bool ItIsInsert
         {
             get
             {
@@ -567,7 +568,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可见
         /// </summary>
-        public bool IsView
+        public bool ItIsView
         {
             get
             {
@@ -581,7 +582,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否可以更新？
         /// </summary>
-        public bool IsUpdate
+        public bool ItIsUpdate
         {
             get
             {
@@ -595,7 +596,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否启用多附件
         /// </summary>
-        public bool IsEnableAthM
+        public bool ItIsEnableAthM
         {
             get
             {
@@ -609,7 +610,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否启用分组字段
         /// </summary>
-        public bool IsEnableGroupField
+        public bool ItIsEnableGroupField
         {
             get
             {
@@ -623,7 +624,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否起用审核连接
         /// </summary>
-        public bool IsEnablePass
+        public bool ItIsEnablePass
         {
             get
             {
@@ -638,7 +639,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否copy数据？
         /// </summary>
-        public bool IsCopyNDData
+        public bool ItIsCopyNDData
         {
             get
             {
@@ -654,7 +655,7 @@ namespace BP.WF.Template.Frm
         /// 是否启用一对多多
         /// </summary>
     
-        public bool IsUse = false;
+        public bool ItIsUse = false;
         /// <summary>
         /// 是否检查人员的权限
         /// </summary>
@@ -686,7 +687,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -716,7 +717,7 @@ namespace BP.WF.Template.Frm
             get
             {
                 //如果不可以插入，就让其返回0.
-                if (this.IsInsert == false)
+                if (this.ItIsInsert == false)
                     return 0;
 
                 return this.GetValIntByKey(MapDtlAttr.RowsOfList);
@@ -830,7 +831,7 @@ namespace BP.WF.Template.Frm
                 //map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
                 //map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
 
-                //map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
+                map.AddTBInt(MapDtlAttr.RowsOfList, 0, "初始化行数", true, false);
                 //map.SetHelperAlert(MapDtlAttr.RowsOfList, "对第1个版本有效.");
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", true, true);
@@ -857,7 +858,7 @@ namespace BP.WF.Template.Frm
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true, MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.
-                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true, MapDtlAttr.ListShowModel, "@0=表格@1=卡片@2=自定义Url");
+                map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, true, MapDtlAttr.ListShowModel, "@0=表格@1=卡片@2=自定义Url@3=2维表@4=3维表(左)@5=3维表(上)");
 
                 map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=开发者表单");
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
@@ -946,11 +947,22 @@ namespace BP.WF.Template.Frm
                 map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true, MapDtlAttr.DtlOpenType, "@0=操作员@1=WorkID-流程ID@2=FID-干流程ID@3=PWorkID-父流程WorkID");
+                map.AddTBAtParas(1000);
                 #endregion 工作流相关.
 
                 #region 相关方法.
                 map.AddGroupMethod("基本功能");
                 RefMethod rm = new RefMethod();
+                rm = new RefMethod();
+                rm.Title = "显示模式"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".ListShowModel";
+                //rm.Icon = "../Img/Setting.png";
+                rm.Icon = "icon-ghost";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".HidAttr";
@@ -1091,7 +1103,7 @@ namespace BP.WF.Template.Frm
         protected override void afterInsertUpdateAction()
         {
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }
@@ -1108,7 +1120,7 @@ namespace BP.WF.Template.Frm
 
             //MapDtl dtlOfThis = new MapDtl(this.No);
             //dtlOfThis.Copy(dtl);
-            //dtlOfThis.setFK_MapData(this.FK_MapData);
+            //dtlOfThis.FrmID =this.FrmID;
             //dtlOfThis.Update();
 
             //删除当前从表Attrs.
@@ -1121,7 +1133,7 @@ namespace BP.WF.Template.Frm
             //执行字段导入.
             foreach (MapAttr item in attrs)
             {
-                item.setFK_MapData(this.No);
+                item.FrmID =this.No;
                 item.Save();
             }
 
@@ -1135,7 +1147,7 @@ namespace BP.WF.Template.Frm
             //执行字段导入.
             foreach (MapExt item in exts)
             {
-                item.setFK_MapData(this.No);
+                item.FrmID =this.No;
                 item.Save();
             }
 
@@ -1148,11 +1160,11 @@ namespace BP.WF.Template.Frm
         public string DoGroup()
         {
             GroupField gf = new GroupField();
-            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FK_MapData, GroupFieldAttr.CtrlID, this.No);
+            int i = gf.Retrieve(GroupFieldAttr.FrmID, this.FrmID, GroupFieldAttr.CtrlID, this.No);
             if (i == 0)
             {
                 gf.Lab = this.Name;
-                gf.FrmID = this.FK_MapData;
+                gf.FrmID = this.FrmID;
                 gf.CtrlType = "Dtl";
                 gf.CtrlID = this.No;
                 gf.Idx = 10;
@@ -1253,8 +1265,13 @@ namespace BP.WF.Template.Frm
             return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDateTime;
         }
 
+        public string ListShowModel()
+        {
+            return "../../Admin/FoolFormDesigner/ListShowModel/Default.htm?FK_MapData=" + this.No + "&t=" + DataType.CurrentDateTime;
+        }
+
         #region 基本属性.
-        
+
         public float H
         {
             get
@@ -1285,14 +1302,14 @@ namespace BP.WF.Template.Frm
         /// <returns>返回执行结果</returns>
         public string InitAttrsOfSelf()
         {
-            if (this.FK_Node == 0)
+            if (this.NodeID == 0)
                 return "err@该从表属性不是自定义属性.";
 
-            if (this.No.Contains("_" + this.FK_Node) == false)
+            if (this.No.Contains("_" + this.NodeID) == false)
                 return "err@该从表属性不是自定义属性.";
 
             //求从表ID.
-            string refDtl = this.No.Replace("_" + this.FK_Node, "");
+            string refDtl = this.No.Replace("_" + this.NodeID, "");
 
             //处理属性问题.
             MapAttrs attrs = new MapAttrs();
@@ -1302,15 +1319,15 @@ namespace BP.WF.Template.Frm
             {
                 string oldMyPK = attr.MyPK;
                 attr.setMyPK(this.No + "_" + attr.KeyOfEn);
-                attr.setFK_MapData(this.No);
+                attr.FrmID =this.No;
                 attr.Insert();
                 //存在字段附件
                 if(attr.UIContralType == UIContralType.AthShow)
                 {
                     BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(oldMyPK);
                     athDesc.MyPK = attr.MyPK;
-                    athDesc.setFK_MapData(this.No);
-                    athDesc.FK_Node = this.FK_Node;
+                    athDesc.FrmID =this.No;
+                    athDesc.NodeID = this.NodeID;
                     athDesc.DirectInsert();
                 }
             }
@@ -1325,13 +1342,13 @@ namespace BP.WF.Template.Frm
                 mapExt = new MapExt();
                 mapExt = ext;
                 mapExt.setMyPK(ext.ExtType + "_" + this.No + "_" + ext.AttrOfOper);
-                mapExt.setFK_MapData(this.No);
+                mapExt.FrmID =this.No;
                 mapExt.Insert();
             }
 
             //处理附件问题
             /* 如果启用了多附件*/
-            if (this.IsEnableAthM == true)
+            if (this.ItIsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 //获取原始附件的属性
@@ -1346,15 +1363,15 @@ namespace BP.WF.Template.Frm
                         return "原始从表的附件属性不存在，请联系管理员";
                     athDesc = oldAthDesc;
                     athDesc.setMyPK(this.No + "_AthMDtl");
-                    athDesc.setFK_MapData(this.No);
+                    athDesc.FrmID =this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
-                    athDesc.IsVisable = false;
+                    athDesc.ItIsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();
                     group.Lab = athDesc.Name;
-                    group.FrmID = this.FK_MapData;
+                    group.FrmID = this.FrmID;
                     group.CtrlType = "Ath";
                     group.CtrlID = athDesc.MyPK;
                     group.Idx = 10;
@@ -1367,7 +1384,7 @@ namespace BP.WF.Template.Frm
                 int count = attr.RetrieveFromDBSources();
                 if (count == 0)
                 {
-                    attr.setFK_MapData(this.No);
+                    attr.FrmID =this.No;
                     attr.setKeyOfEn("AthNum");
                     attr.setName("附件数量");
                     attr.DefVal = "0";
@@ -1388,25 +1405,25 @@ namespace BP.WF.Template.Frm
         {
             MapDtl dtl = new MapDtl(this.No);
             //启用审核
-            dtl.IsEnablePass = this.IsEnablePass;
+            dtl.ItIsEnablePass = this.ItIsEnablePass;
             //超链接
-            dtl.IsEnableLink = this.IsEnableLink;
+            dtl.ItIsEnableLink = this.ItIsEnableLink;
             dtl.LinkLabel = this.LinkLabel;
             dtl.LinkUrl = this.LinkUrl;
             dtl.LinkTarget = this.LinkTarget;
             dtl.Update();
 
             //判断是否启用多附件
-            if (this.IsEnableAthM == true)
+            if (this.ItIsEnableAthM == true)
             {
                 BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment();
                 athDesc.setMyPK(this.No + "_AthMDtl");
                 if (athDesc.RetrieveFromDBSources() == 0)
                 {
-                    athDesc.setFK_MapData(this.No);
+                    athDesc.FrmID =this.No;
                     athDesc.NoOfObj = "AthMDtl";
                     athDesc.Name = this.Name;
-                    athDesc.IsVisable = false;
+                    athDesc.ItIsVisable = false;
                     athDesc.DirectInsert();
                     //增加分组
                     GroupField group = new GroupField();
@@ -1424,7 +1441,7 @@ namespace BP.WF.Template.Frm
                 int count = attr.RetrieveFromDBSources();
                 if (count == 0)
                 {
-                    attr.setFK_MapData(this.No);
+                    attr.FrmID =this.No;
                     attr.setKeyOfEn("AthNum");
                     attr.setName("附件数量");
                     attr.DefVal = "0";
@@ -1438,7 +1455,7 @@ namespace BP.WF.Template.Frm
             }
 
             //获得事件实体.
-            var febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
+            FormEventBaseDtl febd = BP.Sys.Base.Glo.GetFormDtlEventBaseByEnName(this.No);
             if (febd == null)
                 this.FEBD = "";
             else
@@ -1451,11 +1468,11 @@ namespace BP.WF.Template.Frm
             //更新分组标签.  @fanleiwei. 代码有变化.
             BP.Sys.GroupField gf = new GroupField();
             int i = gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
-            if (i == 0 && this.FK_Node == 0)
+            if (i == 0 && this.NodeID == 0)
             {
                 gf.CtrlID = this.No;
                 gf.CtrlType = "Dtl";
-                gf.FrmID = this.FK_MapData;
+                gf.FrmID = this.FrmID;
                 gf.Insert();
             }
 
@@ -1478,7 +1495,7 @@ namespace BP.WF.Template.Frm
         {
             MapDtl dtl = new MapDtl();
             dtl.No = this.No;
-            dtl.SetValByKey(MapDtlAttr.FK_MapData,this.FK_MapData);
+            dtl.SetValByKey(MapDtlAttr.FK_MapData,this.FrmID);
             dtl.SetValByKey(MapDtlAttr.PTable, this.PTable);
             dtl.Delete();
 
@@ -1494,8 +1511,8 @@ namespace BP.WF.Template.Frm
 
 
             //执行清空缓存到的AutoNum.
-            MapData md = new MapData(this.FK_MapData);
-            md.ClearAutoNumCash(true); //更新缓存.
+            MapData md = new MapData(this.FrmID);
+            md.ClearAutoNumCache(true); //更新缓存.
 
             base.afterDelete();
         }

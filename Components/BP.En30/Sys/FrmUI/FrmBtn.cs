@@ -74,7 +74,7 @@ namespace BP.Sys.FrmUI
     public class FrmBtn : EntityMyPK
     {
         #region 属性
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -187,17 +187,17 @@ namespace BP.Sys.FrmUI
 
         public string DoFullCtrl()
         {
-            return "../../Admin/FoolFormDesigner/FullData/Main.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefPK=" + this.MyPK+"&UIControlType=18";
+            return "../../Admin/FoolFormDesigner/FullData/Main.htm?FK_MapData=" + this.FrmID + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefPK=" + this.MyPK+"&UIControlType=18";
         }
 
         protected override void afterInsertUpdateAction()
         {
             //在属性实体集合插入前，clear 父实体的缓存.
-            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FK_MapData);
+            BP.Sys.Base.Glo.ClearMapDataAutoNum(this.FrmID);
 
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }
@@ -208,7 +208,7 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterDelete();
         }
         #endregion

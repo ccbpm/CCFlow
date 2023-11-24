@@ -149,7 +149,7 @@ namespace BP.WF
                 return "MyPK";
             }
         }
-        public string FK_Flow = null;
+        public string FlowNo = null;
         #endregion 基本属性.
 
         #region 字段属性.
@@ -596,6 +596,7 @@ namespace BP.WF
                 case DBType.UX:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
+                case DBType.HGDB:
                     sqlRename = "ALTER TABLE WF_Track RENAME to " + ptable;
                     break;
                 case DBType.MySQL:
@@ -616,7 +617,7 @@ namespace BP.WF
         /// <param name="mypk"></param>
         public void DoInsert(Int64 mypk)
         {
-            string ptable = "ND" + int.Parse(this.FK_Flow) + "Track";
+            string ptable = "ND" + int.Parse(this.FlowNo) + "Track";
             string dbstr = BP.Difference.SystemConfig.AppCenterDBVarStr;
             string sql = "INSERT INTO " + ptable;
             sql += "(";
@@ -670,7 +671,6 @@ namespace BP.WF
             {
                 this.SetValByKey(TrackAttr.MyPK, DBAccess.GenerOIDByGUID());
                 //this.SetValByKey(TrackAttr.MyPK, DBAccess.GenerGUID());
-
             }
             else
             {
@@ -683,7 +683,7 @@ namespace BP.WF
             this.Tag += "@SheBei=" + BP.Web.WebUser.SheBei;
 
             DateTime d;
-            if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
+            if (DataType.IsNullOrEmpty(RDT) || DateTime.TryParse(this.RDT, out d) == false)
                 this.RDT = DataType.CurrentDateTimess;
 
             #region 执行保存
@@ -715,7 +715,7 @@ namespace BP.WF
                 BP.DA.Log.DebugWriteError(ex.Message);
 
                 //创建track.
-                //Track.CreateOrRepairTrackTable(this.FK_Flow);
+                //Track.CreateOrRepairTrackTable(this.FlowNo);
                 throw ex;
             }
 
@@ -732,7 +732,7 @@ namespace BP.WF
                   || this.HisActionType == ActionType.FlowOver)
                 {
 
-                    Flow fl = new Flow(this.FK_Flow);
+                    Flow fl = new Flow(this.FlowNo);
                     Node nd = new Node(this.NDFrom);
 
                     Work wk = nd.HisWork;
@@ -802,7 +802,7 @@ namespace BP.WF
             }
 
             DateTime d;
-            if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
+            if (DataType.IsNullOrEmpty(RDT) || DateTime.TryParse(this.RDT, out d) == false)
                 this.RDT = DataType.CurrentDateTimess;
 
             this.DoInsert(0);

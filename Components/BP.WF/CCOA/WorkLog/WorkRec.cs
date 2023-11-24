@@ -316,7 +316,7 @@ namespace BP.CCOA.WorkLog
             Hashtable ht = new Hashtable();
 
             //本周完成的数量.
-            var sql = "SELECT COUNT(*) FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND WeekNum='" + DataType.CurrentWeek + "'";
+            string sql = "SELECT COUNT(*) FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND WeekNum='" + DataType.CurrentWeek + "'";
             ht.Add("weekNum", DBAccess.RunSQLReturnValInt(sql));
 
             //本月的数量.
@@ -343,14 +343,14 @@ namespace BP.CCOA.WorkLog
         /// <returns></returns>
         public string Default_Months()
         {
-            var sql = "SELECT COUNT(*) AS Num, NianYue FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND NianDu='" + DataType.CurrentYear + "'";
+            string sql = "SELECT COUNT(*) AS Num, NianYue FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND NianDu='" + DataType.CurrentYear + "'";
             sql += " GROUP BY NianYue ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         public string Default_Prjs()
         {
-            var sql = "SELECT Count(*) AS Num, PrjName FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND NianDu='" + DataType.CurrentYear + "'";
+            string sql = "SELECT Count(*) AS Num, PrjName FROM OA_WorkRecDtl WHERE Rec='" + BP.Web.WebUser.No + "' AND NianDu='" + DataType.CurrentYear + "'";
             sql += " GROUP BY PrjName ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
@@ -366,7 +366,7 @@ namespace BP.CCOA.WorkLog
         /// <returns></returns>
         public string FenXi_WeekAvg(string empNo)
         {
-            var sql = "SELECT AVG(HeiJiHour ) as Num, WeekNum as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY WeekNum";
+            string sql = "SELECT AVG(HeiJiHour ) as Num, WeekNum as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY WeekNum";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
@@ -377,7 +377,7 @@ namespace BP.CCOA.WorkLog
         /// <returns></returns>
         public string FenXi_MonthAvg(string empNo)
         {
-            var sql = "SELECT AVG(HeiJiHour ) as Num, NianYue as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY NianYue";
+            string sql = "SELECT AVG(HeiJiHour ) as Num, NianYue as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY NianYue";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
@@ -386,19 +386,19 @@ namespace BP.CCOA.WorkLog
         #region 分析页面. FenXi.htm 项目分析。
         public string FenXi_PrjWeek(string empNo)
         {
-            var sql = "SELECT SUM(HeiJiHour) as Num, PrjName, WeekNum as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName,WeekNum";
+            string sql = "SELECT SUM(HeiJiHour) as Num, PrjName, WeekNum as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName,WeekNum";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         public string FenXi_PrjMonth(string empNo)
         {
-            var sql = "SELECT SUM(HeiJiHour) as Num, PrjName, NianYue as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName,NianYue";
+            string sql = "SELECT SUM(HeiJiHour) as Num, PrjName, NianYue as Item  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName,NianYue";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }
         public string FenXi_Prj(string empNo)
         {
-            var sql = "SELECT SUM(HeiJiHour) as Num, PrjName  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName";
+            string sql = "SELECT SUM(HeiJiHour) as Num, PrjName  FROM OA_WorkRecDtl WHERE   Rec='" + empNo + "' AND NianDu='" + DataType.CurrentYear + "'  GROUP BY PrjName";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }

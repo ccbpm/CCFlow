@@ -48,7 +48,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 工作流程
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -183,7 +183,7 @@ namespace BP.WF.Template
             Nodes ens = new Nodes();
             foreach (NodeCancel en in this)
             {
-                ens.AddEntity(new Node(en.FK_Node));
+                ens.AddEntity(new Node(en.NodeID));
             }
             return ens;
         }

@@ -32,7 +32,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -46,7 +46,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 工作部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -105,7 +105,7 @@ namespace BP.WF.Template
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Node + "_" + this.FK_Dept);
+            this.setMyPK(this.NodeID + "_" + this.DeptNo);
             return base.beforeUpdateInsertAction();
         }
 

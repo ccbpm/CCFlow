@@ -51,7 +51,7 @@ namespace BP.WF.Port
         /// <summary>
         /// 工作人员ID
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -65,7 +65,7 @@ namespace BP.WF.Port
         /// <summary>
         ///部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -79,7 +79,7 @@ namespace BP.WF.Port
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {

@@ -122,11 +122,6 @@
 </template>
 
 <script>
-	import {
-		// uiPlant,
-		plant,
-		basePath,
-	} from './api/config.js'
 	export default {
 		name: "user",
 		data() {
@@ -219,30 +214,16 @@
 			HeadPic() {
 				var doMethod = "HeadPic_Save";
 				const httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-				if (plant == "CCFlow") {
-					// CCFlow
-					this.dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-				} else {
-					// JFlow
-					this.dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-				}
-				this.url = this.dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" +
+				this.url = process.env.VUE_APP_HANDLER + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" +
 					httpHandlerName;
 				console.log(this.url)
 			},
 			//获取签名图片url 方法
 			getSigimg() {
 				const _this = this;
-				if (plant == "CCFlow") {
-					// CCFlow
-					this.dynamicHandler = basePath + "/WF/Comm/Handler.ashx";
-				} else {
-					// JFlow
-					this.dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-				}
 				const doMethod = "Siganture_Init";
 				const httpHandlerName = "BP.WF.HttpHandler.WF_Setting";
-				const apiurl = this.dynamicHandler + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" +
+				const apiurl = process.env.VUE_APP_HANDLER + "?DoType=HttpHandler&DoMethod=" + doMethod + "&HttpHandlerName=" +
 					httpHandlerName;
 				this.$.ajax({
 					url: apiurl,

@@ -44,6 +44,7 @@ namespace BP.WF
         /// 授权人
         /// </summary>
         public const string Auther = "Auther";
+        public const string AutherName = "AutherName";
         /// <summary>
         /// 流程编号
         /// </summary>
@@ -68,7 +69,10 @@ namespace BP.WF
         /// 记录日期
         /// </summary>
         public const string RDT = "RDT";
-        
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     /// 授权
@@ -173,7 +177,8 @@ namespace BP.WF
                 Map map = new Map("WF_Auth", "授权");
                 map.AddMyPK();
 
-                map.AddTBString(AuthAttr.Auther, null, "授权人", true, false, 0, 100, 10);
+                map.AddTBString(AuthAttr.Auther, null, "授权人编号", true, false, 0, 100, 10);
+                map.AddTBString(AuthAttr.AutherName, null, "授权人", true, false, 0, 100, 10);
                 map.AddTBInt(AuthAttr.AuthType, 0, "类型(0=全部流程1=指定流程2=取消)", true, false);
 
                 map.AddTBString(AuthAttr.AutherToEmpNo, null, "授权给谁?", true, false, 0, 100, 10);

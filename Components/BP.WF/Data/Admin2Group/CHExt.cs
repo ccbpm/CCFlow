@@ -83,7 +83,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -97,7 +97,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 流程
         /// </summary>
-        public string FK_FlowT
+        public string FlowT
         {
             get
             {
@@ -125,7 +125,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 操作人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -139,7 +139,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_EmpT
+        public string EmpT
         {
             get
             {
@@ -153,7 +153,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -167,7 +167,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 部门名称
         /// </summary>
-        public string FK_DeptT
+        public string DeptT
         {
             get
             {
@@ -181,7 +181,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 年月
         /// </summary>
-        public string FK_NY
+        public string NY
         {
             get
             {
@@ -223,7 +223,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -237,7 +237,7 @@ namespace BP.WF.Data.Admin2Group
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string FK_NodeT
+        public string NodeT
         {
             get
             {
@@ -327,9 +327,8 @@ namespace BP.WF.Data.Admin2Group
                 rm.Title = "详情";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
-
 
                 this._enMap = map;
                 return this._enMap;
@@ -339,7 +338,7 @@ namespace BP.WF.Data.Admin2Group
 
         public string DoOpen()
         {
-            return "../../MyView.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            return "../../MyView.htm?FK_Flow" + this.FlowNo + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
     /// <summary>

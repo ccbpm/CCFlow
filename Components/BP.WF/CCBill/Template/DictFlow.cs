@@ -82,7 +82,7 @@ namespace BP.CCBill.Template
         /// <summary>
         /// 是否显示在表格右边
         /// </summary>
-        public int IsShowListRight
+        public int ItIsShowListRight
         {
             get
             {

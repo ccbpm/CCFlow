@@ -5,7 +5,7 @@ using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
-using BP.GPM;
+using BP.Port;
 using BP.CCFast.CCMenu;
 using System.Collections;
 using BP.WF.Port.Admin2Group;
@@ -83,7 +83,7 @@ namespace BP.WF.HttpHandler
         }
         public string CheckEncryptEnable()
         {
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (SystemConfig.isEnablePasswordEncryption == true)
                 return "1";
             return "0";
         }
@@ -172,7 +172,7 @@ namespace BP.WF.HttpHandler
         }
         public string Login_VerifyState()
         {
-            if (!String.IsNullOrEmpty(HttpContextHelper.RequestCookieGet(this.ToString() + "_Login_Error", "CCS")))
+            if (!DataType.IsNullOrEmpty(HttpContextHelper.RequestCookieGet(this.ToString() + "_Login_Error", "CCS")))
             {
                 return "err@" + Login_VerifyCode();
             }
@@ -256,7 +256,7 @@ namespace BP.WF.HttpHandler
                 if (DataType.IsNullOrEmpty(gotoSystem) == true)
                     gotoSystem = "";
 
-                //@hongyan. 是不是中间件.
+                //是不是中间件.
                 string val = this.GetRequestVal("IsZZJ");
                 if (DataType.IsNullOrEmpty(val) == true)
                     val = "0";
@@ -338,7 +338,7 @@ namespace BP.WF.HttpHandler
                 //if (wfEmp.RetrieveFromDBSources() == 0)
                 //{
                 //    wfEmp.Name = emp.Name;
-                //    wfEmp.FK_Dept = emp.FK_Dept;
+                //    wfEmp.DeptNo = emp.DeptNo;
                 //    wfEmp.Insert();
                 //}
                 //string code = wfEmp.GetParaString("VerifyCode");
@@ -370,26 +370,7 @@ namespace BP.WF.HttpHandler
 
                 #endregion 校验验证码.
 
-                if (SystemConfig.IsEnablePasswordEncryption == true)
-                {
-                    try
-                    {
-                        String md5Pass = BP.Tools.Cryptography.MD5UpperCase(emp.Pass);
-                        if (!md5Pass.Equals(pass))
-                        {
-                            this.handleLoginFail(userNo);
-                            return "err@用户名或者密码错误.";
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        this.handleLoginFail(userNo);
-                        return "err@账号或密码错误";
-                    }
-                }
-
-                else if (emp.CheckPass(pass) == false)
+                if (emp.CheckPass(pass) == false)
                 {
                     this.handleLoginFail(userNo);
                     return "err@用户名或者密码错误.";
@@ -413,7 +394,7 @@ namespace BP.WF.HttpHandler
                         return msg;
                     }
                 }
-
+                string token = "";
                 if (Glo.CCBPMRunModel == CCBPMRunModel.Single)
                 {
                     BP.WF.Dev2Interface.Port_Login(emp.UserID);
@@ -424,22 +405,23 @@ namespace BP.WF.HttpHandler
                         if (DBAccess.RunSQLReturnValInt(sql, 0) == 1)
                             return "err@该用户已经被禁用.";
                     }
+                    token = BP.WF.Dev2Interface.Port_GenerToken("PC");
 
                     if (gotoSystem.Equals("CCFlow") == true)
-                        return "url@/WF/AppClassic/Home.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID;
+                        return "url@/WF/AppClassic/Home.htm?Token=" + token + "&UserNo=" + emp.UserID;
                     else
-                        return "url@Default.htm?Token=" + BP.WF.Dev2Interface.Port_GenerToken("PC") + "&UserNo=" + emp.UserID;
+                        return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID;
                 }
 
                 //设置他的组织，信息.
                 WebUser.No = emp.UserID; //登录帐号.
-                WebUser.FK_Dept = emp.FK_Dept;
-                WebUser.FK_DeptName = emp.FK_DeptText;
+                WebUser.DeptNo = emp.DeptNo;
+                WebUser.DeptName = emp.DeptText;
 
                 //执行登录.
                 BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
-                string token = BP.WF.Dev2Interface.Port_GenerToken("PC");
-
+                token = BP.WF.Dev2Interface.Port_GenerToken("PC");
+                //HttpContextHelper.RedisUtils.Set("WebUser_" + token, token);
 
                 return "url@Default.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
                 //return "url@SelectOneOrg.htm?Token=" + token + "&UserNo=" + emp.UserID + "&OrgNo=" + emp.OrgNo;
@@ -606,7 +588,7 @@ namespace BP.WF.HttpHandler
                 adminers.Retrieve(OrgAdminerAttr.FK_Emp, emp.UserID);
                 if (adminers.Count == 0)
                 {
-                    BP.WF.Port.Admin2Group.Orgs orgs = new Orgs();
+                    BP.WF.Port.Admin2Group.Orgs orgs = new BP.WF.Port.Admin2Group.Orgs();
                     int i = orgs.Retrieve("Adminer", this.GetRequestVal("TB_No"));
                     if (i == 0)
                     {
@@ -618,7 +600,7 @@ namespace BP.WF.HttpHandler
                     foreach (BP.WF.Port.Admin2Group.Org org in orgs)
                     {
                         OrgAdminer oa = new OrgAdminer();
-                        oa.FK_Emp = WebUser.No;
+                        oa.EmpNo = WebUser.No;
                         oa.OrgNo = org.No;
                         oa.Save();
                     }
@@ -627,8 +609,8 @@ namespace BP.WF.HttpHandler
 
                 //设置他的组织，信息.
                 WebUser.No = emp.UserID; //登录帐号.
-                WebUser.FK_Dept = emp.FK_Dept;
-                WebUser.FK_DeptName = emp.FK_DeptText;
+                WebUser.DeptNo = emp.DeptNo;
+                WebUser.DeptName = emp.DeptText;
 
                 //执行登录.
                 BP.WF.Dev2Interface.Port_Login(emp.UserID, emp.OrgNo);
@@ -694,17 +676,17 @@ namespace BP.WF.HttpHandler
                 Paras ps = new Paras();
                 Emp emp = new Emp(WebUser.No);
                 DataTable dt = null;
-                if (emp.FK_Dept.Equals(WebUser.FK_Dept) == false)
+                if (emp.DeptNo.Equals(WebUser.DeptNo) == false)
                 {
-                    sql = "SELECT No,Name,ParentNo From Sys_FormTree WHERE No='" + WebUser.FK_Dept + "' Order By Idx";
+                    sql = "SELECT No,Name,ParentNo From Sys_FormTree WHERE No='" + WebUser.DeptNo + "' Order By Idx";
                     dt = DBAccess.RunSQLReturnTable(sql);
                     if (dt.Rows.Count == 0)
                     {
                         //根据这个部门编号生成一个流程类别
                         BP.WF.Template.SysFormTree formTree = new Template.SysFormTree();
-                        formTree.No = WebUser.FK_Dept;
+                        formTree.No = WebUser.DeptNo;
                         formTree.ParentNo = WebUser.OrgNo;
-                        formTree.Name = WebUser.FK_DeptName;
+                        formTree.Name = WebUser.DeptName;
                         formTree.OrgNo = WebUser.OrgNo;
                         formTree.DirectInsert();
                     }
@@ -735,10 +717,10 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CCBPMRunModel == CCBPMRunModel.Single)
             {
                 GloVar gloVar = new GloVar();
-                gloVar.No = WebUser.FK_Dept + "_" + WebUser.No + "_Adminer";
+                gloVar.No = WebUser.DeptNo + "_" + WebUser.No + "_Adminer";
                 if (gloVar.RetrieveFromDBSources() != 0)
                 {
-                    sql = "SELECT No as \"No\",Name as \"Name\" FROM Sys_FormTree WHERE  No='" + WebUser.FK_Dept + "' OR ParentNo='" + WebUser.FK_Dept + "' ORDER BY Idx ";
+                    sql = "SELECT No as \"No\",Name as \"Name\" FROM Sys_FormTree WHERE  No='" + WebUser.DeptNo + "' OR ParentNo='" + WebUser.DeptNo + "' ORDER BY Idx ";
 
                 }
             }
@@ -810,7 +792,7 @@ namespace BP.WF.HttpHandler
             string[] flowNos = this.GetRequestVal("EnNos").Split(',');
             for (int i = 0; i < flowNos.Length; i++)
             {
-                var flowNo = flowNos[i];
+                string flowNo = flowNos[i];
 
                 string sql = "UPDATE Sys_MapData SET FK_FormTree ='" + sortNo + "',Idx=" + i + " WHERE No='" + flowNo + "'";
                 DBAccess.RunSQL(sql);
@@ -827,7 +809,7 @@ namespace BP.WF.HttpHandler
 
             for (int i = 0; i < ens.Length; i++)
             {
-                var en = ens[i];
+                string en = ens[i];
 
                 string sql = "UPDATE " + table + " SET Idx=" + i + " WHERE No='" + en + "'";
                 DBAccess.RunSQL(sql);
@@ -938,7 +920,7 @@ namespace BP.WF.HttpHandler
             string[] ens = this.GetRequestVal("SortNos").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var en = ens[i];
+                string en = ens[i];
 
                 string sql = "UPDATE WF_FlowSort SET Idx=" + i + " WHERE No='" + en + "'";
                 DBAccess.RunSQL(sql);
@@ -1037,7 +1019,7 @@ namespace BP.WF.HttpHandler
             BP.CCFast.CCMenu.PowerCenters pcs = new BP.CCFast.CCMenu.PowerCenters();
             pcs.RetrieveAll();
 
-            string mydepts = "" + WebUser.FK_Dept + ","; //我的部门.
+            string mydepts = "" + WebUser.DeptNo + ","; //我的部门.
             string mystas = ""; //我的角色.
 
             DataTable mydeptsDT = DBAccess.RunSQLReturnTable("SELECT FK_Dept,FK_Station FROM Port_DeptEmpStation WHERE FK_Emp='" + WebUser.UserID + "'");
@@ -1053,7 +1035,7 @@ namespace BP.WF.HttpHandler
             foreach (MySystem item in systems)
             {
                 //如果被禁用了.
-                if (item.IsEnable == false) continue;
+                if (item.ItIsEnable == false) continue;
 
                 //找到关于系统的控制权限集合.
                 PowerCenters mypcs = pcs.GetEntitiesByKey(PowerCenterAttr.CtrlPKVal, item.No) as PowerCenters;
@@ -1124,7 +1106,7 @@ namespace BP.WF.HttpHandler
                 foreach (Module module in modules)
                 {
                     //如果被禁用了.
-                    if (module.IsEnable == false) continue;
+                    if (module.ItIsEnable == false) continue;
 
 
                     if (module.SystemNo.Equals(item.No) == false) continue;
@@ -1199,7 +1181,7 @@ namespace BP.WF.HttpHandler
                 {
 
                     //如果被禁用了.
-                    if (menu.IsEnable == false) continue;
+                    if (menu.ItIsEnable == false) continue;
 
                     if (menu.ModuleNo.Equals(item.No) == false) continue;
 
@@ -1372,8 +1354,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_Init()
         {
+
+
+            string isVue3 = this.GetRequestVal("isVue3");
             //如果是admin. 
-            if (BP.Web.WebUser.IsAdmin == true && this.IsMobile == false)
+            if (BP.Web.WebUser.IsAdmin == true && this.ItIsMobile == false)
             {
             }
             else
@@ -1410,28 +1395,32 @@ namespace BP.WF.HttpHandler
             myds.Tables.Add(dtMenu);
             #endregion 把数据加入里面去.
 
+
             #region 如果是admin.
-            if (BP.Web.WebUser.IsAdmin == true && this.IsMobile == false && SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
+            if (BP.Web.WebUser.IsAdmin == true && this.ItIsMobile == false && SystemConfig.CCBPMRunModel != CCBPMRunModel.SAAS)
             {
-                #region 增加默认的系统.
-                DataRow dr = dtSys.NewRow();
-                dr["No"] = "Flows";
-                dr["Name"] = "流程设计";
-                dr["Icon"] = "";
-                dtSys.Rows.Add(dr);
+                if(isVue3 == null)
+                {
+                    #region 增加默认的系统.
+                    DataRow dr = dtSys.NewRow();
+                    dr["No"] = "Flows";
+                    dr["Name"] = "流程设计";
+                    dr["Icon"] = "";
+                    dtSys.Rows.Add(dr);
 
-                dr = dtSys.NewRow();
-                dr["No"] = "Frms";
-                dr["Name"] = "表单设计";
-                dr["Icon"] = "";
-                dtSys.Rows.Add(dr);
+                    dr = dtSys.NewRow();
+                    dr["No"] = "Frms";
+                    dr["Name"] = "表单设计";
+                    dr["Icon"] = "";
+                    dtSys.Rows.Add(dr);
 
-                dr = dtSys.NewRow();
-                dr["No"] = "System";
-                dr["Name"] = "系统管理";
-                dr["Icon"] = "";
-                dtSys.Rows.Add(dr);
-                #endregion 增加默认的系统.
+                    dr = dtSys.NewRow();
+                    dr["No"] = "System";
+                    dr["Name"] = "系统管理";
+                    dr["Icon"] = "";
+                    dtSys.Rows.Add(dr);
+                    #endregion 增加默认的系统.
+                }
 
                 string sqlWhere = "";
                 if (BP.Difference.SystemConfig.CCBPMRunModel != CCBPMRunModel.Single)
@@ -1472,7 +1461,7 @@ namespace BP.WF.HttpHandler
 
             //   myds.WriteXml("c:/11.xml");
 
-            #region 让第一个系统的第1个模块的默认打开的. @hongyan.
+            #region 让第一个系统的第1个模块的默认打开的.
             if (myds.Tables["System"].Rows.Count != 0)
             {
                 //让第一个打开.
@@ -1504,7 +1493,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string LoginGenerQRCodeMobile_Init()
         {
-            var url = BP.Difference.SystemConfig.HostURL + "/FastMobilePortal/Login.htm";
+            string url = BP.Difference.SystemConfig.HostURL + "/FastMobilePortal/Login.htm";
             return url;
         }
 

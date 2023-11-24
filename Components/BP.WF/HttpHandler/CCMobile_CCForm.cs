@@ -15,6 +15,7 @@ using System.Net;
 using BP.Tools;
 using System.Drawing;
 using BP.Difference;
+using Aliyun.OSS;
 
 namespace BP.WF.HttpHandler
 {
@@ -77,7 +78,7 @@ namespace BP.WF.HttpHandler
                 string pkval = item.GetValStringByKey(dtl.PK);
                 foreach (Attr attr in map.Attrs)
                 {
-                    if (attr.IsRefAttr == true)
+                    if (attr.ItIsRefAttr == true)
                         continue;
 
                     if (attr.MyDataType == DataType.AppDateTime || attr.MyDataType == DataType.AppDate)
@@ -155,10 +156,10 @@ namespace BP.WF.HttpHandler
             
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
-            MapData mapData = new MapData(athDesc.FK_MapData);
+            MapData mapData = new MapData(athDesc.FrmID);
             string msg = "";
             //求出来实体记录，方便执行事件.
-            GEEntity en = new GEEntity(athDesc.FK_MapData);
+            GEEntity en = new GEEntity(athDesc.FrmID);
             en.PKVal = pkVal;
             if (en.RetrieveFromDBSources() == 0)
             {
@@ -171,22 +172,22 @@ namespace BP.WF.HttpHandler
             }
 
             //求主键. 如果该表单挂接到流程上.
-            if (this.FK_Node != 0)
+            if (this.NodeID != 0)
             {
                 //判断表单方案。
-                FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
+                FrmNode fn = new FrmNode(this.NodeID, this.FrmID);
                 if (fn.FrmSln == FrmSln.Self)
                 {
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
-                    myathDesc.setMyPK(attachPk + "_" + this.FK_Node);
+                    myathDesc.setMyPK(attachPk + "_" + this.NodeID);
                     if (myathDesc.RetrieveFromDBSources() != 0)
                         athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
                 }
-                pkVal = BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, athDesc);
+                pkVal = BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.NodeID, this.FrmID, athDesc);
             }
 
             //获取上传文件是否需要加密
-            bool fileEncrypt =  BP.Difference.SystemConfig.IsEnableAthEncrypt;
+            bool fileEncrypt =  BP.Difference.SystemConfig.isEnableAthEncrypt;
 
             #region 文件上传的iis服务器上 or db数据库里.
             if (athDesc.AthSaveWay == AthSaveWay.IISServer || athDesc.AthSaveWay == AthSaveWay.DB)
@@ -197,10 +198,10 @@ namespace BP.WF.HttpHandler
                     /*如果有变量*/
                     savePath = savePath.Replace("*", "@");
 
-                    if (savePath.Contains("@") && this.FK_Node != 0)
+                    if (savePath.Contains("@") && this.NodeID != 0)
                     {
                         /*如果包含 @ */
-                        BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
+                        BP.WF.Flow flow = new BP.WF.Flow(this.FlowNo);
                         BP.WF.GERpt myen = flow.HisGERpt;
                         myen.OID = this.WorkID;
                         myen.RetrieveFromDBSources();
@@ -273,9 +274,9 @@ namespace BP.WF.HttpHandler
                 FileInfo info = new FileInfo(realSaveTo);
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                 dbUpload.setMyPK(guid); 
-                dbUpload.NodeID = this.FK_Node;
+                dbUpload.NodeID = this.NodeID;
                 dbUpload.Sort = sort;
-                dbUpload.setFK_MapData(athDesc.FK_MapData);
+                dbUpload.FrmID= athDesc.FrmID ;
                 dbUpload.FK_FrmAttachment = attachPk;
                 dbUpload.FileExts = info.Extension;
                 dbUpload.FID = this.FID;
@@ -287,8 +288,8 @@ namespace BP.WF.HttpHandler
                 dbUpload.RDT = DataType.CurrentDateTimess;
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
-                dbUpload.FK_Dept = WebUser.FK_Dept;
-                dbUpload.FK_DeptName = WebUser.FK_DeptName;
+                dbUpload.DeptNo = WebUser.DeptNo;
+                dbUpload.DeptName = WebUser.DeptName;
                 dbUpload.RefPKVal = pkVal;
                 dbUpload.FID = this.FID;
 
@@ -301,8 +302,8 @@ namespace BP.WF.HttpHandler
             }
             #endregion 文件上传的iis服务器上 or db数据库里.
 
-            #region 保存到数据库 / FTP服务器上.
-            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+            #region 保存到数据库 / FTP服务器上 / OSS服务器上.
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer || athDesc.AthSaveWay == AthSaveWay.OSS)
             {
                 string guid = DBAccess.GenerGUID();
 
@@ -336,23 +337,23 @@ namespace BP.WF.HttpHandler
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                 dbUpload.setMyPK(DBAccess.GenerGUID());
                 dbUpload.Sort = sort;
-                dbUpload.NodeID = FK_Node;
-                dbUpload.setFK_MapData(athDesc.FK_MapData);
+                dbUpload.NodeID = this.NodeID;
+                dbUpload.FrmID= athDesc.FrmID;
                 dbUpload.FK_FrmAttachment = athDesc.MyPK;
                 dbUpload.FID = this.FID; //流程id.
                 if (fileEncrypt == true)
                     dbUpload.SetPara("IsEncrypt", 1);
 
                 dbUpload.RefPKVal = pkVal.ToString();
-                dbUpload.setFK_MapData(athDesc.FK_MapData);
+                dbUpload.FrmID= athDesc.FrmID;
                 dbUpload.FK_FrmAttachment = athDesc.MyPK;
                 dbUpload.FileName = fileName;
                 dbUpload.FileSize = (float)info.Length;
                 dbUpload.RDT = DataType.CurrentDateTimess;
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
-                dbUpload.FK_Dept = WebUser.FK_Dept;
-                dbUpload.FK_DeptName = WebUser.FK_DeptName;
+                dbUpload.DeptNo = WebUser.DeptNo;
+                dbUpload.DeptName = WebUser.DeptName;
                 
                 dbUpload.UploadGUID = guid;
 
@@ -372,11 +373,11 @@ namespace BP.WF.HttpHandler
                     ftpconn.SetCurrentDirectory(ny);
 
                     //判断目录是否存在.
-                    if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
-                        ftpconn.CreateDirectory(athDesc.FK_MapData);
+                    if (ftpconn.DirectoryExist(athDesc.FrmID) == false)
+                        ftpconn.CreateDirectory(athDesc.FrmID);
 
                     //设置当前目录，为操作的目录。
-                    ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
+                    ftpconn.SetCurrentDirectory(athDesc.FrmID);
 
                     //把文件放上去.
                     try
@@ -390,10 +391,33 @@ namespace BP.WF.HttpHandler
                     ftpconn.Close();
 
                     //设置路径.
-                    dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+                    dbUpload.FileFullName = ny + "//" + athDesc.FrmID + "//" + guid + "." + dbUpload.FileExts;
                     dbUpload.Insert();
                     File.Delete(temp);
                 }
+
+                #region 文件上传到OSS服务器上
+                if (athDesc.AthSaveWay == AthSaveWay.OSS)
+                {
+                    string subDir = "";
+                    //判断是否有子目录路径
+                    if (DataType.IsNullOrEmpty(BP.Difference.SystemConfig.BucketSubPath) == false && "/".Equals(BP.Difference.SystemConfig.BucketSubPath) == false)
+                    {
+                        subDir = BP.Difference.SystemConfig.BucketSubPath + "/";
+                    }
+                    string ny = DataType.CurrentYearMonth;
+
+                    // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
+                    var objectName = subDir + ny + "/" + athDesc.FrmID + "/" + guid + "." + dbUpload.FileExts;
+
+                    OSSUtil.doUpload(objectName, temp); 
+
+                    //设置路径.
+                    dbUpload.FileFullName = ny + "//" + athDesc.FrmID + "//" + guid + "." + dbUpload.FileExts;
+                    dbUpload.Insert();
+                    File.Delete(temp);
+                }
+                #endregion 文件上传到OSS服务器上
 
 
                 //执行附件上传后事件，added by liuxc,2017-7-15
@@ -451,7 +475,7 @@ namespace BP.WF.HttpHandler
         public string GetAccessTokenImgs()
         {
             //获取 AccessToken
-            return BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
+            return BP.Port.WeiXin.WeiXinEntity.getAccessToken();
         }
 
         /// <summary>
@@ -490,10 +514,10 @@ namespace BP.WF.HttpHandler
                 string fileName = res.GetResponseHeader("Content-Disposition").Replace("attachment; filename=", "").Replace("\"", "");
                   
                 img.Save(BP.Difference.SystemConfig.PathOfTemp + fileName);
-                BP.DA.Log.DebugWriteError(this.FK_Node+":"+this.FK_Flow + ":" + this.WorkID + ":" +
-                    athDesc.NoOfObj + ":" + athDesc.FK_MapData + ":" + BP.Difference.SystemConfig.PathOfTemp + fileName + ":" + fileName);
-                BP.WF.CCFormAPI.CCForm_AddAth(this.FK_Node,this.FK_Flow, this.WorkID,
-                    athMyPK, athDesc.FK_MapData, BP.Difference.SystemConfig.PathOfTemp + fileName, fileName);
+                BP.DA.Log.DebugWriteError(this.NodeID+":"+this.FlowNo + ":" + this.WorkID + ":" +
+                    athDesc.NoOfObj + ":" + athDesc.FrmID + ":" + BP.Difference.SystemConfig.PathOfTemp + fileName + ":" + fileName);
+                BP.WF.CCFormAPI.CCForm_AddAth(this.NodeID,this.FlowNo, this.WorkID,
+                    athMyPK, athDesc.FrmID, BP.Difference.SystemConfig.PathOfTemp + fileName, fileName);
 
                 return "执行成功";
             }
@@ -542,18 +566,13 @@ namespace BP.WF.HttpHandler
             string jsapi_ticket = "";
             string url1 = htmlPage;
             //获取 AccessToken
-            string accessToken =  BP.GPM.WeiXin.WeiXinEntity.getAccessToken();
+            string accessToken =  BP.Port.WeiXin.WeiXinEntity.getAccessToken();
 
             string url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=" + accessToken;
-
-
-            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
-            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-            string str = reader.ReadToEnd();
-
+            string str = DataType.ReadURLContext(url);
             //权限签名算法
-            BP.GPM.WeiXin.Ticket ticket = new BP.GPM.WeiXin.Ticket();
-            ticket = FormatToJson.ParseFromJson<BP.GPM.WeiXin.Ticket>(str);
+            BP.Port.WeiXin.Msg.Ticket ticket = new BP.Port.WeiXin.Msg.Ticket();
+            ticket = FormatToJson.ParseFromJson<BP.Port.WeiXin.Msg.Ticket>(str);
 
             if (ticket.errcode == "0")
                 jsapi_ticket = ticket.ticket;
@@ -584,10 +603,9 @@ namespace BP.WF.HttpHandler
                 request.Method = "post";
                 request.KeepAlive = true;
                 // 图片的base64编码
-                var files = HttpContextHelper.RequestFiles();  //context.Request.Files;
-                if (files.Count == 0)
+                if (HttpContextHelper.RequestFilesCount == 0)
                     return "err@请选择要上传的身份证件。";
-                Stream stream = files[0].InputStream;//new MemoryStream();
+                Stream stream = HttpContextHelper.RequestFiles(0).InputStream;//new MemoryStream();
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
                 string base64 = Convert.ToBase64String(bytes);
@@ -618,21 +636,18 @@ namespace BP.WF.HttpHandler
             string jsapi_ticket = "";
             string url1 = htmlPage;
             //获取 AccessToken
-            BP.WF.WeiXin.GZH.WeiXinGZHModel.AccessToken accessToken = BP.WF.WeiXin.WeiXinGZHEntity.getAccessToken();
+            BP.Port.WeiXin.Msg.WeiXinGZHModel.AccessToken accessToken = BP.Port.WeiXin.WeiXinGZHEntity.getAccessToken();
 
             if (accessToken.errcode!= "0"&& DataType.IsNullOrEmpty(accessToken.errcode)==false)
                 return "err@获取网页授权失败，errcode：" + accessToken.errcode;
             string token = accessToken.access_token;
             string url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + token+ "&type=jsapi";
 
-
-            HttpWebResponse response = new HttpWebResponseUtility().CreateGetHttpResponse(url, 10000, null, null);
-            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-            string str = reader.ReadToEnd();
+            string str = BP.Tools.PubGlo.HttpGet(url); 
 
             //权限签名算法
-            BP.GPM.WeiXin.Ticket ticket = new BP.GPM.WeiXin.Ticket();
-            ticket = FormatToJson.ParseFromJson<BP.GPM.WeiXin.Ticket>(str);
+            BP.Port.WeiXin.Msg.Ticket ticket = new BP.Port.WeiXin.Msg.Ticket();
+            ticket = FormatToJson.ParseFromJson<BP.Port.WeiXin.Msg.Ticket>(str);
 
             if (ticket.errcode == "0")
                 jsapi_ticket = ticket.ticket;
@@ -654,8 +669,8 @@ namespace BP.WF.HttpHandler
 
         public string WXGZH_AthUpload()
         {
-            HttpPostedFile file = HttpContextHelper.RequestFiles(0);
-            if(file == null)
+            //HttpPostedFile file = HttpContextHelper.RequestFiles(0);
+            if(HttpContextHelper.RequestFiles(0) == null)
             {
                 return "err@请选择文件";
             }
@@ -668,10 +683,10 @@ namespace BP.WF.HttpHandler
             string attachPk = this.GetRequestVal("AttachPK");
 
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
-            MapData mapData = new MapData(athDesc.FK_MapData);
+            MapData mapData = new MapData(athDesc.FrmID);
             string msg = "";
             //求出来实体记录，方便执行事件.
-            GEEntity en = new GEEntity(athDesc.FK_MapData);
+            GEEntity en = new GEEntity(athDesc.FrmID);
             en.PKVal = pkVal;
             if (en.RetrieveFromDBSources() == 0)
             {
@@ -684,18 +699,18 @@ namespace BP.WF.HttpHandler
             }
 
             //求主键. 如果该表单挂接到流程上.
-            if (this.FK_Node != 0 && athDesc.NoOfObj.Contains("AthMDtl") == false)
+            if (this.NodeID != 0 && athDesc.NoOfObj.Contains("AthMDtl") == false)
             {
                 //判断表单方案。
-                FrmNode fn = new FrmNode(this.FK_Node, this.FK_MapData);
+                FrmNode fn = new FrmNode(this.NodeID, this.FrmID);
                 if (fn.FrmSln == FrmSln.Self)
                 {
                     BP.Sys.FrmAttachment myathDesc = new FrmAttachment();
-                    myathDesc.setMyPK(attachPk + "_" + this.FK_Node);
+                    myathDesc.setMyPK(attachPk + "_" + this.NodeID);
                     if (myathDesc.RetrieveFromDBSources() != 0)
                         athDesc.HisCtrlWay = myathDesc.HisCtrlWay;
                 }
-                pkVal = BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.FK_Node, this.FK_MapData, athDesc);
+                pkVal = BP.WF.Dev2Interface.GetAthRefPKVal(this.WorkID, this.PWorkID, this.FID, this.NodeID, this.FrmID, athDesc);
             }
             string savePath = "";
             string fileName = DBAccess.GenerGUID();
@@ -706,12 +721,12 @@ namespace BP.WF.HttpHandler
                     System.IO.Directory.CreateDirectory(savePath);
                 savePath = savePath + "/" + fileName + ".png";
             }
-            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer || athDesc.AthSaveWay == AthSaveWay.OSS)
             {
                 savePath = BP.Difference.SystemConfig.PathOfTemp +fileName + ".tmp";
             }
 
-            file.SaveAs(savePath);
+            HttpContextHelper.RequestFiles(0).SaveAs(savePath);
             
             //using (System.IO.FileStream fs = new FileStream(savePath, FileMode.Create))
             //{
@@ -744,11 +759,11 @@ namespace BP.WF.HttpHandler
                 ftpconn.SetCurrentDirectory(ny);
 
                 //判断目录是否存在.
-                if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
-                    ftpconn.CreateDirectory(athDesc.FK_MapData);
+                if (ftpconn.DirectoryExist(athDesc.FrmID) == false)
+                    ftpconn.CreateDirectory(athDesc.FrmID);
 
                 //设置当前目录，为操作的目录。
-                ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
+                ftpconn.SetCurrentDirectory(athDesc.FrmID);
 
                 //把文件放上去.
                 try
@@ -761,32 +776,48 @@ namespace BP.WF.HttpHandler
                 }
                 ftpconn.Close();
             }
+
+            #region 文件上传到OSS服务器上
+            if (athDesc.AthSaveWay == AthSaveWay.OSS)
+            {
+                string subDir = "";
+                //判断是否有子目录路径
+                if (DataType.IsNullOrEmpty(BP.Difference.SystemConfig.BucketSubPath) == false && "/".Equals(BP.Difference.SystemConfig.BucketSubPath) == false)
+                {
+                    subDir = BP.Difference.SystemConfig.BucketSubPath + "/";
+                }
+                // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
+                var objectName = subDir + ny + "/" + athDesc.FrmID + "/" + fileName + ".png";
+
+                OSSUtil.doUpload(objectName, savePath);
+            }
+            #endregion 文件上传到OSS服务器上
             FileInfo info = new FileInfo(savePath);
             FrmAttachmentDB dbUpload = new FrmAttachmentDB();
             dbUpload.setMyPK(DBAccess.GenerGUID());
             dbUpload.Sort = "";
-            dbUpload.NodeID = FK_Node;
-            dbUpload.setFK_MapData(athDesc.FK_MapData);
+            dbUpload.NodeID = this.NodeID;
+            dbUpload.FrmID= athDesc.FrmID;
             dbUpload.FK_FrmAttachment = athDesc.MyPK;
             dbUpload.FID = this.FID; //流程id.
                
             dbUpload.RefPKVal = pkVal.ToString();
-            dbUpload.setFK_MapData(athDesc.FK_MapData);
+            dbUpload.FrmID= athDesc.FrmID;
             dbUpload.FK_FrmAttachment = athDesc.MyPK;
             dbUpload.FileName = fileName+".png";
             dbUpload.FileSize = (float)info.Length;
             dbUpload.RDT = DataType.CurrentDateTimess;
             dbUpload.Rec = BP.Web.WebUser.No;
             dbUpload.RecName = BP.Web.WebUser.Name;
-            dbUpload.FK_Dept = WebUser.FK_Dept;
-            dbUpload.FK_DeptName = WebUser.FK_DeptName;
+            dbUpload.DeptNo = WebUser.DeptNo;
+            dbUpload.DeptName = WebUser.DeptName;
             dbUpload.FileExts = "png";
             if (athDesc.AthSaveWay == AthSaveWay.IISServer)
                 //文件方式保存
                 dbUpload.FileFullName = savePath;
 
-            if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
-                dbUpload.FileFullName = ny + "//" + athDesc.FK_MapData + "//" + fileName + ".png";
+            if (athDesc.AthSaveWay == AthSaveWay.FTPServer || athDesc.AthSaveWay == AthSaveWay.OSS)
+                dbUpload.FileFullName = ny + "//" + athDesc.FrmID + "//" + fileName + ".png";
             dbUpload.Insert();
            
             return "上传成功";

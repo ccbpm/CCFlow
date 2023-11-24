@@ -31,6 +31,9 @@ namespace BP.Pub
             }
         }
         #endregion 数据实体
+        #region 模板数据
+        public string _rtfStr = "";
+        #endregion 模板数据
 
         #region 数据明细实体
         private System.Text.Encoding _encoder = System.Text.Encoding.GetEncoding("GB2312");
@@ -73,7 +76,17 @@ namespace BP.Pub
                 return _EnsDataAths;
             }
         }
-
+        //明细表对应的附件
+        private FrmAttachments _EnsDataDtlOfAths = null;
+        public FrmAttachments EnsDataDtlOfAths
+        {
+            get
+            {
+                if (_EnsDataDtlOfAths == null)
+                    _EnsDataDtlOfAths = new FrmAttachments();
+                return _EnsDataDtlOfAths;
+            }
+        }
         #endregion 数据明细实体
 
         /// <summary>
@@ -91,6 +104,10 @@ namespace BP.Pub
         public void AddDtlEns(Entities dtlEns)
         {
             this.EnsDataDtls.Add(dtlEns);
+        }
+        public void AddDtlOfAthEns(Entities AthEns)
+        {
+            this.EnsDataDtlOfAths.AddEntities(AthEns);
         }
         public string CyclostyleFilePath = "";
         public string TempFilePath = "";
@@ -112,12 +129,12 @@ namespace BP.Pub
                         switch (strs[3])
                         {
                             case "Text":
-                                if (val == "0")
+                                if (val.Equals("0"))
                                     return "否";
                                 else
                                     return "是";
                             case "YesNo":
-                                if (val == "1")
+                                if (val.Equals("1"))
                                     return "[√]";
                                 else
                                     return "[×]";
@@ -132,7 +149,7 @@ namespace BP.Pub
                             case "RMB":
                                 return float.Parse(val).ToString("0.00");
                             case "RMBDX":
-                                return DataType.ParseFloatToCash(float.Parse(val));
+                                return DataType.ParseFloatToCache(float.Parse(val));
                             default:
                                 throw new Exception("step2参数设置错误" + strs);
                         }
@@ -402,7 +419,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 string[] strs = key.Split('.');
                 if (strs.Length == 2)
                 {
-                    if (strs[1].Trim() == "ImgAth")
+                    if (strs[1].Trim().Equals("ImgAth"))
                     {
                         string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
@@ -429,7 +446,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     switch (strs[1].Trim())
                     {
                         case "Text":
-                            if (val == "0")
+                            if (val.Equals("0"))
                                 return "否";
                             else
                                 return "是";
@@ -444,7 +461,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         case "RMB":
                             return float.Parse(val).ToString("0.00");
                         case "RMBDX":
-                            return DataType.ParseFloatToCash(float.Parse(val));
+                            return DataType.ParseFloatToCache(float.Parse(val));
                         case "ImgAth":
                             string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
@@ -550,20 +567,20 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     string singType = "0";
                     foreach (DataRow drTrack in dtTrack.Rows)
                     {
-                        if (drTrack["No"].ToString() == dr["EmpFrom"].ToString())
+                        if (drTrack["No"].ToString().Equals(dr["EmpFrom"].ToString()))
                         {
                             singType = drTrack["SignType"].ToString();
                             break;
                         }
                     }
 
-                    if (singType == "0" || singType == "2")
+                    if (singType.Equals("0") || singType.Equals("2"))
                     {
                         empStrs = dr["EmpFromT"].ToString();
                     }
 
 
-                    if (singType == "1")
+                    if (singType.Equals("1"))
                     {
                         empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:60px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.jpg'\" /> " + dr["EmpFromT"];
                     }
@@ -693,7 +710,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 if (strs.Length == 1)
                     return this.HisGEEntity.GetValStringByKey(key);
 
-                if(strs[1].Trim() == "Checkboxs")
+                if (strs[1].Trim().Equals("Checkboxs"))
                 {
                     //获取复选框多选的值
                     string content = this.HisGEEntity.GetValStringByKey(strs[0]);
@@ -703,7 +720,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         return content;
                     SysEnums enums = new SysEnums(attr.UIBindKey);
                     string str = "";
-                    foreach(SysEnum en in enums)
+                    foreach (SysEnum en in enums)
                     {
                         if ((content + ",").Contains(en.IntKey + ",") == true)
                             str += en.Lab + ",";
@@ -711,7 +728,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     if (str != "") str = str.Substring(0, str.Length - 1);
                     return str;
                 }
-                if (strs[1].Trim() == "Editor")
+                if (strs[1].Trim().Equals("Editor"))
                 {
                     //获取富文本的内容
                     string content = this.HisGEEntity.GetValStringByKey(strs[0]);
@@ -749,7 +766,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                 }
 
-                if (strs[1].Trim() == "ImgAth")
+                if (strs[1].Trim().Equals("ImgAth"))
                 {
                     string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
                     if (!File.Exists(path1))
@@ -766,7 +783,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     //图片高宽
                     float iWidth = imgAth.Size.Width * 15;
                     float iHeight = imgAth.Size.Height * 15;
-                    if (frmImgAth != null && !DataType.IsNullOrEmpty(frmImgAth.FK_MapData))
+                    if (frmImgAth != null && !DataType.IsNullOrEmpty(frmImgAth.FrmID))
                     {
                         iWidth = frmImgAth.W * 15;
                         iHeight = frmImgAth.H * 15;
@@ -787,7 +804,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     return mypict.ToString();
                 }
 
-                if (strs[1].Trim() == "BPPaint")
+                if (strs[1].Trim().Equals("BPPaint"))
                 {
                     string path1 = DBAccess.RunSQLReturnString("SELECT  Tag2 FROM Sys_FrmEleDB WHERE REFPKVAL=" + this.HisGEEntity.PKVal + " AND EleID='" + strs[0].Trim() + "'");
                     //  string path1 =  BP.Difference.SystemConfig.PathOfDataUser + "\\BPPaint\\" + this.HisGEEntity.ToString().Trim() + "\\" + this.HisGEEntity.PKVal + ".png";
@@ -831,7 +848,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     {
 
                         case "Text":
-                            if (val == "0")
+                            if (val.Equals("0"))
                                 return "否";
                             else
                                 return "是";
@@ -847,7 +864,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             decimal md = Math.Round(decimal.Parse(val), 2);
                             return md.ToString();
                         case "RMBDX":
-                            return this.GetCode(DataType.ParseFloatToCash(float.Parse(val)));
+                            return this.GetCode(DataType.ParseFloatToCache(float.Parse(val)));
                         case "Siganture":
                             string path = SystemConfig.PathOfDataUser + "Siganture/" + val + ".jpg";
                             //获取要插入的图片
@@ -877,29 +894,29 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         //替换rtf模板文件中的签名图片标识为图片字符串
                         // str = str.Replace(imgMark, pict.ToString());
                         case "BoolenText":
-                            if (val == "0")
+                            if (val.Equals("0"))
                                 return "否";
                             else
                                 return "是";
                         case "Boolen":
-                            if (val == "1")
+                            if (val.Equals("1"))
                                 return "[√]";
                             else
                                 return "[×]";
                             break;
                         case "YesNo":
-                            if (val == "1")
+                            if (val.Equals("1"))
                                 return "[√]";
                             else
                                 return "[×]";
                             break;
                         case "Yes":
-                            if (val == "1")
+                            if (val.Equals("1"))
                                 return "[√]";
                             else
                                 return "[×]";
                         case "No":
-                            if (val == "0")
+                            if (val.Equals("0"))
                                 return "[√]";
                             else
                                 return "[×]";
@@ -930,7 +947,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                 if (strs.Length == 3)
                 {
-                    if (strs[2].Trim() == "ImgAth")
+                    if (strs[2].Trim().Equals("ImgAth"))
                     {
                         string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[1].Trim() + "_" + en.PKVal + ".png";
                         //定义rtf中图片字符串.
@@ -958,7 +975,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     switch (strs[2].Trim())
                     {
                         case "Text":
-                            if (val == "0")
+                            if (val.Equals("0"))
                                 return "否";
                             else
                                 return "是";
@@ -973,7 +990,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         case "RMB":
                             return float.Parse(val).ToString("0.00");
                         case "RMBDX":
-                            return DataType.ParseFloatToCash(float.Parse(val));
+                            return DataType.ParseFloatToCache(float.Parse(val));
                         case "ImgAth":
                             string path1 = SystemConfig.PathOfDataUser + "ImgAth/Data/" + strs[0].Trim() + "_" + this.HisGEEntity.PKVal + ".png";
 
@@ -1058,8 +1075,9 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
             if (System.IO.Directory.Exists(path) == false)
                 System.IO.Directory.CreateDirectory(path);
-
-            string str = Cash.GetBillStr(templateRtfFile, false).Substring(0);
+            if (DataType.IsNullOrEmpty(this._rtfStr))
+                this._rtfStr = Cache.GetBillStr(templateRtfFile, false).Substring(0);
+            string str = this._rtfStr;
             if (this.HisEns.Count == 0)
                 if (this.HisGEEntity == null)
                     throw new Exception("@您没有为报表设置数据源...");
@@ -1078,9 +1096,9 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
             string error = "";
             string[] paras = null;
             if (this.HisGEEntity != null)
-                paras = Cash.GetBillParas(templateRtfFile, ensStrs, this.HisGEEntity);
+                paras = Cache.GetBillParas(templateRtfFile, ensStrs, this.HisGEEntity);
             else
-                paras = Cash.GetBillParas(templateRtfFile, ensStrs, this.HisEns);
+                paras = Cache.GetBillParas(templateRtfFile, ensStrs, this.HisEns);
 
             this.TempFilePath = path + file;
             try
@@ -1101,8 +1119,6 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         continue;
 
                     }
-
-
                     try
                     {
                         if (para.Contains("Editor"))
@@ -1153,6 +1169,11 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         else
                         {
                             string val = this.GetValueByKey(para);
+                            if (val == "")
+                            {
+                                str = GetRtfStr(str, "<" + para + ">");
+                                continue;
+                            }
                             val = val.Replace("\\", "\\\\");
                             val = this.GetCode(val);
                             str = str.Replace("<" + para + ">", val);
@@ -1161,7 +1182,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     catch (Exception ex)
                     {
                         error += "@替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
-                        if (SystemConfig.IsDebug)
+                        if (SystemConfig.isDebug)
                             throw new Exception(error);
                         BP.DA.Log.DebugWriteError(error);
                     }
@@ -1171,7 +1192,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                 #region 从表
                 string shortName = "";
                 ArrayList al = this.EnsDataDtls;
-                for(int K = 0; K < 2; K++)
+                for (int K = 0; K < 2; K++)
                 {
                     foreach (Entities dtls in al)
                     {
@@ -1181,7 +1202,25 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                         if (str.IndexOf(shortName) == -1)
                             continue;
-
+                        if(str.IndexOf("-" + shortName + ">") != -1)
+                        {
+                            //获取继承的类
+                            string subStr = str.Substring(0, str.IndexOf("-" + shortName + ">"));
+                            subStr = str.Substring(subStr.LastIndexOf("<"), str.IndexOf("-" + shortName + ">")+ shortName.Length+2- subStr.LastIndexOf("<"));
+                            string className = subStr.Split('-').Length > 1 ? subStr.Split('-')[0].Substring(1) : "";
+                            if (DataType.IsNullOrEmpty(className) == true)
+                            {
+                                str = str.Replace(subStr, GetCode("没有获取到继承BP.Sys.BuessUnitBase的类"));
+                                continue;
+                            }
+                            /* 获得业务单元，开始执行他 */
+                            BuessUnitBase enBuesss = BP.Sys.Base.Glo.GetBuessUnitEntityByEnName(className);
+                            enBuesss.WorkID = Int64.Parse(this.HisGEEntity.PKVal.ToString());
+                            enBuesss.DtlNo = shortName;
+                            string result = enBuesss.DoIt();
+                            str = str.Replace(subStr, result);
+                            continue;
+                        }
                         int pos_rowKey = str.IndexOf("<" + shortName + ".") + 1;
                         int row_start = -1, row_end = -1;
                         if (pos_rowKey != -1)
@@ -1189,12 +1228,12 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\nestrow");
                             if (row_start == -1)
                                 row_start = str.Substring(0, pos_rowKey).LastIndexOf("\\row");
-                            
-                           
+
+
                             row_end = str.Substring(pos_rowKey).IndexOf("\\nestrow");
                             if (row_end == -1)
                                 row_end = str.Substring(pos_rowKey).IndexOf("\\row");
-                           
+
                         }
 
                         if (row_start == -1 || row_end == -1)
@@ -1206,6 +1245,15 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
 
                         Map map = dtls.GetNewEntity.EnMap;
                         int i = dtls.Count;
+                        MapDtl mapDtl = new MapDtl(dtlEnName);
+                        if (dtls.Count == 0 && mapDtl.RowsOfList != 0)
+                        {
+                            for (int j = 0; i < mapDtl.RowsOfList; i++)
+                            {
+                                GEDtl geDtl = new GEDtl(mapDtl.No);
+                                dtls.AddEntity(geDtl);
+                            }
+                        }
                         while (i > 0)
                         {
                             i--;
@@ -1239,11 +1287,62 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                                         }
                                         else
                                         {
-                                            if (attr.IsEnum)
+                                            if (attr.ItIsEnum)
                                                 rowData = rowData.Replace("<" + shortName + "." + attr.Key + "Text>", GetCode(dtl.GetValRefTextByKey(attr.Key)));
                                             else
                                                 rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", dtl.GetValStrByKey(attr.Key));
                                         }
+                                        break;
+                                    case DataType.AppString:
+                                        if (attr.UIContralType == UIContralType.AthShow)
+                                        {
+                                            FrmAttachment ath = this.EnsDataDtlOfAths.GetEntityByKey(mapDtl.No + "_" + attr.Key) as FrmAttachment;
+                                            if (ath != null)
+                                            {
+
+                                                FrmAttachmentDBs dbs = new FrmAttachmentDBs();
+                                                dbs.Retrieve(FrmAttachmentDBAttr.NoOfObj, ath.NoOfObj, FrmAttachmentDBAttr.RefPKVal, dtl.GetValIntByKey("OID"), FrmAttachmentDBAttr.RDT);
+                                                if (ath.FileType == 0)
+                                                {
+                                                    rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode("附件(" + dbs.Count + ")"));
+                                                    break;
+                                                }
+                                                StringBuilder picStr = new StringBuilder();
+                                                foreach (FrmAttachmentDB db in dbs)
+                                                {
+                                                    if (File.Exists(db.FileFullName) == false)
+                                                        continue;
+                                                    //获取要插入的图片
+                                                    System.Drawing.Image imgAth = System.Drawing.Image.FromFile(db.FileFullName);
+
+                                                    //将要插入的图片转换为16进制字符串
+                                                    string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                                    //生成rtf中图片字符串
+                                                    picStr.AppendLine();
+                                                    picStr.Append(@"{\pict");
+                                                    picStr.Append(@"\jpegblip");
+                                                    picStr.Append(@"\picscalex100");
+                                                    picStr.Append(@"\picscaley100");
+                                                    picStr.Append(@"\picwgoal" + imgAth.Size.Width);
+                                                    picStr.Append(@"\pichgoal" + imgAth.Size.Height);
+                                                    picStr.Append(imgHexStringImgAth + "}");
+                                                    picStr.AppendLine();
+                                                }
+                                                rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", picStr.ToString());
+                                                break;
+                                            }
+                                        }
+                                        if (attr.UIContralType == UIContralType.DDL)
+                                        {
+                                            string val = dtl.GetValStrByKey(attr.Key + "Text");
+                                            if (DataType.IsNullOrEmpty(val))
+                                                val = dtl.GetValStrByKey(attr.Key + "T");
+                                            if (DataType.IsNullOrEmpty(val))
+                                                val = dtl.GetValStrByKey(attr.Key);
+                                            rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(val));
+                                            break;
+                                        }
+                                        rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
                                         break;
                                     default:
                                         rowData = rowData.Replace("<" + shortName + "." + attr.Key + ">", GetCode(dtl.GetValStrByKey(attr.Key)));
@@ -1255,7 +1354,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         }
                     }
                 }
-                
+
                 #endregion 从表
 
                 #region 明细 合计信息。
@@ -1285,7 +1384,7 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                                 key = "<" + shortName + "." + attr.Key + ".SUM.RMBDX>";
                                 if (str.IndexOf(key) != -1)
                                     str = str.Replace(key,
-                                        GetCode(DataType.ParseFloatToCash(dtls.GetSumFloatByKey(attr.Key))));
+                                        GetCode(DataType.ParseFloatToCache(dtls.GetSumFloatByKey(attr.Key))));
                                 break;
                             case DataType.AppInt:
                                 key = "<" + shortName + "." + attr.Key + ".SUM>";
@@ -1687,15 +1786,17 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                         System.Drawing.Image imgAth;
                         foreach (FrmAttachmentDB athDb in athDbs)
                         {
+
                             if (athFilesName.Length > 0)
                             {
                                 athFilesName += " ， ";
                             }
                             int i = athDb.FileFullName.LastIndexOf("UploadFile/");
                             athDb.FileFullName = athDb.FileFullName.Substring(i);
-                            //String filePath = SystemConfig.PathOfDataUser + "UploadFile/" + athDb.FK_MapData + "/" + this.HisGEEntity.PKVal + "/" + athDb.FileName;
+                            //String filePath = SystemConfig.PathOfDataUser + "UploadFile/" + athDb.FrmID + "/" + this.HisGEEntity.PKVal + "/" + athDb.FileName;
                             String filePath = SystemConfig.PathOfDataUser + athDb.FileFullName;
-
+                            if (File.Exists(filePath) == false)
+                                continue;
                             imgAth = System.Drawing.Image.FromFile(filePath);
                             System.Drawing.Image bmp = new System.Drawing.Bitmap(imgAth);
                             //imgAth.Dispose();
@@ -1714,6 +1815,8 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                             athImgs = mypict.ToString();
 
                         }
+                        if (athDbs.Count == 0)
+                            athImgs = "";
                         str = str.Replace(wkKey, athImgs);
                     }
                     else
@@ -1728,6 +1831,16 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     }
 
                     str = str.Replace("<" + athName + ">", this.GetCode(athFilesName));
+                }
+
+
+                FrmAttachments ens = new FrmAttachments(ensStrs);
+                foreach (FrmAttachment en in ens)
+                {
+                    if (str.IndexOf("<Ath." + en.NoOfObj) != -1 && str.IndexOf(en.NoOfObj + ".ImgAth>") != -1)
+                    {
+                        str = str.Replace("<Ath." + en.NoOfObj + ".ImgAth>", "\\par");
+                    }
                 }
                 #endregion
 
@@ -1762,12 +1875,12 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
             catch (Exception ex)
             {
                 string msg = "";
-                if (SystemConfig.IsDebug)
+                if (SystemConfig.isDebug)
                 {  // 异常可能与单据的配置有关系。
                     try
                     {
                         this.CyclostyleFilePath = SystemConfig.PathOfDataUser + "CyclostyleFile/" + templateRtfFile;
-                        str = Cash.GetBillStr(templateRtfFile, false);
+                        str = Cache.GetBillStr(templateRtfFile, false);
                         msg = "@已经成功的执行修复线  RepairLineV2，您重新发送一次或者，退后重新在发送一次，是否可以解决此问题";
                     }
                     catch (Exception ex1)
@@ -1779,6 +1892,35 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
             }
         }
         #endregion
+
+        private string GetRtfStr(string rtfStr, string tag)
+        {
+            //移除这个分组标签
+            if (tag.Contains(".End"))
+            {
+                return rtfStr.Replace(tag, "");
+            }
+
+            int pos_rowKey = rtfStr.IndexOf(tag) + 1;
+            int row_start = -1, row_end = -1;
+            if (pos_rowKey > 0)
+            {
+                row_start = rtfStr.Substring(0, pos_rowKey).LastIndexOf("\\pard");
+                //int idx1 = rtfStr.Substring(pos_rowKey).IndexOf("\\par \\ltrrow");
+                int idx2 = rtfStr.Substring(pos_rowKey).IndexOf("\\par");
+                row_end = idx2 + 4;
+                /*if (idx2 != -1)
+                {
+                    if(idx1 == idx2)
+                        row_end = idx1 + 13;
+                    if(idx2<idx1)
+                        row_end = idx2 + 6;
+                }*/
+            }
+            if (row_start != -1 && row_end != -1)
+                rtfStr = rtfStr.Substring(0, row_start) + rtfStr.Substring(pos_rowKey).Substring(row_end);
+            return rtfStr;
+        }
 
         #region 生成单据
         #region 生成单据
@@ -1872,27 +2014,35 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
                     wkVal = "";
                 }
                 String filePath = SystemConfig.PathOfDataUser + "/Siganture/" + wkVal + ".jpg";
-                // 定义rtf中图片字符串
-                StringBuilder mypict = new StringBuilder();
-                // 获取要插入的图片
-                // System.Drawing.Image img =
-                // System.Drawing.Image.FromFile(path);
-                //获取要插入的图片
-                System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
+                if (File.Exists(filePath) == true)
+                {
+                    // 定义rtf中图片字符串
+                    StringBuilder mypict = new StringBuilder();
+                    // 获取要插入的图片
+                    // System.Drawing.Image img =
+                    // System.Drawing.Image.FromFile(path);
+                    //获取要插入的图片
+                    System.Drawing.Image imgAth = System.Drawing.Image.FromFile(filePath);
 
-                //将要插入的图片转换为16进制字符串
-                string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
-                //生成rtf中图片字符串
-                mypict.AppendLine();
-                mypict.Append(@"{\pict");
-                mypict.Append(@"\jpegblip");
-                mypict.Append(@"\picscalex100");
-                mypict.Append(@"\picscaley100");
-                mypict.Append(@"\picwgoal" + imgAth.Width * 15);
-                mypict.Append(@"\pichgoal" + imgAth.Height * 15);
-                mypict.Append(imgHexStringImgAth + "}");
-                mypict.Append("\n");
-                str = str.Replace(wkKey, mypict.ToString());
+                    //将要插入的图片转换为16进制字符串
+                    string imgHexStringImgAth = GetImgHexString(imgAth, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    //生成rtf中图片字符串
+                    mypict.AppendLine();
+                    mypict.Append(@"{\pict");
+                    mypict.Append(@"\jpegblip");
+                    mypict.Append(@"\picscalex100");
+                    mypict.Append(@"\picscaley100");
+                    mypict.Append(@"\picwgoal" + imgAth.Width * 15);
+                    mypict.Append(@"\pichgoal" + imgAth.Height * 15);
+                    mypict.Append(imgHexStringImgAth + "}");
+                    mypict.Append("\n");
+                    str = str.Replace(wkKey, mypict.ToString());
+                }
+                else
+                {
+                    str = "";
+                }
+
             }
             return str;
         }
@@ -1905,6 +2055,14 @@ trgaph108\trleft5\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\br
             this._EnsDataDtls = null;
             this._HisEns = null;
         }
+
+        public RTFEngine(string rtfFile)
+        {
+            this._EnsDataDtls = null;
+            this._HisEns = null;
+            this._rtfStr = Cache.GetBillStr(rtfFile, false).Substring(0);
+        }
+
         /// <summary>
         /// 传入的是单个实体
         /// </summary>

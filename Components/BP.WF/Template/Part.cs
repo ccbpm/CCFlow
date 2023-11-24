@@ -316,16 +316,16 @@ namespace BP.WF.Template
                 map.AddTBInt(PartAttr.NodeID, 0, "节点ID", false, false);
                 map.AddTBString(PartAttr.PartType, null, "类型", false, true, 0, 100, 10);
 
-                map.AddTBString(PartAttr.Tag0, null, "Tag0", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag1, null, "Tag1", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag2, null, "Tag2", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag3, null, "Tag3", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag4, null, "Tag4", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag5, null, "Tag5", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag6, null, "Tag6", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag7, null, "Tag7", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag8, null, "Tag8", false, true, 0, 2000, 10);
-                map.AddTBString(PartAttr.Tag9, null, "Tag9", false, true, 0, 2000, 10);
+                map.AddTBString(PartAttr.Tag0, null, "Tag0", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag1, null, "Tag1", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag2, null, "Tag2", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag3, null, "Tag3", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag4, null, "Tag4", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag5, null, "Tag5", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag6, null, "Tag6", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag7, null, "Tag7", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag8, null, "Tag8", false, true, 0, 200, 10);
+                map.AddTBString(PartAttr.Tag9, null, "Tag9", false, true, 0, 200, 10);
 
                 this._enMap = map;
                 return this._enMap;
@@ -363,7 +363,7 @@ namespace BP.WF.Template
             //全量参数模式. 
             if (paraMode.Equals("1") == true)
             {
-                var geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
+                GEEntity geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
                 pdocs = geEntity.ToJson(false);
             }
             else
@@ -405,7 +405,7 @@ namespace BP.WF.Template
             else
                 workID = ap.GetValIntByKey("WorkID");
 
-            var geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
+            GEEntity geEntity = new GEEntity("ND" + int.Parse(this.FlowNo) + "Rpt", workID);
 
             string url = this.Tag0; //url. 
             url = Glo.DealExp(url, geEntity);

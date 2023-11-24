@@ -405,7 +405,7 @@ namespace BP.WF.Rpt
                 if (PublicFiels.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
 
-                attr.setFK_MapData(md.No);
+                attr.FrmID =md.No;
                 attr.setUIIsEnable(false);
                 attr.Idx = 0;
 
@@ -521,7 +521,7 @@ namespace BP.WF.Rpt
                 md.Insert();
             }
 
-            md.IsSearchKey = true; //按关键查询.
+            md.ItIsSearchKey = true; //按关键查询.
             md.DTSearchWay = DTSearchWay.None; //按日期查询.
             md.DTSearchKey = "";
 

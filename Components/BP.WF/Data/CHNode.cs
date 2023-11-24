@@ -67,12 +67,11 @@ namespace BP.WF.Data
             }
         }
 
-
        
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -101,7 +100,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 操作人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -115,7 +114,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_EmpT
+        public string EmpT
         {
             get
             {
@@ -286,7 +285,7 @@ namespace BP.WF.Data
         #endregion
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.WorkID + "_" + this.FK_Node);
+            this.setMyPK(this.WorkID + "_" + this.NodeID);
             return base.beforeUpdateInsertAction();
         }
 

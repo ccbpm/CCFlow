@@ -17,7 +17,7 @@ namespace BP.Sys
 		/// <summary>
 		/// 工作人员
 		/// </summary>
-		public const string FK_Emp="FK_Emp";
+		public const string EmpNo = "EmpNo";
 		/// <summary>
 		/// 列选择
 		/// </summary>
@@ -46,15 +46,15 @@ namespace BP.Sys
 		/// <summary>
 		/// 操作员ID
 		/// </summary>
-		public string FK_Emp
+		public string EmpNo
 		{
 			get
 			{
-				return this.GetValStringByKey(CFieldAttr.FK_Emp ) ; 
+				return this.GetValStringByKey(CFieldAttr.EmpNo) ; 
 			}
 			set
 			{
-				this.SetValByKey(CFieldAttr.FK_Emp,value) ; 
+				this.SetValByKey(CFieldAttr.EmpNo, value) ; 
 			}
 		}
 		/// <summary>
@@ -81,24 +81,6 @@ namespace BP.Sys
 		{
 		}
 		/// <summary>
-		/// 列选择
-		/// </summary>
-		/// <param name="FK_Emp">工作人员ID</param>
-		/// <param name="className">类名称</param>
-		/// <param name="attrKey">属性</param>
-		/// <param name="Attrs">值</param>
-        public CField(string FK_Emp, string className)
-        {
-            int i = this.Retrieve(CFieldAttr.FK_Emp, FK_Emp,
-                   CFieldAttr.EnsName, className);
-            if (i == 0)
-            {
-                this.EnsName = className;
-                this.FK_Emp = FK_Emp;
-                this.Insert();
-            }
-        }
-		/// <summary>
 		/// map
 		/// </summary>
         public override Map EnMap
@@ -111,7 +93,7 @@ namespace BP.Sys
 
                 map.AddMyPK();
                 map.AddTBString(CFieldAttr.EnsName, null, "实体类名称", false, true, 0, 100, 10);
-                map.AddTBString(CFieldAttr.FK_Emp, null, "工作人员", false, true, 0, 100, 10);
+                map.AddTBString(CFieldAttr.EmpNo, null, "工作人员", false, true, 0, 100, 10);
                 map.AddTBStringDoc(CFieldAttr.Attrs, null, "属性s", true, false);
                 this._enMap = map;
                 return this._enMap;
@@ -122,7 +104,7 @@ namespace BP.Sys
         protected override bool beforeUpdateInsertAction()
         {
 			if(DataType.IsNullOrEmpty(this.MyPK)==true)
-				this.setMyPK(this.EnsName + "_" + this.FK_Emp);
+				this.setMyPK(this.EnsName + "_" + this.EmpNo);
             return base.beforeUpdateInsertAction();
         }
 	

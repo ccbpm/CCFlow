@@ -390,7 +390,7 @@ namespace BP.CCBill
                 map.AddTBString(FrmBillAttr.FieldSet, null, "字段求和求平均设置", true, false, 0, 100, 20, true);
                 //字段格式化函数.
                 map.AddTBString("ForamtFunc", null, "字段格式化函数", true, false, 0, 200, 60, true);
-                  msg = "对字段的显示使用函数进行处理";
+                msg = "对字段的显示使用函数进行处理";
                 msg += "\t\n 1. 对于字段内容需要处理后在输出出来.";
                 msg += "\t\n 2. 比如：原字段内容 @zhangsa,张三@lisi,李四 显示的内容为 张三,李四";
                 msg += "\t\n 3. 配置格式: 字段名@函数名; 比如:  FlowEmps@DealFlowEmps; ";
@@ -509,7 +509,7 @@ namespace BP.CCBill
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
                 //rm.GroupName = "开发接口";
-               // map.AddRefMethod(rm);
+                // map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "打开数据(表格)"; // "设计表单";
@@ -684,7 +684,7 @@ namespace BP.CCBill
         {
             //表单的工具栏权限
             ToolbarBtn btn = new ToolbarBtn();
-            if(this.EntityType == EntityType.FrmDict)
+            if (this.EntityType == EntityType.FrmDict)
             {
                 btn.FrmID = this.No;
                 btn.BtnID = "New";
@@ -711,14 +711,14 @@ namespace BP.CCBill
                 btn.SetValByKey("Idx", 2);
                 btn.Insert();
             }
-            
+
 
             btn = new ToolbarBtn();
             btn.FrmID = this.No;
             btn.BtnID = "PrintHtml";
             btn.BtnLab = "打印Html";
             btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-            btn.IsEnable = false;
+            btn.ItIsEnable = false;
             btn.SetValByKey("Idx", 3);
             btn.Insert();
 
@@ -727,7 +727,7 @@ namespace BP.CCBill
             btn.BtnID = "PrintPDF";
             btn.BtnLab = "打印PDF";
             btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-            btn.IsEnable = false;
+            btn.ItIsEnable = false;
             btn.SetValByKey("Idx", 4);
             btn.Insert();
 
@@ -736,7 +736,7 @@ namespace BP.CCBill
             btn.BtnID = "PrintRTF";
             btn.BtnLab = "打印RTF";
             btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-            btn.IsEnable = false;
+            btn.ItIsEnable = false;
             btn.SetValByKey("Idx", 5);
             btn.Insert();
 
@@ -745,7 +745,7 @@ namespace BP.CCBill
             btn.BtnID = "PrintCCWord";
             btn.BtnLab = "打印CCWord";
             btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-            btn.IsEnable = false;
+            btn.ItIsEnable = false;
             btn.SetValByKey("Idx", 6);
             btn.Insert();
 
@@ -754,7 +754,7 @@ namespace BP.CCBill
             btn.BtnID = "ExpZip";
             btn.BtnLab = "导出Zip包";
             btn.MyPK = btn.FrmID + "_" + btn.BtnID;
-            btn.IsEnable = false;
+            btn.ItIsEnable = false;
             btn.SetValByKey("Idx", 7);
             btn.Insert();
 
@@ -805,7 +805,7 @@ namespace BP.CCBill
                 collection.SetValByKey("Idx", 5);
                 collection.Insert();
             }
-            
+
 
             collection = new Collection();
             collection.FrmID = this.No;
@@ -829,11 +829,11 @@ namespace BP.CCBill
             collection.SetValByKey("Idx", 4);
             collection.Insert();
 
-            
+
 
         }
 
-        
+
         protected override void afterInsert()
         {
             InsertToolbarBtns();
@@ -850,12 +850,24 @@ namespace BP.CCBill
             //取出来全部的属性.
             MapAttrs attrs = new MapAttrs(this.No);
 
+            //创建表单ID。
+            int groupID = DBAccess.RunSQLReturnValInt("SELECT MAX(GroupID) FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'", 0);
+            if (groupID == 0)
+            {
+                GroupField gf = new GroupField();
+                gf.Lab = "基本信息";
+                gf.FrmID = this.No;
+                gf.Insert();
+                groupID = gf.OID;
+            }
+
+
             #region 补充上流程字段到 NDxxxRpt.
             if (attrs.Contains(this.No + "_" + GERptAttr.OID) == false)
             {
                 /* WorkID */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.setKeyOfEn("OID");
                 attr.setName("主键ID");
                 attr.setMyDataType(DataType.AppInt);
@@ -865,13 +877,14 @@ namespace BP.CCBill
                 attr.setUIIsEnable(false);
                 attr.DefVal = "0";
                 attr.setEditType(EditType.Readonly);
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_" + GERptAttr.BillNo) == false)
             {
                 /* 单据编号 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.BillNo);
                 attr.setName("编号"); //  单据编号
@@ -884,6 +897,7 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(100);
                 attr.Idx = -100;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
 
@@ -891,7 +905,7 @@ namespace BP.CCBill
             {
                 /* 名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.Title); // "FlowEmps";
                 attr.setName("名称"); //   单据模式， ccform的模式.
@@ -904,13 +918,14 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(400);
                 attr.Idx = -90;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_BillState") == false)
             {
                 /* 单据状态 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("BillState"); // "FlowEmps";
                 attr.setName("单据状态"); //  
@@ -925,6 +940,7 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(10);
                 attr.Idx = -98;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
 
@@ -932,7 +948,7 @@ namespace BP.CCBill
             {
                 /* 发起人 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("Starter");
                 attr.setName("创建人"); //  
@@ -945,13 +961,14 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(100);
                 attr.Idx = -1;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_StarterName") == false)
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("StarterName");
                 attr.setName("创建人名称"); //  
@@ -964,6 +981,7 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(32);
                 attr.Idx = -1;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
 
@@ -971,7 +989,7 @@ namespace BP.CCBill
             {
                 /* 参数 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn(GERptAttr.AtPara);
                 attr.setName("参数"); // 单据编号
@@ -984,13 +1002,14 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(4000);
                 attr.Idx = -99;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
 
             if (attrs.Contains(this.No + "_RDT") == false)
             {
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("RDT");
                 attr.setName("创建时间");
@@ -1001,13 +1020,14 @@ namespace BP.CCBill
                 attr.setUIIsEnable(false);
                 attr.UIIsLine = false;
                 attr.Idx = -97;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_FK_Dept") == false)
             {
                 /* 创建人部门 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("FK_Dept");
                 attr.setName("创建人部门"); //  
@@ -1020,13 +1040,14 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(100);
                 attr.Idx = -1;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             if (attrs.Contains(this.No + "_OrgNo") == false)
             {
                 /* 创建人名称 */
                 MapAttr attr = new MapAttr();
-                attr.setFK_MapData(this.No);
+                attr.FrmID = this.No;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("OrgNo");
                 attr.setName("创建人所在的组织"); //  
@@ -1039,6 +1060,7 @@ namespace BP.CCBill
                 attr.setMinLen(0);
                 attr.setMaxLen(100);
                 attr.Idx = -1;
+                attr.setGroupID(groupID);
                 attr.Insert();
             }
             #endregion 补充上流程字段。
@@ -1157,7 +1179,7 @@ namespace BP.CCBill
 
         public string ToolbarSetting()
         {
-            return "../../CCBill/Admin/ToolbarSetting.htm?s=34&FrmID=" + this.No ;
+            return "../../CCBill/Admin/ToolbarSetting.htm?s=34&FrmID=" + this.No;
         }
         public string DoPageLoadFull()
         {

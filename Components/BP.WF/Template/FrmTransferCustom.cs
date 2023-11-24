@@ -284,10 +284,10 @@ namespace BP.WF.Template
         /// <param name="fk_mapdata">s</param>
         public FrmTransferCustoms(string fk_mapdata)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
                 this.Retrieve("No", fk_mapdata);
             else
-                this.RetrieveFromCash("No", (object)fk_mapdata);
+                this.RetrieveFromCache("No", (object)fk_mapdata);
         }
         /// <summary>
         /// 得到它的 Entity

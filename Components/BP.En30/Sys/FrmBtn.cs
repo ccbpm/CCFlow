@@ -230,7 +230,7 @@ namespace BP.Sys
         /// <summary>
         /// IsEnable
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -293,7 +293,7 @@ namespace BP.Sys
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {

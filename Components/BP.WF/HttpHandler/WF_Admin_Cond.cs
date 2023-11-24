@@ -29,11 +29,11 @@ namespace BP.WF.HttpHandler
         public string CondPRI_Init()
         {
             Directions dirs = new Directions();
-            dirs.Retrieve(DirectionAttr.Node, this.FK_Node, DirectionAttr.Idx);
+            dirs.Retrieve(DirectionAttr.Node, this.NodeID, DirectionAttr.Idx);
             return dirs.ToJson();
             //按照条件的先后计算.
             Conds cds = new Conds();
-            cds.Retrieve(CondAttr.FK_Node, this.FK_Node,
+            cds.Retrieve(CondAttr.FK_Node, this.NodeID,
                 CondAttr.CondType, 2, CondAttr.Idx);
             foreach (Cond item in cds)
             {
@@ -55,7 +55,7 @@ namespace BP.WF.HttpHandler
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE WF_Direction SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
@@ -71,8 +71,8 @@ namespace BP.WF.HttpHandler
         public string Condition_Init()
         {
             string toNodeID = this.GetRequestVal("ToNodeID");
-            var cond = new Cond();
-            cond.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.ToNodeID, toNodeID);
+            Cond cond = new Cond();
+            cond.Retrieve(CondAttr.FK_Node, this.NodeID, CondAttr.ToNodeID, toNodeID);
             cond.Row.Add("HisDataFrom", cond.HisDataFrom.ToString());
 
             return cond.ToJson();
@@ -87,7 +87,7 @@ namespace BP.WF.HttpHandler
         {
             ps = new Paras();
             ps.SQL = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "Node";
-            ps.Add("Node", this.FK_Node);
+            ps.Add("Node", this.NodeID);
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.Columns[0].ColumnName = "NodeID";
@@ -106,12 +106,12 @@ namespace BP.WF.HttpHandler
             string sql = this.GetRequestVal("TB_Docs");
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.WorkCheck;
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
             cond.ToNodeID = this.ToNodeID;
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
@@ -145,14 +145,14 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.Url;
 
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
             cond.ToNodeID = this.ToNodeID;
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
@@ -187,18 +187,18 @@ namespace BP.WF.HttpHandler
             cond.HisDataFrom = ConnDataFrom.WebApi;
 
             if (this.GetRequestValInt("FK_MainNode") == 0)
-                cond.FK_Node = this.FK_Node;
+                cond.NodeID = this.NodeID;
             else
-                cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+                cond.NodeID = this.GetRequestValInt("FK_MainNode");
             if (this.ToNodeID == 0)
-                cond.ToNodeID = this.FK_Node;
+                cond.ToNodeID = this.NodeID;
             else
                 cond.ToNodeID = this.ToNodeID;
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql; 
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             // cond.OperatorValue = atParas; //在存储一遍.
             cond.SetPara("OperatorValue", atParas);
@@ -228,11 +228,11 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
 
             string toNodeID = this.GetRequestVal("ToNodeID");
-            Node nd = new Node(this.FK_Node);
+            Node nd = new Node(this.NodeID);
 
             string frmID = this.FrmID;
             if (DataType.IsNullOrEmpty(frmID) == true)
-                frmID = "ND" + int.Parse(nd.FK_Flow) + "Rpt";
+                frmID = "ND" + int.Parse(nd.FlowNo) + "Rpt";
 
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
 
@@ -247,7 +247,7 @@ namespace BP.WF.HttpHandler
 
             //增加字段集合.
             string sql = "";
-            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
+            if (BP.Difference.SystemConfig.AppCenterDBType == DBType.Oracle || SystemConfig.AppCenterDBType == DBType.KingBaseR3 || SystemConfig.AppCenterDBType == DBType.KingBaseR6 || BP.Difference.SystemConfig.AppCenterDBType == DBType.PostgreSQL || BP.Difference.SystemConfig.AppCenterDBType == DBType.HGDB || BP.Difference.SystemConfig.AppCenterDBType == DBType.UX)
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='" + frmID + "'";
                 sql += " AND KeyOfEn Not IN (" + noteIn + ") ";
@@ -284,7 +284,7 @@ namespace BP.WF.HttpHandler
         {
             //字段属性.
             MapAttr attr = new MapAttr();
-            attr.setMyPK("ND" + int.Parse(this.FK_Flow) + "Rpt_" + this.KeyOfEn);
+            attr.setMyPK("ND" + int.Parse(this.FlowNo) + "Rpt_" + this.KeyOfEn);
             attr.Retrieve();
             return AttrCond(attr);
         }
@@ -296,7 +296,7 @@ namespace BP.WF.HttpHandler
         {
             //定义变量.
             string field = this.GetRequestVal("DDL_Fields");
-            field = "ND" + int.Parse(this.FK_Flow) + "Rpt_" + field;
+            field = "ND" + int.Parse(this.FlowNo) + "Rpt_" + field;
 
             MapAttr attr = new MapAttr(field);
 
@@ -314,22 +314,22 @@ namespace BP.WF.HttpHandler
 
             cond.ToNodeID = toNodeID;
 
-            cond.FK_Node = this.FK_Node;
-            cond.FK_Operator = oper;
+            cond.NodeID = this.NodeID;
+            cond.OperatorNo = oper;
             cond.OperatorValue = operVal; //操作值.
             cond.OperatorValueT = operValT;
 
-            cond.FK_Attr = field; //字段属性.
+            cond.AttrNo = field; //字段属性.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
 
-            cond.Note = "表单[" + attr.FK_MapData + "]字段:[" + attr.KeyOfEn + "," + attr.Name + "][" + oper + "][" + operValT + "]";
+            cond.Note = "表单[" + attr.FrmID + "]字段:[" + attr.KeyOfEn + "," + attr.Name + "][" + oper + "][" + operValT + "]";
 
             //#region 方向条件，全部更新.
             //Conds conds = new Conds();
             //QueryObject qo = new QueryObject(conds);
-            //qo.AddWhere(CondAttr.FK_Node, this.FK_Node);
+            //qo.AddWhere(CondAttr.FK_Node, this.NodeID);
             //qo.addAnd();
             //qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
             //qo.addAnd();
@@ -378,7 +378,7 @@ namespace BP.WF.HttpHandler
         {
             ps = new Paras();
             ps.SQL = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "FK_Node";
-            ps.Add("FK_Node", this.FK_Node);
+            ps.Add("FK_Node", this.NodeID);
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
             dt.TableName = "Frms";
             dt.Columns[0].ColumnName = "No";
@@ -386,7 +386,7 @@ namespace BP.WF.HttpHandler
 
             //@gaoxin. 
             DataRow dr = dt.NewRow();
-            dr[0] = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            dr[0] = "ND" + int.Parse(this.FlowNo) + "Rpt";
             dr[1] = "节点表单(内置表单)";
             dt.Rows.Add(dr);
 
@@ -434,19 +434,19 @@ namespace BP.WF.HttpHandler
             cond.HisDataFrom = ConnDataFrom.StandAloneFrm;
             cond.ToNodeID = toNodeID;
 
-            cond.FK_Node = this.FK_Node;
-            cond.FK_Operator = oper;
+            cond.NodeID = this.NodeID;
+            cond.OperatorNo = oper;
             cond.OperatorValue = operVal; //操作值.
 
-            cond.FK_Attr = field; //字段属性.
+            cond.AttrNo = field; //字段属性.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
 
             //#region 方向条件，全部更新.
             //Conds conds = new Conds();
             //QueryObject qo = new QueryObject(conds);
-            //qo.AddWhere(CondAttr.FK_Node, this.FK_Node);
+            //qo.AddWhere(CondAttr.FK_Node, this.NodeID);
             //qo.addAnd();
             //qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.StandAloneFrm);
             //qo.addAnd();
@@ -508,7 +508,7 @@ namespace BP.WF.HttpHandler
             }
 
             #region 增加操作符 number.
-            if (attr.IsNum)
+            if (attr.ItIsNum)
             {
                 DataTable dtOperNumber = new DataTable();
                 dtOperNumber.TableName = "Opers";
@@ -624,15 +624,15 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.SQLTemplate;
 
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
             cond.ToNodeID = this.ToNodeID;
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql;
             cond.OperatorValueT = sqlT;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
@@ -663,15 +663,15 @@ namespace BP.WF.HttpHandler
 
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.SQL;
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
             cond.ToNodeID = this.ToNodeID;
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql;
-            cond.FK_DBSrc = FK_DBSrc;
+            cond.DBSrcNo = FK_DBSrc;
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {
@@ -718,8 +718,8 @@ namespace BP.WF.HttpHandler
             }
 
             cond.HisDataFrom = ConnDataFrom.Stas;
-            cond.FK_Flow = this.FK_Flow;
-            cond.FK_Node = FK_MainNode;
+            cond.FlowNo = this.FlowNo;
+            cond.NodeID = FK_MainNode;
 
             cond.ToNodeID = ToNodeID;
             cond.CondType = (BP.WF.Template.CondType)this.GetRequestValInt("CondType"); //条件类型. Dir,Node,Flow
@@ -747,9 +747,9 @@ namespace BP.WF.HttpHandler
             CondType condType = (CondType)this.CondType;
             Cond cond = new Cond();
             cond.HisDataFrom = ConnDataFrom.Depts;
-            cond.FK_Node = this.FK_MainNode;
-            cond.RefFlowNo = this.FK_Flow;
-            cond.FK_Flow = this.FK_Flow;
+            cond.NodeID = this.FK_MainNode;
+            cond.RefFlowNo = this.FlowNo;
+            cond.FlowNo = this.FlowNo;
             cond.ToNodeID = this.ToNodeID;
             cond.CondTypeInt = this.CondType;
 
@@ -769,9 +769,9 @@ namespace BP.WF.HttpHandler
             cond.HisDataFrom = ConnDataFrom.Depts;
             cond.DataFromText = "部门条件";
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondTypeInt = this.CondType;
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
 
             cond.ToNodeID = this.ToNodeID;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
@@ -837,14 +837,14 @@ namespace BP.WF.HttpHandler
 
             cond.HisDataFrom = ConnDataFrom.Paras;
 
-            cond.FK_Node = this.FK_MainNode;
+            cond.NodeID = this.FK_MainNode;
             cond.ToNodeID = this.ToNodeID;
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.OperatorValue = sql;
             cond.Note = HttpUtility.UrlDecode(this.GetRequestVal("TB_Note"), System.Text.Encoding.UTF8); //备注.
 
-            cond.FK_Flow = this.FK_Flow;
+            cond.FlowNo = this.FlowNo;
             cond.CondType = condTypeEnum;
             if (DataType.IsNullOrEmpty(this.MyPK) == true)
             {

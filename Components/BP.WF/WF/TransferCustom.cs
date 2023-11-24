@@ -69,7 +69,7 @@ namespace BP.WF
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -203,7 +203,7 @@ namespace BP.WF
                 this.SetValByKey(TransferCustomAttr.Idx, value);
             }
         }
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -274,7 +274,7 @@ namespace BP.WF
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.setMyPK(this.FK_Node + "_" + this.WorkID);
+            this.setMyPK(this.NodeID + "_" + this.WorkID);
             return base.beforeInsert();
         }
 
@@ -300,13 +300,13 @@ namespace BP.WF
             bool isMeet = false;
             foreach (TransferCustom item in ens)
             {
-                if (item.FK_Node == currNodeID)
+                if (item.NodeID == currNodeID)
                 {
                     isMeet = true;
                     continue;
                 }
 
-                if (isMeet == true && item.IsEnable == true)
+                if (isMeet == true && item.ItIsEnable == true)
                     return item;
             }
 
@@ -315,7 +315,7 @@ namespace BP.WF
             {
                 foreach (TransferCustom item in ens)
                 {
-                    if (item.IsEnable == true && item.FK_Node != currNodeID)
+                    if (item.ItIsEnable == true && item.NodeID != currNodeID)
                         return (TransferCustom)item;
                 }
             }
@@ -333,7 +333,7 @@ namespace BP.WF
                         continue;
                    
                     TransferCustom en = new TransferCustom();
-                    en.FK_Node = nd.NodeID;
+                    en.NodeID = nd.NodeID;
                     //更改流程的运行状态
                     GenerWorkFlow gwf = new GenerWorkFlow(workid);
                     gwf.TransferCustomType = TransferCustomType.ByCCBPMDefine;

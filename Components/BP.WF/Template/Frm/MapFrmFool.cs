@@ -15,7 +15,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否是节点表单?
         /// </summary>
-        public bool IsNodeFrm
+        public bool ItIsNodeFrm
         {
             get
             {
@@ -77,7 +77,7 @@ namespace BP.WF.Template.Frm
             }
         }
 
-        public string FK_FormTree
+        public string FormTreeNo
         {
             get
             {
@@ -277,16 +277,6 @@ namespace BP.WF.Template.Frm
                 rm.Icon = "icon-social-spotify";
                 map.AddRefMethod(rm);
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "重命名字段";
-                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = "../../WF/Img/ReName.png";
-                rm.Icon = "icon-refresh";
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "表单检查"; // "设计表单";
@@ -493,7 +483,7 @@ namespace BP.WF.Template.Frm
             //    this.FromEventEntity = feb.ToString();
 
             if (this.NodeID != 0)
-                this.FK_FormTree = "";
+                this.FormTreeNo = "";
 
             return base.beforeUpdate();
         }
@@ -511,7 +501,7 @@ namespace BP.WF.Template.Frm
                 MapData map = new MapData(this.No);
                 //避免显示在表单库中
                 // map.FK_FrmSort = "";
-                map.FK_FormTree = "";
+                map.FormTreeNo = "";
                 map.DirectUpdate();
             }
 
@@ -670,7 +660,7 @@ namespace BP.WF.Template.Frm
                 gf.Lab = dtl.Name;
                 gf.CtrlID = dtl.No;
                 gf.CtrlType = "Dtl";
-                gf.FrmID = dtl.FK_MapData;
+                gf.FrmID = dtl.FrmID;
                 gf.Save();
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
@@ -687,7 +677,7 @@ namespace BP.WF.Template.Frm
                 gf.Lab = fram.Name;
                 gf.CtrlID = fram.MyPK;
                 gf.CtrlType = "Frame";
-                gf.EnName = fram.FK_MapData;
+                gf.EnName = fram.FrmID;
                 gf.Insert();
 
                 str += "@为框架 " + fram.Name + " 增加了分组.";
@@ -698,7 +688,7 @@ namespace BP.WF.Template.Frm
             foreach (FrmAttachment ath in aths)
             {
                 //单附件、不可见的附件，都不需要增加分组.
-                if (ath.IsVisable == false || ath.UploadType == AttachmentUploadType.Single)
+                if (ath.ItIsVisable == false || ath.UploadType == AttachmentUploadType.Single)
                     continue;
 
 
@@ -710,13 +700,13 @@ namespace BP.WF.Template.Frm
                 gf.Lab = ath.Name;
                 gf.CtrlID = ath.MyPK;
                 gf.CtrlType = "Ath";
-                gf.FrmID = ath.FK_MapData;
+                gf.FrmID = ath.FrmID;
                 gf.Insert();
 
                 str += "@为附件 " + ath.Name + " 增加了分组.";
             }
 
-            if (this.IsNodeFrm == true)
+            if (this.ItIsNodeFrm == true)
             {
                 //提高执行效率.
                 // FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
@@ -769,16 +759,16 @@ namespace BP.WF.Template.Frm
         {
             MapAttr attrOld = new MapAttr();
             attrOld.setKeyOfEn(fieldOld);
-            attrOld.setFK_MapData(this.No);
-            attrOld.setMyPK(attrOld.FK_MapData + "_" + attrOld.KeyOfEn);
+            attrOld.FrmID =this.No;
+            attrOld.setMyPK(attrOld.FrmID + "_" + attrOld.KeyOfEn);
             if (attrOld.RetrieveFromDBSources() == 0)
                 return "@旧字段输入错误[" + attrOld.KeyOfEn + "].";
 
             //检查是否存在该字段？
             MapAttr attrNew = new MapAttr();
             attrNew.setKeyOfEn(newField);
-            attrNew.setFK_MapData(this.No);
-            attrNew.setMyPK(attrNew.FK_MapData + "_" + attrNew.KeyOfEn);
+            attrNew.FrmID =this.No;
+            attrNew.setMyPK(attrNew.FrmID + "_" + attrNew.KeyOfEn);
             if (attrNew.RetrieveFromDBSources() == 1)
                 return "@该字段[" + attrNew.KeyOfEn + "]已经存在.";
 
@@ -788,7 +778,7 @@ namespace BP.WF.Template.Frm
             //copy这个数据,增加上它.
             attrNew.Copy(attrOld);
             attrNew.setKeyOfEn(newField);
-            attrNew.setFK_MapData(this.No);
+            attrNew.FrmID =this.No;
 
             if (newFieldName != "")
                 attrNew.Name = newFieldName;

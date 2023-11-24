@@ -10,23 +10,6 @@
   4, ParentNo="AdminMenu"，固定值，目前只有一个根节点.
   系统维护管理员菜单  
   -->
-  <!--<Group No="LW" Name="低代码"  Icon="icon-folder" />
-  <Item No="LW01" GroupNo="LW" Name="菜单体系" For="admin" Url="../../WF/GPM/SystemList.htm" Icon="icon-menu" />
-  <Item No="LW02" GroupNo="LW" Name="新建系统" For="admin" Url="../../WF/GPM/NewSystem.htm" Icon="icon-plane" />
-
-  <Group No="Flow" Name="流程模板"  Icon="icon-folder" />
-  <Item No="Flow01" GroupNo="Flow" Name="流程" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Admin.Flows" Icon="icon-cursor" />
-  <Item No="Flow02" GroupNo="Flow" Name="目录" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FlowSorts" Icon="icon-star" />
-  <Item No="Flow03" GroupNo="Flow" Name="实例查询" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" Icon="icon-layers" />
-  <Item No="Flow04" GroupNo="Flow" Name="实例分析" For="admin" Url="../../WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" Icon="icon-chart" />
-
-  <Group No="Frm" Name="表单模板"  Icon="icon-folder" />
-  <Item No="Frm01" GroupNo="Frm" Name="表单" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.WF.Admin.Frms" Icon="icon-doc" />
-  <Item No="Frm02" GroupNo="Frm" Name="目录" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.WF.Admin.FrmSorts" Icon="icon-star" />
-  <Item No="Frm03" GroupNo="Frm" Name="数据源" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFDBSrcs" Icon="icon-drop" />
-  <Item No="Frm04" GroupNo="Frm" Name="外键" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon="icon-drop" />
-  <Item No="Frm05" GroupNo="Frm" Name="枚举" For="admin" Url="../../WF/Comm/Search.htm?EnsName=BP.Sys.SysEnumMains" Icon="icon-drop" />-->
-
   <Group No="Org" Name="组织结构"  Icon="icon-organization" />
   <Item No="504" GroupNo="Org" Name="组织结构" For="admin" Url="../../GPM/Organization.htm" Icon="icon-people" />
   <Item No="501" GroupNo="Org" Name="岗位类型维护" For="admin" Url="../../WF/Comm/Ens.htm?EnsName=BP.Port.StationTypes" Icon="icon-note" />

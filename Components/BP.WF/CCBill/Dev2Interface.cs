@@ -57,8 +57,8 @@ namespace BP.CCBill
 
             tk.Rec = WebUser.No;
             tk.RecName = WebUser.Name;
-            tk.DeptNo = WebUser.FK_Dept;
-            tk.DeptName = WebUser.FK_DeptName;
+            tk.DeptNo = WebUser.DeptNo;
+            tk.DeptName = WebUser.DeptName;
 
             // 流程信息。
             tk.WorkIDOfFlow = workIDOfFlow;
@@ -112,7 +112,7 @@ namespace BP.CCBill
                 rpt1.SetValByKey("BillState", 0);
                 rpt1.SetValByKey("Starter", gb.Starter);
                 rpt1.SetValByKey("StarterName", gb.StarterName);
-                rpt1.SetValByKey("FK_Dept", WebUser.FK_Dept);
+                rpt1.SetValByKey("FK_Dept", WebUser.DeptNo);
                 rpt1.SetValByKey("RDT", gb.RDT);
                 rpt1.SetValByKey("Title", gb.Title);
                 rpt1.SetValByKey("BillNo", gb.BillNo);
@@ -139,9 +139,9 @@ namespace BP.CCBill
 
             //if (DataType.IsNullOrEmpty(billNo) == false)
             //    gb.BillNo = billNo; //BillNo
-            gb.FK_Dept = BP.Web.WebUser.FK_Dept;
-            gb.DeptName = BP.Web.WebUser.FK_DeptName;
-            gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
+            gb.DeptNo = BP.Web.WebUser.DeptNo;
+            gb.DeptName = BP.Web.WebUser.DeptName;
+            gb.FrmTreeNo = fb.FormTreeNo; //单据类别.
             gb.RDT = DataType.CurrentDateTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
@@ -189,7 +189,7 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", (int)gb.BillState);
             rpt.SetValByKey("Starter", gb.Starter);
             rpt.SetValByKey("StarterName", gb.StarterName);
-            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
+            rpt.SetValByKey("FK_Dept", WebUser.DeptNo);
             rpt.SetValByKey("RDT", gb.RDT);
             rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", gb.BillNo);
@@ -199,13 +199,10 @@ namespace BP.CCBill
                 rpt.SetValByKey("PFrmID", pDictFrmID);
             }
 
-
-
             rpt.OID = gb.WorkID;
             rpt.InsertAsOID(gb.WorkID);
 
             BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, rpt.OID.ToString(), FrmActionType.Create, "创建记录");
-
             return gb.WorkID;
         }
         /// <summary>
@@ -245,11 +242,11 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", 0);
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
-            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
+            rpt.SetValByKey("FK_Dept", WebUser.DeptNo);
             rpt.SetValByKey("RDT", DataType.CurrentDate);
 
             //设置编号生成规则.
-            rpt.EnMap.CodeStruct = fb.BillNoFormat;
+            rpt.EnMap.CodeStruct = "4";//  fb.BillNoFormat;
 
             //rpt.SetValByKey("Title", gb.Title);
             rpt.SetValByKey("BillNo", rpt.GenerNewNoByKey("BillNo"));
@@ -296,7 +293,7 @@ namespace BP.CCBill
             rpt.SetValByKey("BillState", 100);
             rpt.SetValByKey("Starter", WebUser.No);
             rpt.SetValByKey("StarterName", WebUser.Name);
-            rpt.SetValByKey("FK_Dept", WebUser.FK_Dept);
+            rpt.SetValByKey("FK_Dept", WebUser.DeptNo);
             rpt.SetValByKey("RDT", DataType.CurrentDate);
             rpt.Update();
 
@@ -525,7 +522,7 @@ namespace BP.CCBill
             gb.FrmName = fb.Name; //单据名称.
             gb.FrmID = fb.No; //单据ID
 
-            gb.FK_FrmTree = fb.FK_FormTree; //单据类别.
+            gb.FrmTreeNo = fb.FormTreeNo; //单据类别.
             gb.RDT = DataType.CurrentDateTime;
             gb.NDStep = 1;
             gb.NDStepName = "启动";
@@ -548,6 +545,7 @@ namespace BP.CCBill
             rpt.SetValByKey("BillNo", gb.BillNo);
             rpt.OID = gb.WorkID;
             rpt.InsertAsOID(gb.WorkID);
+
             #region 复制其他数据.
 
             //复制明细。
@@ -556,7 +554,7 @@ namespace BP.CCBill
             {
                 foreach (MapDtl dtl in dtls)
                 {
-                    if (dtl.IsCopyNDData == false)
+                    if (dtl.ItIsCopyNDData == false)
                         continue;
 
                     //new 一个实例.
@@ -568,7 +566,7 @@ namespace BP.CCBill
                     {
                         //是否启用多附件
                         FrmAttachmentDBs dbs = null;
-                        if (dtl.IsEnableAthM == true)
+                        if (dtl.ItIsEnableAthM == true)
                         {
                             //根据从表的OID 获取附件信息
                             dbs = new FrmAttachmentDBs();
@@ -619,8 +617,6 @@ namespace BP.CCBill
             #endregion 复制表单其他数据.
 
             BP.CCBill.Dev2Interface.Dict_AddTrack(frmID, workID.ToString(), "复制", "执行复制");
-
-
             return "复制成功.";
         }
 
@@ -652,6 +648,7 @@ namespace BP.CCBill
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
             return ds;
+
         }
         /// <summary>
         /// 获得待办列表
@@ -701,10 +698,10 @@ namespace BP.CCBill
 
             titleRole = titleRole.Replace("@WebUser.No", WebUser.No);
             titleRole = titleRole.Replace("@WebUser.Name", WebUser.Name);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
-            titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
-            titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
-            titleRole = titleRole.Replace("@RDT", DateTime.Now.ToString("yy年MM月dd日HH时mm分"));
+            titleRole = titleRole.Replace("@WebUser.FK_DeptNameOfFull", WebUser.DeptNameOfFull);
+            titleRole = titleRole.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
+            titleRole = titleRole.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
+            titleRole = titleRole.Replace("@RDT", DataType.CurrentDateByFormart("yy年MM月dd日HH时mm分"));
             if (titleRole.Contains("@"))
             {
                 Attrs attrs = wk.EnMap.Attrs;
@@ -714,7 +711,7 @@ namespace BP.CCBill
                 {
                     if (titleRole.Contains("@") == false)
                         break;
-                    if (attr.IsRefAttr == false)
+                    if (attr.ItIsRefAttr == false)
                         continue;
                     titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
                 }
@@ -725,7 +722,7 @@ namespace BP.CCBill
                     if (titleRole.Contains("@") == false)
                         break;
 
-                    if (attr.IsRefAttr == true)
+                    if (attr.ItIsRefAttr == true)
                         continue;
                     titleRole = titleRole.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
                 }
@@ -774,7 +771,7 @@ namespace BP.CCBill
 
             if (billNo.Contains("@WebUser.DeptZi"))
             {
-                string val = DBAccess.RunSQLReturnStringIsNull("SELECT Zi FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "'", "");
+                string val = DBAccess.RunSQLReturnStringIsNull("SELECT Zi FROM Port_Dept WHERE No='" + WebUser.DeptNo + "'", "");
                 billNo = billNo.Replace("@WebUser.DeptZi", val.ToString());
             }
 
@@ -817,7 +814,7 @@ namespace BP.CCBill
             string maxBillNo = DBAccess.RunSQLReturnString(sql);
             int ilsh = 0;
 
-            if (string.IsNullOrWhiteSpace(maxBillNo))
+            if (DataType.IsNullOrEmpty(maxBillNo))
             {
                 //没有数据，则所有流水号都从1开始
                 foreach (KeyValuePair<int, int> kv in loc)

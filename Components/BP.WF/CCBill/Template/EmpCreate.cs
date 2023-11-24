@@ -42,7 +42,7 @@ namespace BP.CCBill.Template
 		/// <summary>
 		/// 到人员
 		/// </summary>
-		public string FK_Emp
+		public string EmpNo
 		{
 			get
 			{
@@ -53,7 +53,7 @@ namespace BP.CCBill.Template
 				this.SetValByKey(EmpCreateAttr.FK_Emp,value);
 			}
 		}
-        public string FK_EmpT
+        public string EmpNoT
         {
             get
             {

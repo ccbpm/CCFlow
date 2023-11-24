@@ -48,7 +48,7 @@ namespace BP.WF.DTS
         {
 
             /*查找一天预警1次的消息记录，并执行推送。*/
-            string sql = "SELECT A.WorkID, A.Title, A.FlowName, A.TodoSta, B.FK_Emp, b.FK_EmpText, C.WAlertWay  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C  ";
+            string sql = "SELECT A.WorkID, A.Title, A.FlowName, A.TodoSta, B.FK_Emp, b.EmpName, C.WAlertWay  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C  ";
             sql += " WHERE A.WorkID=B.WorkID AND A.FK_Node=C.NodeID AND a.TodoSta=1 AND ( C.WAlertRole=1 OR C.WAlertRole=2 ) ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
@@ -58,7 +58,7 @@ namespace BP.WF.DTS
                 string title = dr["Title"].ToString();
                 string flowName = dr["FlowName"].ToString();
                 string empNo = dr["FK_Emp"].ToString();
-                string empName = dr["FK_EmpText"].ToString();
+                string empName = dr["EmpName"].ToString();
 
                 BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(empNo);
 

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
+using System.Security.AccessControl;
+using Aliyun.OSS;
 using BP.DA;
 using BP.Difference;
 using BP.En;
+using BP.Tools;
 
 namespace BP.Sys
 {
@@ -211,7 +215,7 @@ namespace BP.Sys
                 string val = value.Replace(".", "");
                 string[] words = { "asp", "jsp", "do", "php", "msi", "bat", "exe", "sql" };
                 val = val.ToLower();
-                foreach (var item in words)
+                foreach (string item in words)
                 {
                     if (val.Contains(item) && val.Length == item.Length)
                         throw new Exception("err@非法的文件格式.");
@@ -233,11 +237,11 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
 
 
-                if (DataType.IsNullOrEmpty(this.FK_MapData) == true)
+                if (DataType.IsNullOrEmpty(this.FrmID) == true)
                     throw new Exception("err@错误:请首先给FK_MapData赋值..");
 
                 //获取最后"_"的位置
-                string val = value.Replace(this.FK_MapData + "_", "");
+                string val = value.Replace(this.FrmID + "_", "");
                 this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val);
             }
         }
@@ -312,12 +316,10 @@ namespace BP.Sys
             }
         }
 
-
-
         /// <summary>
         /// 所在部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -331,7 +333,7 @@ namespace BP.Sys
         /// <summary>
         /// 所在部门名称
         /// </summary>
-        public string FK_DeptName
+        public string DeptName
         {
             get
             {
@@ -342,12 +344,10 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.FK_DeptName, value);
             }
         }
-
-
         /// <summary>
         /// 附件编号
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -357,10 +357,6 @@ namespace BP.Sys
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_MapData, value);
             }
-        }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(FrmAttachmentDBAttr.FK_MapData, val);
         }
         /// <summary>
         /// 文件大小
@@ -379,7 +375,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否锁定行?
         /// </summary>
-        public bool IsRowLock
+        public bool ItIsRowLock
         {
             get
             {
@@ -505,13 +501,13 @@ namespace BP.Sys
         /// 生成文件.
         /// </summary>
         /// <returns></returns>
-        private string MakeFullFileFromFtp()
+        private string MakeFullFileFromOSS()
         {
             string pathOfTemp = BP.Difference.SystemConfig.PathOfTemp;
             if (System.IO.Directory.Exists(pathOfTemp) == false)
                 System.IO.Directory.CreateDirectory(pathOfTemp);
 
-            string tempFile = pathOfTemp + System.Guid.NewGuid() + "." + this.FileExts;
+            string tempFile = pathOfTemp + DBAccess.GenerGUID() + "." + this.FileExts;
 
 
             //  string tempFile =  BP.Difference.SystemConfig.PathOfTemp + + this.FileName;
@@ -522,7 +518,35 @@ namespace BP.Sys
             }
             catch
             {
-                //  tempFile =  BP.Difference.SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
+            }
+
+            //调用OSSUtil执行下载（下载到临时文件）
+            OSSUtil.doDownload(this.FileFullName, tempFile);
+
+            return tempFile;
+        }
+
+        /// <summary>
+        /// 生成文件.
+        /// </summary>
+        /// <returns></returns>
+        private string MakeFullFileFromFtp()
+        {
+            string pathOfTemp = BP.Difference.SystemConfig.PathOfTemp;
+            if (System.IO.Directory.Exists(pathOfTemp) == false)
+                System.IO.Directory.CreateDirectory(pathOfTemp);
+
+            string tempFile = pathOfTemp + DBAccess.GenerGUID() + "." + this.FileExts;
+
+
+            //  string tempFile =  BP.Difference.SystemConfig.PathOfTemp + + this.FileName;
+            try
+            {
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
+            }
+            catch
+            {
             }
 
             FtpConnection conn = new FtpConnection(BP.Difference.SystemConfig.FTPServerIP, BP.Difference.SystemConfig.FTPServerPort,
@@ -550,7 +574,7 @@ namespace BP.Sys
         protected override void afterDelete()
         {
             //判断删除excel数据提取的数据
-            if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
+            if (DataType.IsNullOrEmpty(this.FK_FrmAttachment))
                 return;
 
             FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
@@ -592,6 +616,9 @@ namespace BP.Sys
             if (saveWay == BP.Sys.AthSaveWay.FTPServer)
                 return this.MakeFullFileFromFtp();
 
+            if (saveWay == BP.Sys.AthSaveWay.OSS)
+                return this.MakeFullFileFromOSS();
+
             if (saveWay == BP.Sys.AthSaveWay.DB)
                 throw new Exception("@尚未处理存储到db里面的文件.");
 
@@ -614,7 +641,7 @@ namespace BP.Sys
             this.DoOrderUp(FrmAttachmentDBAttr.RefPKVal, this.RefPKVal,
                FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment, FrmAttachmentDBAttr.Idx);
 
-            //  this.DoOrderUp(FrmAttachmentDBAttr.FK_MapData, this.FK_MapData, FrmAttachmentDBAttr.Idx);
+            //  this.DoOrderUp(FrmAttachmentDBAttr.FK_MapData, this.FrmID, FrmAttachmentDBAttr.Idx);
         }
     }
     /// <summary>

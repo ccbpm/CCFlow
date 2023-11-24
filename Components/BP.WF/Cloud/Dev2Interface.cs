@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using BP.Difference;
 using System.Web.UI.WebControls;
 using BP.WF.Port.Admin2Group;
-using BP.WF.Admin;
+using BP.WF.Template;
 using BP.Port;
 
 namespace BP.Cloud
@@ -32,17 +32,17 @@ namespace BP.Cloud
             try
             {
                 #region 1.检查完整性.
-                var org = new BP.Cloud.Org();
+                BP.Cloud.Org org = new BP.Cloud.Org();
                 org.SetValByKey("No", orgNo);
                 if (org.RetrieveFromDBSources() == 1)
                     return "err@组织编号已经存在";
 
-                var dept = new BP.Cloud.Dept();
+                BP.Cloud.Dept dept = new BP.Cloud.Dept();
                 dept.SetValByKey("No", orgNo);
                 if (dept.RetrieveFromDBSources() == 1)
                     return "err@部门编号已经存在";
 
-                var emp = new BP.Cloud.Emp();
+                BP.Cloud.Emp emp = new BP.Cloud.Emp();
                 emp.SetValByKey("No", orgNo + "_" + orgNo);
                 if (emp.RetrieveFromDBSources() == 1)
                     return "err@人员编号已经存在";
@@ -81,19 +81,26 @@ namespace BP.Cloud
                 emp.SetValByKey("UserID", orgNo);
 
                 emp.DirectInsert();
+
+                string pass = BP.Difference.SystemConfig.UserDefaultPass;
+                if(BP.Difference.SystemConfig.isEnablePasswordEncryption == true)
+                {
+                    pass = BP.Tools.Cryptography.MD5_Encrypt(pass);
+                }
+                DBAccess.RunSQL("UPDATE Port_Emp SET Pass='" + pass + "' WHERE No='" + orgNo + "_" + orgNo + "'");
                 #endregion 创建组织.
 
                 #region 4. 设置管理员.
-                var oa = new OrgAdminer();
-                oa.setMyPK(orgNo + "_" + orgNo);
+                OrgAdminer oa = new OrgAdminer();
                 oa.SetValByKey("OrgNo", orgNo);
-                oa.SetValByKey("FK_Emp", orgNo);
+                oa.SetValByKey("FK_Emp", orgNo + "_" + orgNo);
                 oa.SetValByKey("EmpName", orgName);
+                oa.setMyPK(oa.GetValByKey("OrgNo") + "_" + oa.GetValByKey("FK_Emp"));
                 oa.DirectInsert();
                 #endregion 设置管理员.
 
                 #region 5. 增加流程树.
-                var fs = new FlowSort();
+                BP.WF.Template.FlowSort fs = new BP.WF.Template.FlowSort();
                 fs.SetValByKey("OrgNo", orgNo); ;
                 fs.SetValByKey("No", orgNo);
 
@@ -101,7 +108,7 @@ namespace BP.Cloud
                 fs.SetValByKey("Name", orgName);
                 fs.DirectInsert();
 
-                fs = new FlowSort();
+                fs = new BP.WF.Template.FlowSort();
                 fs.SetValByKey("OrgNo", orgNo); ;
                 fs.SetValByKey("No", DBAccess.GenerGUID());
 
@@ -109,7 +116,7 @@ namespace BP.Cloud
                 fs.SetValByKey("Name", "类型1");
                 fs.DirectInsert();
 
-                fs = new FlowSort();
+                fs = new BP.WF.Template.FlowSort();
                 fs.SetValByKey("OrgNo", orgNo);
                 fs.SetValByKey("No", DBAccess.GenerGUID());
                 fs.SetValByKey("ParentNo", orgNo);
@@ -119,21 +126,21 @@ namespace BP.Cloud
                 #endregion   增加流程树.
 
                 #region 6. 增加表单树.
-                var f1s = new FrmSort();
+                BP.WF.Template.SysFormTree f1s = new BP.WF.Template.SysFormTree();
                 f1s.SetValByKey("OrgNo", orgNo);
                 f1s.SetValByKey("No", orgNo);
                 f1s.SetValByKey("ParentNo", "100");
                 f1s.SetValByKey("Name", orgName);
                 f1s.DirectInsert();
 
-                f1s = new FrmSort();
+                f1s = new BP.WF.Template.SysFormTree();
                 f1s.SetValByKey("OrgNo", orgNo);
                 f1s.SetValByKey("No", DBAccess.GenerGUID());
                 f1s.SetValByKey("ParentNo", orgNo);
                 f1s.SetValByKey("Name", "类型1");
                 f1s.DirectInsert();
 
-                f1s = new FrmSort();
+                f1s = new BP.WF.Template.SysFormTree();
                 f1s.SetValByKey("OrgNo", orgNo); ;
                 f1s.SetValByKey("No", DBAccess.GenerGUID());
                 f1s.SetValByKey("ParentNo", orgNo);
@@ -260,8 +267,8 @@ namespace BP.Cloud
             cookieValues.Add("No", emp.UserID);
             cookieValues.Add("Name", HttpUtility.UrlEncode(emp.Name));
 
-            cookieValues.Add("FK_Dept", emp.FK_Dept);
-            cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(emp.FK_DeptText));
+            cookieValues.Add("FK_Dept", emp.DeptNo);
+            cookieValues.Add("FK_DeptName", HttpUtility.UrlEncode(emp.DeptText));
 
             cookieValues.Add("OrgNo", emp.OrgNo);
             cookieValues.Add("OrgName", emp.OrgName);
@@ -277,8 +284,8 @@ namespace BP.Cloud
             //给 session 赋值.
             BP.Difference.HttpContextHelper.Current.Session["No"] = emp.UserID;
             BP.Difference.HttpContextHelper.Current.Session["Name"] = emp.Name;
-            BP.Difference.HttpContextHelper.Current.Session["FK_Dept"] = emp.FK_Dept;
-            BP.Difference.HttpContextHelper.Current.Session["FK_DeptText"] = emp.FK_DeptText;
+            BP.Difference.HttpContextHelper.Current.Session["FK_Dept"] = emp.DeptNo;
+            BP.Difference.HttpContextHelper.Current.Session["FK_DeptText"] = emp.DeptText;
             BP.Difference.HttpContextHelper.Current.Session["OrgNo"] = emp.OrgNo;
             BP.Difference.HttpContextHelper.Current.Session["OrgName"] = emp.OrgName;
 
@@ -347,6 +354,7 @@ namespace BP.Cloud
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                 case DBType.UX:
+                case DBType.HGDB:
                     currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist WHERE FK_Emp='" + WebUser.No + "' AND  OrgNo='" + WebUser.OrgNo + "' Order by RDT DESC LIMIT 1)";
                     break;
                 case DBType.MSSQL:
@@ -367,13 +375,13 @@ namespace BP.Cloud
                     case DBType.MySQL:
                         futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps," + currNode + " AS CurrNode ,1 AS RunType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT GROUP_CONCAT(B.EmpName SEPARATOR ';') AS EmpName, B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node) C,WF_Node D"
-                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
+                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.NodeID = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
                         break;
                     case DBType.MSSQL:
                         futureSQL = " UNION SELECT A.WorkID,A.StarterName,A.Title,A.DeptName,D.Name AS NodeName,A.RDT,B.FK_Node,A.FK_Flow,A.FID,A.FlowName,C.EmpName AS TodoEmps ," + currNode + " AS CurrNode ,1 AS RunType FROM WF_GenerWorkFlow A, WF_SelectAccper B,"
                                 + "(SELECT EmpName=STUFF((Select ';'+FK_Emp+','+EmpName From WF_SelectAccper t Where t.FK_Node=B.FK_Node FOR xml path('')) , 1 , 1 , '') , B.WorkID,B.FK_Node FROM WF_GenerWorkFlow A, WF_SelectAccper B WHERE A.WorkID = B.WorkID  group By B.FK_Node,B.WorkID) C,WF_Node D"
-                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.FK_Node = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
+                                + " WHERE A.WorkID = B.WorkID AND B.WorkID = C.WorkID AND B.FK_Node = C.FK_Node AND A.NodeID = D.NodeID AND B.FK_Emp = '" + WebUser.No + "'"
                                 + " AND B.FK_Node Not in(Select DISTINCT FK_Node From WF_GenerWorkerlist G where G.WorkID = B.WorkID)AND A.WFState != 3";
                         break;
                     default:
@@ -494,6 +502,7 @@ namespace BP.Cloud
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                 case DBType.UX:
+                case DBType.HGDB:
                     currNode = "(SELECT  FK_Node FROM WF_GenerWorkerlist G WHERE   G.WorkID = A.WorkID AND FK_Emp='" + WebUser.No + "' Order by RDT DESC LIMIT 1)";
                     break;
                 case DBType.MSSQL:

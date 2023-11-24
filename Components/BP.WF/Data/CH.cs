@@ -263,7 +263,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -277,7 +277,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程
         /// </summary>
-        public string FK_FlowT
+        public string FlowT
         {
             get
             {
@@ -361,7 +361,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 操作人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -375,7 +375,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_EmpT
+        public string EmpT
         {
             get
             {
@@ -431,7 +431,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -445,7 +445,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门名称
         /// </summary>
-        public string FK_DeptT
+        public string DeptT
         {
             get
             {
@@ -459,7 +459,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 年月
         /// </summary>
-        public string FK_NY
+        public string NY
         {
             get
             {
@@ -529,7 +529,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -543,7 +543,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string FK_NodeT
+        public string NodeT
         {
             get
             {

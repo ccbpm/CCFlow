@@ -20,7 +20,7 @@ namespace BP.En
         /// <summary>
         /// 是否是加密字段
         /// </summary>
-        public bool IsJM = false;
+        public bool ItIsJM = false;
         /// <summary>
         /// 增加帮助
         /// </summary>
@@ -28,7 +28,7 @@ namespace BP.En
         /// <param name="url"></param>
         public void SetHelperUrl(string key, string url)
         {
-            if (SystemConfig.IsDisHelp == true)
+            if (SystemConfig.isDisHelp == true)
                 return;
             Attr attr = this.GetAttrByKey(key);
             attr.HelperUrl = url;
@@ -40,7 +40,7 @@ namespace BP.En
         /// <param name="key">字段</param>
         public void SetHelperBaidu(string key)
         {
-            if (SystemConfig.IsDisHelp == true)
+            if (SystemConfig.isDisHelp == true)
                 return;
             Attr attr = this.GetAttrByKey(key);
             attr.HelperUrl = "http://www.baidu.com/s?word=ccflow " + attr.Desc;
@@ -52,7 +52,7 @@ namespace BP.En
         /// <param name="keyword">关键字</param>
         public void SetHelperBaidu(string key, string keyword)
         {
-            if (SystemConfig.IsDisHelp == true)
+            if (SystemConfig.isDisHelp == true)
                 return;
             Attr attr = this.GetAttrByKey(key);
             attr.HelperUrl = "http://www.baidu.com/s?word=" + keyword;
@@ -64,7 +64,7 @@ namespace BP.En
         /// <param name="context">连接</param>
         public void SetHelperAlert(string key, string context)
         {
-            if (SystemConfig.IsDisHelp == true)
+            if (SystemConfig.isDisHelp == true)
                 return;
             context = context.Replace("@", "＠");
             Attr attr = this.GetAttrByKey(key);
@@ -74,7 +74,7 @@ namespace BP.En
 
         #region 关于缓存问题
         public string _FK_MapData = null;
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -90,39 +90,11 @@ namespace BP.En
         /// <summary>
         /// 存放位置
         /// </summary>
-        private Depositary _DepositaryOfEntity = Depositary.None;
-        /// <summary>
-        /// 存放位置OfEntity
-        /// </summary>
-        public Depositary DepositaryOfEntity
-        {
-            get
-            {
-                return _DepositaryOfEntity;
-            }
-            set
-            {
-                _DepositaryOfEntity = value;
-            }
-        }
+        public Depositary DepositaryOfEntity = Depositary.None;
         /// <summary>
         /// 
         /// </summary>		
-        private Depositary _DepositaryOfMap = Depositary.Application;
-        /// <summary>
-        /// 存放位置
-        /// </summary>
-        public Depositary DepositaryOfMap
-        {
-            get
-            {
-                return _DepositaryOfMap;
-            }
-            set
-            {
-                _DepositaryOfMap = value;
-            }
-        }
+        public Depositary DepositaryOfMap = Depositary.Application;
         #endregion
 
         #region 查询属性处理
@@ -195,7 +167,7 @@ namespace BP.En
         public void AddSearchAttr(string key, int width = 130)
         {
             Attr attr = this.GetAttrByKey(key);
-            if (attr.Key == "FK_Dept")
+            if (attr.Key.Equals("FK_Dept"))
                 this.SearchFKEnums.Add(attr, false, null, width);
             else
                 this.SearchFKEnums.Add(attr, true, null, width);
@@ -243,7 +215,7 @@ namespace BP.En
         {
             foreach (Attr attr in this.Attrs)
             {
-                if (attr.Key.ToUpper() == key.ToUpper())
+                if (attr.Key.ToUpper().Equals(key.ToUpper()))
                 {
                     return attr;
                 }
@@ -268,7 +240,7 @@ namespace BP.En
         {
             foreach (Attr attr in this.Attrs)
             {
-                if (attr.UIBindKey == key)
+                if (attr.UIBindKey.Equals(key))
                 {
                     return attr;
                 }
@@ -345,7 +317,7 @@ namespace BP.En
                     {
                         if (attr.MyFieldType == FieldType.NormalVirtual || attr.MyFieldType == FieldType.RefText)
                             continue;
-                        _HisPhysicsAttrs.Add(attr, false, this.IsAddRefName);
+                        _HisPhysicsAttrs.Add(attr, false, this.ItIsAddRefName);
                     }
                 }
                 return _HisPhysicsAttrs;
@@ -390,7 +362,7 @@ namespace BP.En
         /// 是否加入相关联的名称
         /// AttrKey -  AttrKeyName 
         /// </summary>
-        public bool IsAddRefName = false;
+        public bool ItIsAddRefName = false;
         /// <summary>
         /// 他的外键Enum集合
         /// </summary>
@@ -667,8 +639,8 @@ namespace BP.En
         /// <summary>
         /// 是否版本管理
         /// </summary>
-        public bool IsEnableVer = false;
-        public bool IsShowSearchKey = true;
+        public bool ItIsEnableVer = false;
+        public bool ItIsShowSearchKey = true;
         /// <summary>
         /// 如果是null，就按照通用的查询关键字.
         /// 如果按照指定的格式查询按照如下格式配置.
@@ -878,7 +850,7 @@ namespace BP.En
                             attr.UIBindKey = val;
                             break;
                         case "UIIsReadonly":
-                            if (val == "1" || val.ToUpper() == "TRUE")
+                            if (val.Equals("1") || val.ToUpper().Equals("TRUE"))
                                 attr.UIIsReadonly = true;
                             else
                                 attr.UIIsReadonly = false;
@@ -920,7 +892,7 @@ namespace BP.En
                             if (this.PKs.IndexOf(attr.Key) != -1)
                             {
                                 /* 如果是一个主键  */
-                                if (attr.Field == "")
+                                if (attr.Field.Equals(""))
                                     attr.Field = attr.Key;
                                 this.AddDDLEntitiesPK(attr.Key, attr.Field, attr.DefaultVal.ToString(), attr.Desc, ensNoName, attr.UIIsReadonly);
                             }
@@ -951,7 +923,7 @@ namespace BP.En
         #region 与生成No字串有关
         /// <summary>
         /// 编码结构
-        /// 例如： 0， 2322;
+        /// 例如： 0， 2322CCFrom_ToolBar_Init
         /// </summary>
         string _CodeStruct = "2";
         /// <summary>
@@ -965,7 +937,15 @@ namespace BP.En
             }
             set
             {
-                this._CodeStruct = value;
+                string str = value;
+                if (str.Equals("{LSH4}"))
+                    str = "4";
+                if (str.Equals("{LSH3}"))
+                    str = "3";
+                if (str.Equals("{LSH2}"))
+                    str = "2";
+
+                this._CodeStruct = str;
                 this._IsAutoGenerNo = true;
 
             }
@@ -983,7 +963,7 @@ namespace BP.En
         /// 是否允许重复的名称.
         /// 在insert，update 前检查。
         /// </summary>
-        public bool IsAllowRepeatName
+        public bool ItIsAllowRepeatName
         {
             get
             {
@@ -1001,7 +981,7 @@ namespace BP.En
         /// <summary>
         /// 是否自动编号.		 
         /// </summary>
-        public bool IsAutoGenerNo
+        public bool ItIsAutoGenerNo
         {
             get
             {
@@ -1043,7 +1023,7 @@ namespace BP.En
         /// <summary>
         /// 是否是视图
         /// </summary>
-		public bool IsView
+		public bool ItIsView
         {
             get
             {
@@ -1077,12 +1057,12 @@ namespace BP.En
             set
             {
                 // 因为组成的select 语句放入了内存,修改它的时间也要修改内存的数据。
-                //DA.Cash.AddObj(this.ToString()+"SQL",Depositary.Application,null);
+                //DA.Cache.AddObj(this.ToString()+"SQL",Depositary.Application,null);
 
-                DA.Cash.RemoveObj(this.ToString() + "SQL", Depositary.Application);
-                Cash.RemoveObj("MapOf" + this.ToString(), this.DepositaryOfMap); // RemoveObj
+                DA.Cache.RemoveObj(this.ToString() + "SQL", Depositary.Application);
+                Cache.RemoveObj("MapOf" + this.ToString(), this.DepositaryOfMap); // RemoveObj
 
-                //DA.Cash.setObj(en.ToString()+"SQL",en.EnMap.DepositaryOfMap) as string;
+                //DA.Cache.setObj(en.ToString()+"SQL",en.EnMap.DepositaryOfMap) as string;
                 this._PhysicsTable = value;
             }
         }
@@ -1413,7 +1393,7 @@ namespace BP.En
             attr.UIRefKeyValue = refKey;
             attr.UIIsReadonly = uiIsEnable == true ? false : true;
 
-            this.Attrs.Add(attr, true, this.IsAddRefName);
+            this.Attrs.Add(attr, true, this.ItIsAddRefName);
         }
         public void AddDDLEntities(string key, string field, object defaultVal, int dataType, string desc, Entities ens, string refKey, string refText, bool uiIsEnable)
         {
@@ -1518,7 +1498,7 @@ namespace BP.En
         {
             foreach (Attr attr in attrs)
             {
-                if (attr.IsRefAttr)
+                if (attr.ItIsRefAttr)
                     continue;
                 this.Attrs.Add(attr, isClearGroupName);
             }
@@ -1727,12 +1707,12 @@ namespace BP.En
 
             if (isRichText == true)
             {
-                attr.IsSupperText = 1; //是富文本. 都要解析为上下结构.
+                attr.ItIsSupperText = 1; //是富文本. 都要解析为上下结构.
                 isUILine = true; //必须是上下结构.
             }
             else
             {
-                attr.IsSupperText = 0; //不是富文本. 根据 isUILine 解析是否上下结构.
+                attr.ItIsSupperText = 0; //不是富文本. 根据 isUILine 解析是否上下结构.
             }
 
             attr.UIIsLine = isUILine;
@@ -2076,7 +2056,7 @@ namespace BP.En
         /// <param name="isReadonly">isReadonly</param>
         public void AddTBDate(string key, string desc, bool uiVisable, bool isReadonly)
         {
-            AddTBDate(key, key, DateTime.Now.ToString(DataType.SysDataFormat), desc, uiVisable, isReadonly);
+            AddTBDate(key, key, DataType.CurrentDate, desc, uiVisable, isReadonly);
         }
         #endregion
 
@@ -2109,7 +2089,7 @@ namespace BP.En
         }
         public void AddTBDateTime(string key, string desc, bool uiVisable, bool isReadonly)
         {
-            this.AddTBDateTime(key, key, DateTime.Now.ToString(DataType.SysDateTimeFormat), desc, uiVisable, isReadonly);
+            this.AddTBDateTime(key, key,  DataType.CurrentDateTime, desc, uiVisable, isReadonly);
         }
         #endregion
 

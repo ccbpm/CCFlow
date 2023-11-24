@@ -112,7 +112,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 节点编号
         /// </summary>
-		public int FK_Node
+		public int NodeID
 		{
 			get
 			{
@@ -168,7 +168,7 @@ namespace BP.WF.Data
 		/// <summary>
 		/// 流程隶属部门
 		/// </summary>
-		public string FK_Dept
+		public string DeptNo
 		{
 			get
 			{
@@ -196,7 +196,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 隶属年月
         /// </summary>
-		public string  FK_NY
+		public string  NY
 		{
 			get
 			{
@@ -210,7 +210,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 流程编号
         /// </summary>
-		public string  FK_Flow
+		public string  FlowNo
 		{
 			get
 			{
@@ -318,11 +318,11 @@ namespace BP.WF.Data
         /// 工作质量评价
         /// </summary>
         /// <param name="workid"></param>
-        /// <param name="FK_Node"></param>
-		public Eval(int workid, int FK_Node)
+        /// <param name="nodeID"></param>
+		public Eval(int workid, int nodeID)
 		{
 			this.WorkID=workid;
-			this.FK_Node=FK_Node;
+			this.NodeID= nodeID;
 			this.Retrieve();
 		}
 		/// <summary>

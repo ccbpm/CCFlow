@@ -46,14 +46,7 @@ namespace BP.CCBill
                 return str;
             }
         }
-        public string Name
-        {
-            get
-            {
-                string str = this.GetRequestVal("Name");
-                return str;
-            }
-        }
+      
         #endregion 属性.
 
         /// <summary>
@@ -78,7 +71,7 @@ namespace BP.CCBill
                 if (DataType.IsNullOrEmpty(sql) == true)
                     return "";
 
-                sql = sql.Replace("~", "'");
+                sql = sql.Replace("~~", "\"");
                 sql = sql.Replace("~", "'");
                
                 DataTable mydt = new DataTable();
@@ -124,7 +117,7 @@ namespace BP.CCBill
                     if (url.Contains("http") == false)
                     {
                         /*如果没有绝对路径 */
-                        if (BP.Difference.SystemConfig.IsBSsystem)
+                        if (BP.Difference.SystemConfig.isBSsystem)
                         {
                             /*在cs模式下自动获取*/
                             string host = HttpContextHelper.RequestUrlHost;//BP.Sys.Base.Glo.Request.Url.Host;
@@ -134,7 +127,7 @@ namespace BP.CCBill
                                 url = "http://" + HttpContextHelper.RequestUrlAuthority + url;
                         }
 
-                        if (BP.Difference.SystemConfig.IsBSsystem == false)
+                        if (BP.Difference.SystemConfig.isBSsystem == false)
                         {
                             /*在cs模式下它的baseurl 从web.config中获取.*/
                             string cfgBaseUrl =  BP.Difference.SystemConfig.AppSettings["HostURL"];
@@ -266,7 +259,7 @@ namespace BP.CCBill
                     attr.DirectUpdate();
                     if (systemKeys.IndexOf(attr.KeyOfEn + ",") == -1)
                     {
-                        attr.setFK_MapData(this.FrmID);
+                        attr.FrmID =this.FrmID;
                         attr.setMyPK(this.FrmID + "_" + attr.KeyOfEn);
                         attr.GroupID = 1;
                         attr.Insert();
@@ -277,7 +270,7 @@ namespace BP.CCBill
 
             }
             MapData mapData = new MapData(this.FrmID);
-            mapData.ClearCash();
+            mapData.ClearCache();
             return "执行成功";
         }
 

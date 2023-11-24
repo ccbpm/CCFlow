@@ -82,7 +82,7 @@ namespace BP.En
         
         protected override bool beforeUpdate()
         {
-            if (this.EnMap.IsAllowRepeatName == false)
+            if (this.EnMap.ItIsAllowRepeatName == false)
             {
                 if (this.PKCount == 1)
                 {

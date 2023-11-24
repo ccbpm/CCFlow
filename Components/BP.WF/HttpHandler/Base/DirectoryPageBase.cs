@@ -397,7 +397,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 是否是移动？
         /// </summary>
-        public bool IsMobile
+        public bool ItIsMobile
         {
             get
             {
@@ -537,7 +537,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -627,7 +627,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -656,14 +656,13 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-
                 return str;
             }
         }
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -674,13 +673,14 @@ namespace BP.WF.HttpHandler
                     return null;
                 if (DataType.IsNumStr(str) == false)
                     return "err@";
-                return str;
+                
+                return BP.WF.Dev2Interface.Flow_TurnFlowMark2FlowNo(str);
             }
         }
         /// <summary>
         /// 人员编号
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -729,24 +729,6 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        /// <summary>
-        /// 表单ID 
-        /// </summary>
-        public string FrmID
-        {
-            get
-            {
-                string str = this.GetRequestVal("FrmID");
-
-                if (DataType.IsNullOrEmpty(str) == true)
-                    str = this.GetRequestVal("FK_MapData");
-
-                if (DataType.IsNullOrEmpty(str) == true)
-                    str = this.GetRequestVal("FK_Frm");
-
-                return str;
-            }
-        }
         public int GroupField
         {
             get
@@ -758,24 +740,25 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
+        private int _nodeID = 0;
         /// <summary>
         /// 节点ID
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
+                if (_nodeID != 0)
+                    return _nodeID;
+
                 int nodeID = this.GetRequestValInt("FK_Node");
                 if (nodeID == 0)
                     nodeID = this.GetRequestValInt("NodeID");
                 return nodeID;
             }
-        }
-        public int NodeID
-        {
-            get
+            set
             {
-                return this.FK_Node;
+                _nodeID = value;
             }
         }
         public int ToNodeID
@@ -842,21 +825,7 @@ namespace BP.WF.HttpHandler
                 return this.GetRequestValInt("CWorkID");
             }
         }
-        /// <summary>
-        /// 框架ID
-        /// </summary>
-        public string FK_MapFrame
-        {
-            get
-            {
 
-
-                string str = this.GetRequestVal("FK_MapFrame");// context.Request.QueryString["FK_MapFrame"];
-                if (DataType.IsNullOrEmpty(str) == true)
-                    return null;
-                return str;
-            }
-        }
         /// <summary>
         /// SID
         /// </summary>
@@ -905,7 +874,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 明细表
         /// </summary>
-        public string FK_MapDtl
+        public string MapDtlNo
         {
             get
             {
@@ -1020,6 +989,21 @@ namespace BP.WF.HttpHandler
                     return "0";
                 return str;
             }
+        }
+
+        /// <summary>
+        /// 部门编号
+        /// </summary>
+        public string FK_Dept
+        {
+            get
+            {
+                string str = this.GetRequestVal("FK_Dept");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+
         }
         #endregion 属性.
 

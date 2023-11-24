@@ -58,10 +58,10 @@ namespace BP.WF.DTS
                     gwf.WorkID = Int64.Parse(dr[GERptAttr.OID].ToString());
                     gwf.FID = Int64.Parse(dr[GERptAttr.FID].ToString());
 
-                    gwf.FK_FlowSort = en.FK_FlowSort;
+                    gwf.FlowSortNo = en.FlowSortNo;
                     gwf.SysType = en.SysType;
 
-                    gwf.FK_Flow = en.No;
+                    gwf.FlowNo = en.No;
                     gwf.FlowName = en.Name;
                     gwf.Title = dr[GERptAttr.Title].ToString();
                     gwf.WFState = (WFState)int.Parse(dr[GERptAttr.WFState].ToString());
@@ -70,18 +70,18 @@ namespace BP.WF.DTS
                     gwf.Starter = dr[GERptAttr.FlowStarter].ToString();
                     gwf.StarterName = dr[GERptAttr.FlowStarter].ToString();
                     gwf.RDT = dr[GERptAttr.FlowStartRDT].ToString();
-                    gwf.FK_Node = int.Parse(dr[GERptAttr.FlowEndNode].ToString());
-                    gwf.FK_Dept = dr[GERptAttr.FK_Dept].ToString();
+                    gwf.NodeID = int.Parse(dr[GERptAttr.FlowEndNode].ToString());
+                    gwf.DeptNo = dr[GERptAttr.FK_Dept].ToString();
 
                     BP.Port.Dept dept = null;
                     try
                     {
-                        dept = new BP.Port.Dept(gwf.FK_Dept);
+                        dept = new BP.Port.Dept(gwf.DeptNo);
                         gwf.DeptName = dept.Name;
                     }
                     catch
                     {
-                        gwf.DeptName = gwf.FK_Dept;
+                        gwf.DeptName = gwf.DeptName;
                     }
 
                     try

@@ -47,7 +47,7 @@ namespace BP.WF.HttpHandler
             }
         }
 
-        public bool IsContainsNDYF
+        public bool ItIsContainsNDYF
         {
             get
             {
@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 部门编号
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -73,9 +73,9 @@ namespace BP.WF.HttpHandler
                 if (val == "all")
                     return;
 
-                if (this.FK_Dept == null)
+                if (this.DeptNo == null)
                 {
-                    this.FK_Dept = value;
+                    this.DeptNo = value;
                     return;
                 }
             }
@@ -148,7 +148,7 @@ namespace BP.WF.HttpHandler
             ht.Add("My", "我发起的流程");
             ht.Add("MyJoin", "我审批的流程");
 
-            RptDfine rd = new RptDfine(this.FK_Flow);
+            RptDfine rd = new RptDfine(this.FlowNo);
             Paras ps = new Paras();
 
             #region 增加本部门发起流程的查询.
@@ -158,8 +158,8 @@ namespace BP.WF.HttpHandler
                 if (DBAccess.IsExitsTableCol("Port_Dept", "Leader") == true)
                 {
                     ps.SQL = "SELECT Leader FROM Port_Dept WHERE No=" + BP.Difference.SystemConfig.AppCenterDBVarStr + "No";
-                    ps.Add("No", BP.Web.WebUser.FK_Dept);
-                    //string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
+                    ps.Add("No", BP.Web.WebUser.DeptNo);
+                    //string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.DeptNo + "'";
                     string strs = DBAccess.RunSQLReturnStringIsNull(ps, null);
                     if (strs != null && strs.Contains(BP.Web.WebUser.No) == true)
                     {
@@ -181,7 +181,7 @@ namespace BP.WF.HttpHandler
             }
             #endregion 增加本部门发起流程的查询.
 
-            Flow fl = new Flow(this.FK_Flow);
+            Flow fl = new Flow(this.FlowNo);
             ht.Add("FlowName", fl.Name);
 
             string advEmps = BP.Difference.SystemConfig.AppSettings["AdvEmps"];
@@ -231,12 +231,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowSearch_InitToolBar()
         {
-            if (string.IsNullOrWhiteSpace(this.FK_Flow))
+            if (DataType.IsNullOrEmpty(this.FlowNo))
                 return "err@参数FK_Flow不能为空";
 
             DataSet ds = new DataSet();
 
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
 
             #region 用户查询条件信息 不存在注册
             UserRegedit ur = new UserRegedit();
@@ -266,7 +266,7 @@ namespace BP.WF.HttpHandler
             if (md.RetrieveFromDBSources() == 0)
             {
                 /*如果没有找到，就让其重置一下.*/
-                BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
+                BP.WF.Rpt.RptDfine rd = new RptDfine(this.FlowNo);
                 rd.DoReset(this.SearchType);
                 md.RetrieveFromDBSources();
             }
@@ -274,7 +274,7 @@ namespace BP.WF.HttpHandler
             #region  关键字 时间查询条件
             md.SetPara("DTSearchWay", (int)md.DTSearchWay);
             md.SetPara("DTSearchKey", md.DTSearchKey);
-            md.SetPara("IsSearchKey", md.IsSearchKey);
+            md.SetPara("IsSearchKey", md.ItIsSearchKey);
             md.SetPara("StringSearchKeys", md.GetParaString("StringSearchKeys"));
             md.SetPara("SearchKey", ur.SearchKey);
 
@@ -320,7 +320,7 @@ namespace BP.WF.HttpHandler
             foreach (string ctrl in ctrls)
             {
                 //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示context.Request.QueryString[ctrl]
-                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
+                if (DataType.IsNullOrEmpty(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
                 attr = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -346,7 +346,7 @@ namespace BP.WF.HttpHandler
 
                 Attr ar = attr.HisAttr;
                 //判读该字段是否是枚举
-                if (ar.IsEnum == true)
+                if (ar.ItIsEnum == true)
                 {
                     SysEnums ses = new SysEnums(attr.UIBindKey);
                     DataTable dtEnum = ses.ToDataTableField();
@@ -355,7 +355,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 }
                 //判断是否是外键
-                if (ar.IsFK == true)
+                if (ar.ItIsFK == true)
                 {
                     Entities ensFK = ar.HisFKEns;
                     ensFK.RetrieveAll();
@@ -390,7 +390,7 @@ namespace BP.WF.HttpHandler
         {
 
             DataSet ds = new DataSet();
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
 
 
             //查询出单流程的所有字段
@@ -454,7 +454,7 @@ namespace BP.WF.HttpHandler
         public string FlowSearch_Data()
         {
             //表单编号
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
 
             //当前用户查询信息表
             UserRegedit ur = new UserRegedit(WebUser.No, rptNo + "_SearchAttrs");
@@ -504,10 +504,10 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(GERptAttr.WFState, ">", 1);
             #region 关键字查询
             string searchKey = ""; //关键字查询
-            if (mapData.IsSearchKey)
+            if (mapData.ItIsSearchKey)
                 searchKey = ur.SearchKey;
 
-            if (mapData.IsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
+            if (mapData.ItIsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
             {
                 int i = 0;
 
@@ -678,7 +678,7 @@ namespace BP.WF.HttpHandler
                     case UIContralType.RadioBtn:
                         cid = "DDL_" + attr.Key;
 
-                        if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                        if (kvs.ContainsKey(cid) == false || DataType.IsNullOrEmpty(kvs[cid]))
                             continue;
 
                         selectVal = kvs[cid];
@@ -783,7 +783,7 @@ namespace BP.WF.HttpHandler
             string mvals = GetRequestVal("mvals");
 
 
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
             UserRegedit ur = new UserRegedit();
             //   ur.setMyPK(WebUser.No + rptNo + "_SearchAttrs";
             ur.SetValByKey("MyPK", WebUser.No + rptNo + "_SearchAttrs");
@@ -816,7 +816,7 @@ namespace BP.WF.HttpHandler
                     break;
                 case "MyDept": //我部门发起的.
                     title = "我部门发起的流程";
-                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.DeptNo);
                     break;
                 case "MyJoin": //我参与的.
                     title = "我参与的流程";
@@ -849,13 +849,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowGroup_Init()
         {
-            if (string.IsNullOrWhiteSpace(this.FK_Flow))
+            if (DataType.IsNullOrEmpty(this.FlowNo))
                 return "err@参数FK_Flow不能为空";
 
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.GroupType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.GroupType;
 
             //报表信息，包含是否显示关键字查询IsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式DTSearchWay，时间字段DTSearchKey
             MapData md = new MapData();
@@ -863,7 +863,7 @@ namespace BP.WF.HttpHandler
             if (md.RetrieveFromDBSources() == 0)
             {
                 /*如果没有找到，就让其重置一下.*/
-                BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
+                BP.WF.Rpt.RptDfine rd = new RptDfine(this.FlowNo);
 
                 rd.DoReset(this.GroupType);
 
@@ -908,7 +908,7 @@ namespace BP.WF.HttpHandler
             vals = ur.GetVals();
             md.SetPara("DTSearchWay", (int)md.DTSearchWay);
             md.SetPara("DTSearchKey", md.DTSearchKey);
-            md.SetPara("IsSearchKey", md.IsSearchKey);
+            md.SetPara("IsSearchKey", md.ItIsSearchKey);
             md.SetPara("T_SearchKey", ur.SearchKey);
 
             if (md.DTSearchWay != DTSearchWay.None)
@@ -996,7 +996,7 @@ namespace BP.WF.HttpHandler
 
             foreach (MapAttr attr in attrs)
             {
-                if (attr.IsPK || attr.IsNum == false)
+                if (attr.ItIsPK || attr.ItIsNum == false)
                     continue;
                 if (attr.UIContralType == UIContralType.TB == false)
                     continue;
@@ -1039,7 +1039,7 @@ namespace BP.WF.HttpHandler
                     ddlDr["Selected"] = "true";
                 ddlDt.Rows.Add(ddlDr);
 
-                if (this.IsContainsNDYF)
+                if (this.ItIsContainsNDYF)
                 {
                     ddlDr = ddlDt.NewRow();
                     ddlDr["No"] = "AMOUNT";
@@ -1073,7 +1073,7 @@ namespace BP.WF.HttpHandler
             foreach (string ctrl in ctrls)
             {
                 //增加判断，如果URL中有传参，则不进行此SearchAttr的过滤条件显示context.Request.QueryString[ctrl]
-                if (string.IsNullOrWhiteSpace(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
+                if (DataType.IsNullOrEmpty(ctrl) || !DataType.IsNullOrEmpty(HttpContextHelper.RequestParams(ctrl)))
                     continue;
 
                 ar = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ctrl) as MapAttr;
@@ -1210,7 +1210,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public DataSet FlowGroupDoneSet()
         {
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.GroupType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.GroupType;
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
             MapAttrs attrs = new MapAttrs(rptNo);
@@ -1357,7 +1357,7 @@ namespace BP.WF.HttpHandler
                     qo.AddWhere(BP.WF.GERptAttr.FlowStarter, WebUser.No);
                     break;
                 case "MyDept": //我部门发起的.
-                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    qo.AddWhere(BP.WF.GERptAttr.FK_Dept, WebUser.DeptNo);
                     break;
                 case "MyJoin": //我参与的.
                     qo.AddWhere(BP.WF.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
@@ -1571,8 +1571,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowGroup_Exp()
         {
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.GroupType;
-            var desc = "";
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.GroupType;
+            string desc = "";
 
             if (this.GroupType.Equals("My"))
                 desc = "我发起的流程";
@@ -1607,14 +1607,14 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowContrastDtl_Init()
         {
-            if (string.IsNullOrWhiteSpace(this.FK_Flow))
+            if (DataType.IsNullOrEmpty(this.FlowNo))
                 return "err@参数FK_Flow不能为空";
 
             string pageSize = GetRequestVal("pageSize");
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
 
             GEEntitys ges = new GEEntitys(rptNo);
 
@@ -1635,7 +1635,7 @@ namespace BP.WF.HttpHandler
                 row["Width"] = attr.UIWidthInt;
                 row["UIContralType"] = attr.UIContralType;
 
-                if (attr.HisAttr.IsFKorEnum)
+                if (attr.HisAttr.ItIsFKorEnum)
                     row["No"] = attr.KeyOfEn + "Text";
 
                 dt.Rows.Add(row);
@@ -1645,7 +1645,7 @@ namespace BP.WF.HttpHandler
 
             //查询结果
             QueryObject qo = new QueryObject(ges);
-            var strs = HttpContextHelper.RequestParamKeys;// this.context.Request.Form.ToString().Split('&');
+            string[] strs = HttpContextHelper.RequestParamKeys;// this.context.Request.Form.ToString().Split('&');
             foreach (string key in strs)
             {
                 if (key.IndexOf("FK_Flow") != -1 || key.IndexOf("SearchType") != -1)
@@ -1658,7 +1658,7 @@ namespace BP.WF.HttpHandler
 
                 //if (key == "FK_Dept")
                 //{
-                //    this.FK_Dept = mykey[1];
+                //    this.DeptNo = mykey[1];
                 //    continue;
                 //}
                 bool isExist = false;
@@ -1691,7 +1691,7 @@ namespace BP.WF.HttpHandler
                         if (key == "FK_Dept" || key == "FK_Unit")
                         {
                             if (key == "FK_Dept")
-                                val = WebUser.FK_Dept;
+                                val = WebUser.DeptNo;
                         }
                         else
                         {
@@ -1714,23 +1714,23 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
             }
 
-            if (this.FK_Dept != null && (this.GetRequestVal("FK_Emp") == null
+            if (this.DeptNo != null && (this.GetRequestVal("FK_Emp") == null
                 || this.GetRequestVal("FK_Emp") == "all"))
             {
-                if (this.FK_Dept.Length == 2)
+                if (this.DeptNo.Length == 2)
                 {
                     qo.AddWhere("FK_Dept", " = ", "all");
                     qo.addAnd();
                 }
                 else
                 {
-                    if (this.FK_Dept.Length == 8)
+                    if (this.DeptNo.Length == 8)
                     {
-                        qo.AddWhere("FK_Dept", " = ", this.FK_Dept);
+                        qo.AddWhere("FK_Dept", " = ", this.DeptNo);
                     }
                     else
                     {
-                        qo.AddWhere("FK_Dept", " like ", this.FK_Dept + "%");
+                        qo.AddWhere("FK_Dept", " like ", this.DeptNo + "%");
                     }
 
                     qo.addAnd();
@@ -1753,13 +1753,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowGroupDtl_Exp()
         {
-            if (string.IsNullOrWhiteSpace(this.FK_Flow))
+            if (DataType.IsNullOrEmpty(this.FlowNo))
                 return "err@参数FK_Flow不能为空";
 
             string pageSize = GetRequestVal("pageSize");
             string fcid = string.Empty;
             Dictionary<string, string> vals = null;
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FlowNo) + "Rpt" + this.SearchType;
 
             GEEntitys ges = new GEEntitys(rptNo);
 
@@ -1772,7 +1772,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(ges);
 
             //string[] strs = this.context.Request.Form.ToString().Split('&');
-            var strs = HttpContextHelper.RequestParamKeys;
+            string[] strs = HttpContextHelper.RequestParamKeys;
             foreach (string key in strs)
             {
                 if (key.IndexOf("FK_Flow") != -1 || key.IndexOf("SearchType") != -1)
@@ -1813,7 +1813,7 @@ namespace BP.WF.HttpHandler
                         if (key == "FK_Dept" || key == "FK_Unit")
                         {
                             if (key == "FK_Dept")
-                                val = WebUser.FK_Dept;
+                                val = WebUser.DeptNo;
                         }
                         else
                         {
@@ -1836,23 +1836,23 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
             }
 
-            if (this.FK_Dept != null && (this.GetRequestVal("FK_Emp") == null
+            if (this.DeptNo != null && (this.GetRequestVal("FK_Emp") == null
                 || this.GetRequestVal("FK_Emp") == "all"))
             {
-                if (this.FK_Dept.Length == 2)
+                if (this.DeptNo.Length == 2)
                 {
                     qo.AddWhere("FK_Dept", " = ", "all");
                     qo.addAnd();
                 }
                 else
                 {
-                    if (this.FK_Dept.Length == 8)
+                    if (this.DeptNo.Length == 8)
                     {
-                        qo.AddWhere("FK_Dept", " = ", this.FK_Dept);
+                        qo.AddWhere("FK_Dept", " = ", this.DeptNo);
                     }
                     else
                     {
-                        qo.AddWhere("FK_Dept", " like ", this.FK_Dept + "%");
+                        qo.AddWhere("FK_Dept", " like ", this.DeptNo + "%");
                     }
 
                     qo.addAnd();
@@ -1912,12 +1912,12 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
 
             #region 关键字查询
-            if (md.IsSearchKey)
+            if (md.ItIsSearchKey)
                 searchKey = ur.SearchKey;
 
 
             bool isFirst = true;
-            if (md.IsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
+            if (md.ItIsSearchKey && DataType.IsNullOrEmpty(searchKey) == false && searchKey.Length >= 1)
             {
                 int i = 0;
 
@@ -2089,7 +2089,7 @@ namespace BP.WF.HttpHandler
                     //            else
                     //                cid = "DT_" + attr.Key;
 
-                    //            if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                    //            if (kvs.ContainsKey(cid) == false || DataType.IsNullOrEmpty(kvs[cid]))
                     //                continue;
 
                     //            selectVal = kvs[cid];
@@ -2102,7 +2102,7 @@ namespace BP.WF.HttpHandler
                     //        default:
                     //            cid = "TB_" + attr.Key;
 
-                    //            if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                    //            if (kvs.ContainsKey(cid) == false || DataType.IsNullOrEmpty(kvs[cid]))
                     //                continue;
 
                     //            selectVal = kvs[cid];
@@ -2118,7 +2118,7 @@ namespace BP.WF.HttpHandler
                     case UIContralType.RadioBtn:
                         cid = "DDL_" + attr.Key;
 
-                        if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                        if (kvs.ContainsKey(cid) == false || DataType.IsNullOrEmpty(kvs[cid]))
                             continue;
 
                         selectVal = kvs[cid];
@@ -2138,7 +2138,7 @@ namespace BP.WF.HttpHandler
                                 {
                                     if (attr.Key == "FK_Dept")
                                     {
-                                        selectVal = WebUser.FK_Dept;
+                                        selectVal = WebUser.DeptNo;
                                     }
                                 }
                                 else
@@ -2185,7 +2185,7 @@ namespace BP.WF.HttpHandler
                     //case UIContralType.CheckBok:
                     //    cid = "CB_" + attr.Key;
 
-                    //    if (kvs.ContainsKey(cid) == false || string.IsNullOrWhiteSpace(kvs[cid]))
+                    //    if (kvs.ContainsKey(cid) == false || DataType.IsNullOrEmpty(kvs[cid]))
                     //        continue;
 
                     //    selectVal = kvs[cid];
@@ -2269,7 +2269,7 @@ namespace BP.WF.HttpHandler
 
         public string MyDeptFlow_Init()
         {
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMyDept";
+            string fk_mapdata = "ND" + int.Parse(this.FlowNo) + "RptMyDept";
 
             DataSet ds = new DataSet();
 
@@ -2305,7 +2305,7 @@ namespace BP.WF.HttpHandler
 
         public string MyJoinFlow_Init()
         {
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMyJoin";
+            string fk_mapdata = "ND" + int.Parse(this.FlowNo) + "RptMyJoin";
 
             DataSet ds = new DataSet();
 

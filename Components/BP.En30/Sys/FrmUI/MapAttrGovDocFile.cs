@@ -17,7 +17,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -98,8 +98,9 @@ namespace BP.Sys.FrmUI
                 map.AddTBInt(MapAttrAttr.MaxLen, 50, "最大长度", false, false);
 
                 map.AddDDLSysEnum(MapAttrAttr.UIIsEnable, 0, "启用类型", true, true, "CtrlEnableType", "@0=禁用(隐藏)@1=启用@2=只读");
-
-                map.AddDDLSysEnum(MapAttrAttr.Tag, 0, "组件类型", true, true, "GovDocType", "@0=RTF模板@1=HTML模板@2=Weboffice组件@3=WPS组件@4=金格组件");
+                string cfgStr = "@0=RTF模板@1=HTML模板@2=Weboffice组件@3=WPS组件@4=金格组件";
+                map.AddDDLStringEnum(MapAttrAttr.Tag, "0", "组件类型", cfgStr, true);
+                //map.AddDDLSysEnum(MapAttrAttr.Tag, 0, "组件类型", true, true, "GovDocType", "@0=RTF模板@1=HTML模板@2=Weboffice组件@3=WPS组件@4=金格组件");
 
                 //map.AddDDLSQL(MapAttrAttr.CSSCtrl, "0", "自定义样式", MapAttrString.SQLOfCSSAttr, true);
                 #endregion 基本字段信息.
@@ -156,7 +157,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoBill()
         {
-            return "../../Admin/FoolFormDesigner/PrintTemplate/Default.htm?FK_MapData=" + this.FK_MapData + "&FrmID="+this.FK_MapData+"&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PrintTemplate/Default.htm?FK_MapData=" + this.FrmID + "&FrmID="+this.FrmID+"&KeyOfEn=" + this.KeyOfEn;
         }
 
         protected override bool beforeUpdateInsertAction()
@@ -175,15 +176,15 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn + "')";
                 DBAccess.RunSQL(sql);
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterDelete();
         }
@@ -196,7 +197,7 @@ namespace BP.Sys.FrmUI
             mapAttr.Update();
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
             base.afterInsertUpdateAction();
         }
         #endregion

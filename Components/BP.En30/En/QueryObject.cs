@@ -299,6 +299,7 @@ namespace BP.En
                     switch (this.HisDBType)
                     {
                         case DBType.Oracle:
+                        case DBType.DM:
                         case DBType.KingBaseR3:
                         case DBType.KingBaseR6:
                             this.SQL = "( " + attr2Field(attr) + " " + exp + " '%'||" + this.HisVarStr + "FK_Dept||'%' )";
@@ -420,13 +421,13 @@ namespace BP.En
         /// <param name="val">值</param>
         public void AddWhere(string attr, string exp, int val)
         {
-            if (attr == "RowNum")
+            if (attr.Equals("RowNum"))
             {
                 this.SQL = "( " + attr2Field(attr) + " " + exp + " " + val + ")";
             }
             else
             {
-                if (this.HisVarStr == "?")
+                if (this.HisVarStr.Equals("?"))
                     this.SQL = "( " + attr2Field(attr) + " " + exp + "?)";
                 else
                     this.SQL = "( " + attr2Field(attr) + " " + exp + this.HisVarStr + attr + ")";
@@ -454,7 +455,7 @@ namespace BP.En
         public void AddWhere(string attr, string exp, float val)
         {
             this.MyParas.Add(attr, val);
-            if (this.HisVarStr == "?")
+            if (this.HisVarStr.Equals("?"))
                 this.SQL = "( " + attr2Field(attr) + " " + exp + "?)";
             else
                 this.SQL = "( " + attr2Field(attr) + " " + exp + " " + this.HisVarStr + attr + ")";
@@ -642,14 +643,14 @@ namespace BP.En
         private string attr2Field(string attrKey)
         {
             Attr attr = this.HisMap.GetAttrByKey(attrKey);
-            if (attr.IsRefAttr == true)
+            if (attr.ItIsRefAttr == true)
             {
-                if (this.HisDBType == DBType.Oracle || this.HisDBType==DBType.KingBaseR3 || this.HisDBType==DBType.KingBaseR6)
+                if (this.HisDBType==DBType.DM ||this.HisDBType == DBType.Oracle || this.HisDBType==DBType.KingBaseR3 || this.HisDBType==DBType.KingBaseR6)
                     return "T" + attr.Key.Replace("Text", "") + ".Name";
 
                 Entity en = attr.HisFKEn;
 
-                if (attr.IsFK == false)
+                if (attr.ItIsFK == false)
                     return en.EnMap.PhysicsTable + "_" + attr.Key.Replace("Text", "") + ".Name";
 
 
@@ -986,7 +987,7 @@ namespace BP.En
                 {
                     paraI++;
                     //pks += "'" + dr[0].ToString() + "'";
-                    if (dbStr == "?")
+                    if (dbStr.Equals("?"))
                         pks += "?,";
                     else
                         pks +=  BP.Difference.SystemConfig.AppCenterDBVarStr + "R" + paraI + ",";
@@ -1001,7 +1002,7 @@ namespace BP.En
                         return pks.Substring(0, pks.Length - 1);
                 }
             }
-            if (pks == "")
+            if (pks.Equals(""))
             {
                 return null;
                 //return " '1'  ";
@@ -1029,7 +1030,7 @@ namespace BP.En
                         pks += "'" + dr[0].ToString() + "',";
                 }
             }
-            if (pks == "")
+            if (pks.Equals(""))
                 return "  '11111111' ";
             return pks.Substring(0, pks.Length - 1);
         }
@@ -1050,7 +1051,7 @@ namespace BP.En
         /// <returns></returns>
         public int DoQuery(string pk, int pageSize, int pageIdx)
         {
-            if (pk == "OID" || pk == "WorkID")
+            if (pk.Equals("OID") || pk.Equals("WorkID"))
                 return DoQuery(pk, pageSize, pageIdx, pk, true);
             else
                 return DoQuery(pk, pageSize, pageIdx, pk, false);
@@ -1066,7 +1067,7 @@ namespace BP.En
         /// <returns>查询结果</returns>
         public int DoQuery(string pk, int pageSize, int pageIdx, string orderBy, string orderWay)
         {
-            if (orderWay.ToLower().Trim() == "up" || orderWay.ToLower().Trim() == "asc")
+            if (orderWay.ToLower().Trim().Equals("up") || orderWay.ToLower().Trim().Equals("asc"))
                 return DoQuery(pk, pageSize, pageIdx, orderBy, false);
             else
                 return DoQuery(pk, pageSize, pageIdx, orderBy, true);
@@ -1152,6 +1153,7 @@ namespace BP.En
                     switch (map.EnDBUrl.DBType)
                     {
                         case DBType.Oracle:
+                        case DBType.DM:
                         case DBType.KingBaseR3:
                         case DBType.KingBaseR6:
                             toIdx = top + pageSize;
@@ -1253,6 +1255,7 @@ namespace BP.En
                             return this.doEntitiesQuery();
                         case DBType.PostgreSQL:
                         case DBType.UX:
+                        case DBType.HGDB:
                             toIdx = top + pageSize;
                             if (DataType.IsNullOrEmpty(this._sql) == true)
                             {
@@ -1370,6 +1373,7 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
@@ -1407,7 +1411,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                //   if (BP.Difference.SystemConfig.IsDebug)
+                //   if (BP.Difference.SystemConfig.isDebug)
                 this.En.CheckPhysicsTable();
                 throw ex;
             }
@@ -1421,6 +1425,7 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
@@ -1463,6 +1468,7 @@ namespace BP.En
             switch (this.En.EnMap.EnDBUrl.DBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     if (DataType.IsNullOrEmpty(this._sql) == true)
@@ -1510,6 +1516,7 @@ namespace BP.En
             switch (this.HisDBType)
             {
                 case DBType.Oracle:
+                case DBType.DM:
                 case DBType.KingBaseR3:
                 case DBType.KingBaseR6:
                     if (this.Top != -1)
@@ -1534,7 +1541,7 @@ namespace BP.En
         /// <returns>初始化后的ens</returns>
         public static Entities InitEntitiesByDataTable(Entities ens, DataTable dt, string[] fullAttrs)
         {
-           
+            FieldCaseModel fieldCaseModel = BP.Difference.SystemConfig.AppCenterDBFieldCaseModel;
             if (fullAttrs == null)
             {
                 Map enMap = ens.GetNewEntity.EnMap;
@@ -1547,14 +1554,14 @@ namespace BP.En
                         Entity en = ens.GetNewEntity;
                         foreach (Attr attr in attrs)
                         {
-                            if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                            if (fieldCaseModel == FieldCaseModel.UpperCase)
                             {
                                 if ( attr.MyFieldType == FieldType.RefText)
                                     en.SetValByKey(attr.Key, dr[attr.Key]);
                                 else
                                     en.SetValByKey(attr.Key, dr[attr.Key.ToUpper()]);
                             }
-                            else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                            else if (fieldCaseModel == FieldCaseModel.Lowercase)
                             {
                                 if (attr.MyFieldType == FieldType.RefText)
                                     en.SetValByKey(attr.Key, dr[attr.Key]);
@@ -1587,14 +1594,14 @@ namespace BP.En
                 Entity en = ens.GetNewEntity;
                 foreach (String str in fullAttrs)
                 {
-                    if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.UpperCase)
+                    if (fieldCaseModel == FieldCaseModel.UpperCase)
                     {
                         if (dt.Columns.Contains(str) == true)
                             en.SetValByKey(str, dr[str]);
                         else
                             en.SetValByKey(str, dr[str.ToUpper()]);
                     }
-                    else if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
+                    else if (fieldCaseModel == FieldCaseModel.Lowercase)
                     {
                         if (dt.Columns.Contains(str) == true)
                             en.SetValByKey(str, dr[str]);

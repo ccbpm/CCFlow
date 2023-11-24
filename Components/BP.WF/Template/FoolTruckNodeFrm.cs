@@ -30,7 +30,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -73,7 +73,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -136,9 +136,9 @@ namespace BP.WF.Template
             if (this.FrmSln == 0 || this.FrmSln == 1)
             {
                 string sql = "";
-                sql += "@DELETE FROM Sys_FrmSln WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
-                sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
-                sql += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.FK_Node + "'";
+                sql += "@DELETE FROM Sys_FrmSln WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.NodeID + "'";
+                sql += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.NodeID + "'";
+                sql += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_Frm + "' AND FK_Node='" + this.NodeID + "'";
                 DBAccess.RunSQLs(sql);
             }
             return base.beforeUpdate();

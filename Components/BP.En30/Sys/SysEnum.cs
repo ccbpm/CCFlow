@@ -36,7 +36,7 @@ namespace BP.Sys
         /// StrKey
         /// </summary>
         public const string StrKey = "StrKey";
-
+        public const string RefPK = "RefPK";
     }
     /// <summary>
     /// SysEnum
@@ -223,6 +223,10 @@ namespace BP.Sys
                 map.AddTBString(SysEnumMainAttr.OrgNo, null, "OrgNo", true, false, 0, 50, 8);
                 map.AddTBString(SysEnumAttr.StrKey, null, "StrKey", true, false, 1, 100, 8);
 
+                //新增属性
+                map.AddTBString(SysEnumAttr.RefPK, null, "RefPK", true, false, 0, 100, 8);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -284,13 +288,16 @@ namespace BP.Sys
 
                     int RBShowModel = mapAttr.GetParaInt("RBShowModel");
                     FrmRB frmrb1 = new FrmRB();
-                    frmrb1.setMyPK(fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey);
+                    frmrb1.MyPK= fk_mapdata + "_" + this.EnumKey + "_" + this.IntKey;
 
-                    frmrb.setFK_MapData(fk_mapdata);
+                    frmrb.FrmID= fk_mapdata;
                     frmrb.setKeyOfEn(this.EnumKey);
                     frmrb.setEnumKey(this.EnumKey);
                     frmrb.setLab(this.Lab);
-                    frmrb.setIntKey(this.IntKey);
+                    if (DataType.IsNullOrEmpty(this.StrKey) == false)
+                        frmrb.setIntKey(this.StrKey);
+                    else
+                        frmrb.setIntKey(this.IntKey.ToString());
                     frmrb.Insert();
                 }
 
@@ -317,64 +324,94 @@ namespace BP.Sys
             }
             return strs;
         }
-        public string GenerCaseWhenForOracle(string enName, string mTable, string key, string field, string enumKey, int def)
+        public string GenerCaseWhenForOracle(string enName, string mTable, string key, string field, string enumKey, string def)
         {
-            string sql = (string)Cash.GetObjFormApplication("ESQL" + enName + mTable + key + "_" + enumKey, null);
+            string sql = (string)Cache.GetObjFormApplication("ESQL" + enName + mTable + key + "_" + enumKey, null);
             // string sql = "";
             if (sql != null)
                 return sql;
-
+            sql = " SELECT EnumType,CfgVal From Sys_EnumMain WHERE No='" + enumKey + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int enumType = 0;
+            if (dt.Rows.Count != 0)
+                enumType = int.Parse(dt.Rows[0][0].ToString());
             if (this.Count == 0)
             {
-                SysEnumMain enumMain = new SysEnumMain(enumKey);
-                RegIt(enumKey, enumMain.CfgVal);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
+                RegIt(enumKey, dt.Rows[0][1].ToString());
                 new SysEnums(enumKey);
 
                 if (this.Count == 0)
                     throw new Exception("@枚举值" + enumKey + "已被删除。");
             }
 
-
-            sql = " CASE NVL(" + mTable + field + "," + def + ")";
+            if(enumType == 0 && DataType.IsNumStr(def))
+                sql = " CASE NVL(" + mTable + field + "," + Int32.Parse(def) + ")";
+            else
+                sql = " CASE NVL(" + mTable + field + ",'" + def + "')";
             foreach (SysEnum se1 in this)
             {
-                sql += " WHEN " + se1.IntKey + " THEN '" + se1.Lab + "'";
+                if(DataType.IsNullOrEmpty(se1.StrKey))
+                    sql += " WHEN " + se1.IntKey + " THEN '" + se1.Lab + "'";
+                else
+                    sql += " WHEN '" + se1.StrKey + "' THEN '" + se1.Lab + "'";
             }
 
-            SysEnum se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, def);
+            SysEnum se = null;
+            if (enumType == 0 && DataType.IsNumStr(def))
+                se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, int.Parse(def));
+            else if (enumType == 1 && DataType.IsNullOrEmpty(def) == false)
+                se = (SysEnum)this.GetEntityByKey(SysEnumAttr.StrKey, def);
             if (se == null)
                 sql += " END \"" + key + "Text\"";
             else
                 sql += " WHEN NULL THEN '" + se.Lab + "' END \"" + key + "Text\"";
 
-            Cash.AddObj("ESQL" + enName + mTable + key + "_" + enumKey, Depositary.Application, sql);
+            Cache.AddObj("ESQL" + enName + mTable + key + "_" + enumKey, Depositary.Application, sql);
             return sql;
         }
 
-        public string GenerCaseWhenForOracle(string mTable, string key, string field, string enumKey, int def)
+        public string GenerCaseWhenForOracle(string mTable, string key, string field, string enumKey, string def)
         {
+            string sql = "";
+            sql = " SELECT EnumType,CfgVal From Sys_EnumMain WHERE No='" + enumKey + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            int enumType = 0;
+            if (dt.Rows.Count!=0)
+                enumType = int.Parse(dt.Rows[0][0].ToString());
             if (this.Count == 0)
             {
-                SysEnumMain enumMain = new SysEnumMain(enumKey);
-                RegIt(enumKey, enumMain.CfgVal);
+                if(dt.Rows.Count == 0)
+                    throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
+                RegIt(enumKey, dt.Rows[0][1].ToString());
                 new SysEnums(enumKey);
 
                 if (this.Count == 0)
                     throw new Exception("@枚举值（" + enumKey + "）已被删除，无法形成期望的SQL。");
             }
 
-            string sql = "";
+            
+            
             sql = " CASE " + mTable + field;
             foreach (SysEnum se1 in this)
-                sql += " WHEN " + se1.IntKey + " THEN '" + se1.Lab + "'";
-
-            SysEnum se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, def);
+            {
+                if (DataType.IsNullOrEmpty(se1.StrKey))
+                    sql += " WHEN " + se1.IntKey + " THEN '" + se1.Lab + "'";
+                else
+                    sql += " WHEN '" + se1.StrKey + "' THEN '" + se1.Lab + "'";
+            }
+            SysEnum se = null;
+            if(enumType == 0 && DataType.IsNumStr(def))
+                se = (SysEnum)this.GetEntityByKey(SysEnumAttr.IntKey, int.Parse(def));
+            else if(enumType == 1 && DataType.IsNullOrEmpty(def) == false)
+                se = (SysEnum)this.GetEntityByKey(SysEnumAttr.StrKey, def);
             if (se == null)
                 sql += " END \"" + key + "Text\"";
             else
                 sql += " WHEN NULL THEN '" + se.Lab + "' END \"" + key + "Text\"";
 
-            // Cash.AddObj("ESQL" + enName + key + "_" + enumKey, Depositary.Application, sql);
+            // Cache.AddObj("ESQL" + enName + key + "_" + enumKey, Depositary.Application, sql);
             return sql;
         }
         public void LoadIt(string enumKey)
@@ -426,6 +463,14 @@ namespace BP.Sys
         {
             try
             {
+                if (DataType.IsNullOrEmpty(vals))
+                    throw new Exception("err@EnumKey="+ EnumKey + "的错误vals是空值.");
+
+                vals = vals.Replace(" ", "");
+                vals = vals.Replace(" ", "");
+                vals = vals.Replace(" ", "");
+                vals = vals.Replace("\n", "");
+
                 string[] strs = vals.Split('@');
                 SysEnums ens = new SysEnums();
                 ens.Delete(SysEnumAttr.EnumKey, EnumKey);
@@ -462,7 +507,7 @@ namespace BP.Sys
         }
         public bool Full(string enumKey)
         {
-            Entities ens = (Entities)Cash.GetObjFormApplication("EnumOf" + enumKey + Web.WebUser.SysLang, null);
+            Entities ens = (Entities)Cache.GetObjFormApplication("EnumOf" + enumKey + Web.WebUser.SysLang, null);
             if (ens != null)
             {
                 this.AddEntities(ens);
@@ -486,7 +531,7 @@ namespace BP.Sys
                     if (qo.DoQuery() == 0)
                         return false;
 
-                    Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
+                    Cache.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
                     return true;
                 }
 
@@ -495,7 +540,7 @@ namespace BP.Sys
                 if (qo.DoQuery() == 0)
                     return false;
 
-                Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
+                Cache.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
                 return true;
             }
 
@@ -510,7 +555,7 @@ namespace BP.Sys
                 return false;
             }
 
-            Cash.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
+            Cache.AddObj("EnumOf" + enumKey + Web.WebUser.SysLang, Depositary.Application, this);
             return true;
         }
         ///// <summary>

@@ -39,9 +39,9 @@ namespace BP.Sys
         {
             get
             {
-                var colstr = this.HisAP.GetValStrByKey("ShowColumns");
+                string colstr = this.HisAP.GetValStrByKey("ShowColumns");
 
-                if (string.IsNullOrWhiteSpace(colstr))
+                if (DataType.IsNullOrEmpty(colstr))
                     return new string[0];
 
                 return colstr.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -87,7 +87,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用双击打开？
         /// </summary>
-        public bool IsEnableDouclickGlo
+        public bool ItIsEnableDouclickGlo
         {
             get
             {
@@ -97,7 +97,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否显示相关功能?
         /// </summary>
-        public bool IsEnableRefFunc
+        public bool ItIsEnableRefFunc
         {
             get
             {
@@ -107,7 +107,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否启用焦点字段
         /// </summary>
-        public bool IsEnableFocusField
+        public bool ItIsEnableFocusField
         {
             get
             {
@@ -117,7 +117,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否打开ICON
         /// </summary>
-        public bool IsEnableOpenICON
+        public bool ItIsEnableOpenICON
         {
             get
             {

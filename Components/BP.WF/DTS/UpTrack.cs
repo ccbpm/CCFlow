@@ -57,7 +57,6 @@ namespace BP.WF.DTS
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     Track tk = new Track();
-                    tk.FK_Flow = fl.No;
                     tk.Row.LoadDataTable(dt, dt.Rows[0]);
                     tk.DoInsert(0); // 执行insert.
                 }

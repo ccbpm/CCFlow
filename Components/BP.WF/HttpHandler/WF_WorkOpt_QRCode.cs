@@ -30,7 +30,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Submit()
         {
-            NodeExt ne = new NodeExt(this.FK_Node);
+            NodeExt ne = new NodeExt(this.NodeID);
             int val = ne.GetValIntByKey(BtnAttr.QRCodeRole);
             if (val == 0)
                 return "err@流程表单扫描已经关闭不允许扫描.";
@@ -41,7 +41,7 @@ namespace BP.WF.HttpHandler
                 if (WebUser.No == null)
                     BP.WF.Dev2Interface.Port_Login("Guest");
 
-                return "../../MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "../../MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
 
@@ -62,14 +62,14 @@ namespace BP.WF.HttpHandler
                 else
                     BP.WF.Dev2Interface.Port_Login(emp.No, emp.OrgNo);
 
-                return "../../MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "../../MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
             //如果是：外部用户？.
             if (val == 3)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                if (gwf.FK_Node != this.FK_Node)
+                if (gwf.NodeID != this.NodeID)
                     return "err@二维码过期";
 
                 //使用内部用户登录.
@@ -84,9 +84,9 @@ namespace BP.WF.HttpHandler
                 //执行登录.
                 BP.WF.Dev2InterfaceGuest.Port_Login(user.No, user.Name);
 
-                HuiQian_AddGuest(this.WorkID, this.FK_Node);
+                HuiQian_AddGuest(this.WorkID, this.NodeID);
 
-                return "../../MyFlow.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "../../MyFlow.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
             return "err@系统错误.";
@@ -102,9 +102,9 @@ namespace BP.WF.HttpHandler
 
             
             if (this.WorkID == 0)  //开始节点的时候.
-                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
             else
-                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow;
+                url =  BP.Difference.SystemConfig.HostURL + "/WF/WorkOpt/QRCode/ScanGuide.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.NodeID + "&FK_Flow=" + this.FlowNo;
 
             QRCodeEncoder encoder = new QRCodeEncoder();
             encoder.QRCodeEncodeMode = QRCodeEncoder.ENCODE_MODE.BYTE;//编码方式(注意：BYTE能支持中文，ALPHA_NUMERIC扫描出来的都是数字)
@@ -120,7 +120,7 @@ namespace BP.WF.HttpHandler
             string tempPath = "";
 
             if (this.WorkID == 0)
-                tempPath =  BP.Difference.SystemConfig.PathOfTemp + this.FK_Flow + ".png";
+                tempPath =  BP.Difference.SystemConfig.PathOfTemp + this.FlowNo + ".png";
             else
                 tempPath =  BP.Difference.SystemConfig.PathOfTemp + this.WorkID + ".png";
 
@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
         }
         public string ScanGuide_Init()
         {
-            NodeExt ne = new NodeExt(this.FK_Node);
+            NodeExt ne = new NodeExt(this.NodeID);
             int val = ne.GetValIntByKey(BtnAttr.QRCodeRole);
 
             if (val == 0)
@@ -144,7 +144,7 @@ namespace BP.WF.HttpHandler
                 if (WebUser.No == null)
                     BP.WF.Dev2Interface.Port_Login("Guest");
 
-                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
             // 如果需要权限才能查看表单.
@@ -152,25 +152,25 @@ namespace BP.WF.HttpHandler
             {
                 //判断是否登录?
                 if (WebUser.No == null)
-                    return "Login.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&QRCodeRole=2";
+                    return "Login.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&QRCodeRole=2";
 
-                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
             //外部账户协作模式处理工作.
             if (val == 3)
             {
                 if (GuestUser.No == null)
-                    return "Login.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&QRCodeRole=2";
+                    return "Login.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID + "&QRCodeRole=2";
 
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-                if (gwf.FK_Node != this.FK_Node)
+                if (gwf.NodeID != this.NodeID)
                     return "err@二维码过期";
 
-                HuiQian_AddGuest(this.WorkID, this.FK_Node);
+                HuiQian_AddGuest(this.WorkID, this.NodeID);
 
 
-                return "/CCMobile/MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+                return "/CCMobile/MyFlowView.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FlowNo + "&FK_Node=" + this.NodeID;
             }
 
             return "err@没有判断的模式.";
@@ -181,8 +181,8 @@ namespace BP.WF.HttpHandler
         {
             //判断是否存在该节点的待办
             GenerWorkerList gwl = new GenerWorkerList();
-            gwl.FK_Node = fk_node;
-            gwl.FK_Emp = GuestUser.No;
+            gwl.NodeID = fk_node;
+            gwl.EmpNo = GuestUser.No;
             gwl.WorkID = workid;
             int num = gwl.RetrieveFromDBSources();
             //还没有待办，增加会签人信息
@@ -204,18 +204,18 @@ namespace BP.WF.HttpHandler
                 }
                 if (num == 0)
                     throw new Exception("err@发生不可预测的问题,组长协作模式下找不到组长信息");
-                gwf.HuiQianZhuChiRen = gwlZCR.FK_Emp;
-                gwf.HuiQianZhuChiRenName = gwlZCR.FK_EmpText;
+                gwf.HuiQianZhuChiRen = gwlZCR.EmpNo;
+                gwf.HuiQianZhuChiRenName = gwlZCR.EmpName;
                 gwlZCR.SetPara("HuiQianType", "");
-                gwlZCR.FK_Emp = GuestUser.No;
-                gwlZCR.FK_EmpText = GuestUser.Name;
-                gwlZCR.IsPassInt = 0; //设置不可以用.
-                gwlZCR.FK_Dept = "";
+                gwlZCR.EmpNo = GuestUser.No;
+                gwlZCR.EmpName = GuestUser.Name;
+                gwlZCR.PassInt = 0; //设置不可以用.
+                gwlZCR.DeptNo = "";
                 gwlZCR.DeptName = ""; //部门名称.
-                gwlZCR.IsRead = false;
+                gwlZCR.ItIsRead = false;
                 gwlZCR.GuestNo = GuestUser.No;
                 gwlZCR.GuestName = GuestUser.Name;
-                gwlZCR.SetPara("HuiQianZhuChiRen", gwlZCR.FK_Emp);
+                gwlZCR.SetPara("HuiQianZhuChiRen", gwlZCR.EmpNo);
 
                 #region 计算会签时间.
                 if (nd.HisCHWay == CHWay.None)
@@ -228,7 +228,7 @@ namespace BP.WF.HttpHandler
                     DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
                          nd.TimeLimitHH, nd.TimeLimitMM, nd.TWay);
                     //应完成日期.
-                    gwlZCR.SDT = dtOfShould.ToString(DataType.SysDateTimeFormat + ":ss");
+                    gwlZCR.SDT =  DataType.SysDateTimeFormat(dtOfShould);
                 }
 
                 //求警告日期.
@@ -238,11 +238,11 @@ namespace BP.WF.HttpHandler
                 if (nd.WarningDay != 0)
                     dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, (int)nd.WarningDay, 0, 0, nd.TWay);
 
-                gwlZCR.DTOfWarning = dtOfWarning.ToString(DataType.SysDateTimeFormat);
+                gwlZCR.DTOfWarning = DataType.SysDateTimeFormat(dtOfWarning);
                 #endregion 计算会签时间.
 
-                gwlZCR.Sender = gwlZCR.FK_Emp + "," + gwlZCR.FK_EmpText; //发送人为当前人.
-                gwlZCR.IsHuiQian = true;
+                gwlZCR.Sender = gwlZCR.EmpNo + "," + gwlZCR.EmpName; //发送人为当前人.
+                gwlZCR.ItIsHuiQian = true;
                 gwlZCR.Insert(); //插入作为待办.
 
                 //修改GenerWorkFlow的信息
@@ -250,12 +250,12 @@ namespace BP.WF.HttpHandler
                 gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing;
                 gwf.Update();
                 //给组长发送消息
-                BP.WF.Dev2Interface.Port_SendMsg(gwlZCR.FK_Emp,
-                  "bpm会签工作参与", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + GuestUser.No, GuestUser.Name + "参与了您对工作的｛" + gwf.Title + "｝邀请,请您及时关注工作进度.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
+                BP.WF.Dev2Interface.Port_SendMsg(gwlZCR.EmpNo,
+                  "bpm会签工作参与", "HuiQian" + gwf.WorkID + "_" + gwf.NodeID + "_" + GuestUser.No, GuestUser.Name + "参与了您对工作的｛" + gwf.Title + "｝邀请,请您及时关注工作进度.", "HuiQian", gwf.FlowNo, gwf.NodeID, gwf.WorkID, gwf.FID);
 
                 //执行会签,写入日志.
-                BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, GuestUser.No + "," + GuestUser.Name,
-                    ActionType.HuiQian, "执行会签", null, null, null, GuestUser.No, GuestUser.Name, gwlZCR.FK_Emp, gwlZCR.FK_EmpText);
+                BP.WF.Dev2Interface.WriteTrack(gwf.FlowNo, gwf.NodeID, gwf.NodeName, gwf.WorkID, gwf.FID, GuestUser.No + "," + GuestUser.Name,
+                    ActionType.HuiQian, "执行会签", null, null, null, GuestUser.No, GuestUser.Name, gwlZCR.EmpNo, gwlZCR.EmpName);
                 return;
             }
 

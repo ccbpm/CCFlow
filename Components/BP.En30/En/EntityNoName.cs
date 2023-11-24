@@ -135,7 +135,7 @@ namespace BP.En
         {
             if (this.No.Trim().Length == 0)
             {
-                if (this.EnMap.IsAutoGenerNo)
+                if (this.EnMap.ItIsAutoGenerNo)
                     this.No = this.GenerNewNo;
                 else
                     //throw new Exception("@没有给[" + this.EnDesc + "]ClassID=[" + this.ClassID + "]Name=[" + this.Name + "]设置编号,不能执行插入.");
@@ -172,7 +172,7 @@ namespace BP.En
             }
             else
             {
-                if (this.EnMap.IsAutoGenerNo
+                if (this.EnMap.ItIsAutoGenerNo
                     && this.EnMap.GetAttrByKey("No").UIIsReadonly)
                     this.No = this.GenerNewNo;
 

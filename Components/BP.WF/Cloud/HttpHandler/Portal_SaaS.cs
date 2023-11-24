@@ -28,7 +28,7 @@ namespace BP.Cloud.HttpHandler
         }
         public string CheckEncryptEnable()
         {
-            if (SystemConfig.IsEnablePasswordEncryption == true)
+            if (SystemConfig.isEnablePasswordEncryption == true)
                 return "1";
             return "0";
         }
@@ -36,7 +36,7 @@ namespace BP.Cloud.HttpHandler
         /// 获取组织
         /// </summary>
         /// <returns></returns>
-        public string SelectOnOrg_Init() 
+        public string SelectOneOrg_Init() 
         {
             BP.Cloud.Orgs orgs = new BP.Cloud.Orgs();
             orgs.RetrieveAll();
@@ -44,11 +44,29 @@ namespace BP.Cloud.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
 
+        /// <summary>
+        /// JFlow要用到，根据no获取对应的组织数据
+        /// </summary>
+        /// <returns></returns>
+        public string GetOrgByNo()
+        {
+            String no = this.GetRequestVal("OrgNo");
+            BP.Cloud.Org org = new Org();
+            org.No = no;
+            if (org.RetrieveFromDBSources() == 0)
+            {
+                return "err@组织不存在.";
+            }
+            return org.ToJson();
+        }
+
         public string Login_Submit()
         {
             try
             {
                 string orgNo = this.OrgNo;
+                if(DataType.IsNullOrEmpty(orgNo) == true)
+                    return "err@没有获取到OrgNo，请检查参数是否正确.";
                 string userNo = this.GetRequestVal("TB_No");
                 string pass = this.GetRequestVal("TB_PW");
                 if (pass == null)

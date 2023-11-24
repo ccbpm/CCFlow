@@ -19,14 +19,7 @@ namespace BP.CCBill
                 return str;
             }
         }
-        public string Name
-        {
-            get
-            {
-                string str = this.GetRequestVal("Name");
-                return str;
-            }
-        }
+       
         #endregion 属性.
 
         /// <summary>
@@ -45,7 +38,7 @@ namespace BP.CCBill
             string[] ens = this.GetRequestVal("MyPKs").Split(',');
             for (int i = 0; i < ens.Length; i++)
             {
-                var enNo = ens[i];
+                string enNo = ens[i];
                 string sql = "UPDATE Sys_MapAttr SET Idx=" + i + " WHERE MyPK='" + enNo + "'";
                 DBAccess.RunSQL(sql);
             }
@@ -58,7 +51,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string MethodDoc_GetScript()
         {
-            var en = new MethodFunc(this.No);
+            MethodFunc en = new MethodFunc(this.No);
             int type = this.GetRequestValInt("TypeOfFunc");
             if (type == 0)
                 return en.MethodDoc_SQL;
@@ -77,7 +70,7 @@ namespace BP.CCBill
         /// <returns></returns>
         public string MethodDoc_SaveScript()
         {
-            var en = new MethodFunc(this.No);
+            MethodFunc en = new MethodFunc(this.No);
 
             int type = this.GetRequestValInt("TypeOfFunc");
             string doc = this.GetRequestVal("doc");

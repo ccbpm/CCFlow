@@ -27,7 +27,7 @@ namespace BP.WF.Template.Frm
         /// <summary>
         /// 是否是节点表单?
         /// </summary>
-        public bool IsNodeFrm
+        public bool ItIsNodeFrm
         {
             get
             {
@@ -89,7 +89,7 @@ namespace BP.WF.Template.Frm
             }
         }
 
-        public string FK_FormTree
+        public string FormTreeNo
         {
             get
             {
@@ -281,16 +281,6 @@ namespace BP.WF.Template.Frm
                 rm.Icon = "icon-social-spotify";
                 map.AddRefMethod(rm);
 
-                //带有参数的方法.
-                rm = new RefMethod();
-                rm.Title = "重命名字段";
-                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = "../../WF/Img/ReName.png";
-                rm.Icon = "icon-refresh";
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "表单检查"; // "设计表单";
@@ -424,7 +414,7 @@ namespace BP.WF.Template.Frm
         protected override bool beforeUpdate()
         {
             if (this.NodeID != 0)
-                this.FK_FormTree = "";
+                this.FormTreeNo = "";
 
             return base.beforeUpdate();
         }
@@ -442,7 +432,7 @@ namespace BP.WF.Template.Frm
                 MapData map = new MapData(this.No);
                 //避免显示在表单库中
                 // map.FK_FrmSort = "";
-                map.FK_FormTree = "";
+                map.FormTreeNo = "";
                 map.DirectUpdate();
             }
 

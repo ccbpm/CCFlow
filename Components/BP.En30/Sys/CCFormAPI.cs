@@ -45,10 +45,10 @@ namespace BP.Sys
                     mapFrame.setMyPK(fk_mapdata + "_" + no);
                     if (mapFrame.RetrieveFromDBSources() != 0)
                         throw new Exception("@创建失败，已经有同名元素[" + no + "]的控件.");
-                    mapFrame.setFK_MapData(fk_mapdata);
+                    mapFrame.FrmID=fk_mapdata;
                     mapFrame.setEleType("iFrame");
-                    mapFrame.setName(name);
-                    mapFrame.setFrmID(no);
+                    mapFrame.Name= name;
+                    mapFrame.FrmID= no;
                     mapFrame.URL = "http://ccbpm.cn";
                  
                     mapFrame.W = 400;
@@ -62,7 +62,7 @@ namespace BP.Sys
                     md.CheckPTableSaveModel(no);
 
                     MapAttr ma = new MapAttr();
-                    ma.setFK_MapData(fk_mapdata);
+                    ma.FrmID =fk_mapdata;
                     ma.setKeyOfEn(no);
                     ma.setName(name);
                     ma.setMyDataType(DataType.AppString);
@@ -92,7 +92,7 @@ namespace BP.Sys
             name = name.Trim();
 
             FrmImgAth ath = new FrmImgAth();
-            ath.setFK_MapData(fk_mapdata);
+            ath.FrmID= fk_mapdata;
             ath.CtrlID = no;
             ath.setMyPK(fk_mapdata + "_" + no);
 
@@ -111,10 +111,10 @@ namespace BP.Sys
         public static void CreateOrSaveAthSingle(string fk_mapdata, string no, string name, float x, float y)
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.setFK_MapData(fk_mapdata);
+            ath.FrmID =fk_mapdata;
             ath.NoOfObj = no;
 
-            ath.setMyPK(ath.FK_MapData + "_" + ath.NoOfObj);
+            ath.setMyPK(ath.FrmID + "_" + ath.NoOfObj);
             ath.RetrieveFromDBSources();
             ath.UploadType = AttachmentUploadType.Single;
             ath.Name = name;
@@ -131,9 +131,9 @@ namespace BP.Sys
         public static void CreateOrSaveAthMulti(string fk_mapdata, string no, string name)
         {
             FrmAttachment ath = new FrmAttachment();
-            ath.setFK_MapData(fk_mapdata);
+            ath.FrmID =fk_mapdata;
             ath.NoOfObj = no;
-            ath.setMyPK(ath.FK_MapData + "_" + ath.NoOfObj);
+            ath.setMyPK(ath.FrmID + "_" + ath.NoOfObj);
             int i = ath.RetrieveFromDBSources();
 
             if (i == 0)
@@ -176,7 +176,7 @@ namespace BP.Sys
             }
 
             dtl.Name = dtlName;
-            dtl.setFK_MapData(fk_mapdata);
+            dtl.FrmID =fk_mapdata;
 
             dtl.Save();
 
@@ -212,7 +212,7 @@ namespace BP.Sys
             attr.RetrieveFromDBSources();
 
             //基本属性赋值.
-            attr.setFK_MapData(fk_mapdata);
+            attr.FrmID =fk_mapdata;
             attr.setKeyOfEn(fieldName);
             attr.setName(fieldDesc);
             attr.setMyDataType(DataType.AppString);
@@ -266,7 +266,7 @@ namespace BP.Sys
                 attrH.SetValByKey(MapAttrAttr.MyDataType , DataType.AppString);
                 attrH.SetValByKey(MapAttrAttr.UIVisible ,false);
                 attrH.SetValByKey(MapAttrAttr.UIIsEnable , false);
-                attrH.SetValByKey(MapAttrAttr.MyPK , attrH.FK_MapData + "_" + attrH.KeyOfEn);
+                attrH.SetValByKey(MapAttrAttr.MyPK , attrH.FrmID + "_" + attrH.KeyOfEn);
 
                 if (attrH.RetrieveFromDBSources() == 0)
                     attrH.Insert();
@@ -289,11 +289,11 @@ namespace BP.Sys
             float x, float y, int colSpan = 1)
         {
             MapAttr ma = new MapAttr();
-            ma.setFK_MapData(fk_mapdata);
+            ma.FrmID =fk_mapdata;
             ma.setKeyOfEn(fieldName);
 
             //赋值主键。
-            ma.setMyPK(ma.FK_MapData + "_" + ma.KeyOfEn);
+            ma.setMyPK(ma.FrmID + "_" + ma.KeyOfEn);
 
             //先查询赋值.
             ma.RetrieveFromDBSources();
@@ -315,10 +315,13 @@ namespace BP.Sys
                 {
                     idx++;
                     FrmRB rb = new FrmRB();
-                    rb.setFK_MapData(ma.FK_MapData);
+                    rb.FrmID= ma.FrmID;
                     rb.setKeyOfEn(ma.KeyOfEn);
-                    rb.setIntKey(item.IntKey);
-                    rb.setMyPK(rb.FK_MapData + "_" + rb.KeyOfEn + "_" + rb.IntKey);
+                    if (DataType.IsNullOrEmpty(item.StrKey) == false)
+                        rb.setIntKey(item.StrKey);
+                    else
+                        rb.setIntKey(item.IntKey.ToString());
+                    rb.setMyPK(rb.FrmID + "_" + rb.KeyOfEn + "_" + rb.IntKey);
                     rb.RetrieveFromDBSources();
 
                     rb.setEnumKey(ma.UIBindKey);
@@ -340,9 +343,9 @@ namespace BP.Sys
             //imgPKs = imgPKs.Replace(ctrlID + "@", "@");
             FrmImg img = new FrmImg();
             img.setMyPK(keyOfEn);
-            img.setFK_MapData(frmID);
+            img.FrmID= frmID;
             img.Name = name;
-            img.IsEdit = 1;
+            img.ItIsEdit = 1;
             img.HisImgAppType = ImgAppType.Img;
             img.Insert();
         }
@@ -354,12 +357,12 @@ namespace BP.Sys
             md.CheckPTableSaveModel(field);
 
             MapAttr ma = new MapAttr();
-            ma.setFK_MapData(frmID);
+            ma.FrmID =frmID;
             ma.setKeyOfEn(field);
             ma.setName(fieldDesc);
             ma.setMyDataType(mydataType);
             if (mydataType == 7)
-                ma.IsSupperText = 1;
+                ma.ItIsSupperText = 1;
 
             //frmID设置字段所属的分组
             GroupField groupField = new GroupField();
@@ -376,7 +379,7 @@ namespace BP.Sys
             md.CheckPTableSaveModel(field);
 
             MapAttr ma = new MapAttr();
-            ma.setFK_MapData(fk_mapdata);
+            ma.FrmID = fk_mapdata;
             ma.setKeyOfEn(field);
             ma.setName(fieldDesc);
             ma.setMyDataType(DataType.AppInt);
@@ -397,7 +400,7 @@ namespace BP.Sys
                 return;
 
             //删除可能存在的数据.
-            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + ma.KeyOfEn + "' AND FK_MapData='" + ma.FK_MapData + "'");
+            DBAccess.RunSQL("DELETE FROM Sys_FrmRB WHERE KeyOfEn='" + ma.KeyOfEn + "' AND FK_MapData='" + ma.FrmID + "'");
 
             SysEnums ses = new SysEnums(ma.UIBindKey);
             int idx = 0;
@@ -405,12 +408,15 @@ namespace BP.Sys
             {
                 idx++;
                 FrmRB rb = new FrmRB();
-                rb.setFK_MapData(ma.FK_MapData);
+                rb.FrmID=  ma.FrmID;
                 rb.setKeyOfEn(ma.KeyOfEn);
                 rb.setEnumKey(ma.UIBindKey);
 
                 rb.setLab(item.Lab);
-                rb.setIntKey(item.IntKey);
+                if (DataType.IsNullOrEmpty(item.StrKey) == false)
+                    rb.setIntKey(item.StrKey);
+                else
+                    rb.setIntKey(item.IntKey.ToString());
                 //rb.X = ma.X;
                 ////让其变化y值.
                 //rb.Y = ma.Y + idx * 30;
@@ -531,7 +537,7 @@ namespace BP.Sys
                 gf.Insert();
 
             MapAttr attr = new MapAttr();
-            attr.setFK_MapData(frmID);
+            attr.FrmID =frmID;
             attr.setKeyOfEn( prx + "_Note");
             attr.setName("审核意见"); // sta;  // this.ToE("CheckNote", "审核意见");
             attr.setMyDataType(DataType.AppString);
@@ -549,7 +555,7 @@ namespace BP.Sys
 
 
             attr = new MapAttr();
-            attr.setFK_MapData(frmID);
+            attr.FrmID =frmID;
             attr.setKeyOfEn(prx + "_Checker");
             attr.setName("审核人");// "审核人";
             attr.setMyDataType(DataType.AppString);
@@ -561,13 +567,13 @@ namespace BP.Sys
             attr.setDefVal("@WebUser.No");
             attr.setUIIsEnable(false);
             attr.setGroupID(gf.OID);
-            attr.IsSigan=true;
+            attr.ItIsSigan = true;
             attr.Idx = 2;
             attr.Insert();
             attr.Update("Idx", 2);
 
             attr = new MapAttr();
-            attr.setFK_MapData(frmID);
+            attr.FrmID =frmID;
             attr.setKeyOfEn(prx + "_RDT");
             attr.setName("审核日期"); // "审核日期";
             attr.setMyDataType(DataType.AppDateTime);
@@ -611,9 +617,9 @@ namespace BP.Sys
             MapDtls dtls = new MapDtls(frmID);
             foreach (MapDtl dtl in dtls)
             {
-                dtl.IsInsert = false;
-                dtl.IsUpdate = false;
-                dtl.IsDelete = false;
+                dtl.ItIsInsert = false;
+                dtl.ItIsUpdate = false;
+                dtl.ItIsDelete = false;
                 dtl.Update();
 
                 //sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
@@ -623,12 +629,10 @@ namespace BP.Sys
             FrmAttachments ens = new FrmAttachments(frmID);
             foreach (FrmAttachment en in ens)
             {
-                en.IsUpload = false;
+                en.ItIsUpload = false;
                 en.DeleteWay = 0;
                 en.Update();
 
-                //sql = "UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE FK_MapData='" + dtl.No + "'";
-                //DBAccess.RunSQL(sql);
             }
 
         }
@@ -654,9 +658,24 @@ namespace BP.Sys
                  
                 attr.Insert();
             }
+            if (attr.IsExit(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, frmID) == false)
+            {
+                attr.SetValByKey(MapAttrAttr.FK_MapData, frmID);
+                attr.SetValByKey(MapAttrAttr.KeyOfEn, "FID");
+                attr.SetValByKey(MapAttrAttr.Name, "干流程主键");
+                attr.SetValByKey(MapAttrAttr.MyDataType, DataType.AppInt);
+                attr.SetValByKey(MapAttrAttr.UIContralType, (int)UIContralType.TB);
+                attr.setLGType(FieldTypeS.Normal);
+                attr.setUIVisible(false);
+                attr.setUIIsEnable(false);
+                attr.SetValByKey(MapAttrAttr.DefVal, "0");
+                attr.SetValByKey(MapAttrAttr.EditType, (int)EditType.Readonly);
+
+                attr.Insert();
+            }
             if (attr.IsExit(MapAttrAttr.KeyOfEn, "AtPara", MapAttrAttr.FK_MapData, frmID) == false)
             {
-                attr.setFK_MapData(frmID);
+                attr.FrmID =frmID;
                 attr.HisEditType = EditType.UnDel;
                 attr.setKeyOfEn("AtPara");
                 attr.setName("参数"); // 单据编号
@@ -686,7 +705,7 @@ namespace BP.Sys
             MapData mymd = new MapData();
             mymd.No = copyToFrmID;
             if (mymd.RetrieveFromDBSources() == 1)
-                throw new Exception("@目标表单ID:" + copyToFrmID + "已经存在，位于:" + mymd.FK_FormTreeText + "目录下.");
+                throw new Exception("@目标表单ID:" + copyToFrmID + "已经存在，位于:" + mymd.FormTreeText + "目录下.");
 
             //获得源文件信息.
             DataSet ds = GenerHisDataSet_AllEleInfo(srcFrmID);
@@ -719,7 +738,7 @@ namespace BP.Sys
 
             mdCopyTo.Retrieve();
 
-            mdCopyTo.FK_FormTree = fk_frmTree;
+            mdCopyTo.FormTreeNo = fk_frmTree;
             //  md.FK_FrmSort = fk_frmTree;
             mdCopyTo.Name = copyFrmName;
             mdCopyTo.Update();
@@ -743,17 +762,17 @@ namespace BP.Sys
         public static void AfterFrmEditAction(string frmID)
         {
             //清除缓存.
-            CashFrmTemplate.Remove(frmID);
-            Cash.SetMap(frmID, null);
+            CacheFrmTemplate.Remove(frmID);
+            Cache.SetMap(frmID, null);
 
             MapData mapdata = new MapData();
             mapdata.No = frmID;
             mapdata.RetrieveFromDBSources();
-            Cash2019.UpdateRow(mapdata.ToString(), frmID, mapdata.Row);
+            Cache2019.UpdateRow(mapdata.ToString(), frmID, mapdata.Row);
             GEEntity en = new GEEntity(frmID);
             en.Row = null;
-            en.SQLCash = null;
-            BP.DA.Cash.SetRow(frmID,null);
+            en.SQLCache = null;
+            BP.DA.Cache.SetRow(frmID,null);
             mapdata.CleanObject();
             return;
         }
@@ -765,7 +784,7 @@ namespace BP.Sys
         public static DataSet GenerHisDataSet(string frmID, string frmName = null, MapData md = null)
         {
             //首先从缓存获取数据.
-            DataSet dsFrm = CashFrmTemplate.GetFrmDataSetModel(frmID);
+            DataSet dsFrm = CacheFrmTemplate.GetFrmDataSetModel(frmID);
             if (dsFrm != null)
                 return dsFrm;
 
@@ -824,7 +843,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_FrmImgAth);
 
             //放入缓存.
-            CashFrmTemplate.Put(frmID, ds);
+            CacheFrmTemplate.Put(frmID, ds);
 
             return ds;
         }
@@ -1082,7 +1101,7 @@ namespace BP.Sys
 
             foreach (DataTable item in ds.Tables)
             {
-                if (item.TableName == "Sys_MapAttr" && item.Rows.Count == 0)
+                if (item.TableName.Equals("Sys_MapAttr") && item.Rows.Count == 0)
                     md.RepairMap();
             }
 
@@ -1129,7 +1148,7 @@ namespace BP.Sys
         {
             MapData md = MapData.ImpMapData(ds);
             md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
-            md.FK_FormTree = frmSort;
+            md.FormTreeNo = frmSort;
             md.Update();
             return md;
         }
@@ -1137,7 +1156,7 @@ namespace BP.Sys
         {
             MapData md = MapData.ImpMapData(newFrmID, ds);
             md.OrgNo = DBAccess.RunSQLReturnString("SELECT OrgNo FROM sys_formtree WHERE NO='" + frmSort + "'");
-            md.FK_FormTree = frmSort;
+            md.FormTreeNo = frmSort;
             md.Update();
             return md;
         }

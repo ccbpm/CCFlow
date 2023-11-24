@@ -97,7 +97,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 父子流程组件
         /// </summary>
-        public const string SFSta = "SFSta";
+        public const string IsEnableSF = "IsEnableSF";
     }
     /// <summary>
     /// 谁是主键？
@@ -189,7 +189,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 按部门
         /// </summary>
-        ByDept=7
+        ByDept=7,
+        /// <summary>
+        /// 包含人员启用
+        /// </summary>
+        ByEmps = 8,
     }
     /// <summary>
     /// 节点表单
@@ -273,7 +277,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否启用装载填充事件
         /// </summary>
-        public bool IsEnableLoadData
+        public bool ItIsEnableLoadData
         {
             get
             {
@@ -299,21 +303,20 @@ namespace BP.WF.Template
             }
         }
 
-        public FrmSubFlowSta SFSta
+        /// <summary>
+        /// 是否启用父子流程组件.
+        /// </summary>
+        public bool IsEnableSF
         {
             get
             {
-                return (FrmSubFlowSta)this.GetValIntByKey(FrmNodeAttr.SFSta);
-            }
-            set
-            {
-                this.SetValByKey(FrmNodeAttr.SFSta, (int)value);
+                return this.GetValBooleanByKey(FrmNodeAttr.IsEnableSF);
             }
         }
         /// <summary>
         /// 是否执行1变n
         /// </summary>
-        public bool Is1ToN
+        public bool ItIs1ToN
         {
             get
             {
@@ -327,7 +330,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否默认打开
         /// </summary>
-        public bool IsDefaultOpen
+        public bool ItIsDefaultOpen
         {
             get
             {
@@ -341,7 +344,7 @@ namespace BP.WF.Template
         /// <summary>
         ///节点
         /// </summary>
-        public int FK_Node
+        public int NodeID
         {
             get
             {
@@ -414,7 +417,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否显示
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -493,7 +496,7 @@ namespace BP.WF.Template
         {
             get
             {
-                if (this.FrmEnableRole == FrmEnableRole.WhenHaveFrmPara && this.FK_Frm == "ND" + this.FK_Node)
+                if (this.FrmEnableRole == FrmEnableRole.WhenHaveFrmPara && this.FK_Frm == "ND" + this.NodeID)
                     return "不启用";
 
                 SysEnum se = new SysEnum(FrmNodeAttr.FrmEnableRole, this.FrmEnableRoleInt);
@@ -517,7 +520,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 流程编号
         /// </summary>
-        public string FK_Flow
+        public string FlowNo
         {
             get
             {
@@ -531,7 +534,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以编辑？
         /// </summary>
-        public bool IsEdit
+        public bool ItIsEdit
         {
             get
             {
@@ -543,11 +546,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以编辑？
         /// </summary>
-        public int IsEditInt
+        public int ItIsEditInt
         {
             get
             {
-                if (this.IsEdit)
+                if (this.ItIsEdit)
                     return 1;
                 return 0;
             }
@@ -555,7 +558,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以打印
         /// </summary>
-        public bool IsPrint
+        public bool ItIsPrint
         {
             get
             {
@@ -569,7 +572,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 是否可以打印
         /// </summary>
-        public int IsPrintInt
+        public int ItIsPrintInt
         {
             get
             {
@@ -593,18 +596,18 @@ namespace BP.WF.Template
         /// <summary>
         ///打开时是否关闭其它的页面？
         /// </summary>
-        public bool IsCloseEtcFrm
+        public bool ItIsCloseEtcFrm
         {
             get
             {
                 return this.GetValBooleanByKey(FrmNodeAttr.IsCloseEtcFrm);
             }
         }
-        public int IsCloseEtcFrmInt
+        public int ItIsCloseEtcFrmInt
         {
             get
             {
-                if (this.IsCloseEtcFrm)
+                if (this.ItIsCloseEtcFrm)
                     return 1;
                 return 0;
             }
@@ -657,21 +660,21 @@ namespace BP.WF.Template
         public FrmNode(int fk_node, string fk_frm)
         {
             //设置属性.
-            this.FK_Node = fk_node;
+            this.NodeID = fk_node;
             this.FK_Frm = fk_frm;
 
             int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
 
             if (i == 0)
             {
-                this.IsPrint = false;
+                this.ItIsPrint = false;
                 //不可以编辑.
                 this.FrmSln = FrmSln.Default;
                 Node node = new Node(fk_node);
                 if (node.FrmWorkCheckSta != FrmWorkCheckSta.Disable)
                     this.IsEnableFWC = node.FrmWorkCheckSta;
 
-                this.FK_Flow = node.FK_Flow;
+                this.FlowNo = node.FlowNo;
                 return;
             }
         }
@@ -700,7 +703,9 @@ namespace BP.WF.Template
                 map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
                 map.AddTBInt(FrmNodeAttr.IsCloseEtcFrm, 0, "打开时是否关闭其它的页面？", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableFWC, 0, "是否启用审核组件？", true, false);
-                map.AddTBInt(FrmNodeAttr.SFSta, 0, "是否启用父子流程组件？", true, false);
+                map.AddTBInt(FrmNodeAttr.IsEnableSF, 0, "是否启用审核组件？", true, false);
+
+               // map.AddTBInt(FrmNodeAttr.SFSta, 0, "是否启用父子流程组件？", true, false);
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
@@ -740,25 +745,25 @@ namespace BP.WF.Template
         #region 方法.
         public void DoUp()
         {
-            this.DoOrderUp(FrmNodeAttr.FK_Node, this.FK_Node.ToString(), FrmNodeAttr.Idx);
+            this.DoOrderUp(FrmNodeAttr.FK_Node, this.NodeID.ToString(), FrmNodeAttr.Idx);
         }
         public void DoDown()
         {
-            this.DoOrderDown(FrmNodeAttr.FK_Node, this.FK_Node.ToString(), FrmNodeAttr.Idx);
+            this.DoOrderDown(FrmNodeAttr.FK_Node, this.NodeID.ToString(), FrmNodeAttr.Idx);
         }
         protected override bool beforeUpdateInsertAction()
         {
             if (this.FK_Frm.Length == 0)
                 throw new Exception("@表单编号为空");
 
-            if (this.FK_Node == 0)
+            if (this.NodeID == 0)
                 throw new Exception("@节点ID为空");
 
-            if (this.FK_Flow.Length == 0)
+            if (this.FlowNo.Length == 0)
                 throw new Exception("@流程编号为空");
 
 
-            this.setMyPK(this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow);
+            this.setMyPK(this.FK_Frm + "_" + this.NodeID + "_" + this.FlowNo);
 
             //获取表单的类型
             MapData mapData = new MapData();
@@ -775,7 +780,7 @@ namespace BP.WF.Template
         protected override bool beforeInsert()
         {
             //如果不是开始节点，默认为只读方案.
-            if (this.FK_Node.ToString().EndsWith("01") == false)
+            if (this.NodeID.ToString().EndsWith("01") == false)
                 this.FrmSln =  FrmSln.Readonly;
 
             return base.beforeInsert();
@@ -798,7 +803,7 @@ namespace BP.WF.Template
                 Nodes ens = new Nodes();
                 foreach (FrmNode ns in this)
                 {
-                    ens.AddEntity(new Node(ns.FK_Node));
+                    ens.AddEntity(new Node(ns.NodeID));
                 }
                 return ens;
             }
@@ -901,7 +906,7 @@ namespace BP.WF.Template
             Nodes ens = new Nodes();
             foreach (FrmNode en in this)
             {
-                ens.AddEntity(new Node(en.FK_Node));
+                ens.AddEntity(new Node(en.NodeID));
             }
             return ens;
         }

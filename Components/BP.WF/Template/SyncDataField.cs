@@ -153,7 +153,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 类型
         /// </summary>
-        public bool IsSync
+        public bool ItIsSync
         {
             get
             {

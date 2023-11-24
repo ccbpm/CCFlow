@@ -5,6 +5,7 @@ using BP.DA;
 using BP.En;
 using BP.Sys;
 using BP.Port;
+using BP.Port.WeiXin;
 
 namespace BP.Cloud
 {
@@ -56,6 +57,7 @@ namespace BP.Cloud
         /// </summary>
         public const string unionid = "unionid";
         public const string EmpSta = "EmpSta";
+        public const string OpenID = "OpenID";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -66,7 +68,7 @@ namespace BP.Cloud
         /// <summary>
         /// 该人员是否被禁用.
         /// </summary>
-        public bool IsEnable
+        public bool ItIsEnable
         {
             get
             {
@@ -98,6 +100,17 @@ namespace BP.Cloud
                 this.SetValByKey(EmpAttr.UserID, value);
             }
         }
+        public string OpenID
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.OpenID);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.OpenID, value);
+            }
+        }
         
         /// <summary>
         /// 拼音
@@ -117,7 +130,7 @@ namespace BP.Cloud
         /// <summary>
         /// 部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {
@@ -128,7 +141,7 @@ namespace BP.Cloud
                 this.SetValByKey(EmpAttr.FK_Dept, value);
             }
         }
-        public string FK_DeptText
+        public string DeptText
         {
             get
             {
@@ -297,6 +310,9 @@ namespace BP.Cloud
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", false, false, 0, 1000, 132, false);
                 map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", true, true, 0, 500, 132, false);
 
+                map.AddTBString(EmpAttr.OpenID, null, "微信OpenID", false, false, 0, 200, 36);
+
+
                 //map.AddDDLEntities(EmpAttr.OrgNo, null, "组织", new BP.Cloud.Orgs(), false);
                 //map.AddTBString(EmpAttr.OrgNo, null, "OrgNo", false, false, 0, 36, 36);
                 //map.AddTBString(EmpAttr.OrgName, null, "OrgName", false, false, 0, 36, 36);
@@ -344,12 +360,12 @@ namespace BP.Cloud
         #region 方法执行.
         public string DoEditMainDept()
         {
-            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return "../../../GPM/EmpDeptMainDept.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.DeptNo;
         }
 
         public string DoEditLeader()
         {
-            return "../../../GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.FK_Dept;
+            return "../../../GPM/EmpLeader.htm?FK_Emp=" + this.No + "&FK_Dept=" + this.DeptNo;
         }
 
         public string DoEmpDepts()
@@ -371,8 +387,8 @@ namespace BP.Cloud
             //  this.OrgNo = BP.Web.WebUser.OrgNo;
             ////处理主部门的问题.
             //DeptEmp de = new DeptEmp();
-            //de.FK_Dept = this.FK_Dept;
-            //de.FK_Emp = this.No;
+            //de.DeptNo = this.DeptNo;
+            //de.EmpNo = this.No;
             //de.IsMainDept = true;
             //de.OrgNo = this.OrgNo;
             //de.Save();
@@ -408,8 +424,8 @@ namespace BP.Cloud
             emp.No = this.No;
             if (emp.RetrieveFromDBSources() != 0)
             {
-                emp.FK_Dept = this.FK_Dept;
-                emp.Update();
+                emp.DeptNo = this.DeptNo;
+                emp.DirectUpdate();
             }
 
             base.afterInsertUpdateAction();
@@ -450,7 +466,7 @@ namespace BP.Cloud
         /// </summary>
         public string DoUp()
         {
-            this.DoOrderUp(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+            this.DoOrderUp(EmpAttr.FK_Dept, this.DeptNo, EmpAttr.Idx);
             return "执行成功.";
         }
         /// <summary>
@@ -458,7 +474,7 @@ namespace BP.Cloud
         /// </summary>
         public string DoDown()
         {
-            this.DoOrderDown(EmpAttr.FK_Dept, this.FK_Dept, EmpAttr.Idx);
+            this.DoOrderDown(EmpAttr.FK_Dept, this.DeptNo, EmpAttr.Idx);
             return "执行成功.";
         }
         /// <summary>

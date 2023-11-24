@@ -1,8 +1,0 @@
-﻿
-namespace BP.GPM.DTalk.DDSDK
-{
-    public class TokenResult : ResultPackage
-    {
-        public string Access_token { get; set; }
-    }
-}

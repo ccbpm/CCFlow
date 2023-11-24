@@ -357,7 +357,7 @@ namespace BP.WF.Data
         /// <summary>
         /// 发起人部门
         /// </summary>
-        public string FK_Dept
+        public string DeptNo
         {
             get
             {

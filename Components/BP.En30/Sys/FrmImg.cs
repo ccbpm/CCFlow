@@ -42,7 +42,7 @@ namespace BP.Sys
         /// <summary>
         /// 主表
         /// </summary>
-        public const string FK_MapData = "FK_MapData";
+        public const string FrmID = "FK_MapData";
        
         /// <summary>
         /// URL
@@ -140,7 +140,7 @@ namespace BP.Sys
         /// <summary>
         /// 是否可以编辑
         /// </summary>
-        public int IsEdit
+        public int ItIsEdit
         {
             get
             {
@@ -255,21 +255,18 @@ namespace BP.Sys
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
-                return this.GetValStrByKey(FrmImgAttr.FK_MapData);
+                return this.GetValStrByKey(FrmImgAttr.FrmID);
             }
             set
             {
-                this.SetValByKey(FrmImgAttr.FK_MapData, value);
+                this.SetValByKey(FrmImgAttr.FrmID, value);
             }
         }
-        public void setFK_MapData(string val)
-        {
-            this.SetValByKey(FrmImgAttr.FK_MapData, val);
-        }
+       
         public float UIWidth
         {
             get
@@ -323,11 +320,11 @@ namespace BP.Sys
                 if (this._enMap != null)
                     return this._enMap;
                 Map map = new Map("Sys_FrmImg", "图片");
-                map.IndexField = FrmImgAttr.FK_MapData; 
+                map.IndexField = FrmImgAttr.FrmID; 
 
                 map.AddMyPK();
 
-                map.AddTBString(FrmImgAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
+                map.AddTBString(FrmImgAttr.FrmID, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "对应字段", true, false, 1, 100, 20);
 
                 map.AddTBInt(FrmImgAttr.ImgAppType, 0, "应用类型", false, false);
@@ -368,7 +365,7 @@ namespace BP.Sys
         protected override bool beforeInsert()
         {
             if(DataType.IsNullOrEmpty(this.KeyOfEn) == false)
-                this.setMyPK(this.FK_MapData + "_" + this.KeyOfEn );
+                this.setMyPK(this.FrmID + "_" + this.KeyOfEn );
             return base.beforeInsert();
         }
 

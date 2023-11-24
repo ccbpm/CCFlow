@@ -33,7 +33,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {
@@ -61,7 +61,7 @@ namespace BP.CCFast.CCMenu
         /// <summary>
         /// 是否选中
         /// </summary>
-        public bool IsChecked
+        public bool ItIsChecked
         {
             get
             {
@@ -110,7 +110,7 @@ namespace BP.CCFast.CCMenu
         protected override bool beforeInsert()
         {
             //@wwh,代码转换.
-            this.MyPK = this.FK_Menu + "_" + this.FK_Emp;
+            this.MyPK = this.FK_Menu + "_" + this.EmpNo;
             return base.beforeInsert();
         }
     }

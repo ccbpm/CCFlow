@@ -100,7 +100,7 @@ namespace BP.En
         /// <summary>
         /// 是否隐藏
         /// </summary>
-        public bool IsHidden
+        public bool ItIsHidden
         {
             get
             {
@@ -185,19 +185,19 @@ namespace BP.En
                         return _DefaultVal.Replace("@WebUser.Name", WebUser.Name);
 
                     if (_DefaultVal.Contains("@WebUser.FK_Dept"))
-                        return _DefaultVal.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                        return _DefaultVal.Replace("@WebUser.FK_Dept", WebUser.DeptNo);
 
                     if (_DefaultVal.Contains("@WebUser.DeptParentNo"))
                         return _DefaultVal.Replace("@WebUser.DeptParentNo", WebUser.DeptParentNo);
 
                     if (_DefaultVal.Contains("@WebUser.FK_DeptName"))
-                        return _DefaultVal.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+                        return _DefaultVal.Replace("@WebUser.FK_DeptName", WebUser.DeptName);
 
                     if (_DefaultVal.Contains("@WebUser.OrgNo"))
                         return _DefaultVal.Replace("@WebUser.OrgNo", WebUser.OrgNo);
 
                     if (_DefaultVal.Contains("@WebUser.FK_DeptNameOfFull"))
-                        return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+                        return _DefaultVal.Replace("@WebUser.FK_DeptNameOfFull", WebUser.DeptNameOfFull);
 
                     // 处理传递过来的参数。
                     //foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
@@ -309,7 +309,7 @@ namespace BP.En
             this.DefaultSymbol = DefaultSymbol;
             this.DefaultVal = defaultValue;
             this.TBWidth = tbwidth;
-            this.IsHidden = isHidden;
+            this.ItIsHidden = isHidden;
         }
         #endregion
     }

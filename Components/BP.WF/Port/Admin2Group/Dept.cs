@@ -135,13 +135,13 @@ namespace BP.WF.Port.Admin2Group
                 return "err@用户编号错误:" + adminer;
 
             //如果指定的人员.
-            if (emp.FK_Dept.Equals(this.No) == false) {
+            if (emp.DeptNo.Equals(this.No) == false) {
                 Depts depts = new Depts();
                 depts.Retrieve(DeptAttr.ParentNo, this.No);
                 bool isHave = false;
                 foreach (Dept dept in depts)
                 {
-                    if (emp.FK_Dept.Equals(dept.No))
+                    if (emp.DeptNo.Equals(dept.No))
                     {
                         isHave = true;
                         break;
@@ -174,7 +174,7 @@ namespace BP.WF.Port.Admin2Group
 
             //增加到管理员.
             OrgAdminer oa = new OrgAdminer();
-            oa.FK_Emp = emp.UserID;
+            oa.EmpNo = emp.UserID;
             oa.OrgNo = this.No;
             oa.Insert();
 
@@ -292,9 +292,9 @@ namespace BP.WF.Port.Admin2Group
                 return base.RetrieveAll();
 
             QueryObject qo = new QueryObject(this);
-            qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.FK_Dept);
+            qo.AddWhere(DeptAttr.No, " = ", BP.Web.WebUser.DeptNo);
             qo.addOr();
-            qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.FK_Dept);
+            qo.AddWhere(DeptAttr.ParentNo, " = ", BP.Web.WebUser.DeptNo);
             return qo.DoQuery();
         }
         /// <summary>

@@ -68,16 +68,16 @@ namespace BP.WF.DTS
                     gwl.WorkID = workid;
                     string[] empStrs = str.Split(',');
 
-                    gwl.FK_Emp = empStrs[0];
-                    gwl.FK_Node = gwf.FK_Node;
+                    gwl.EmpNo = empStrs[0];
+                    gwl.NodeID = gwf.NodeID;
                     if (empStrs.Length == 2)
-                        gwl.FK_EmpText = empStrs[1];
-                    gwl.FK_Flow = gwf.FK_Flow;
+                        gwl.EmpName= empStrs[1];
+                    gwl.FlowNo = gwf.FlowNo;
                     gwl.RDT = gwf.SDTOfNode;
                     gwl.CDT = gwf.SDTOfNode;
-                    gwl.IsEnable = true;
-                    gwl.IsRead = false;
-                    gwl.IsPass = false;
+                    gwl.ItIsEnable = true;
+                    gwl.ItIsRead = false;
+                    gwl.ItIsPass = false;
                     gwl.WhoExeIt = 0;
                     gwl.Save();
                 }
@@ -99,7 +99,7 @@ namespace BP.WF.DTS
 
                 GenerWorkFlow gwf = new GenerWorkFlow(workid);
                 GenerWorkerLists gwls = new GenerWorkerLists(workid);
-                gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.NodeID);
                 if (gwls.Count == 1)
                 {
                     if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianing)

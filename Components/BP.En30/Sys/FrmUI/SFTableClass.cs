@@ -74,7 +74,7 @@ namespace BP.Sys.FrmUI
                 rm.Title = "查看数据";
                 rm.ClassMethodName = this.ToString() + ".DoEdit";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.IsForEns = false;
+                rm.ItIsForEns = false;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -97,7 +97,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         protected override bool beforeDelete()
         {
-            BP.Sys.SFTable sf = new Sys.SFTable(this.No);
+            BP.Sys.SFTable sf = new BP.Sys.SFTable(this.No);
             sf.Delete();
             return base.beforeDelete();
         }

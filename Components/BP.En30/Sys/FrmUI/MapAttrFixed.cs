@@ -17,7 +17,7 @@ namespace BP.Sys.FrmUI
         /// <summary>
         /// 表单ID
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -143,7 +143,7 @@ namespace BP.Sys.FrmUI
             attr.RetrieveFromDBSources();
 
             //强制设置为评论组件.
-            this.SetValByKey(MapAttrAttr.UIContralType,(int)UIContralType.Fixed);
+            this.SetValByKey(MapAttrAttr.UIContralType,(int)UIContralType.Location);
 
             if (this.GetValStrByKey("GroupID").Equals("无")==true)
                 this.SetValByKey("GroupID", "0");
@@ -159,22 +159,22 @@ namespace BP.Sys.FrmUI
         protected override void afterDelete()
         {
             //删除经度纬度的字段
-            MapAttr mapAttr = new MapAttr(this.FK_MapData + "_JD");
+            MapAttr mapAttr = new MapAttr(this.FrmID + "_JD");
             mapAttr.Delete();
 
-            mapAttr = new MapAttr(this.FK_MapData + "_WD");
+            mapAttr = new MapAttr(this.FrmID + "_WD");
             mapAttr.Delete();
 
             //删除相对应的rpt表中的字段
-            if (this.FK_MapData.Contains("ND") == true)
+            if (this.FrmID.Contains("ND") == true)
             {
-                string fk_mapData = this.FK_MapData.Substring(0, this.FK_MapData.Length - 2) + "Rpt";
+                string fk_mapData = this.FrmID.Substring(0, this.FrmID.Length - 2) + "Rpt";
                 string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapData + "' AND( KeyOfEn='" + this.KeyOfEn +"' OR KeyOfEn='JD' OR KeyOfEn='WD')";
                 DBAccess.RunSQL(sql);
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterDelete();
         }
@@ -189,10 +189,10 @@ namespace BP.Sys.FrmUI
 
             //判断表单中是否存在经度、维度字段
             mapAttr = new MapAttr();
-            mapAttr.setMyPK(this.FK_MapData + "_" + "JD");
+            mapAttr.setMyPK(this.FrmID + "_" + "JD");
             if (mapAttr.RetrieveFromDBSources() == 0)
             {
-                mapAttr.setFK_MapData(this.FK_MapData);
+                mapAttr.FrmID =this.FrmID;
                 mapAttr.setKeyOfEn("JD");
                 mapAttr.setName("经度");
                 mapAttr.GroupID = 1;
@@ -207,10 +207,10 @@ namespace BP.Sys.FrmUI
                 mapAttr.Insert(); //插入字段.
             }
 
-            mapAttr.setMyPK(this.FK_MapData + "_" + "WD");
+            mapAttr.setMyPK(this.FrmID + "_" + "WD");
             if (mapAttr.RetrieveFromDBSources() == 0)
             {
-                mapAttr.setFK_MapData(this.FK_MapData);
+                mapAttr.FrmID =this.FrmID;
                 mapAttr.setKeyOfEn("WD");
                 mapAttr.setName("纬度");
                 mapAttr.GroupID = 1;
@@ -226,7 +226,7 @@ namespace BP.Sys.FrmUI
             }
 
             //调用frmEditAction, 完成其他的操作.
-            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FK_MapData);
+            BP.Sys.CCFormAPI.AfterFrmEditAction(this.FrmID);
 
             base.afterInsertUpdateAction();
         }

@@ -139,7 +139,7 @@ namespace BP.Sys
         /// <summary>
         /// FK_MapData
         /// </summary>
-        public string FK_MapData
+        public string FrmID
         {
             get
             {
@@ -231,13 +231,13 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            //this.setMyPK(this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal;
+            //this.setMyPK(this.FrmID + "_" + this.EleID + "_" + this.RefPKVal;
            // this.GenerPKVal();
             return base.beforeUpdateInsertAction();
         }
         public void GenerPKVal()
         {
-            this.setMyPK(this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal);
+            this.setMyPK(this.FrmID + "_" + this.EleID + "_" + this.RefPKVal);
         }
     }
     /// <summary>
@@ -267,10 +267,10 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public FrmEleDBs(string fk_mapdata)
         {
-            if (BP.Difference.SystemConfig.IsDebug)
+            if (BP.Difference.SystemConfig.isDebug)
                 this.Retrieve(MapAttrAttr.FK_MapData, fk_mapdata);
             else
-                this.RetrieveFromCash(MapAttrAttr.FK_MapData, (object)fk_mapdata);
+                this.RetrieveFromCache(MapAttrAttr.FK_MapData, (object)fk_mapdata);
         }
 
         public void SaveFrmEleDBs(string fk_mapdata,string eleID,string refPKVal,string paras)
@@ -284,7 +284,7 @@ namespace BP.Sys
                 string[] vals = str.Split(',');
                 frmEleDB =new FrmEleDB();
                 frmEleDB.setMyPK(eleID + "_" + refPKVal + "_" + vals[0]);
-                frmEleDB.setFK_MapData(fk_mapdata);
+                frmEleDB.FrmID =fk_mapdata;
                 frmEleDB.EleID = eleID;
                 frmEleDB.RefPKVal = refPKVal;
                 frmEleDB.Tag1 = vals[0];

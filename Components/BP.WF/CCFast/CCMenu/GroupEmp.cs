@@ -23,7 +23,7 @@ namespace BP.CCFast.CCMenu
     public class GroupEmp : EntityMM
     {
         #region 属性
-        public string FK_Emp
+        public string EmpNo
         {
             get
             {

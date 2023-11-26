@@ -276,33 +276,6 @@ namespace BP.WF
         JFlow
     }
     /// <summary>
-    /// 短消息写入规则（当系统产生短消息的时候，需要写入的方式。）
-    /// </summary>
-    public enum ShortMessageWriteTo
-    {
-        /// <summary>
-        /// 写入Sys_SMS表
-        /// </summary>
-        ToSMSTable = 0,
-        /// <summary>
-        /// 写入WebServices.
-        /// WS地址: \DataUser\PortalInterface.asmx 的 WriteShortMessage
-        /// </summary>
-        ToWebservices = 1,
-        /// <summary>
-        /// 写入丁丁
-        /// </summary>
-        ToDingDing = 2,
-        /// <summary>
-        /// 写入微信.
-        /// </summary>
-        ToWeiXin = 3,
-        /// <summary>
-        /// 写入CCIM
-        /// </summary>
-        CCIM = 4
-    }
-    /// <summary>
     /// 加签模式
     /// </summary>
     public enum AskforHelpSta

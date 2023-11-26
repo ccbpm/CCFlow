@@ -886,6 +886,8 @@ namespace BP.Sys
                 // 也可以用于 字段之间的计算 优先级.
                 map.AddTBInt(MapExtAttr.PRI, 0, "PRI/顺序号", false, false);
                 map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 3999, 20);
+                //@hongyan.
+                map.AddTBString("RefPKVal", null, "RefPKVal", true, false, 0, 100, 20);
 
                 this._enMap = map;
                 return this._enMap;

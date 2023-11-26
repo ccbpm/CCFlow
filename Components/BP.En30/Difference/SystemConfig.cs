@@ -201,6 +201,60 @@ namespace BP.Difference
             #endregion
         }
 
+        #region 消息启用配置.
+        /// <summary>
+        /// 写入SMS表?
+        /// </summary>
+        public static bool MessageIsEnableSMS
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyBoolen("MessageIsEnableSMS", false);
+            }
+        }
+        /// <summary>
+        /// 写入邮件?
+        /// </summary>
+        public static bool MessageIsEnableEmail
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyBoolen("MessageIsEnableEmail", false);
+            }
+        }
+        /// <summary>
+        /// 写入钉钉?
+        /// </summary>
+        public static bool MessageIsEnableDingDing
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyBoolen("MessageIsEnableDingDing", false);
+            }
+        }
+        /// <summary>
+        /// 写入微信?
+        /// </summary>
+        public static bool MessageIsEnableWeiXin
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyBoolen("MessageIsEnableWeiXin", false);
+            }
+        }
+        /// <summary>
+        /// 写入webservices?
+        /// </summary>
+        public static bool MessageIsEnableSelf
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyBoolen("MessageIsEnableSelf", false);
+            }
+        }
+        #endregion 消息启用配置.
+
+
         #region 用户配置信息
         /// <summary>
         /// 运行模式

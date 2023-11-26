@@ -669,6 +669,7 @@ namespace BP.WF.HttpHandler
                 string str = this.GetRequestVal("FK_Flow");
                 if (str == null)
                     str = this.GetRequestVal("FlowNo");
+
                 if (str == null || str == "" || str == "null")
                     return null;
                 if (DataType.IsNumStr(str) == false)

@@ -236,16 +236,7 @@ namespace BP.WF
             }
         }
 
-        /// <summary>
-        /// 短消息写入类型
-        /// </summary>
-        public static ShortMessageWriteTo ShortMessageWriteTo
-        {
-            get
-            {
-                return (ShortMessageWriteTo)SystemConfig.GetValByKeyInt("ShortMessageWriteTo", 0);
-            }
-        }
+    
         /// <summary>
         /// 当前选择的流程.
         /// </summary>
@@ -269,6 +260,8 @@ namespace BP.WF
         /// </summary>
         public static Plant Plant = WF.Plant.CCFlow;
         #endregion 公共属性.
+
+
 
         /// <summary>
         /// CCBPMRunModel

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8E48D1DF-CEED-4F0C-B863-3359B2A99134}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BP.Demo</RootNamespace>
+    <AssemblyName>BP.Demo</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Demo\BPFramework\School.cs" />
+    <Compile Include="Demo\BPFramework\BPUser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Demo\BPFramework\EmpCent.cs" />
+    <Compile Include="Demo\BPFramework\BanJi.cs" />
+    <Compile Include="Demo\BPFramework\StudentKeMu.cs" />
+    <Compile Include="Demo\BPFramework\Student.cs" />
+    <Compile Include="Demo\BPFramework\KeMu.cs" />
+    <Compile Include="Demo\BuessUnit\BuessUnitDemo.cs" />
+    <Compile Include="Demo\CN\City.cs" />
+    <Compile Include="Demo\CN\PQ.cs" />
+    <Compile Include="Demo\CN\SF.cs" />
+    <Compile Include="Demo\FlowEvent\F001.cs" />
+    <Compile Include="Demo\FlowEvent\F025.cs" />
+    <Compile Include="Demo\FlowEvent\F104.cs" />
+    <Compile Include="Demo\FlowEvent\FEETemplete.cs" />
+    <Compile Include="Demo\FlowEvent\NE101.cs" />
+    <Compile Include="Demo\Emp.cs" />
+    <Compile Include="Demo\FlowEvent\F189.cs" />
+    <Compile Include="Demo\FormEventDtl\Demo_TastCaseEventFrmDtl2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Demo\FormEvent\FromEvent_Demo_01.cs" />
+    <Compile Include="Demo\FormEvent\CCFrm_ZhuBiaoShiJianCeShi.cs" />
+    <Compile Include="Demo\License\License.cs" />
+    <Compile Include="Demo\License\People.cs" />
+    <Compile Include="HandlerInterfaceAPI.cs" />
+    <Compile Include="ImplementCode\GenerFrmHelpLink.cs" />
+    <Compile Include="Rpt\RptStudent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Demo\BPFramework\Resume.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Demo\SDK\ND018Rpt.cs" />
+    <Compile Include="Demo\SDK\ND112Rpt.cs" />
+    <Compile Include="Demo\SDK\QingJia.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">
+      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
+      <Name>BP.En30</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
+      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
+      <Name>BP.WF</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Demo\BPFramework\Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Demo\CRM\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

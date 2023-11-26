@@ -3793,6 +3793,7 @@ namespace BP.WF.HttpHandler
             en.MyPK = this.MyPK;
 
             //流程信息.
+            en.SetValByKey(WorkOptAttr.StartRDT, gwf.RDT);
             en.SetValByKey(WorkOptAttr.SendRDT, gwf.SendDT);
             en.SetValByKey(WorkOptAttr.SendSDT, gwf.SDTOfNode);
             en.SetValByKey(WorkOptAttr.SenderName, gwf.Sender);

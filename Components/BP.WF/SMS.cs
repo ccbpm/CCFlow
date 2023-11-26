@@ -4,6 +4,7 @@ using BP.En;
 using BP.Web;
 using BP.Sys;
 using System.Net.Mail;
+using BP.Difference;
 
 namespace BP.WF
 {
@@ -544,7 +545,7 @@ namespace BP.WF
 
                 //map.ItIsShowSearchKey = false;
                 //map.SearchFields="Tel,Addr,"
-             
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -565,14 +566,14 @@ namespace BP.WF
                 System.Net.Mail.MailMessage myEmail = new System.Net.Mail.MailMessage();
 
                 //邮件地址.
-                string emailAddr =  BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
+                string emailAddr = BP.Difference.SystemConfig.GetValByKey("SendEmailAddress", null);
                 if (emailAddr == null)
                 {
                     return false;
                     //emailAddr = "ccbpmtester@tom.com";
                 }
 
-                string emailPassword =  BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
+                string emailPassword = BP.Difference.SystemConfig.GetValByKey("SendEmailPass", null);
                 if (emailPassword == null)
                 {
                     return false;
@@ -581,7 +582,7 @@ namespace BP.WF
 
                 mailDoc = DataType.ParseText2Html(mailDoc);
 
-                string displayName =  BP.Difference.SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
+                string displayName = BP.Difference.SystemConfig.GetValByKey("SendEmailDisplayName", "驰骋BPM");
                 myEmail.From = new System.Net.Mail.MailAddress(emailAddr, displayName, System.Text.Encoding.UTF8);
 
                 myEmail.To.Add(mail);
@@ -601,14 +602,14 @@ namespace BP.WF
                     client.EnableSsl = false;
 
                 client.Credentials = new System.Net.NetworkCredential(emailAddr, emailPassword);
-                client.Port =  BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
-                client.Host =  BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
+                client.Port = BP.Difference.SystemConfig.GetValByKeyInt("SendEmailPort", 587); //使用的端口
+                client.Host = BP.Difference.SystemConfig.GetValByKey("SendEmailHost", "smtp.gmail.com");
 
                 object userState = myEmail;
                 //调用自带的异步方法
                 client.Send(myEmail);
-               /* client.SendMailAsync(myEmail);
-                client.SendAsync(myEmail, userState);*/
+                /* client.SendMailAsync(myEmail);
+                 client.SendAsync(myEmail, userState);*/
             }
             catch (Exception e)
             {
@@ -623,7 +624,7 @@ namespace BP.WF
         public void SendMsgToSAAS()
         {
             //获取设置.
-            string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
+            string messageUrl = BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
             if (DataType.IsNullOrEmpty(messageUrl) == true)
                 return;
 
@@ -662,7 +663,7 @@ namespace BP.WF
             //微信
             {
                 //注册到url里面去.
-                BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
+                BP.Tools.PubGlo.HttpPostConnect(httpUrl, json, "POST", true);
             }
         }
         /// <summary>
@@ -678,100 +679,31 @@ namespace BP.WF
                     SendMsgToSAAS();
                     return;
                 }
-
-                //if (BP.Difference.SystemConfig.CustomerNo.Equals("YuTong") == true)
-                //{
-                //    DealYuTong();
-                //    return;
-                //}
-
                 if (this.HisEmailSta != MsgSta.UnRun)
                     return;
 
-                #region 发送邮件
-                if (this.PushModel.Contains("Email") == true && DataType.IsNullOrEmpty(this.Email) == false)
-                {
-                    string emailStrs = this.Email;
-                    emailStrs = emailStrs.Replace(",", ";");
-                    emailStrs = emailStrs.Replace("，", ";");
+                //根据全局配置文件来判断,消息的写入方式.
+                // 发送邮件
+                if (SystemConfig.MessageIsEnableEmail == true)
+                    BP.WF.OverrideEvent.SendToEmail(this);
 
-                    //包含多个邮箱
-                    if (emailStrs.Contains(";") == true)
-                    {
-                        string[] emails = emailStrs.Split(';');
-                        foreach (string email in emails)
-                        {
-                            if (DataType.IsNullOrEmpty(email) == true)
-                                continue;
-                            SendEmailNowAsync(email, this.Title, this.DocOfEmail);
-                        }
-                    }
-                    else
-                    {   //单个邮箱
-                        SendEmailNowAsync(this.Email, this.Title, this.DocOfEmail);
-                    }
-                }
-                #endregion 发送邮件
+                // 发送钉钉.
+                if (BP.Difference.SystemConfig.MessageIsEnableDingDing == true)
+                    BP.WF.OverrideEvent.SendToDingDing(this);
 
-                #region 发送短消息 调用接口
-                string messageUrl =  BP.Difference.SystemConfig.AppSettings["HandlerOfMessage"];
-                if (DataType.IsNullOrEmpty(messageUrl) == true)
-                    return;
+                // 发送微信.
+                if (BP.Difference.SystemConfig.MessageIsEnableWeiXin == true)
+                    BP.WF.OverrideEvent.SendToWeiXin(this);
 
-                string httpUrl = "";
-
-                string json = "{";
-                json += " \"sender\": \"" + WebUser.No + "\",";
-                json += " \"sendTo\": \"" + this.SendToEmpNo + "\",";
-                json += " \"tel\": \"" + this.Mobile + "\",";
-                json += " \"title\":\"" + this.Title + "\",";
-                json += " \"msgFlag\":\"" + this.MsgFlag.Replace("WKAlt", "") + "\",";
-                json += " \"content\":\"" + this.MobileInfo + " \",";
-                json += " \"openUrl\":\"" + this.OpenURL + " \"}";
-
-                //soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                //站内消息
-                if (this.PushModel.Contains("CCMsg") == true)
-                {
-                    httpUrl = messageUrl + "?DoType=SendToCCMSG";
-                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
-                    //soap.SendToCCMSG(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
-                }
-                //短信
-                if (this.PushModel.Contains("SMS") == true)
-                {
-                    httpUrl = messageUrl + "?DoType=SMS";
-                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
-                    //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,this.Title, this.OpenURL);
-                }
-                //钉钉
-                if (this.PushModel.Contains("DingDing") == true)
-                {
-                    httpUrl = messageUrl + "?DoType=SendToDingDing&sendTo=" + this.SendToEmpNo + "&title=" + this.Title + "&msgConten=" + this.MobileInfo;
-                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
-                    //soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
-                }
-
-                //微信
-                if (this.PushModel.Contains("WeiXin") == true)
-                {
-                    httpUrl = messageUrl + "?DoType=SendToWeiXin&sendTo=" + this.SendToEmpNo;
-                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
-                    //BP.WF.WeiXin.WeiXinMessage.SendMsgToUsers(this.SendToEmpNo, this.Title, this.Doc, WebUser.No);
-                }
-                //WebService
-                if (this.PushModel.Contains("WS") == true)
-                {
-                    httpUrl = messageUrl + "?DoType=SendToWebServices";
-                    BP.Tools.PubGlo.HttpPostConnect(httpUrl, json,"POST",true);
-                    //soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, this.Title, this.OpenURL);
-                }
-                #endregion 发送短消息 调用接口
+                // 发送自定义url.
+                if (BP.Difference.SystemConfig.MessageIsEnableSelf == true)
+                    BP.WF.OverrideEvent.MessageIsEnableSelf(this);
             }
             catch (Exception ex)
             {
                 BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
+
             base.afterInsert();
         }
         /// <summary>

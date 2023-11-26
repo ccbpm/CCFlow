@@ -8,6 +8,7 @@ using BP.DA;
 using BP.Web;
 using BP.Sys;
 using BP.WF.Template;
+using Aliyun.OSS;
 
 namespace BP.CCBill
 {

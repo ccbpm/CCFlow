@@ -1,1 +1,0 @@
-start cmd /k "pnpm install && pnpm run dev"

@@ -14,6 +14,7 @@ using BP.Difference;
 using BP.CCBill.Template;
 using LitJson;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace BP.CCBill
 {
@@ -332,18 +333,14 @@ namespace BP.CCBill
         public string DealException(Exception ex, string sql)
         {
             string errmsg = "";
-            // 使用正则表达式匹配字符串
-            Regex regex = new Regex("");
-
+            string exMessage = ex.Message.ToLower();
             //字段不存在的异常
-            regex = new Regex(@"unknown column '(.+)' in 'field list'");
-            if (ex.Message != null && regex.IsMatch(ex.Message.ToLower()))
+            if (exMessage != null && (exMessage.Contains("does not exist") || exMessage.Contains("unknown column")))
             {
                 errmsg = "err@执行失败，物理表的字段不存在，请创建字段.";
             }
             //表不存在的异常
-            regex = new Regex(@"table '(.+)' doesn't exist");
-            if (ex.Message != null && regex.IsMatch(ex.Message.ToLower()))
+            if (exMessage != null && (exMessage.Contains("doesn't exist")))
             {
                 errmsg = "err@执行失败，物理表不存在，请您创建物理表或者表名配置错误.";
             }
@@ -523,9 +520,10 @@ namespace BP.CCBill
             }
             #endregion 开始执行SQLs.
 
-            BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, workID, "执行方法", func.Name);
+            //无法执行到这里
+            //BP.CCBill.Dev2Interface.Dict_AddTrack(this.FrmID, workID, "执行方法", func.Name);
 
-            return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
+            //return "err@" + func.MethodDocTypeOfFunc + ",执行的类型没有解析.";
         }
         /// <summary>
         /// 执行url.

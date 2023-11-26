@@ -1,0 +1,1399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="CheckUserNoPassWord">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckUserNoPassWordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CheckUserNoPassWordResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDept">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="deptNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDepts">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetDeptsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptsByParentNo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parentDeptNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptsByParentNoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptsByParentNoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStations">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetStationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStationsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="stationNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStationResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmps">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetEmpsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEmpsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpsByDeptNo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="deptNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpsByDeptNoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEmpsByDeptNoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="no" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEmpResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptEmp">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetDeptEmpResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptEmpResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpHisDepts">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="empNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpHisDeptsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEmpHisDeptsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpHisStations">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="empNo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetEmpHisStationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetEmpHisStationsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDeptEmpStations">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetDeptEmpStationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDeptEmpStationsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsByStations">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="stationNos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsByStationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenerEmpsByStationsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsByDepts">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="deptNos" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsByDeptsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenerEmpsByDeptsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsBySpecDeptAndStats">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="deptNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="stations" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GenerEmpsBySpecDeptAndStatsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenerEmpsBySpecDeptAndStatsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="int" type="s:int" />
+      <s:element name="DataTable" nillable="true">
+        <s:complexType>
+          <s:sequence>
+            <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+            <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CheckUserNoPassWordSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckUserNoPassWord" />
+  </wsdl:message>
+  <wsdl:message name="CheckUserNoPassWordSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckUserNoPassWordResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDept" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDepts" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDeptsByParentNo" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptsByParentNoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStations" />
+  </wsdl:message>
+  <wsdl:message name="GetStationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStationSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStation" />
+  </wsdl:message>
+  <wsdl:message name="GetStationSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEmps" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEmpsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEmpsByDeptNo" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEmpsByDeptNoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEmp" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEmpResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDeptEmp" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptEmpResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEmpHisDepts" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEmpHisDeptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetEmpHisStations" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetEmpHisStationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpStationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDeptEmpStations" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpStationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDeptEmpStationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GenerEmpsByStations" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GenerEmpsByStationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsSoapIn">
+    <wsdl:part name="parameters" element="tns:GenerEmpsByDepts" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsSoapOut">
+    <wsdl:part name="parameters" element="tns:GenerEmpsByDeptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsSoapIn">
+    <wsdl:part name="parameters" element="tns:GenerEmpsBySpecDeptAndStats" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsSoapOut">
+    <wsdl:part name="parameters" element="tns:GenerEmpsBySpecDeptAndStatsResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckUserNoPassWordHttpGetIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CheckUserNoPassWordHttpGetOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptHttpGetIn">
+    <wsdl:part name="deptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsHttpGetIn" />
+  <wsdl:message name="GetDeptsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoHttpGetIn">
+    <wsdl:part name="parentDeptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetStationsHttpGetIn" />
+  <wsdl:message name="GetStationsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetStationHttpGetIn">
+    <wsdl:part name="stationNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetStationHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsHttpGetIn" />
+  <wsdl:message name="GetEmpsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoHttpGetIn">
+    <wsdl:part name="deptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHttpGetIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpHttpGetIn" />
+  <wsdl:message name="GetDeptEmpHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsHttpGetIn">
+    <wsdl:part name="empNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsHttpGetIn">
+    <wsdl:part name="empNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpStationsHttpGetIn" />
+  <wsdl:message name="GetDeptEmpStationsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsHttpGetIn">
+    <wsdl:part name="stationNos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsHttpGetIn">
+    <wsdl:part name="deptNos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpGetIn">
+    <wsdl:part name="deptNo" type="s:string" />
+    <wsdl:part name="stations" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="CheckUserNoPassWordHttpPostIn">
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CheckUserNoPassWordHttpPostOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptHttpPostIn">
+    <wsdl:part name="deptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsHttpPostIn" />
+  <wsdl:message name="GetDeptsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoHttpPostIn">
+    <wsdl:part name="parentDeptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptsByParentNoHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetStationsHttpPostIn" />
+  <wsdl:message name="GetStationsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetStationHttpPostIn">
+    <wsdl:part name="stationNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetStationHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsHttpPostIn" />
+  <wsdl:message name="GetEmpsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoHttpPostIn">
+    <wsdl:part name="deptNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpsByDeptNoHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHttpPostIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpHttpPostIn" />
+  <wsdl:message name="GetDeptEmpHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsHttpPostIn">
+    <wsdl:part name="empNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisDeptsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsHttpPostIn">
+    <wsdl:part name="empNo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetEmpHisStationsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDeptEmpStationsHttpPostIn" />
+  <wsdl:message name="GetDeptEmpStationsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsHttpPostIn">
+    <wsdl:part name="stationNos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByStationsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsHttpPostIn">
+    <wsdl:part name="deptNos" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsByDeptsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpPostIn">
+    <wsdl:part name="deptNo" type="s:string" />
+    <wsdl:part name="stations" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:portType name="PortalInterfaceSoap">
+    <wsdl:operation name="CheckUserNoPassWord">
+      <wsdl:input message="tns:CheckUserNoPassWordSoapIn" />
+      <wsdl:output message="tns:CheckUserNoPassWordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <wsdl:input message="tns:GetDeptSoapIn" />
+      <wsdl:output message="tns:GetDeptSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <wsdl:input message="tns:GetDeptsSoapIn" />
+      <wsdl:output message="tns:GetDeptsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <wsdl:input message="tns:GetDeptsByParentNoSoapIn" />
+      <wsdl:output message="tns:GetDeptsByParentNoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <wsdl:input message="tns:GetStationsSoapIn" />
+      <wsdl:output message="tns:GetStationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <wsdl:input message="tns:GetStationSoapIn" />
+      <wsdl:output message="tns:GetStationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <wsdl:input message="tns:GetEmpsSoapIn" />
+      <wsdl:output message="tns:GetEmpsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <wsdl:input message="tns:GetEmpsByDeptNoSoapIn" />
+      <wsdl:output message="tns:GetEmpsByDeptNoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <wsdl:input message="tns:GetEmpSoapIn" />
+      <wsdl:output message="tns:GetEmpSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <wsdl:input message="tns:GetDeptEmpSoapIn" />
+      <wsdl:output message="tns:GetDeptEmpSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <wsdl:input message="tns:GetEmpHisDeptsSoapIn" />
+      <wsdl:output message="tns:GetEmpHisDeptsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <wsdl:input message="tns:GetEmpHisStationsSoapIn" />
+      <wsdl:output message="tns:GetEmpHisStationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <wsdl:input message="tns:GetDeptEmpStationsSoapIn" />
+      <wsdl:output message="tns:GetDeptEmpStationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <wsdl:input message="tns:GenerEmpsByStationsSoapIn" />
+      <wsdl:output message="tns:GenerEmpsByStationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <wsdl:input message="tns:GenerEmpsByDeptsSoapIn" />
+      <wsdl:output message="tns:GenerEmpsByDeptsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsSoapIn" />
+      <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PortalInterfaceHttpGet">
+    <wsdl:operation name="CheckUserNoPassWord">
+      <wsdl:input message="tns:CheckUserNoPassWordHttpGetIn" />
+      <wsdl:output message="tns:CheckUserNoPassWordHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <wsdl:input message="tns:GetDeptHttpGetIn" />
+      <wsdl:output message="tns:GetDeptHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <wsdl:input message="tns:GetDeptsHttpGetIn" />
+      <wsdl:output message="tns:GetDeptsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <wsdl:input message="tns:GetDeptsByParentNoHttpGetIn" />
+      <wsdl:output message="tns:GetDeptsByParentNoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <wsdl:input message="tns:GetStationsHttpGetIn" />
+      <wsdl:output message="tns:GetStationsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <wsdl:input message="tns:GetStationHttpGetIn" />
+      <wsdl:output message="tns:GetStationHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <wsdl:input message="tns:GetEmpsHttpGetIn" />
+      <wsdl:output message="tns:GetEmpsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <wsdl:input message="tns:GetEmpsByDeptNoHttpGetIn" />
+      <wsdl:output message="tns:GetEmpsByDeptNoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <wsdl:input message="tns:GetEmpHttpGetIn" />
+      <wsdl:output message="tns:GetEmpHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <wsdl:input message="tns:GetDeptEmpHttpGetIn" />
+      <wsdl:output message="tns:GetDeptEmpHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <wsdl:input message="tns:GetEmpHisDeptsHttpGetIn" />
+      <wsdl:output message="tns:GetEmpHisDeptsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <wsdl:input message="tns:GetEmpHisStationsHttpGetIn" />
+      <wsdl:output message="tns:GetEmpHisStationsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <wsdl:input message="tns:GetDeptEmpStationsHttpGetIn" />
+      <wsdl:output message="tns:GetDeptEmpStationsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <wsdl:input message="tns:GenerEmpsByStationsHttpGetIn" />
+      <wsdl:output message="tns:GenerEmpsByStationsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <wsdl:input message="tns:GenerEmpsByDeptsHttpGetIn" />
+      <wsdl:output message="tns:GenerEmpsByDeptsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsHttpGetIn" />
+      <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PortalInterfaceHttpPost">
+    <wsdl:operation name="CheckUserNoPassWord">
+      <wsdl:input message="tns:CheckUserNoPassWordHttpPostIn" />
+      <wsdl:output message="tns:CheckUserNoPassWordHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <wsdl:input message="tns:GetDeptHttpPostIn" />
+      <wsdl:output message="tns:GetDeptHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <wsdl:input message="tns:GetDeptsHttpPostIn" />
+      <wsdl:output message="tns:GetDeptsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <wsdl:input message="tns:GetDeptsByParentNoHttpPostIn" />
+      <wsdl:output message="tns:GetDeptsByParentNoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <wsdl:input message="tns:GetStationsHttpPostIn" />
+      <wsdl:output message="tns:GetStationsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <wsdl:input message="tns:GetStationHttpPostIn" />
+      <wsdl:output message="tns:GetStationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <wsdl:input message="tns:GetEmpsHttpPostIn" />
+      <wsdl:output message="tns:GetEmpsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <wsdl:input message="tns:GetEmpsByDeptNoHttpPostIn" />
+      <wsdl:output message="tns:GetEmpsByDeptNoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <wsdl:input message="tns:GetEmpHttpPostIn" />
+      <wsdl:output message="tns:GetEmpHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <wsdl:input message="tns:GetDeptEmpHttpPostIn" />
+      <wsdl:output message="tns:GetDeptEmpHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <wsdl:input message="tns:GetEmpHisDeptsHttpPostIn" />
+      <wsdl:output message="tns:GetEmpHisDeptsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <wsdl:input message="tns:GetEmpHisStationsHttpPostIn" />
+      <wsdl:output message="tns:GetEmpHisStationsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <wsdl:input message="tns:GetDeptEmpStationsHttpPostIn" />
+      <wsdl:output message="tns:GetDeptEmpStationsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <wsdl:input message="tns:GenerEmpsByStationsHttpPostIn" />
+      <wsdl:output message="tns:GenerEmpsByStationsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <wsdl:input message="tns:GenerEmpsByDeptsHttpPostIn" />
+      <wsdl:output message="tns:GenerEmpsByDeptsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsHttpPostIn" />
+      <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PortalInterfaceSoap" type="tns:PortalInterfaceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckUserNoPassWord">
+      <soap:operation soapAction="http://tempuri.org/CheckUserNoPassWord" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <soap:operation soapAction="http://tempuri.org/GetDept" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <soap:operation soapAction="http://tempuri.org/GetDepts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <soap:operation soapAction="http://tempuri.org/GetDeptsByParentNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <soap:operation soapAction="http://tempuri.org/GetStations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <soap:operation soapAction="http://tempuri.org/GetStation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <soap:operation soapAction="http://tempuri.org/GetEmps" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <soap:operation soapAction="http://tempuri.org/GetEmpsByDeptNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <soap:operation soapAction="http://tempuri.org/GetEmp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <soap:operation soapAction="http://tempuri.org/GetDeptEmp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <soap:operation soapAction="http://tempuri.org/GetEmpHisDepts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <soap:operation soapAction="http://tempuri.org/GetEmpHisStations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <soap:operation soapAction="http://tempuri.org/GetDeptEmpStations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <soap:operation soapAction="http://tempuri.org/GenerEmpsByStations" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <soap:operation soapAction="http://tempuri.org/GenerEmpsByDepts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <soap:operation soapAction="http://tempuri.org/GenerEmpsBySpecDeptAndStats" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PortalInterfaceSoap12" type="tns:PortalInterfaceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckUserNoPassWord">
+      <soap12:operation soapAction="http://tempuri.org/CheckUserNoPassWord" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <soap12:operation soapAction="http://tempuri.org/GetDept" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <soap12:operation soapAction="http://tempuri.org/GetDepts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <soap12:operation soapAction="http://tempuri.org/GetDeptsByParentNo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <soap12:operation soapAction="http://tempuri.org/GetStations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <soap12:operation soapAction="http://tempuri.org/GetStation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <soap12:operation soapAction="http://tempuri.org/GetEmps" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <soap12:operation soapAction="http://tempuri.org/GetEmpsByDeptNo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <soap12:operation soapAction="http://tempuri.org/GetEmp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <soap12:operation soapAction="http://tempuri.org/GetDeptEmp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <soap12:operation soapAction="http://tempuri.org/GetEmpHisDepts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <soap12:operation soapAction="http://tempuri.org/GetEmpHisStations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <soap12:operation soapAction="http://tempuri.org/GetDeptEmpStations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <soap12:operation soapAction="http://tempuri.org/GenerEmpsByStations" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <soap12:operation soapAction="http://tempuri.org/GenerEmpsByDepts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <soap12:operation soapAction="http://tempuri.org/GenerEmpsBySpecDeptAndStats" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PortalInterfaceHttpGet" type="tns:PortalInterfaceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="CheckUserNoPassWord">
+      <http:operation location="/CheckUserNoPassWord" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <http:operation location="/GetDept" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <http:operation location="/GetDepts" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <http:operation location="/GetDeptsByParentNo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <http:operation location="/GetStations" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <http:operation location="/GetStation" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <http:operation location="/GetEmps" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <http:operation location="/GetEmpsByDeptNo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <http:operation location="/GetEmp" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <http:operation location="/GetDeptEmp" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <http:operation location="/GetEmpHisDepts" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <http:operation location="/GetEmpHisStations" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <http:operation location="/GetDeptEmpStations" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <http:operation location="/GenerEmpsByStations" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <http:operation location="/GenerEmpsByDepts" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <http:operation location="/GenerEmpsBySpecDeptAndStats" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PortalInterfaceHttpPost" type="tns:PortalInterfaceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="CheckUserNoPassWord">
+      <http:operation location="/CheckUserNoPassWord" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDept">
+      <http:operation location="/GetDept" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDepts">
+      <http:operation location="/GetDepts" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptsByParentNo">
+      <http:operation location="/GetDeptsByParentNo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStations">
+      <http:operation location="/GetStations" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStation">
+      <http:operation location="/GetStation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmps">
+      <http:operation location="/GetEmps" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpsByDeptNo">
+      <http:operation location="/GetEmpsByDeptNo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmp">
+      <http:operation location="/GetEmp" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmp">
+      <http:operation location="/GetDeptEmp" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisDepts">
+      <http:operation location="/GetEmpHisDepts" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEmpHisStations">
+      <http:operation location="/GetEmpHisStations" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDeptEmpStations">
+      <http:operation location="/GetDeptEmpStations" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByStations">
+      <http:operation location="/GenerEmpsByStations" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsByDepts">
+      <http:operation location="/GenerEmpsByDepts" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
+      <http:operation location="/GenerEmpsBySpecDeptAndStats" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PortalInterface">
+    <wsdl:port name="PortalInterfaceSoap" binding="tns:PortalInterfaceSoap">
+      <soap:address location="http://localhost:1458/DataUser/PortalInterface.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PortalInterfaceSoap12" binding="tns:PortalInterfaceSoap12">
+      <soap12:address location="http://localhost:1458/DataUser/PortalInterface.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PortalInterfaceHttpGet" binding="tns:PortalInterfaceHttpGet">
+      <http:address location="http://localhost:1458/DataUser/PortalInterface.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PortalInterfaceHttpPost" binding="tns:PortalInterfaceHttpPost">
+      <http:address location="http://localhost:1458/DataUser/PortalInterface.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

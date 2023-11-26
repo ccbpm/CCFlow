@@ -545,23 +545,34 @@ namespace BP.WF.HttpHandler
 
                         string workID = strs[1];
                         string empNo = strs[2];
+                        string u = "";
 
                         GenerWorkerList wl = new GenerWorkerList();
                         int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, empNo,
                             GenerWorkerListAttr.WorkID, workID,
                             GenerWorkerListAttr.IsPass, 0);
 
-                        if (i == 0)
-                            return "info@此工作已经被别人处理或者此流程已删除";
+                        //如果已处理就打开在途查看
+                        GenerWorkFlow gwf = new GenerWorkFlow(int.Parse(workID));
+                        int gwfNum = gwf.Retrieve();
+                        if (i == 0 && gwfNum != 0)
+                        {
+                            u = "MyViewGener.htm?WorkID=" + workID + "&FK_Flow=" + gwf.FlowNo + "&FK_Node=" + gwf.NodeID + "&FID=" + gwf.FID + "&PWorkID=" + gwf.PWorkID;
+                            return "url@" + u;
+                        }
+                        else if (i == 0 && gwfNum == 0) {
+                            return "info@你好，未查询到此工作流程数据或者已经被删除。";
+                        }
+                            
 
-                        GenerWorkFlow gwf = new GenerWorkFlow(wl.WorkID);
+                     
 
                         //设置他的组织.
                         BP.Web.WebUser.OrgNo = gwf.OrgNo;
 
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.EmpNo);
                         Web.WebUser.SignInOfGener(empOF);
-                        string u = "MyFlow.htm?FK_Flow=" + wl.FlowNo + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.NodeID + "&FID=" + wl.FID + "&PWorkID=" + gwf.PWorkID;
+                        u = "MyFlow.htm?FK_Flow=" + wl.FlowNo + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.NodeID + "&FID=" + wl.FID + "&PWorkID=" + gwf.PWorkID;
 
                         return "url@" + u;
                     case "ExitAuth":
@@ -1071,6 +1082,13 @@ namespace BP.WF.HttpHandler
                 dt.Columns["DOMAIN"].ColumnName = "Domain";
                 dt.Columns["DEPTNAME"].ColumnName = "DeptName";
                 dt.Columns["BILLNO"].ColumnName = "BillNo";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["HUNGUPTIME"].ColumnName = "HungupTime";
+                dt.Columns["ORGNO"].ColumnName = "OrgNo";
+                dt.Columns["PNODEID"].ColumnName = "PNodeID";
+                dt.Columns["PRJNAME"].ColumnName = "PrjName";
+                dt.Columns["PRJNO"].ColumnName = "PrjNo";
+                dt.Columns["SDTOFFLOWWARNING"].ColumnName = "SDTOfFlowWarning";
             }
 
             if (BP.Difference.SystemConfig.AppCenterDBFieldCaseModel == FieldCaseModel.Lowercase)
@@ -1115,6 +1133,13 @@ namespace BP.WF.HttpHandler
                 dt.Columns["domain"].ColumnName = "Domain";
                 dt.Columns["deptname"].ColumnName = "DeptName";
                 dt.Columns["billno"].ColumnName = "BillNo";
+                dt.Columns["atpara"].ColumnName = "AtPara";
+                dt.Columns["hunguptime"].ColumnName = "HungupTime";
+                dt.Columns["orgno"].ColumnName = "OrgNo";
+                dt.Columns["pnodeid"].ColumnName = "PNodeID";
+                dt.Columns["prjname"].ColumnName = "PrjName";
+                dt.Columns["prjno"].ColumnName = "PrjNo";
+                dt.Columns["sdtofflowwarning"].ColumnName = "SDTOfFlowWarning";
             }
 
             return BP.Tools.Json.ToJson(dt);

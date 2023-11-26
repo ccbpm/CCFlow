@@ -1076,6 +1076,7 @@ namespace BP.CCBill
                 sf.ColumnValue = "BillNo";
                 sf.ColumnText = "Title";
                 sf.SelectStatement = "SELECT BillNo AS No, Title as Name FROM " + this.PTable;
+                sf.SetPara("EnName", "TS.FrmUI.SFTableSQLNoName"); 
                 sf.Insert();
             }
             #endregion 注册到外键表
